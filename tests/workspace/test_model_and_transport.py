@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import pytest
 
 from orgrebase.digest import sha256_digest
-from orgrebase.domain import EvidenceClass, IntegrityError, RunEnvelope
+from orgrebase.domain import EvidenceClass, RunEnvelope
 from orgrebase.workspace.model_provider import (
     BoundedSchemaRepairProvider,
     DeterministicModelProvider,

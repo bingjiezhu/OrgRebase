@@ -5,7 +5,6 @@ import pytest
 from orgrebase.workspace.benchmark import (
     BaselineSystem,
     OWBBenchmarkRepository,
-    OWBEvaluator,
     ReferenceWorkspaceBenchmarkSUT,
     run_owb_evaluation,
 )

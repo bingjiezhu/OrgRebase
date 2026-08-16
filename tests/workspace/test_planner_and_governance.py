@@ -5,7 +5,6 @@ import json
 import pytest
 
 from orgrebase.domain import AuthorizationError
-from orgrebase.workspace.formation import WorkspaceFormationService
 from orgrebase.workspace.models import TaskRequest
 from orgrebase.workspace.planner import CoalitionPlanner
 from orgrebase.workspace.task_agent import TemplateBoundTaskInterpreter

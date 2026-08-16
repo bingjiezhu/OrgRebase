@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
-from orgrebase.digest import canonical_json, sha256_digest
-from orgrebase.domain import DependencyStrength, EvidenceClass, IntegrityError, ManifestCompleteness
+from orgrebase.digest import sha256_digest
+from orgrebase.domain import DependencyStrength, IntegrityError, ManifestCompleteness
 from orgrebase.store import StateStore
 from orgrebase.workspace.benchmark import OWBBenchmarkRepository
 from orgrebase.workspace.models import (
@@ -62,7 +62,7 @@ _PARTITION_ENUM = {
 class RestrictedSkillInterpreter:
     """Execute a tiny audited declarative language; arbitrary Python is forbidden."""
 
-    allowed_operations = {"REQUIRE_FIELDS", "MAP_VALUE", "RETURN_FIELD"}
+    allowed_operations: ClassVar[set[str]] = {"REQUIRE_FIELDS", "MAP_VALUE", "RETURN_FIELD"}
 
     def execute(self, program: DeclarativeSkillProgram, public_input: Mapping[str, Any]) -> dict[str, Any]:
         if program.allowed_tool_ids or program.side_effects:

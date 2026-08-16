@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
 
 from orgrebase.digest import sha256_digest
 from orgrebase.domain import (
@@ -12,7 +12,6 @@ from orgrebase.domain import (
     DependencyManifest,
     DependencyRequirementSlot,
     EdgeStatus,
-    ManifestCompleteness,
     ObjectState,
     VersionedObject,
 )
@@ -79,7 +78,6 @@ def _new_object(
     sensitivity: str = "INTERNAL",
     allowed_purposes: tuple[str, ...] = ("enterprise_quote", "change_rebase"),
 ) -> VersionedObject:
-    payload_key = "canonical_value"
     if kind == "SkillContractVersion":
         payload = {"strategy": value, "contract_ref": f"workspace:{object_id}@{version}"}
     else:

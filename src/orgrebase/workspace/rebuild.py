@@ -12,19 +12,18 @@ import json
 import sqlite3
 from collections.abc import Mapping
 from dataclasses import dataclass
+from typing import ClassVar
 
 from orgrebase.digest import sha256_digest
 from orgrebase.domain import (
     ChangeSetRevision,
     ContextItem,
     ContextManifest,
-    CoverageBasis,
     DependencyManifest,
     DependencyRequirementSlot,
     EvidenceClass,
     ImpactPreview,
     IntegrityError,
-    ManifestCompleteness,
     ObjectDelta,
     ObjectState,
     RebaseReceipt,
@@ -56,8 +55,6 @@ from orgrebase.workspace.models import (
     PreparedSuccessorEvidence,
     QuotePayload,
     QuoteTaskLiterals,
-    RuntimeDependencyManifest,
-    SemanticKind,
     TaskContextManifest,
     TaskRequest,
     WorkspaceGraphEdge,
@@ -140,7 +137,7 @@ class WorkspaceRebuildContextProvider:
     ) -> tuple[ContextManifest, ...]:
         manifests: list[ContextManifest] = []
         for result in affected:
-            object_id = getattr(result, "object_id")
+            object_id = result.object_id
             current = store.get_object(object_id)
             if current.payload.get("deliverable_kind") != "QUOTE":
                 raise IntegrityError(f"WORKSPACE_CONTEXT_UNSUPPORTED_TARGET:{object_id}")
@@ -187,7 +184,7 @@ class QuoteRebuildPayloadHandler:
     Those remain under :class:`RebaseWorkflow` control.
     """
 
-    field_by_object_id = {
+    field_by_object_id: ClassVar[dict[str, str]] = {
         "claim:product.launch_date": "launch_date",
         "policy:finance.currency": "currency",
     }

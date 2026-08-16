@@ -16,9 +16,9 @@ from orgrebase.digest import sha256_digest
 from orgrebase.domain import (
     AgentCandidateIngestionReceipt,
     AgentRun,
+    ChangeSetRevision,
     CompilationReceipt,
     ContentAddressedModel,
-    ContextManifest,
     CoordinationReceipt,
     CoverageBasis,
     DependencyManifest,
@@ -29,8 +29,6 @@ from orgrebase.domain import (
     MinimalRebaseCertificate,
     ObjectState,
     OrchestrationPlan,
-    RebaseReceipt,
-    ChangeSetRevision,
     RunEnvelope,
     StructuredHandoff,
     VersionedObject,
@@ -139,7 +137,7 @@ class TaskTemplateVersion(ContentAddressedModel):
         return f"{self.id}@{self.version}"
 
     @model_validator(mode="after")
-    def validate_slots(self) -> "TaskTemplateVersion":
+    def validate_slots(self) -> TaskTemplateVersion:
         slot_ids = [item.slot_id for item in self.slots]
         if len(slot_ids) != len(set(slot_ids)):
             raise ValueError("template slot IDs must be unique")
@@ -231,7 +229,7 @@ class CoalitionPlan(ContentAddressedModel):
         return tuple(sorted({item.domain_id for item in self.coverage}))
 
     @model_validator(mode="after")
-    def validate_order_and_coverage(self) -> "CoalitionPlan":
+    def validate_order_and_coverage(self) -> CoalitionPlan:
         if self.selected_card_refs != tuple(sorted(self.selected_card_refs)):
             raise ValueError("selected cards must be lexical sorted")
         if tuple(item.slot_id for item in self.coverage) != tuple(
@@ -319,7 +317,7 @@ class AdmittedReference(ContentAddressedModel):
     admission_decision_ref: str
 
     @model_validator(mode="after")
-    def verify_projection(self) -> "AdmittedReference":
+    def verify_projection(self) -> AdmittedReference:
         if sha256_digest(self.projection) != self.projection_digest:
             raise ValueError("projection digest mismatch")
         return self
@@ -461,7 +459,7 @@ class WorkTrace(ContentAddressedModel):
         return f"{self.id}@{self.version}"
 
     @model_validator(mode="after")
-    def verify_event_chain(self) -> "WorkTrace":
+    def verify_event_chain(self) -> WorkTrace:
         previous = "sha256:" + "0" * 64
         for expected, event in enumerate(self.events, 1):
             if event.sequence != expected or event.previous_event_digest != previous:
@@ -636,7 +634,7 @@ class WorkspaceGraphSnapshot(ContentAddressedModel):
         return f"{self.id}@{self.version}"
 
     @model_validator(mode="after")
-    def verify_sorted_and_edge_digest(self) -> "WorkspaceGraphSnapshot":
+    def verify_sorted_and_edge_digest(self) -> WorkspaceGraphSnapshot:
         if self.object_refs != tuple(sorted(self.object_refs)):
             raise ValueError("snapshot object refs must be sorted")
         if self.manifest_refs != tuple(sorted(self.manifest_refs)):

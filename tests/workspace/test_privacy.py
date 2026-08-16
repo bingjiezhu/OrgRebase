@@ -4,8 +4,8 @@ import json
 
 import pytest
 
-from orgrebase.workspace.benchmark import OWBBenchmarkRepository
 from orgrebase.domain import IntegrityError
+from orgrebase.workspace.benchmark import OWBBenchmarkRepository
 from orgrebase.workspace.evidence import WorkspaceEvidenceExporter
 
 

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from orgrebase.domain import ImpactClassification, ObjectState
+from orgrebase.domain import ObjectState
 from orgrebase.workspace.service import WorkspaceService
 
 

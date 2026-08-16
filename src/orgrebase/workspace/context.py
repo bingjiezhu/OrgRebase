@@ -8,9 +8,9 @@ from orgrebase.digest import sha256_digest
 from orgrebase.domain import AuthorizationError, EvidenceClass
 from orgrebase.workspace.models import (
     ActorContextProjection,
-    AdmittedReference,
     AdmissionDecision,
     AdmissionVerdict,
+    AdmittedReference,
     ClaimCandidate,
     ClaimScope,
     CoalitionPlan,

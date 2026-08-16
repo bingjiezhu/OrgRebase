@@ -10,7 +10,6 @@ from orgrebase.store import StateStore
 from orgrebase.workspace.formation import seed_workspace_store
 from orgrebase.workspace.skill_foundry import (
     GovernedSkillEvaluator,
-    SKILL_PROGRAM_MEDIA_TYPE,
     SkillCurator,
     SkillFoundryService,
 )

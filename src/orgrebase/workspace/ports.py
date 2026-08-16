@@ -9,7 +9,6 @@ from pydantic import BaseModel, JsonValue
 
 from orgrebase.domain import RunEnvelope, VersionedObject
 from orgrebase.workspace.models import (
-    ActorContextProjection,
     BenchmarkCase,
     BenchmarkGold,
     CaseRunReceipt,

@@ -10,6 +10,7 @@ from pydantic import JsonValue
 from orgrebase.digest import sha256_digest
 from orgrebase.domain import ManifestCompleteness
 from orgrebase.workspace.models import (
+    CoverageStatus,
     OutputFieldLineage,
     OutputProducedEvent,
     QuotePayload,
@@ -18,13 +19,11 @@ from orgrebase.workspace.models import (
     ResolvedQuoteInputs,
     RuntimeDependencyEntry,
     RuntimeDependencyManifest,
-    SemanticKind,
     StoredArtifact,
     TaskContextManifest,
     TaskRequest,
     TaskTemplateVersion,
     TraceCoverageReceipt,
-    CoverageStatus,
     WorkTrace,
 )
 

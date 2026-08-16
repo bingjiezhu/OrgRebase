@@ -5,7 +5,6 @@ from pathlib import Path
 
 from orgrebase.workspace.readiness import audit_repository
 
-
 ROOT = Path(__file__).resolve().parents[2]
 
 

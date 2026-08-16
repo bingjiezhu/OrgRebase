@@ -35,7 +35,7 @@ def test_vmrc_missing_or_extra_rebuild_is_rejected(workspace_service) -> None:
     quote = next(item for item in effects if item["target_id"] == "work:quote_acme")
     quote["disposition"] = "HOLD_FOR_REVIEW"
     payload["digest"] = ""
-    with pytest.raises((IntegrityError, ValueError), match="MINIMALITY_MISSING_REBUILD|content digest"):
+    with pytest.raises((IntegrityError, ValueError), match=r"MINIMALITY_MISSING_REBUILD|content digest"):
         MinimalRebaseCertificateVerifier(fixture).verify(payload, bundle.change_set)
 
 

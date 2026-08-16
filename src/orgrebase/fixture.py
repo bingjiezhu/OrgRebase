@@ -9,13 +9,13 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict
 
 from orgrebase.digest import sha256_digest
-from orgrebase.resource_paths import runtime_asset_path
 from orgrebase.domain import (
     AgentIdentity,
     DependencyEdge,
     DependencyManifest,
     VersionedObject,
 )
+from orgrebase.resource_paths import runtime_asset_path
 
 
 class EnterpriseFixture(BaseModel):

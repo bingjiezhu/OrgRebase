@@ -6,13 +6,16 @@ import json
 import sqlite3
 import threading
 from collections.abc import Iterator, Mapping
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from orgrebase.digest import canonical_json, sha256_digest
 from orgrebase.domain import IntegrityError, ObjectState, VersionedObject
 from orgrebase.fixture import EnterpriseFixture
+
+if TYPE_CHECKING:
+    from orgrebase.workspace.models import ArtifactWrite, StoredArtifact
 
 
 class StateStore:
@@ -39,17 +42,15 @@ class StateStore:
         self.connection.close()
         self._closed = True
 
-    def __enter__(self) -> "StateStore":
+    def __enter__(self) -> StateStore:
         return self
 
     def __exit__(self, exc_type: object, exc: object, traceback: object) -> None:
         self.close()
 
     def __del__(self) -> None:  # pragma: no cover - defensive resource cleanup
-        try:
+        with suppress(Exception):
             self.close()
-        except Exception:
-            pass
 
     def _create_schema(self) -> None:
         self.connection.executescript(
@@ -422,7 +423,7 @@ class StateStore:
     def save_artifact_writes(
         self,
         connection: sqlite3.Connection,
-        writes: tuple["ArtifactWrite", ...],
+        writes: tuple[ArtifactWrite, ...],
     ) -> tuple[str, ...]:
         """Save a prepared immutable artifact bundle inside the caller transaction."""
 
@@ -465,7 +466,7 @@ class StateStore:
         self,
         artifact_id: str,
         expected_media_type: str | None = None,
-    ) -> "StoredArtifact":
+    ) -> StoredArtifact:
         """Verified exact-ID artifact read with canonical round-trip validation."""
 
         from orgrebase.workspace.models import StoredArtifact

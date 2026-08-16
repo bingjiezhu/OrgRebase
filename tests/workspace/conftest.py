@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from contextlib import suppress
 from pathlib import Path
 
 import pytest
@@ -19,10 +20,8 @@ def workspace_service(workspace_db: Path) -> Iterator[WorkspaceService]:
     try:
         yield service
     finally:
-        try:
+        with suppress(Exception):
             service.close()
-        except Exception:
-            pass
 
 
 @pytest.fixture
@@ -38,7 +37,5 @@ def persistent_workspace(tmp_path: Path) -> Iterator[tuple[WorkspaceService, Pat
     try:
         yield service, path
     finally:
-        try:
+        with suppress(Exception):
             service.close()
-        except Exception:
-            pass

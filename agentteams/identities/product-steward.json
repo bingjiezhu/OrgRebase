@@ -1,0 +1,37 @@
+{
+  "name": "product-steward",
+  "role": "Product domain authority interpreter",
+  "capabilities": [
+    "compare canonical product values",
+    "propose ClaimDelta",
+    "cite product sources"
+  ],
+  "inputs": [
+    "CompiledDelegationTask",
+    "Product source refs",
+    "ChangeSet candidate",
+    "ImpactPreview"
+  ],
+  "outputs": [
+    "ClaimDeltaCandidate",
+    "SemanticExplanation"
+  ],
+  "dependencies": [
+    "Product ContextManifest",
+    "product-scoped tools"
+  ],
+  "decision_boundary": [
+    "cannot self-admit candidate",
+    "cannot speak for Legal/GTM/Finance",
+    "cannot apply"
+  ],
+  "trace": [
+    "orchestration_plan_digest",
+    "delegation_task_digest",
+    "source_ref",
+    "input_digest",
+    "output_digest",
+    "handoff_digest"
+  ],
+  "authority_domain": "product"
+}

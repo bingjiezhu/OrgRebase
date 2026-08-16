@@ -1,0 +1,115 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    },
+    "ImpactCertificateType": {
+      "enum": [
+        "POSITIVE_WITNESS",
+        "BOUNDED_NON_IMPACT",
+        "UNCERTAINTY_WITNESS"
+      ],
+      "title": "ImpactCertificateType",
+      "type": "string"
+    },
+    "ImpactClassification": {
+      "enum": [
+        "AFFECTED_HARD",
+        "AFFECTED_REVIEW",
+        "AFFECTED_INFORMATIONAL",
+        "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+        "UNKNOWN",
+        "OUT_OF_SCOPE",
+        "REQUALIFICATION_REQUIRED"
+      ],
+      "title": "ImpactClassification",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/impact-certificate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "certificate_type": {
+      "$ref": "#/$defs/ImpactCertificateType"
+    },
+    "change_set_digest": {
+      "title": "Change Set Digest",
+      "type": "string"
+    },
+    "claim_boundary": {
+      "title": "Claim Boundary",
+      "type": "string"
+    },
+    "classification": {
+      "$ref": "#/$defs/ImpactClassification"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "$ref": "#/$defs/EvidenceClass",
+      "default": "LOCAL_DETERMINISTIC"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "reason_code": {
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "result_digest": {
+      "title": "Result Digest",
+      "type": "string"
+    },
+    "revision_lock_digest": {
+      "title": "Revision Lock Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "orgrebase.impact-certificate.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "traversal_commitment": {
+      "additionalProperties": true,
+      "title": "Traversal Commitment",
+      "type": "object"
+    },
+    "verifier_version": {
+      "default": "orgrebase.impact-certificate-verifier@1.0.0",
+      "title": "Verifier Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "certificate_type",
+    "subject_id",
+    "classification",
+    "reason_code",
+    "change_set_digest",
+    "result_digest",
+    "revision_lock_digest",
+    "traversal_commitment",
+    "claim_boundary"
+  ],
+  "title": "ImpactCertificate",
+  "type": "object"
+}

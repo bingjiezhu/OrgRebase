@@ -1,0 +1,125 @@
+{
+  "$defs": {
+    "CoalitionCoverage": {
+      "additionalProperties": false,
+      "properties": {
+        "card_ref": {
+          "title": "Card Ref",
+          "type": "string"
+        },
+        "domain_id": {
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "slot_id": {
+          "title": "Slot Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "slot_id",
+        "card_ref",
+        "domain_id"
+      ],
+      "title": "CoalitionCoverage",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-coalition-plan.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "admitted_slot_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Admitted Slot Ids",
+      "type": "array"
+    },
+    "coverage": {
+      "items": {
+        "$ref": "#/$defs/CoalitionCoverage"
+      },
+      "title": "Coverage",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "input_digest": {
+      "title": "Input Digest",
+      "type": "string"
+    },
+    "planner_version": {
+      "title": "Planner Version",
+      "type": "string"
+    },
+    "revision_lock": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Revision Lock",
+      "type": "object"
+    },
+    "selected_card_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Selected Card Refs",
+      "type": "array"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    },
+    "tie_break_tuple": {
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      ],
+      "title": "Tie Break Tuple",
+      "type": "array"
+    },
+    "total_declared_cost": {
+      "title": "Total Declared Cost",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "task_ref",
+    "template_ref",
+    "admitted_slot_ids",
+    "selected_card_refs",
+    "coverage",
+    "total_declared_cost",
+    "tie_break_tuple",
+    "planner_version",
+    "revision_lock",
+    "input_digest"
+  ],
+  "title": "CoalitionPlan",
+  "type": "object"
+}

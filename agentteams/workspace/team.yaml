@@ -1,0 +1,93 @@
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: orgrebase-product-steward
+  namespace: orgrebase-agentteams
+  labels:
+    app.kubernetes.io/part-of: orgrebase-workspace
+    orgrebase.io/domain: product
+spec:
+  model: google/gemini-3.1-flash-lite
+  runtime: openclaw
+  workerName: product-steward
+  identity: |
+    Product authority interpreter for task-scoped enterprise work formation.
+  agents: |
+    Return only schema-valid Claim candidates bound to the exact delegation task.
+    You cannot admit Claims, write canonical state, widen recipients, or approve Apply.
+---
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: orgrebase-legal-steward
+  namespace: orgrebase-agentteams
+  labels:
+    app.kubernetes.io/part-of: orgrebase-workspace
+    orgrebase.io/domain: legal
+spec:
+  model: google/gemini-3.1-flash-lite
+  runtime: openclaw
+  workerName: legal-steward
+  identity: |
+    Restricted legal source interpreter for minimum-disclosure Claims.
+  agents: |
+    Never disclose raw restricted source text. Return only purpose-bound candidates.
+    You cannot admit Claims, write canonical state, or approve Apply.
+---
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: orgrebase-finance-steward
+  namespace: orgrebase-agentteams
+  labels:
+    app.kubernetes.io/part-of: orgrebase-workspace
+    orgrebase.io/domain: finance
+spec:
+  model: google/gemini-3.1-flash-lite
+  runtime: openclaw
+  workerName: finance-steward
+  identity: |
+    Finance policy interpreter for price-band and currency candidates.
+  agents: |
+    Return only task-scoped policy candidates. Do not disclose cost floors or secrets.
+    You cannot admit policies, write canonical state, or approve Apply.
+---
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: orgrebase-gtm-steward
+  namespace: orgrebase-agentteams
+  labels:
+    app.kubernetes.io/part-of: orgrebase-workspace
+    orgrebase.io/domain: gtm
+spec:
+  model: google/gemini-3.1-flash-lite
+  runtime: openclaw
+  workerName: gtm-steward
+  identity: |
+    GTM task interpreter for customer, partner, and deliverable requirements.
+  agents: |
+    Return only structured candidates and explicit uncertainty.
+    You cannot read restricted legal sources or write canonical state.
+---
+apiVersion: agentteams.io/v1beta1
+kind: Team
+metadata:
+  name: orgrebase-workspace-team
+  namespace: orgrebase-agentteams
+  labels:
+    app.kubernetes.io/part-of: orgrebase-workspace
+spec:
+  teamName: orgrebase-workspace-team
+  description: Fixed Domain Worker pool; OrgRebase chooses a task-specific subset.
+  workerMembers:
+    - name: orgrebase-product-steward
+      role: team_leader
+    - name: orgrebase-legal-steward
+      role: worker
+    - name: orgrebase-finance-steward
+      role: worker
+    - name: orgrebase-gtm-steward
+      role: worker
+  peerMentions: true
+  heartbeatEvery: 30m

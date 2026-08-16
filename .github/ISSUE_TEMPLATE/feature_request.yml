@@ -1,0 +1,30 @@
+name: Feature request
+description: Propose an improvement grounded in a control-plane invariant or user journey.
+title: "[Idea]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Which user task or invariant is currently hard to preserve?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the successful flow and the evidence that would prove it.
+    validations:
+      required: true
+  - type: textarea
+    id: authority
+    attributes:
+      label: Authority and write boundary
+      description: Which agent may propose, and what remains control-plane-only?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

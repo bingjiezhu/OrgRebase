@@ -1,0 +1,149 @@
+{
+  "$defs": {
+    "HealthStatus": {
+      "enum": [
+        "ACTIVE",
+        "DEGRADED",
+        "INACTIVE"
+      ],
+      "title": "HealthStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-domain-capability-card-version.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "accepted_input_schema_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Accepted Input Schema Refs",
+      "type": "array"
+    },
+    "allowed_purposes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Purposes",
+      "type": "array"
+    },
+    "allowed_tool_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tool Ids",
+      "type": "array"
+    },
+    "authority_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Authority Refs",
+      "type": "array"
+    },
+    "capabilities": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "declared_cost": {
+      "minimum": 0,
+      "title": "Declared Cost",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "disclosure_policy_ref": {
+      "title": "Disclosure Policy Ref",
+      "type": "string"
+    },
+    "domain_id": {
+      "title": "Domain Id",
+      "type": "string"
+    },
+    "freshness_sla_seconds": {
+      "minimum": 0,
+      "title": "Freshness Sla Seconds",
+      "type": "integer"
+    },
+    "health_status": {
+      "$ref": "#/$defs/HealthStatus"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "output_schema_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Output Schema Refs",
+      "type": "array"
+    },
+    "resource_refs": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Resource Refs",
+      "type": "array"
+    },
+    "supported_slot_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Supported Slot Ids",
+      "type": "array"
+    },
+    "valid_from": {
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_to": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Valid To"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "worker_id": {
+      "title": "Worker Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "domain_id",
+    "worker_id",
+    "authority_refs",
+    "capabilities",
+    "supported_slot_ids",
+    "accepted_input_schema_refs",
+    "output_schema_refs",
+    "allowed_purposes",
+    "disclosure_policy_ref",
+    "freshness_sla_seconds",
+    "declared_cost",
+    "health_status",
+    "valid_from"
+  ],
+  "title": "DomainCapabilityCardVersion",
+  "type": "object"
+}

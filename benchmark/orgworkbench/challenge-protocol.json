@@ -1,0 +1,16 @@
+{
+  "benchmark_version": "owb.v1.1",
+  "case_count": 64,
+  "digest": "sha256:a7a3961a201d87762ca5587160f47aa8ce478713a4a631980a50fbdc3107fc42",
+  "generator_contract": "same schemas/invariants as open core; unseen organizations, values and paraphrases",
+  "gold_access": "evaluator-only",
+  "partitions": {
+    "CHANGE": 24,
+    "FORMATION": 16,
+    "REPEATABILITY": 8,
+    "SECURITY": 8,
+    "SKILL": 8
+  },
+  "schema_version": "owb.challenge-protocol.v1",
+  "seed_policy": "evaluator-secret; reveal only seed digest before run and seed after result freeze"
+}

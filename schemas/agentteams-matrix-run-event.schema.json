@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/agentteams-matrix-run-event.schema.json",
+  "title": "OrgRebase payload embedded at Matrix content.orgrebase.run",
+  "type": "object",
+  "required": ["schema_version", "run_id", "nonce", "worker_name", "event_kind"],
+  "properties": {
+    "schema_version": {"const": "orgrebase.matrix-run-event.v1"},
+    "run_id": {"type": "string", "pattern": "^run:orgrebase:live:"},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "worker_name": {"type": "string", "minLength": 1},
+    "event_kind": {"enum": ["LEADER_DELEGATION", "WORKER_CANDIDATE", "SKILL_LOADED"]},
+    "artifact_ref": {"type": "string", "minLength": 1},
+    "artifact_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "candidate_only": {"type": "boolean"},
+    "orchestration_plan_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "delegation_task_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "input_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    },
+    "skill_name": {"type": "string", "minLength": 1},
+    "skill_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"event_kind": {"const": "LEADER_DELEGATION"}}},
+      "then": {"required": ["orchestration_plan_digest"]}
+    },
+    {
+      "if": {"properties": {"event_kind": {"const": "WORKER_CANDIDATE"}}},
+      "then": {
+        "required": [
+          "artifact_ref",
+          "artifact_digest",
+          "candidate_only",
+          "orchestration_plan_digest",
+          "delegation_task_digest",
+          "input_refs"
+        ]
+      }
+    },
+    {
+      "if": {"properties": {"event_kind": {"const": "SKILL_LOADED"}}},
+      "then": {"required": ["skill_name", "skill_digest"]}
+    }
+  ]
+}

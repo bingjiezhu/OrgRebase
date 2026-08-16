@@ -1,0 +1,274 @@
+{
+  "$defs": {
+    "CoverageBasis": {
+      "enum": [
+        "RUNTIME_OBSERVED",
+        "OWNER_DECLARED_COMPLETE",
+        "CONTRACT_DECLARED",
+        "IMPORTED_VERIFIED",
+        "AGENT_INFERRED",
+        "UNKNOWN_COVERAGE"
+      ],
+      "title": "CoverageBasis",
+      "type": "string"
+    },
+    "DependencyStrength": {
+      "enum": [
+        "HARD",
+        "REVIEW",
+        "INFORMATIONAL"
+      ],
+      "title": "DependencyStrength",
+      "type": "string"
+    },
+    "ObjectDigestBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "object_id": {
+          "title": "Object Id",
+          "type": "string"
+        },
+        "object_ref": {
+          "title": "Object Ref",
+          "type": "string"
+        },
+        "storage_class": {
+          "enum": [
+            "OBJECT_VERSION",
+            "ARTIFACT_PROJECTION"
+          ],
+          "title": "Storage Class",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_ref",
+        "object_id",
+        "version",
+        "kind",
+        "digest",
+        "storage_class"
+      ],
+      "title": "ObjectDigestBinding",
+      "type": "object"
+    },
+    "WorkspaceGraphEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "consumer_ref": {
+          "title": "Consumer Ref",
+          "type": "string"
+        },
+        "coverage_basis": {
+          "$ref": "#/$defs/CoverageBasis"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "provider_digest": {
+          "title": "Provider Digest",
+          "type": "string"
+        },
+        "provider_ref": {
+          "title": "Provider Ref",
+          "type": "string"
+        },
+        "relation": {
+          "title": "Relation",
+          "type": "string"
+        },
+        "source_evidence_ref": {
+          "title": "Source Evidence Ref",
+          "type": "string"
+        },
+        "source_manifest_ref": {
+          "title": "Source Manifest Ref",
+          "type": "string"
+        },
+        "source_trace_event_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Trace Event Ref"
+        },
+        "strength": {
+          "$ref": "#/$defs/DependencyStrength"
+        },
+        "valid_from": {
+          "title": "Valid From",
+          "type": "string"
+        },
+        "valid_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid To"
+        }
+      },
+      "required": [
+        "id",
+        "provider_ref",
+        "provider_digest",
+        "consumer_ref",
+        "relation",
+        "strength",
+        "source_manifest_ref",
+        "source_evidence_ref",
+        "coverage_basis",
+        "valid_from"
+      ],
+      "title": "WorkspaceGraphEdge",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-workspace-graph-snapshot.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "base_revision": {
+      "title": "Base Revision",
+      "type": "string"
+    },
+    "builder_version": {
+      "title": "Builder Version",
+      "type": "string"
+    },
+    "built_at": {
+      "title": "Built At",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "edge_set_digest": {
+      "title": "Edge Set Digest",
+      "type": "string"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/WorkspaceGraphEdge"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "graph_namespace": {
+      "title": "Graph Namespace",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "manifest_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Manifest Refs",
+      "type": "array"
+    },
+    "object_digests": {
+      "items": {
+        "$ref": "#/$defs/ObjectDigestBinding"
+      },
+      "title": "Object Digests",
+      "type": "array"
+    },
+    "object_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Object Refs",
+      "type": "array"
+    },
+    "organization_id": {
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "revisions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Revisions",
+      "type": "object"
+    },
+    "scope_roots": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Scope Roots",
+      "type": "array"
+    },
+    "target_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Target Refs",
+      "type": "array"
+    },
+    "universe_digest": {
+      "title": "Universe Digest",
+      "type": "string"
+    },
+    "universe_id": {
+      "title": "Universe Id",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "organization_id",
+    "graph_namespace",
+    "universe_id",
+    "universe_digest",
+    "base_revision",
+    "scope_roots",
+    "object_refs",
+    "object_digests",
+    "edges",
+    "manifest_refs",
+    "target_refs",
+    "revisions",
+    "edge_set_digest",
+    "built_at",
+    "builder_version"
+  ],
+  "title": "WorkspaceGraphSnapshot",
+  "type": "object"
+}

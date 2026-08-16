@@ -1,0 +1,109 @@
+{
+  "schema_version": "orgrebase.task-intents.v1",
+  "plan_id": "orchestration-plan:launch-change@1",
+  "intents": [
+    {
+      "id": "task:launch-change:01",
+      "agent": "change-coordinator",
+      "purpose": "Decompose the locked change into authority-bounded advisory work.",
+      "depends_on": [],
+      "required_capabilities": [
+        "decompose ChangeSet",
+        "assign scoped tasks"
+      ],
+      "allowed_outputs": [
+        "TaskGraph",
+        "CandidateSummary"
+      ],
+      "context_scope": [
+        "ChangeSetRevision",
+        "RevisionLock",
+        "ImpactPreview"
+      ],
+      "failure": "ABSTAIN"
+    },
+    {
+      "id": "task:launch-change:02",
+      "agent": "product-steward",
+      "purpose": "Explain the product semantic delta without admitting it.",
+      "depends_on": [
+        "task:launch-change:01"
+      ],
+      "required_capabilities": [
+        "propose ClaimDelta"
+      ],
+      "allowed_outputs": [
+        "ClaimDeltaCandidate",
+        "SemanticExplanation"
+      ],
+      "context_scope": [
+        "product",
+        "admitted-source-refs"
+      ],
+      "failure": "ABSTAIN"
+    },
+    {
+      "id": "task:launch-change:03",
+      "agent": "legal-steward",
+      "purpose": "Derive only the minimum purpose-bound legal claim.",
+      "depends_on": [
+        "task:launch-change:01"
+      ],
+      "required_capabilities": [
+        "derive minimal obligation claim"
+      ],
+      "allowed_outputs": [
+        "MinimalClaimCandidate",
+        "CoverageAssertionCandidate"
+      ],
+      "context_scope": [
+        "legal-restricted",
+        "derived-legal-claims"
+      ],
+      "failure": "ABSTAIN"
+    },
+    {
+      "id": "task:launch-change:04",
+      "agent": "gtm-steward",
+      "purpose": "Propose GTM impact and expose coverage gaps as uncertainty.",
+      "depends_on": [
+        "task:launch-change:02",
+        "task:launch-change:03"
+      ],
+      "required_capabilities": [
+        "propose dependency candidates"
+      ],
+      "allowed_outputs": [
+        "ImpactCandidate",
+        "CoverageGapCandidate"
+      ],
+      "context_scope": [
+        "gtm",
+        "derived-legal-claims",
+        "dependency-manifests"
+      ],
+      "failure": "UNKNOWN"
+    },
+    {
+      "id": "task:launch-change:05",
+      "agent": "skill-curator",
+      "purpose": "Propose a portable Skill patch without release authority.",
+      "depends_on": [
+        "task:launch-change:04"
+      ],
+      "required_capabilities": [
+        "propose bounded contract patch"
+      ],
+      "allowed_outputs": [
+        "SkillPatchCandidate",
+        "ConfounderList"
+      ],
+      "context_scope": [
+        "redacted-trajectories",
+        "skill-contract",
+        "impact-results"
+      ],
+      "failure": "ABSTAIN"
+    }
+  ]
+}

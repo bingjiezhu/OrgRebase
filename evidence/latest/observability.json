@@ -1,0 +1,1231 @@
+{
+  "correlation": {
+    "receipt_digest": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592",
+    "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+    "trace_id": "e2d2c7467dccf753252bae34145c4faf",
+    "workflow_run_id": "run:orgrebase:launch-date:local@1"
+  },
+  "format": "OTLP_JSON_MAPPABLE",
+  "logs": {
+    "resourceLogs": [
+      {
+        "resource": {
+          "attributes": [
+            {
+              "key": "deployment.environment.name",
+              "value": {
+                "stringValue": "local-deterministic"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "orgrebase"
+              }
+            },
+            {
+              "key": "service.version",
+              "value": {
+                "stringValue": "0.3.0"
+              }
+            }
+          ]
+        },
+        "scopeLogs": [
+          {
+            "logRecords": [
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:995742bf07d6831aaa94a69da15e0ffc7630ea7838978de31328ffc7ffe9c0a8"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "FIXTURE_LOADED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000001000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:029d7d675f640fe98ff837793f34437b41e0b3865b2dd27ca6007941212c6df7"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:995742bf07d6831aaa94a69da15e0ffc7630ea7838978de31328ffc7ffe9c0a8"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "2"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "TOOL_INVOKED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000002000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:7ed7541c2abb04039684dd9aea0a110a1126c19ddb9c07fb41c316d25f283a69"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:029d7d675f640fe98ff837793f34437b41e0b3865b2dd27ca6007941212c6df7"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "3"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "IMPACT_PREVIEWED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000003000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:e552ca8e2a52ad05e79a720bce1862ec3807dd58aa26560bd64a6d380ee03942"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:7ed7541c2abb04039684dd9aea0a110a1126c19ddb9c07fb41c316d25f283a69"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "4"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "REBASE_APPLIED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000004000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:d89cbfbcce75e73bd162e193e1df78903f6ef0a1ed82d5ca6440a0c2d547d66c"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:e552ca8e2a52ad05e79a720bce1862ec3807dd58aa26560bd64a6d380ee03942"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "5"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "CONFLICT_RESOLVED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000005000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:9092c1478422c184ad580313e48aaf62a071333c4be66e4862008a8e6c51308d"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:d89cbfbcce75e73bd162e193e1df78903f6ef0a1ed82d5ca6440a0c2d547d66c"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "6"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "APPLY_REJECTED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000006000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:f061c01017406b73e6b5c6df0f30cf6dfcea489613f8f7cb738605cfa636c843"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:9092c1478422c184ad580313e48aaf62a071333c4be66e4862008a8e6c51308d"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "7"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "DOWNSTREAM_EFFECTS_COMPENSATED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000007000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:22870322038af1de3065377cba2560a762be33ce1c44c17deba12abf89dccaff"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:f061c01017406b73e6b5c6df0f30cf6dfcea489613f8f7cb738605cfa636c843"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "8"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "REAL_GIT_TOOL_INVOKED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000008000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:e4a5e5ed1fd207931440933657a56d068919fe32714c08dd8bdbb3e4b98d3d59"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:22870322038af1de3065377cba2560a762be33ce1c44c17deba12abf89dccaff"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "9"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "REAL_GIT_TOOL_INVOKED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000009000000"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.event.digest",
+                    "value": {
+                      "stringValue": "sha256:50d536713493e266805d2c057edc17018c50535b60fa1ac73f75b9a8f49e613a"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.previous_digest",
+                    "value": {
+                      "stringValue": "sha256:e4a5e5ed1fd207931440933657a56d068919fe32714c08dd8bdbb3e4b98d3d59"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.event.sequence",
+                    "value": {
+                      "intValue": "10"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "body": {
+                  "stringValue": "COMPENSATION_SAGA_UPDATED"
+                },
+                "severityNumber": 9,
+                "severityText": "INFO",
+                "timeUnixNano": "1776000000010000000"
+              }
+            ],
+            "scope": {
+              "name": "orgrebase",
+              "version": "0.3.0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metrics": {
+    "resourceMetrics": [
+      {
+        "resource": {
+          "attributes": [
+            {
+              "key": "deployment.environment.name",
+              "value": {
+                "stringValue": "local-deterministic"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "orgrebase"
+              }
+            },
+            {
+              "key": "service.version",
+              "value": {
+                "stringValue": "0.3.0"
+              }
+            }
+          ]
+        },
+        "scopeMetrics": [
+          {
+            "metrics": [
+              {
+                "gauge": {
+                  "dataPoints": [
+                    {
+                      "asInt": "2",
+                      "attributes": [
+                        {
+                          "key": "metric",
+                          "value": {
+                            "stringValue": "bounded_unaffected"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.run.nonce",
+                          "value": {
+                            "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.workflow.run_id",
+                          "value": {
+                            "stringValue": "run:orgrebase:launch-date:local@1"
+                          }
+                        }
+                      ],
+                      "timeUnixNano": "1776000000032000000"
+                    },
+                    {
+                      "asInt": "1",
+                      "attributes": [
+                        {
+                          "key": "metric",
+                          "value": {
+                            "stringValue": "facts_changed"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.run.nonce",
+                          "value": {
+                            "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.workflow.run_id",
+                          "value": {
+                            "stringValue": "run:orgrebase:launch-date:local@1"
+                          }
+                        }
+                      ],
+                      "timeUnixNano": "1776000000032000000"
+                    },
+                    {
+                      "asInt": "0",
+                      "attributes": [
+                        {
+                          "key": "metric",
+                          "value": {
+                            "stringValue": "false_invalidations"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.run.nonce",
+                          "value": {
+                            "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.workflow.run_id",
+                          "value": {
+                            "stringValue": "run:orgrebase:launch-date:local@1"
+                          }
+                        }
+                      ],
+                      "timeUnixNano": "1776000000032000000"
+                    },
+                    {
+                      "asInt": "1",
+                      "attributes": [
+                        {
+                          "key": "metric",
+                          "value": {
+                            "stringValue": "skills_requalified"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.run.nonce",
+                          "value": {
+                            "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.workflow.run_id",
+                          "value": {
+                            "stringValue": "run:orgrebase:launch-date:local@1"
+                          }
+                        }
+                      ],
+                      "timeUnixNano": "1776000000032000000"
+                    },
+                    {
+                      "asInt": "0",
+                      "attributes": [
+                        {
+                          "key": "metric",
+                          "value": {
+                            "stringValue": "unauthorized_disclosures"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.run.nonce",
+                          "value": {
+                            "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.workflow.run_id",
+                          "value": {
+                            "stringValue": "run:orgrebase:launch-date:local@1"
+                          }
+                        }
+                      ],
+                      "timeUnixNano": "1776000000032000000"
+                    },
+                    {
+                      "asInt": "1",
+                      "attributes": [
+                        {
+                          "key": "metric",
+                          "value": {
+                            "stringValue": "unknown"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.run.nonce",
+                          "value": {
+                            "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.workflow.run_id",
+                          "value": {
+                            "stringValue": "run:orgrebase:launch-date:local@1"
+                          }
+                        }
+                      ],
+                      "timeUnixNano": "1776000000032000000"
+                    },
+                    {
+                      "asInt": "2",
+                      "attributes": [
+                        {
+                          "key": "metric",
+                          "value": {
+                            "stringValue": "work_items_rebased"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.run.nonce",
+                          "value": {
+                            "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                          }
+                        },
+                        {
+                          "key": "orgrebase.workflow.run_id",
+                          "value": {
+                            "stringValue": "run:orgrebase:launch-date:local@1"
+                          }
+                        }
+                      ],
+                      "timeUnixNano": "1776000000032000000"
+                    }
+                  ]
+                },
+                "name": "orgrebase.rebase.outcome",
+                "unit": "{item}"
+              }
+            ],
+            "scope": {
+              "name": "orgrebase",
+              "version": "0.3.0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "content_capture": false,
+    "identifiers": "stable IDs and SHA-256 digests only",
+    "output_capture": false,
+    "prompt_capture": false
+  },
+  "schema_version": "orgrebase.observability.v1",
+  "semantic_conventions": {
+    "gen_ai_stability": "DEVELOPMENT",
+    "orgrebase_namespace": "orgrebase.*@v1",
+    "release": "opentelemetry-semantic-conventions@v1.43.0",
+    "source_commit": "89aae43"
+  },
+  "traces": {
+    "resourceSpans": [
+      {
+        "resource": {
+          "attributes": [
+            {
+              "key": "deployment.environment.name",
+              "value": {
+                "stringValue": "local-deterministic"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "orgrebase"
+              }
+            },
+            {
+              "key": "service.version",
+              "value": {
+                "stringValue": "0.3.0"
+              }
+            }
+          ]
+        },
+        "scopeSpans": [
+          {
+            "scope": {
+              "name": "orgrebase",
+              "version": "0.3.0"
+            },
+            "spans": [
+              {
+                "attributes": [
+                  {
+                    "key": "gen_ai.agent.name",
+                    "value": {
+                      "stringValue": "change-coordinator"
+                    }
+                  },
+                  {
+                    "key": "gen_ai.operation.name",
+                    "value": {
+                      "stringValue": "invoke_agent"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.agent.run_id",
+                    "value": {
+                      "stringValue": "run:change-coordinator@1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.evidence.class",
+                    "value": {
+                      "stringValue": "LOCAL_DETERMINISTIC"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.input.digest",
+                    "value": {
+                      "stringValue": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.plan.digest",
+                    "value": {
+                      "stringValue": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.predecessor.count",
+                    "value": {
+                      "intValue": "0"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.task.digest",
+                    "value": {
+                      "stringValue": "sha256:be8018568d882e7b88db4ce5a598687cb228c7438ceb79388ac8f6b616232dbf"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.output.digest",
+                    "value": {
+                      "stringValue": "sha256:496c007844a52a7d777182238b492afff6e35dc513bf6f3acbf7cb664ce43367"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "endTimeUnixNano": "1776000000001000000",
+                "kind": 1,
+                "name": "agent.run/change-coordinator",
+                "parentSpanId": "88bff2ea6e1da46b",
+                "spanId": "aad75bd497b62c27",
+                "startTimeUnixNano": "1776000000000000000",
+                "status": {
+                  "code": 1
+                },
+                "traceId": "e2d2c7467dccf753252bae34145c4faf"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "gen_ai.agent.name",
+                    "value": {
+                      "stringValue": "product-steward"
+                    }
+                  },
+                  {
+                    "key": "gen_ai.operation.name",
+                    "value": {
+                      "stringValue": "invoke_agent"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.agent.run_id",
+                    "value": {
+                      "stringValue": "run:product-steward@1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.evidence.class",
+                    "value": {
+                      "stringValue": "LOCAL_DETERMINISTIC"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.input.digest",
+                    "value": {
+                      "stringValue": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.plan.digest",
+                    "value": {
+                      "stringValue": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.predecessor.count",
+                    "value": {
+                      "intValue": "1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.task.digest",
+                    "value": {
+                      "stringValue": "sha256:0740714ed049347f70edf79cbd4973ebf3c78651aee1e28d40a493fb2ffd77fe"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.output.digest",
+                    "value": {
+                      "stringValue": "sha256:d0a78dd9d6a324c7b03ed2d4ed482332b87960e135032d2b5c184204e2d9d38e"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "endTimeUnixNano": "1776000000003000000",
+                "kind": 1,
+                "name": "agent.run/product-steward",
+                "parentSpanId": "aad75bd497b62c27",
+                "spanId": "771e48ae6b1dd1db",
+                "startTimeUnixNano": "1776000000002000000",
+                "status": {
+                  "code": 1
+                },
+                "traceId": "e2d2c7467dccf753252bae34145c4faf"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "gen_ai.agent.name",
+                    "value": {
+                      "stringValue": "legal-steward"
+                    }
+                  },
+                  {
+                    "key": "gen_ai.operation.name",
+                    "value": {
+                      "stringValue": "invoke_agent"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.agent.run_id",
+                    "value": {
+                      "stringValue": "run:legal-steward@1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.evidence.class",
+                    "value": {
+                      "stringValue": "LOCAL_DETERMINISTIC"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.input.digest",
+                    "value": {
+                      "stringValue": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.plan.digest",
+                    "value": {
+                      "stringValue": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.predecessor.count",
+                    "value": {
+                      "intValue": "1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.task.digest",
+                    "value": {
+                      "stringValue": "sha256:d1e16f5437572d9844cecfb3737639e34dffbf04ebdba55052ffe16c62ad8893"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.output.digest",
+                    "value": {
+                      "stringValue": "sha256:a4439afe892cc0d5556ec4fe9af09a57175e46c3269e8520c741a597cef8e3f4"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "endTimeUnixNano": "1776000000005000000",
+                "kind": 1,
+                "name": "agent.run/legal-steward",
+                "parentSpanId": "aad75bd497b62c27",
+                "spanId": "ca85b41ad6457fe7",
+                "startTimeUnixNano": "1776000000004000000",
+                "status": {
+                  "code": 1
+                },
+                "traceId": "e2d2c7467dccf753252bae34145c4faf"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "gen_ai.agent.name",
+                    "value": {
+                      "stringValue": "gtm-steward"
+                    }
+                  },
+                  {
+                    "key": "gen_ai.operation.name",
+                    "value": {
+                      "stringValue": "invoke_agent"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.agent.run_id",
+                    "value": {
+                      "stringValue": "run:gtm-steward@1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.evidence.class",
+                    "value": {
+                      "stringValue": "LOCAL_DETERMINISTIC"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.input.digest",
+                    "value": {
+                      "stringValue": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.plan.digest",
+                    "value": {
+                      "stringValue": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.predecessor.count",
+                    "value": {
+                      "intValue": "2"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.task.digest",
+                    "value": {
+                      "stringValue": "sha256:f2cc9b887bbbab06b324bee649d04cf5b53b15d2a6820ebb097b7b2acabe7cc8"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.output.digest",
+                    "value": {
+                      "stringValue": "sha256:1a4eb8d632ee6b5dc4e86a021c46787d6490d721a3398095457bffbd8c68b1a7"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "endTimeUnixNano": "1776000000007000000",
+                "kind": 1,
+                "links": [
+                  {
+                    "attributes": [
+                      {
+                        "key": "orgrebase.link.kind",
+                        "value": {
+                          "stringValue": "orchestration_predecessor"
+                        }
+                      }
+                    ],
+                    "spanId": "ca85b41ad6457fe7",
+                    "traceId": "e2d2c7467dccf753252bae34145c4faf"
+                  }
+                ],
+                "name": "agent.run/gtm-steward",
+                "parentSpanId": "771e48ae6b1dd1db",
+                "spanId": "5c9d981b4bb965dd",
+                "startTimeUnixNano": "1776000000006000000",
+                "status": {
+                  "code": 1
+                },
+                "traceId": "e2d2c7467dccf753252bae34145c4faf"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "gen_ai.agent.name",
+                    "value": {
+                      "stringValue": "skill-curator"
+                    }
+                  },
+                  {
+                    "key": "gen_ai.operation.name",
+                    "value": {
+                      "stringValue": "invoke_agent"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.agent.run_id",
+                    "value": {
+                      "stringValue": "run:skill-curator@1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.evidence.class",
+                    "value": {
+                      "stringValue": "LOCAL_DETERMINISTIC"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.input.digest",
+                    "value": {
+                      "stringValue": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.plan.digest",
+                    "value": {
+                      "stringValue": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.predecessor.count",
+                    "value": {
+                      "intValue": "1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.orchestration.task.digest",
+                    "value": {
+                      "stringValue": "sha256:2cf5d68f53ea0200fa64e304506833a3ab80ce8db89145a351c9ad6e708f9c9d"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.output.digest",
+                    "value": {
+                      "stringValue": "sha256:eb0465916c6ea49cd03a94313670fad49eb715fc8b95de33fe602e39cf12bdc8"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "endTimeUnixNano": "1776000000009000000",
+                "kind": 1,
+                "name": "agent.run/skill-curator",
+                "parentSpanId": "5c9d981b4bb965dd",
+                "spanId": "dfa6459e5d6598c3",
+                "startTimeUnixNano": "1776000000008000000",
+                "status": {
+                  "code": 1
+                },
+                "traceId": "e2d2c7467dccf753252bae34145c4faf"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "gen_ai.operation.name",
+                    "value": {
+                      "stringValue": "execute_tool"
+                    }
+                  },
+                  {
+                    "key": "gen_ai.tool.name",
+                    "value": {
+                      "stringValue": "orgrebase.read_dependency_evidence"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.evidence.class",
+                    "value": {
+                      "stringValue": "LOCAL_DETERMINISTIC"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.request.digest",
+                    "value": {
+                      "stringValue": "sha256:ca8d004a9aa0d33c6f1d0dd524ab382282e831c023b36d237ed37bbc07abc28a"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.result.digest",
+                    "value": {
+                      "stringValue": "sha256:797ef11aadca41aaef0f41e8263c3d615c4675455cd136d91b8cede557f595b1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "endTimeUnixNano": "1776000000023000000",
+                "kind": 3,
+                "name": "tool.call/orgrebase.read_dependency_evidence",
+                "parentSpanId": "5c9d981b4bb965dd",
+                "spanId": "9f223887129d01ad",
+                "startTimeUnixNano": "1776000000022000000",
+                "status": {
+                  "code": 1
+                },
+                "traceId": "e2d2c7467dccf753252bae34145c4faf"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "orgrebase.evidence.class",
+                    "value": {
+                      "stringValue": "LOCAL_DETERMINISTIC"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.preview.ref",
+                    "value": {
+                      "stringValue": "preview:launch-date@r1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.receipt.digest",
+                    "value": {
+                      "stringValue": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.receipt.id",
+                    "value": {
+                      "stringValue": "rebase:launch-date@1"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.run.nonce",
+                    "value": {
+                      "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                    }
+                  },
+                  {
+                    "key": "orgrebase.workflow.run_id",
+                    "value": {
+                      "stringValue": "run:orgrebase:launch-date:local@1"
+                    }
+                  }
+                ],
+                "endTimeUnixNano": "1776000000040000000",
+                "kind": 2,
+                "name": "control.apply_rebase",
+                "spanId": "88bff2ea6e1da46b",
+                "startTimeUnixNano": "1776000000000000000",
+                "status": {
+                  "code": 1
+                },
+                "traceId": "e2d2c7467dccf753252bae34145c4faf"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

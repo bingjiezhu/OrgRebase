@@ -1,0 +1,242 @@
+{
+  "$defs": {
+    "ClaimScope": {
+      "enum": [
+        "ORGANIZATION",
+        "TASK"
+      ],
+      "title": "ClaimScope",
+      "type": "string"
+    },
+    "DependencyStrength": {
+      "enum": [
+        "HARD",
+        "REVIEW",
+        "INFORMATIONAL"
+      ],
+      "title": "DependencyStrength",
+      "type": "string"
+    },
+    "ExtraRequirementPolicy": {
+      "enum": [
+        "REJECT",
+        "REVIEW"
+      ],
+      "title": "ExtraRequirementPolicy",
+      "type": "string"
+    },
+    "ObjectState": {
+      "enum": [
+        "PROPOSED",
+        "CURRENT",
+        "SUPERSEDED",
+        "STALE",
+        "REVIEW_REQUIRED",
+        "REBASE_REQUIRED",
+        "ROLLED_BACK_PENDING_REBASE",
+        "REQUALIFICATION_REQUIRED",
+        "SHADOW",
+        "CANARY",
+        "ACTIVE",
+        "QUARANTINED"
+      ],
+      "title": "ObjectState",
+      "type": "string"
+    },
+    "RequirementSlotSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_purposes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Purposes",
+          "type": "array"
+        },
+        "allowed_recipients": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Recipients",
+          "type": "array"
+        },
+        "claim_scope": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ClaimScope"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "domain_id": {
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "freshness_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Freshness Seconds"
+        },
+        "output_field_paths": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Output Field Paths",
+          "type": "array"
+        },
+        "relation": {
+          "title": "Relation",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "semantic_kind": {
+          "$ref": "#/$defs/SemanticKind"
+        },
+        "sensitivity_ceiling": {
+          "default": "INTERNAL",
+          "title": "Sensitivity Ceiling",
+          "type": "string"
+        },
+        "slot_id": {
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "strength": {
+          "$ref": "#/$defs/DependencyStrength"
+        },
+        "value_schema_ref": {
+          "title": "Value Schema Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "slot_id",
+        "semantic_kind",
+        "domain_id",
+        "value_schema_ref",
+        "required",
+        "relation",
+        "strength",
+        "allowed_purposes",
+        "allowed_recipients"
+      ],
+      "title": "RequirementSlotSpec",
+      "type": "object"
+    },
+    "SemanticKind": {
+      "enum": [
+        "CLAIM",
+        "POLICY",
+        "SKILL",
+        "TOOL",
+        "LITERAL"
+      ],
+      "title": "SemanticKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-task-template-version.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tool_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tool Ids",
+      "type": "array"
+    },
+    "deliverable_kind": {
+      "title": "Deliverable Kind",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "extra_requirement_policy": {
+      "$ref": "#/$defs/ExtraRequirementPolicy"
+    },
+    "forbidden_fields": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Forbidden Fields",
+      "type": "array"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "output_schema_ref": {
+      "title": "Output Schema Ref",
+      "type": "string"
+    },
+    "preservation_fields": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Preservation Fields",
+      "type": "array"
+    },
+    "renderer_id": {
+      "title": "Renderer Id",
+      "type": "string"
+    },
+    "renderer_version": {
+      "title": "Renderer Version",
+      "type": "string"
+    },
+    "slots": {
+      "items": {
+        "$ref": "#/$defs/RequirementSlotSpec"
+      },
+      "title": "Slots",
+      "type": "array"
+    },
+    "state": {
+      "$ref": "#/$defs/ObjectState",
+      "default": "ACTIVE"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "deliverable_kind",
+    "slots",
+    "extra_requirement_policy",
+    "renderer_id",
+    "renderer_version",
+    "preservation_fields",
+    "forbidden_fields",
+    "output_schema_ref"
+  ],
+  "title": "TaskTemplateVersion",
+  "type": "object"
+}

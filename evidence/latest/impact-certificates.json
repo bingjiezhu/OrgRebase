@@ -1,0 +1,407 @@
+{
+  "schema_version": "orgrebase.impact-certificate-bundle.v1",
+  "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+  "certificates": [
+    {
+      "certificate_type": "POSITIVE_WITNESS",
+      "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+      "claim_boundary": "An admitted typed witness path exists in the committed dependency snapshot; causality outside that snapshot is not claimed.",
+      "classification": "AFFECTED_HARD",
+      "digest": "sha256:386ce8ad6418fa5d7de02a392fa0b698769f423d1abd01c406d6dd92e59250c8",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "impact-certificate:work:sales_quote_a@r1",
+      "reason_code": "ADMITTED_TYPED_PATH",
+      "result_digest": "sha256:f757bebdc6be6f0cd778ab4401163c1b83f51a7b0d6af4bae8696195e82e03d2",
+      "revision_lock_digest": "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8",
+      "schema_version": "orgrebase.impact-certificate.v1",
+      "subject_id": "work:sales_quote_a",
+      "traversal_commitment": {
+        "budget_exhausted": false,
+        "dependency_snapshot_digest": "sha256:2f8cd84a7b791c4dc0be910ba53afe792871adef4e9d08343e5fecfbd9a5df6c",
+        "eligible_edge_ids": [
+          "edge:contract-obligation",
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support",
+          "edge:message-support",
+          "edge:plan-sales",
+          "edge:pricing-finance",
+          "edge:residency-legal"
+        ],
+        "excluded_edges": [
+          {
+            "edge_id": "edge:launch-partner-candidate",
+            "reason": "STATUS_PROPOSED_EDGE"
+          }
+        ],
+        "max_depth": 8,
+        "reachable_edge_ids": [
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support"
+        ],
+        "reachable_node_ids": [
+          "claim:product.launch_date",
+          "skill:enterprise-launch-readiness",
+          "work:sales_quote_a",
+          "work:support_doc_b"
+        ],
+        "reachable_slice_digest": "sha256:5d05258d8230e252bf4b6d9968471ebdf815ddae333af47c66a229c5de4771ec",
+        "selected_path_classification": "AFFECTED_HARD",
+        "selected_path_edge_ids": [
+          "edge:launch-sales"
+        ],
+        "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+        "source_id": "claim:product.launch_date",
+        "target_coverage": {
+          "assessment_failures": [],
+          "manifest_completeness": "COMPLETE",
+          "manifest_digest": "sha256:e19927a5c20a4bbe04df935db8c71aba2ecf71812b38303e39b2b9adb9ef6d4f",
+          "manifest_ref": "dependency-manifest:sales-quote-a@v1",
+          "requirement_slot_ids": [
+            "slot:sales-launch-date",
+            "slot:sales-enterprise-plan"
+          ],
+          "target_ref": "work:sales_quote_a@v1"
+        },
+        "target_coverage_digest": "sha256:c50a8827bfd1fb077dbe9078b994c35898a220b5e2c9f54d42c847bae1e510e6",
+        "target_id": "work:sales_quote_a",
+        "truncated_frontier_edge_ids": []
+      },
+      "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0"
+    },
+    {
+      "certificate_type": "POSITIVE_WITNESS",
+      "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+      "claim_boundary": "An admitted typed witness path exists in the committed dependency snapshot; causality outside that snapshot is not claimed.",
+      "classification": "AFFECTED_HARD",
+      "digest": "sha256:e4e9eaf0984929bceca123347a80f077421f32c7a97d0bb6fe2bb103eb95573d",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "impact-certificate:work:support_doc_b@r1",
+      "reason_code": "ADMITTED_TYPED_PATH",
+      "result_digest": "sha256:d7b6a70dff8c4e7cd116cf9be755391d8841188697cb5c3442d119066eac09f9",
+      "revision_lock_digest": "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8",
+      "schema_version": "orgrebase.impact-certificate.v1",
+      "subject_id": "work:support_doc_b",
+      "traversal_commitment": {
+        "budget_exhausted": false,
+        "dependency_snapshot_digest": "sha256:2f8cd84a7b791c4dc0be910ba53afe792871adef4e9d08343e5fecfbd9a5df6c",
+        "eligible_edge_ids": [
+          "edge:contract-obligation",
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support",
+          "edge:message-support",
+          "edge:plan-sales",
+          "edge:pricing-finance",
+          "edge:residency-legal"
+        ],
+        "excluded_edges": [
+          {
+            "edge_id": "edge:launch-partner-candidate",
+            "reason": "STATUS_PROPOSED_EDGE"
+          }
+        ],
+        "max_depth": 8,
+        "reachable_edge_ids": [
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support"
+        ],
+        "reachable_node_ids": [
+          "claim:product.launch_date",
+          "skill:enterprise-launch-readiness",
+          "work:sales_quote_a",
+          "work:support_doc_b"
+        ],
+        "reachable_slice_digest": "sha256:5d05258d8230e252bf4b6d9968471ebdf815ddae333af47c66a229c5de4771ec",
+        "selected_path_classification": "AFFECTED_HARD",
+        "selected_path_edge_ids": [
+          "edge:launch-support"
+        ],
+        "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+        "source_id": "claim:product.launch_date",
+        "target_coverage": {
+          "assessment_failures": [],
+          "manifest_completeness": "COMPLETE",
+          "manifest_digest": "sha256:376dbb3979197109ec438804503054785efb78a5b5bf386c6d8e4c5a95a6d860",
+          "manifest_ref": "dependency-manifest:support-doc-b@v1",
+          "requirement_slot_ids": [
+            "slot:support-launch-date",
+            "slot:support-message"
+          ],
+          "target_ref": "work:support_doc_b@v1"
+        },
+        "target_coverage_digest": "sha256:0f515cc5e4a09ba1ddbafda84460628bcdfacc6ce6e8ec548c593cb068ab29f9",
+        "target_id": "work:support_doc_b",
+        "truncated_frontier_edge_ids": []
+      },
+      "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0"
+    },
+    {
+      "certificate_type": "BOUNDED_NON_IMPACT",
+      "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+      "claim_boundary": "No admitted trusted path exists in the committed dependency snapshot and the target declares complete coverage; this is not a global non-impact claim.",
+      "classification": "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+      "digest": "sha256:79628a9d722038df9d20a43a1505f7c9725f4de269e2613054dfee87842b32ab",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "impact-certificate:work:legal_review_c@r1",
+      "reason_code": "COMPLETE_COVERAGE_NO_ADMITTED_PATH",
+      "result_digest": "sha256:05a4825279ada89528de27fc91d8c4079c25d3096ca21b3c8bfa4a4bb17c2abf",
+      "revision_lock_digest": "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8",
+      "schema_version": "orgrebase.impact-certificate.v1",
+      "subject_id": "work:legal_review_c",
+      "traversal_commitment": {
+        "budget_exhausted": false,
+        "dependency_snapshot_digest": "sha256:2f8cd84a7b791c4dc0be910ba53afe792871adef4e9d08343e5fecfbd9a5df6c",
+        "eligible_edge_ids": [
+          "edge:contract-obligation",
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support",
+          "edge:message-support",
+          "edge:plan-sales",
+          "edge:pricing-finance",
+          "edge:residency-legal"
+        ],
+        "excluded_edges": [
+          {
+            "edge_id": "edge:launch-partner-candidate",
+            "reason": "STATUS_PROPOSED_EDGE"
+          }
+        ],
+        "max_depth": 8,
+        "reachable_edge_ids": [
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support"
+        ],
+        "reachable_node_ids": [
+          "claim:product.launch_date",
+          "skill:enterprise-launch-readiness",
+          "work:sales_quote_a",
+          "work:support_doc_b"
+        ],
+        "reachable_slice_digest": "sha256:5d05258d8230e252bf4b6d9968471ebdf815ddae333af47c66a229c5de4771ec",
+        "selected_path_classification": null,
+        "selected_path_edge_ids": [],
+        "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+        "source_id": "claim:product.launch_date",
+        "target_coverage": {
+          "assessment_failures": [],
+          "manifest_completeness": "COMPLETE",
+          "manifest_digest": "sha256:d6637b93c66611598f4d369513af0f492fedfeedb2b50bc91720a285afcc5990",
+          "manifest_ref": "dependency-manifest:legal-review-c@v1",
+          "requirement_slot_ids": [
+            "slot:legal-residency"
+          ],
+          "target_ref": "work:legal_review_c@v1"
+        },
+        "target_coverage_digest": "sha256:40685c09db80664a7167c5846227263d333e89b4d2f62988be9edc26fe16992f",
+        "target_id": "work:legal_review_c",
+        "truncated_frontier_edge_ids": []
+      },
+      "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0"
+    },
+    {
+      "certificate_type": "BOUNDED_NON_IMPACT",
+      "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+      "claim_boundary": "No admitted trusted path exists in the committed dependency snapshot and the target declares complete coverage; this is not a global non-impact claim.",
+      "classification": "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+      "digest": "sha256:dd2f1638e613826bb587b602ed06f54e84fd5c38ee09ff090ffeea9f6d7ed8b9",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "impact-certificate:work:finance_analysis_d@r1",
+      "reason_code": "COMPLETE_COVERAGE_NO_ADMITTED_PATH",
+      "result_digest": "sha256:de3e5e1be8d5e9284c9078cd8d776d2c44c52faa51b367cbebaddda3e991476c",
+      "revision_lock_digest": "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8",
+      "schema_version": "orgrebase.impact-certificate.v1",
+      "subject_id": "work:finance_analysis_d",
+      "traversal_commitment": {
+        "budget_exhausted": false,
+        "dependency_snapshot_digest": "sha256:2f8cd84a7b791c4dc0be910ba53afe792871adef4e9d08343e5fecfbd9a5df6c",
+        "eligible_edge_ids": [
+          "edge:contract-obligation",
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support",
+          "edge:message-support",
+          "edge:plan-sales",
+          "edge:pricing-finance",
+          "edge:residency-legal"
+        ],
+        "excluded_edges": [
+          {
+            "edge_id": "edge:launch-partner-candidate",
+            "reason": "STATUS_PROPOSED_EDGE"
+          }
+        ],
+        "max_depth": 8,
+        "reachable_edge_ids": [
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support"
+        ],
+        "reachable_node_ids": [
+          "claim:product.launch_date",
+          "skill:enterprise-launch-readiness",
+          "work:sales_quote_a",
+          "work:support_doc_b"
+        ],
+        "reachable_slice_digest": "sha256:5d05258d8230e252bf4b6d9968471ebdf815ddae333af47c66a229c5de4771ec",
+        "selected_path_classification": null,
+        "selected_path_edge_ids": [],
+        "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+        "source_id": "claim:product.launch_date",
+        "target_coverage": {
+          "assessment_failures": [],
+          "manifest_completeness": "COMPLETE",
+          "manifest_digest": "sha256:de24b18e33f43d43c325229ff7eb49dde6fb41959ee097abc1cbfe0fd6557073",
+          "manifest_ref": "dependency-manifest:finance-analysis-d@v1",
+          "requirement_slot_ids": [
+            "slot:finance-pricing"
+          ],
+          "target_ref": "work:finance_analysis_d@v1"
+        },
+        "target_coverage_digest": "sha256:e6d7065b8cedfffdb593a2708fc2c6ef3974315abcd66b5d6c8948d46021c438",
+        "target_id": "work:finance_analysis_d",
+        "truncated_frontier_edge_ids": []
+      },
+      "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0"
+    },
+    {
+      "certificate_type": "UNCERTAINTY_WITNESS",
+      "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+      "claim_boundary": "Coverage is insufficient, so this certificate proves uncertainty only and must never authorize KEEP_CURRENT.",
+      "classification": "UNKNOWN",
+      "digest": "sha256:1842faab340a5e9e5cab360f661830c110999d955d74917929b3f1c5171dfbcc",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "impact-certificate:work:partner_brief_e@r1",
+      "reason_code": "DEPENDENCY_COVERAGE_INSUFFICIENT",
+      "result_digest": "sha256:95714bfb785912ea5dabf614219f74273983a4f4f15f9faa56543310b3666379",
+      "revision_lock_digest": "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8",
+      "schema_version": "orgrebase.impact-certificate.v1",
+      "subject_id": "work:partner_brief_e",
+      "traversal_commitment": {
+        "budget_exhausted": false,
+        "dependency_snapshot_digest": "sha256:2f8cd84a7b791c4dc0be910ba53afe792871adef4e9d08343e5fecfbd9a5df6c",
+        "eligible_edge_ids": [
+          "edge:contract-obligation",
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support",
+          "edge:message-support",
+          "edge:plan-sales",
+          "edge:pricing-finance",
+          "edge:residency-legal"
+        ],
+        "excluded_edges": [
+          {
+            "edge_id": "edge:launch-partner-candidate",
+            "reason": "STATUS_PROPOSED_EDGE"
+          }
+        ],
+        "max_depth": 8,
+        "reachable_edge_ids": [
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support"
+        ],
+        "reachable_node_ids": [
+          "claim:product.launch_date",
+          "skill:enterprise-launch-readiness",
+          "work:sales_quote_a",
+          "work:support_doc_b"
+        ],
+        "reachable_slice_digest": "sha256:5d05258d8230e252bf4b6d9968471ebdf815ddae333af47c66a229c5de4771ec",
+        "selected_path_classification": null,
+        "selected_path_edge_ids": [],
+        "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+        "source_id": "claim:product.launch_date",
+        "target_coverage": {
+          "assessment_failures": [
+            "MANIFEST_PARTIAL",
+            "MANIFEST_REQUIREMENT_SET_MISMATCH"
+          ],
+          "manifest_completeness": "PARTIAL",
+          "manifest_digest": "sha256:98766faf179452539d0a7eb3478be436cc4ff527a68c5863af52260dbc7f4d4e",
+          "manifest_ref": "dependency-manifest:partner-brief-e@v1",
+          "requirement_slot_ids": [
+            "slot:partner-launch-candidate"
+          ],
+          "target_ref": "work:partner_brief_e@v1"
+        },
+        "target_coverage_digest": "sha256:148154fd714a72360f4b82e2c3f615b3eab7d3c760dc7dced762a07284b8fb83",
+        "target_id": "work:partner_brief_e",
+        "truncated_frontier_edge_ids": []
+      },
+      "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0"
+    },
+    {
+      "certificate_type": "POSITIVE_WITNESS",
+      "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+      "claim_boundary": "An admitted typed witness path exists in the committed dependency snapshot; causality outside that snapshot is not claimed.",
+      "classification": "REQUALIFICATION_REQUIRED",
+      "digest": "sha256:63272f07ba24fd7157da11cdf92b5834859f52fdb667e47821dd4856a296cda6",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "impact-certificate:skill:enterprise-launch-readiness@r1",
+      "reason_code": "HARD_CONTRACT_DEPENDENCY_CHANGED",
+      "result_digest": "sha256:9c446f9d8635e794882c8bc8d7d2afa473114d0798998a6da2b6f0fb361b58ae",
+      "revision_lock_digest": "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8",
+      "schema_version": "orgrebase.impact-certificate.v1",
+      "subject_id": "skill:enterprise-launch-readiness",
+      "traversal_commitment": {
+        "budget_exhausted": false,
+        "dependency_snapshot_digest": "sha256:2f8cd84a7b791c4dc0be910ba53afe792871adef4e9d08343e5fecfbd9a5df6c",
+        "eligible_edge_ids": [
+          "edge:contract-obligation",
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support",
+          "edge:message-support",
+          "edge:plan-sales",
+          "edge:pricing-finance",
+          "edge:residency-legal"
+        ],
+        "excluded_edges": [
+          {
+            "edge_id": "edge:launch-partner-candidate",
+            "reason": "STATUS_PROPOSED_EDGE"
+          }
+        ],
+        "max_depth": 8,
+        "reachable_edge_ids": [
+          "edge:launch-sales",
+          "edge:launch-skill",
+          "edge:launch-support"
+        ],
+        "reachable_node_ids": [
+          "claim:product.launch_date",
+          "skill:enterprise-launch-readiness",
+          "work:sales_quote_a",
+          "work:support_doc_b"
+        ],
+        "reachable_slice_digest": "sha256:5d05258d8230e252bf4b6d9968471ebdf815ddae333af47c66a229c5de4771ec",
+        "selected_path_classification": "AFFECTED_HARD",
+        "selected_path_edge_ids": [
+          "edge:launch-skill"
+        ],
+        "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+        "source_id": "claim:product.launch_date",
+        "target_coverage": {
+          "assessment_failures": [],
+          "manifest_completeness": "COMPLETE",
+          "manifest_digest": "sha256:714c2fe8753dd0978546dbdad9947d438a7c77fadd5114826f6f302a69bf5fae",
+          "manifest_ref": "dependency-manifest:launch-readiness-skill@1.2",
+          "requirement_slot_ids": [
+            "slot:skill-launch-date"
+          ],
+          "target_ref": "skill:enterprise-launch-readiness@1.2"
+        },
+        "target_coverage_digest": "sha256:6cae0df578575590aa287a7d6a48791962b7ba12cd975d3f073e68d65e16dbd6",
+        "target_id": "skill:enterprise-launch-readiness",
+        "truncated_frontier_edge_ids": []
+      },
+      "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0"
+    }
+  ]
+}

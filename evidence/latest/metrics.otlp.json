@@ -1,0 +1,214 @@
+{
+  "resourceMetrics": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "deployment.environment.name",
+            "value": {
+              "stringValue": "local-deterministic"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "orgrebase"
+            }
+          },
+          {
+            "key": "service.version",
+            "value": {
+              "stringValue": "0.3.0"
+            }
+          }
+        ]
+      },
+      "scopeMetrics": [
+        {
+          "metrics": [
+            {
+              "gauge": {
+                "dataPoints": [
+                  {
+                    "asInt": "2",
+                    "attributes": [
+                      {
+                        "key": "metric",
+                        "value": {
+                          "stringValue": "bounded_unaffected"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.run.nonce",
+                        "value": {
+                          "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.workflow.run_id",
+                        "value": {
+                          "stringValue": "run:orgrebase:launch-date:local@1"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1776000000032000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "metric",
+                        "value": {
+                          "stringValue": "facts_changed"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.run.nonce",
+                        "value": {
+                          "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.workflow.run_id",
+                        "value": {
+                          "stringValue": "run:orgrebase:launch-date:local@1"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1776000000032000000"
+                  },
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "metric",
+                        "value": {
+                          "stringValue": "false_invalidations"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.run.nonce",
+                        "value": {
+                          "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.workflow.run_id",
+                        "value": {
+                          "stringValue": "run:orgrebase:launch-date:local@1"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1776000000032000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "metric",
+                        "value": {
+                          "stringValue": "skills_requalified"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.run.nonce",
+                        "value": {
+                          "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.workflow.run_id",
+                        "value": {
+                          "stringValue": "run:orgrebase:launch-date:local@1"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1776000000032000000"
+                  },
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "metric",
+                        "value": {
+                          "stringValue": "unauthorized_disclosures"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.run.nonce",
+                        "value": {
+                          "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.workflow.run_id",
+                        "value": {
+                          "stringValue": "run:orgrebase:launch-date:local@1"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1776000000032000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "metric",
+                        "value": {
+                          "stringValue": "unknown"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.run.nonce",
+                        "value": {
+                          "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.workflow.run_id",
+                        "value": {
+                          "stringValue": "run:orgrebase:launch-date:local@1"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1776000000032000000"
+                  },
+                  {
+                    "asInt": "2",
+                    "attributes": [
+                      {
+                        "key": "metric",
+                        "value": {
+                          "stringValue": "work_items_rebased"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.run.nonce",
+                        "value": {
+                          "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                        }
+                      },
+                      {
+                        "key": "orgrebase.workflow.run_id",
+                        "value": {
+                          "stringValue": "run:orgrebase:launch-date:local@1"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1776000000032000000"
+                  }
+                ]
+              },
+              "name": "orgrebase.rebase.outcome",
+              "unit": "{item}"
+            }
+          ],
+          "scope": {
+            "name": "orgrebase",
+            "version": "0.3.0"
+          }
+        }
+      ]
+    }
+  ]
+}

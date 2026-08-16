@@ -1,0 +1,37 @@
+{
+  "name": "legal-steward",
+  "role": "Restricted legal source interpreter",
+  "capabilities": [
+    "read synthetic restricted legal source",
+    "derive minimal obligation claim",
+    "identify legal non-impact"
+  ],
+  "inputs": [
+    "CompiledDelegationTask",
+    "Legal ContextManifest",
+    "ChangeSet scope",
+    "ImpactPreview"
+  ],
+  "outputs": [
+    "MinimalClaimCandidate",
+    "CoverageAssertionCandidate"
+  ],
+  "dependencies": [
+    "legal-scoped read tools",
+    "purpose policy"
+  ],
+  "decision_boundary": [
+    "cannot disclose full contract to GTM",
+    "cannot decide GTM work state",
+    "cannot approve change"
+  ],
+  "trace": [
+    "orchestration_plan_digest",
+    "delegation_task_digest",
+    "source_digest",
+    "derivation_digest",
+    "policy_decision",
+    "handoff_digest"
+  ],
+  "authority_domain": "legal"
+}

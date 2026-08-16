@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/contracts/agent-candidate-result.schema.json",
+  "title": "OrgRebase AgentTeams candidate result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "nonce",
+    "worker_name",
+    "candidate_only",
+    "orchestration_plan_digest",
+    "delegation_task_digest",
+    "input_refs",
+    "output",
+    "uncertainty",
+    "prohibited_actions_respected"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.candidate-result.v1"},
+    "run_id": {"type": "string", "pattern": "^run:orgrebase:live:"},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "worker_name": {
+      "enum": ["product-steward", "legal-steward", "gtm-steward", "skill-curator"]
+    },
+    "candidate_only": {"const": true},
+    "orchestration_plan_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "delegation_task_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "input_refs": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    },
+    "output": {"type": "object", "minProperties": 1},
+    "uncertainty": {"type": "array", "items": {"type": "string"}},
+    "prohibited_actions_respected": {
+      "type": "array",
+      "uniqueItems": true,
+      "allOf": [
+        {"contains": {"const": "no_canonical_write"}},
+        {"contains": {"const": "no_approval"}},
+        {"contains": {"const": "no_apply"}},
+        {"contains": {"const": "no_cross_domain_authority"}}
+      ]
+    }
+  }
+}

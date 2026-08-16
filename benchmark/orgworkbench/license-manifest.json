@@ -1,0 +1,65 @@
+{
+  "assets": [
+    {
+      "asset_id": "owb-v1.1-open-core",
+      "content_checksum_policy": "CONTENT_ADDRESSED_IN_DATASET_MANIFEST",
+      "license_source_url": "repository://LICENSE",
+      "license_spdx": "PolyForm-Noncommercial-1.0.0",
+      "license_verified_at": "2026-08-16",
+      "notice": "Project-generated synthetic benchmark; no real PII. Commercial use follows repository COMMERCIAL-LICENSE.md.",
+      "origin": "project-generated",
+      "pii_class": "SYNTHETIC",
+      "redistribution": "ALLOWED",
+      "release_bundle": true,
+      "source_url": "repository://benchmark/orgworkbench",
+      "usage": "CANONICAL_BENCHMARK",
+      "version_or_commit": "owb.v1.1"
+    },
+    {
+      "asset_id": "microsoft-sql-samples-schema",
+      "content_checksum_policy": "REQUIRED_AFTER_VERSION_PIN",
+      "license_source_url": "https://github.com/microsoft/sql-server-samples/blob/master/license.txt",
+      "license_spdx": "MIT",
+      "license_verified_at": "2026-08-16",
+      "notice": "Schema inspiration/adapter only; core rows regenerated.",
+      "origin": "microsoft/sql-server-samples",
+      "pii_class": "NONE",
+      "redistribution": "ALLOWED",
+      "release_bundle": false,
+      "source_url": "https://github.com/microsoft/sql-server-samples",
+      "usage": "OPTIONAL_REALISM",
+      "version_or_commit": "PIN_AT_IMPLEMENTATION"
+    },
+    {
+      "asset_id": "cuad-legal-adapter",
+      "content_checksum_policy": "REQUIRED_AFTER_VERSION_PIN",
+      "license_source_url": "https://www.atticusprojectai.org/cuad/",
+      "license_spdx": "CC-BY-4.0",
+      "license_verified_at": "2026-08-16",
+      "notice": "Not included in OWB core; preserve attribution and dataset terms.",
+      "origin": "TheAtticusProject/cuad",
+      "pii_class": "PUBLIC_CONTRACT_TEXT_REVIEW_REQUIRED",
+      "redistribution": "SEPARATE_ATTRIBUTED_PACK_OR_LINK_ONLY",
+      "release_bundle": false,
+      "source_url": "https://www.atticusprojectai.org/cuad/",
+      "usage": "OPTIONAL_LEGAL_REALISM_LINK_ONLY",
+      "version_or_commit": "PIN_AT_IMPLEMENTATION"
+    },
+    {
+      "asset_id": "contractnli-legal-adapter",
+      "content_checksum_policy": "REQUIRED_AFTER_VERSION_PIN",
+      "license_source_url": "https://stanfordnlp.github.io/contract-nli/",
+      "license_spdx": "CC-BY-4.0",
+      "license_verified_at": "2026-08-16",
+      "notice": "Not included in OWB core; preserve attribution and dataset terms.",
+      "origin": "stanfordnlp/contract-nli",
+      "pii_class": "PUBLIC_CONTRACT_TEXT_REVIEW_REQUIRED",
+      "redistribution": "SEPARATE_ATTRIBUTED_PACK_OR_LINK_ONLY",
+      "release_bundle": false,
+      "source_url": "https://stanfordnlp.github.io/contract-nli/",
+      "usage": "OPTIONAL_LEGAL_ENTAILMENT_REALISM_LINK_ONLY",
+      "version_or_commit": "PIN_AT_IMPLEMENTATION"
+    }
+  ],
+  "schema_version": "orgrebase.dataset-license-manifest.v1"
+}

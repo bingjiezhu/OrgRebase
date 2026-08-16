@@ -1,0 +1,228 @@
+{
+  "$defs": {
+    "EvaluationMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "case_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Case Refs",
+          "type": "array"
+        },
+        "denominator": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Denominator"
+        },
+        "metric_id": {
+          "title": "Metric Id",
+          "type": "string"
+        },
+        "numerator": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Numerator"
+        },
+        "status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "NOT_APPLICABLE"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "metric_id",
+        "value",
+        "status"
+      ],
+      "title": "EvaluationMetric",
+      "type": "object"
+    },
+    "OWBCoreScore": {
+      "additionalProperties": false,
+      "properties": {
+        "benchmark_version": {
+          "title": "Benchmark Version",
+          "type": "string"
+        },
+        "component_scores": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Component Scores",
+          "type": "object"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "pass_threshold": {
+          "default": 90.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Pass Threshold",
+          "type": "number"
+        },
+        "status": {
+          "enum": [
+            "PASS",
+            "FAIL"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "system_profile": {
+          "title": "System Profile",
+          "type": "string"
+        },
+        "weighted_score": {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Weighted Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "benchmark_version",
+        "system_profile",
+        "component_scores",
+        "weighted_score",
+        "status"
+      ],
+      "title": "OWBCoreScore",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-evaluation-report.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_version": {
+      "title": "Benchmark Version",
+      "type": "string"
+    },
+    "case_receipt_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Case Receipt Refs",
+      "type": "array"
+    },
+    "completed_at": {
+      "title": "Completed At",
+      "type": "string"
+    },
+    "core_score": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/OWBCoreScore"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "hard_gate_results": {
+      "items": {
+        "$ref": "#/$defs/EvaluationMetric"
+      },
+      "title": "Hard Gate Results",
+      "type": "array"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "metrics": {
+      "items": {
+        "$ref": "#/$defs/EvaluationMetric"
+      },
+      "title": "Metrics",
+      "type": "array"
+    },
+    "mode": {
+      "title": "Mode",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_RUN"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "system_profile": {
+      "title": "System Profile",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "benchmark_version",
+    "system_profile",
+    "mode",
+    "case_receipt_refs",
+    "metrics",
+    "hard_gate_results",
+    "status",
+    "evidence_refs",
+    "completed_at"
+  ],
+  "title": "EvaluationReport",
+  "type": "object"
+}

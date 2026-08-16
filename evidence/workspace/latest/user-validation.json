@@ -1,0 +1,16 @@
+{
+  "digest": "sha256:c244eedc041a6c5a915f70ce30596144486b0e48dc4f6a73afd9a4914211e281",
+  "evidence_class": "NOT_RUN",
+  "id": "user-validation:workspace@v1",
+  "limitations": [
+    "Synthetic scenario checks cannot be represented as USER_STUDY evidence.",
+    "Collect at least five consented, redacted enterprise-role walkthroughs."
+  ],
+  "median_trace_value": 0.0,
+  "median_usefulness": 0.0,
+  "participant_count": 0,
+  "pilot_or_conditional_count": 0,
+  "problem_comprehension_rate": 0.0,
+  "repeated_critical_gaps": [],
+  "status": "NOT_RUN"
+}

@@ -1,0 +1,197 @@
+{
+  "schema_version": "orgrebase.review-readiness.v1",
+  "criteria": [
+    {
+      "id": "real_user_and_application_scenario",
+      "title": "Real user and application scenario",
+      "status": "DOCUMENTED_WITH_EXECUTABLE_SYNTHETIC_DEMO;EXTERNAL_USER_STUDY_NOT_RUN",
+      "documents": [
+        "README.md",
+        "docs/USER-AND-APPLICATION-SCENARIO.md",
+        "docs/WORKSPACE-DEMO-RUNBOOK.md",
+        "examples/README.md"
+      ],
+      "code_paths": [
+        "src/orgrebase/workspace/formation.py",
+        "src/orgrebase/workspace/service.py",
+        "src/orgrebase/workspace/user_validation.py"
+      ],
+      "tests": [
+        "tests/workspace/test_formation.py",
+        "tests/workspace/test_user_validation.py",
+        "tests/workspace/test_cli.py",
+        "tests/workspace/test_api.py"
+      ],
+      "evidence_paths": [
+        "evidence/workspace/latest/workspace-demo.json",
+        "evidence/workspace/latest/user-validation.json",
+        "examples/input/enterprise-quote-task.json",
+        "examples/output/quote-v3.json"
+      ],
+      "commands": [
+        "make workspace-demo",
+        "make workspace-user-validation-check"
+      ],
+      "claim_boundary": "The user problem, workflow, target roles, deployment path, and validation protocol are documented. The bundled business run is synthetic and the external user study remains NOT_RUN."
+    },
+    {
+      "id": "agent_complete_task_closure",
+      "title": "Agent complete task closure",
+      "status": "LOCAL_DETERMINISTIC_E2E_PASS;WORKSPACE_LIVE_AGENTTEAMS_NOT_RUN",
+      "documents": [
+        "docs/AGENT-TASK-CLOSURE.md",
+        "docs/AGENT-IDENTITIES.md",
+        "docs/WORKSPACE-ARCHITECTURE.md",
+        "agentteams/workspace/README.md"
+      ],
+      "code_paths": [
+        "src/orgrebase/workspace/task_agent.py",
+        "src/orgrebase/workspace/planner.py",
+        "src/orgrebase/workspace/domain_agents.py",
+        "src/orgrebase/workspace/execution.py",
+        "src/orgrebase/workspace/rebuild.py",
+        "src/orgrebase/workspace/transport.py"
+      ],
+      "tests": [
+        "tests/workspace/test_formation.py",
+        "tests/workspace/test_rebase.py",
+        "tests/workspace/test_repeatability.py",
+        "tests/workspace/test_transport.py",
+        "tests/workspace/test_agentteams_live_evidence.py"
+      ],
+      "evidence_paths": [
+        "evidence/workspace/latest/formation/task-receipt.json",
+        "evidence/workspace/latest/rebase/launch-workspace-rebase-receipt.json",
+        "evidence/workspace/latest/rebase/currency-workspace-rebase-receipt.json",
+        "evidence/workspace/latest/repeatability/final-quote.json",
+        "evidence/workspace/latest/agentteams-check.json"
+      ],
+      "commands": [
+        "make workspace-check",
+        "make workspace-agentteams-conformance-check"
+      ],
+      "claim_boundary": "The local task-to-Quote-to-two-change-to-Skill loop is complete. The Workspace-specific external AgentTeams run is not claimed without correlated K8s, Matrix, artifact, Skill, and provider evidence."
+    },
+    {
+      "id": "core_function_verifiable_materials",
+      "title": "Core functions have verifiable material",
+      "status": "PASS",
+      "documents": [
+        "docs/VERIFICATION-EVIDENCE-MAP.md",
+        "docs/WORKSPACE-EVALUATION.md",
+        "docs/WORKSPACE-DEMO-RUNBOOK.md"
+      ],
+      "code_paths": [
+        "src/orgrebase/impact.py",
+        "src/orgrebase/certificates.py",
+        "src/orgrebase/workspace/evidence.py",
+        "src/orgrebase/workspace/benchmark.py"
+      ],
+      "tests": [
+        "tests/workspace/test_evidence.py",
+        "tests/workspace/test_benchmark.py",
+        "tests/workspace/test_failures.py",
+        "tests/workspace/test_skill_foundry.py"
+      ],
+      "evidence_paths": [
+        "evidence/workspace/latest/evidence-index.json",
+        "evidence/workspace/latest/evaluation/owb-results.json",
+        "evidence/workspace/latest/rebase/launch-minimal-rebase-certificate.json",
+        "evidence/workspace/latest/skill/evaluation-receipt.json",
+        "evidence/latest/proof-pack.json"
+      ],
+      "commands": [
+        "make workspace-evidence-check",
+        "make workspace-benchmark-check",
+        "make workspace-skill-check",
+        "make evidence-verify"
+      ],
+      "claim_boundary": "Evidence proves the declared synthetic/local boundaries, not production ROI, global enterprise graph completeness, or arbitrary free-text causality."
+    },
+    {
+      "id": "model_agent_architecture_tool_interfaces",
+      "title": "Model, Agent architecture, and tool interfaces",
+      "status": "PASS_WITH_OPTIONAL_LIVE_PROFILES",
+      "documents": [
+        "docs/MODEL-AGENT-TOOL-INTERFACES.md",
+        "docs/TOOL-CONTRACT.md",
+        "docs/OBSERVABILITY.md",
+        "docs/SKILL-LIST.md",
+        "agentteams/workspace/README.md"
+      ],
+      "code_paths": [
+        "src/orgrebase/workspace/model_provider.py",
+        "src/orgrebase/workspace/models.py",
+        "src/orgrebase/workspace/ports.py",
+        "src/orgrebase/tools.py",
+        "src/orgrebase/api.py"
+      ],
+      "tests": [
+        "tests/workspace/test_model_provider.py",
+        "tests/workspace/test_model_and_transport.py",
+        "tests/workspace/test_transport.py",
+        "tests/test_goai_runtime.py"
+      ],
+      "evidence_paths": [
+        "schemas/workspace-model-request.schema.json",
+        "schemas/workspace-model-response-receipt.schema.json",
+        "schemas/workspace-domain-read-request.schema.json",
+        "schemas/workspace-domain-read-projection.schema.json",
+        "agentteams/workspace/source-lock.json"
+      ],
+      "commands": [
+        "make workspace-contract-check",
+        "make workspace-model-check",
+        "make workspace-agentteams-static-check"
+      ],
+      "claim_boundary": "Deterministic and replay profiles are executable. Live model and Workspace AgentTeams evidence are optional and honestly classified."
+    },
+    {
+      "id": "data_authorization_and_privacy_risk",
+      "title": "Data authorization and privacy risk",
+      "status": "PASS_FOR_SYNTHETIC_RELEASE;PRODUCTION_CONNECTOR_REVIEW_REQUIRED",
+      "documents": [
+        "docs/WORKSPACE-DATA-AND-PRIVACY.md",
+        "benchmark/orgworkbench/DATASET-CARD.md",
+        "docs/THIRD-PARTY-INVENTORY.md",
+        "SECURITY.md"
+      ],
+      "code_paths": [
+        "src/orgrebase/workspace/admission.py",
+        "src/orgrebase/workspace/context.py",
+        "src/orgrebase/workspace/evidence.py",
+        "src/orgrebase/workspace/user_validation.py"
+      ],
+      "tests": [
+        "tests/workspace/test_privacy.py",
+        "tests/workspace/test_evidence.py",
+        "tests/workspace/test_user_validation.py",
+        "tests/workspace/test_benchmark.py"
+      ],
+      "evidence_paths": [
+        "benchmark/orgworkbench/dataset-manifest.json",
+        "benchmark/orgworkbench/license-manifest.json",
+        "evidence/workspace/latest/formation/task-context.json",
+        "evidence/workspace/latest/user-validation.json"
+      ],
+      "commands": [
+        "make workspace-benchmark-check",
+        "make workspace-evidence-check",
+        "make workspace-user-validation-check"
+      ],
+      "claim_boundary": "Bundled data is project-generated synthetic data. Optional external datasets are link/download-only and require pinning, attribution, checksum, PII review, and retention approval before use."
+    }
+  ],
+  "required_criteria": [
+    "real_user_and_application_scenario",
+    "agent_complete_task_closure",
+    "core_function_verifiable_materials",
+    "model_agent_architecture_tool_interfaces",
+    "data_authorization_and_privacy_risk"
+  ],
+  "current_external_boundaries": {
+    "workspace_agentteams_live": "NOT_RUN",
+    "real_user_validation": "NOT_RUN",
+    "real_enterprise_connectors": "NOT_RUN"
+  }
+}

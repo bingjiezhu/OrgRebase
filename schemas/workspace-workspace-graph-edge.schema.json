@@ -1,0 +1,111 @@
+{
+  "$defs": {
+    "CoverageBasis": {
+      "enum": [
+        "RUNTIME_OBSERVED",
+        "OWNER_DECLARED_COMPLETE",
+        "CONTRACT_DECLARED",
+        "IMPORTED_VERIFIED",
+        "AGENT_INFERRED",
+        "UNKNOWN_COVERAGE"
+      ],
+      "title": "CoverageBasis",
+      "type": "string"
+    },
+    "DependencyStrength": {
+      "enum": [
+        "HARD",
+        "REVIEW",
+        "INFORMATIONAL"
+      ],
+      "title": "DependencyStrength",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-workspace-graph-edge.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "consumer_ref": {
+      "title": "Consumer Ref",
+      "type": "string"
+    },
+    "coverage_basis": {
+      "$ref": "#/$defs/CoverageBasis"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "provider_digest": {
+      "title": "Provider Digest",
+      "type": "string"
+    },
+    "provider_ref": {
+      "title": "Provider Ref",
+      "type": "string"
+    },
+    "relation": {
+      "title": "Relation",
+      "type": "string"
+    },
+    "source_evidence_ref": {
+      "title": "Source Evidence Ref",
+      "type": "string"
+    },
+    "source_manifest_ref": {
+      "title": "Source Manifest Ref",
+      "type": "string"
+    },
+    "source_trace_event_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Trace Event Ref"
+    },
+    "strength": {
+      "$ref": "#/$defs/DependencyStrength"
+    },
+    "valid_from": {
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_to": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Valid To"
+    }
+  },
+  "required": [
+    "id",
+    "provider_ref",
+    "provider_digest",
+    "consumer_ref",
+    "relation",
+    "strength",
+    "source_manifest_ref",
+    "source_evidence_ref",
+    "coverage_basis",
+    "valid_from"
+  ],
+  "title": "WorkspaceGraphEdge",
+  "type": "object"
+}

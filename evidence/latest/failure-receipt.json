@@ -1,0 +1,25 @@
+{
+  "actual_revisions": {
+    "graph": "graph:canonical@r2-injected",
+    "policy": "policy:context@r1",
+    "runtime_registry": "runtime:registry@r1",
+    "skill_registry": "skills:registry@r1"
+  },
+  "after_state_digest": "sha256:47e9d1db8ce3e72691780653a330eec19c8fe77b1174ddca46094e0337306747",
+  "before_state_digest": "sha256:47e9d1db8ce3e72691780653a330eec19c8fe77b1174ddca46094e0337306747",
+  "digest": "sha256:7794b5c29569008d275344124047db4f3d4a9f3f3986c8c8f46c325f2c94bab9",
+  "error_code": "PREVIEW_EXPIRED",
+  "evidence_class": "LOCAL_DETERMINISTIC",
+  "expected_revisions": {
+    "graph": "graph:canonical@r1",
+    "policy": "policy:context@r1",
+    "runtime_registry": "runtime:registry@r1",
+    "skill_registry": "skills:registry@r1"
+  },
+  "id": "failure:preview-expired@1",
+  "operation": "APPLY_REBASE",
+  "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+  "status": "REJECTED_BEFORE_WRITE",
+  "target_writes": 0,
+  "workflow_run_id": "run:orgrebase:launch-date:local@1"
+}

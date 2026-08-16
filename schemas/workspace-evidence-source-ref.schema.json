@@ -1,0 +1,70 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-evidence-source-ref.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "locator_class": {
+      "title": "Locator Class",
+      "type": "string"
+    },
+    "media_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Media Type"
+    },
+    "observed_at": {
+      "title": "Observed At",
+      "type": "string"
+    },
+    "source_digest": {
+      "title": "Source Digest",
+      "type": "string"
+    },
+    "source_id": {
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_version": {
+      "title": "Source Version",
+      "type": "string"
+    },
+    "valid_from": {
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_to": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Valid To"
+    }
+  },
+  "required": [
+    "source_id",
+    "source_version",
+    "source_digest",
+    "locator_class",
+    "observed_at",
+    "valid_from"
+  ],
+  "title": "EvidenceSourceRef",
+  "type": "object"
+}

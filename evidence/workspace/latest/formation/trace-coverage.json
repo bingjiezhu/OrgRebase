@@ -1,0 +1,98 @@
+{
+  "allowed_optional_slots": [],
+  "digest": "sha256:40b4a03414b818b268ea947bcba4b4a1fbfe5c53740ad0876812683ebc91f6d4",
+  "expected_required_slots": [
+    "currency",
+    "data_residency",
+    "launch_date",
+    "notice_required",
+    "partner_terms",
+    "price_band",
+    "product_plan",
+    "quote_compose_skill"
+  ],
+  "id": "trace-coverage:quote_acme@v1",
+  "missing_slots": [],
+  "observed_slots": [
+    "currency",
+    "data_residency",
+    "launch_date",
+    "notice_required",
+    "partner_terms",
+    "price_band",
+    "product_plan",
+    "quote_compose_skill"
+  ],
+  "output_field_lineage": [
+    {
+      "field_path": "owner",
+      "source_kind": "TASK_LITERAL",
+      "source_slot_ids": []
+    },
+    {
+      "field_path": "deliverable_kind",
+      "source_kind": "DETERMINISTIC_COMPUTED",
+      "source_slot_ids": []
+    },
+    {
+      "field_path": "customer_id",
+      "source_kind": "TASK_LITERAL",
+      "source_slot_ids": []
+    },
+    {
+      "field_path": "product_plan",
+      "source_kind": "SLOT",
+      "source_slot_ids": [
+        "product_plan"
+      ]
+    },
+    {
+      "field_path": "launch_date",
+      "source_kind": "SLOT",
+      "source_slot_ids": [
+        "launch_date"
+      ]
+    },
+    {
+      "field_path": "data_residency",
+      "source_kind": "SLOT",
+      "source_slot_ids": [
+        "data_residency"
+      ]
+    },
+    {
+      "field_path": "notice_required",
+      "source_kind": "SLOT",
+      "source_slot_ids": [
+        "notice_required"
+      ]
+    },
+    {
+      "field_path": "price_band",
+      "source_kind": "SLOT",
+      "source_slot_ids": [
+        "price_band"
+      ]
+    },
+    {
+      "field_path": "currency",
+      "source_kind": "SLOT",
+      "source_slot_ids": [
+        "currency"
+      ]
+    },
+    {
+      "field_path": "partner_terms_code",
+      "source_kind": "SLOT",
+      "source_slot_ids": [
+        "partner_terms"
+      ]
+    }
+  ],
+  "status": "PASS",
+  "template_ref": "template:enterprise_quote@v1",
+  "trace_ref": "work-trace:quote_acme@v1",
+  "unexpected_slots": [],
+  "unmediated_channels": [],
+  "verifier_version": "workspace-trace-coverage@1.0.0"
+}

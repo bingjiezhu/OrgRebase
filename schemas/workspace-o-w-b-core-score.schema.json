@@ -1,0 +1,57 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-o-w-b-core-score.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_version": {
+      "title": "Benchmark Version",
+      "type": "string"
+    },
+    "component_scores": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Component Scores",
+      "type": "object"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "pass_threshold": {
+      "default": 90.0,
+      "maximum": 100.0,
+      "minimum": 0.0,
+      "title": "Pass Threshold",
+      "type": "number"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "system_profile": {
+      "title": "System Profile",
+      "type": "string"
+    },
+    "weighted_score": {
+      "maximum": 100.0,
+      "minimum": 0.0,
+      "title": "Weighted Score",
+      "type": "number"
+    }
+  },
+  "required": [
+    "benchmark_version",
+    "system_profile",
+    "component_scores",
+    "weighted_score",
+    "status"
+  ],
+  "title": "OWBCoreScore",
+  "type": "object"
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-graph-pointer-payload.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "base_revision": {
+      "title": "Base Revision",
+      "type": "string"
+    },
+    "graph_namespace": {
+      "title": "Graph Namespace",
+      "type": "string"
+    },
+    "promoted_at": {
+      "title": "Promoted At",
+      "type": "string"
+    },
+    "snapshot_digest": {
+      "title": "Snapshot Digest",
+      "type": "string"
+    },
+    "snapshot_ref": {
+      "title": "Snapshot Ref",
+      "type": "string"
+    },
+    "universe_id": {
+      "title": "Universe Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "snapshot_ref",
+    "snapshot_digest",
+    "graph_namespace",
+    "universe_id",
+    "base_revision",
+    "promoted_at"
+  ],
+  "title": "GraphPointerPayload",
+  "type": "object"
+}

@@ -1,0 +1,189 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    },
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-model-response-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "completed_at": {
+      "title": "Completed At",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Code"
+    },
+    "evidence_class": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        {
+          "enum": [
+            "DESIGN",
+            "LIVE_MODEL",
+            "USER_STUDY"
+          ],
+          "type": "string"
+        }
+      ],
+      "title": "Evidence Class"
+    },
+    "finish_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Finish Reason"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "input_tokens": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Input Tokens",
+      "type": "integer"
+    },
+    "latency_ms": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Latency Ms",
+      "type": "integer"
+    },
+    "model_id": {
+      "title": "Model Id",
+      "type": "string"
+    },
+    "model_version": {
+      "title": "Model Version",
+      "type": "string"
+    },
+    "output_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Output Digest"
+    },
+    "output_tokens": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Output Tokens",
+      "type": "integer"
+    },
+    "provider": {
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_request_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Request Id"
+    },
+    "request_digest": {
+      "title": "Request Digest",
+      "type": "string"
+    },
+    "request_ref": {
+      "title": "Request Ref",
+      "type": "string"
+    },
+    "schema_valid": {
+      "title": "Schema Valid",
+      "type": "boolean"
+    },
+    "seed_supported": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Seed Supported"
+    },
+    "status": {
+      "enum": [
+        "VALID",
+        "ABSTAIN",
+        "SCHEMA_ERROR",
+        "PROVIDER_ERROR",
+        "NOT_RUN"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JsonValue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "id",
+    "request_ref",
+    "request_digest",
+    "status",
+    "provider",
+    "model_id",
+    "model_version",
+    "schema_valid",
+    "completed_at",
+    "evidence_class"
+  ],
+  "title": "ModelResponseReceipt",
+  "type": "object"
+}

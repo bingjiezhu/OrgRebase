@@ -1,0 +1,20 @@
+{
+  "base_rebase_receipt_digest": "sha256:6e4c4268126b2eba51a03eb1bf714df22ed77fb00622e6e8f55f027abc7da8fb",
+  "base_rebase_receipt_ref": "rebase:workspace:workspace-launch-date@r1",
+  "committed_at": "2026-08-15T00:04:00Z",
+  "digest": "sha256:36f14dd176234496f825f603abfc27e8bd0c5e5e27c635b0ba9e986389c2246f",
+  "graph_pointer_ref": "graph:workspace@v2",
+  "id": "workspace-rebase:workspace-launch-date@r1",
+  "status": "COMPLETED",
+  "successor_manifest_refs": [
+    "runtime-dependency:quote_acme@v2"
+  ],
+  "successor_object_refs": [
+    "work:quote_acme@v2"
+  ],
+  "successor_snapshot_digest": "sha256:968d30f6392534309179490e3c32f7684d6734c4fb89cd92d0a8d9d12a26256a",
+  "successor_snapshot_ref": "workspace-graph:northstar@v2",
+  "successor_trace_refs": [
+    "work-trace:quote_acme@v2"
+  ]
+}

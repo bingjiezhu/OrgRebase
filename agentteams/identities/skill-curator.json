@@ -1,0 +1,38 @@
+{
+  "name": "skill-curator",
+  "role": "Skill contract candidate author",
+  "capabilities": [
+    "compare seeded trajectories",
+    "propose bounded contract patch",
+    "describe applicability"
+  ],
+  "inputs": [
+    "CompiledDelegationTask",
+    "redacted trajectories",
+    "SkillContractVersion",
+    "impact candidate",
+    "ImpactPreview"
+  ],
+  "outputs": [
+    "SkillPatchCandidate",
+    "ConfounderList"
+  ],
+  "dependencies": [
+    "read-only trace set",
+    "contract schema"
+  ],
+  "decision_boundary": [
+    "cannot read held-out answers",
+    "cannot edit evaluator or threshold",
+    "cannot expand permissions",
+    "cannot publish"
+  ],
+  "trace": [
+    "orchestration_plan_digest",
+    "delegation_task_digest",
+    "trajectory_set_digest",
+    "patch_digest",
+    "evaluation_request_digest"
+  ],
+  "authority_domain": "skill-governance"
+}

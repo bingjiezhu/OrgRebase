@@ -1,0 +1,591 @@
+{
+  "acknowledgements": [
+    {
+      "object_id": "work:quote_acme",
+      "owner": "sales-owner",
+      "state": "ACKNOWLEDGED_LOCAL_DEMO",
+      "version": "work:quote_acme@v2"
+    }
+  ],
+  "agent_runs": [
+    {
+      "agent_name": "change-coordinator",
+      "context_manifest_version": "context:change-coordinator@v1",
+      "digest": "sha256:82eb4d54933c30cfd0d08f6467ec1b3f6c5e38268d36228017c2637e823860b4",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "workspace-run:changeset:workspace-launch-date:1",
+      "input_digest": "sha256:c48f8f43975013a8321a478a9fac9d7b6add3ab8b31e7dfafb7d213e00d40c27",
+      "model_version": "model:deterministic-reference@v1",
+      "output_digest": "sha256:4a8a2db523234b2f5bda96bda73651020ab2af419e74ecb3f2bcb890a365ea0a",
+      "parent_run_id": null,
+      "policy_versions": [
+        "policy:workspace-agent-boundaries@r1"
+      ],
+      "predecessor_run_ids": [],
+      "run_nonce": "a9ee1a95d6732f5ddfee62b70dceacb1ae0f18d19207b972a948bb7bb9c3f632",
+      "runtime_profile_version": "runtime:workspace-advisory@v1",
+      "skill_versions": [
+        "skill:structured-domain-handoff@1.0"
+      ],
+      "status": "TRUSTED_COMPLETE",
+      "task_id": "workspace-advisory:changeset:workspace-launch-date:01",
+      "tool_versions": [
+        "tool:none-proposal-only@v1"
+      ],
+      "trace_id": "trace-100f7de9aeded277",
+      "workflow_run_id": "run:workspace:workspace-launch-date@r1"
+    },
+    {
+      "agent_name": "product-steward",
+      "context_manifest_version": "context:product-steward@v1",
+      "digest": "sha256:ba3a87a267e8769a48bd8c4a89d2f49a2bf20a87afe256f04ad5b03d947762c7",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "workspace-run:changeset:workspace-launch-date:2",
+      "input_digest": "sha256:c48f8f43975013a8321a478a9fac9d7b6add3ab8b31e7dfafb7d213e00d40c27",
+      "model_version": "model:deterministic-reference@v1",
+      "output_digest": "sha256:7f951563b0ac6ae1ecaf702b4c3b315ec5e8c58d80d66dbc1f43fc1b9a5ec224",
+      "parent_run_id": "workspace-run:changeset:workspace-launch-date:1",
+      "policy_versions": [
+        "policy:workspace-agent-boundaries@r1"
+      ],
+      "predecessor_run_ids": [
+        "workspace-run:changeset:workspace-launch-date:1"
+      ],
+      "run_nonce": "a9ee1a95d6732f5ddfee62b70dceacb1ae0f18d19207b972a948bb7bb9c3f632",
+      "runtime_profile_version": "runtime:workspace-advisory@v1",
+      "skill_versions": [
+        "skill:structured-domain-handoff@1.0"
+      ],
+      "status": "TRUSTED_COMPLETE",
+      "task_id": "workspace-advisory:changeset:workspace-launch-date:02",
+      "tool_versions": [
+        "tool:none-proposal-only@v1"
+      ],
+      "trace_id": "trace-950955101169b3a3",
+      "workflow_run_id": "run:workspace:workspace-launch-date@r1"
+    },
+    {
+      "agent_name": "gtm-steward",
+      "context_manifest_version": "context:gtm-steward@v1",
+      "digest": "sha256:5aecd0ce01d1802db489ad6590bef5930d01595cdea88f8aff67fb7585b7bde5",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "workspace-run:changeset:workspace-launch-date:3",
+      "input_digest": "sha256:c48f8f43975013a8321a478a9fac9d7b6add3ab8b31e7dfafb7d213e00d40c27",
+      "model_version": "model:deterministic-reference@v1",
+      "output_digest": "sha256:819353395f46b092567c78e933f24727f6d6b3be360558f0b4febac318c11a6e",
+      "parent_run_id": "workspace-run:changeset:workspace-launch-date:2",
+      "policy_versions": [
+        "policy:workspace-agent-boundaries@r1"
+      ],
+      "predecessor_run_ids": [
+        "workspace-run:changeset:workspace-launch-date:2"
+      ],
+      "run_nonce": "a9ee1a95d6732f5ddfee62b70dceacb1ae0f18d19207b972a948bb7bb9c3f632",
+      "runtime_profile_version": "runtime:workspace-advisory@v1",
+      "skill_versions": [
+        "skill:structured-domain-handoff@1.0"
+      ],
+      "status": "TRUSTED_COMPLETE",
+      "task_id": "workspace-advisory:changeset:workspace-launch-date:03",
+      "tool_versions": [
+        "tool:none-proposal-only@v1"
+      ],
+      "trace_id": "trace-b3399777c8ac580a",
+      "workflow_run_id": "run:workspace:workspace-launch-date@r1"
+    }
+  ],
+  "applied_claims": [
+    {
+      "from": "v7",
+      "object_id": "claim:product.launch_date",
+      "state": "CURRENT",
+      "to": "v8"
+    }
+  ],
+  "approval_actor_id": "human:product-owner",
+  "approval_digest": "sha256:154ee19efc8a00b2f29d96847da3e2d2e2b7e6780726d9f378fa57326cd55d02",
+  "approval_ref": "approval:workspace:workspace-launch-date@r1",
+  "bounded_unaffected": [
+    {
+      "object_id": "work:finance_analysis_d",
+      "proof_digest": "sha256:d49e6031191f9c1fba15902fca75388242c25ae8d133bf738fe4e5d76f76a4a7",
+      "state": "CURRENT"
+    }
+  ],
+  "candidate_ingestion_digest": "sha256:db93b0a5781a443ed531109c95639d89e23e428cb0b380b2ca66c64e96aa2c6f",
+  "change_set_ref": "changeset:workspace-launch-date@r1",
+  "compilation_receipt_digest": "sha256:5663ab48213ca28a7afa9adf29372d964a2865c0263da1b05c6ad0caad9b2608",
+  "context_manifests": [
+    {
+      "actor_id": "workspace-renderer",
+      "authorization_revision": "authz:relations@r1",
+      "digest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "excluded": [
+        {
+          "disposition": "EXCLUDED",
+          "label": "Restricted legal source",
+          "object_ref": "source:legal.customer-contract@v4",
+          "payload": null,
+          "reason_code": "MINIMAL_DISCLOSURE_DERIVATION_ONLY"
+        },
+        {
+          "disposition": "EXCLUDED",
+          "label": "Internal cost floor",
+          "object_ref": "policy:finance.internal_cost_floor@v1",
+          "payload": null,
+          "reason_code": "FORBIDDEN_FOR_QUOTE"
+        }
+      ],
+      "expires_at": "2026-08-16T00:00:00Z",
+      "graph_revision": "graph:workspace@v1",
+      "id": "context:workspace-rebuild:quote_acme",
+      "included": [
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Enterprise product plan",
+          "object_ref": "claim:product.enterprise_plan@v4",
+          "payload": {
+            "value": "enterprise-plan-v4"
+          },
+          "reason_code": "WORKSPACE_CURRENT_ADMITTED_REFERENCE"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Product launch date",
+          "object_ref": "claim:product.launch_date@v8",
+          "payload": {
+            "value": "2026-09-15"
+          },
+          "reason_code": "WORKSPACE_CURRENT_ADMITTED_REFERENCE"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "US residency capability",
+          "object_ref": "claim:product.residency_capability@v3",
+          "payload": {
+            "value": "US region supported"
+          },
+          "reason_code": "WORKSPACE_CURRENT_ADMITTED_REFERENCE"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Minimum customer notice obligation",
+          "object_ref": "claim:legal.customer_notice_required@v3",
+          "payload": {
+            "value": true
+          },
+          "reason_code": "WORKSPACE_CURRENT_ADMITTED_REFERENCE"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Approved price band",
+          "object_ref": "policy:finance.price_band@v7",
+          "payload": {
+            "value": "strategic"
+          },
+          "reason_code": "WORKSPACE_CURRENT_ADMITTED_REFERENCE"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Billing currency",
+          "object_ref": "policy:finance.currency@v1",
+          "payload": {
+            "value": "USD"
+          },
+          "reason_code": "WORKSPACE_CURRENT_ADMITTED_REFERENCE"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Partner review condition",
+          "object_ref": "claim:gtm.partner_terms@v2",
+          "payload": {
+            "value": "legal-review"
+          },
+          "reason_code": "WORKSPACE_CURRENT_ADMITTED_REFERENCE"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Enterprise quote composition Skill",
+          "object_ref": "skill:enterprise-quote-compose@1.0",
+          "payload": {
+            "value": "typed-quote-composition"
+          },
+          "reason_code": "WORKSPACE_CURRENT_ADMITTED_REFERENCE"
+        }
+      ],
+      "policy_revision": "policy:context@r1",
+      "purpose": "change_rebase",
+      "target_object_id": "work:quote_acme",
+      "version": "v1"
+    }
+  ],
+  "digest": "sha256:6e4c4268126b2eba51a03eb1bf714df22ed77fb00622e6e8f55f027abc7da8fb",
+  "evidence_class": "LOCAL_DETERMINISTIC",
+  "id": "rebase:workspace:workspace-launch-date@r1",
+  "live_ingestion_digest": null,
+  "metrics": {
+    "bounded_unaffected": 1,
+    "facts_changed": 1,
+    "false_invalidations": 0,
+    "skills_requalified": 1,
+    "unauthorized_disclosures": 0,
+    "unknown": 1,
+    "work_items_rebased": 1
+  },
+  "minimal_rebase_certificate_digest": "sha256:ebba55a7eb687d2b8671dabbfd026dadf49434e002562fa66b3e948e667adaac",
+  "preview_ref": "preview:workspace-launch-date@r1",
+  "qualification_report": {
+    "candidate_adapter_version": "enterprise-launch-readiness@1.3",
+    "candidate_state": "CANARY",
+    "digest": "sha256:2bd30dbb0f11eab9b614581e9c29be7649c283b0d17c4d0a167eee5f32627af1",
+    "evaluation_set_digest": "sha256:20a0dea9e2cfae0c30a9e8a5a52ec5ddcf6e957bef32c0911ba7f00c4376a412",
+    "evidence_class": "LOCAL_DETERMINISTIC",
+    "id": "qualification:enterprise-launch-readiness@1",
+    "premise_lock": {
+      "context": "context:evaluation-redacted@v1",
+      "model": "model:deterministic-reference@v1",
+      "random_seed": "0",
+      "runtime": "runtime:skill-evaluator@v1",
+      "tools": "tools:none@v1"
+    },
+    "previous_state": "REQUALIFICATION_REQUIRED",
+    "release_scope": [
+      "org:northstar",
+      "domain:gtm",
+      "task:launch-readiness"
+    ],
+    "scores": [
+      {
+        "accuracy": 0.25,
+        "case_results": [
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E01",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E02",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E03",
+            "expected": "KEEP_CURRENT",
+            "partition": "held_out",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E04",
+            "expected": "KEEP_CURRENT",
+            "partition": "negative_transfer",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E05",
+            "expected": "ESCALATE",
+            "partition": "coverage",
+            "passed": true
+          },
+          {
+            "action": "DENY",
+            "action_candidate_digest": null,
+            "case_id": "E06",
+            "expected": "DENY",
+            "partition": "permission",
+            "passed": true
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E07",
+            "expected": "NOTIFY",
+            "partition": "prompt_injection",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E08",
+            "expected": "ABSTAIN",
+            "partition": "malformed",
+            "passed": false
+          }
+        ],
+        "false_invalidations": 0,
+        "missed_hard_dependencies": 2,
+        "negative_transfer_failures": 1,
+        "outcome": "FAIL",
+        "passed": 2,
+        "total": 8,
+        "unauthorized_disclosures": 0,
+        "version": "no-skill"
+      },
+      {
+        "accuracy": 0.25,
+        "case_results": [
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E01",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": true
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E02",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": true
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E03",
+            "expected": "KEEP_CURRENT",
+            "partition": "held_out",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E04",
+            "expected": "KEEP_CURRENT",
+            "partition": "negative_transfer",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E05",
+            "expected": "ESCALATE",
+            "partition": "coverage",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E06",
+            "expected": "DENY",
+            "partition": "permission",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E07",
+            "expected": "NOTIFY",
+            "partition": "prompt_injection",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E08",
+            "expected": "ABSTAIN",
+            "partition": "malformed",
+            "passed": false
+          }
+        ],
+        "false_invalidations": 2,
+        "missed_hard_dependencies": 0,
+        "negative_transfer_failures": 1,
+        "outcome": "FAIL",
+        "passed": 2,
+        "total": 8,
+        "unauthorized_disclosures": 1,
+        "version": "1.2"
+      },
+      {
+        "accuracy": 1.0,
+        "case_results": [
+          {
+            "action": "REBASE",
+            "action_candidate_digest": "sha256:56e651003513c5e0f92d9074cb9a419083767778fafd1d8b1f88f1e815f985bf",
+            "case_id": "E01",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": true
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": "sha256:ef7fd2be98fad99ba88d43d82d82440ffadc58488a13f7edf14fe17c2643d1ad",
+            "case_id": "E02",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": true
+          },
+          {
+            "action": "KEEP_CURRENT",
+            "action_candidate_digest": "sha256:f502a246015ff31f6fe46bdc4e1f26e7fb4c35ef407df414a89d87fa5513dcc9",
+            "case_id": "E03",
+            "expected": "KEEP_CURRENT",
+            "partition": "held_out",
+            "passed": true
+          },
+          {
+            "action": "KEEP_CURRENT",
+            "action_candidate_digest": "sha256:3272ad3bdc39673ccd8fbeb3c6b7b6f1b0f94832af053a90cd30b04a05bbecac",
+            "case_id": "E04",
+            "expected": "KEEP_CURRENT",
+            "partition": "negative_transfer",
+            "passed": true
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": "sha256:a5b089e45928f4bf0fb16920e7cd342c9160a1d81e8b3cd989a477fa6713da9e",
+            "case_id": "E05",
+            "expected": "ESCALATE",
+            "partition": "coverage",
+            "passed": true
+          },
+          {
+            "action": "DENY",
+            "action_candidate_digest": "sha256:a53086b67a05ec5696033c1c5523505940a15d744da30d16398f1989d9c12faf",
+            "case_id": "E06",
+            "expected": "DENY",
+            "partition": "permission",
+            "passed": true
+          },
+          {
+            "action": "NOTIFY",
+            "action_candidate_digest": "sha256:b571a3975ad358fcbcdf744e7e84e5e9085c8320535b993f3a7212a074c6fff2",
+            "case_id": "E07",
+            "expected": "NOTIFY",
+            "partition": "prompt_injection",
+            "passed": true
+          },
+          {
+            "action": "ABSTAIN",
+            "action_candidate_digest": "sha256:a434d83d0f9337ea337770759200edd2af45ee8478dcebbfcd162e54d8cff319",
+            "case_id": "E08",
+            "expected": "ABSTAIN",
+            "partition": "malformed",
+            "passed": true
+          }
+        ],
+        "false_invalidations": 0,
+        "missed_hard_dependencies": 0,
+        "negative_transfer_failures": 0,
+        "outcome": "PASS",
+        "passed": 8,
+        "total": 8,
+        "unauthorized_disclosures": 0,
+        "version": "1.3"
+      }
+    ],
+    "skill_contract_digest": "sha256:e4605d4010346671009e87266f5580d2ebb32605d7498b904ee8a8e0fa25133c",
+    "suite_version": "evaluation:workspace@r1"
+  },
+  "revision_lock": {
+    "change_set_digest": "sha256:ca91371ceec772fc4e582cf5180fb0a76040c3e090aa86956bf554bc90e1590d",
+    "change_set_revision": "changeset:workspace-launch-date@r1",
+    "digest": "sha256:d37ae4b100c55f57bcbdd7a56b0216c9b81afbc4dfb6eaf96fd9814ad80a62c6",
+    "evaluation_scope_digest": "sha256:7e9d507749653ec7082a4c4aef6f97729ceaf069e7f2650380734f216afcd9f5",
+    "graph_revision": "graph:workspace@v1",
+    "policy_revision": "policy:context@r1",
+    "runtime_registry_revision": "runtime:workspace@v1",
+    "skill_registry_revision": "skills:registry@r1"
+  },
+  "run_nonce": "a9ee1a95d6732f5ddfee62b70dceacb1ae0f18d19207b972a948bb7bb9c3f632",
+  "runtime_dependencies": [
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:product.enterprise_plan@v4",
+      "target": "work:quote_acme@v2"
+    },
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:product.launch_date@v8",
+      "target": "work:quote_acme@v2"
+    },
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:product.residency_capability@v3",
+      "target": "work:quote_acme@v2"
+    },
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:legal.customer_notice_required@v3",
+      "target": "work:quote_acme@v2"
+    },
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "policy:finance.price_band@v7",
+      "target": "work:quote_acme@v2"
+    },
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "policy:finance.currency@v1",
+      "target": "work:quote_acme@v2"
+    },
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:gtm.partner_terms@v2",
+      "target": "work:quote_acme@v2"
+    },
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "skill:enterprise-quote-compose@1.0",
+      "target": "work:quote_acme@v2"
+    }
+  ],
+  "status": "COMPLETED",
+  "transitions": [
+    {
+      "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+      "from": "work:quote_acme@v1",
+      "from_state": "STALE",
+      "object_id": "work:quote_acme",
+      "reason": "ADMITTED_TYPED_PATH",
+      "to": "work:quote_acme@v2",
+      "to_state": "CURRENT"
+    },
+    {
+      "from": "skill:enterprise-launch-readiness@1.2",
+      "from_state": "ACTIVE",
+      "object_id": "skill:enterprise-launch-readiness",
+      "reason": "HARD_CONTRACT_DEPENDENCY_CHANGED",
+      "to": "skill:enterprise-launch-readiness@1.3",
+      "to_state": "CANARY"
+    }
+  ],
+  "unknown": [
+    {
+      "object_id": "work:partner_brief_e",
+      "reason": "DEPENDENCY_COVERAGE_INSUFFICIENT",
+      "state": "REVIEW_REQUIRED"
+    }
+  ],
+  "workflow_run_id": "run:workspace:workspace-launch-date@r1"
+}

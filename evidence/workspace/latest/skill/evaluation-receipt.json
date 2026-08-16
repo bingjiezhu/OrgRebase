@@ -1,0 +1,247 @@
+{
+  "candidate_digest": "sha256:4afb7a8393b573e72daa815b1019f20ff6f25c2e93715623c18cee635528e233",
+  "candidate_program_digest": "sha256:b6fc491b4f7b7d1f851e89adbf6af9951db54aaaadd30778c8ef9ec8d2d1d494",
+  "candidate_ref": "skill-candidate:enterprise-quote-compose@1.1",
+  "case_results": [
+    {
+      "baseline_output_digest": "sha256:73644194c49d1a31663b10aa5c6e6b39a09aad955d1b331d00fe570b46b02142",
+      "candidate_output_digest": "sha256:a51fa5a598abf842817ec3e7a1df8b57f85d5d046cd5061a8ba0b38e447d1b29",
+      "case_ref": "skill-eval:S-00",
+      "partition": "REPLAY",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:ec379d3718ad59017a9e0b9a858425dba3dc3ac3405e06b2c7ee7b02f348da47",
+      "candidate_output_digest": "sha256:a51fa5a598abf842817ec3e7a1df8b57f85d5d046cd5061a8ba0b38e447d1b29",
+      "case_ref": "skill-eval:S-01",
+      "partition": "HELD_OUT",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:b479700d737eada3d3a40682f9f18b9cee5b02d897ab28eb76e312291ceb6909",
+      "candidate_output_digest": "sha256:6c075722a5385b033f964ce3e678ee0a64955e31f4a315d061a185a71a067042",
+      "case_ref": "skill-eval:S-02",
+      "partition": "NEGATIVE_TRANSFER",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": false
+    },
+    {
+      "baseline_output_digest": "sha256:5ed23e43307a8b7767b37f93168d7139ee88a627889e9833c667abd18dc5bd91",
+      "candidate_output_digest": "sha256:66297b3f791165af32bb4784d2f3dd2ad2827286c42236f0ad6c1e7dfe0f7eae",
+      "case_ref": "skill-eval:S-03",
+      "partition": "PERMISSION",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:aee7159f22eb8ff729c7a2e3f123c44c968a277331e505204a7451077b0e840d",
+      "candidate_output_digest": "sha256:a87683a55f4424d7fe30389e4a02580afe9f0d1945c77b1ff1309edaa317d949",
+      "case_ref": "skill-eval:S-04",
+      "partition": "INJECTION",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:9f3f049581a58b7f183bb6899eb8b083c4e8cd5467660027a4e10b60f74b6160",
+      "candidate_output_digest": "sha256:721629e997e3b39aeee5cf933c2589bef3c9038d6f7062228db93da58f5f8285",
+      "case_ref": "skill-eval:S-05",
+      "partition": "MALFORMED",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:02a474f42a5a3a9fa6d6deecac1bd941f765cedf84c24603b158da3daee00e29",
+      "candidate_output_digest": "sha256:721629e997e3b39aeee5cf933c2589bef3c9038d6f7062228db93da58f5f8285",
+      "case_ref": "skill-eval:S-06",
+      "partition": "RESOURCE",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:453de83f660af1f783f13f4d7ef05b7fc332174217ee01637977bf04e5f91eae",
+      "candidate_output_digest": "sha256:860f9457306d4f132773e6dc253e56a44bfc770a7211ac4c2ca69eda346c767d",
+      "case_ref": "skill-eval:S-07",
+      "partition": "CANARY",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:73644194c49d1a31663b10aa5c6e6b39a09aad955d1b331d00fe570b46b02142",
+      "candidate_output_digest": "sha256:a51fa5a598abf842817ec3e7a1df8b57f85d5d046cd5061a8ba0b38e447d1b29",
+      "case_ref": "skill-eval:S-08",
+      "partition": "REPLAY",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:ec379d3718ad59017a9e0b9a858425dba3dc3ac3405e06b2c7ee7b02f348da47",
+      "candidate_output_digest": "sha256:a51fa5a598abf842817ec3e7a1df8b57f85d5d046cd5061a8ba0b38e447d1b29",
+      "case_ref": "skill-eval:S-09",
+      "partition": "HELD_OUT",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:b479700d737eada3d3a40682f9f18b9cee5b02d897ab28eb76e312291ceb6909",
+      "candidate_output_digest": "sha256:6c075722a5385b033f964ce3e678ee0a64955e31f4a315d061a185a71a067042",
+      "case_ref": "skill-eval:S-10",
+      "partition": "NEGATIVE_TRANSFER",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": false
+    },
+    {
+      "baseline_output_digest": "sha256:5ed23e43307a8b7767b37f93168d7139ee88a627889e9833c667abd18dc5bd91",
+      "candidate_output_digest": "sha256:66297b3f791165af32bb4784d2f3dd2ad2827286c42236f0ad6c1e7dfe0f7eae",
+      "case_ref": "skill-eval:S-11",
+      "partition": "PERMISSION",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:aee7159f22eb8ff729c7a2e3f123c44c968a277331e505204a7451077b0e840d",
+      "candidate_output_digest": "sha256:a87683a55f4424d7fe30389e4a02580afe9f0d1945c77b1ff1309edaa317d949",
+      "case_ref": "skill-eval:S-12",
+      "partition": "INJECTION",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:9f3f049581a58b7f183bb6899eb8b083c4e8cd5467660027a4e10b60f74b6160",
+      "candidate_output_digest": "sha256:721629e997e3b39aeee5cf933c2589bef3c9038d6f7062228db93da58f5f8285",
+      "case_ref": "skill-eval:S-13",
+      "partition": "MALFORMED",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:02a474f42a5a3a9fa6d6deecac1bd941f765cedf84c24603b158da3daee00e29",
+      "candidate_output_digest": "sha256:721629e997e3b39aeee5cf933c2589bef3c9038d6f7062228db93da58f5f8285",
+      "case_ref": "skill-eval:S-14",
+      "partition": "RESOURCE",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    },
+    {
+      "baseline_output_digest": "sha256:453de83f660af1f783f13f4d7ef05b7fc332174217ee01637977bf04e5f91eae",
+      "candidate_output_digest": "sha256:860f9457306d4f132773e6dc253e56a44bfc770a7211ac4c2ca69eda346c767d",
+      "case_ref": "skill-eval:S-15",
+      "partition": "CANARY",
+      "passed": true,
+      "reason_codes": [
+        "EXACT_CANDIDATE_PASS"
+      ],
+      "regressed_baseline_success": false,
+      "repaired_baseline_failure": true
+    }
+  ],
+  "digest": "sha256:85c2c2827d81449038b2512b96a9d08cc4895f244225880001715f0d78fdda7c",
+  "evaluated_at": "2026-08-16T00:00:00Z",
+  "evaluation_suite_digest": "sha256:cae22513a4ccff83c67ef9498580f3138639ceb27ae72c9577156fac0231f043",
+  "gate_results": [
+    {
+      "gate_id": "exact_candidate_digest",
+      "observed": "sha256:b6fc491b4f7b7d1f851e89adbf6af9951db54aaaadd30778c8ef9ec8d2d1d494",
+      "passed": true,
+      "reason_code": "EXACT_STORED_PROGRAM_EXECUTED",
+      "threshold": "sha256:b6fc491b4f7b7d1f851e89adbf6af9951db54aaaadd30778c8ef9ec8d2d1d494"
+    },
+    {
+      "gate_id": "all_cases_pass",
+      "observed": 16,
+      "passed": true,
+      "reason_code": "PAIRED_EVALUATION",
+      "threshold": 16
+    },
+    {
+      "gate_id": "heldout_net_gain_pp",
+      "observed": 87.5,
+      "passed": true,
+      "reason_code": "CANDIDATE_VS_BASELINE",
+      "threshold": 10.0
+    },
+    {
+      "gate_id": "functional_regressions",
+      "observed": 0,
+      "passed": true,
+      "reason_code": "NO_BASELINE_SUCCESS_REGRESSION",
+      "threshold": 0
+    },
+    {
+      "gate_id": "critical_security_failures",
+      "observed": 0,
+      "passed": true,
+      "reason_code": "SECURITY_VETO",
+      "threshold": 0
+    }
+  ],
+  "id": "skill-evaluation:enterprise-quote-compose@1.1",
+  "premise_lock": {
+    "benchmark": "sha256:03e77a3457864c469af516dd22bfd1e8188e0b995cfabb6f5a6e6ad800856fab",
+    "runtime": "restricted-declarative-interpreter@1.0.0",
+    "seed": "20260815",
+    "tools": "none"
+  },
+  "verdict": "CANARY"
+}

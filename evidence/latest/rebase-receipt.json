@@ -1,0 +1,685 @@
+{
+  "acknowledgements": [
+    {
+      "object_id": "work:sales_quote_a",
+      "owner": "sales-owner",
+      "state": "ACKNOWLEDGED_LOCAL_DEMO",
+      "version": "work:sales_quote_a@v2"
+    },
+    {
+      "object_id": "work:support_doc_b",
+      "owner": "support-owner",
+      "state": "ACKNOWLEDGED_LOCAL_DEMO",
+      "version": "work:support_doc_b@v2"
+    }
+  ],
+  "agent_runs": [
+    {
+      "agent_name": "change-coordinator",
+      "context_manifest_version": "context:change-coordinator@v1",
+      "digest": "sha256:b1da1db322fec334baa1a22c9bb4f622293faf3f4b3a4cf4291f91b808c06fff",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "run:change-coordinator@1",
+      "input_digest": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421",
+      "model_version": "model:deterministic-reference@v1",
+      "output_digest": "sha256:496c007844a52a7d777182238b492afff6e35dc513bf6f3acbf7cb664ce43367",
+      "parent_run_id": null,
+      "policy_versions": [
+        "policy:agent-boundaries@r1"
+      ],
+      "predecessor_run_ids": [],
+      "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+      "runtime_profile_version": "runtime:agentteams-v1.2.2-adapter@v1",
+      "skill_versions": [
+        "skill:structured-domain-handoff@1.0"
+      ],
+      "status": "TRUSTED_COMPLETE",
+      "task_id": "task:launch-change:01",
+      "tool_versions": [
+        "tool:none-proposal-only@v1"
+      ],
+      "trace_id": "trace-3df2cfdb4e86bf23",
+      "workflow_run_id": "run:orgrebase:launch-date:local@1"
+    },
+    {
+      "agent_name": "product-steward",
+      "context_manifest_version": "context:product-steward@v1",
+      "digest": "sha256:b2f9f1ab0f8d76f8661a16cefbeed20c95e535bc174e6fe8e6ddcbf22abbdde0",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "run:product-steward@1",
+      "input_digest": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421",
+      "model_version": "model:deterministic-reference@v1",
+      "output_digest": "sha256:d0a78dd9d6a324c7b03ed2d4ed482332b87960e135032d2b5c184204e2d9d38e",
+      "parent_run_id": "run:change-coordinator@1",
+      "policy_versions": [
+        "policy:agent-boundaries@r1"
+      ],
+      "predecessor_run_ids": [
+        "run:change-coordinator@1"
+      ],
+      "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+      "runtime_profile_version": "runtime:agentteams-v1.2.2-adapter@v1",
+      "skill_versions": [
+        "skill:structured-domain-handoff@1.0"
+      ],
+      "status": "TRUSTED_COMPLETE",
+      "task_id": "task:launch-change:02",
+      "tool_versions": [
+        "tool:none-proposal-only@v1"
+      ],
+      "trace_id": "trace-70a35e3cc06dcf1d",
+      "workflow_run_id": "run:orgrebase:launch-date:local@1"
+    },
+    {
+      "agent_name": "legal-steward",
+      "context_manifest_version": "context:legal-steward@v1",
+      "digest": "sha256:7156086c1e2bef68c450ad612742d2e0267950ebd2452282476d24f356113037",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "run:legal-steward@1",
+      "input_digest": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421",
+      "model_version": "model:deterministic-reference@v1",
+      "output_digest": "sha256:a4439afe892cc0d5556ec4fe9af09a57175e46c3269e8520c741a597cef8e3f4",
+      "parent_run_id": "run:change-coordinator@1",
+      "policy_versions": [
+        "policy:agent-boundaries@r1"
+      ],
+      "predecessor_run_ids": [
+        "run:change-coordinator@1"
+      ],
+      "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+      "runtime_profile_version": "runtime:agentteams-v1.2.2-adapter@v1",
+      "skill_versions": [
+        "skill:structured-domain-handoff@1.0"
+      ],
+      "status": "TRUSTED_COMPLETE",
+      "task_id": "task:launch-change:03",
+      "tool_versions": [
+        "tool:none-proposal-only@v1"
+      ],
+      "trace_id": "trace-5f6c92449bb36682",
+      "workflow_run_id": "run:orgrebase:launch-date:local@1"
+    },
+    {
+      "agent_name": "gtm-steward",
+      "context_manifest_version": "context:gtm-steward@v1",
+      "digest": "sha256:c6b0ec3063932ccf28f06fdcae7e8774f52813b91f080d4685dc0991fe763f79",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "run:gtm-steward@1",
+      "input_digest": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421",
+      "model_version": "model:deterministic-reference@v1",
+      "output_digest": "sha256:1a4eb8d632ee6b5dc4e86a021c46787d6490d721a3398095457bffbd8c68b1a7",
+      "parent_run_id": "run:product-steward@1",
+      "policy_versions": [
+        "policy:agent-boundaries@r1"
+      ],
+      "predecessor_run_ids": [
+        "run:product-steward@1",
+        "run:legal-steward@1"
+      ],
+      "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+      "runtime_profile_version": "runtime:agentteams-v1.2.2-adapter@v1",
+      "skill_versions": [
+        "skill:structured-domain-handoff@1.0"
+      ],
+      "status": "TRUSTED_COMPLETE",
+      "task_id": "task:launch-change:04",
+      "tool_versions": [
+        "tool:dependency-evidence@1.0.0"
+      ],
+      "trace_id": "trace-b863687a9125b674",
+      "workflow_run_id": "run:orgrebase:launch-date:local@1"
+    },
+    {
+      "agent_name": "skill-curator",
+      "context_manifest_version": "context:skill-curator@v1",
+      "digest": "sha256:4933e5f1d36737c095daa71ebffc3755089244dd02c3a63fb78084d0650d3591",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "id": "run:skill-curator@1",
+      "input_digest": "sha256:54d7d180b5bae12778a8b48315b9f9d6f882459310d7b828b02da385b3611421",
+      "model_version": "model:deterministic-reference@v1",
+      "output_digest": "sha256:eb0465916c6ea49cd03a94313670fad49eb715fc8b95de33fe602e39cf12bdc8",
+      "parent_run_id": "run:gtm-steward@1",
+      "policy_versions": [
+        "policy:agent-boundaries@r1"
+      ],
+      "predecessor_run_ids": [
+        "run:gtm-steward@1"
+      ],
+      "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+      "runtime_profile_version": "runtime:agentteams-v1.2.2-adapter@v1",
+      "skill_versions": [
+        "skill:enterprise-launch-readiness@1.2"
+      ],
+      "status": "TRUSTED_COMPLETE",
+      "task_id": "task:launch-change:05",
+      "tool_versions": [
+        "tool:none-proposal-only@v1"
+      ],
+      "trace_id": "trace-ae5c4ced960a5a67",
+      "workflow_run_id": "run:orgrebase:launch-date:local@1"
+    }
+  ],
+  "applied_claims": [
+    {
+      "from": "v7",
+      "object_id": "claim:product.launch_date",
+      "state": "CURRENT",
+      "to": "v8"
+    }
+  ],
+  "approval_actor_id": "human:change-approver",
+  "approval_digest": "sha256:51092beac5ac7bdbfa6f1f21536eaa2b034c5278783bab7d72fa9c3f30a715fd",
+  "approval_ref": "approval:launch-date@1",
+  "bounded_unaffected": [
+    {
+      "object_id": "work:legal_review_c",
+      "proof_digest": "sha256:05a4825279ada89528de27fc91d8c4079c25d3096ca21b3c8bfa4a4bb17c2abf",
+      "state": "CURRENT"
+    },
+    {
+      "object_id": "work:finance_analysis_d",
+      "proof_digest": "sha256:de3e5e1be8d5e9284c9078cd8d776d2c44c52faa51b367cbebaddda3e991476c",
+      "state": "CURRENT"
+    }
+  ],
+  "candidate_ingestion_digest": "sha256:6d2f93def973d9e7e02225aeea9201e75e558961c622599780d0683c836fe6f3",
+  "change_set_ref": "changeset:launch-date@r1",
+  "compilation_receipt_digest": "sha256:63d0faa014e90b3464ecc30f5b52e0f670b7463644cfea66ea2c799773e14b5e",
+  "context_manifests": [
+    {
+      "actor_id": "sales-agent",
+      "authorization_revision": "authz:relations@r1",
+      "digest": "sha256:cb314890d4d92614c49209c91fbdc4d3c34e5067887cfe639903a8ea74953042",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "excluded": [
+        {
+          "disposition": "EXCLUDED",
+          "label": "Restricted customer contract",
+          "object_ref": "source:legal.customer-contract@v4",
+          "payload": null,
+          "reason_code": "PURPOSE_NOT_ALLOWED"
+        },
+        {
+          "disposition": "EXCLUDED",
+          "label": "Support launch message",
+          "object_ref": "claim:gtm.support_message@v2",
+          "payload": null,
+          "reason_code": "NOT_REQUIRED_FOR_TASK"
+        }
+      ],
+      "expires_at": "2026-09-16T00:00:00Z",
+      "graph_revision": "graph:canonical@r1",
+      "id": "context:sales-agent-launch-rebase",
+      "included": [
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Product launch date",
+          "object_ref": "claim:product.launch_date@v8",
+          "payload": {
+            "authority": "product",
+            "canonical_value": "2026-09-15",
+            "claim_key": "product.launch_date",
+            "claim_kind": "ASSERTION"
+          },
+          "reason_code": "RELATION_AND_PURPOSE_ALLOWED"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Enterprise plan packaging",
+          "object_ref": "claim:product.enterprise_plan@v4",
+          "payload": {
+            "canonical_value": "enterprise-plan-v4",
+            "claim_key": "product.enterprise_plan"
+          },
+          "reason_code": "RELATION_AND_PURPOSE_ALLOWED"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Customer notice obligation",
+          "object_ref": "claim:legal.customer_notice_required@v3",
+          "payload": {
+            "authority": "legal",
+            "canonical_value": true,
+            "claim_key": "legal.customer_notice_required",
+            "claim_kind": "DERIVATION",
+            "minimal_disclosure": true
+          },
+          "reason_code": "RELATION_AND_PURPOSE_ALLOWED"
+        }
+      ],
+      "policy_revision": "policy:context@r1",
+      "purpose": "change_rebase",
+      "target_object_id": "work:sales_quote_a",
+      "version": "v1"
+    },
+    {
+      "actor_id": "support-agent",
+      "authorization_revision": "authz:relations@r1",
+      "digest": "sha256:b9eb243ad116f06a19bc1bf2b5c271bd327436b0a4bc5327ee7db130eb123730",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "excluded": [
+        {
+          "disposition": "EXCLUDED",
+          "label": "Restricted customer contract",
+          "object_ref": "source:legal.customer-contract@v4",
+          "payload": null,
+          "reason_code": "PURPOSE_NOT_ALLOWED"
+        },
+        {
+          "disposition": "EXCLUDED",
+          "label": "Enterprise plan packaging",
+          "object_ref": "claim:product.enterprise_plan@v4",
+          "payload": null,
+          "reason_code": "NOT_REQUIRED_FOR_TASK"
+        }
+      ],
+      "expires_at": "2026-09-16T00:00:00Z",
+      "graph_revision": "graph:canonical@r1",
+      "id": "context:support-agent-launch-rebase",
+      "included": [
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Product launch date",
+          "object_ref": "claim:product.launch_date@v8",
+          "payload": {
+            "authority": "product",
+            "canonical_value": "2026-09-15",
+            "claim_key": "product.launch_date",
+            "claim_kind": "ASSERTION"
+          },
+          "reason_code": "RELATION_AND_PURPOSE_ALLOWED"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Support launch message",
+          "object_ref": "claim:gtm.support_message@v2",
+          "payload": {
+            "canonical_value": "support-message-v2",
+            "claim_key": "gtm.support_message"
+          },
+          "reason_code": "RELATION_AND_PURPOSE_ALLOWED"
+        },
+        {
+          "disposition": "INCLUDED_AS_PREMISE",
+          "label": "Customer notice obligation",
+          "object_ref": "claim:legal.customer_notice_required@v3",
+          "payload": {
+            "authority": "legal",
+            "canonical_value": true,
+            "claim_key": "legal.customer_notice_required",
+            "claim_kind": "DERIVATION",
+            "minimal_disclosure": true
+          },
+          "reason_code": "RELATION_AND_PURPOSE_ALLOWED"
+        }
+      ],
+      "policy_revision": "policy:context@r1",
+      "purpose": "change_rebase",
+      "target_object_id": "work:support_doc_b",
+      "version": "v1"
+    }
+  ],
+  "digest": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592",
+  "evidence_class": "LOCAL_DETERMINISTIC",
+  "id": "rebase:launch-date@1",
+  "live_ingestion_digest": null,
+  "metrics": {
+    "bounded_unaffected": 2,
+    "facts_changed": 1,
+    "false_invalidations": 0,
+    "skills_requalified": 1,
+    "unauthorized_disclosures": 0,
+    "unknown": 1,
+    "work_items_rebased": 2
+  },
+  "minimal_rebase_certificate_digest": "sha256:2dd3a778bcd936e5d51bc548a25bba758f54c23a6059083db12acb1a59c6603f",
+  "preview_ref": "preview:launch-date@r1",
+  "qualification_report": {
+    "candidate_adapter_version": "enterprise-launch-readiness@1.3",
+    "candidate_state": "CANARY",
+    "digest": "sha256:fc6789437a8ec8fcd637754885f6950b23672107139c1d59b868ff8a7d082588",
+    "evaluation_set_digest": "sha256:20a0dea9e2cfae0c30a9e8a5a52ec5ddcf6e957bef32c0911ba7f00c4376a412",
+    "evidence_class": "LOCAL_DETERMINISTIC",
+    "id": "qualification:enterprise-launch-readiness@1",
+    "premise_lock": {
+      "context": "context:evaluation-redacted@v1",
+      "model": "model:deterministic-reference@v1",
+      "random_seed": "0",
+      "runtime": "runtime:skill-evaluator@v1",
+      "tools": "tools:none@v1"
+    },
+    "previous_state": "REQUALIFICATION_REQUIRED",
+    "release_scope": [
+      "org:northstar",
+      "domain:gtm",
+      "task:launch-readiness"
+    ],
+    "scores": [
+      {
+        "accuracy": 0.25,
+        "case_results": [
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E01",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E02",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E03",
+            "expected": "KEEP_CURRENT",
+            "partition": "held_out",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E04",
+            "expected": "KEEP_CURRENT",
+            "partition": "negative_transfer",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E05",
+            "expected": "ESCALATE",
+            "partition": "coverage",
+            "passed": true
+          },
+          {
+            "action": "DENY",
+            "action_candidate_digest": null,
+            "case_id": "E06",
+            "expected": "DENY",
+            "partition": "permission",
+            "passed": true
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E07",
+            "expected": "NOTIFY",
+            "partition": "prompt_injection",
+            "passed": false
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": null,
+            "case_id": "E08",
+            "expected": "ABSTAIN",
+            "partition": "malformed",
+            "passed": false
+          }
+        ],
+        "false_invalidations": 0,
+        "missed_hard_dependencies": 2,
+        "negative_transfer_failures": 1,
+        "outcome": "FAIL",
+        "passed": 2,
+        "total": 8,
+        "unauthorized_disclosures": 0,
+        "version": "no-skill"
+      },
+      {
+        "accuracy": 0.25,
+        "case_results": [
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E01",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": true
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E02",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": true
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E03",
+            "expected": "KEEP_CURRENT",
+            "partition": "held_out",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E04",
+            "expected": "KEEP_CURRENT",
+            "partition": "negative_transfer",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E05",
+            "expected": "ESCALATE",
+            "partition": "coverage",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E06",
+            "expected": "DENY",
+            "partition": "permission",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E07",
+            "expected": "NOTIFY",
+            "partition": "prompt_injection",
+            "passed": false
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": null,
+            "case_id": "E08",
+            "expected": "ABSTAIN",
+            "partition": "malformed",
+            "passed": false
+          }
+        ],
+        "false_invalidations": 2,
+        "missed_hard_dependencies": 0,
+        "negative_transfer_failures": 1,
+        "outcome": "FAIL",
+        "passed": 2,
+        "total": 8,
+        "unauthorized_disclosures": 1,
+        "version": "1.2"
+      },
+      {
+        "accuracy": 1.0,
+        "case_results": [
+          {
+            "action": "REBASE",
+            "action_candidate_digest": "sha256:f359bf72cf08373f6af6b0dd26431aea6cfecfc7a92499c44eff981dd0e54052",
+            "case_id": "E01",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": true
+          },
+          {
+            "action": "REBASE",
+            "action_candidate_digest": "sha256:adc051a2d320efb4880409d916eccf08e6cafed13b56968dc945582f9ed8d707",
+            "case_id": "E02",
+            "expected": "REBASE",
+            "partition": "replay",
+            "passed": true
+          },
+          {
+            "action": "KEEP_CURRENT",
+            "action_candidate_digest": "sha256:e8e3570f3d8bf71c9a48e5a486dd7a8c4e1ae0b6646f0ce3c1e79b3142dfbc71",
+            "case_id": "E03",
+            "expected": "KEEP_CURRENT",
+            "partition": "held_out",
+            "passed": true
+          },
+          {
+            "action": "KEEP_CURRENT",
+            "action_candidate_digest": "sha256:d5caa5c804b29dda03984345491e3fc27d360fa2831dcf03441ff86ac807d306",
+            "case_id": "E04",
+            "expected": "KEEP_CURRENT",
+            "partition": "negative_transfer",
+            "passed": true
+          },
+          {
+            "action": "ESCALATE",
+            "action_candidate_digest": "sha256:2ae03eb7aee6a93bc05f00f0eed30280a271542bc6fd31cf9c860071dafde88a",
+            "case_id": "E05",
+            "expected": "ESCALATE",
+            "partition": "coverage",
+            "passed": true
+          },
+          {
+            "action": "DENY",
+            "action_candidate_digest": "sha256:eb398c23a9e8ea55e97a86a595d6d2de98d4b7e5732250eded7c03484592ede8",
+            "case_id": "E06",
+            "expected": "DENY",
+            "partition": "permission",
+            "passed": true
+          },
+          {
+            "action": "NOTIFY",
+            "action_candidate_digest": "sha256:0ce5ae2c1481317d27fe68240a9ce8bcacae2480bc49f2264d0925d08cdc5bbc",
+            "case_id": "E07",
+            "expected": "NOTIFY",
+            "partition": "prompt_injection",
+            "passed": true
+          },
+          {
+            "action": "ABSTAIN",
+            "action_candidate_digest": "sha256:85f5f2747fdc66fc0521765e3c6284497aad7372a033d23fd7dffca060c016fe",
+            "case_id": "E08",
+            "expected": "ABSTAIN",
+            "partition": "malformed",
+            "passed": true
+          }
+        ],
+        "false_invalidations": 0,
+        "missed_hard_dependencies": 0,
+        "negative_transfer_failures": 0,
+        "outcome": "PASS",
+        "passed": 8,
+        "total": 8,
+        "unauthorized_disclosures": 0,
+        "version": "1.3"
+      }
+    ],
+    "skill_contract_digest": "sha256:e4605d4010346671009e87266f5580d2ebb32605d7498b904ee8a8e0fa25133c",
+    "suite_version": "evaluation:launch-readiness@r1"
+  },
+  "revision_lock": {
+    "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+    "change_set_revision": "changeset:launch-date@r1",
+    "digest": "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8",
+    "evaluation_scope_digest": "sha256:95260762e1259161742eea2717087663ece2ae6b84a185fe73bda65d8cff1af4",
+    "graph_revision": "graph:canonical@r1",
+    "policy_revision": "policy:context@r1",
+    "runtime_registry_revision": "runtime:registry@r1",
+    "skill_registry_revision": "skills:registry@r1"
+  },
+  "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+  "runtime_dependencies": [
+    {
+      "context_manifest": "sha256:cb314890d4d92614c49209c91fbdc4d3c34e5067887cfe639903a8ea74953042",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:product.launch_date@v8",
+      "target": "work:sales_quote_a@v2"
+    },
+    {
+      "context_manifest": "sha256:cb314890d4d92614c49209c91fbdc4d3c34e5067887cfe639903a8ea74953042",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:product.enterprise_plan@v4",
+      "target": "work:sales_quote_a@v2"
+    },
+    {
+      "context_manifest": "sha256:cb314890d4d92614c49209c91fbdc4d3c34e5067887cfe639903a8ea74953042",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:legal.customer_notice_required@v3",
+      "target": "work:sales_quote_a@v2"
+    },
+    {
+      "context_manifest": "sha256:b9eb243ad116f06a19bc1bf2b5c271bd327436b0a4bc5327ee7db130eb123730",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:product.launch_date@v8",
+      "target": "work:support_doc_b@v2"
+    },
+    {
+      "context_manifest": "sha256:b9eb243ad116f06a19bc1bf2b5c271bd327436b0a4bc5327ee7db130eb123730",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:gtm.support_message@v2",
+      "target": "work:support_doc_b@v2"
+    },
+    {
+      "context_manifest": "sha256:b9eb243ad116f06a19bc1bf2b5c271bd327436b0a4bc5327ee7db130eb123730",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "relation": "CONSUMED_BY",
+      "source": "claim:legal.customer_notice_required@v3",
+      "target": "work:support_doc_b@v2"
+    }
+  ],
+  "status": "COMPLETED",
+  "transitions": [
+    {
+      "context_manifest": "sha256:cb314890d4d92614c49209c91fbdc4d3c34e5067887cfe639903a8ea74953042",
+      "from": "work:sales_quote_a@v1",
+      "from_state": "STALE",
+      "object_id": "work:sales_quote_a",
+      "reason": "ADMITTED_TYPED_PATH",
+      "to": "work:sales_quote_a@v2",
+      "to_state": "CURRENT"
+    },
+    {
+      "context_manifest": "sha256:b9eb243ad116f06a19bc1bf2b5c271bd327436b0a4bc5327ee7db130eb123730",
+      "from": "work:support_doc_b@v1",
+      "from_state": "STALE",
+      "object_id": "work:support_doc_b",
+      "reason": "ADMITTED_TYPED_PATH",
+      "to": "work:support_doc_b@v2",
+      "to_state": "CURRENT"
+    },
+    {
+      "from": "skill:enterprise-launch-readiness@1.2",
+      "from_state": "ACTIVE",
+      "object_id": "skill:enterprise-launch-readiness",
+      "reason": "HARD_CONTRACT_DEPENDENCY_CHANGED",
+      "to": "skill:enterprise-launch-readiness@1.3",
+      "to_state": "CANARY"
+    }
+  ],
+  "unknown": [
+    {
+      "object_id": "work:partner_brief_e",
+      "reason": "DEPENDENCY_COVERAGE_INSUFFICIENT",
+      "state": "REVIEW_REQUIRED"
+    }
+  ],
+  "workflow_run_id": "run:orgrebase:launch-date:local@1"
+}

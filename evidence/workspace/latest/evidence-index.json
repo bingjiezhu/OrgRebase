@@ -1,0 +1,601 @@
+{
+  "digest": "sha256:badf7dcc85c2b0999a9a121247ac9e7ee088bb9d3328a0f3d5cd99fd14542ced",
+  "entries": [
+    {
+      "artifact_ref": "agentteams/status.json",
+      "claim_supported": "Records AgentTeams static/live status, missing prerequisites, and target-write boundary.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:ff4770d36d84a847b8af4431d203abcc1854c6bd73dadac5b0cb2d8ad73bda30",
+      "evidence_class": "NOT_RUN",
+      "media_type": "application/json",
+      "negative_test_ids": [],
+      "sha256": "sha256:d724e7638674754352cbd45b8202422425d5253c14e546fb308725aa66bfc399",
+      "verifier_command": "make workspace-agentteams-check"
+    },
+    {
+      "artifact_ref": "evaluation/owb-results.json",
+      "claim_supported": "OWB v1.1 deterministic conformance, baselines and ablations.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:7846dfca8a9d4e7322a21a1f8a2fb0c9c20cd980326bfa0847f10a7cef783aa8",
+      "evidence_class": "SYNTHETIC_FIXTURE",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "gold-isolation",
+        "license-gate",
+        "cross-org-isolation"
+      ],
+      "sha256": "sha256:17ee71a0d89b401655b4ad49bc9e7406f13b7ee623423e23cdee68f604833353",
+      "verifier_command": "make workspace-benchmark-check"
+    },
+    {
+      "artifact_ref": "formation/admission-decision-01.json",
+      "claim_supported": "Atomic work-formation artifact: admission-decision-01.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:093ad3d378c4fdf326e95d51bde2b3c0321216d6fe337ea860d44742c3dad686",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:adbf8111a7075d50c5215a406a9adbb6d6be4b0647c1f1135b8edb07c6f67abb",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/admission-decision-02.json",
+      "claim_supported": "Atomic work-formation artifact: admission-decision-02.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:88895bacb920fe3879fb8b860fb380636184d596b5adb03205ce05566ae9a0d9",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:c2e0b7c9acb0c7191a17fc79908d9e1f6b405ad1620872e23acf38301a37a5eb",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/admission-decision-03.json",
+      "claim_supported": "Atomic work-formation artifact: admission-decision-03.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:71e52a3f874d2db98c048476a8d7dbc8de86dad89c2c16f1a6f3011b64836dec",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:ac9caafc2e25313d0eb133e77b3c6322c35bbb81ca173cc4f3f17064adc2d025",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/admission-decision-04.json",
+      "claim_supported": "Atomic work-formation artifact: admission-decision-04.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:84b1ceaf60cf99c20dbc71e8735fe76658c002bfa051c48e2eff87b1c49a3187",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:4db74fcaef3e63cbd65ddc6d833bbcef4bdbafdda74936ec7960691c40df41cb",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/admission-decision-05.json",
+      "claim_supported": "Atomic work-formation artifact: admission-decision-05.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:ad313616daa06517afb7c88c8cae44c79befe7752b56873b0fcca00fe6b681c0",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:80b12bacb49ce9eff5ff461fc62d9a40bcb041145a4e0a00479e2e7e36dde099",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/admission-decision-06.json",
+      "claim_supported": "Atomic work-formation artifact: admission-decision-06.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:66bcfb3fb53f78ff4e39f25b487e0fa03473db2f03e226bea55829554e61e32c",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:f0fbf7b0e6e2c0915356aa7bca1d5b90d3a5302d9c550ea9d53adc006385fd4e",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/admission-decision-07.json",
+      "claim_supported": "Atomic work-formation artifact: admission-decision-07.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:51b3e8517739b26c54dd8ecd866a7f15cab201badb275b54c04ab4b85ce2cfee",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:2242fb80877859e4a93e27c4d3ff0e1fc63e4678eda9607af0f5f2d8c07beb86",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/admission-decision-08.json",
+      "claim_supported": "Atomic work-formation artifact: admission-decision-08.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:2158b2c4da62db917e3d936ada8e18f431bdb2ea592db60f48ca3c565d10f8e7",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:46cc8dc35bd3f0bc8782c58b9dce4640835c7054511490ebfc841bbfe9e93845",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/coalition-plan.json",
+      "claim_supported": "Atomic work-formation artifact: coalition-plan.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:0453945835343fa9107a952610c09c3e4bbf302c63b2ba59b89f240160a0664a",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:d65bef4d7aac8c90fea8e137a33a68477773acc7bd20a3d8747784f53f9c9e23",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/quote-v1.json",
+      "claim_supported": "Atomic work-formation artifact: quote-v1.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:5c05b1428e431270f4a443d345ede7a032d1729e208c5440b780801f4961dc1a",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:53c99cb774742b504b36d7200da0761e429a45218dc4cf112e44b48ffcfb1206",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/runtime-dependency-manifest.json",
+      "claim_supported": "Atomic work-formation artifact: runtime-dependency-manifest.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:43e6436cb52710c07788496ca3988d7c075111a5323913d5b07e33c3917436f3",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:c2692f74cbf8b5d467d9da657a58e18b21069724e3fb173a3815ef37dfbf5fb1",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/task-context.json",
+      "claim_supported": "Atomic work-formation artifact: task-context.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:55692973c0f6fbd7a0f07c06bc16b884081d547492fe2d479e843c263bf8e8b8",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:11033357dc6d0b3bf8e10af769bff1041222de09a56d786b189d0d5dbb62c2f7",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/task-receipt.json",
+      "claim_supported": "Quote v1, WorkTrace and graph snapshot were atomically formed.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:25e1f78e930de3bc6c0ece34ccfb975a7fd188aa2838a4c03524f9b6f41c14e7",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "formation-rollback",
+        "formation-idempotency"
+      ],
+      "sha256": "sha256:49187533fc3660c055521ab6a23f14ca6ea535bd3ca4bfb9d8e19714c38bdf50",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/trace-coverage.json",
+      "claim_supported": "Atomic work-formation artifact: trace-coverage.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:77681fff5e217a66f6fca0a3e0d2b93fd3b500ffa1d371c564be43945b15c280",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:da3b4f80e2077a5cee233d5bd31ad92f0acc7f776e0ad7cc9585865d916a454e",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/work-trace.json",
+      "claim_supported": "Atomic work-formation artifact: work-trace.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:6d5b8450d3f879e6ec1fdecf13e326dc0df972a2d56aca7894d63359d773f36e",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:ce4b5223ff34134058dd7f5acf990b0692e61360bff766f06e333011001bde44",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "formation/workspace-graph-snapshot-v1.json",
+      "claim_supported": "Atomic work-formation artifact: workspace-graph-snapshot-v1.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:9b0a2fc8707d5bdfac18f5c8dc911fd42bd929b8c47b12a5842c84012c11a5ab",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "unmediated-read",
+        "trace-tamper",
+        "manifest-bijection"
+      ],
+      "sha256": "sha256:dc259e09f244f24ef199ade3ef7f70323e5b9e8c055a8b5b6788bcb615f7dca9",
+      "verifier_command": "make workspace-formation-check"
+    },
+    {
+      "artifact_ref": "rebase/currency-approval.json",
+      "claim_supported": "Certified currency selective rebase artifact: approval.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:9caef6a82b5d27874322c649878e91b354d1f11072bd3531a0c38cdb48043a23",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:b7eecc32c85b229f43c1580531ce240982422ba26560d99c323b61429d00393e",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/currency-change-set.json",
+      "claim_supported": "Certified currency selective rebase artifact: change_set.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:4d8e4127406f878ce6e50fec3aaf47b6e1685b0954dd511eaabfabe42ecfdd3b",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:2b0eb7b8f678dbe3443fef2df9f44a624a2519672c9b530f83c274b37ce476ae",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/currency-graph-pointer.json",
+      "claim_supported": "Certified currency selective rebase artifact: graph_pointer.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:9da36db43ae8dec7c0788f5c4e7b899cbd3265331f5ca6a3907a23fe208c4b22",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:a4bca355743fd53fbdc54b8f8158153407d8c0b23ab87a37d530f69cc29818fc",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/currency-minimal-rebase-certificate.json",
+      "claim_supported": "Certified currency selective rebase artifact: minimal_rebase_certificate.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:2baa5838aa7d5a656d3b0b74afd6b05bd819cebb64dc15adcab9893cc5d76bcc",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:6b44f32ecda7fcfc71a006249ee86e81a7735bdb63195f0b5fb6d0e03c0ac0a9",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/currency-preview.json",
+      "claim_supported": "Certified currency selective rebase artifact: preview.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:7bb69b786e20a041644d21788ea6fc7a7a6936d9ff6f71bce1cfa16f6cffbf6c",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:e1857517c7393a66145e8edf0a3486d70e0dd2b1cf11cb431065f7f509268208",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/currency-quote.json",
+      "claim_supported": "Certified currency selective rebase artifact: quote.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:24935e4609c0f2b9fc3ac4387a7eff449f93b1d02baa0a3f67581b6e71239a57",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:e575abc699c6d4cea4c90002f2be27761b4740a656e06c93ff10dc63cdf93d45",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/currency-rebase-receipt.json",
+      "claim_supported": "Certified currency selective rebase artifact: rebase_receipt.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:caf0d4a80e676ede0ca33977458106edc0c923032700cca07dbcbf2ff56f6fbb",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:d5e2c2c58ccb3e9a48bc42caaa722777bd50a3c99eccc897b2bbacbaf6ef1895",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/currency-workspace-rebase-receipt.json",
+      "claim_supported": "Certified currency selective rebase artifact: workspace_rebase_receipt.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:50728ea0305cd662a22fa108fe484a24a8a5f891b3447c3d9dbd1864d6f4f927",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:9b35665d653ff35ccd0f8dc94cfbd056dd7bba288b07ed9d5c31d0d1e655599f",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/launch-approval.json",
+      "claim_supported": "Certified launch selective rebase artifact: approval.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:949cb679c89f388c8f1cdde164d7b7d70d9d98ccda82a7db5565700e28f1ec56",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:71f33522107ab2bc1f472589d877448f28f8d1744097d877ef7feb65a64d400a",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/launch-change-set.json",
+      "claim_supported": "Certified launch selective rebase artifact: change_set.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:a7634259ea01c3c9e9d50aa98dc1cdfbc5fe443ef6b21a22801607865d3365b8",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:4bfa9e697b0f6deac7c092a885f33db7364705a054788133255364c039e879d3",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/launch-graph-pointer.json",
+      "claim_supported": "Certified launch selective rebase artifact: graph_pointer.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:cd7edbc7258044d2008cdf7dc0647bc38be36d319c014f7dceb2a2f9896f6e7b",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:8eb5d0548327e48faba4e55640e0056091743d87b6ba664fd43aa208dcd5337a",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/launch-minimal-rebase-certificate.json",
+      "claim_supported": "Certified launch selective rebase artifact: minimal_rebase_certificate.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:97b4b2e4f39c8f279018e9b4786f89b5c8e51fb6cc5de2609c6521a0a929ba4a",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:64689d70a9be77d4cb7d5f472b196de5cca836e7710f08add5458e640d95d7c1",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/launch-preview.json",
+      "claim_supported": "Certified launch selective rebase artifact: preview.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:488fe5c4ca9f79049475b9f500ba61c759f7dc49a7d657017ef10dfdf99f20bc",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:ed9b8c36bacde020eb76aaf22e62813e2c7339b4418f2330c0dfef6e993b3ca6",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/launch-quote.json",
+      "claim_supported": "Certified launch selective rebase artifact: quote.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:6f03f175f05fc7948d38d731ae24654ce721a23d764f6242813f759d6ea69dff",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:7a2cab0c4f69e5138661fa1ae74f5da7e6dcc6d6799000edad74ee5555974acb",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/launch-rebase-receipt.json",
+      "claim_supported": "Certified launch selective rebase artifact: rebase_receipt.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:b990d364d105b27c03deb0067196e87caf3e8fb03b3266a74990948f02652316",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:aebf6f4d78951cccc5f3c4f9a88440a19d9bb3af764686df285449e01e9ba232",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "rebase/launch-workspace-rebase-receipt.json",
+      "claim_supported": "Certified launch selective rebase artifact: workspace_rebase_receipt.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:86d33a3c156ebd6ea7255643e9a746256daf324eef30a1c9557638dc3e23630f",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "preview-drift-zero-write",
+        "vmrc-tamper",
+        "successor-atomicity"
+      ],
+      "sha256": "sha256:5f21d9033721d8df30de5ff98cea1773a13083a2ca8717d7cebe2596d9c8c2ab",
+      "verifier_command": "make workspace-rebase-check"
+    },
+    {
+      "artifact_ref": "repeatability/final-graph-pointer.json",
+      "claim_supported": "Successor graph pointer advanced atomically to v3.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:3e8229a219668be3d9ed87d3b3dd9105214a35846f5fb89191b56a9685053b4a",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [],
+      "sha256": "sha256:a4bca355743fd53fbdc54b8f8158153407d8c0b23ab87a37d530f69cc29818fc",
+      "verifier_command": "make workspace-repeatability-check"
+    },
+    {
+      "artifact_ref": "repeatability/final-quote.json",
+      "claim_supported": "The restarted second change produced Quote v3 in EUR.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:1e45464ccebbd57da802bbc6d4aa5a3e8c9671d1fb43f5eaaa7f8c1385030c5e",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [],
+      "sha256": "sha256:e575abc699c6d4cea4c90002f2be27761b4740a656e06c93ff10dc63cdf93d45",
+      "verifier_command": "make workspace-repeatability-check"
+    },
+    {
+      "artifact_ref": "skill/candidate.json",
+      "claim_supported": "Curator candidate bytes are immutable and digest-bound.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:79b45878e39f607761cc518958e80b4287d46f808d5a60a8e4228aec6d9007d3",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "candidate-byte-mutation",
+        "repository-substitute"
+      ],
+      "sha256": "sha256:7c832eaef3b14a3a9f014531ed524244f00ebe94e7950f69d5e8c8e2074dbdf5",
+      "verifier_command": "make workspace-skill-check"
+    },
+    {
+      "artifact_ref": "skill/evaluation-receipt.json",
+      "claim_supported": "The exact candidate passed replay, held-out, regression and safety gates.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:a0fd57c1e1a12045a7121b4348b4ae8821397777e4d75d7a3dea93ba402eabc7",
+      "evidence_class": "LOCAL_DETERMINISTIC",
+      "media_type": "application/json",
+      "negative_test_ids": [],
+      "sha256": "sha256:7f7cf6d6fba86b4af42ed75bae145b760ade20ad55e770a83fcfb2e2a546c9fe",
+      "verifier_command": "make workspace-skill-check"
+    },
+    {
+      "artifact_ref": "tool/dependency-evidence-called-event.json",
+      "claim_supported": "The tool event is bound to the same run, receipt, tool, request and result digests.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:1a205cc09e6eda1269cea3c066a98f02539daf64566e539349a8f20e9c317bbe",
+      "evidence_class": "LOCAL_REAL_TOOL",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "tool-run-mismatch",
+        "tool-digest-mismatch"
+      ],
+      "sha256": "sha256:132f6f6a4362bf8658ed42fd1a7cedc59aa1ed3424ceca7d6b95141dbd8703c2",
+      "verifier_command": "make workspace-evidence-check"
+    },
+    {
+      "artifact_ref": "tool/dependency-evidence-invocation.json",
+      "claim_supported": "The main Workspace run executed the dependency-evidence tool and persisted its receipt.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:c7fca0dc159dfd2740be3753a1488a20e202dc767253d2ef7a8decc0fa63dac5",
+      "evidence_class": "LOCAL_REAL_TOOL",
+      "media_type": "application/json",
+      "negative_test_ids": [
+        "tool-authz-denied",
+        "tool-idempotency-conflict"
+      ],
+      "sha256": "sha256:d8f4a99c5f05cfbf9eafb0c2a4758a29ee8a7c697be0c6f308b48bf3a494f78d",
+      "verifier_command": "make workspace-evidence-check"
+    },
+    {
+      "artifact_ref": "user-validation.json",
+      "claim_supported": "Records participant count, evidence class, consent gate, and current validation status.",
+      "contains_sensitive_data": false,
+      "digest": "sha256:08ab25f25c1747e8da71592e1a37e7a93f311d6ebca02aaea9682acdc0b51ec6",
+      "evidence_class": "NOT_RUN",
+      "media_type": "application/json",
+      "negative_test_ids": [],
+      "sha256": "sha256:abcaa454df5dd00409c23b3ba5a54ae7540f363dacbefc371dfdac1a949bd19c",
+      "verifier_command": "make workspace-user-validation-check"
+    }
+  ],
+  "event_chain_head": "sha256:9f97d68acae1548ef79120e54045a4ff5721bc8c86e446bc9496ce676fc04976",
+  "generated_at": "2026-08-16T00:00:00Z",
+  "id": "evidence-index:run-workspace-complete@v1",
+  "run_id": "run:workspace:complete@v1",
+  "status": "PASS"
+}

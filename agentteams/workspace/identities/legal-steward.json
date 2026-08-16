@@ -1,0 +1,1 @@
+{"worker_id":"legal-steward","domain_id":"legal","candidate_only":true,"can_write_canonical_state":false,"allowed_output_schemas":["orgrebase.domain-candidate-bundle.v1","orgrebase.claim-candidate.v1"],"raw_restricted_disclosure":false}

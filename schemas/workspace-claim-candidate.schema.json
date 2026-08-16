@@ -1,0 +1,230 @@
+{
+  "$defs": {
+    "ClaimScope": {
+      "enum": [
+        "ORGANIZATION",
+        "TASK"
+      ],
+      "title": "ClaimScope",
+      "type": "string"
+    },
+    "EvidenceSourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "locator_class": {
+          "title": "Locator Class",
+          "type": "string"
+        },
+        "media_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Media Type"
+        },
+        "observed_at": {
+          "title": "Observed At",
+          "type": "string"
+        },
+        "source_digest": {
+          "title": "Source Digest",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_version": {
+          "title": "Source Version",
+          "type": "string"
+        },
+        "valid_from": {
+          "title": "Valid From",
+          "type": "string"
+        },
+        "valid_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid To"
+        }
+      },
+      "required": [
+        "source_id",
+        "source_version",
+        "source_digest",
+        "locator_class",
+        "observed_at",
+        "valid_from"
+      ],
+      "title": "EvidenceSourceRef",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "SemanticKind": {
+      "enum": [
+        "CLAIM",
+        "POLICY",
+        "SKILL",
+        "TOOL",
+        "LITERAL"
+      ],
+      "title": "SemanticKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-claim-candidate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_ref": {
+      "title": "Authority Ref",
+      "type": "string"
+    },
+    "candidate_id": {
+      "title": "Candidate Id",
+      "type": "string"
+    },
+    "claim_scope": {
+      "$ref": "#/$defs/ClaimScope"
+    },
+    "conflict_keys": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Conflict Keys",
+      "type": "array"
+    },
+    "derived_from": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Derived From",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "fresh_until": {
+      "title": "Fresh Until",
+      "type": "string"
+    },
+    "governance_state": {
+      "const": "PROPOSED",
+      "default": "PROPOSED",
+      "title": "Governance State",
+      "type": "string"
+    },
+    "issuer_domain_id": {
+      "title": "Issuer Domain Id",
+      "type": "string"
+    },
+    "predicate": {
+      "title": "Predicate",
+      "type": "string"
+    },
+    "purpose": {
+      "title": "Purpose",
+      "type": "string"
+    },
+    "recipients": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Recipients",
+      "type": "array"
+    },
+    "semantic_kind": {
+      "$ref": "#/$defs/SemanticKind"
+    },
+    "sensitivity": {
+      "title": "Sensitivity",
+      "type": "string"
+    },
+    "source_refs": {
+      "items": {
+        "$ref": "#/$defs/EvidenceSourceRef"
+      },
+      "title": "Source Refs",
+      "type": "array"
+    },
+    "subject_ref": {
+      "title": "Subject Ref",
+      "type": "string"
+    },
+    "task_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Ref"
+    },
+    "temporal_state": {
+      "title": "Temporal State",
+      "type": "string"
+    },
+    "transformation_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Transformation Ref"
+    },
+    "value": {
+      "$ref": "#/$defs/JsonValue"
+    },
+    "value_schema_ref": {
+      "title": "Value Schema Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "candidate_id",
+    "semantic_kind",
+    "subject_ref",
+    "predicate",
+    "value",
+    "value_schema_ref",
+    "issuer_domain_id",
+    "authority_ref",
+    "source_refs",
+    "temporal_state",
+    "sensitivity",
+    "claim_scope",
+    "purpose",
+    "recipients",
+    "fresh_until"
+  ],
+  "title": "ClaimCandidate",
+  "type": "object"
+}

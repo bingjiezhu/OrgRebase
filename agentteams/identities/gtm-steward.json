@@ -1,0 +1,37 @@
+{
+  "name": "gtm-steward",
+  "role": "Sales and Support work dependency interpreter",
+  "capabilities": [
+    "inspect GTM work manifests",
+    "propose dependency candidates",
+    "explain operational impact"
+  ],
+  "inputs": [
+    "CompiledDelegationTask",
+    "GTM work refs",
+    "admitted product delta",
+    "ImpactPreview"
+  ],
+  "outputs": [
+    "ImpactCandidate",
+    "CoverageGapCandidate"
+  ],
+  "dependencies": [
+    "GTM ContextManifest",
+    "read-only work tools"
+  ],
+  "decision_boundary": [
+    "cannot read restricted Legal source",
+    "cannot mark work stale/current",
+    "cannot overrule impact engine"
+  ],
+  "trace": [
+    "orchestration_plan_digest",
+    "delegation_task_digest",
+    "work_ref",
+    "context_digest",
+    "candidate_edge_digest",
+    "handoff_digest"
+  ],
+  "authority_domain": "gtm"
+}

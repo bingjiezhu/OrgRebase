@@ -1,0 +1,34 @@
+{
+  "schema_version": "orgrebase.agentteams-preflight.v1",
+  "status": "READY",
+  "agentteams_version": "v1.2.2",
+  "required_workers": 5,
+  "deployment_model": "google/gemini-3.1-flash-lite",
+  "deployment_provider": "vertex-ai-openai-compat",
+  "checks": {
+    "binary.docker": {
+      "status": "PASS"
+    },
+    "binary.kubectl": {
+      "status": "PASS"
+    },
+    "docker.daemon": {
+      "status": "PASS",
+      "detail": "exit=0"
+    },
+    "llm.authentication": {
+      "status": "PASS",
+      "mode": "vertex-adc",
+      "detail": "location=global; model=google/gemini-3.1-flash-lite; credentials=adc-present",
+      "value_disclosed": false
+    },
+    "orgrebase.assets": {
+      "status": "PASS",
+      "detail": "{"
+    }
+  },
+  "blockers": [],
+  "secrets_disclosed": false,
+  "evidence_class": "PASS_STATIC",
+  "claim_boundary": "READY means the host can start a live run; it is not proof that a run occurred."
+}

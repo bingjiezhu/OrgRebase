@@ -1,0 +1,128 @@
+{
+  "$defs": {
+    "EffectDisposition": {
+      "enum": [
+        "REBUILD",
+        "PRESERVE_WITHIN_BOUNDARY",
+        "HOLD_FOR_REVIEW",
+        "REQUALIFY"
+      ],
+      "title": "EffectDisposition",
+      "type": "string"
+    },
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    },
+    "MinimalEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "disposition": {
+          "$ref": "#/$defs/EffectDisposition"
+        },
+        "impact_certificate_digest": {
+          "title": "Impact Certificate Digest",
+          "type": "string"
+        },
+        "impact_result_digest": {
+          "title": "Impact Result Digest",
+          "type": "string"
+        },
+        "target_id": {
+          "title": "Target Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_id",
+        "disposition",
+        "impact_result_digest",
+        "impact_certificate_digest"
+      ],
+      "title": "MinimalEffect",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/minimal-rebase-certificate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "change_set_digest": {
+      "title": "Change Set Digest",
+      "type": "string"
+    },
+    "claim_boundary": {
+      "title": "Claim Boundary",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "effects": {
+      "items": {
+        "$ref": "#/$defs/MinimalEffect"
+      },
+      "title": "Effects",
+      "type": "array"
+    },
+    "evidence_class": {
+      "$ref": "#/$defs/EvidenceClass",
+      "default": "LOCAL_DETERMINISTIC"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "impact_certificate_set_digest": {
+      "title": "Impact Certificate Set Digest",
+      "type": "string"
+    },
+    "minimality_invariants": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Minimality Invariants",
+      "type": "array"
+    },
+    "preview_digest": {
+      "title": "Preview Digest",
+      "type": "string"
+    },
+    "revision_lock_digest": {
+      "title": "Revision Lock Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "orgrebase.minimal-rebase-certificate.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "verifier_version": {
+      "default": "orgrebase.minimal-rebase-verifier@1.0.0",
+      "title": "Verifier Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "change_set_digest",
+    "preview_digest",
+    "revision_lock_digest",
+    "impact_certificate_set_digest",
+    "effects",
+    "minimality_invariants",
+    "claim_boundary"
+  ],
+  "title": "MinimalRebaseCertificate",
+  "type": "object"
+}

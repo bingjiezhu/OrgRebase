@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/agentteams-model-call.schema.json",
+  "title": "Redacted AgentTeams model call evidence record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "nonce", "worker_name", "status",
+    "provider_request_id", "model", "timestamp_ms", "artifact_ref", "artifact_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.agentteams-model-call.v1"},
+    "run_id": {"type": "string", "pattern": "^run:orgrebase:live:"},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "worker_name": {"type": "string", "minLength": 1},
+    "status": {"enum": ["SUCCEEDED", "FAILED"]},
+    "provider_request_id": {"type": "string", "minLength": 1},
+    "model": {"type": "string", "minLength": 1},
+    "timestamp_ms": {"type": "integer"},
+    "artifact_ref": {"type": "string", "minLength": 1},
+    "artifact_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

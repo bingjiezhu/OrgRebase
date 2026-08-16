@@ -1,0 +1,47 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-template-candidate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_ref",
+    "template_ref",
+    "confidence",
+    "reason_codes"
+  ],
+  "title": "TemplateCandidate",
+  "type": "object"
+}

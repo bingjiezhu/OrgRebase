@@ -1,0 +1,78 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-task-request.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "customer_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Customer Id"
+    },
+    "deliverable_kind": {
+      "title": "Deliverable Kind",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "input_values": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Input Values",
+      "type": "object"
+    },
+    "organization_id": {
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "purpose": {
+      "title": "Purpose",
+      "type": "string"
+    },
+    "requested_at": {
+      "title": "Requested At",
+      "type": "string"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "organization_id",
+    "actor_id",
+    "purpose",
+    "deliverable_kind",
+    "requested_at",
+    "template_ref",
+    "idempotency_key"
+  ],
+  "title": "TaskRequest",
+  "type": "object"
+}

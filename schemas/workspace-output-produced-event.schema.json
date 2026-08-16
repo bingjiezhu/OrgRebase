@@ -1,0 +1,67 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-output-produced-event.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "const": "OUTPUT_PRODUCED",
+      "default": "OUTPUT_PRODUCED",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "occurred_at": {
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "output_digest": {
+      "title": "Output Digest",
+      "type": "string"
+    },
+    "output_ref": {
+      "title": "Output Ref",
+      "type": "string"
+    },
+    "previous_event_digest": {
+      "title": "Previous Event Digest",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "sequence": {
+      "title": "Sequence",
+      "type": "integer"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "task_ref",
+    "run_id",
+    "sequence",
+    "output_ref",
+    "output_digest",
+    "occurred_at",
+    "idempotency_key",
+    "previous_event_digest"
+  ],
+  "title": "OutputProducedEvent",
+  "type": "object"
+}

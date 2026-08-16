@@ -1,0 +1,367 @@
+{
+  "$defs": {
+    "DependencyStrength": {
+      "enum": [
+        "HARD",
+        "REVIEW",
+        "INFORMATIONAL"
+      ],
+      "title": "DependencyStrength",
+      "type": "string"
+    },
+    "OutputProducedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "OUTPUT_PRODUCED",
+          "default": "OUTPUT_PRODUCED",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "occurred_at": {
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "output_digest": {
+          "title": "Output Digest",
+          "type": "string"
+        },
+        "output_ref": {
+          "title": "Output Ref",
+          "type": "string"
+        },
+        "previous_event_digest": {
+          "title": "Previous Event Digest",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "sequence": {
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "task_ref": {
+          "title": "Task Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "task_ref",
+        "run_id",
+        "sequence",
+        "output_ref",
+        "output_digest",
+        "occurred_at",
+        "idempotency_key",
+        "previous_event_digest"
+      ],
+      "title": "OutputProducedEvent",
+      "type": "object"
+    },
+    "ReferenceResolvedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "REFERENCE_RESOLVED",
+          "default": "REFERENCE_RESOLVED",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "input_digest": {
+          "title": "Input Digest",
+          "type": "string"
+        },
+        "occurred_at": {
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "previous_event_digest": {
+          "title": "Previous Event Digest",
+          "type": "string"
+        },
+        "projection_digest": {
+          "title": "Projection Digest",
+          "type": "string"
+        },
+        "provider_digest": {
+          "title": "Provider Digest",
+          "type": "string"
+        },
+        "provider_ref": {
+          "title": "Provider Ref",
+          "type": "string"
+        },
+        "relation": {
+          "title": "Relation",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "semantic_kind": {
+          "$ref": "#/$defs/SemanticKind"
+        },
+        "sequence": {
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "slot_id": {
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "strength": {
+          "$ref": "#/$defs/DependencyStrength"
+        },
+        "task_ref": {
+          "title": "Task Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "task_ref",
+        "run_id",
+        "sequence",
+        "slot_id",
+        "provider_ref",
+        "provider_digest",
+        "semantic_kind",
+        "relation",
+        "strength",
+        "projection_digest",
+        "input_digest",
+        "occurred_at",
+        "idempotency_key",
+        "previous_event_digest"
+      ],
+      "title": "ReferenceResolvedEvent",
+      "type": "object"
+    },
+    "SemanticKind": {
+      "enum": [
+        "CLAIM",
+        "POLICY",
+        "SKILL",
+        "TOOL",
+        "LITERAL"
+      ],
+      "title": "SemanticKind",
+      "type": "string"
+    },
+    "ToolCalledEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "TOOL_CALLED",
+          "default": "TOOL_CALLED",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "invocation_receipt_ref": {
+          "title": "Invocation Receipt Ref",
+          "type": "string"
+        },
+        "occurred_at": {
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "previous_event_digest": {
+          "title": "Previous Event Digest",
+          "type": "string"
+        },
+        "request_digest": {
+          "title": "Request Digest",
+          "type": "string"
+        },
+        "result_digest": {
+          "title": "Result Digest",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "sequence": {
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "task_ref": {
+          "title": "Task Ref",
+          "type": "string"
+        },
+        "tool_ref": {
+          "title": "Tool Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "task_ref",
+        "run_id",
+        "sequence",
+        "tool_ref",
+        "invocation_receipt_ref",
+        "request_digest",
+        "result_digest",
+        "occurred_at",
+        "idempotency_key",
+        "previous_event_digest"
+      ],
+      "title": "ToolCalledEvent",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-work-trace.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "coalition_plan_ref": {
+      "title": "Coalition Plan Ref",
+      "type": "string"
+    },
+    "completed_at": {
+      "title": "Completed At",
+      "type": "string"
+    },
+    "context_manifest_ref": {
+      "title": "Context Manifest Ref",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "events": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "OUTPUT_PRODUCED": "#/$defs/OutputProducedEvent",
+            "REFERENCE_RESOLVED": "#/$defs/ReferenceResolvedEvent",
+            "TOOL_CALLED": "#/$defs/ToolCalledEvent"
+          },
+          "propertyName": "event_type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ReferenceResolvedEvent"
+          },
+          {
+            "$ref": "#/$defs/OutputProducedEvent"
+          },
+          {
+            "$ref": "#/$defs/ToolCalledEvent"
+          }
+        ]
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "head_event_digest": {
+      "title": "Head Event Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "organization_id": {
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "output_digest": {
+      "title": "Output Digest",
+      "type": "string"
+    },
+    "output_ref": {
+      "title": "Output Ref",
+      "type": "string"
+    },
+    "renderer_ref": {
+      "title": "Renderer Ref",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "started_at": {
+      "title": "Started At",
+      "type": "string"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "organization_id",
+    "task_ref",
+    "run_id",
+    "template_ref",
+    "coalition_plan_ref",
+    "context_manifest_ref",
+    "events",
+    "head_event_digest",
+    "renderer_ref",
+    "started_at",
+    "completed_at",
+    "output_ref",
+    "output_digest"
+  ],
+  "title": "WorkTrace",
+  "type": "object"
+}

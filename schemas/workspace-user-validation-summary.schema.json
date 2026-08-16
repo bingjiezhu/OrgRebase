@@ -1,0 +1,111 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-user-validation-summary.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        {
+          "enum": [
+            "DESIGN",
+            "LIVE_MODEL",
+            "USER_STUDY"
+          ],
+          "type": "string"
+        }
+      ],
+      "title": "Evidence Class"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "median_trace_value": {
+      "maximum": 5.0,
+      "minimum": 0.0,
+      "title": "Median Trace Value",
+      "type": "number"
+    },
+    "median_usefulness": {
+      "maximum": 5.0,
+      "minimum": 0.0,
+      "title": "Median Usefulness",
+      "type": "number"
+    },
+    "participant_count": {
+      "minimum": 0,
+      "title": "Participant Count",
+      "type": "integer"
+    },
+    "pilot_or_conditional_count": {
+      "minimum": 0,
+      "title": "Pilot Or Conditional Count",
+      "type": "integer"
+    },
+    "problem_comprehension_rate": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Problem Comprehension Rate",
+      "type": "number"
+    },
+    "repeated_critical_gaps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Repeated Critical Gaps",
+      "type": "array"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_RUN"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "participant_count",
+    "problem_comprehension_rate",
+    "median_usefulness",
+    "median_trace_value",
+    "pilot_or_conditional_count",
+    "repeated_critical_gaps",
+    "status",
+    "evidence_class",
+    "limitations"
+  ],
+  "title": "UserValidationSummary",
+  "type": "object"
+}

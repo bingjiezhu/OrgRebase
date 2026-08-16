@@ -1,0 +1,69 @@
+{
+  "$defs": {
+    "CandidateSource": {
+      "enum": [
+        "USER",
+        "AGENT",
+        "TEMPLATE"
+      ],
+      "title": "CandidateSource",
+      "type": "string"
+    },
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-task-requirement-candidate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_sequence": {
+      "minimum": 0,
+      "title": "Candidate Sequence",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "proposed_domain_id": {
+      "title": "Proposed Domain Id",
+      "type": "string"
+    },
+    "rationale": {
+      "title": "Rationale",
+      "type": "string"
+    },
+    "requested_value_hint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JsonValue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "slot_id": {
+      "title": "Slot Id",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/CandidateSource"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_ref",
+    "slot_id",
+    "proposed_domain_id",
+    "rationale",
+    "source",
+    "candidate_sequence"
+  ],
+  "title": "TaskRequirementCandidate",
+  "type": "object"
+}

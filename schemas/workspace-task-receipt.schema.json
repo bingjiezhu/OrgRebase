@@ -1,0 +1,93 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-task-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "admission_decision_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Admission Decision Refs",
+      "type": "array"
+    },
+    "coalition_plan_ref": {
+      "title": "Coalition Plan Ref",
+      "type": "string"
+    },
+    "committed_at": {
+      "title": "Committed At",
+      "type": "string"
+    },
+    "context_manifest_ref": {
+      "title": "Context Manifest Ref",
+      "type": "string"
+    },
+    "coverage_receipt_ref": {
+      "title": "Coverage Receipt Ref",
+      "type": "string"
+    },
+    "deliverable_ref": {
+      "title": "Deliverable Ref",
+      "type": "string"
+    },
+    "dependency_manifest_ref": {
+      "title": "Dependency Manifest Ref",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "graph_snapshot_ref": {
+      "title": "Graph Snapshot Ref",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "revision_lock": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Revision Lock",
+      "type": "object"
+    },
+    "status": {
+      "const": "COMPLETED",
+      "default": "COMPLETED",
+      "title": "Status",
+      "type": "string"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    },
+    "trace_ref": {
+      "title": "Trace Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "task_ref",
+    "template_ref",
+    "coalition_plan_ref",
+    "admission_decision_refs",
+    "context_manifest_ref",
+    "trace_ref",
+    "coverage_receipt_ref",
+    "dependency_manifest_ref",
+    "deliverable_ref",
+    "graph_snapshot_ref",
+    "revision_lock",
+    "committed_at"
+  ],
+  "title": "TaskReceipt",
+  "type": "object"
+}

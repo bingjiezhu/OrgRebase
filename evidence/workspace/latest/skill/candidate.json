@@ -1,0 +1,36 @@
+{
+  "allowed_tool_ids": [],
+  "applicable_template_refs": [
+    "template:enterprise_quote@v1"
+  ],
+  "candidate_program_digest": "sha256:b6fc491b4f7b7d1f851e89adbf6af9951db54aaaadd30778c8ef9ec8d2d1d494",
+  "candidate_program_ref": "skill-program:enterprise-quote-compose@1.1",
+  "created_at": "2026-08-16T00:00:00Z",
+  "created_by": "agent:skill-curator",
+  "digest": "sha256:4afb7a8393b573e72daa815b1019f20ff6f25c2e93715623c18cee635528e233",
+  "executable": false,
+  "id": "skill-candidate:enterprise-quote-compose",
+  "input_schema_ref": "schema:orgrebase.skill-eval-input.v1",
+  "output_lineage_rules": [],
+  "output_schema_ref": "schema:orgrebase.skill-eval-output.v1",
+  "required_slot_ids": [
+    "product_plan",
+    "launch_date",
+    "data_residency",
+    "notice_required",
+    "price_band",
+    "currency",
+    "partner_terms"
+  ],
+  "risk_class": "BOUNDED_TRANSFORM",
+  "source_task_refs": [
+    "task:quote_acme",
+    "task:quote_beta"
+  ],
+  "source_trace_refs": [
+    "work-trace:quote_acme@v1",
+    "work-trace:quote_beta@v1"
+  ],
+  "status": "CANDIDATE",
+  "version": "1.1"
+}

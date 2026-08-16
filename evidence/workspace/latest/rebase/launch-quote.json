@@ -1,0 +1,38 @@
+{
+  "allowed_purposes": [
+    "enterprise_quote",
+    "change_rebase"
+  ],
+  "coverage_basis": [
+    "RUNTIME_OBSERVED"
+  ],
+  "coverage_complete": true,
+  "digest": "sha256:91aabd1e8f4e2f1f1dc7d9e8ee592f5ab35d459c114f87068ee465af3da0e341",
+  "domain": "gtm",
+  "id": "work:quote_acme",
+  "kind": "WorkItemVersion",
+  "label": "Acme Enterprise Quote",
+  "payload": {
+    "context_manifest": "sha256:3da7bcbfd7ebe5351c16ca6501658d1f697d3a55585b0180118437a2831b500e",
+    "currency": "USD",
+    "customer_id": "customer:acme",
+    "data_residency": "US region supported",
+    "deliverable_kind": "QUOTE",
+    "launch_date": "2026-09-15",
+    "notice_required": true,
+    "owner": "sales-owner",
+    "partner_terms_code": "legal-review",
+    "price_band": "strategic",
+    "product_plan": "enterprise-plan-v4",
+    "rebase_change_set": "sha256:7ad4afeae2a84db1fd2d4fb643d1e8f3a7aa213d0a91dc21769937c9f42dddf0",
+    "rebased_from": "work:quote_acme@v1"
+  },
+  "sensitivity": "CONFIDENTIAL",
+  "source_refs": [
+    "task-context:quote_acme@v1"
+  ],
+  "state": "CURRENT",
+  "valid_from": "2026-08-15T00:04:00Z",
+  "valid_to": null,
+  "version": "v2"
+}

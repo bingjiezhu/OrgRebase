@@ -1,0 +1,28 @@
+{
+  "disclaimer": "Deterministic synthetic comparison; not production ROI or accuracy.",
+  "evidence_class": "SYNTHETIC_FIXTURE",
+  "fixture": "canonical-enterprise@v1",
+  "systems": [
+    {
+      "false_invalidation_rate": 0.6,
+      "stale_artifact_recall": 1.0,
+      "system": "unified-rag-baseline",
+      "unauthorized_disclosure_count": 1,
+      "unknown_calibration": 0.0
+    },
+    {
+      "false_invalidation_rate": 0.4,
+      "stale_artifact_recall": 1.0,
+      "system": "natural-language-multi-agent-baseline",
+      "unauthorized_disclosure_count": 0,
+      "unknown_calibration": 0.0
+    },
+    {
+      "false_invalidation_rate": 0.0,
+      "stale_artifact_recall": 1.0,
+      "system": "orgrebase",
+      "unauthorized_disclosure_count": 0,
+      "unknown_calibration": 1.0
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "$defs": {
+    "CoverageStatus": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ],
+      "title": "CoverageStatus",
+      "type": "string"
+    },
+    "OutputFieldLineage": {
+      "additionalProperties": false,
+      "properties": {
+        "field_path": {
+          "title": "Field Path",
+          "type": "string"
+        },
+        "source_kind": {
+          "enum": [
+            "SLOT",
+            "TASK_LITERAL",
+            "DETERMINISTIC_COMPUTED"
+          ],
+          "title": "Source Kind",
+          "type": "string"
+        },
+        "source_slot_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Slot Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field_path",
+        "source_kind"
+      ],
+      "title": "OutputFieldLineage",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-trace-coverage-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_optional_slots": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Optional Slots",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "expected_required_slots": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Expected Required Slots",
+      "type": "array"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "missing_slots": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Slots",
+      "type": "array"
+    },
+    "observed_slots": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Observed Slots",
+      "type": "array"
+    },
+    "output_field_lineage": {
+      "items": {
+        "$ref": "#/$defs/OutputFieldLineage"
+      },
+      "title": "Output Field Lineage",
+      "type": "array"
+    },
+    "status": {
+      "$ref": "#/$defs/CoverageStatus"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    },
+    "trace_ref": {
+      "title": "Trace Ref",
+      "type": "string"
+    },
+    "unexpected_slots": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unexpected Slots",
+      "type": "array"
+    },
+    "unmediated_channels": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unmediated Channels",
+      "type": "array"
+    },
+    "verifier_version": {
+      "title": "Verifier Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "trace_ref",
+    "template_ref",
+    "expected_required_slots",
+    "allowed_optional_slots",
+    "observed_slots",
+    "missing_slots",
+    "unexpected_slots",
+    "unmediated_channels",
+    "output_field_lineage",
+    "status",
+    "verifier_version"
+  ],
+  "title": "TraceCoverageReceipt",
+  "type": "object"
+}

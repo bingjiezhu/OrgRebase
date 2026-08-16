@@ -1,0 +1,15 @@
+{
+  "schema_version": "orgrebase.vertex-provider-probe.v1",
+  "status": "PASS",
+  "provider": "vertex-ai-openai-compat",
+  "project": "REDACTED",
+  "location": "global",
+  "model": "google/gemini-3.1-flash-lite",
+  "provider_request_id": "fOJ_ap7XPNHDodAP0Nyn2AY",
+  "timestamp_ms": 1786765946812,
+  "credentials_disclosed": false,
+  "prompt_or_completion_disclosed": false,
+  "evidence_class": "LIVE_PROVIDER_PROBE",
+  "claim_boundary": "Proves one Vertex provider request only; it is not AgentTeams Worker, Matrix, candidate-artifact, or LIVE_AGENTTEAMS evidence.",
+  "error": null
+}

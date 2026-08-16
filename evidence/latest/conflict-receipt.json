@@ -1,0 +1,40 @@
+{
+  "admitted_candidate_id": "candidate:product-launch-date@v8",
+  "candidates": [
+    {
+      "authority_domain": "product",
+      "claim_key": "product.launch_date",
+      "digest": "sha256:57f9c0dd4d2d570f3848e8c3404cd34a0bcf7526533834538da2cf1be52f147a",
+      "id": "candidate:product-launch-date@v8",
+      "proposed_value": "2026-09-15",
+      "source_ref": "source:product-release-plan@v13",
+      "submitted_by": "product-steward"
+    },
+    {
+      "authority_domain": "gtm",
+      "claim_key": "product.launch_date",
+      "digest": "sha256:61a3641e3c160e31ddb7fb826b3d17cd35eb21a84fb4abd2adfa022fd3740bfe",
+      "id": "candidate:gtm-launch-date@legacy",
+      "proposed_value": "2026-09-01",
+      "source_ref": "source:gtm-customer-commitment@v4",
+      "submitted_by": "gtm-steward"
+    }
+  ],
+  "claim_key": "product.launch_date",
+  "digest": "sha256:8813e8d0f0d9698888ded82f46f162310c699b28a93a62a7fe9f460085427f63",
+  "evidence_class": "LOCAL_DETERMINISTIC",
+  "id": "conflict:product-launch-date@1",
+  "policy_revision": "policy:claim-authority@r1",
+  "rejected": [
+    {
+      "candidate_id": "candidate:gtm-launch-date@legacy",
+      "proposed_value": "2026-09-01",
+      "reason": "NON_AUTHORITATIVE_DOMAIN"
+    }
+  ],
+  "rule": "declared domain authority + cited source; no majority vote and no agent self-admission",
+  "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+  "status": "RESOLVED_CANDIDATE_ONLY",
+  "target_writes": 0,
+  "workflow_run_id": "run:orgrebase:launch-date:local@1"
+}

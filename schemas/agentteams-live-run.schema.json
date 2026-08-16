@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/agentteams-live-run.schema.json",
+  "title": "OrgRebase AgentTeams Live Run Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "nonce", "issued_at_ms", "expires_at_ms",
+    "agentteams", "team", "workers", "runtime_pods", "skill"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.agentteams-live-run.v1"},
+    "run_id": {"type": "string", "pattern": "^run:orgrebase:live:"},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "issued_at_ms": {"type": "integer"},
+    "expires_at_ms": {"type": "integer"},
+    "agentteams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "source_commit"],
+      "properties": {
+        "version": {"const": "v1.2.2"},
+        "source_commit": {"const": "849182af8e017168a5a200a87b1062142caf462d"}
+      }
+    },
+    "team": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace", "name", "uid", "generation", "room_id"],
+      "properties": {
+        "namespace": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "uid": {"type": "string", "minLength": 1},
+        "generation": {"type": "integer", "minimum": 1},
+        "room_id": {"type": "string", "pattern": "^!"}
+      }
+    },
+    "workers": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "namespace", "resource_name", "uid", "generation", "worker_name",
+          "matrix_user_id", "role", "model", "runtime", "image", "required_skills"
+        ],
+        "properties": {
+          "namespace": {"type": "string", "minLength": 1},
+          "resource_name": {"type": "string", "minLength": 1},
+          "uid": {"type": "string", "minLength": 1},
+          "generation": {"type": "integer", "minimum": 1},
+          "worker_name": {"enum": ["change-coordinator", "product-steward", "legal-steward", "gtm-steward", "skill-curator"]},
+          "matrix_user_id": {"type": "string", "pattern": "^@"},
+          "role": {"enum": ["team_leader", "worker"]},
+          "model": {"type": "string", "minLength": 1},
+          "runtime": {"type": "string", "minLength": 1},
+          "image": {
+            "description": "Exact Worker.spec.image, or null when AgentTeams resolves its configured runtime default.",
+            "type": ["string", "null"],
+            "minLength": 1
+          },
+          "required_skills": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        }
+      }
+    },
+    "runtime_pods": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "namespace", "name", "uid", "worker_resource_name",
+          "container_name", "image", "image_id"
+        ],
+        "properties": {
+          "namespace": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "uid": {"type": "string", "minLength": 1},
+          "worker_resource_name": {"type": "string", "minLength": 1},
+          "container_name": {"const": "worker"},
+          "image": {"type": "string", "minLength": 1, "not": {"pattern": ":latest$"}},
+          "image_id": {"type": "string", "pattern": "@sha256:[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "assigned_worker", "digest"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "assigned_worker": {"type": "string", "minLength": 1},
+        "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

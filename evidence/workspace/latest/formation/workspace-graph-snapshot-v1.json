@@ -1,0 +1,361 @@
+{
+  "base_revision": "r1",
+  "builder_version": "workspace-snapshot-builder@1.0.0",
+  "built_at": "2026-08-15T00:00:00Z",
+  "digest": "sha256:b5377108ba0bdfcc585e9bfcb56ee885793052ea838fa3213851e142df74a091",
+  "edge_set_digest": "sha256:ebea9e192196421d2f5eecf392aeeefd6e22caeed5abad6c0011a55659111f21",
+  "edges": [
+    {
+      "consumer_ref": "work:partner_brief_e@v1",
+      "coverage_basis": "AGENT_INFERRED",
+      "digest": "sha256:aabd88eca0406d0eabea76729b79aa4dee7853d9522cefa1741ae13caba8796f",
+      "id": "edge:launch-partner-candidate",
+      "provider_digest": "sha256:15f6a1d01a40afda1badef8de109bfa34ad66d7cc382d15d388800dd2266f4f6",
+      "provider_ref": "claim:product.launch_date@v7",
+      "relation": "ASSUMES",
+      "source_evidence_ref": "handoff:gtm-candidate",
+      "source_manifest_ref": "dependency-manifest:partner-brief-e@v1",
+      "source_trace_event_ref": null,
+      "strength": "REVIEW",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "skill:enterprise-launch-readiness@1.2",
+      "coverage_basis": "CONTRACT_DECLARED",
+      "digest": "sha256:da8b6167b0dc61aaf8d5daf14d19302f476f19cc1a8103e589a14c2cdbe48063",
+      "id": "edge:launch-skill",
+      "provider_digest": "sha256:15f6a1d01a40afda1badef8de109bfa34ad66d7cc382d15d388800dd2266f4f6",
+      "provider_ref": "claim:product.launch_date@v7",
+      "relation": "REQUIRES_CLAIM",
+      "source_evidence_ref": "skill-contract:enterprise-launch-readiness@1.2",
+      "source_manifest_ref": "dependency-manifest:launch-readiness-skill@1.2",
+      "source_trace_event_ref": null,
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:finance_analysis_d@v1",
+      "coverage_basis": "OWNER_DECLARED_COMPLETE",
+      "digest": "sha256:099b329890850feb833a2e2e64eb34a43b5a33167a818d4f4dadf65a1fced1fc",
+      "id": "edge:pricing-finance",
+      "provider_digest": "sha256:79458f531f5b92e2ff71405a900d43e99b159a9287e21fc53b508fcef5720124",
+      "provider_ref": "policy:finance.pricing@v7",
+      "relation": "REQUIRES_POLICY",
+      "source_evidence_ref": "owner-attestation:finance@r1",
+      "source_manifest_ref": "dependency-manifest:finance-analysis-d@v1",
+      "source_trace_event_ref": null,
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "digest": "sha256:ae0ce49473893453e401603d534339fa89b23718a331d4b0d03500761c77d164",
+      "id": "edge:runtime:1e76e6035468a281",
+      "provider_digest": "sha256:a04a1e9b7aa3d422daf5e122614d0f65e5db6ae9b3c9471492f54f88d4ec5c62",
+      "provider_ref": "claim:legal.customer_notice_required@v3",
+      "relation": "REQUIRES_CLAIM",
+      "source_evidence_ref": "event:quote_acme:reference-resolved:04",
+      "source_manifest_ref": "runtime-dependency:quote_acme@v1",
+      "source_trace_event_ref": "event:quote_acme:reference-resolved:04",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "digest": "sha256:5f3ea5aadaaeae705e83ab021530ebea78e7de79dcce154084d5c641c9968c73",
+      "id": "edge:runtime:81d0f93b994f1c09",
+      "provider_digest": "sha256:8a6796400928f80ee43939006dc5c9ee6c74698bdfe98c40cfcbf78ae30a4582",
+      "provider_ref": "claim:product.residency_capability@v3",
+      "relation": "REQUIRES_CLAIM",
+      "source_evidence_ref": "event:quote_acme:reference-resolved:03",
+      "source_manifest_ref": "runtime-dependency:quote_acme@v1",
+      "source_trace_event_ref": "event:quote_acme:reference-resolved:03",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "digest": "sha256:a0b033837552cfb25910aebb001a8350c73a7f1ca03474f3fcdf737306965649",
+      "id": "edge:runtime:81eaf9df8a0c14b9",
+      "provider_digest": "sha256:faa5ea2df973806222ac217660ad7f1db828f0c0a57dcbcc9e44d3da74142064",
+      "provider_ref": "skill:enterprise-quote-compose@1.0",
+      "relation": "REQUIRES_SKILL",
+      "source_evidence_ref": "event:quote_acme:reference-resolved:08",
+      "source_manifest_ref": "runtime-dependency:quote_acme@v1",
+      "source_trace_event_ref": "event:quote_acme:reference-resolved:08",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "digest": "sha256:3e4cc7a473a091536126b4a4a380e7aeb105f24bce6859676571e81aca7ef21a",
+      "id": "edge:runtime:87a4e84ff6a9df3a",
+      "provider_digest": "sha256:e8d44a3ce710e6445301b3d52e8f19be1c36dc7ecfe775ea827201fee9710a0a",
+      "provider_ref": "claim:product.enterprise_plan@v4",
+      "relation": "REQUIRES_CLAIM",
+      "source_evidence_ref": "event:quote_acme:reference-resolved:01",
+      "source_manifest_ref": "runtime-dependency:quote_acme@v1",
+      "source_trace_event_ref": "event:quote_acme:reference-resolved:01",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "digest": "sha256:a77c4b4aa9c9ea02330428a17c57400ad6e9555c8bb0d5411abc730e1bb1e7bc",
+      "id": "edge:runtime:970ba5db04bc311a",
+      "provider_digest": "sha256:7e69bcaf05264ba6a43c611a6f5765eff3add3de51c402930dd3afb1896835bb",
+      "provider_ref": "policy:finance.price_band@v7",
+      "relation": "REQUIRES_POLICY",
+      "source_evidence_ref": "event:quote_acme:reference-resolved:05",
+      "source_manifest_ref": "runtime-dependency:quote_acme@v1",
+      "source_trace_event_ref": "event:quote_acme:reference-resolved:05",
+      "strength": "REVIEW",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "digest": "sha256:5fae3af52e3fa16511e081bcf5f1a97bf36e7213c0b0bcf52f477f087f93267a",
+      "id": "edge:runtime:a8b6faf93cbd585d",
+      "provider_digest": "sha256:7409961c7b688c9b8feff96a32dab38ae8441a00bc87766454faa781a6001ce6",
+      "provider_ref": "claim:product.launch_date@v7",
+      "relation": "REQUIRES_CLAIM",
+      "source_evidence_ref": "event:quote_acme:reference-resolved:02",
+      "source_manifest_ref": "runtime-dependency:quote_acme@v1",
+      "source_trace_event_ref": "event:quote_acme:reference-resolved:02",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "digest": "sha256:f45884420e12a38236e5f8c71374b3b9c1f35f8d55be768d78df2a538d11ded7",
+      "id": "edge:runtime:f05df20d94735142",
+      "provider_digest": "sha256:68f43f6474a5d21351ec3c1cbde570f7dc987ab6fa53ddb4ba63455ae2120e7d",
+      "provider_ref": "claim:gtm.partner_terms@v2",
+      "relation": "REQUIRES_CLAIM",
+      "source_evidence_ref": "event:quote_acme:reference-resolved:07",
+      "source_manifest_ref": "runtime-dependency:quote_acme@v1",
+      "source_trace_event_ref": "event:quote_acme:reference-resolved:07",
+      "strength": "REVIEW",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "coverage_basis": "RUNTIME_OBSERVED",
+      "digest": "sha256:009a66d519a96c4c1234fe47834430f25fc361848a57d5497691cbe932164485",
+      "id": "edge:runtime:f74aef835e292ff0",
+      "provider_digest": "sha256:594513554f861edb2fe5d959d0200b3461e29d9a35968966acf2fe762be748ad",
+      "provider_ref": "policy:finance.currency@v1",
+      "relation": "REQUIRES_POLICY",
+      "source_evidence_ref": "event:quote_acme:reference-resolved:06",
+      "source_manifest_ref": "runtime-dependency:quote_acme@v1",
+      "source_trace_event_ref": "event:quote_acme:reference-resolved:06",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    }
+  ],
+  "graph_namespace": "graph:workspace",
+  "id": "workspace-graph:northstar",
+  "manifest_refs": [
+    "dependency-manifest:finance-analysis-d@v1",
+    "dependency-manifest:launch-readiness-skill@1.2",
+    "dependency-manifest:partner-brief-e@v1",
+    "runtime-dependency:quote_acme@v1"
+  ],
+  "object_digests": [
+    {
+      "digest": "sha256:43a3963019119125bde3fcd09a88a9b1a84ea0611e459a7a8936d118776947b0",
+      "kind": "ClaimVersion",
+      "object_id": "claim:gtm.partner_terms",
+      "object_ref": "claim:gtm.partner_terms@v2",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v2"
+    },
+    {
+      "digest": "sha256:8fef66a0f1ddeb3a2fdf9446e5fc7cd3d0766c051b72c8456bac6efbb3a5c56d",
+      "kind": "ClaimVersion",
+      "object_id": "claim:gtm.public_launch_message",
+      "object_ref": "claim:gtm.public_launch_message@v1",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v1"
+    },
+    {
+      "digest": "sha256:ba0149651dcfaa9d5f48b514392ab6ae25655c11540ac0b99c21ee40cec02e77",
+      "kind": "ClaimVersion",
+      "object_id": "claim:legal.customer_notice_required",
+      "object_ref": "claim:legal.customer_notice_required@v3",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v3"
+    },
+    {
+      "digest": "sha256:1a587d21b987c229e2d20c82d0de603ebae79e8d193c1e5c02328780ac72adf6",
+      "kind": "ClaimVersion",
+      "object_id": "claim:product.enterprise_plan",
+      "object_ref": "claim:product.enterprise_plan@v4",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v4"
+    },
+    {
+      "digest": "sha256:c52b7c34915f4b9584ae3ed900609ffb5e848145880d08015a6e92ff1d1ae4de",
+      "kind": "ClaimVersion",
+      "object_id": "claim:product.launch_date",
+      "object_ref": "claim:product.launch_date@v7",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v7"
+    },
+    {
+      "digest": "sha256:0b7ce11d66c1bc2bac65291f2c95d4b79408c7ded2f2b479370dcb9ffb8cef8c",
+      "kind": "ClaimVersion",
+      "object_id": "claim:product.launch_date",
+      "object_ref": "claim:product.launch_date@v8",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v8"
+    },
+    {
+      "digest": "sha256:789cf3a7f85fbe626170fa90f38d8242188c79ad01408507c9473e09b81ee0ce",
+      "kind": "ClaimVersion",
+      "object_id": "claim:product.residency_capability",
+      "object_ref": "claim:product.residency_capability@v3",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v3"
+    },
+    {
+      "digest": "sha256:308593a86baee5af8de31b7f5cdbd663939ead19905cda90510972a57f362426",
+      "kind": "PolicyVersion",
+      "object_id": "policy:finance.currency",
+      "object_ref": "policy:finance.currency@v1",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v1"
+    },
+    {
+      "digest": "sha256:45f20749d75b32fe551f18af3091d7e959d61ede0dbd0b3fd2ce0e689e701a3c",
+      "kind": "PolicyVersion",
+      "object_id": "policy:finance.currency",
+      "object_ref": "policy:finance.currency@v2",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v2"
+    },
+    {
+      "digest": "sha256:12f3861f5a72ddbb6950182c467a543a736fc7111713cab7115e41bf726f434a",
+      "kind": "PolicyVersion",
+      "object_id": "policy:finance.price_band",
+      "object_ref": "policy:finance.price_band@v7",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v7"
+    },
+    {
+      "digest": "sha256:a22790fa44cc6e388b080117e7564d2f473293ed6fb96a4751fe2c41dc163c26",
+      "kind": "PolicyVersion",
+      "object_id": "policy:finance.pricing",
+      "object_ref": "policy:finance.pricing@v7",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v7"
+    },
+    {
+      "digest": "sha256:586eef99edb7538faf1e05ba6a22dbdb3c11df9bd592add0f8e9ed219f4f8acd",
+      "kind": "SkillContractVersion",
+      "object_id": "skill:enterprise-launch-readiness",
+      "object_ref": "skill:enterprise-launch-readiness@1.2",
+      "storage_class": "OBJECT_VERSION",
+      "version": "1.2"
+    },
+    {
+      "digest": "sha256:9718b36246ed3cb65b4d1a59f8f2ae476407302e34b4110dce728c768120480c",
+      "kind": "SkillContractVersion",
+      "object_id": "skill:enterprise-launch-readiness",
+      "object_ref": "skill:enterprise-launch-readiness@1.3",
+      "storage_class": "OBJECT_VERSION",
+      "version": "1.3"
+    },
+    {
+      "digest": "sha256:8c010b8ef318197932d105dc972ec3dbf4fd895b3d195f5c5c5764dcfb318e47",
+      "kind": "SkillReferenceVersion",
+      "object_id": "skill:enterprise-quote-compose",
+      "object_ref": "skill:enterprise-quote-compose@1.0",
+      "storage_class": "OBJECT_VERSION",
+      "version": "1.0"
+    },
+    {
+      "digest": "sha256:c00498f4e288737e0c70078364d31168299399991015ed575e37a96b85e5dfcd",
+      "kind": "WorkItemVersion",
+      "object_id": "work:finance_analysis_d",
+      "object_ref": "work:finance_analysis_d@v1",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v1"
+    },
+    {
+      "digest": "sha256:b0d18a5eba660cd51ff184911243c4247569a696d06b6601bcb552949f6e3abe",
+      "kind": "WorkItemVersion",
+      "object_id": "work:partner_brief_e",
+      "object_ref": "work:partner_brief_e@v1",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v1"
+    },
+    {
+      "digest": "sha256:3d05fd1101d77c289a29e956fdfb2f2d24d8ee57a6f9b396122615d8b773ddd5",
+      "kind": "WorkItemVersion",
+      "object_id": "work:quote_acme",
+      "object_ref": "work:quote_acme@v1",
+      "storage_class": "OBJECT_VERSION",
+      "version": "v1"
+    }
+  ],
+  "object_refs": [
+    "claim:gtm.partner_terms@v2",
+    "claim:gtm.public_launch_message@v1",
+    "claim:legal.customer_notice_required@v3",
+    "claim:product.enterprise_plan@v4",
+    "claim:product.launch_date@v7",
+    "claim:product.launch_date@v8",
+    "claim:product.residency_capability@v3",
+    "policy:finance.currency@v1",
+    "policy:finance.currency@v2",
+    "policy:finance.price_band@v7",
+    "policy:finance.pricing@v7",
+    "skill:enterprise-launch-readiness@1.2",
+    "skill:enterprise-launch-readiness@1.3",
+    "skill:enterprise-quote-compose@1.0",
+    "work:finance_analysis_d@v1",
+    "work:partner_brief_e@v1",
+    "work:quote_acme@v1"
+  ],
+  "organization_id": "org:northstar",
+  "revisions": {
+    "authorization": "authz:relations@r1",
+    "evaluation_suite": "evaluation:workspace@r1",
+    "graph": "graph:workspace@v1",
+    "policy": "policy:context@r1",
+    "runtime_registry": "runtime:workspace@v1",
+    "skill_registry": "skills:registry@r1"
+  },
+  "scope_roots": [
+    "claim:product.launch_date",
+    "policy:finance.currency"
+  ],
+  "target_refs": [
+    "skill:enterprise-launch-readiness@1.2",
+    "work:finance_analysis_d@v1",
+    "work:partner_brief_e@v1",
+    "work:quote_acme@v1"
+  ],
+  "universe_digest": "sha256:597604f60f439dd1caf53e3b851797f69d35245b659f20af8edc8cb77a1ded5f",
+  "universe_id": "workspace-universe:northstar@r1",
+  "version": "v1"
+}

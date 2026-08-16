@@ -1,0 +1,66 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-workspace-change-spec.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "base_version": {
+      "title": "Base Version",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "expected_snapshot_digest": {
+      "title": "Expected Snapshot Digest",
+      "type": "string"
+    },
+    "expected_snapshot_ref": {
+      "title": "Expected Snapshot Ref",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "object_id": {
+      "title": "Object Id",
+      "type": "string"
+    },
+    "owner_id": {
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "proposed_version": {
+      "title": "Proposed Version",
+      "type": "string"
+    },
+    "purpose": {
+      "title": "Purpose",
+      "type": "string"
+    },
+    "revision": {
+      "title": "Revision",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "revision",
+    "owner_id",
+    "purpose",
+    "object_id",
+    "base_version",
+    "proposed_version",
+    "expected_snapshot_ref",
+    "expected_snapshot_digest",
+    "idempotency_key"
+  ],
+  "title": "WorkspaceChangeSpec",
+  "type": "object"
+}

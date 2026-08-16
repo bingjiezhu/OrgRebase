@@ -1,0 +1,88 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-domain-delegation-task.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_context_projection_ref": {
+      "title": "Actor Context Projection Ref",
+      "type": "string"
+    },
+    "allowed_output_schema_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Output Schema Refs",
+      "type": "array"
+    },
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "coalition_plan_ref": {
+      "title": "Coalition Plan Ref",
+      "type": "string"
+    },
+    "deadline_at": {
+      "title": "Deadline At",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "domain_id": {
+      "title": "Domain Id",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "nonce": {
+      "title": "Nonce",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "slot_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Slot Ids",
+      "type": "array"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    },
+    "worker_id": {
+      "title": "Worker Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "task_ref",
+    "template_ref",
+    "coalition_plan_ref",
+    "domain_id",
+    "worker_id",
+    "slot_ids",
+    "actor_context_projection_ref",
+    "allowed_output_schema_refs",
+    "run_id",
+    "nonce",
+    "deadline_at"
+  ],
+  "title": "DomainDelegationTask",
+  "type": "object"
+}

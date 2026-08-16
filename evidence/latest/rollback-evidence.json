@@ -1,0 +1,206 @@
+{
+  "approval": {
+    "actor_id": "human:rollback-approver",
+    "actor_role": "independent-rollback-approver",
+    "apply_approval_digest": "sha256:51092beac5ac7bdbfa6f1f21536eaa2b034c5278783bab7d72fa9c3f30a715fd",
+    "apply_approver_id": "human:change-approver",
+    "approved_at": "2026-08-14T00:06:00Z",
+    "authority_scope": [
+      "rollback:downstream-compensation"
+    ],
+    "digest": "sha256:8a66b02e300c66d9d988c8a431dc13f1cdd919f976f8bfead03d38572551d585",
+    "id": "rollback-approval:launch-date@1",
+    "method": "LOCAL_EXPLICIT_COMPENSATION_APPROVAL",
+    "reason": "downstream effects must be compensated without changing authority",
+    "rebase_receipt_digest": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592",
+    "rollback_plan_digest": "sha256:f677f7479327d7c5491d536fad3844d16c5a72fee529823a57e63cf9ac97a887",
+    "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+    "workflow_run_id": "run:orgrebase:launch-date:local@1"
+  },
+  "current_state": {
+    "claim:product.launch_date": {
+      "digest": "sha256:0b7ce11d66c1bc2bac65291f2c95d4b79408c7ded2f2b479370dcb9ffb8cef8c",
+      "state": "CURRENT",
+      "version": "v8"
+    },
+    "skill:enterprise-launch-readiness": {
+      "digest": "sha256:586eef99edb7538faf1e05ba6a22dbdb3c11df9bd592add0f8e9ed219f4f8acd",
+      "state": "REQUALIFICATION_REQUIRED",
+      "version": "1.2"
+    },
+    "work:finance_analysis_d": {
+      "digest": "sha256:c00498f4e288737e0c70078364d31168299399991015ed575e37a96b85e5dfcd",
+      "state": "CURRENT",
+      "version": "v1"
+    },
+    "work:legal_review_c": {
+      "digest": "sha256:d8056066c0b1a7877de597e82572c534bfd764bea78736042e361a44fc854f1e",
+      "state": "CURRENT",
+      "version": "v1"
+    },
+    "work:partner_brief_e": {
+      "digest": "sha256:b0d18a5eba660cd51ff184911243c4247569a696d06b6601bcb552949f6e3abe",
+      "state": "REVIEW_REQUIRED",
+      "version": "v1"
+    },
+    "work:sales_quote_a": {
+      "digest": "sha256:05d2141a9cf3b94e254832ffdf61d28b64e7f06f4c16408979aa2f29d67f008e",
+      "state": "ROLLED_BACK_PENDING_REBASE",
+      "version": "v3"
+    },
+    "work:support_doc_b": {
+      "digest": "sha256:3959aa2ff7e249bfd03e4a7da969ed9937d8b21e510f0bf06246711cfb036379",
+      "state": "ROLLED_BACK_PENDING_REBASE",
+      "version": "v3"
+    }
+  },
+  "event_chain": {
+    "events": 7,
+    "head_digest": "sha256:f061c01017406b73e6b5c6df0f30cf6dfcea489613f8f7cb738605cfa636c843",
+    "status": "PASS"
+  },
+  "plan": {
+    "actions": [
+      {
+        "action": "RESTORE_DOWNSTREAM_CONTENT_AS_PENDING_REBASE",
+        "current_ref": "work:sales_quote_a@v2",
+        "next_version": "v3",
+        "object_id": "work:sales_quote_a",
+        "restore_from_ref": "work:sales_quote_a@v1"
+      },
+      {
+        "action": "RESTORE_DOWNSTREAM_CONTENT_AS_PENDING_REBASE",
+        "current_ref": "work:support_doc_b@v2",
+        "next_version": "v3",
+        "object_id": "work:support_doc_b",
+        "restore_from_ref": "work:support_doc_b@v1"
+      },
+      {
+        "action": "QUARANTINE_CANARY_AND_REQUIRE_REQUALIFICATION",
+        "current_ref": "skill:enterprise-launch-readiness@1.3",
+        "object_id": "skill:enterprise-launch-readiness",
+        "restore_pointer_ref": "skill:enterprise-launch-readiness@1.2"
+      }
+    ],
+    "authoritative_claim_ref": "claim:product.launch_date@v8",
+    "digest": "sha256:f677f7479327d7c5491d536fad3844d16c5a72fee529823a57e63cf9ac97a887",
+    "expected_current_state": {
+      "claim:product.launch_date": {
+        "digest": "sha256:0b7ce11d66c1bc2bac65291f2c95d4b79408c7ded2f2b479370dcb9ffb8cef8c",
+        "ref": "claim:product.launch_date@v8",
+        "state": "CURRENT"
+      },
+      "skill:enterprise-launch-readiness": {
+        "digest": "sha256:9718b36246ed3cb65b4d1a59f8f2ae476407302e34b4110dce728c768120480c",
+        "ref": "skill:enterprise-launch-readiness@1.3",
+        "state": "CANARY"
+      },
+      "work:partner_brief_e": {
+        "digest": "sha256:b0d18a5eba660cd51ff184911243c4247569a696d06b6601bcb552949f6e3abe",
+        "ref": "work:partner_brief_e@v1",
+        "state": "REVIEW_REQUIRED"
+      },
+      "work:sales_quote_a": {
+        "digest": "sha256:a49fccc61463fda68ce6a474659099e6bbbfbe401337ce4990c5840492d6cb61",
+        "ref": "work:sales_quote_a@v2",
+        "state": "CURRENT"
+      },
+      "work:support_doc_b": {
+        "digest": "sha256:27c56ff3dc3a91f85c02c578f128c2238e787322bd54b59859269d7351330f71",
+        "ref": "work:support_doc_b@v2",
+        "state": "CURRENT"
+      }
+    },
+    "id": "rollback-plan:launch-date@1",
+    "preserved_states": [
+      {
+        "object_id": "claim:product.launch_date",
+        "reason": "AUTHORITATIVE_FACT_IS_NOT_A_DOWNSTREAM_SIDE_EFFECT",
+        "ref": "claim:product.launch_date@v8"
+      },
+      {
+        "object_id": "work:partner_brief_e",
+        "reason": "UNKNOWN_REMAINS_UNKNOWN_AFTER_COMPENSATION",
+        "ref": "work:partner_brief_e@v1",
+        "state": "REVIEW_REQUIRED"
+      }
+    ],
+    "rebase_receipt_digest": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592",
+    "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+    "target_status": "ROLLED_BACK_PENDING_REBASE",
+    "workflow_run_id": "run:orgrebase:launch-date:local@1"
+  },
+  "receipt": {
+    "apply_approval_ref": "approval:launch-date@1",
+    "approval_ref": "rollback-approval:launch-date@1",
+    "authoritative_claim_ref": "claim:product.launch_date@v8",
+    "authoritative_claim_unchanged": true,
+    "compensates_rebase_receipt": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592",
+    "compensation_results": [
+      {
+        "action": "RESTORE_DOWNSTREAM_CONTENT_AS_PENDING_REBASE",
+        "object_id": "work:sales_quote_a",
+        "status": "SUCCEEDED"
+      },
+      {
+        "action": "RESTORE_DOWNSTREAM_CONTENT_AS_PENDING_REBASE",
+        "object_id": "work:support_doc_b",
+        "status": "SUCCEEDED"
+      },
+      {
+        "action": "QUARANTINE_CANARY_AND_REQUIRE_REQUALIFICATION",
+        "object_id": "skill:enterprise-launch-readiness",
+        "status": "SUCCEEDED"
+      }
+    ],
+    "digest": "sha256:bfd49d7f9d3fdf03568c5ad78ae066bb55d487912fa389653da5c2fd36167076",
+    "event_chain_head": "sha256:f061c01017406b73e6b5c6df0f30cf6dfcea489613f8f7cb738605cfa636c843",
+    "evidence_class": "LOCAL_DETERMINISTIC",
+    "id": "rollback:launch-date@1",
+    "metrics": {
+      "authoritative_claims_changed": 0,
+      "history_rows_deleted": 0,
+      "skills_quarantined": 1,
+      "unknown_items_preserved": 1,
+      "work_items_compensated": 2,
+      "work_items_pending_rebase": 2
+    },
+    "preserved_states": [
+      {
+        "object_id": "claim:product.launch_date",
+        "reason": "AUTHORITATIVE_FACT_IS_NOT_A_DOWNSTREAM_SIDE_EFFECT",
+        "ref": "claim:product.launch_date@v8"
+      },
+      {
+        "object_id": "work:partner_brief_e",
+        "reason": "UNKNOWN_REMAINS_UNKNOWN_AFTER_COMPENSATION",
+        "ref": "work:partner_brief_e@v1",
+        "state": "REVIEW_REQUIRED"
+      }
+    ],
+    "rollback_plan_digest": "sha256:f677f7479327d7c5491d536fad3844d16c5a72fee529823a57e63cf9ac97a887",
+    "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+    "status": "ROLLED_BACK_PENDING_REBASE",
+    "transitions": [
+      {
+        "from": "work:sales_quote_a@v2",
+        "object_id": "work:sales_quote_a",
+        "to": "work:sales_quote_a@v3",
+        "to_state": "ROLLED_BACK_PENDING_REBASE"
+      },
+      {
+        "from": "work:support_doc_b@v2",
+        "object_id": "work:support_doc_b",
+        "to": "work:support_doc_b@v3",
+        "to_state": "ROLLED_BACK_PENDING_REBASE"
+      },
+      {
+        "from": "skill:enterprise-launch-readiness@1.3",
+        "object_id": "skill:enterprise-launch-readiness",
+        "to": "skill:enterprise-launch-readiness@1.2",
+        "to_state": "REQUALIFICATION_REQUIRED"
+      }
+    ],
+    "workflow_run_id": "run:orgrebase:launch-date:local@1"
+  }
+}

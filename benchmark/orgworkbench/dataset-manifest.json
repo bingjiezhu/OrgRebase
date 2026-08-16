@@ -1,0 +1,28 @@
+{
+  "benchmark_version": "owb.v1.1",
+  "case_count": 192,
+  "case_isolation": "ONE_EPHEMERAL_STORE_PER_CASE",
+  "case_type_counts": {
+    "CHANGE": 72,
+    "FORMATION": 48,
+    "REPEATABILITY": 24,
+    "SECURITY": 32,
+    "SKILL": 16
+  },
+  "cases_digest": "sha256:8f8f2aea4f1e67b0c234114a5903ddd5d2749de530c833ec0be9562ef1b20c90",
+  "challenge_protocol_digest": "sha256:a7a3961a201d87762ca5587160f47aa8ce478713a4a631980a50fbdc3107fc42",
+  "generator_seed": 20260815,
+  "gold_digest": "sha256:6a7854d3c334e1fa4eefb7368e00bddbbc0f448423099b4e3c3b114c3d9bb346",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "organization_count": 12,
+  "organization_digest": "sha256:f1780045dd7ffea16e8664740f2de034cb9da136a32a9feee347f02427656bea",
+  "pii": "NONE_SYNTHETIC",
+  "private_source_digest": "sha256:ac865632bd4457834aee7aeb43cb6e47c6316a52a9f6f1b58d6bc47c94b681ed",
+  "split_counts": {
+    "ADVERSARIAL": 32,
+    "DEV": 40,
+    "SKILL": 16,
+    "TEST": 104
+  },
+  "template_digest": "sha256:d65a511f69364bdb062aef1f8bb469459d3c92c11db4f7a00fd07c18d5267402"
+}

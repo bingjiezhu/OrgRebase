@@ -1,0 +1,124 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "orgrebase"
+version = "0.3.0"
+description = "Enterprise Work Build & Recovery System with certified selective rebase for governed agents"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+license = { text = "PolyForm-Noncommercial-1.0.0" }
+license-files = ["LICENSE", "COMMERCIAL-LICENSE.md", "NOTICE.md"]
+authors = [{ name = "Bingjie Zhu" }]
+keywords = [
+  "agents",
+  "enterprise",
+  "evidence",
+  "governance",
+  "selective-rebase",
+  "skills",
+  "source-available",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: Other/Proprietary License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Office/Business",
+]
+dependencies = [
+  "fastapi>=0.116,<1",
+  "pydantic>=2.11,<3",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx2>=2.10,<3",
+  "pytest>=8.4,<10",
+  "pytest-cov>=6.2,<8",
+  "pyyaml>=6.0.2,<7",
+  "ruff>=0.12,<1",
+]
+
+[project.urls]
+Homepage = "https://github.com/bingjiezhu/OrgRebase"
+Documentation = "https://github.com/bingjiezhu/OrgRebase/tree/main/docs"
+Issues = "https://github.com/bingjiezhu/OrgRebase/issues"
+Changelog = "https://github.com/bingjiezhu/OrgRebase/blob/main/CHANGELOG.md"
+Source = "https://github.com/bingjiezhu/OrgRebase"
+
+[project.scripts]
+orgrebase = "orgrebase.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/orgrebase"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"demo/console" = "orgrebase/static"
+"skills/enterprise-launch-readiness/contract.json" = "orgrebase/skill_contracts/enterprise-launch-readiness.json"
+"fixtures/canonical-enterprise.json" = "orgrebase/_assets/fixtures/canonical-enterprise.json"
+"orchestration/task-intents.json" = "orgrebase/_assets/orchestration/task-intents.json"
+"agentteams/identities" = "orgrebase/_assets/agentteams/identities"
+"benchmark/orgworkbench" = "orgrebase/_assets/benchmark/orgworkbench"
+"configs/workspace/metric-registry.json" = "orgrebase/_assets/configs/workspace/metric-registry.json"
+"evidence/release-facts.json" = "orgrebase/_assets/evidence/release-facts.json"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src",
+  "tests",
+  "scripts",
+  "agentteams",
+  "benchmark",
+  "configs",
+  "contracts",
+  "demo/console",
+  "docs",
+  "evidence",
+  "examples",
+  "fixtures",
+  "orchestration",
+  "schemas",
+  "skills",
+  "CHANGELOG.md",
+  "CODE_OF_CONDUCT.md",
+  "CONTRIBUTING.md",
+  "LICENSE",
+  "COMMERCIAL-LICENSE.md",
+  "Makefile",
+  "NOTICE.md",
+  "RELEASE-VERIFICATION.md",
+  "README.md",
+  "README.zh-CN.md",
+  "SECURITY.md",
+  "pyproject.toml",
+  "requirements.txt",
+  "requirements-dev.txt",
+  "uv.lock",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers --disable-warnings"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["orgrebase"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 85
+
+[tool.ruff]
+target-version = "py312"
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]

@@ -1,0 +1,77 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-tool-called-event.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "const": "TOOL_CALLED",
+      "default": "TOOL_CALLED",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "invocation_receipt_ref": {
+      "title": "Invocation Receipt Ref",
+      "type": "string"
+    },
+    "occurred_at": {
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "previous_event_digest": {
+      "title": "Previous Event Digest",
+      "type": "string"
+    },
+    "request_digest": {
+      "title": "Request Digest",
+      "type": "string"
+    },
+    "result_digest": {
+      "title": "Result Digest",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "sequence": {
+      "title": "Sequence",
+      "type": "integer"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "tool_ref": {
+      "title": "Tool Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "task_ref",
+    "run_id",
+    "sequence",
+    "tool_ref",
+    "invocation_receipt_ref",
+    "request_digest",
+    "result_digest",
+    "occurred_at",
+    "idempotency_key",
+    "previous_event_digest"
+  ],
+  "title": "ToolCalledEvent",
+  "type": "object"
+}

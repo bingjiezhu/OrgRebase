@@ -1,0 +1,118 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-dataset-license-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_purposes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Purposes",
+      "type": "array"
+    },
+    "attribution": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Attribution"
+    },
+    "content_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Content Digest"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "fetched_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Fetched At"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "license_spdx": {
+      "title": "License Spdx",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "origin_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Origin Url"
+    },
+    "pii_status": {
+      "enum": [
+        "NONE_SYNTHETIC",
+        "PUBLIC_DOCUMENT",
+        "POTENTIAL_PII",
+        "RESTRICTED"
+      ],
+      "title": "Pii Status",
+      "type": "string"
+    },
+    "redistribution": {
+      "enum": [
+        "BUNDLED",
+        "DOWNLOAD_ONLY",
+        "NOT_ALLOWED"
+      ],
+      "title": "Redistribution",
+      "type": "string"
+    },
+    "retention_policy": {
+      "title": "Retention Policy",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "version",
+    "origin_url",
+    "license_spdx",
+    "attribution",
+    "redistribution",
+    "pii_status",
+    "allowed_purposes",
+    "retention_policy",
+    "content_digest",
+    "fetched_at"
+  ],
+  "title": "DatasetLicenseRecord",
+  "type": "object"
+}

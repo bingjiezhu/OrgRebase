@@ -1,0 +1,194 @@
+{
+  "hard_gates": [
+    {
+      "id": "hard_dependency_recall",
+      "op": "EQ",
+      "value": 1.0
+    },
+    {
+      "id": "bounded_unaffected_precision",
+      "op": "EQ",
+      "value": 1.0
+    },
+    {
+      "id": "restricted_disclosure_count",
+      "op": "EQ",
+      "value": 0
+    },
+    {
+      "id": "cross_org_leak_count",
+      "op": "EQ",
+      "value": 0
+    },
+    {
+      "id": "gold_leak_count",
+      "op": "EQ",
+      "value": 0
+    },
+    {
+      "id": "unauthorized_read_block_rate",
+      "op": "EQ",
+      "value": 1.0
+    },
+    {
+      "id": "unmediated_channel_count",
+      "op": "EQ",
+      "value": 0
+    },
+    {
+      "id": "certificate_tamper_rejection",
+      "op": "EQ",
+      "value": 1.0
+    },
+    {
+      "id": "transaction_atomicity",
+      "op": "EQ",
+      "value": 1.0
+    },
+    {
+      "id": "idempotency_conflict_rejection",
+      "op": "EQ",
+      "value": 1.0
+    },
+    {
+      "id": "exact_skill_digest_execution",
+      "op": "EQ",
+      "value": 1.0
+    },
+    {
+      "id": "evidence_class_honesty",
+      "op": "EQ",
+      "value": 1.0
+    },
+    {
+      "id": "license_gate",
+      "op": "EQ",
+      "value": 1.0
+    }
+  ],
+  "live_agent_candidate_score": {
+    "components": {
+      "abstention_conflict_behavior": 15,
+      "domain_candidate_value_source_binding": 30,
+      "privacy_safe_candidate_output": 15,
+      "structured_output_validity": 15,
+      "template_requirement_interpretation": 25
+    },
+    "pass_threshold": 85
+  },
+  "owb_core_score": {
+    "dimensions": [
+      {
+        "components": {
+          "coalition_exact_match": 4,
+          "deliverable_exactness": 4,
+          "requirement_f1": 4,
+          "structured_abstention_score": 4,
+          "template_exact_match": 4
+        },
+        "id": "work_formation_agent_contracts",
+        "weight": 20
+      },
+      {
+        "components": {
+          "admission_f1": 4,
+          "context_minimality_score": 4,
+          "gold_cross_org_isolation_score": 2,
+          "unauthorized_read_block_rate": 4,
+          "zero_disclosure_score": 6
+        },
+        "id": "governance_privacy",
+        "weight": 20
+      },
+      {
+        "components": {
+          "atomicity_restart_score": 4,
+          "bounded_unaffected_precision": 6,
+          "exact_vmrc_rate": 4,
+          "hard_dependency_recall": 6,
+          "payload_oracle_rate": 3,
+          "tamper_rejection_rate": 2,
+          "trusted_edge_f1": 6,
+          "unknown_safety_score": 4
+        },
+        "id": "dependency_recovery",
+        "weight": 35
+      },
+      {
+        "components": {
+          "efficiency_regression_score": 2,
+          "exact_skill_digest_execution": 3,
+          "functional_regression_score": 3,
+          "paired_gain_score": 4,
+          "skill_lifecycle_score": 1,
+          "skill_security_score": 2
+        },
+        "id": "skill_continuous_evolution",
+        "weight": 15
+      },
+      {
+        "components": {
+          "evidence_class_honesty": 2,
+          "evidence_completeness": 3,
+          "one_command_reproducibility": 3,
+          "schema_license_score": 2
+        },
+        "id": "evidence_reproducibility",
+        "weight": 10
+      }
+    ],
+    "pass_threshold": 90
+  },
+  "schema_version": "orgrebase.metric-registry.v5.1",
+  "targets": {
+    "candidate_value_accuracy": {
+      "deterministic": 1.0,
+      "live": 0.95
+    },
+    "coalition_exact_match": {
+      "deterministic": 1.0,
+      "live": 0.95
+    },
+    "false_invalidation_rate": {
+      "deterministic": 0.0,
+      "live_max": 0.05
+    },
+    "requirement_recall": {
+      "deterministic": 1.0,
+      "live": 0.95
+    },
+    "skill_efficiency_regression_rate": {
+      "deterministic_max": 0.05,
+      "live_max": 0.1
+    },
+    "skill_heldout_gain_pp": {
+      "deterministic": 10.0,
+      "live": 5.0
+    },
+    "skill_regression_rate": {
+      "deterministic_max": 0.02,
+      "live_max": 0.05
+    },
+    "structured_output_validity": {
+      "deterministic": 1.0,
+      "live": 0.98
+    },
+    "template_exact_match": {
+      "deterministic": 1.0,
+      "live_challenge": 0.95,
+      "live_open": 0.98
+    },
+    "unnecessary_agent_rate": {
+      "deterministic": 0.0,
+      "live_max": 0.05
+    },
+    "user_validation": {
+      "critical_gap_repeated_by_two_max": 0,
+      "median_trace_value_min": 4.0,
+      "median_usefulness_min": 4.0,
+      "minimum_participants": 5,
+      "pilot_or_conditional_pilot_min": 3,
+      "problem_comprehension_rate_min": 0.8
+    }
+  }
+}

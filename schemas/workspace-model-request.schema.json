@@ -1,0 +1,130 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-model-request.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "allowed_tool_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tool Ids",
+      "type": "array"
+    },
+    "attempt": {
+      "maximum": 2,
+      "minimum": 0,
+      "title": "Attempt",
+      "type": "integer"
+    },
+    "context_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Context Refs",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "input_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Input Refs",
+      "type": "array"
+    },
+    "max_output_tokens": {
+      "exclusiveMinimum": 0,
+      "title": "Max Output Tokens",
+      "type": "integer"
+    },
+    "model_id": {
+      "title": "Model Id",
+      "type": "string"
+    },
+    "model_version": {
+      "title": "Model Version",
+      "type": "string"
+    },
+    "prompt_template_digest": {
+      "title": "Prompt Template Digest",
+      "type": "string"
+    },
+    "prompt_template_ref": {
+      "title": "Prompt Template Ref",
+      "type": "string"
+    },
+    "provider": {
+      "title": "Provider",
+      "type": "string"
+    },
+    "purpose": {
+      "title": "Purpose",
+      "type": "string"
+    },
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_digest": {
+      "title": "Schema Digest",
+      "type": "string"
+    },
+    "schema_name": {
+      "title": "Schema Name",
+      "type": "string"
+    },
+    "seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Seed"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "temperature": {
+      "title": "Temperature",
+      "type": "number"
+    }
+  },
+  "required": [
+    "request_id",
+    "run_id",
+    "task_ref",
+    "actor_id",
+    "purpose",
+    "schema_name",
+    "schema_digest",
+    "context_refs",
+    "input_refs",
+    "allowed_tool_ids",
+    "provider",
+    "model_id",
+    "model_version",
+    "prompt_template_ref",
+    "prompt_template_digest",
+    "temperature",
+    "seed",
+    "max_output_tokens",
+    "attempt"
+  ],
+  "title": "ModelRequest",
+  "type": "object"
+}

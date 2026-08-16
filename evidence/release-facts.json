@@ -1,0 +1,118 @@
+{
+  "schema_version": "orgrebase.release-facts.v3",
+  "project": "OrgRebase",
+  "release": "0.3.0",
+  "system_thesis": "proof-carrying Agent orchestration and governed Skills for enterprise semantics",
+  "release_scope": "CODE_ONLY",
+  "workspace": {
+    "local_status": "PASS",
+    "final_quote_ref": "work:quote_acme@v3",
+    "final_quote_digest": "sha256:0212b4cfc2a86552beb1aea4aa35e5771e7c6204a4c45f0d7f9dc59379953b44",
+    "launch_date": "2026-09-15",
+    "currency": "EUR",
+    "final_graph_ref": "graph:workspace@v3",
+    "evaluation_score": 100.0,
+    "skill_status": "CANARY",
+    "agentteams_static": "PASS",
+    "agentteams_live": "NOT_RUN",
+    "user_validation": "NOT_RUN",
+    "evidence_index_digest": "sha256:badf7dcc85c2b0999a9a121247ac9e7ee088bb9d3328a0f3d5cd99fd14542ced"
+  },
+  "local_control_plane": {
+    "status": "PASS",
+    "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+    "preview_digest": "sha256:3f63d00ac12f4fa000ca90e26ce63824877b41f96c4c97705e609c5d94d18741",
+    "impact_algorithm": "impact-max-severity@1.1.0",
+    "impact_counts": {
+      "affected_hard": 2,
+      "bounded_unaffected": 2,
+      "skill_requalification": 1,
+      "unknown": 1
+    },
+    "impact_certificate_count": 6,
+    "minimal_rebase_certificate_digest": "sha256:2dd3a778bcd936e5d51bc548a25bba758f54c23a6059083db12acb1a59c6603f",
+    "rebase_receipt_digest": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592",
+    "candidate_ingestion_digest": "sha256:6d2f93def973d9e7e02225aeea9201e75e558961c622599780d0683c836fe6f3",
+    "evidence_manifest_artifacts": 16
+  },
+  "agent_orchestration": {
+    "status": "PASS",
+    "compiler": "orgrebase.authority-aware-orchestration-compiler@1.0.0",
+    "plan_digest": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d",
+    "coordination_receipt_digest": "sha256:e2eb4ccea279d74a68eaf646c4e2f63b62e5d62c8b0ac9d0f3979fdbc12302b1",
+    "compilation_receipt_digest": "sha256:63d0faa014e90b3464ecc30f5b52e0f670b7463644cfea66ea2c799773e14b5e",
+    "task_count": 5,
+    "authority_domains": [
+      "coordination",
+      "gtm",
+      "legal",
+      "product",
+      "skill-governance"
+    ],
+    "input_commitments_per_task": [
+      3
+    ],
+    "checked_invariants": [
+      "exactly_one_task_per_declared_agent",
+      "acyclic_declared_dependencies",
+      "capabilities_and_outputs_are_identity_subsets",
+      "all_tasks_bind_exact_changeset_preview_and_revision_lock",
+      "candidate_only_no_normative_state_writer"
+    ]
+  },
+  "skill_governance": {
+    "status": "PASS",
+    "contract_digest": "sha256:e4605d4010346671009e87266f5580d2ebb32605d7498b904ee8a8e0fa25133c",
+    "evaluation_set_digest": "sha256:20a0dea9e2cfae0c30a9e8a5a52ec5ddcf6e957bef32c0911ba7f00c4376a412",
+    "candidate_adapter_version": "enterprise-launch-readiness@1.3",
+    "bound_action_candidates": 8,
+    "release_state": "CANARY"
+  },
+  "core_change_advisory_live_agentteams": {
+    "status": "PASS",
+    "evidence_class": "LIVE_AGENTTEAMS",
+    "receipt_digest": "sha256:c4e2a622a3e8cff2995585e78eb33b1c2a06e42ddc99939563751a08a5d930bc",
+    "run_id": "run:orgrebase:live:1786777886735:ef62692a8907",
+    "agentteams_version": "v1.2.2",
+    "source_commit": "849182af8e017168a5a200a87b1062142caf462d",
+    "worker_count": 5,
+    "successful_model_calls": 4,
+    "model_ids": [
+      "google/gemini-3.1-flash-lite"
+    ]
+  },
+  "candidate_control_plane": {
+    "status": "PASS",
+    "receipt_digest": "sha256:f2bb805265843fedc3ecc63c457b432db5929ed8e8104ef1937dcced284749c3",
+    "orchestration_plan_digest": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d",
+    "evaluated": 4,
+    "advisory_accepted": 4,
+    "rejected": 0,
+    "target_writes": 0,
+    "rejection_reason_counts": {
+      "EXACTLY_BOUND_ADVISORY": 4
+    }
+  },
+  "code_release_gate": {
+    "status": "PASS",
+    "checks": {
+      "workspace_local_loop": "PASS",
+      "workspace_skill": "CANARY",
+      "workspace_agentteams_static": "PASS",
+      "review_readiness": "PASS",
+      "core_evidence_manifest": "PASS"
+    },
+    "external_milestones": {
+      "real_enterprise_connectors": "NOT_RUN",
+      "real_user_validation": "NOT_RUN",
+      "workspace_agentteams_live": "NOT_RUN"
+    }
+  },
+  "claim_boundaries": [
+    "Business objects and benchmark outcomes use a synthetic fixture.",
+    "The Core change-advisory receipt proves one observed AgentTeams run; Workspace formation live remains NOT_RUN.",
+    "All four observed live candidates carried the Leader-committed plan, exact task, and exact input bindings; the control plane admitted them as advisory only with zero target writes.",
+    "No real enterprise connector or Matrix human approval is claimed.",
+    "Submission documents and video are outside this code-only fact surface."
+  ]
+}

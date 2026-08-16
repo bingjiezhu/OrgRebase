@@ -1,0 +1,117 @@
+{
+  "$defs": {
+    "DependencyStrength": {
+      "enum": [
+        "HARD",
+        "REVIEW",
+        "INFORMATIONAL"
+      ],
+      "title": "DependencyStrength",
+      "type": "string"
+    },
+    "SemanticKind": {
+      "enum": [
+        "CLAIM",
+        "POLICY",
+        "SKILL",
+        "TOOL",
+        "LITERAL"
+      ],
+      "title": "SemanticKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-reference-resolved-event.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "const": "REFERENCE_RESOLVED",
+      "default": "REFERENCE_RESOLVED",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "input_digest": {
+      "title": "Input Digest",
+      "type": "string"
+    },
+    "occurred_at": {
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "previous_event_digest": {
+      "title": "Previous Event Digest",
+      "type": "string"
+    },
+    "projection_digest": {
+      "title": "Projection Digest",
+      "type": "string"
+    },
+    "provider_digest": {
+      "title": "Provider Digest",
+      "type": "string"
+    },
+    "provider_ref": {
+      "title": "Provider Ref",
+      "type": "string"
+    },
+    "relation": {
+      "title": "Relation",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "semantic_kind": {
+      "$ref": "#/$defs/SemanticKind"
+    },
+    "sequence": {
+      "title": "Sequence",
+      "type": "integer"
+    },
+    "slot_id": {
+      "title": "Slot Id",
+      "type": "string"
+    },
+    "strength": {
+      "$ref": "#/$defs/DependencyStrength"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "task_ref",
+    "run_id",
+    "sequence",
+    "slot_id",
+    "provider_ref",
+    "provider_digest",
+    "semantic_kind",
+    "relation",
+    "strength",
+    "projection_digest",
+    "input_digest",
+    "occurred_at",
+    "idempotency_key",
+    "previous_event_digest"
+  ],
+  "title": "ReferenceResolvedEvent",
+  "type": "object"
+}

@@ -1,0 +1,42 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-task-template-catalog-summary.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "catalog_digest": {
+      "title": "Catalog Digest",
+      "type": "string"
+    },
+    "deliverable_kinds": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Deliverable Kinds",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "template_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Template Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "template_refs",
+    "deliverable_kinds",
+    "catalog_digest"
+  ],
+  "title": "TaskTemplateCatalogSummary",
+  "type": "object"
+}

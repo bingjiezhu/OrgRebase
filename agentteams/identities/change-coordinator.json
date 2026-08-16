@@ -1,0 +1,38 @@
+{
+  "name": "change-coordinator",
+  "role": "Team Leader and change task coordinator",
+  "capabilities": [
+    "decompose ChangeSet",
+    "assign scoped tasks",
+    "aggregate candidates"
+  ],
+  "inputs": [
+    "ChangeSetRevision",
+    "RevisionLock",
+    "ImpactPreview"
+  ],
+  "outputs": [
+    "TaskGraph",
+    "CandidateSummary"
+  ],
+  "dependencies": [
+    "authority-aware orchestration compiler",
+    "AgentTeams Manager",
+    "OrgRebase read-only coordination tools"
+  ],
+  "decision_boundary": [
+    "cannot admit claims",
+    "cannot approve or apply",
+    "cannot mark work state",
+    "cannot publish skills"
+  ],
+  "trace": [
+    "orchestration_plan_digest",
+    "delegation_task_digest",
+    "task_id",
+    "parent_run_id",
+    "handoff_digest",
+    "AgentTeams task/Matrix refs when live"
+  ],
+  "authority_domain": "coordination"
+}

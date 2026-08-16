@@ -1,0 +1,155 @@
+{
+  "$defs": {
+    "OutputFieldLineage": {
+      "additionalProperties": false,
+      "properties": {
+        "field_path": {
+          "title": "Field Path",
+          "type": "string"
+        },
+        "source_kind": {
+          "enum": [
+            "SLOT",
+            "TASK_LITERAL",
+            "DETERMINISTIC_COMPUTED"
+          ],
+          "title": "Source Kind",
+          "type": "string"
+        },
+        "source_slot_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Slot Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field_path",
+        "source_kind"
+      ],
+      "title": "OutputFieldLineage",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-skill-candidate-artifact.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tool_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tool Ids",
+      "type": "array"
+    },
+    "applicable_template_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Applicable Template Refs",
+      "type": "array"
+    },
+    "candidate_program_digest": {
+      "title": "Candidate Program Digest",
+      "type": "string"
+    },
+    "candidate_program_ref": {
+      "title": "Candidate Program Ref",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "created_by": {
+      "title": "Created By",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "executable": {
+      "const": false,
+      "default": false,
+      "title": "Executable",
+      "type": "boolean"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "input_schema_ref": {
+      "title": "Input Schema Ref",
+      "type": "string"
+    },
+    "output_lineage_rules": {
+      "items": {
+        "$ref": "#/$defs/OutputFieldLineage"
+      },
+      "title": "Output Lineage Rules",
+      "type": "array"
+    },
+    "output_schema_ref": {
+      "title": "Output Schema Ref",
+      "type": "string"
+    },
+    "required_slot_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Required Slot Ids",
+      "type": "array"
+    },
+    "risk_class": {
+      "title": "Risk Class",
+      "type": "string"
+    },
+    "source_task_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Task Refs",
+      "type": "array"
+    },
+    "source_trace_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Trace Refs",
+      "type": "array"
+    },
+    "status": {
+      "const": "CANDIDATE",
+      "default": "CANDIDATE",
+      "title": "Status",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "source_task_refs",
+    "source_trace_refs",
+    "candidate_program_ref",
+    "candidate_program_digest",
+    "input_schema_ref",
+    "output_schema_ref",
+    "applicable_template_refs",
+    "required_slot_ids",
+    "output_lineage_rules",
+    "allowed_tool_ids",
+    "risk_class",
+    "created_by",
+    "created_at"
+  ],
+  "title": "SkillCandidateArtifact",
+  "type": "object"
+}

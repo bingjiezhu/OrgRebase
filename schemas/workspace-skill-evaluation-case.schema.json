@@ -1,0 +1,60 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-skill-evaluation-case.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "expected_output": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Expected Output",
+      "type": "object"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "partition": {
+      "enum": [
+        "REPLAY",
+        "HELD_OUT",
+        "NEGATIVE_TRANSFER",
+        "PERMISSION",
+        "INJECTION",
+        "MALFORMED",
+        "RESOURCE",
+        "CANARY"
+      ],
+      "title": "Partition",
+      "type": "string"
+    },
+    "public_input": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Public Input",
+      "type": "object"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "partition",
+    "public_input",
+    "expected_output",
+    "template_ref"
+  ],
+  "title": "SkillEvaluationCase",
+  "type": "object"
+}

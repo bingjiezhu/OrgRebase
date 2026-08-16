@@ -1,0 +1,83 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-actor-context-projection.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "$ref": "#/$defs/EvidenceClass"
+    },
+    "excluded": {
+      "items": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "type": "object"
+      },
+      "title": "Excluded",
+      "type": "array"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "included_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Included Refs",
+      "type": "array"
+    },
+    "purpose": {
+      "title": "Purpose",
+      "type": "string"
+    },
+    "task_context_ref": {
+      "title": "Task Context Ref",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "actor_id",
+    "task_context_ref",
+    "purpose",
+    "included_refs",
+    "excluded",
+    "expires_at",
+    "evidence_class"
+  ],
+  "title": "ActorContextProjection",
+  "type": "object"
+}

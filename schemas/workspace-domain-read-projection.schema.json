@@ -1,0 +1,79 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    },
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-domain-read-projection.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "domain_id": {
+      "title": "Domain Id",
+      "type": "string"
+    },
+    "evidence_class": {
+      "$ref": "#/$defs/EvidenceClass"
+    },
+    "excluded_fields": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Excluded Fields",
+      "type": "array"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "request_ref": {
+      "title": "Request Ref",
+      "type": "string"
+    },
+    "source_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Refs",
+      "type": "array"
+    },
+    "values": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Values",
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "request_ref",
+    "domain_id",
+    "actor_id",
+    "values",
+    "source_refs",
+    "excluded_fields",
+    "evidence_class"
+  ],
+  "title": "DomainReadProjection",
+  "type": "object"
+}

@@ -1,0 +1,195 @@
+{
+  "discount_exception_memo@v1": {
+    "coalition": [
+      "legal",
+      "finance",
+      "gtm"
+    ],
+    "slots": [
+      [
+        "price_band",
+        "policy:finance.price_band",
+        "REQUIRES_POLICY",
+        "HARD"
+      ],
+      [
+        "currency",
+        "policy:finance.currency",
+        "REQUIRES_POLICY",
+        "HARD"
+      ],
+      [
+        "partner_terms",
+        "claim:gtm.partner_terms",
+        "REQUIRES_CLAIM",
+        "REVIEW"
+      ],
+      [
+        "notice_required",
+        "claim:legal.notice_required",
+        "REQUIRES_CLAIM",
+        "REVIEW"
+      ]
+    ],
+    "task_variants": [
+      "Prepare a discount-exception memo for {customer_ref} using price band, currency, partner review, and minimum legal notice.",
+      "Draft the commercial exception memo for {customer_ref}; Finance, GTM, and Legal constraints are required.",
+      "For {customer_ref}, summarize whether a discount exception can proceed and what review conditions apply.",
+      "Create a governed discount memo for {customer_ref}; do not reveal internal cost floor.",
+      "请为 {customer_ref} 准备折扣例外备忘录，核对价格带、币种、partner 条款和最小法务义务。",
+      "客户 {customer_ref} 申请特殊折扣。请组织 Legal、Finance、GTM，并隐藏内部成本。",
+      "生成 {customer_ref} 的 discount exception memo，说明审查条件但不要自动批准。",
+      "为 {customer_ref} 写折扣例外草案；不得披露 Finance internal cost 或合同原文。",
+      "Discount exception request for {customer_ref}: price band, currency, partner terms, minimum legal notice.",
+      "Prepare the bounded commercial exception memo for {customer_ref}; no Product worker is required.",
+      "请为 {customer_ref} 形成折扣审查 memo，只选择 Legal + Finance + GTM。",
+      "Create a discount-review memo for {customer_ref}; hold if policy or legal evidence is stale."
+    ]
+  },
+  "enterprise_quote@v1": {
+    "coalition": [
+      "product",
+      "legal",
+      "finance",
+      "gtm"
+    ],
+    "slots": [
+      [
+        "product_plan",
+        "claim:product.plan",
+        "REQUIRES_CLAIM",
+        "HARD"
+      ],
+      [
+        "launch_date",
+        "claim:product.launch_date",
+        "REQUIRES_CLAIM",
+        "HARD"
+      ],
+      [
+        "data_residency",
+        "claim:product.data_residency",
+        "REQUIRES_CLAIM",
+        "HARD"
+      ],
+      [
+        "notice_required",
+        "claim:legal.notice_required",
+        "REQUIRES_CLAIM",
+        "HARD"
+      ],
+      [
+        "price_band",
+        "policy:finance.price_band",
+        "REQUIRES_POLICY",
+        "REVIEW"
+      ],
+      [
+        "currency",
+        "policy:finance.currency",
+        "REQUIRES_POLICY",
+        "HARD"
+      ],
+      [
+        "partner_terms",
+        "claim:gtm.partner_terms",
+        "REQUIRES_CLAIM",
+        "REVIEW"
+      ],
+      [
+        "rendering_skill",
+        "skill:enterprise-quote-compose",
+        "REQUIRES_SKILL",
+        "HARD"
+      ]
+    ],
+    "task_variants": [
+      "Prepare an enterprise quote for {customer_ref}. Include plan, launch date, data residency, notice obligation, permitted price band, billing currency, and partner review condition.",
+      "Create a customer-ready enterprise quotation for {customer_ref}; verify product timing, residency, legal notice, pricing band, currency, and partner terms.",
+      "For {customer_ref}, draft the enterprise offer with the approved product plan and date plus the minimum Legal, Finance, and GTM constraints.",
+      "Build the enterprise quote for {customer_ref}. I need launch timing, US/EU residency, notification duty, price range, currency, and partner caveat.",
+      "请为 {customer_ref} 准备企业版报价，包含产品套餐、上线日期、数据驻留、通知义务、价格带、币种和合作伙伴审查条件。",
+      "给 {customer_ref} 出一份可对客的企业报价；只使用已批准的产品、法务、财务和 GTM 前提。",
+      "客户 {customer_ref} 需要企业方案。请核对发布日期、驻留能力、法务通知、价格范围、结算币种及 partner 条款后形成报价。",
+      "生成 {customer_ref} 企业报价草案。不要猜测缺失字段，也不要披露内部成本或合同原文。",
+      "Quote request: {customer_ref}. Required fields are plan/date/residency/notice/price-band/currency/partner-review. Use current governed sources only.",
+      "Prepare an enterprise commercial proposal for {customer_ref}; keep internal legal and cost material out of the deliverable.",
+      "为 {customer_ref} 形成 enterprise quote；需要 Product、Legal、Finance、GTM 的最小结论，并保留版本与来源。",
+      "Customer {customer_ref} asks for an enterprise quote. Produce the typed deliverable and abstain if any required governed premise is unavailable."
+    ]
+  },
+  "public_launch_summary@v1": {
+    "coalition": [
+      "product",
+      "gtm"
+    ],
+    "slots": [
+      [
+        "product_plan",
+        "claim:product.plan",
+        "REQUIRES_CLAIM",
+        "HARD"
+      ],
+      [
+        "launch_date",
+        "claim:product.launch_date",
+        "REQUIRES_CLAIM",
+        "HARD"
+      ],
+      [
+        "public_message",
+        "claim:gtm.public_launch_message",
+        "REQUIRES_CLAIM",
+        "INFORMATIONAL"
+      ]
+    ],
+    "task_variants": [
+      "Draft a public launch summary for {customer_ref} using only approved public product and GTM information.",
+      "Create a customer-safe launch note for {customer_ref}; include plan, date, and approved public message only.",
+      "Summarize the launch for {customer_ref}. Do not use Legal or Finance material.",
+      "Prepare a public-facing product launch blurb for {customer_ref} with the current plan and date.",
+      "请为 {customer_ref} 写公开发布摘要，只能使用产品公开信息和已批准 GTM 话术。",
+      "生成 {customer_ref} 的公开上线说明；不要调用法务或财务域。",
+      "客户 {customer_ref} 需要一段公开 launch summary，包含套餐、日期和公共消息。",
+      "请输出可公开的上线摘要；若某字段不是 PUBLIC/允许用途则不要包含。客户：{customer_ref}。",
+      "Public launch summary request for {customer_ref}: product plan, launch date, approved GTM message.",
+      "Write the minimal public launch update for {customer_ref}; legal notice and pricing are out of scope.",
+      "为 {customer_ref} 编写公开产品更新，只选 Product + GTM 的必要信息。",
+      "Create a concise public announcement for {customer_ref}; no restricted or confidential data."
+    ]
+  },
+  "residency_faq@v1": {
+    "coalition": [
+      "product",
+      "legal"
+    ],
+    "slots": [
+      [
+        "data_residency",
+        "claim:product.data_residency",
+        "REQUIRES_CLAIM",
+        "HARD"
+      ],
+      [
+        "notice_required",
+        "claim:legal.notice_required",
+        "REQUIRES_CLAIM",
+        "REVIEW"
+      ]
+    ],
+    "task_variants": [
+      "Prepare a customer-facing data-residency FAQ for {customer_ref} from Product capability and the minimum Legal conclusion.",
+      "Create the residency FAQ for {customer_ref}; include supported region and notice requirement only.",
+      "For {customer_ref}, answer the data-residency question with Product + Legal, no pricing data.",
+      "Draft a safe residency response for {customer_ref} using admitted capability and legal minimum disclosure.",
+      "请为 {customer_ref} 准备数据驻留 FAQ，只使用产品能力和最小法务结论。",
+      "客户 {customer_ref} 询问数据驻留。请核对 Product 和 Legal，不要读取财务信息。",
+      "生成 {customer_ref} 的驻留说明，包含支持区域与是否需要客户通知。",
+      "为 {customer_ref} 输出可对客的 residency FAQ，不得包含合同原文。",
+      "Residency FAQ request for {customer_ref}: region support and minimum legal notice conclusion.",
+      "Answer {customer_ref}'s residency question with the smallest governed context.",
+      "请只组织 Product 与 Legal，为 {customer_ref} 形成 residency FAQ。",
+      "Customer-safe residency FAQ for {customer_ref}; abstain if either required premise is stale."
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-human-review-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_ref": {
+      "title": "Case Ref",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "const": "USER_STUDY",
+      "default": "USER_STUDY",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "recorded_at": {
+      "title": "Recorded At",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "verdict": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNCERTAIN"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "case_ref",
+    "reviewer_id",
+    "verdict",
+    "reason_codes",
+    "recorded_at"
+  ],
+  "title": "HumanReviewRecord",
+  "type": "object"
+}

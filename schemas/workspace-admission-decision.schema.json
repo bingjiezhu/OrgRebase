@@ -1,0 +1,67 @@
+{
+  "$defs": {
+    "AdmissionVerdict": {
+      "enum": [
+        "ADMIT",
+        "REJECT",
+        "HOLD"
+      ],
+      "title": "AdmissionVerdict",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-admission-decision.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_ref": {
+      "title": "Candidate Ref",
+      "type": "string"
+    },
+    "checks": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "title": "Checks",
+      "type": "object"
+    },
+    "decided_at": {
+      "title": "Decided At",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "policy_revision": {
+      "title": "Policy Revision",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "verdict": {
+      "$ref": "#/$defs/AdmissionVerdict"
+    }
+  },
+  "required": [
+    "id",
+    "candidate_ref",
+    "verdict",
+    "reason_codes",
+    "checks",
+    "policy_revision",
+    "decided_at"
+  ],
+  "title": "AdmissionDecision",
+  "type": "object"
+}

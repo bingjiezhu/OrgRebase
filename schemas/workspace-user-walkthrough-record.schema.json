@@ -1,0 +1,93 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-user-walkthrough-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "consent_recorded": {
+      "title": "Consent Recorded",
+      "type": "boolean"
+    },
+    "critical_gaps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Critical Gaps",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "const": "USER_STUDY",
+      "default": "USER_STUDY",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "participant_role": {
+      "title": "Participant Role",
+      "type": "string"
+    },
+    "pilot_intent": {
+      "enum": [
+        "PILOT",
+        "CONDITIONAL_PILOT",
+        "NO_PILOT",
+        "NOT_ASKED"
+      ],
+      "title": "Pilot Intent",
+      "type": "string"
+    },
+    "problem_understood": {
+      "title": "Problem Understood",
+      "type": "boolean"
+    },
+    "recorded_at": {
+      "title": "Recorded At",
+      "type": "string"
+    },
+    "redacted_findings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Redacted Findings",
+      "type": "array"
+    },
+    "scenario_version": {
+      "title": "Scenario Version",
+      "type": "string"
+    },
+    "trace_value_rating": {
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Trace Value Rating",
+      "type": "integer"
+    },
+    "usefulness_rating": {
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Usefulness Rating",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "participant_role",
+    "scenario_version",
+    "consent_recorded",
+    "problem_understood",
+    "usefulness_rating",
+    "trace_value_rating",
+    "pilot_intent",
+    "redacted_findings",
+    "critical_gaps",
+    "recorded_at"
+  ],
+  "title": "UserWalkthroughRecord",
+  "type": "object"
+}

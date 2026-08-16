@@ -1,0 +1,110 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-benchmark-gold.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "expected_admitted_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Expected Admitted Refs",
+      "type": "array"
+    },
+    "expected_coalition": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Expected Coalition",
+      "type": "array"
+    },
+    "expected_edges": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Expected Edges",
+      "type": "array"
+    },
+    "expected_error_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Expected Error Code"
+    },
+    "expected_impact": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JsonValue"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expected_output": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JsonValue"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expected_template": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Expected Template"
+    },
+    "forbidden_values": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Forbidden Values",
+      "type": "array"
+    },
+    "schema_version": {
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "case_id",
+    "expected_template",
+    "expected_coalition",
+    "expected_admitted_refs",
+    "expected_output",
+    "expected_edges",
+    "expected_impact",
+    "expected_error_code",
+    "forbidden_values"
+  ],
+  "title": "BenchmarkGold",
+  "type": "object"
+}

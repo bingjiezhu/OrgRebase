@@ -1,0 +1,90 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "SkillOperation": {
+      "additionalProperties": false,
+      "properties": {
+        "input_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Input Fields",
+          "type": "array"
+        },
+        "operation": {
+          "title": "Operation",
+          "type": "string"
+        },
+        "output_field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Field"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Parameters",
+          "type": "object"
+        }
+      },
+      "required": [
+        "operation",
+        "input_fields"
+      ],
+      "title": "SkillOperation",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-declarative-skill-program.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tool_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tool Ids",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "operations": {
+      "items": {
+        "$ref": "#/$defs/SkillOperation"
+      },
+      "title": "Operations",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "orgrebase.declarative-skill.v1",
+      "default": "orgrebase.declarative-skill.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "side_effects": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Side Effects",
+      "type": "array"
+    }
+  },
+  "required": [
+    "operations"
+  ],
+  "title": "DeclarativeSkillProgram",
+  "type": "object"
+}

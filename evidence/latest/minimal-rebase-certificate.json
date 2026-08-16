@@ -1,0 +1,56 @@
+{
+  "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+  "claim_boundary": "Minimal only for the exact ChangeSet, revision lock, target scope, dependency manifests, and deterministic transfer rules committed by this certificate.",
+  "digest": "sha256:2dd3a778bcd936e5d51bc548a25bba758f54c23a6059083db12acb1a59c6603f",
+  "effects": [
+    {
+      "disposition": "REBUILD",
+      "impact_certificate_digest": "sha256:386ce8ad6418fa5d7de02a392fa0b698769f423d1abd01c406d6dd92e59250c8",
+      "impact_result_digest": "sha256:f757bebdc6be6f0cd778ab4401163c1b83f51a7b0d6af4bae8696195e82e03d2",
+      "target_id": "work:sales_quote_a"
+    },
+    {
+      "disposition": "REBUILD",
+      "impact_certificate_digest": "sha256:e4e9eaf0984929bceca123347a80f077421f32c7a97d0bb6fe2bb103eb95573d",
+      "impact_result_digest": "sha256:d7b6a70dff8c4e7cd116cf9be755391d8841188697cb5c3442d119066eac09f9",
+      "target_id": "work:support_doc_b"
+    },
+    {
+      "disposition": "PRESERVE_WITHIN_BOUNDARY",
+      "impact_certificate_digest": "sha256:79628a9d722038df9d20a43a1505f7c9725f4de269e2613054dfee87842b32ab",
+      "impact_result_digest": "sha256:05a4825279ada89528de27fc91d8c4079c25d3096ca21b3c8bfa4a4bb17c2abf",
+      "target_id": "work:legal_review_c"
+    },
+    {
+      "disposition": "PRESERVE_WITHIN_BOUNDARY",
+      "impact_certificate_digest": "sha256:dd2f1638e613826bb587b602ed06f54e84fd5c38ee09ff090ffeea9f6d7ed8b9",
+      "impact_result_digest": "sha256:de3e5e1be8d5e9284c9078cd8d776d2c44c52faa51b367cbebaddda3e991476c",
+      "target_id": "work:finance_analysis_d"
+    },
+    {
+      "disposition": "HOLD_FOR_REVIEW",
+      "impact_certificate_digest": "sha256:1842faab340a5e9e5cab360f661830c110999d955d74917929b3f1c5171dfbcc",
+      "impact_result_digest": "sha256:95714bfb785912ea5dabf614219f74273983a4f4f15f9faa56543310b3666379",
+      "target_id": "work:partner_brief_e"
+    },
+    {
+      "disposition": "REQUALIFY",
+      "impact_certificate_digest": "sha256:63272f07ba24fd7157da11cdf92b5834859f52fdb667e47821dd4856a296cda6",
+      "impact_result_digest": "sha256:9c446f9d8635e794882c8bc8d7d2afa473114d0798998a6da2b6f0fb361b58ae",
+      "target_id": "skill:enterprise-launch-readiness"
+    }
+  ],
+  "evidence_class": "LOCAL_DETERMINISTIC",
+  "id": "minimal-rebase-certificate:launch-date@r1",
+  "impact_certificate_set_digest": "sha256:84a4691ddd9d7ec480614575e55df4f24381cf95100493dcd53f7ee91f2fd05c",
+  "minimality_invariants": [
+    "every AFFECTED_HARD target is REBUILD",
+    "no non-AFFECTED_HARD target is REBUILD",
+    "UNKNOWN is HOLD_FOR_REVIEW and never PRESERVE",
+    "every effect binds one independently verifiable impact certificate"
+  ],
+  "preview_digest": "sha256:3f63d00ac12f4fa000ca90e26ce63824877b41f96c4c97705e609c5d94d18741",
+  "revision_lock_digest": "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8",
+  "schema_version": "orgrebase.minimal-rebase-certificate.v1",
+  "verifier_version": "orgrebase.minimal-rebase-verifier@1.0.0"
+}

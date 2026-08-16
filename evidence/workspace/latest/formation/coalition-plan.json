@@ -1,0 +1,84 @@
+{
+  "admitted_slot_ids": [
+    "currency",
+    "data_residency",
+    "launch_date",
+    "notice_required",
+    "partner_terms",
+    "price_band",
+    "product_plan",
+    "quote_compose_skill"
+  ],
+  "coverage": [
+    {
+      "card_ref": "capability-card:finance@v1",
+      "domain_id": "finance",
+      "slot_id": "currency"
+    },
+    {
+      "card_ref": "capability-card:product@v1",
+      "domain_id": "product",
+      "slot_id": "data_residency"
+    },
+    {
+      "card_ref": "capability-card:product@v1",
+      "domain_id": "product",
+      "slot_id": "launch_date"
+    },
+    {
+      "card_ref": "capability-card:legal@v1",
+      "domain_id": "legal",
+      "slot_id": "notice_required"
+    },
+    {
+      "card_ref": "capability-card:gtm@v1",
+      "domain_id": "gtm",
+      "slot_id": "partner_terms"
+    },
+    {
+      "card_ref": "capability-card:finance@v1",
+      "domain_id": "finance",
+      "slot_id": "price_band"
+    },
+    {
+      "card_ref": "capability-card:product@v1",
+      "domain_id": "product",
+      "slot_id": "product_plan"
+    },
+    {
+      "card_ref": "capability-card:gtm@v1",
+      "domain_id": "gtm",
+      "slot_id": "quote_compose_skill"
+    }
+  ],
+  "digest": "sha256:84b2cbe9eb1a3432185074ed2554b0a6ef931f91f6c58833f4718bd5b4d482b0",
+  "id": "coalition:quote_acme@v1",
+  "input_digest": "sha256:1251fdf83f85f9442eff986675b38e477045d23cb31372b0fe6857562d45e230",
+  "planner_version": "workspace-coalition-exhaustive@1.0.0",
+  "revision_lock": {
+    "authorization": "authz:workspace@r1",
+    "graph": "graph:workspace@seed-r1",
+    "policy": "policy:workspace@r1",
+    "runtime_registry": "runtime:workspace@r1",
+    "skill_registry": "skills:registry@r1"
+  },
+  "selected_card_refs": [
+    "capability-card:finance@v1",
+    "capability-card:gtm@v1",
+    "capability-card:legal@v1",
+    "capability-card:product@v1"
+  ],
+  "task_ref": "task:quote_acme",
+  "template_ref": "template:enterprise_quote@v1",
+  "tie_break_tuple": [
+    4,
+    10,
+    [
+      "finance",
+      "gtm",
+      "legal",
+      "product"
+    ]
+  ],
+  "total_declared_cost": 10
+}

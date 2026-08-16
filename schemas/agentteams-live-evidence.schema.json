@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/agentteams-live-evidence.schema.json",
+  "title": "OrgRebase AgentTeams Live Evidence",
+  "oneOf": [
+    {"$ref": "#/$defs/pass"},
+    {"$ref": "#/$defs/notRun"}
+  ],
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "pass": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "status",
+        "evidence_class",
+        "source",
+        "evidence",
+        "receipt_digest",
+        "claim_boundary"
+      ],
+      "properties": {
+        "schema_version": {"const": "orgrebase.agentteams-live-evidence.v2"},
+        "status": {"const": "PASS"},
+        "evidence_class": {"const": "LIVE_AGENTTEAMS"},
+        "source": {"type": "string", "minLength": 1},
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "run_id",
+            "nonce",
+            "agentteams",
+            "kubernetes_context",
+            "kubernetes",
+            "matrix",
+            "artifacts",
+            "model_calls",
+            "source_digests",
+            "source_bundle_digest"
+          ],
+          "properties": {
+            "run_id": {"type": "string", "pattern": "^run:orgrebase:live:"},
+            "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "agentteams": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["version", "source_commit"],
+              "properties": {
+                "version": {"const": "v1.2.2"},
+                "source_commit": {"const": "849182af8e017168a5a200a87b1062142caf462d"}
+              }
+            },
+            "kubernetes_context": {"type": "string", "minLength": 1},
+            "kubernetes": {
+              "type": "object",
+              "required": ["team", "workers", "pods"],
+              "properties": {
+                "team": {"type": "object"},
+                "workers": {"type": "array", "minItems": 5, "maxItems": 5},
+                "pods": {"type": "array", "minItems": 3}
+              }
+            },
+            "matrix": {
+              "type": "object",
+              "required": [
+                "room_id",
+                "leader_delegation_event_id",
+                "orchestration_plan_digest",
+                "candidate_event_ids",
+                "candidate_senders",
+                "candidate_task_bindings"
+              ],
+              "properties": {
+                "room_id": {"type": "string", "pattern": "^!"},
+                "leader_delegation_event_id": {"type": "string", "pattern": "^\\$"},
+                "orchestration_plan_digest": {"$ref": "#/$defs/digest"},
+                "candidate_event_ids": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+                "candidate_senders": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "pattern": "^@"}},
+                "candidate_task_bindings": {
+                  "type": "array",
+                  "minItems": 3,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["worker_name", "delegation_task_digest", "input_refs"],
+                    "properties": {
+                      "worker_name": {"type": "string", "minLength": 1},
+                      "delegation_task_digest": {"$ref": "#/$defs/digest"},
+                      "input_refs": {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {"$ref": "#/$defs/digest"}
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "artifacts": {
+              "type": "object",
+              "required": ["candidate_artifacts", "skill"],
+              "properties": {
+                "candidate_artifacts": {"type": "array", "minItems": 3},
+                "skill": {
+                  "type": "object",
+                  "required": ["name", "digest", "assigned_worker", "loaded_event_id"],
+                  "properties": {"digest": {"$ref": "#/$defs/digest"}}
+                }
+              }
+            },
+            "model_calls": {
+              "type": "object",
+              "required": [
+                "successful_calls", "successful_workers", "provider_request_ids",
+                "models", "candidate_bindings"
+              ],
+              "properties": {
+                "successful_calls": {"type": "integer", "minimum": 3},
+                "successful_workers": {"type": "array", "minItems": 3, "uniqueItems": true},
+                "provider_request_ids": {"type": "array", "minItems": 3, "uniqueItems": true},
+                "models": {"type": "array", "minItems": 1},
+                "candidate_bindings": {"type": "array", "minItems": 3}
+              }
+            },
+            "source_digests": {
+              "type": "object",
+              "minProperties": 5,
+              "additionalProperties": {"$ref": "#/$defs/digest"}
+            },
+            "source_bundle_digest": {"$ref": "#/$defs/digest"}
+          }
+        },
+        "receipt_digest": {"$ref": "#/$defs/digest"},
+        "claim_boundary": {"type": "string", "minLength": 1}
+      }
+    },
+    "notRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "status",
+        "evidence_class",
+        "error_code",
+        "reason",
+        "claim_boundary"
+      ],
+      "properties": {
+        "schema_version": {"const": "orgrebase.agentteams-live-evidence.v2"},
+        "status": {"const": "NOT_RUN"},
+        "evidence_class": {"const": "NOT_RUN"},
+        "error_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "reason": {"type": "string", "minLength": 1},
+        "claim_boundary": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

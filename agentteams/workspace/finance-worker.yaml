@@ -1,0 +1,17 @@
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: orgrebase-finance-steward
+  namespace: orgrebase-agentteams
+  labels:
+    app.kubernetes.io/part-of: orgrebase-workspace
+    orgrebase.io/domain: finance
+spec:
+  model: google/gemini-3.1-flash-lite
+  runtime: openclaw
+  workerName: finance-steward
+  identity: |
+    OrgRebase finance domain candidate-only Worker.
+  agents: |
+    Return only schema-valid candidates bound to the exact delegation task.
+    You cannot admit Claims, approve Apply, or write canonical state.

@@ -1,0 +1,73 @@
+{
+  "apply_approval_ref": "approval:launch-date@1",
+  "approval_ref": "rollback-approval:launch-date@1",
+  "authoritative_claim_ref": "claim:product.launch_date@v8",
+  "authoritative_claim_unchanged": true,
+  "compensates_rebase_receipt": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592",
+  "compensation_results": [
+    {
+      "action": "RESTORE_DOWNSTREAM_CONTENT_AS_PENDING_REBASE",
+      "object_id": "work:sales_quote_a",
+      "status": "SUCCEEDED"
+    },
+    {
+      "action": "RESTORE_DOWNSTREAM_CONTENT_AS_PENDING_REBASE",
+      "object_id": "work:support_doc_b",
+      "status": "SUCCEEDED"
+    },
+    {
+      "action": "QUARANTINE_CANARY_AND_REQUIRE_REQUALIFICATION",
+      "object_id": "skill:enterprise-launch-readiness",
+      "status": "SUCCEEDED"
+    }
+  ],
+  "digest": "sha256:bfd49d7f9d3fdf03568c5ad78ae066bb55d487912fa389653da5c2fd36167076",
+  "event_chain_head": "sha256:f061c01017406b73e6b5c6df0f30cf6dfcea489613f8f7cb738605cfa636c843",
+  "evidence_class": "LOCAL_DETERMINISTIC",
+  "id": "rollback:launch-date@1",
+  "metrics": {
+    "authoritative_claims_changed": 0,
+    "history_rows_deleted": 0,
+    "skills_quarantined": 1,
+    "unknown_items_preserved": 1,
+    "work_items_compensated": 2,
+    "work_items_pending_rebase": 2
+  },
+  "preserved_states": [
+    {
+      "object_id": "claim:product.launch_date",
+      "reason": "AUTHORITATIVE_FACT_IS_NOT_A_DOWNSTREAM_SIDE_EFFECT",
+      "ref": "claim:product.launch_date@v8"
+    },
+    {
+      "object_id": "work:partner_brief_e",
+      "reason": "UNKNOWN_REMAINS_UNKNOWN_AFTER_COMPENSATION",
+      "ref": "work:partner_brief_e@v1",
+      "state": "REVIEW_REQUIRED"
+    }
+  ],
+  "rollback_plan_digest": "sha256:f677f7479327d7c5491d536fad3844d16c5a72fee529823a57e63cf9ac97a887",
+  "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+  "status": "ROLLED_BACK_PENDING_REBASE",
+  "transitions": [
+    {
+      "from": "work:sales_quote_a@v2",
+      "object_id": "work:sales_quote_a",
+      "to": "work:sales_quote_a@v3",
+      "to_state": "ROLLED_BACK_PENDING_REBASE"
+    },
+    {
+      "from": "work:support_doc_b@v2",
+      "object_id": "work:support_doc_b",
+      "to": "work:support_doc_b@v3",
+      "to_state": "ROLLED_BACK_PENDING_REBASE"
+    },
+    {
+      "from": "skill:enterprise-launch-readiness@1.3",
+      "object_id": "skill:enterprise-launch-readiness",
+      "to": "skill:enterprise-launch-readiness@1.2",
+      "to_state": "REQUALIFICATION_REQUIRED"
+    }
+  ],
+  "workflow_run_id": "run:orgrebase:launch-date:local@1"
+}

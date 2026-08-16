@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/agentteams-artifact-manifest.schema.json",
+  "title": "OrgRebase AgentTeams Candidate Artifact Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "nonce", "artifacts", "skill_runtime_evidence"],
+  "properties": {
+    "schema_version": {"const": "orgrebase.agentteams-artifact-manifest.v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifacts": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref", "path", "digest", "schema_version", "producer_worker", "producer_matrix_user_id", "candidate_only"],
+        "properties": {
+          "ref": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "schema_version": {"type": "string", "minLength": 1},
+          "producer_worker": {"type": "string", "minLength": 1},
+          "producer_matrix_user_id": {"type": "string", "pattern": "^@"},
+          "candidate_only": {"const": true}
+        }
+      }
+    },
+    "skill_runtime_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill_name", "assigned_worker", "worker_matrix_user_id", "skill_path", "skill_digest", "loaded_event_id"],
+      "properties": {
+        "skill_name": {"type": "string", "minLength": 1},
+        "assigned_worker": {"type": "string", "minLength": 1},
+        "worker_matrix_user_id": {"type": "string", "pattern": "^@"},
+        "skill_path": {"type": "string", "minLength": 1},
+        "skill_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "loaded_event_id": {"type": "string", "pattern": "^\\$"}
+      }
+    }
+  }
+}

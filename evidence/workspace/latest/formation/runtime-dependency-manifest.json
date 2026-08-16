@@ -1,0 +1,123 @@
+{
+  "authority_domain": "gtm",
+  "compiled_at": "2026-08-15T00:00:00Z",
+  "compiler_version": "workspace-runtime-dependency@1.0.0",
+  "completeness": "COMPLETE",
+  "consumer_ref": "work:quote_acme@v1",
+  "coverage_receipt_ref": "trace-coverage:quote_acme@v1",
+  "digest": "sha256:f7d220316f308d20907252d0ad3cad77f71f3eab935ab8e6394a4370be35cb6f",
+  "entries": [
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "provider_digest": "sha256:e8d44a3ce710e6445301b3d52e8f19be1c36dc7ecfe775ea827201fee9710a0a",
+      "provider_ref": "claim:product.enterprise_plan@v4",
+      "relation": "REQUIRES_CLAIM",
+      "slot_id": "product_plan",
+      "source_event_digest": "sha256:b9ee27f9929455f990ca26456961d016bb1e0db0c3f83457d71ffe51ab6875ba",
+      "source_event_ref": "event:quote_acme:reference-resolved:01",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "provider_digest": "sha256:7409961c7b688c9b8feff96a32dab38ae8441a00bc87766454faa781a6001ce6",
+      "provider_ref": "claim:product.launch_date@v7",
+      "relation": "REQUIRES_CLAIM",
+      "slot_id": "launch_date",
+      "source_event_digest": "sha256:d9ea25e20fdc843a9da5ba5f8a6097cfc5a72a6a6bd692bf78f62423e9a8b510",
+      "source_event_ref": "event:quote_acme:reference-resolved:02",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "provider_digest": "sha256:8a6796400928f80ee43939006dc5c9ee6c74698bdfe98c40cfcbf78ae30a4582",
+      "provider_ref": "claim:product.residency_capability@v3",
+      "relation": "REQUIRES_CLAIM",
+      "slot_id": "data_residency",
+      "source_event_digest": "sha256:d63930a4da25e0e148185395a1c8e9f4860a6625f499fe2ab9f7b45b41231594",
+      "source_event_ref": "event:quote_acme:reference-resolved:03",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "provider_digest": "sha256:a04a1e9b7aa3d422daf5e122614d0f65e5db6ae9b3c9471492f54f88d4ec5c62",
+      "provider_ref": "claim:legal.customer_notice_required@v3",
+      "relation": "REQUIRES_CLAIM",
+      "slot_id": "notice_required",
+      "source_event_digest": "sha256:98eb71a8cb46a3217b41b5be96d6b5f9a6c06fda781a716530c077c762a04ef9",
+      "source_event_ref": "event:quote_acme:reference-resolved:04",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "provider_digest": "sha256:7e69bcaf05264ba6a43c611a6f5765eff3add3de51c402930dd3afb1896835bb",
+      "provider_ref": "policy:finance.price_band@v7",
+      "relation": "REQUIRES_POLICY",
+      "slot_id": "price_band",
+      "source_event_digest": "sha256:0c32e268b0e2e7b6869db33dee6674898c0ea014ac79baadc8fa5e8e32e753d3",
+      "source_event_ref": "event:quote_acme:reference-resolved:05",
+      "strength": "REVIEW",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "provider_digest": "sha256:594513554f861edb2fe5d959d0200b3461e29d9a35968966acf2fe762be748ad",
+      "provider_ref": "policy:finance.currency@v1",
+      "relation": "REQUIRES_POLICY",
+      "slot_id": "currency",
+      "source_event_digest": "sha256:e481d7b70fd80f7df90070e1ca91e3c973505b655ab15450ad1f4337b2f24b99",
+      "source_event_ref": "event:quote_acme:reference-resolved:06",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "provider_digest": "sha256:68f43f6474a5d21351ec3c1cbde570f7dc987ab6fa53ddb4ba63455ae2120e7d",
+      "provider_ref": "claim:gtm.partner_terms@v2",
+      "relation": "REQUIRES_CLAIM",
+      "slot_id": "partner_terms",
+      "source_event_digest": "sha256:e93c2c7e0c8321782b8a20ca44ea1908ef251eef467488c01340b72161b795c7",
+      "source_event_ref": "event:quote_acme:reference-resolved:07",
+      "strength": "REVIEW",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "consumer_ref": "work:quote_acme@v1",
+      "provider_digest": "sha256:faa5ea2df973806222ac217660ad7f1db828f0c0a57dcbcc9e44d3da74142064",
+      "provider_ref": "skill:enterprise-quote-compose@1.0",
+      "relation": "REQUIRES_SKILL",
+      "slot_id": "quote_compose_skill",
+      "source_event_digest": "sha256:083f44b3f9f9d2334fa937acce5042b33abcd169ceb38fcf12e256798ed40a3b",
+      "source_event_ref": "event:quote_acme:reference-resolved:08",
+      "strength": "HARD",
+      "valid_from": "2026-08-15T00:00:00Z",
+      "valid_to": null
+    }
+  ],
+  "id": "runtime-dependency:quote_acme",
+  "issuer_id": "system:workspace-runtime-observer",
+  "provenance_refs": [
+    "work-trace:quote_acme@v1",
+    "trace-coverage:quote_acme@v1"
+  ],
+  "revision_lock": {
+    "authorization": "authz:workspace@r1",
+    "graph": "graph:workspace@seed-r1",
+    "policy": "policy:workspace@r1",
+    "runtime_registry": "runtime:workspace@r1",
+    "skill_registry": "skills:registry@r1"
+  },
+  "task_ref": "task:quote_acme",
+  "trace_ref": "work-trace:quote_acme@v1",
+  "version": "v1"
+}

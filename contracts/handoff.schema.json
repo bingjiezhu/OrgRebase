@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/contracts/handoff.schema.json",
+  "title": "OrgRebase Structured Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "schema_version", "task_id", "change_set_id", "graph_revision", "workflow_run_id", "run_nonce", "orchestration_plan_digest", "delegation_task_digest", "input_refs", "from_agent", "to_agent", "payload", "candidate_only", "digest"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "schema_version": {"const": "orgrebase.handoff.v1"},
+    "task_id": {"type": "string", "minLength": 1},
+    "change_set_id": {"type": "string", "minLength": 1},
+    "graph_revision": {"type": "string", "minLength": 1},
+    "workflow_run_id": {"type": "string", "minLength": 1},
+    "run_nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "orchestration_plan_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "delegation_task_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "input_refs": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    },
+    "from_agent": {"type": "string", "minLength": 1},
+    "to_agent": {"const": "orgrebase-control-plane"},
+    "payload": {"type": "object"},
+    "candidate_only": {"const": true},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

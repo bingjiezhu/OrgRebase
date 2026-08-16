@@ -1,0 +1,21 @@
+{
+  "candidate_ref": "sha256:2cc3701782830112bd12efa967858e6210b0a7a1c416514114b5c3b1b9ec923b",
+  "checks": {
+    "authority_domain": true,
+    "fresh": true,
+    "purpose": true,
+    "recipient": true,
+    "schema": true,
+    "scope": true,
+    "slot_allowed": true,
+    "unique_slot": true
+  },
+  "decided_at": "2026-08-15T00:00:00Z",
+  "digest": "sha256:f7a3781621190bc848cb329eac7f8367f13af2cfee9b797aee2bbbb12fafd112",
+  "id": "admission:quote_acme:price_band@v1",
+  "policy_revision": "policy:workspace@r1",
+  "reason_codes": [
+    "ALL_CHECKS_PASS"
+  ],
+  "verdict": "ADMIT"
+}

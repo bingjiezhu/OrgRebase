@@ -1,0 +1,54 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-domain-read-request.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "domain_id": {
+      "title": "Domain Id",
+      "type": "string"
+    },
+    "projection_ref": {
+      "title": "Projection Ref",
+      "type": "string"
+    },
+    "purpose": {
+      "title": "Purpose",
+      "type": "string"
+    },
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "slot_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Slot Ids",
+      "type": "array"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "request_id",
+    "task_ref",
+    "actor_id",
+    "domain_id",
+    "slot_ids",
+    "purpose",
+    "projection_ref"
+  ],
+  "title": "DomainReadRequest",
+  "type": "object"
+}

@@ -1,0 +1,44 @@
+{
+  "change_set_digest": "sha256:ca91371ceec772fc4e582cf5180fb0a76040c3e090aa86956bf554bc90e1590d",
+  "claim_boundary": "Minimal only for the exact ChangeSet, revision lock, target scope, dependency manifests, and deterministic transfer rules committed by this certificate.",
+  "digest": "sha256:ebba55a7eb687d2b8671dabbfd026dadf49434e002562fa66b3e948e667adaac",
+  "effects": [
+    {
+      "disposition": "REQUALIFY",
+      "impact_certificate_digest": "sha256:7cecd17d44f7385628227e3b85331f8c4984bd1b80adfff08693520416b103f7",
+      "impact_result_digest": "sha256:e0e06aa2510c7924ea778469c4090eca8e6b198d3d532fc2bf438b41c66fa8d0",
+      "target_id": "skill:enterprise-launch-readiness"
+    },
+    {
+      "disposition": "PRESERVE_WITHIN_BOUNDARY",
+      "impact_certificate_digest": "sha256:066d483a96dacfad23446a4b39f04c9cdf2f3ed47c5e912e88d71098207ae3eb",
+      "impact_result_digest": "sha256:d49e6031191f9c1fba15902fca75388242c25ae8d133bf738fe4e5d76f76a4a7",
+      "target_id": "work:finance_analysis_d"
+    },
+    {
+      "disposition": "HOLD_FOR_REVIEW",
+      "impact_certificate_digest": "sha256:e15157efb9bc518a8479b599d98db749bd8604562e4f7b407a0ada93ed4ae314",
+      "impact_result_digest": "sha256:95714bfb785912ea5dabf614219f74273983a4f4f15f9faa56543310b3666379",
+      "target_id": "work:partner_brief_e"
+    },
+    {
+      "disposition": "REBUILD",
+      "impact_certificate_digest": "sha256:db7359ea0584253660c55a8c061ad5683bdca66f054a4aa8381e71cc74f1088b",
+      "impact_result_digest": "sha256:296223225f7f639845ef61f19ef733d5dfb03a6809dfeb51d956ccea791ee41f",
+      "target_id": "work:quote_acme"
+    }
+  ],
+  "evidence_class": "LOCAL_DETERMINISTIC",
+  "id": "minimal-rebase-certificate:workspace-launch-date@r1",
+  "impact_certificate_set_digest": "sha256:faddfaa4a564e3aa1f7a4abaf5c2a0e3ffdcee9726a64902b43627a240680726",
+  "minimality_invariants": [
+    "every AFFECTED_HARD target is REBUILD",
+    "no non-AFFECTED_HARD target is REBUILD",
+    "UNKNOWN is HOLD_FOR_REVIEW and never PRESERVE",
+    "every effect binds one independently verifiable impact certificate"
+  ],
+  "preview_digest": "sha256:fe419b8ed3b3b38474abf1b0531bdaeef7c7ce084ec52f13092c02079118e7da",
+  "revision_lock_digest": "sha256:d37ae4b100c55f57bcbdd7a56b0216c9b81afbc4dfb6eaf96fd9814ad80a62c6",
+  "schema_version": "orgrebase.minimal-rebase-certificate.v1",
+  "verifier_version": "orgrebase.minimal-rebase-verifier@1.0.0"
+}

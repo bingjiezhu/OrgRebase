@@ -1,0 +1,143 @@
+{
+  "$defs": {
+    "CoverageBasis": {
+      "enum": [
+        "RUNTIME_OBSERVED",
+        "OWNER_DECLARED_COMPLETE",
+        "CONTRACT_DECLARED",
+        "IMPORTED_VERIFIED",
+        "AGENT_INFERRED",
+        "UNKNOWN_COVERAGE"
+      ],
+      "title": "CoverageBasis",
+      "type": "string"
+    },
+    "DependencyRequirementSlot": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_basis": {
+          "$ref": "#/$defs/CoverageBasis"
+        },
+        "edge_id": {
+          "title": "Edge Id",
+          "type": "string"
+        },
+        "provenance_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Provenance Refs",
+          "type": "array"
+        },
+        "relation": {
+          "title": "Relation",
+          "type": "string"
+        },
+        "slot_id": {
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "strength": {
+          "$ref": "#/$defs/DependencyStrength"
+        }
+      },
+      "required": [
+        "slot_id",
+        "edge_id",
+        "source_id",
+        "relation",
+        "strength",
+        "coverage_basis",
+        "provenance_refs"
+      ],
+      "title": "DependencyRequirementSlot",
+      "type": "object"
+    },
+    "DependencyStrength": {
+      "enum": [
+        "HARD",
+        "REVIEW",
+        "INFORMATIONAL"
+      ],
+      "title": "DependencyStrength",
+      "type": "string"
+    },
+    "ManifestCompleteness": {
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "UNKNOWN"
+      ],
+      "title": "ManifestCompleteness",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/dependency-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_domain": {
+      "title": "Authority Domain",
+      "type": "string"
+    },
+    "completeness": {
+      "$ref": "#/$defs/ManifestCompleteness"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "issuer_id": {
+      "title": "Issuer Id",
+      "type": "string"
+    },
+    "provenance_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Provenance Refs",
+      "type": "array"
+    },
+    "requirement_slots": {
+      "items": {
+        "$ref": "#/$defs/DependencyRequirementSlot"
+      },
+      "title": "Requirement Slots",
+      "type": "array"
+    },
+    "target_id": {
+      "title": "Target Id",
+      "type": "string"
+    },
+    "target_version": {
+      "title": "Target Version",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "target_id",
+    "target_version",
+    "issuer_id",
+    "authority_domain",
+    "completeness",
+    "requirement_slots",
+    "provenance_refs"
+  ],
+  "title": "DependencyManifest",
+  "type": "object"
+}

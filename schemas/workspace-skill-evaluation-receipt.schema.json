@@ -1,0 +1,166 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "SkillCaseResult": {
+      "additionalProperties": false,
+      "properties": {
+        "baseline_output_digest": {
+          "title": "Baseline Output Digest",
+          "type": "string"
+        },
+        "candidate_output_digest": {
+          "title": "Candidate Output Digest",
+          "type": "string"
+        },
+        "case_ref": {
+          "title": "Case Ref",
+          "type": "string"
+        },
+        "partition": {
+          "title": "Partition",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "regressed_baseline_success": {
+          "title": "Regressed Baseline Success",
+          "type": "boolean"
+        },
+        "repaired_baseline_failure": {
+          "title": "Repaired Baseline Failure",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "case_ref",
+        "partition",
+        "baseline_output_digest",
+        "candidate_output_digest",
+        "passed",
+        "repaired_baseline_failure",
+        "regressed_baseline_success",
+        "reason_codes"
+      ],
+      "title": "SkillCaseResult",
+      "type": "object"
+    },
+    "SkillGateResult": {
+      "additionalProperties": false,
+      "properties": {
+        "gate_id": {
+          "title": "Gate Id",
+          "type": "string"
+        },
+        "observed": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "reason_code": {
+          "title": "Reason Code",
+          "type": "string"
+        },
+        "threshold": {
+          "$ref": "#/$defs/JsonValue"
+        }
+      },
+      "required": [
+        "gate_id",
+        "passed",
+        "observed",
+        "threshold",
+        "reason_code"
+      ],
+      "title": "SkillGateResult",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-skill-evaluation-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_digest": {
+      "title": "Candidate Digest",
+      "type": "string"
+    },
+    "candidate_program_digest": {
+      "title": "Candidate Program Digest",
+      "type": "string"
+    },
+    "candidate_ref": {
+      "title": "Candidate Ref",
+      "type": "string"
+    },
+    "case_results": {
+      "items": {
+        "$ref": "#/$defs/SkillCaseResult"
+      },
+      "title": "Case Results",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evaluated_at": {
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "evaluation_suite_digest": {
+      "title": "Evaluation Suite Digest",
+      "type": "string"
+    },
+    "gate_results": {
+      "items": {
+        "$ref": "#/$defs/SkillGateResult"
+      },
+      "title": "Gate Results",
+      "type": "array"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "premise_lock": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Premise Lock",
+      "type": "object"
+    },
+    "verdict": {
+      "enum": [
+        "CANARY",
+        "QUARANTINED"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "candidate_ref",
+    "candidate_digest",
+    "candidate_program_digest",
+    "evaluation_suite_digest",
+    "case_results",
+    "gate_results",
+    "verdict",
+    "premise_lock",
+    "evaluated_at"
+  ],
+  "title": "SkillEvaluationReceipt",
+  "type": "object"
+}

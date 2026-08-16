@@ -1,0 +1,13 @@
+{
+  "evidence_class": "NOT_RUN",
+  "missing_prerequisites": [
+    "Workspace Kubernetes Team/Worker export",
+    "Workspace Matrix membership/event export",
+    "Workspace candidate artifact bytes and digests",
+    "Workspace provider request IDs"
+  ],
+  "schema_version": "orgrebase.workspace-agentteams-live.v1",
+  "source_lock_digest": "sha256:125c4ef5108627026e23435020973d9a0dbc785f2bfd6d4d428ba4313d29c1e0",
+  "status": "NOT_RUN",
+  "target_writes": 0
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/contracts/skill-action.schema.json",
+  "title": "Enterprise Launch Readiness action candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "preview_digest", "object_id", "action", "reason_code", "adapter_version", "contract_digest", "candidate_only", "evidence_class", "digest"],
+  "properties": {
+    "schema_version": {"const": "orgrebase.skill-action.v1"},
+    "preview_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "object_id": {"type": "string", "minLength": 1},
+    "action": {"enum": ["REBASE", "REVIEW", "NOTIFY", "KEEP_CURRENT", "ESCALATE", "DENY", "ABSTAIN"]},
+    "reason_code": {"type": "string", "minLength": 1},
+    "adapter_version": {"const": "enterprise-launch-readiness@1.3"},
+    "contract_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "candidate_only": {"const": true},
+    "evidence_class": {"const": "LOCAL_DETERMINISTIC"},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

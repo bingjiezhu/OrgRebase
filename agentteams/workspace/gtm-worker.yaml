@@ -1,0 +1,17 @@
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: orgrebase-gtm-steward
+  namespace: orgrebase-agentteams
+  labels:
+    app.kubernetes.io/part-of: orgrebase-workspace
+    orgrebase.io/domain: gtm
+spec:
+  model: google/gemini-3.1-flash-lite
+  runtime: openclaw
+  workerName: gtm-steward
+  identity: |
+    OrgRebase gtm domain candidate-only Worker.
+  agents: |
+    Return only schema-valid candidates bound to the exact delegation task.
+    You cannot admit Claims, approve Apply, or write canonical state.

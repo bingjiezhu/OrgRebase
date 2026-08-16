@@ -1,0 +1,64 @@
+{
+  "digest": "sha256:f2bb805265843fedc3ecc63c457b432db5929ed8e8104ef1937dcced284749c3",
+  "id": "agent-candidate-ingestion:ef62692a8907@1",
+  "schema_version": "orgrebase.agent-candidate-ingestion.v1",
+  "live_receipt_digest": "sha256:c4e2a622a3e8cff2995585e78eb33b1c2a06e42ddc99939563751a08a5d930bc",
+  "run_id": "run:orgrebase:live:1786777886735:ef62692a8907",
+  "nonce": "173014a9e8854d8fee69a16b2a5858a3bd1ce4a4848919aaad978767b78cc8e4",
+  "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+  "preview_digest": "sha256:3f63d00ac12f4fa000ca90e26ce63824877b41f96c4c97705e609c5d94d18741",
+  "orchestration_plan_digest": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d",
+  "decisions": [
+    {
+      "artifact_ref": "result:gtm-steward",
+      "artifact_digest": "sha256:9a43388c786b2e4c5fe7f47b262a2d858b079cbe0c7c678193cfd920766ace67",
+      "producer_worker": "gtm-steward",
+      "decision": "ADVISORY_ACCEPTED",
+      "reason_codes": [
+        "EXACTLY_BOUND_ADVISORY"
+      ],
+      "admitted_effects": []
+    },
+    {
+      "artifact_ref": "result:legal-steward",
+      "artifact_digest": "sha256:de8617138e70270030e6ee784f9f89763b2ef0f9fef318dc405aafae3fd7005d",
+      "producer_worker": "legal-steward",
+      "decision": "ADVISORY_ACCEPTED",
+      "reason_codes": [
+        "EXACTLY_BOUND_ADVISORY"
+      ],
+      "admitted_effects": []
+    },
+    {
+      "artifact_ref": "result:product-steward",
+      "artifact_digest": "sha256:c537a6d736afe3fe7998f8506687394160089aee92230281c7f546bc2b35eea6",
+      "producer_worker": "product-steward",
+      "decision": "ADVISORY_ACCEPTED",
+      "reason_codes": [
+        "EXACTLY_BOUND_ADVISORY"
+      ],
+      "admitted_effects": []
+    },
+    {
+      "artifact_ref": "result:skill-curator",
+      "artifact_digest": "sha256:6d455c8071f1f0cccc6f336165aab4d587627a3fcefec94a22d3330784fd6839",
+      "producer_worker": "skill-curator",
+      "decision": "ADVISORY_ACCEPTED",
+      "reason_codes": [
+        "EXACTLY_BOUND_ADVISORY"
+      ],
+      "admitted_effects": []
+    }
+  ],
+  "admitted_candidate_digests": [
+    "sha256:9a43388c786b2e4c5fe7f47b262a2d858b079cbe0c7c678193cfd920766ace67",
+    "sha256:de8617138e70270030e6ee784f9f89763b2ef0f9fef318dc405aafae3fd7005d",
+    "sha256:c537a6d736afe3fe7998f8506687394160089aee92230281c7f546bc2b35eea6",
+    "sha256:6d455c8071f1f0cccc6f336165aab4d587627a3fcefec94a22d3330784fd6839"
+  ],
+  "rejected_candidate_digests": [],
+  "target_writes": 0,
+  "source_evidence_class": "LIVE_AGENTTEAMS",
+  "verifier_evidence_class": "LOCAL_DETERMINISTIC",
+  "claim_boundary": "Candidates may contribute bound advice only. This receipt grants no approval, canonical-state, or Apply authority."
+}

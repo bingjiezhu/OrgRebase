@@ -1,0 +1,253 @@
+{
+  "schema_version": "orgrebase.agentteams-live-evidence.v2",
+  "status": "PASS",
+  "evidence_class": "LIVE_AGENTTEAMS",
+  "source": "direct Kubernetes API + Matrix server export + byte-addressed artifacts + provider export",
+  "evidence": {
+    "run_id": "run:orgrebase:live:1786777886735:ef62692a8907",
+    "nonce": "173014a9e8854d8fee69a16b2a5858a3bd1ce4a4848919aaad978767b78cc8e4",
+    "agentteams": {
+      "version": "v1.2.2",
+      "source_commit": "849182af8e017168a5a200a87b1062142caf462d"
+    },
+    "kubernetes_context": "kind-orgrebase-agentteams",
+    "kubernetes": {
+      "team": {
+        "name": "orgrebase-change-team",
+        "uid": "22a329d8-2420-4760-be7b-be11cf86a147",
+        "generation": 1,
+        "resource_version": "17942",
+        "room_id": "!8aEgXrbBOKCV7UqFaB:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local"
+      },
+      "workers": [
+        {
+          "worker_name": "change-coordinator",
+          "resource_name": "orgrebase-change-coordinator",
+          "uid": "803a8b18-4ec7-47c3-b012-57860f51452c",
+          "generation": 2,
+          "resource_version": "17822",
+          "spec_hash": "bccfd8669c29e7c5",
+          "matrix_user_id": "@change-coordinator:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local"
+        },
+        {
+          "worker_name": "gtm-steward",
+          "resource_name": "orgrebase-gtm-steward",
+          "uid": "bd7aa4aa-88a7-4f0d-ac7a-44b9273b22ce",
+          "generation": 2,
+          "resource_version": "17857",
+          "spec_hash": "4f6f46231bfc489a",
+          "matrix_user_id": "@gtm-steward:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local"
+        },
+        {
+          "worker_name": "legal-steward",
+          "resource_name": "orgrebase-legal-steward",
+          "uid": "ecfe4473-40a5-4c97-92b7-b78f895d5b19",
+          "generation": 2,
+          "resource_version": "17846",
+          "spec_hash": "d87bcdc3c7ef1329",
+          "matrix_user_id": "@legal-steward:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local"
+        },
+        {
+          "worker_name": "product-steward",
+          "resource_name": "orgrebase-product-steward",
+          "uid": "c93cd70c-4fd9-4c82-9a9d-1b77b294135f",
+          "generation": 2,
+          "resource_version": "17833",
+          "spec_hash": "d1b38b54695d3a01",
+          "matrix_user_id": "@product-steward:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local"
+        },
+        {
+          "worker_name": "skill-curator",
+          "resource_name": "orgrebase-skill-curator",
+          "uid": "f8f68c77-d07c-441c-b4cf-e22c19f4d78d",
+          "generation": 2,
+          "resource_version": "17874",
+          "spec_hash": "94b46162c97d004e",
+          "matrix_user_id": "@skill-curator:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local"
+        }
+      ],
+      "pods": [
+        {
+          "name": "agentteams-worker-orgrebase-change-coordinator",
+          "uid": "d635ae90-2f62-4ca6-a8ce-b41ad6808162",
+          "worker_resource_name": "orgrebase-change-coordinator",
+          "resource_version": "17948",
+          "container_name": "worker",
+          "image": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker:v1.2.2",
+          "image_id": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker@sha256:301f9e311654eca203246fa666d63a126244ea8793f700603d2a6d37b7ffea75"
+        },
+        {
+          "name": "agentteams-worker-orgrebase-gtm-steward",
+          "uid": "2eb9ba5c-0dbd-4e6f-ad7c-7d6f3f0a6add",
+          "worker_resource_name": "orgrebase-gtm-steward",
+          "resource_version": "17990",
+          "container_name": "worker",
+          "image": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker:v1.2.2",
+          "image_id": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker@sha256:301f9e311654eca203246fa666d63a126244ea8793f700603d2a6d37b7ffea75"
+        },
+        {
+          "name": "agentteams-worker-orgrebase-legal-steward",
+          "uid": "b72aae72-1867-43e3-a4aa-d9590534569f",
+          "worker_resource_name": "orgrebase-legal-steward",
+          "resource_version": "17975",
+          "container_name": "worker",
+          "image": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker:v1.2.2",
+          "image_id": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker@sha256:301f9e311654eca203246fa666d63a126244ea8793f700603d2a6d37b7ffea75"
+        },
+        {
+          "name": "agentteams-worker-orgrebase-product-steward",
+          "uid": "13b7f422-1351-42fd-b319-a22328efbbc2",
+          "worker_resource_name": "orgrebase-product-steward",
+          "resource_version": "17931",
+          "container_name": "worker",
+          "image": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker:v1.2.2",
+          "image_id": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker@sha256:301f9e311654eca203246fa666d63a126244ea8793f700603d2a6d37b7ffea75"
+        },
+        {
+          "name": "agentteams-worker-orgrebase-skill-curator",
+          "uid": "491931c4-e724-4514-bb80-ed438602d6ff",
+          "worker_resource_name": "orgrebase-skill-curator",
+          "resource_version": "17999",
+          "container_name": "worker",
+          "image": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker:v1.2.2",
+          "image_id": "higress-registry.cn-hangzhou.cr.aliyuncs.com/agentteams/agentteams-worker@sha256:301f9e311654eca203246fa666d63a126244ea8793f700603d2a6d37b7ffea75"
+        }
+      ]
+    },
+    "matrix": {
+      "room_id": "!8aEgXrbBOKCV7UqFaB:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local",
+      "leader_delegation_event_id": "$G8Pk8EL2-QbmES1iXEn3b5yMZ92s5teaiPYuAQ3e0I0",
+      "orchestration_plan_digest": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d",
+      "candidate_event_ids": [
+        "$9xGV0cRW2ptcMuBNNc4_QGCls8ZsFcpO0Nqxf6kCZ_4",
+        "$D-Bo6Zkd8jgFN1ch_wfgYk0ZmJO3qUcE1MNETREj3WA",
+        "$gavdLSOCseo6GxfSAdfZuXz3iyGW09K8QYtVgHm2po8",
+        "$i6WRDP6Q4CHkR5N6WTNg1LKVm74jb0InY-fbSPzjvCs"
+      ],
+      "candidate_senders": [
+        "@gtm-steward:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local",
+        "@legal-steward:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local",
+        "@product-steward:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local",
+        "@skill-curator:orgrebase-agentteams-tuwunel.orgrebase-agentteams.svc.cluster.local"
+      ],
+      "candidate_task_bindings": [
+        {
+          "worker_name": "gtm-steward",
+          "delegation_task_digest": "sha256:f2cc9b887bbbab06b324bee649d04cf5b53b15d2a6820ebb097b7b2acabe7cc8",
+          "input_refs": [
+            "sha256:3f63d00ac12f4fa000ca90e26ce63824877b41f96c4c97705e609c5d94d18741",
+            "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+            "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8"
+          ]
+        },
+        {
+          "worker_name": "legal-steward",
+          "delegation_task_digest": "sha256:d1e16f5437572d9844cecfb3737639e34dffbf04ebdba55052ffe16c62ad8893",
+          "input_refs": [
+            "sha256:3f63d00ac12f4fa000ca90e26ce63824877b41f96c4c97705e609c5d94d18741",
+            "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+            "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8"
+          ]
+        },
+        {
+          "worker_name": "product-steward",
+          "delegation_task_digest": "sha256:0740714ed049347f70edf79cbd4973ebf3c78651aee1e28d40a493fb2ffd77fe",
+          "input_refs": [
+            "sha256:3f63d00ac12f4fa000ca90e26ce63824877b41f96c4c97705e609c5d94d18741",
+            "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+            "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8"
+          ]
+        },
+        {
+          "worker_name": "skill-curator",
+          "delegation_task_digest": "sha256:2cf5d68f53ea0200fa64e304506833a3ab80ce8db89145a351c9ad6e708f9c9d",
+          "input_refs": [
+            "sha256:3f63d00ac12f4fa000ca90e26ce63824877b41f96c4c97705e609c5d94d18741",
+            "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+            "sha256:fddfd7f7e515f03ffd390f99eaf4f225a28414e5188a2d02082469541b08e5f8"
+          ]
+        }
+      ]
+    },
+    "artifacts": {
+      "candidate_artifacts": [
+        {
+          "ref": "result:gtm-steward",
+          "digest": "sha256:9a43388c786b2e4c5fe7f47b262a2d858b079cbe0c7c678193cfd920766ace67"
+        },
+        {
+          "ref": "result:legal-steward",
+          "digest": "sha256:de8617138e70270030e6ee784f9f89763b2ef0f9fef318dc405aafae3fd7005d"
+        },
+        {
+          "ref": "result:product-steward",
+          "digest": "sha256:c537a6d736afe3fe7998f8506687394160089aee92230281c7f546bc2b35eea6"
+        },
+        {
+          "ref": "result:skill-curator",
+          "digest": "sha256:6d455c8071f1f0cccc6f336165aab4d587627a3fcefec94a22d3330784fd6839"
+        }
+      ],
+      "skill": {
+        "name": "enterprise-launch-readiness",
+        "digest": "sha256:e2d35aff116edfb3bd900eab4f67204edb9c18d8245c520b304bf47e185d53d7",
+        "assigned_worker": "skill-curator",
+        "loaded_event_id": "$xGnN6h3LO2Srpvq3nFNI2Uj-IOvaJRSVCadJ85ucnXE"
+      }
+    },
+    "model_calls": {
+      "successful_calls": 4,
+      "successful_workers": [
+        "gtm-steward",
+        "legal-steward",
+        "product-steward",
+        "skill-curator"
+      ],
+      "provider_request_ids": [
+        "IxOAatiFPObn6tkP18P0uAk",
+        "IxOAav_uO-7AodAPvZCF4Ak",
+        "JBOAapUB5smh0A_J8IX4Dw",
+        "JBOAatvQApHz998PnYyYyQI"
+      ],
+      "models": [
+        "google/gemini-3.1-flash-lite"
+      ],
+      "candidate_bindings": [
+        {
+          "worker_name": "gtm-steward",
+          "artifact_ref": "result:gtm-steward",
+          "artifact_digest": "sha256:9a43388c786b2e4c5fe7f47b262a2d858b079cbe0c7c678193cfd920766ace67",
+          "provider_request_id": "JBOAapUB5smh0A_J8IX4Dw"
+        },
+        {
+          "worker_name": "legal-steward",
+          "artifact_ref": "result:legal-steward",
+          "artifact_digest": "sha256:de8617138e70270030e6ee784f9f89763b2ef0f9fef318dc405aafae3fd7005d",
+          "provider_request_id": "JBOAatvQApHz998PnYyYyQI"
+        },
+        {
+          "worker_name": "product-steward",
+          "artifact_ref": "result:product-steward",
+          "artifact_digest": "sha256:c537a6d736afe3fe7998f8506687394160089aee92230281c7f546bc2b35eea6",
+          "provider_request_id": "IxOAav_uO-7AodAPvZCF4Ak"
+        },
+        {
+          "worker_name": "skill-curator",
+          "artifact_ref": "result:skill-curator",
+          "artifact_digest": "sha256:6d455c8071f1f0cccc6f336165aab4d587627a3fcefec94a22d3330784fd6839",
+          "provider_request_id": "IxOAatiFPObn6tkP18P0uAk"
+        }
+      ]
+    },
+    "source_digests": {
+      "run_envelope": "sha256:83d14212a502bf0944ebc7d72e0c02a51e85c089ea23e1b3cd7056a2210b05a7",
+      "matrix_export": "sha256:0fc80a71382806099358728224c9fcc197fbb1084c504adf695be0f1e7232a13",
+      "artifact_manifest": "sha256:9f2a647ebe12d166397c848ae9fb5d6492d0fe06dc61210fa456dd3d443605bf",
+      "model_call_export": "sha256:fdcddb92014bfbd747e8943888ececcfd5c5cad5decd59cdaec7f568785a7b34",
+      "kubernetes_snapshot": "sha256:94bf280dedc706c11b48fa60ee582a341a95551bae7dbb97fb062f50dcbe16e5"
+    },
+    "source_bundle_digest": "sha256:fd9d4fdd5e24f3819e78ade2c2f5547b94fa2418c620bf5813362d9f58557a62"
+  },
+  "receipt_digest": "sha256:c4e2a622a3e8cff2995585e78eb33b1c2a06e42ddc99939563751a08a5d930bc",
+  "claim_boundary": "Proves one observed AgentTeams execution and its evidence bindings; it does not prove production accuracy, ROI, or long-term reliability."
+}

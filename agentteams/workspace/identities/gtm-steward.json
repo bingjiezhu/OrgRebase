@@ -1,0 +1,1 @@
+{"worker_id":"gtm-steward","domain_id":"gtm","candidate_only":true,"can_write_canonical_state":false,"allowed_output_schemas":["orgrebase.domain-candidate-bundle.v1","orgrebase.claim-candidate.v1"]}

@@ -1,0 +1,81 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-workspace-rebase-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "base_rebase_receipt_digest": {
+      "title": "Base Rebase Receipt Digest",
+      "type": "string"
+    },
+    "base_rebase_receipt_ref": {
+      "title": "Base Rebase Receipt Ref",
+      "type": "string"
+    },
+    "committed_at": {
+      "title": "Committed At",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "graph_pointer_ref": {
+      "title": "Graph Pointer Ref",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "status": {
+      "const": "COMPLETED",
+      "default": "COMPLETED",
+      "title": "Status",
+      "type": "string"
+    },
+    "successor_manifest_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Successor Manifest Refs",
+      "type": "array"
+    },
+    "successor_object_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Successor Object Refs",
+      "type": "array"
+    },
+    "successor_snapshot_digest": {
+      "title": "Successor Snapshot Digest",
+      "type": "string"
+    },
+    "successor_snapshot_ref": {
+      "title": "Successor Snapshot Ref",
+      "type": "string"
+    },
+    "successor_trace_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Successor Trace Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "base_rebase_receipt_ref",
+    "base_rebase_receipt_digest",
+    "successor_object_refs",
+    "successor_trace_refs",
+    "successor_manifest_refs",
+    "successor_snapshot_ref",
+    "successor_snapshot_digest",
+    "graph_pointer_ref",
+    "committed_at"
+  ],
+  "title": "WorkspaceRebaseReceipt",
+  "type": "object"
+}

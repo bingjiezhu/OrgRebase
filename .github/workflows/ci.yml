@@ -135,7 +135,7 @@ jobs:
             orgrebase/dist/*.tar.gz
           sbom-path: orgrebase/dist/sbom.cdx.json
       - name: Retain candidate artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: orgrebase-candidate-${{ github.sha }}
           path: orgrebase/dist/

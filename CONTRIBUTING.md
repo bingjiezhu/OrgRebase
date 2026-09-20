@@ -21,3 +21,7 @@ Open an issue with the problem, the smallest interface change, and the evidence 
 will prove it. Reuse and integration feedback uses the Reuse template. See
 [COMMUNITY.md](COMMUNITY.md). Security reports use [SECURITY.md](SECURITY.md), not a
 public issue.
+
+Dependabot is enabled. Do not merge a pip PR unless `uv.lock` is updated in the same
+change. Do not merge a GitHub Actions PR unless both `.github/workflows/` and
+`orgrebase/.github/workflows/` stay identical.

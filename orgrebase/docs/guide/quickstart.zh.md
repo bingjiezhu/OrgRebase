@@ -4,9 +4,9 @@
 
 ## 取得匹配版本
 
-使用与文档匹配的源码版本；若站点提供源码下载，先核对其SHA-256。产品源码目录包含`pyproject.toml`、`uv.lock`和`scripts/`。原先单独克隆产品仓库不包含OAC；若 GitHub 按工作区发布，并列的`orgrebase/`和`oac-spec/`一次 clone 即可。本节无需OAC。
+使用与文档匹配的源码版本；若站点提供源码下载，先核对其SHA-256。产品源码目录包含`pyproject.toml`、`uv.lock`和`scripts/`。原先单独克隆产品仓库不包含OAC；现状公开仓库是工作区根，并列的`orgrebase/`和`oac-spec/`一次 clone 即可，产品目录就是`orgrebase/`。本节无需OAC。
 
-进入上述产品源码目录后执行。需要Python 3.12.13与uv；首次依赖安装需要网络或完整缓存。
+进入`orgrebase/`后执行。需要Python 3.12.13与uv；首次依赖安装需要网络或完整缓存。
 
 ```bash
 uv sync --locked --all-extras

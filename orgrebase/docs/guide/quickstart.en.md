@@ -4,9 +4,9 @@ Verify installation, pricing and the approval path with one public historical tr
 
 ## Obtain a matching version
 
-Use the source revision matching this documentation. If the site provides a source download, verify its SHA-256. The product source directory contains `pyproject.toml`, `uv.lock` and `scripts/`. Previously, cloning the product alone did not supply OAC. A workspace GitHub publication includes sibling `orgrebase/` and `oac-spec/`. This quickstart does not need OAC.
+Use the source revision matching this documentation. If the site provides a source download, verify its SHA-256. The product source directory contains `pyproject.toml`, `uv.lock` and `scripts/`. Previously, cloning the product alone did not supply OAC. Now the public repository is a workspace root with sibling `orgrebase/` and `oac-spec/`; the product directory is `orgrebase/`. This quickstart does not need OAC.
 
-Run from that product source directory with Python 3.12.13 and uv. Initial dependency installation needs network access or a complete cache.
+Run from `orgrebase/` with Python 3.12.13 and uv. Initial dependency installation needs network access or a complete cache.
 
 ```bash
 uv sync --locked --all-extras

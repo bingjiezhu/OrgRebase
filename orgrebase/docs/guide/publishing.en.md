@@ -2,7 +2,13 @@
 
 ## Product source directory
 
-The [OrgRebase product repository](https://github.com/bingjiezhu/OrgRebase) maintains source, contracts, tests, documentation and licenses. Its root contains `pyproject.toml`, `src/`, `docs/`, `documentation/` and `LICENSE`; the corresponding directory in a complete source distribution is named `orgrebase/`. Deployment configuration, customer credentials and runtime databases are managed separately.
+The [OrgRebase product repository](https://github.com/bingjiezhu/OrgRebase) maintains source, contracts, tests, documentation and licenses.
+
+Previously: the GitHub product root *was* the product source root, containing `pyproject.toml`, `src/`, `docs/`, `documentation/` and `LICENSE`; a complete source distribution named that directory `orgrebase/`.
+
+Now: the public repository is a workspace root. Those product files live under `orgrebase/`, next to sibling `oac-spec/`. After `git clone`, `cd orgrebase/` before `uv sync`, `make check-core`, or the documentation build. Deployment configuration, customer credentials and runtime databases remain separate.
+
+Why: one clone supplies matching OAC without nesting it inside the product package or changing its Apache-2.0 / CC BY 4.0 terms.
 
 OAC is an independent dependency. Previously: the GitHub product root did not include OAC; a complete source distribution could supply sibling `orgrebase/` and `oac-spec/` trees, and a product-only checkout needed a matching revision at `../oac-spec` or `ORGREBASE_OAC_ROOT`. Now: a workspace publication puts both trees at the clone root, so default `../oac-spec` works. Why: they ship together without nesting OAC inside the product package or changing its Apache-2.0 / CC BY 4.0 terms. Full CI on the product-root layout binds `OAC_REPOSITORY` and a 40-character `OAC_REVISION`; a workspace layout should run checks from `orgrebase/` and use the in-repo `oac-spec/`. Core CI does not require OAC.
 
@@ -15,7 +21,7 @@ OAC is an independent dependency. Previously: the GitHub product root did not in
 
 ## Build the bilingual site
 
-Run from the product root:
+Previously: run from the product root (the directory that contains `pyproject.toml`). Now: that directory is `orgrebase/` in a workspace clone.
 
 ```bash
 uv sync --project documentation --locked --python 3.12.13

@@ -21,7 +21,7 @@
 
 ## 本地构建与预览
 
-在产品仓库根执行。文档工具链独立锁定在`documentation/`，不属于产品`uv sync --all-extras`，
+原先：在产品仓库根（含`pyproject.toml`的目录）执行。现状：工作区 clone 后进入`orgrebase/`执行。文档工具链独立锁定在`documentation/`，不属于产品`uv sync --all-extras`，
 也不会进入产品运行依赖。
 
 ```bash

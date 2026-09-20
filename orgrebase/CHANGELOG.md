@@ -11,6 +11,11 @@ clone supplies the default sibling OAC path. Licenses remain path-specific.
 Core CI runs from `orgrebase/` on every push; full OAC and PostgreSQL validation
 is `workflow_dispatch` against the in-tree `oac-spec/`.
 
+The annotated tag `v0.4.0` is the workspace-publish snapshot. Subsequent `main`
+commits keep the same product version 0.4.0 and add the core-CI import fix plus
+the hosted documentation site. Clone `main` for that tree; do not treat the tag
+commit as the only public revision.
+
 Control-plane work included in this 0.4.0 tree:
 
 - Enforce configured authentication in local deployments and reject change

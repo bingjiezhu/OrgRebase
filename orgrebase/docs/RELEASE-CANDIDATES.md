@@ -17,7 +17,7 @@ wheel 的运行资源仅在 `pyproject.toml` 的 `tool.hatch.build.targets.wheel
 
 原先（截至 2026-09-14）：产品源码版本为 0.4.0，[公开 release](https://github.com/bingjiezhu/OrgRebase/releases) 仍为 v0.3.0；本地 OAC 仓库尚未配置 remote。公开发布尚未同步，不妨碍通过双仓快照审阅契约、相关工作和实现。
 
-现状（2026-09-20）：公开仓库改为工作区根，`orgrebase/` 与 `oac-spec/` 并列，产品版本仍为 0.4.0，发行标签为 `v0.4.0`。接收方仍需从可信渠道取得本次制品摘要，不能用版本字符串或旧 release 代替核验。旧的 v0.3.0 产品根发布及冻结证据保留各自身份；新源码不沿用旧制品的验证资格。
+现状（2026-09-20）：公开仓库改为工作区根，`orgrebase/` 与 `oac-spec/` 并列，产品版本仍为 0.4.0，发行标签为 `v0.4.0`。文档站由同一份 Markdown 发布到 [GitHub Pages](https://bingjiezhu.github.io/OrgRebase/)。`v0.4.0` 是工作区发布快照；其后 `main` 含 core CI 的 import 修复与文档站工作流，复现请 clone `main`。接收方仍需从可信渠道取得本次制品摘要，不能用版本字符串或旧 release 代替核验。旧的 v0.3.0 产品根发布及冻结证据保留各自身份；新源码不沿用旧制品的验证资格。
 
 后续维护仍应先明确范围与许可，再绑定提交、OAC 准入指纹、锁文件、制品和对应验证结果。配置 remote、提交、打 tag、发布 release 是独立的维护操作，不由本地构建自动执行。
 

@@ -65,7 +65,7 @@ pyyaml==6.0.3
     # via uvicorn
 rfc8785==0.1.4
     # via orgrebase
-sqlalchemy==2.0.52
+sqlalchemy==2.0.54
     # via orgrebase
 starlette==1.6.0
     # via fastapi

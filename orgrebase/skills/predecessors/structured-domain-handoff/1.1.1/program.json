@@ -1,0 +1,10 @@
+{
+  "schema_version": "orgrebase.restricted-skill-program.v1",
+  "adapter": "STRUCTURED_DOMAIN_HANDOFF_V1",
+  "required_fields": ["run_id", "task_id", "delegation_id", "delegation_task_digest", "context_projection_digest", "candidate_bundle"],
+  "deny_flags": ["request_restricted_source", "permission_expansion", "recipient_expansion", "schema_expansion", "target_write_requested"],
+  "abstain_flags": ["prompt_injection", "malformed_input", "deadline_expired", "resource_exhausted", "stale_input"],
+  "allowed_tool_ids": [],
+  "side_effects": [],
+  "digest": "sha256:494cfcf17dafecbb0a4902d1d6b6c7bc60a4e6bb7037213f159350acaf3d97ab"
+}

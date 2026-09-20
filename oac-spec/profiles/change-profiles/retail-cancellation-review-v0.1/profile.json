@@ -1,0 +1,13 @@
+{
+  "apiVersion": "oac.change-profile/v0.1",
+  "applicabilityLanguage": "oac.supplier.applicability/v0.2+legacy",
+  "deltaPath": "/request",
+  "effectCeiling": "zero_effect",
+  "kind": "ChangeProfile",
+  "knownValueType": "string",
+  "profileId": "oac.retail.cancellation-review",
+  "profileVersion": "v0.1",
+  "resourceProfile": "oac.supplier.transfer/conformance-resource-profile/v1",
+  "semanticType": "retail.cancel_requested",
+  "unknownValuePolicy": "explicit-state-only"
+}

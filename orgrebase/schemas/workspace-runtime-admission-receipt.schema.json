@@ -1,0 +1,149 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-runtime-admission-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "admitted_at": {
+      "title": "Admitted At",
+      "type": "string"
+    },
+    "agent_execution": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Agent Execution",
+      "type": "string"
+    },
+    "approval_digest": {
+      "title": "Approval Digest",
+      "type": "string"
+    },
+    "capsule_digest": {
+      "title": "Capsule Digest",
+      "type": "string"
+    },
+    "certificate_digest": {
+      "title": "Certificate Digest",
+      "type": "string"
+    },
+    "checked": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Checked",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "formation_digest": {
+      "title": "Formation Digest",
+      "type": "string"
+    },
+    "formation_ref": {
+      "title": "Formation Ref",
+      "type": "string"
+    },
+    "handler_execution": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Handler Execution",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "lowering_receipt_digest": {
+      "title": "Lowering Receipt Digest",
+      "type": "string"
+    },
+    "lowering_runtime_invoked": {
+      "const": false,
+      "default": false,
+      "title": "Lowering Runtime Invoked",
+      "type": "boolean"
+    },
+    "lowering_status": {
+      "const": "PRODUCED",
+      "default": "PRODUCED",
+      "title": "Lowering Status",
+      "type": "string"
+    },
+    "outcome_certificate": {
+      "const": "NOT_IMPLEMENTED",
+      "default": "NOT_IMPLEMENTED",
+      "title": "Outcome Certificate",
+      "type": "string"
+    },
+    "plan_digest": {
+      "title": "Plan Digest",
+      "type": "string"
+    },
+    "policy_digest": {
+      "title": "Policy Digest",
+      "type": "string"
+    },
+    "preview_digest": {
+      "title": "Preview Digest",
+      "type": "string"
+    },
+    "real_enterprise": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Real Enterprise",
+      "type": "string"
+    },
+    "runtime_binding_digest": {
+      "title": "Runtime Binding Digest",
+      "type": "string"
+    },
+    "runtime_bundle_digest": {
+      "title": "Runtime Bundle Digest",
+      "type": "string"
+    },
+    "runtime_control_plane_writes": {
+      "const": 1,
+      "default": 1,
+      "title": "Runtime Control Plane Writes",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-runtime-admission-receipt.v1",
+      "default": "orgrebase.oac-runtime-admission-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "const": "LOCAL_RUNTIME_ADMISSION_PASS",
+      "default": "LOCAL_RUNTIME_ADMISSION_PASS",
+      "title": "Status",
+      "type": "string"
+    },
+    "target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Target Writes",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "capsule_digest",
+    "preview_digest",
+    "approval_digest",
+    "formation_ref",
+    "formation_digest",
+    "plan_digest",
+    "certificate_digest",
+    "runtime_binding_digest",
+    "runtime_bundle_digest",
+    "lowering_receipt_digest",
+    "policy_digest",
+    "checked",
+    "admitted_at"
+  ],
+  "title": "RuntimeAdmissionReceipt",
+  "type": "object"
+}

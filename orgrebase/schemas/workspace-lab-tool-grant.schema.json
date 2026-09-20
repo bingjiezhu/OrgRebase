@@ -1,0 +1,77 @@
+{
+  "$defs": {
+    "LabToolRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "arguments"
+      ],
+      "title": "LabToolRequest",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-lab-tool-grant.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_ref": {
+      "minLength": 1,
+      "title": "Evidence Ref",
+      "type": "string"
+    },
+    "mutates_state": {
+      "title": "Mutates State",
+      "type": "boolean"
+    },
+    "obligation_ref": {
+      "minLength": 1,
+      "title": "Obligation Ref",
+      "type": "string"
+    },
+    "request": {
+      "$ref": "#/$defs/LabToolRequest"
+    },
+    "role": {
+      "minLength": 1,
+      "title": "Role",
+      "type": "string"
+    },
+    "work_unit_ref": {
+      "minLength": 1,
+      "title": "Work Unit Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "request",
+    "role",
+    "obligation_ref",
+    "work_unit_ref",
+    "evidence_ref",
+    "mutates_state"
+  ],
+  "title": "LabToolGrant",
+  "type": "object"
+}

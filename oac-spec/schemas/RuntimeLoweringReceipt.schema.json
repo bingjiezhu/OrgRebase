@@ -1,0 +1,283 @@
+{
+  "$defs": {
+    "LoweringStatus": {
+      "description": "Outcome of the local, zero-effect lowering decision.",
+      "enum": [
+        "PRODUCED",
+        "BLOCKED"
+      ],
+      "title": "LoweringStatus",
+      "type": "string"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "RuntimeLoweringReceiptSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "bundleRef": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "changeRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "proofScope": {
+          "const": "lowering_only",
+          "title": "Proofscope",
+          "type": "string"
+        },
+        "reasonCodes": {
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "recomputedCertificateRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "runtimeAdmissionPerformed": {
+          "const": false,
+          "title": "Runtimeadmissionperformed",
+          "type": "boolean"
+        },
+        "runtimeBindingRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "runtimeInvoked": {
+          "const": false,
+          "title": "Runtimeinvoked",
+          "type": "boolean"
+        },
+        "snapshotRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "status": {
+          "$ref": "#/$defs/LoweringStatus"
+        },
+        "subjectPlanRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "suppliedCertificateRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "targetWrites": {
+          "const": 0,
+          "title": "Targetwrites",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "snapshotRef",
+        "changeRef",
+        "subjectPlanRef",
+        "suppliedCertificateRef",
+        "recomputedCertificateRef",
+        "runtimeBindingRef",
+        "status",
+        "reasonCodes",
+        "proofScope",
+        "runtimeInvoked",
+        "runtimeAdmissionPerformed",
+        "targetWrites"
+      ],
+      "title": "RuntimeLoweringReceiptSpec",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/RuntimeLoweringReceipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "RuntimeLoweringReceipt",
+      "default": "RuntimeLoweringReceipt",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/RuntimeLoweringReceiptSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "RuntimeLoweringReceipt",
+  "type": "object"
+}

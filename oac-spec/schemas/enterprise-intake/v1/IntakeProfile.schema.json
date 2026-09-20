@@ -1,0 +1,253 @@
+{
+  "$defs": {
+    "ExtensionRule": {
+      "additionalProperties": false,
+      "properties": {
+        "declaredClass": {
+          "enum": [
+            "subject",
+            "outcome_criterion",
+            "evidence_obligation",
+            "constraint",
+            "trigger"
+          ],
+          "title": "Declaredclass",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "declaredClass"
+      ],
+      "title": "ExtensionRule",
+      "type": "object"
+    },
+    "JsonValue": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "array"
+        },
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/enterprise-intake/v1/IntakeProfile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.enterprise-intake.document/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Digest",
+      "type": "string"
+    },
+    "kind": {
+      "const": "IntakeProfile",
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "additionalProperties": false,
+      "properties": {
+        "effectCeiling": {
+          "const": "zero_effect",
+          "title": "Effectceiling",
+          "type": "string"
+        },
+        "extensions": {
+          "items": {
+            "$ref": "#/$defs/ExtensionRule"
+          },
+          "title": "Extensions",
+          "type": "array"
+        },
+        "profileVersion": {
+          "const": "oac.supplier.enterprise-intake/v0.1",
+          "title": "Profileversion",
+          "type": "string"
+        },
+        "requiredClasses": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 3,
+          "title": "Requiredclasses",
+          "type": "array"
+        },
+        "ruleSetDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Rulesetdigest",
+          "type": "string"
+        },
+        "scopeRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Scoperefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "profileVersion",
+        "ruleSetDigest",
+        "scopeRefs",
+        "requiredClasses",
+        "extensions",
+        "effectCeiling"
+      ],
+      "title": "IntakeProfileSpec",
+      "type": "object"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec",
+    "digest"
+  ],
+  "title": "IntakeProfile",
+  "type": "object"
+}

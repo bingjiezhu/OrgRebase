@@ -1,0 +1,59 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:evergreen-enterprise-quote@r1",
+  "organization_id": "org:evergreen-industries",
+  "component_kind": "DOMAIN",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "organization_id": "org:evergreen-industries",
+    "scenario_id": "evergreen-blue-harbor-enterprise-quote",
+    "default_task": {
+      "id": "task:quote-blue-harbor",
+      "actor_id": "employee:enterprise-quote-operator",
+      "purpose": "enterprise_quote",
+      "deliverable_kind": "QUOTE",
+      "requested_at": "2026-08-27T00:00:00Z",
+      "template_ref": "template:enterprise_quote@v1",
+      "customer_id": "customer:blue-harbor",
+      "idempotency_key": "workspace:form:quote-blue-harbor@v1",
+      "input_values": [
+        {
+          "key": "owner",
+          "value": "enterprise-quote-operator"
+        }
+      ]
+    },
+    "change_family": [
+      {
+        "kind": "launch_date",
+        "owner_id": "human:evergreen-product-owner",
+        "change_id": "changeset:evergreen-launch-date",
+        "revision": "r1",
+        "purpose": "change_rebase",
+        "object_id": "claim:product.launch_date",
+        "base_version": "v1",
+        "proposed_version": "v2",
+        "idempotency_key": "workspace:apply:evergreen-launch-date@r1"
+      },
+      {
+        "kind": "currency",
+        "owner_id": "human:evergreen-finance-owner",
+        "change_id": "changeset:evergreen-currency",
+        "revision": "r1",
+        "purpose": "change_rebase",
+        "object_id": "policy:finance.currency",
+        "base_version": "v1",
+        "proposed_version": "v2",
+        "idempotency_key": "workspace:apply:evergreen-currency@r1"
+      }
+    ],
+    "domains": [
+      "finance",
+      "gtm",
+      "legal",
+      "product"
+    ]
+  },
+  "projection_digest": "sha256:57cf88c57f881b6b70d0e02a7839ca35265290f1d658acd15d73c3c14a645bd1"
+}

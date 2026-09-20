@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrgRebase OAC 历史合成参考演化图</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root { --paper:#f5f5f5; --ink:#2d3142; --muted:#4f5d75; --soft:#7a8399; --accent:#eb6c36; }
+    body { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:48px 32px;
+      background:var(--paper); color:var(--ink); font-family:'Geist','PingFang SC','Hiragino Sans GB',sans-serif; }
+    .frame { width:100%; max-width:1280px; }
+    .eyebrow { margin-bottom:8px; color:var(--muted); font:500 8px/1 'Geist Mono',monospace; letter-spacing:.18em; }
+    h1 { margin-bottom:24px; color:var(--ink); font:400 28px/1.15 'Instrument Serif','Songti SC',serif; }
+    svg { display:block; width:100%; min-width:960px; }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <p class="eyebrow">HISTORICAL REFERENCE · SYNTHETIC OAC EVOLUTION</p>
+    <h1>历史合成参考：企业提供契约，系统组织工作，证明结果，再受治理地成长</h1>
+    <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img"
+      aria-labelledby="oac-governed-evolution-loop-title oac-governed-evolution-loop-desc">
+      <title id="oac-governed-evolution-loop-title">OrgRebase OAC 历史合成参考演化闭环</title>
+      <desc id="oac-governed-evolution-loop-desc">这是历史合成参考图，不是当前 Golden Quote 或 OAC 门控产品运行图。企业 Source 与 Demand 经 OAC 形成多种合规计划，由可替换 Runtime 执行，Outcome 判定结果，经治理权限批准 successor 字节并可回滚。</desc>
+      <defs>
+        <marker id="evolution-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4f5d75"/></marker>
+        <marker id="evolution-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eb6c36"/></marker>
+      </defs>
+      <rect width="1280" height="720" fill="#f5f5f5"/>
+
+      <!-- Trust zones -->
+      <rect x="224" y="120" width="368" height="248" rx="8" fill="rgba(45,49,66,.02)" stroke="rgba(45,49,66,.12)" stroke-width="0.8"/>
+      <rect x="248" y="124" width="136" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="316" y="136" fill="#7a8399" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle" letter-spacing=".14em">REPLACEABLE WORK</text>
+      <rect x="616" y="120" width="584" height="400" rx="8" fill="rgba(235,108,54,.04)" stroke="rgba(235,108,54,.50)" stroke-width="0.8" stroke-dasharray="4,4"/>
+      <rect x="640" y="124" width="176" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="728" y="136" fill="#eb6c36" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle" letter-spacing=".14em">ASSURANCE &amp; GOVERNANCE</text>
+
+      <!-- Main approved path -->
+      <line x1="200" y1="276" x2="248" y2="276" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#evolution-arrow)"/>
+      <line x1="392" y1="276" x2="432" y2="276" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#evolution-arrow)"/>
+      <line x1="576" y1="276" x2="648" y2="276" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#evolution-arrow-accent)"/>
+      <line x1="816" y1="276" x2="856" y2="276" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#evolution-arrow)"/>
+      <line x1="1000" y1="276" x2="1040" y2="276" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#evolution-arrow-accent)"/>
+      <line x1="1120" y1="312" x2="1120" y2="380" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#evolution-arrow-accent)"/>
+
+      <!-- Rollback / next-cycle path -->
+      <path d="M 1040,416 H 1008 Q 1000,416 1000,424 V 540 H 120 Q 112,540 112,532 V 312" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#evolution-arrow)"/>
+
+      <!-- Audit path -->
+      <path d="M 1080,312 V 336 Q 1080,344 1072,344 H 960 Q 952,344 952,352 V 400" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#evolution-arrow)"/>
+
+      <!-- Forbidden Runtime bypass stops before governance boundary -->
+      <path d="M 504,312 V 388 Q 504,396 512,396 H 1024" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="1032" y1="384" x2="1032" y2="408" stroke="#2d3142" stroke-width="1.2"/>
+      <line x1="1024" y1="388" x2="1040" y2="404" stroke="#2d3142" stroke-width="1.2"/>
+      <line x1="1040" y1="388" x2="1024" y2="404" stroke="#2d3142" stroke-width="1.2"/>
+
+      <!-- Labels -->
+      <rect x="196" y="248" width="48" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="220" y="260" fill="#4f5d75" font-size="8" font-family="'Geist Mono','Noto Sans Mono CJK SC',monospace" text-anchor="middle">编译</text>
+      <rect x="392" y="248" width="40" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="412" y="260" fill="#4f5d75" font-size="8" font-family="'Geist Mono','Noto Sans Mono CJK SC',monospace" text-anchor="middle">执行</text>
+      <rect x="580" y="248" width="64" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="612" y="260" fill="#eb6c36" font-size="8" font-family="'Geist Mono','Noto Sans Mono CJK SC',monospace" text-anchor="middle">独立观察</text>
+      <rect x="1000" y="248" width="40" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="1020" y="260" fill="#eb6c36" font-size="8" font-family="'Geist Mono','Noto Sans Mono CJK SC',monospace" text-anchor="middle">批准</text>
+      <rect x="480" y="508" width="128" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="544" y="520" fill="#4f5d75" font-size="8" font-family="'Geist Mono','Noto Sans Mono CJK SC',monospace" text-anchor="middle">回滚 / 进入下一轮</text>
+      <rect x="664" y="368" width="160" height="16" rx="2" fill="#f5f5f5"/>
+      <text x="744" y="380" fill="#4f5d75" font-size="8" font-family="'Geist Mono','Noto Sans Mono CJK SC',monospace" text-anchor="middle">Runtime 直接改 Source：拒绝</text>
+
+      <!-- Nodes -->
+      <g>
+        <rect x="40" y="240" width="160" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="40" y="240" width="160" height="72" rx="6" fill="rgba(79,93,117,.10)" stroke="#7a8399"/>
+        <rect x="48" y="248" width="48" height="16" rx="2" fill="transparent" stroke="rgba(122,131,153,.45)"/>
+        <text x="72" y="260" fill="#7a8399" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">ROOTS</text>
+        <text x="120" y="284" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">企业事实 + 目标</text>
+        <text x="120" y="300" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">Source + Demand</text>
+      </g>
+      <g>
+        <rect x="248" y="240" width="144" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="248" y="240" width="144" height="72" rx="6" fill="#fff" stroke="#2d3142"/>
+        <rect x="256" y="248" width="40" height="16" rx="2" fill="transparent" stroke="rgba(45,49,66,.40)"/>
+        <text x="276" y="260" fill="#2d3142" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">OAC</text>
+        <text x="320" y="284" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">多种合规工作方案</text>
+        <text x="320" y="300" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">BASE ≠ SPLIT · same obligations</text>
+      </g>
+      <g>
+        <rect x="432" y="240" width="144" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="432" y="240" width="144" height="72" rx="6" fill="#fff" stroke="#2d3142"/>
+        <rect x="440" y="248" width="56" height="16" rx="2" fill="transparent" stroke="rgba(45,49,66,.40)"/>
+        <text x="468" y="260" fill="#2d3142" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">RUNTIME</text>
+        <text x="504" y="284" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">可替换执行器</text>
+        <text x="504" y="300" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">ExecutionReceipt · zero effect</text>
+      </g>
+      <g>
+        <rect x="648" y="240" width="168" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="648" y="240" width="168" height="72" rx="6" fill="rgba(235,108,54,.08)" stroke="#eb6c36"/>
+        <rect x="656" y="248" width="64" height="16" rx="2" fill="transparent" stroke="rgba(235,108,54,.50)"/>
+        <text x="688" y="260" fill="#eb6c36" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">OUTCOME</text>
+        <text x="732" y="284" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">独立结果判定</text>
+        <text x="732" y="300" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">COMPLETED 仍可 REJECT</text>
+      </g>
+      <g>
+        <rect x="856" y="240" width="144" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="856" y="240" width="144" height="72" rx="6" fill="#fff" stroke="#2d3142"/>
+        <rect x="864" y="248" width="64" height="16" rx="2" fill="transparent" stroke="rgba(45,49,66,.40)"/>
+        <text x="896" y="260" fill="#2d3142" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">CANDIDATE</text>
+        <text x="928" y="284" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">可复用程序候选</text>
+        <text x="928" y="300" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">义务 + 证据 · 不固化 DAG</text>
+      </g>
+      <g>
+        <rect x="1040" y="240" width="160" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="1040" y="240" width="160" height="72" rx="6" fill="rgba(235,108,54,.08)" stroke="#eb6c36"/>
+        <rect x="1048" y="248" width="56" height="16" rx="2" fill="transparent" stroke="rgba(235,108,54,.50)"/>
+        <text x="1076" y="260" fill="#eb6c36" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">GOVERN</text>
+        <text x="1120" y="284" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">独立治理权限</text>
+        <text x="1120" y="300" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">先批准 successor 精确字节</text>
+      </g>
+      <g>
+        <rect x="1040" y="380" width="160" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="1040" y="380" width="160" height="72" rx="6" fill="rgba(45,49,66,.05)" stroke="#4f5d75"/>
+        <rect x="1048" y="388" width="56" height="16" rx="2" fill="transparent" stroke="rgba(79,93,117,.50)"/>
+        <text x="1076" y="400" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">SOURCE</text>
+        <text x="1120" y="424" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">不可变 successor</text>
+        <text x="1120" y="440" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">Profile + Snapshot · rollback</text>
+      </g>
+      <g>
+        <rect x="872" y="400" width="160" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="872" y="400" width="160" height="72" rx="6" fill="rgba(45,49,66,.03)" stroke="rgba(45,49,66,.30)"/>
+        <rect x="880" y="408" width="48" height="16" rx="2" fill="transparent" stroke="rgba(45,49,66,.30)"/>
+        <text x="904" y="420" fill="#7a8399" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">AUDIT</text>
+        <text x="952" y="444" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist','PingFang SC',sans-serif" text-anchor="middle">全链证据索引</text>
+        <text x="952" y="460" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" text-anchor="middle">digest · event chain · replay</text>
+      </g>
+
+      <line x1="40" y1="644" x2="1240" y2="644" stroke="rgba(45,49,66,.12)" stroke-width="0.8"/>
+      <text x="40" y="668" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".18em">LEGEND</text>
+      <rect x="128" y="656" width="16" height="12" rx="2" fill="rgba(235,108,54,.08)" stroke="#eb6c36"/>
+      <text x="152" y="668" fill="#4f5d75" font-size="8" font-family="'Geist','PingFang SC',sans-serif">不可自证的关键门</text>
+      <rect x="312" y="656" width="16" height="12" rx="2" fill="#fff" stroke="#2d3142"/>
+      <text x="336" y="668" fill="#4f5d75" font-size="8" font-family="'Geist','PingFang SC',sans-serif">可替换的实现</text>
+      <line x1="472" y1="664" x2="504" y2="664" stroke="#4f5d75" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="512" y="668" fill="#4f5d75" font-size="8" font-family="'Geist','PingFang SC',sans-serif">回滚 / 禁止绕过</text>
+      <text x="760" y="668" fill="#7a8399" font-size="8" font-family="'Geist','PingFang SC',sans-serif">历史合成参考，不代表当前 Golden/OAC 门控产品运行；当前系统图见 docs/SYSTEM-MAP.md</text>
+    </svg>
+  </main>
+</body>
+</html>

@@ -1,0 +1,414 @@
+{
+  "$defs": {
+    "ApplicabilityEvaluation": {
+      "additionalProperties": false,
+      "description": "Deterministic ledger fact for one edge, rule, or unknown-transition duty.",
+      "properties": {
+        "evaluationId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Evaluationid",
+          "type": "string"
+        },
+        "predicateVersion": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Predicateversion",
+          "type": "string"
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "result": {
+          "$ref": "#/$defs/ApplicabilityResult"
+        },
+        "sourceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Sourceref",
+          "type": "string"
+        },
+        "witnessRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Witnessrefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evaluationId",
+        "sourceRef",
+        "predicateVersion",
+        "result",
+        "witnessRefs"
+      ],
+      "title": "ApplicabilityEvaluation",
+      "type": "object"
+    },
+    "ApplicabilityResult": {
+      "description": "Strong-Kleene result emitted by a contextual predicate evaluation.",
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ],
+      "title": "ApplicabilityResult",
+      "type": "string"
+    },
+    "CoverageObligation": {
+      "additionalProperties": false,
+      "properties": {
+        "domainRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Domainref",
+          "type": "string"
+        },
+        "obligationId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationid",
+          "type": "string"
+        },
+        "obligationType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationtype",
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "dependency_path",
+            "organizational_rule",
+            "discovery_gap"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "pathRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Pathrefs",
+          "type": "array"
+        },
+        "requiredEvidence": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requiredevidence",
+          "type": "array"
+        },
+        "requiredRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Requiredroleref",
+          "type": "string"
+        },
+        "resolutionState": {
+          "enum": [
+            "affected",
+            "unknown",
+            "unresolved"
+          ],
+          "title": "Resolutionstate",
+          "type": "string"
+        },
+        "targetRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Targetref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "obligationId",
+        "origin",
+        "targetRef",
+        "domainRef",
+        "requiredRoleRef",
+        "obligationType",
+        "requiredEvidence",
+        "pathRefs",
+        "resolutionState"
+      ],
+      "title": "CoverageObligation",
+      "type": "object"
+    },
+    "DerivationOrderRequirement": {
+      "additionalProperties": false,
+      "description": "Topology-neutral ordering requirement emitted by Profile derivation.",
+      "properties": {
+        "dependencyReasonRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Dependencyreasonrefs",
+          "type": "array"
+        },
+        "predecessorRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Predecessorroleref",
+          "type": "string"
+        },
+        "prerequisiteReasonGroups": {
+          "default": [],
+          "items": {
+            "items": {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Prerequisitereasongroups",
+          "type": "array"
+        },
+        "reasonRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reasonrefs",
+          "type": "array"
+        },
+        "roleWide": {
+          "title": "Rolewide",
+          "type": "boolean"
+        },
+        "successorRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Successorroleref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "predecessorRoleRef",
+        "successorRoleRef",
+        "reasonRefs",
+        "roleWide"
+      ],
+      "title": "DerivationOrderRequirement",
+      "type": "object"
+    },
+    "ImpactPath": {
+      "additionalProperties": false,
+      "properties": {
+        "dutyRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Dutyrefs",
+          "type": "array"
+        },
+        "edgeRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Edgerefs",
+          "type": "array"
+        },
+        "evaluationRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evaluationrefs",
+          "type": "array"
+        },
+        "origin": {
+          "enum": [
+            "dependency",
+            "rule",
+            "gap",
+            "bounded_non_impact",
+            "excluded"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "pathId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Pathid",
+          "type": "string"
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "ruleRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Rulerefs",
+          "type": "array"
+        },
+        "state": {
+          "$ref": "#/$defs/ImpactState"
+        },
+        "targetRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Targetref",
+          "type": "string"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "pathId",
+        "targetRef",
+        "state",
+        "origin"
+      ],
+      "title": "ImpactPath",
+      "type": "object"
+    },
+    "ImpactState": {
+      "enum": [
+        "affected",
+        "unaffected_proven",
+        "unknown",
+        "out_of_declared_scope"
+      ],
+      "title": "ImpactState",
+      "type": "string"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/ProfileDerivationReport.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Deterministic Profile semantics without any selected Agent topology.",
+  "properties": {
+    "apiVersion": {
+      "const": "oac.derivation/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "applicabilityEvaluations": {
+      "items": {
+        "$ref": "#/$defs/ApplicabilityEvaluation"
+      },
+      "title": "Applicabilityevaluations",
+      "type": "array"
+    },
+    "changeDigest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Changedigest",
+      "type": "string"
+    },
+    "impactPaths": {
+      "items": {
+        "$ref": "#/$defs/ImpactPath"
+      },
+      "title": "Impactpaths",
+      "type": "array"
+    },
+    "kind": {
+      "const": "ProfileDerivationReport",
+      "title": "Kind",
+      "type": "string"
+    },
+    "obligations": {
+      "items": {
+        "$ref": "#/$defs/CoverageObligation"
+      },
+      "title": "Obligations",
+      "type": "array"
+    },
+    "profileId": {
+      "const": "oac.supplier.transfer",
+      "title": "Profileid",
+      "type": "string"
+    },
+    "profileVersion": {
+      "const": "v0.2",
+      "title": "Profileversion",
+      "type": "string"
+    },
+    "requiredOrders": {
+      "items": {
+        "$ref": "#/$defs/DerivationOrderRequirement"
+      },
+      "title": "Requiredorders",
+      "type": "array"
+    },
+    "rootApplicabilityUnknown": {
+      "title": "Rootapplicabilityunknown",
+      "type": "boolean"
+    },
+    "snapshotDigest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Snapshotdigest",
+      "type": "string"
+    },
+    "unresolvedRefs": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Unresolvedrefs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "profileId",
+    "profileVersion",
+    "snapshotDigest",
+    "changeDigest",
+    "applicabilityEvaluations",
+    "impactPaths",
+    "obligations",
+    "requiredOrders",
+    "unresolvedRefs",
+    "rootApplicabilityUnknown"
+  ],
+  "title": "ProfileDerivationReport",
+  "type": "object"
+}

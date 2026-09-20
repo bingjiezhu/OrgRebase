@@ -1,0 +1,44 @@
+name: Reuse or feedback
+description: Ask about reusing OrgRebase or OAC, or record an integration attempt.
+title: "[Reuse]: "
+labels: [reuse]
+body:
+  - type: markdown
+    attributes:
+      value: Use this form for reuse questions, Skill/Pack adaptation, or feedback after trying the public first run. Do not attach credentials, customer data, or raw model traces.
+  - type: dropdown
+    id: tree
+    attributes:
+      label: Which tree
+      options:
+        - orgrebase (product)
+        - oac-spec (contract)
+        - both / workspace clone
+    validations:
+      required: true
+  - type: dropdown
+    id: intent
+    attributes:
+      label: What you tried
+      options:
+        - Public quote first run (`run_public_quote_replay.py`)
+        - Rule Pack / Skill reuse
+        - AgentTeams lock reconstruction
+        - Authenticated deployment
+        - Other integration
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: What happened
+      description: Commands, expected result, and actual result. Redact secrets and personal paths.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I removed API keys, credentials, restricted source text, raw prompts, model output, and personal paths.
+          required: true

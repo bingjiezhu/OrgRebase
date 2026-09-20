@@ -1,0 +1,90 @@
+version: 1
+generated_at: "2026-08-23"
+claim_limit: >-
+  This inventory records upstream identity and permitted development use. It does not
+  promote upstream retrieval labels into OAC organizational ground truth.
+assets:
+  - id: hf:lightonai/veracier-industries
+    name: "EDiTh — Véracier Industries"
+    type: dataset
+    upstream: "https://huggingface.co/datasets/lightonai/veracier-industries"
+    revision: "844264a930674feacf6dee1844da77b0c4d66b2a"
+    revision_url: "https://huggingface.co/datasets/lightonai/veracier-industries/tree/844264a930674feacf6dee1844da77b0c4d66b2a"
+    license: Apache-2.0
+    retrieved_at: "2026-08-23"
+    files_used:
+      - path: ANSWER_KEY.json
+        sha256: "6aff2211fd5681aaa734a0c5d0eed5a518ef0146e0cd4df6bd7d4fac6d6bbe78"
+        redistributed: false
+      - path: MASTER_INDEX.csv
+        sha256: "0b5498d97f6fedfdd5a93fd03dfa53a17d9210b6c96de5ea2fa43775e674029c"
+        redistributed: false
+      - path: README.md
+        sha256: "381f6a1367431a73ddec147656ba68fb01f67585940647d91dc6e70833faab7e"
+        redistributed: false
+    files_not_retrieved:
+      - "by_entity.tar.gz (~1.7 GB PDF corpus)"
+    oac_use: >-
+      Pin provenance, transcribe PROC-01 metadata/index classifications, and author a
+      separate exploratory supplier-change annotation layer and counterfactuals.
+    known_label_gaps:
+      - "PROC-01 ANSWER_KEY ground_truth is an empty object at the pinned revision."
+      - "MASTER_INDEX classifications are document/use-case relevance labels, not OAC obligations."
+      - "No upstream labels define required roles, impact paths, partial order, authority, evidence duties, or valid plan sets."
+    attribution: >-
+      EDiTh is published by LightOn as a fully synthetic enterprise digital-twin benchmark.
+
+  - id: hf:ServiceNow-AI/EnterpriseOps-Gym
+    name: EnterpriseOps-Gym
+    type: dataset-and-execution-benchmark
+    upstream: "https://huggingface.co/datasets/ServiceNow-AI/EnterpriseOps-Gym"
+    revision: "c8e538eae8a6205294f0a86675fefdc1fac408f6"
+    revision_url: "https://huggingface.co/datasets/ServiceNow-AI/EnterpriseOps-Gym/tree/c8e538eae8a6205294f0a86675fefdc1fac408f6"
+    license: Apache-2.0
+    retrieved_at: "2026-08-23"
+    files_used:
+      - path: README.md
+        sha256: "cf559d619ad720c652c038d1b5fa9c541c45f83bac93a5d535c7fb3e7a091820"
+        redistributed: false
+    files_not_retrieved:
+      - "oracle/*.parquet"
+      - "plus_5_tools/*.parquet"
+      - "plus_10_tools/*.parquet"
+      - "plus_15_tools/*.parquet"
+      - "container images and runtime databases"
+    oac_use: >-
+      Pin a future outcome-verification substrate and document its SQL-verifier capability.
+      The current Shadow MVP does not execute, redistribute, or score these tasks.
+    known_label_gaps:
+      - "The released domains do not contain the EDiTh supplier-bankruptcy scenario."
+      - "SQL outcome verifiers do not label which organizational roles must participate."
+      - "No cross-dataset row alignment with EDiTh exists."
+    attribution: >-
+      EnterpriseOps-Gym is published by ServiceNow AI Research as a synthetic,
+      containerized enterprise agent benchmark.
+
+  - id: github:sierra-research/tau2-bench
+    name: tau2 retail task 113 local mapping reference
+    type: synthetic-public-task-reference
+    upstream: "https://github.com/sierra-research/tau2-bench"
+    revision: "672227c6b6676edc20d57ea53b7000262aae77b9"
+    revision_url: "https://github.com/sierra-research/tau2-bench/tree/672227c6b6676edc20d57ea53b7000262aae77b9"
+    license: MIT
+    license_url: "https://github.com/sierra-research/tau2-bench/blob/672227c6b6676edc20d57ea53b7000262aae77b9/LICENSE"
+    files_used:
+      - path: data/tau2/domains/retail/tasks.json
+        task_id: "113"
+        redistributed: false
+    local_derived_files:
+      - tests/fixtures/retail-cancellation/snapshot.json
+      - tests/fixtures/retail-cancellation/change.json
+    oac_use: >-
+      Preserve synthetic task/order references in a proposed OAC organization mapping to test
+      a finite retail cancellation-request planning profile. The fixture contains no runtime
+      database, upstream oracle, credentials or execution authority.
+    known_label_gaps:
+      - "Upstream does not label this mapping's roles, impact rules, admission facts or evidence duties."
+      - "These local proposals are not upstream Gold or human-reviewed organization facts."
+    attribution: >-
+      tau2-bench is published by Sierra Research under the MIT License. The local OAC
+      mapping is a separate proposed artifact and does not imply upstream endorsement.

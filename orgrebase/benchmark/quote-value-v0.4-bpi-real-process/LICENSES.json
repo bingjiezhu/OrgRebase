@@ -1,0 +1,23 @@
+{
+  "schema_version": "orgrebase.workspace-public-real-process-license-manifest.v1",
+  "upstream": {
+    "dataset_id": "bpi-challenge-2019-4tu-12715853",
+    "title": "BPI Challenge 2019",
+    "publisher": "4TU.ResearchData",
+    "doi": "10.4121/uuid:d06aff4b-79f0-45e6-8ec8-e19730c248f1",
+    "record_url": "https://data.4tu.nl/articles/dataset/BPI_Challenge_2019/12715853",
+    "spdx": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "included_material": "A deterministic transformed event projection with source attribution; the raw XES bytes are not redistributed.",
+    "changes": "Extracted real Change Price and downstream event observations into a fixed query slice; no affected labels or causal annotations were added."
+  },
+  "runtime_dependencies": [
+    {
+      "name": "Python standard library",
+      "purpose": "streaming XES parsing, temporary SQLite indexing, hashing and JSON output",
+      "bundled": false
+    }
+  ],
+  "redistribution_boundary": "Retain attribution and CC BY 4.0 terms with the projection; do not package the raw XES.",
+  "digest": "sha256:62fdf3b95043c51be5551c7e8fd5e2c75a216a4633e05c8096845adfbc4c3d64"
+}

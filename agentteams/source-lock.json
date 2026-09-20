@@ -1,7 +1,0 @@
-{
-  "schema_version": "orgrebase.agentteams-source-lock.v1",
-  "repository": "https://github.com/agentscope-ai/AgentTeams",
-  "tag": "v1.2.2",
-  "commit": "849182af8e017168a5a200a87b1062142caf462d",
-  "crd_api_version": "agentteams.io/v1beta1"
-}

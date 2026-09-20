@@ -1,0 +1,60 @@
+{
+  "effectCeiling": "zero_effect",
+  "identity": {
+    "logicalManifestProjection": "omit-only-packageId",
+    "resourceDigest": "sha256-rfc8785-omit-only-digest",
+    "ruleSetDigest": "sha256-rfc8785-complete-rule-registry",
+    "transportDigest": "sha256-exact-bytes"
+  },
+  "normativeRef": "docs/architecture/enterprise-intake.md",
+  "profile": "oac.supplier.enterprise-intake/v0.1",
+  "registryVersion": "oac.enterprise-intake.admission-rules/v1",
+  "resourceLimits": {
+    "maxJsonDepth": 64,
+    "maxMaterialBytes": 1048576,
+    "maxResources": 128,
+    "maxTotalBytes": 16777216
+  },
+  "rules": [
+    {
+      "requirement": "Closed UTF-8/I-JSON; no duplicate keys or inventory identities; enforce all declared resource ceilings before mapping.",
+      "ruleId": "INTAKE-001"
+    },
+    {
+      "requirement": "Manifest inventory exactly equals material bytes; raw and semantic references are independently verified without adding defaults.",
+      "ruleId": "INTAKE-002"
+    },
+    {
+      "requirement": "Caller-pinned Profile selects this exact rule set; namespace, governance, required classes and finite extension mappings are explicit.",
+      "ruleId": "INTAKE-003"
+    },
+    {
+      "requirement": "Caller-pinned Authority covers exact Profile, logical manifest, subjects, scope and evaluation time within issuedAt <= time < expiresAt.",
+      "ruleId": "INTAKE-004"
+    },
+    {
+      "requirement": "Review and decision require HUMAN actors with exact permitted actions; neither may alias any proposer, including by revision or digest.",
+      "ruleId": "INTAKE-005"
+    },
+    {
+      "requirement": "Every known resource and transport-document owner resolves to an admitted Snapshot role; Demand requester and role pass the existing evolution relation.",
+      "ruleId": "INTAKE-006"
+    },
+    {
+      "requirement": "Demand and Change bind exact roots, governance and bounded scope; subject/outcome/evidence/constraint/trigger refs resolve to real admitted-profile material bytes.",
+      "ruleId": "INTAKE-007"
+    },
+    {
+      "requirement": "Unknown or missing mappings retain unresolved findings; only complete valid inputs plus an independent ADMITTED decision can admit subjects.",
+      "ruleId": "INTAKE-008"
+    },
+    {
+      "requirement": "Receipt reasons and refs are sorted unique projections; REJECTED/UNKNOWN admit no subjects and produce no Source/Demand roots or derived work.",
+      "ruleId": "INTAKE-009"
+    },
+    {
+      "requirement": "Reuse SourceAdmissionReceipt and the unique Supplier derivation; transport admission never promotes nested candidate facts, executes work or changes the effect ceiling.",
+      "ruleId": "INTAKE-010"
+    }
+  ]
+}

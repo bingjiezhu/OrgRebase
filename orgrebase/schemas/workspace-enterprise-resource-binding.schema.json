@@ -1,0 +1,31 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-enterprise-resource-binding.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "domain_id": {
+      "title": "Domain Id",
+      "type": "string"
+    },
+    "object_id": {
+      "title": "Object Id",
+      "type": "string"
+    },
+    "owner_id": {
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "slot_id": {
+      "title": "Slot Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "slot_id",
+    "object_id",
+    "domain_id",
+    "owner_id"
+  ],
+  "title": "EnterpriseResourceBinding",
+  "type": "object"
+}

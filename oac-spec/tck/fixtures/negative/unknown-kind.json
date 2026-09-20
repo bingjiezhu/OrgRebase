@@ -1,0 +1,13 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "UnregisteredOrganizationResource",
+  "metadata": {
+    "id": "invalid:unknown-kind",
+    "namespace": "oac.tck",
+    "revision": 1,
+    "createdAt": "2026-08-23T00:00:00Z",
+    "sourceRefs": []
+  },
+  "spec": {},
+  "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

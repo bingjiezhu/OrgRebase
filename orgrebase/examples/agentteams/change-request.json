@@ -1,0 +1,21 @@
+{
+  "schema_version": "orgrebase.goai-agentteams-request.v1",
+  "scenario": "core-change-advisory",
+  "organization_id": "org:northstar",
+  "requested_by": "human:product-owner",
+  "purpose": "change_rebase",
+  "change": {
+    "object_id": "claim:product.launch_date",
+    "base_version": "v7",
+    "base_value": "2026-09-01",
+    "proposed_version": "v8",
+    "proposed_value": "2026-09-15"
+  },
+  "expected_team": [
+    "change-coordinator",
+    "product-steward",
+    "legal-steward",
+    "gtm-steward",
+    "skill-curator"
+  ]
+}

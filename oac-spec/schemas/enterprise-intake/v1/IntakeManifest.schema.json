@@ -1,0 +1,174 @@
+{
+  "$defs": {
+    "IntakeResource": {
+      "additionalProperties": false,
+      "properties": {
+        "declaredClass": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Declaredclass",
+          "type": "string"
+        },
+        "mediaType": {
+          "const": "application/json",
+          "title": "Mediatype",
+          "type": "string"
+        },
+        "proposerRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Proposerref",
+          "type": "string"
+        },
+        "rawDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Rawdigest",
+          "type": "string"
+        },
+        "resourceRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "sourceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Sourceref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mediaType",
+        "sourceRef",
+        "rawDigest",
+        "resourceRef",
+        "declaredClass",
+        "proposerRef"
+      ],
+      "title": "IntakeResource",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/enterprise-intake/v1/IntakeManifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "declaredScopeRefs": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Declaredscoperefs",
+      "type": "array"
+    },
+    "effectiveAt": {
+      "format": "date-time",
+      "title": "Effectiveat",
+      "type": "string"
+    },
+    "governanceRef": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Governanceref",
+      "type": "string"
+    },
+    "intakeProfileRef": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Intakeprofileref",
+      "type": "string"
+    },
+    "intakeProtocol": {
+      "const": "oac.enterprise-intake/v0.1",
+      "title": "Intakeprotocol",
+      "type": "string"
+    },
+    "namespace": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Namespace",
+      "type": "string"
+    },
+    "observedAt": {
+      "format": "date-time",
+      "title": "Observedat",
+      "type": "string"
+    },
+    "packageId": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Packageid",
+      "type": "string"
+    },
+    "resources": {
+      "items": {
+        "$ref": "#/$defs/IntakeResource"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "title": "Resources",
+      "type": "array"
+    }
+  },
+  "required": [
+    "intakeProtocol",
+    "packageId",
+    "namespace",
+    "governanceRef",
+    "intakeProfileRef",
+    "observedAt",
+    "effectiveAt",
+    "resources",
+    "declaredScopeRefs"
+  ],
+  "title": "IntakeManifest",
+  "type": "object"
+}

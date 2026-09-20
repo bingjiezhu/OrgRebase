@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "oac-contract"
+version = "0.3.0a0"
+description = "Experimental Organizational Agent Contract schemas, compiler, verifier, and TCK"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+license = "Apache-2.0"
+license-files = ["LICENSES/Apache-2.0.txt"]
+authors = [{ name = "OAC Contributors" }]
+keywords = ["agents", "enterprise", "contracts", "conformance", "organization"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business",
+]
+dependencies = [
+  "pydantic>=2.11,<3",
+  "rfc8785>=0.1.4,<0.2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "cryptography>=50,<51",
+  "jsonschema>=4.25,<5",
+  "mypy>=1.20,<2",
+  "types-jsonschema>=4.25,<5",
+  "pytest>=8.4,<10",
+  "pytest-cov>=6.2,<8",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+oac = "oac.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/oac"]
+
+# The reference CLI is required to remain useful after installation, outside a
+# source checkout.  Keep the standards assets under one package-owned resource
+# root so importlib.resources can resolve the exact same relative references as
+# the repository TCK manifest.
+[tool.hatch.build.targets.wheel.force-include]
+"LICENSES/Apache-2.0.txt" = "oac/resources/LICENSES/Apache-2.0.txt"
+"schemas" = "oac/resources/schemas"
+"profiles/enterprise-intake" = "oac/resources/profiles/enterprise-intake"
+"profiles/change-profiles" = "oac/resources/profiles/change-profiles"
+"profiles/human-annotation" = "oac/resources/profiles/human-annotation"
+"profiles/outcome-profiles" = "oac/resources/profiles/outcome-profiles"
+"profiles/supplier-change/annotations" = "oac/resources/profiles/supplier-change/annotations"
+"profiles/supplier-change/cases" = "oac/resources/profiles/supplier-change/cases"
+"profiles/supplier-change/datasets" = "oac/resources/profiles/supplier-change/datasets"
+"profiles/supplier-change/inputs" = "oac/resources/profiles/supplier-change/inputs"
+"profiles/supplier-change/source-labels" = "oac/resources/profiles/supplier-change/source-labels"
+"profiles/supplier-change/witnesses" = "oac/resources/profiles/supplier-change/witnesses"
+"profiles/supplier-change/conformance-resource-profile-v1.json" = "oac/resources/profiles/supplier-change/conformance-resource-profile-v1.json"
+"tck" = "oac/resources/tck"
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers --disable-warnings"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["oac"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/oac", "ctk/runner/src/oac_ctk_runner"]
+check_untyped_defs = true
+warn_unused_ignores = true

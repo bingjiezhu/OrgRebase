@@ -1,0 +1,150 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "CONTROLLED_LOCAL_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/tool-invocation-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "after_state_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "After State Digest"
+    },
+    "audit_event_digest": {
+      "title": "Audit Event Digest",
+      "type": "string"
+    },
+    "before_state_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Before State Digest"
+    },
+    "compensation_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Compensation Ref"
+    },
+    "completed_at": {
+      "title": "Completed At",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Code"
+    },
+    "evidence_class": {
+      "$ref": "#/$defs/EvidenceClass"
+    },
+    "external_operation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "External Operation Id"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "request_digest": {
+      "title": "Request Digest",
+      "type": "string"
+    },
+    "result_digest": {
+      "title": "Result Digest",
+      "type": "string"
+    },
+    "run_nonce": {
+      "title": "Run Nonce",
+      "type": "string"
+    },
+    "started_at": {
+      "title": "Started At",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "tool_ref": {
+      "title": "Tool Ref",
+      "type": "string"
+    },
+    "workflow_run_id": {
+      "title": "Workflow Run Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "tool_ref",
+    "actor_id",
+    "workflow_run_id",
+    "run_nonce",
+    "request_digest",
+    "result_digest",
+    "status",
+    "started_at",
+    "completed_at",
+    "audit_event_digest",
+    "evidence_class"
+  ],
+  "title": "ToolInvocationReceipt",
+  "type": "object"
+}

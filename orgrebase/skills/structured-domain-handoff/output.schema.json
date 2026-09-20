@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schema:orgrebase.domain-transport-candidate.v1",
+  "title": "StructuredDomainHandoffCandidateOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "Digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "NonZeroDigest": {"type": "string", "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"}
+  },
+  "required": ["schema_version", "action", "reason", "package_digest", "candidate_only", "target_writes"],
+  "properties": {
+    "schema_version": {"const": "orgrebase.skill-result-candidate.v1"},
+    "action": {"enum": ["HANDOFF", "DENY", "ABSTAIN"]},
+    "reason": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "delegation_id": {"type": "string", "minLength": 1},
+    "delegation_task_digest": {"$ref": "#/$defs/Digest"},
+    "context_projection_digest": {"$ref": "#/$defs/Digest"},
+    "candidate_bundle_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "package_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "candidate_only": {"const": true},
+    "target_writes": {"const": 0}
+  }
+}

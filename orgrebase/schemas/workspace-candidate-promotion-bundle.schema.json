@@ -1,0 +1,248 @@
+{
+  "$defs": {
+    "CandidateChainRoots": {
+      "additionalProperties": false,
+      "properties": {
+        "coalition_result_binding_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Coalition Result Binding Digest",
+          "type": "string"
+        },
+        "domain_result_digests": {
+          "additionalProperties": {
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "title": "Domain Result Digests",
+          "type": "object"
+        },
+        "native_receipt_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Native Receipt Digest",
+          "type": "string"
+        },
+        "skill_invocation_receipt_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Skill Invocation Receipt Digest",
+          "type": "string"
+        },
+        "skill_package_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Skill Package Digest",
+          "type": "string"
+        },
+        "skill_result_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Skill Result Digest",
+          "type": "string"
+        },
+        "source_payload_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Payload Digest",
+          "type": "string"
+        },
+        "source_receipt_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Receipt Digest",
+          "type": "string"
+        },
+        "tool_receipt_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Tool Receipt Digest",
+          "type": "string"
+        },
+        "tool_result_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Tool Result Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_receipt_digest",
+        "source_payload_digest",
+        "native_receipt_digest",
+        "coalition_result_binding_digest",
+        "domain_result_digests",
+        "tool_receipt_digest",
+        "tool_result_digest",
+        "skill_package_digest",
+        "skill_invocation_receipt_digest",
+        "skill_result_digest"
+      ],
+      "title": "CandidateChainRoots",
+      "type": "object"
+    },
+    "ProposedChange": {
+      "additionalProperties": false,
+      "properties": {
+        "base_version": {
+          "minLength": 1,
+          "title": "Base Version",
+          "type": "string"
+        },
+        "change_id": {
+          "minLength": 1,
+          "title": "Change Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "launch_date",
+            "currency"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "owner_id": {
+          "minLength": 1,
+          "title": "Owner Id",
+          "type": "string"
+        },
+        "profile_binding_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Profile Binding Digest",
+          "type": "string"
+        },
+        "proposed_version": {
+          "minLength": 1,
+          "title": "Proposed Version",
+          "type": "string"
+        },
+        "purpose": {
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "owner_id",
+        "change_id",
+        "object_id",
+        "base_version",
+        "proposed_version",
+        "purpose",
+        "profile_binding_digest"
+      ],
+      "title": "ProposedChange",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-candidate-promotion-bundle.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "approval_policy": {
+      "const": "EXACT_PREVIEW_AND_PROMOTION_DIGEST",
+      "title": "Approval Policy",
+      "type": "string"
+    },
+    "base_graph_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Base Graph Digest",
+      "type": "string"
+    },
+    "base_graph_ref": {
+      "minLength": 1,
+      "title": "Base Graph Ref",
+      "type": "string"
+    },
+    "base_quote_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Base Quote Digest",
+      "type": "string"
+    },
+    "base_quote_ref": {
+      "minLength": 1,
+      "title": "Base Quote Ref",
+      "type": "string"
+    },
+    "candidate_action": {
+      "const": "APPLY_QUOTE",
+      "title": "Candidate Action",
+      "type": "string"
+    },
+    "candidate_terminal_state": {
+      "const": "CANDIDATE_ACCEPTED",
+      "title": "Candidate Terminal State",
+      "type": "string"
+    },
+    "canonical_writer": {
+      "const": "STATESTORE_REBASE_WORKFLOW",
+      "title": "Canonical Writer",
+      "type": "string"
+    },
+    "claim_boundary": {
+      "const": "AGENT_SKILL_TOOL_RECOMMEND;DETERMINISTIC_CONTROL_PREVIEWS;OWNER_APPROVES;STATESTORE_WRITES",
+      "title": "Claim Boundary",
+      "type": "string"
+    },
+    "digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "const": "CONTROLLED_LOCAL_CANDIDATE_TO_GOVERNED_APPLY",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "proposal_plane_target_writes": {
+      "const": 0,
+      "title": "Proposal Plane Target Writes",
+      "type": "integer"
+    },
+    "proposed_changes": {
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/ProposedChange"
+        },
+        {
+          "$ref": "#/$defs/ProposedChange"
+        }
+      ],
+      "title": "Proposed Changes",
+      "type": "array"
+    },
+    "roots": {
+      "$ref": "#/$defs/CandidateChainRoots"
+    },
+    "run_id": {
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.candidate-promotion-bundle.v1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "digest",
+    "schema_version",
+    "evidence_class",
+    "run_id",
+    "candidate_terminal_state",
+    "candidate_action",
+    "roots",
+    "base_quote_ref",
+    "base_quote_digest",
+    "base_graph_ref",
+    "base_graph_digest",
+    "proposed_changes",
+    "proposal_plane_target_writes",
+    "canonical_writer",
+    "approval_policy",
+    "claim_boundary"
+  ],
+  "title": "CandidatePromotionBundle",
+  "type": "object"
+}

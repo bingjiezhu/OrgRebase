@@ -1,0 +1,985 @@
+{
+  "$defs": {
+    "AdmissionStatus": {
+      "enum": [
+        "admitted",
+        "candidate",
+        "disputed",
+        "retracted"
+      ],
+      "title": "AdmissionStatus",
+      "type": "string"
+    },
+    "BoundaryStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "unknown"
+      ],
+      "title": "BoundaryStatus",
+      "type": "string"
+    },
+    "CompletenessManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "coveredNodeRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Coverednoderefs",
+          "type": "array"
+        },
+        "coveredRelationTypes": {
+          "items": {
+            "$ref": "#/$defs/RelationType"
+          },
+          "title": "Coveredrelationtypes",
+          "type": "array"
+        },
+        "discoveryEvidence": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Discoveryevidence",
+          "type": "array"
+        },
+        "discoveryObligationType": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Discoveryobligationtype"
+        },
+        "discoveryRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Discoveryroleref",
+          "type": "string"
+        },
+        "discoveryTargetRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Discoverytargetref"
+        },
+        "knownGaps": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Knowngaps",
+          "type": "array"
+        },
+        "maxDepth": {
+          "exclusiveMinimum": 0,
+          "title": "Maxdepth",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/BoundaryStatus"
+        }
+      },
+      "required": [
+        "status",
+        "coveredNodeRefs",
+        "coveredRelationTypes",
+        "maxDepth",
+        "discoveryRoleRef"
+      ],
+      "title": "CompletenessManifest",
+      "type": "object"
+    },
+    "ContextualApplicabilityPredicate": {
+      "additionalProperties": false,
+      "description": "Versioned, non-executable conjunction evaluated with strong Kleene logic.",
+      "properties": {
+        "afterState": {
+          "enum": [
+            "known",
+            "unknown",
+            "not_observable",
+            "not_applicable"
+          ],
+          "title": "Afterstate",
+          "type": "string"
+        },
+        "afterValues": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Aftervalues",
+          "type": "array"
+        },
+        "predicateVersion": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Predicateversion",
+          "type": "string"
+        },
+        "relationTypes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RelationType"
+          },
+          "title": "Relationtypes",
+          "type": "array"
+        },
+        "scopeSelector": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ScopeSelector"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "semanticType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Semantictype",
+          "type": "string"
+        },
+        "subjectSelector": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SubjectSelector"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "predicateVersion",
+        "semanticType",
+        "afterState"
+      ],
+      "title": "ContextualApplicabilityPredicate",
+      "type": "object"
+    },
+    "ContextualImpactRule": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionStatus": {
+          "$ref": "#/$defs/AdmissionStatus"
+        },
+        "applicability": {
+          "$ref": "#/$defs/ContextualApplicabilityPredicate"
+        },
+        "obligationType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationtype",
+          "type": "string"
+        },
+        "prerequisiteObligationTypes": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Prerequisiteobligationtypes",
+          "type": "array"
+        },
+        "requiredEvidence": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requiredevidence",
+          "type": "array"
+        },
+        "requiredRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Requiredroleref",
+          "type": "string"
+        },
+        "ruleId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Ruleid",
+          "type": "string"
+        },
+        "targetRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Targetref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ruleId",
+        "applicability",
+        "targetRef",
+        "requiredRoleRef",
+        "obligationType",
+        "requiredEvidence",
+        "admissionStatus"
+      ],
+      "title": "ContextualImpactRule",
+      "type": "object"
+    },
+    "DependencyEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionStatus": {
+          "$ref": "#/$defs/AdmissionStatus"
+        },
+        "edgeId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Edgeid",
+          "type": "string"
+        },
+        "relationType": {
+          "$ref": "#/$defs/RelationType"
+        },
+        "sourceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Sourceref",
+          "type": "string"
+        },
+        "targetRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Targetref",
+          "type": "string"
+        },
+        "transferPredicate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TransferPredicate"
+            },
+            {
+              "$ref": "#/$defs/ContextualApplicabilityPredicate"
+            }
+          ],
+          "title": "Transferpredicate"
+        }
+      },
+      "required": [
+        "edgeId",
+        "sourceRef",
+        "targetRef",
+        "relationType",
+        "transferPredicate",
+        "admissionStatus"
+      ],
+      "title": "DependencyEdge",
+      "type": "object"
+    },
+    "EffectCeiling": {
+      "enum": [
+        "zero_effect"
+      ],
+      "title": "EffectCeiling",
+      "type": "string"
+    },
+    "ImpactRule": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionStatus": {
+          "$ref": "#/$defs/AdmissionStatus"
+        },
+        "afterValues": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Aftervalues",
+          "type": "array"
+        },
+        "obligationType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationtype",
+          "type": "string"
+        },
+        "requiredEvidence": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requiredevidence",
+          "type": "array"
+        },
+        "requiredRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Requiredroleref",
+          "type": "string"
+        },
+        "ruleId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Ruleid",
+          "type": "string"
+        },
+        "semanticType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Semantictype",
+          "type": "string"
+        },
+        "targetRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Targetref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ruleId",
+        "semanticType",
+        "afterValues",
+        "targetRef",
+        "requiredRoleRef",
+        "obligationType",
+        "requiredEvidence",
+        "admissionStatus"
+      ],
+      "title": "ImpactRule",
+      "type": "object"
+    },
+    "OrganizationNode": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionStatus": {
+          "$ref": "#/$defs/AdmissionStatus",
+          "default": "admitted"
+        },
+        "domainRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Domainref",
+          "type": "string"
+        },
+        "nodeId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Nodeid",
+          "type": "string"
+        },
+        "nodeType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Nodetype",
+          "type": "string"
+        },
+        "ownerRoleRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerroleref"
+        }
+      },
+      "required": [
+        "nodeId",
+        "nodeType",
+        "domainRef"
+      ],
+      "title": "OrganizationNode",
+      "type": "object"
+    },
+    "OrganizationSnapshotSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "completeness": {
+          "$ref": "#/$defs/CompletenessManifest"
+        },
+        "dependencyEdges": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/DependencyEdge"
+          },
+          "title": "Dependencyedges",
+          "type": "array"
+        },
+        "impactRules": {
+          "default": [],
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ImpactRule"
+              },
+              {
+                "$ref": "#/$defs/ContextualImpactRule"
+              }
+            ]
+          },
+          "title": "Impactrules",
+          "type": "array"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/OrganizationNode"
+          },
+          "minItems": 1,
+          "title": "Nodes",
+          "type": "array"
+        },
+        "principals": {
+          "items": {
+            "$ref": "#/$defs/Principal"
+          },
+          "minItems": 1,
+          "title": "Principals",
+          "type": "array"
+        },
+        "roleDefinitions": {
+          "items": {
+            "$ref": "#/$defs/RoleDefinition"
+          },
+          "minItems": 1,
+          "title": "Roledefinitions",
+          "type": "array"
+        },
+        "separationConstraints": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SeparationConstraint"
+          },
+          "title": "Separationconstraints",
+          "type": "array"
+        },
+        "unknownTransitionDuties": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnknownTransitionDuty"
+          },
+          "title": "Unknowntransitionduties",
+          "type": "array"
+        }
+      },
+      "required": [
+        "nodes",
+        "roleDefinitions",
+        "principals",
+        "completeness"
+      ],
+      "title": "OrganizationSnapshotSpec",
+      "type": "object"
+    },
+    "Principal": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionStatus": {
+          "$ref": "#/$defs/AdmissionStatus",
+          "default": "admitted"
+        },
+        "eligibleRoleRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Eligiblerolerefs",
+          "type": "array"
+        },
+        "principalId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Principalid",
+          "type": "string"
+        },
+        "principalType": {
+          "enum": [
+            "human",
+            "agent",
+            "service",
+            "team"
+          ],
+          "title": "Principaltype",
+          "type": "string"
+        },
+        "qualificationRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Qualificationrefs",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "principalId",
+        "principalType",
+        "eligibleRoleRefs",
+        "status"
+      ],
+      "title": "Principal",
+      "type": "object"
+    },
+    "RelationType": {
+      "enum": [
+        "business_dependency",
+        "contractual_dependency",
+        "financial_exposure",
+        "compliance_dependency",
+        "operational_dependency",
+        "traceability",
+        "similarity",
+        "correlation"
+      ],
+      "title": "RelationType",
+      "type": "string"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "RoleDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionStatus": {
+          "$ref": "#/$defs/AdmissionStatus",
+          "default": "admitted"
+        },
+        "domainRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Domainref",
+          "type": "string"
+        },
+        "effectCeiling": {
+          "$ref": "#/$defs/EffectCeiling",
+          "default": "zero_effect"
+        },
+        "mission": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Mission",
+          "type": "string"
+        },
+        "requiredQualifications": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Requiredqualifications",
+          "type": "array"
+        },
+        "responsibilityTypes": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Responsibilitytypes",
+          "type": "array"
+        },
+        "roleId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Roleid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "roleId",
+        "domainRef",
+        "mission",
+        "responsibilityTypes"
+      ],
+      "title": "RoleDefinition",
+      "type": "object"
+    },
+    "ScopeSelector": {
+      "additionalProperties": false,
+      "description": "Explicit interpretation of change ``scopeRefs`` for one predicate.",
+      "properties": {
+        "matchMode": {
+          "enum": [
+            "all",
+            "any"
+          ],
+          "title": "Matchmode",
+          "type": "string"
+        },
+        "missingBehavior": {
+          "enum": [
+            "false",
+            "unknown"
+          ],
+          "title": "Missingbehavior",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "refs",
+        "matchMode",
+        "missingBehavior"
+      ],
+      "title": "ScopeSelector",
+      "type": "object"
+    },
+    "SeparationConstraint": {
+      "additionalProperties": false,
+      "properties": {
+        "constraintId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Constraintid",
+          "type": "string"
+        },
+        "leftRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Leftroleref",
+          "type": "string"
+        },
+        "rightRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Rightroleref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "constraintId",
+        "leftRoleRef",
+        "rightRoleRef"
+      ],
+      "title": "SeparationConstraint",
+      "type": "object"
+    },
+    "SubjectSelector": {
+      "additionalProperties": false,
+      "description": "Bounded subject atoms; no arbitrary attributes or executable expressions.",
+      "properties": {
+        "domainRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Domainrefs",
+          "type": "array"
+        },
+        "nodeTypes": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Nodetypes",
+          "type": "array"
+        },
+        "subjectRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Subjectrefs",
+          "type": "array"
+        }
+      },
+      "title": "SubjectSelector",
+      "type": "object"
+    },
+    "TransferPredicate": {
+      "additionalProperties": false,
+      "description": "Profile-declared condition under which one edge transfers this change.",
+      "properties": {
+        "afterValues": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Aftervalues",
+          "type": "array"
+        },
+        "semanticType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Semantictype",
+          "type": "string"
+        }
+      },
+      "required": [
+        "semanticType",
+        "afterValues"
+      ],
+      "title": "TransferPredicate",
+      "type": "object"
+    },
+    "UnknownTransitionDuty": {
+      "additionalProperties": false,
+      "description": "Snapshot-owned obligation emitted only for an UNKNOWN applicability result.",
+      "properties": {
+        "admissionStatus": {
+          "$ref": "#/$defs/AdmissionStatus"
+        },
+        "applicability": {
+          "$ref": "#/$defs/ContextualApplicabilityPredicate"
+        },
+        "dutyId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dutyid",
+          "type": "string"
+        },
+        "obligationType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationtype",
+          "type": "string"
+        },
+        "prerequisiteObligationTypes": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Prerequisiteobligationtypes",
+          "type": "array"
+        },
+        "requiredEvidence": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requiredevidence",
+          "type": "array"
+        },
+        "requiredRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Requiredroleref",
+          "type": "string"
+        },
+        "targetRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Targetref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dutyId",
+        "applicability",
+        "targetRef",
+        "requiredRoleRef",
+        "obligationType",
+        "requiredEvidence",
+        "admissionStatus"
+      ],
+      "title": "UnknownTransitionDuty",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/OrganizationSnapshot.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "OrganizationSnapshot",
+      "default": "OrganizationSnapshot",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/OrganizationSnapshotSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "OrganizationSnapshot",
+  "type": "object"
+}

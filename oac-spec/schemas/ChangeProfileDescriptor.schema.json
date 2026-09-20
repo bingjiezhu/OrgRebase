@@ -1,0 +1,77 @@
+{
+  "$id": "https://oac.dev/schemas/v0alpha1/ChangeProfileDescriptor.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.change-profile/v0.1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "applicabilityLanguage": {
+      "const": "oac.supplier.applicability/v0.2+legacy",
+      "title": "Applicabilitylanguage",
+      "type": "string"
+    },
+    "deltaPath": {
+      "const": "/request",
+      "title": "Deltapath",
+      "type": "string"
+    },
+    "effectCeiling": {
+      "const": "zero_effect",
+      "title": "Effectceiling",
+      "type": "string"
+    },
+    "kind": {
+      "const": "ChangeProfile",
+      "title": "Kind",
+      "type": "string"
+    },
+    "knownValueType": {
+      "const": "string",
+      "title": "Knownvaluetype",
+      "type": "string"
+    },
+    "profileId": {
+      "const": "oac.retail.cancellation-review",
+      "title": "Profileid",
+      "type": "string"
+    },
+    "profileVersion": {
+      "const": "v0.1",
+      "title": "Profileversion",
+      "type": "string"
+    },
+    "resourceProfile": {
+      "const": "oac.supplier.transfer/conformance-resource-profile/v1",
+      "title": "Resourceprofile",
+      "type": "string"
+    },
+    "semanticType": {
+      "const": "retail.cancel_requested",
+      "title": "Semantictype",
+      "type": "string"
+    },
+    "unknownValuePolicy": {
+      "const": "explicit-state-only",
+      "title": "Unknownvaluepolicy",
+      "type": "string"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "profileId",
+    "profileVersion",
+    "semanticType",
+    "deltaPath",
+    "knownValueType",
+    "unknownValuePolicy",
+    "effectCeiling",
+    "applicabilityLanguage",
+    "resourceProfile"
+  ],
+  "title": "ChangeProfileDescriptor",
+  "type": "object"
+}

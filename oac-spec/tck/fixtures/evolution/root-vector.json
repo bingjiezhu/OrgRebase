@@ -1,0 +1,24 @@
+{
+  "profile": "oac.evolution.minimum/v0.1",
+  "namespace": "oac.examples.supplier",
+  "refs": {
+    "snapshot": {"apiVersion":"oac.dev/v0alpha1","kind":"OrganizationSnapshot","namespace":"oac.examples.supplier","resourceId":"snapshot:veracier-proc01","revision":1,"digest":"sha256:b48ce98a9991583c09075ec4f93906de6b986bf1cea87cb132db0daafc62bcc4"},
+    "sourceAdmission": {"apiVersion":"oac.dev/v0alpha1","kind":"SourceAdmissionReceipt","namespace":"oac.examples.supplier","resourceId":"receipt:intake-1","revision":1,"digest":"sha256:bd9b6310e3d19253de06168a499d5a8100a60afd95f7d07fb177a4e35670955d"},
+    "demand": {"apiVersion":"oac.dev/v0alpha1","kind":"OrganizationalDemand","namespace":"oac.examples.supplier","resourceId":"demand:supplier-review","revision":1,"digest":"sha256:a31a5bb77bd4991ac6e649f79247b1eb57fe619d8dea96ec65162a4473279f1f"},
+    "change": {"apiVersion":"oac.dev/v0alpha1","kind":"SemanticChangeSet","namespace":"oac.examples.supplier","resourceId":"change:SC-008","revision":1,"digest":"sha256:fee664c4db2703538b35950a5a5cf0c126f5ca0c04b7a56502f04718402754d3"},
+    "plan": {"apiVersion":"oac.dev/v0alpha1","kind":"OrganizationPlan","namespace":"oac.examples.supplier","resourceId":"plan:SC-008:BASE","revision":1,"digest":"sha256:5870179500c52bf7530969583d60678045492eee26001ffe7fabda74391a572f"},
+    "planCertificate": {"apiVersion":"oac.dev/v0alpha1","kind":"PlanCertificate","namespace":"oac.examples.supplier","resourceId":"certificate:SC-008:BASE","revision":1,"digest":"sha256:61910539bc876b0a670221a8dec8cd4b841a7c00d53a2727d4fc607f297429f2"},
+    "runtimeBinding": {"apiVersion":"oac.dev/v0alpha1","kind":"RuntimeBinding","namespace":"oac.examples.supplier","resourceId":"binding:SC-008:BASE","revision":1,"digest":"sha256:b7afc9169b9b0a69ab5658a3b78c80298881d316e87b4ee852f54b126071c5bb"},
+    "runtimeBundle": {"apiVersion":"oac.dev/v0alpha1","kind":"ZeroEffectRuntimeBundle","namespace":"oac.examples.supplier","resourceId":"bundle:SC-008:BASE","revision":1,"digest":"sha256:29947505efadd128173587c5f7c2f3b12c5190ce60b6c752fadd5c3812c90e2b"},
+    "executionReceipt": {"apiVersion":"oac.dev/v0alpha1","kind":"ExecutionReceipt","namespace":"oac.examples.supplier","resourceId":"execution:SC-008:BASE:COMPLETED","revision":1,"digest":"sha256:9dbdd03466477a34806490bd2d0866112d6f2683add3fd2e1f741bc30bef245e"},
+    "executionEvidence": {"apiVersion":"oac.dev/v0alpha1","kind":"ExecutionEvidence","namespace":"oac.examples.supplier","resourceId":"evidence:SC-008:BASE","revision":1,"digest":"sha256:73e21a6dab5c45457b2a088669a2aeef5d065ef5a3032a56a540d145f5968d12"},
+    "outcomeCertificate": {"apiVersion":"oac.dev/v0alpha1","kind":"OutcomeCertificate","namespace":"oac.examples.supplier","resourceId":"outcome:SC-008:BASE:REJECT","revision":1,"digest":"sha256:c35f6fcb378bc8e895d659d12b793687f2f01e75af10b4ceff66bc67680d9331"}
+  },
+  "expectedRoots": {
+    "source": "sha256:ef9158ed9943d0d0a6029d0c2a84b5badc6f410943adbfe9e30909209ec84278",
+    "demand": "sha256:25576d86b847a5901edcaae8391d2902dc8408f14455fea04769d3120f542969",
+    "plan": "sha256:eefa0013da85bed746581548be181abec972831260b0d9a711878f6244040287",
+    "execution": "sha256:65032c6aa32281582ecfe50296f3c91856d8448b866974367feb2e3e32a0d2a7",
+    "outcome": "sha256:f32f75647b0ab82aacdd184794188ae5d5c46563c5d6c48da94e0ad13b149df7"
+  }
+}

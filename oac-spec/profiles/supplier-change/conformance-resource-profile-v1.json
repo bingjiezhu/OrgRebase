@@ -1,0 +1,28 @@
+{
+  "exhaustion": {
+    "errorCode": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED",
+    "partialDomainResultPermitted": false,
+    "sutStatus": "RESOURCE_EXHAUSTED"
+  },
+  "limits": {
+    "adapterTimeoutMs": 5000,
+    "maxAdapterOutputBytes": 1048576,
+    "maxBundleBytes": 67108864,
+    "maxBundleFiles": 512,
+    "maxCaseBytes": 1048576,
+    "maxRequestBytes": 1048576,
+    "maxDuties": 512,
+    "maxEdges": 1024,
+    "maxEvaluations": 2048,
+    "maxJsonDepth": 64,
+    "maxNodes": 256,
+    "maxPathPrefixes": 4096,
+    "maxPlanBytes": 16777216,
+    "maxResourceBytes": 8388608,
+    "maxRules": 512,
+    "maxSemanticDepth": 32,
+    "maxTotalWitnessRefs": 8192,
+    "maxWitnessRefsPerEvaluation": 256
+  },
+  "profileId": "oac.supplier.transfer/conformance-resource-profile/v1"
+}

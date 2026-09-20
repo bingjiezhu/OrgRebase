@@ -1,0 +1,39 @@
+{
+  "schema_version": "orgrebase.skill-package-manifest.v2",
+  "package_id": "skill-package:structured-domain-handoff@1.1.1",
+  "name": "structured-domain-handoff",
+  "version": "1.1.1",
+  "entry_point": "STRUCTURED_DOMAIN_HANDOFF_V1",
+  "resources": {
+    "skill": {"path": "SKILL.md", "sha256": "sha256:4c51a0bff0250e9582c1f5190440b0a688cf59c2cc2457e5e72117ef4e4fe28d"},
+    "contract": {"path": "contract.json", "sha256": "sha256:f19ec4330375c3e2e245aca795ea008c0ff206d85daed75e4d16dc8cfde742e1"},
+    "program": {"path": "program.json", "sha256": "sha256:dce8a74720b2308e2dd2d1b8f391cd3ecfbdc1f43536153416eaed47105a0bfe"},
+    "input_schema": {"path": "input.schema.json", "sha256": "sha256:2a10bdf91aa29cbcf1644db1247d3e69374c62a9cc0973fee8b4fce7b9ba75c5"},
+    "output_schema": {"path": "output.schema.json", "sha256": "sha256:9007f560a373ab35ef27a6880082d8c9a200bdcd66452f99690b07d4d9786132"}
+  },
+  "program_content_digest": "sha256:494cfcf17dafecbb0a4902d1d6b6c7bc60a4e6bb7037213f159350acaf3d97ab",
+  "input_schema_ref": "schema:orgrebase.structured-domain-handoff-input.v1",
+  "output_schema_ref": "schema:orgrebase.domain-transport-candidate.v1",
+  "permissions": {"allowed_tools": [], "side_effects": [], "effect_ceiling": "CANDIDATE_ONLY"},
+  "dependencies": {
+    "schema:orgrebase.structured-domain-handoff-input.v1": "sha256:2a10bdf91aa29cbcf1644db1247d3e69374c62a9cc0973fee8b4fce7b9ba75c5",
+    "schema:orgrebase.domain-transport-candidate.v1": "sha256:9007f560a373ab35ef27a6880082d8c9a200bdcd66452f99690b07d4d9786132",
+    "runtime:workspace-transport-compiler@1.0.0": "sha256:82e7cb90207ba4986fbe82c6ba20d02fec791c7973281abb04b77fdf8381d289"
+  },
+  "evaluation": {
+    "partitions": ["REPLAY", "HELD_OUT", "NEGATIVE_TRANSFER", "PERMISSION", "INJECTION", "MALFORMED", "RESOURCE_OR_DEADLINE", "CANARY"],
+    "functional_min_pass_rate": 1.0,
+    "security_min_pass_rate": 1.0,
+    "target_writes_max": 0
+  },
+  "release_artifact": {
+    "id": "skill-release:structured-domain-handoff@1.1.1",
+    "source_candidate_ref": null,
+    "source_candidate_digest": null,
+    "source_candidate_executable": false,
+    "predecessor_package_digest": "sha256:5c098c7ae6ba77372f174961776a5f25cdff37e3b7011c3e7388f5302fd25865"
+  },
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "provenance_refs": ["agentteams/workspace/skills/structured-domain-handoff/SKILL.md", "workspace-transport-compiler@1.0.0"],
+  "manifest_digest": "sha256:7c6cc80c6c8076e3a8015eb106844b1cd6edc4b0dd1d859b05d231b7f32a84c1"
+}

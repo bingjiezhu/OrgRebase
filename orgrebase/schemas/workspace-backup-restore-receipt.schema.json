@@ -1,0 +1,91 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-backup-restore-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_count": {
+      "minimum": 0,
+      "title": "Artifact Count",
+      "type": "integer"
+    },
+    "backup_digest": {
+      "title": "Backup Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "duration_ms": {
+      "minimum": 0,
+      "title": "Duration Ms",
+      "type": "integer"
+    },
+    "evidence_class": {
+      "const": "OBSERVED_CONTROLLED_LOCAL",
+      "default": "OBSERVED_CONTROLLED_LOCAL",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "object_count": {
+      "minimum": 0,
+      "title": "Object Count",
+      "type": "integer"
+    },
+    "production_sla_claimed": {
+      "const": false,
+      "default": false,
+      "title": "Production Sla Claimed",
+      "type": "boolean"
+    },
+    "restored_digest": {
+      "title": "Restored Digest",
+      "type": "string"
+    },
+    "restored_event_head": {
+      "title": "Restored Event Head",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.backup-restore-receipt.v1",
+      "default": "orgrebase.backup-restore-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_digest": {
+      "title": "Source Digest",
+      "type": "string"
+    },
+    "source_event_head": {
+      "title": "Source Event Head",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "source_digest",
+    "backup_digest",
+    "restored_digest",
+    "source_event_head",
+    "restored_event_head",
+    "object_count",
+    "artifact_count",
+    "duration_ms",
+    "status"
+  ],
+  "title": "BackupRestoreReceipt",
+  "type": "object"
+}

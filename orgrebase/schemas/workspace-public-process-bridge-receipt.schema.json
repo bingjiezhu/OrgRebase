@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-public-process-bridge-receipt.schema.json",
+  "title": "Public Process Data Bridge Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "benchmark_version",
+    "run_id",
+    "status",
+    "evidence_class",
+    "claim_ceiling",
+    "claim_boundary",
+    "input_closure",
+    "scenario",
+    "strategies",
+    "enterprise_value_metrics",
+    "limitations",
+    "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-public-process-bridge-receipt.v1"},
+    "benchmark_version": {"const": "QuoteValue-v0.3-public-process"},
+    "run_id": {"type": "string", "minLength": 1},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "PUBLIC_SOURCE_DERIVED_SYNTHETIC"},
+    "claim_ceiling": {"const": "MECHANISM_VALIDATION_ONLY"},
+    "claim_boundary": {"const": "NOT_OBSERVED_ENTERPRISE_SHADOW_NOT_REALIZED_ROI_NOT_PRODUCTION_SLA"},
+    "input_closure": {"type": "object", "required": ["projection_digest", "overlay_digest", "mapping_digest"], "additionalProperties": true},
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario_id", "target_count", "ground_truth_affected_count", "ground_truth_origin", "dependency_kind_counts"],
+      "properties": {
+        "scenario_id": {"type": "string", "minLength": 1},
+        "target_count": {"type": "integer", "minimum": 1},
+        "ground_truth_affected_count": {"type": "integer", "minimum": 1},
+        "ground_truth_origin": {"const": "EXPERIMENTER_INJECTED"},
+        "dependency_kind_counts": {"type": "object", "required": ["ACTUAL_READ", "EXPLICIT_NON_DEPENDENCY", "UNKNOWN"], "additionalProperties": false, "properties": {"ACTUAL_READ": {"type": "integer", "minimum": 0}, "EXPLICIT_NON_DEPENDENCY": {"type": "integer", "minimum": 0}, "UNKNOWN": {"type": "integer", "minimum": 0}}}
+      }
+    },
+    "strategies": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["strategy_id", "classifications", "counts", "metrics"],
+        "properties": {
+          "strategy_id": {"enum": ["BROADCAST_ALL", "NAIVE_GRAPH", "OAC_TYPED_WITH_UNKNOWN"]},
+          "classifications": {"type": "object", "required": ["affected", "unknown", "unaffected"], "additionalProperties": false, "properties": {"affected": {"type": "array", "items": {"type": "string"}}, "unknown": {"type": "array", "items": {"type": "string"}}, "unaffected": {"type": "array", "items": {"type": "string"}}}},
+          "counts": {"type": "object", "required": ["true_positive", "false_positive", "true_negative", "false_negative", "conservative_action_scope"], "additionalProperties": {"type": "integer", "minimum": 0}},
+          "metrics": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["precision", "recall", "false_invalidation_rate", "scope_reduction_rate", "unsafe_false_unaffected_rate"],
+            "properties": {
+              "precision": {"$ref": "#/$defs/metric"},
+              "recall": {"$ref": "#/$defs/metric"},
+              "false_invalidation_rate": {"$ref": "#/$defs/metric"},
+              "scope_reduction_rate": {"$ref": "#/$defs/metric"},
+              "unsafe_false_unaffected_rate": {"$ref": "#/$defs/metric"}
+            }
+          }
+        }
+      }
+    },
+    "enterprise_value_metrics": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["metric_id", "status", "value", "evidence_class", "reason"],
+        "properties": {
+          "metric_id": {"type": "string", "minLength": 1},
+          "status": {"const": "NOT_RUN"},
+          "value": {"type": "null"},
+          "evidence_class": {"const": "NOT_RUN"},
+          "reason": {"const": "PUBLIC_SIMULATION_DOES_NOT_OBSERVE_ENTERPRISE_VALUE"}
+        }
+      }
+    },
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "numerator", "denominator", "formula"],
+      "properties": {
+        "value": {"type": "number", "minimum": 0, "maximum": 1},
+        "numerator": {"type": "integer", "minimum": 0},
+        "denominator": {"type": "integer", "minimum": 1},
+        "formula": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

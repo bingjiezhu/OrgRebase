@@ -1,0 +1,156 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrganizationSnapshot",
+  "metadata": {
+    "id": "snapshot:retail-113",
+    "namespace": "orgrebase.lab.retail",
+    "revision": 1,
+    "ownerRef": "role:review",
+    "governanceRef": "governance:local-lab",
+    "createdAt": "2026-09-10T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "https://github.com/sierra-research/tau2-bench/tree/672227c6b6676edc20d57ea53b7000262aae77b9",
+      "orgrebase:local-proposed-mapping"
+    ]
+  },
+  "digest": "sha256:12861e2957b302302c8a5b5882901acf11b0cc7362396d5cfa70aa6249f558a7",
+  "spec": {
+    "nodes": [
+      {
+        "nodeId": "request:113",
+        "nodeType": "customer-request",
+        "domainRef": "domain:retail",
+        "ownerRoleRef": "role:review",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:5056519",
+        "nodeType": "retail-order",
+        "domainRef": "domain:retail",
+        "ownerRoleRef": "role:cancel",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:5995614",
+        "nodeType": "retail-order",
+        "domainRef": "domain:retail",
+        "ownerRoleRef": "role:cancel",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "roleDefinitions": [
+      {
+        "roleId": "role:review",
+        "domainRef": "domain:retail",
+        "mission": "Review review obligations in a disposable environment",
+        "responsibilityTypes": [
+          "review"
+        ],
+        "requiredQualifications": [
+          "qualification:review"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      },
+      {
+        "roleId": "role:cancel",
+        "domainRef": "domain:retail",
+        "mission": "Review cancel obligations in a disposable environment",
+        "responsibilityTypes": [
+          "cancel"
+        ],
+        "requiredQualifications": [
+          "qualification:cancel"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "principals": [
+      {
+        "principalId": "principal:review",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:review"
+        ],
+        "qualificationRefs": [
+          "qualification:review"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      },
+      {
+        "principalId": "principal:cancel",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:cancel"
+        ],
+        "qualificationRefs": [
+          "qualification:cancel"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "dependencyEdges": [],
+    "impactRules": [
+      {
+        "ruleId": "rule:cancel:5056519",
+        "semanticType": "retail.cancel_requested",
+        "afterValues": [
+          "confirmed"
+        ],
+        "targetRef": "order:5056519",
+        "requiredRoleRef": "role:cancel",
+        "obligationType": "cancel_order",
+        "requiredEvidence": [
+          "evidence:cancel:5056519"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:cancel:5995614",
+        "semanticType": "retail.cancel_requested",
+        "afterValues": [
+          "confirmed"
+        ],
+        "targetRef": "order:5995614",
+        "requiredRoleRef": "role:cancel",
+        "obligationType": "cancel_order",
+        "requiredEvidence": [
+          "evidence:cancel:5995614"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:review",
+        "semanticType": "retail.cancel_requested",
+        "afterValues": [
+          "confirmed"
+        ],
+        "targetRef": "request:113",
+        "requiredRoleRef": "role:review",
+        "obligationType": "review_order",
+        "requiredEvidence": [
+          "evidence:review"
+        ],
+        "admissionStatus": "admitted"
+      }
+    ],
+    "separationConstraints": [],
+    "completeness": {
+      "status": "complete",
+      "coveredNodeRefs": [
+        "request:113",
+        "order:5056519",
+        "order:5995614"
+      ],
+      "coveredRelationTypes": [],
+      "maxDepth": 1,
+      "knownGaps": [],
+      "discoveryRoleRef": "role:review"
+    }
+  }
+}

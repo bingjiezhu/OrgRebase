@@ -1,0 +1,347 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-quote-shadow-admission-receipt.schema.json",
+  "$defs": {
+    "AdmissionGate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "PASS",
+            "NOT_RUN"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "detail"
+      ],
+      "title": "AdmissionGate",
+      "type": "object"
+    },
+    "MetricResult": {
+      "additionalProperties": false,
+      "properties": {
+        "metric_id": {
+          "title": "Metric Id",
+          "type": "string"
+        },
+        "formula": {
+          "title": "Formula",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "numerator": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Numerator"
+        },
+        "denominator": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Denominator"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "CALCULATED",
+            "NOT_RUN"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "evidence_class": {
+          "$ref": "#/$defs/ShadowEvidenceClass"
+        },
+        "observation_window": {
+          "title": "Observation Window",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "limitation": {
+          "title": "Limitation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metric_id",
+        "formula",
+        "value",
+        "numerator",
+        "denominator",
+        "unit",
+        "status",
+        "evidence_class",
+        "observation_window",
+        "source_refs",
+        "limitation"
+      ],
+      "title": "MetricResult",
+      "type": "object"
+    },
+    "ObservationWindow": {
+      "additionalProperties": false,
+      "properties": {
+        "started_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Started At"
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ended At"
+        },
+        "timezone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timezone"
+        }
+      },
+      "title": "ObservationWindow",
+      "type": "object"
+    },
+    "ShadowEvidenceClass": {
+      "enum": [
+        "NOT_RUN",
+        "SYNTHETIC_CONTRACT_FIXTURE",
+        "OBSERVED_ENTERPRISE_SHADOW"
+      ],
+      "title": "ShadowEvidenceClass",
+      "type": "string"
+    },
+    "SourceKind": {
+      "enum": [
+        "WORKFLOW_EVENT_LOG",
+        "ACTIVE_TIME_LOG",
+        "ACCESS_EVENT_LOG",
+        "IMPACT_ADJUDICATION_LOG",
+        "COST_LEDGER"
+      ],
+      "title": "SourceKind",
+      "type": "string"
+    },
+    "SourceProvenance": {
+      "enum": [
+        "SYNTHETIC_FIXTURE",
+        "ENTERPRISE_EXTRACT"
+      ],
+      "title": "SourceProvenance",
+      "type": "string"
+    },
+    "SourceVerification": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "file_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "File Sha256",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/SourceKind"
+        },
+        "provenance": {
+          "$ref": "#/$defs/SourceProvenance"
+        },
+        "complete_for_window": {
+          "const": true,
+          "title": "Complete For Window",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "file_sha256",
+        "kind",
+        "provenance",
+        "complete_for_window"
+      ],
+      "title": "SourceVerification",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.workspace-quote-shadow-admission-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "assessed_at": {
+      "format": "date-time",
+      "title": "Assessed At",
+      "type": "string"
+    },
+    "observation_record_id": {
+      "title": "Observation Record Id",
+      "type": "string"
+    },
+    "observation_record_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Observation Record Digest",
+      "type": "string"
+    },
+    "admission_verdict": {
+      "const": "ADMIT",
+      "title": "Admission Verdict",
+      "type": "string"
+    },
+    "measurement_status": {
+      "enum": [
+        "CALCULATED",
+        "NOT_RUN"
+      ],
+      "title": "Measurement Status",
+      "type": "string"
+    },
+    "evidence_ceiling": {
+      "$ref": "#/$defs/ShadowEvidenceClass"
+    },
+    "enterprise_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Enterprise Ref"
+    },
+    "observation_window": {
+      "$ref": "#/$defs/ObservationWindow"
+    },
+    "gates": {
+      "items": {
+        "$ref": "#/$defs/AdmissionGate"
+      },
+      "title": "Gates",
+      "type": "array"
+    },
+    "source_evidence": {
+      "items": {
+        "$ref": "#/$defs/SourceVerification"
+      },
+      "title": "Source Evidence",
+      "type": "array"
+    },
+    "metrics": {
+      "items": {
+        "$ref": "#/$defs/MetricResult"
+      },
+      "maxItems": 7,
+      "minItems": 7,
+      "title": "Metrics",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "assessed_at",
+    "observation_record_id",
+    "observation_record_digest",
+    "admission_verdict",
+    "measurement_status",
+    "evidence_ceiling",
+    "enterprise_ref",
+    "observation_window",
+    "gates",
+    "source_evidence",
+    "metrics",
+    "limitations"
+  ],
+  "title": "QuoteShadowAdmissionReceipt",
+  "type": "object"
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:veracier-supplier-shadow@r2",
+  "organization_id": "org:veracier",
+  "component_kind": "CAPABILITY",
+  "revision": "r2",
+  "runtime_binding_mode": "INTAKE_ONLY",
+  "projection": {
+    "requested_deliverable_kind": "SUPPLIER_STATUS_REVIEW",
+    "requested_template_ref": "template:supplier_status_review@v1",
+    "demand_ref": "demand:SC-008",
+    "runtime_handler": "NOT_IMPLEMENTED",
+    "growth_ceiling": "G0_DESCRIBE"
+  },
+  "projection_digest": "sha256:1af05f8e21bf86021009c2975c0d66f4707a92cc9a9f43ba59d08c10ccbe1bfc"
+}

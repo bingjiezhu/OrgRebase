@@ -1,0 +1,14 @@
+{
+  "action": "accept_task_result",
+  "digest": "sha256:bd2fd04211c82154d84bd61d696392bccb3868437d814810523d82ae124e4ad9",
+  "error": null,
+  "key": "at-domain-legal-a3f56c48b0c5:accept",
+  "ok": true,
+  "payload_digest": "sha256:c1c151f77a35aa64efc0e2e28121f81ccc9215f83c1657b21b071f44fcfc0804",
+  "raw_ref": "raw-mcp/008-at-domain-legal-a3f56c48b0c5-accept-76a3d7df.json",
+  "request_digest": "sha256:a90b63fe3dc25248526938f781ea9e1fc4fb7a85c0491d50f36a4435de29d23f",
+  "response_digest": "sha256:1e5054b40eaa93f8328ae765d5b0b5d9d047d1fe426bebed8d3c459ba100b698",
+  "sequence": 8,
+  "status": "completed",
+  "tool": "projectflow"
+}

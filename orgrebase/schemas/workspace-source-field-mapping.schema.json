@@ -1,0 +1,47 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-source-field-mapping.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "field": {
+      "pattern": "^[a-z][a-z0-9_]{0,127}$",
+      "title": "Field",
+      "type": "string"
+    },
+    "record_id": {
+      "pattern": "^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "slot_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Slot Id",
+      "type": "string"
+    },
+    "transform": {
+      "default": "identity",
+      "enum": [
+        "identity",
+        "date_only"
+      ],
+      "title": "Transform",
+      "type": "string"
+    },
+    "value_map": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "maxProperties": 128,
+      "title": "Value Map",
+      "type": "object"
+    }
+  },
+  "required": [
+    "record_id",
+    "field",
+    "slot_id"
+  ],
+  "title": "SourceFieldMapping",
+  "type": "object"
+}

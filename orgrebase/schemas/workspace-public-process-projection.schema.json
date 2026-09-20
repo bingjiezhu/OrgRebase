@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-public-process-projection.schema.json",
+  "title": "Object-Centric Public Process Projection",
+  "$defs": {
+    "origin": {"enum": ["OBSERVED", "DERIVED", "EXPERIMENTER_INJECTED", "MISSING"]},
+    "nonempty": {"type": "string", "minLength": 1},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection_id",
+    "evidence_class",
+    "claim_boundary",
+    "upstream",
+    "selection",
+    "provenance_legend",
+    "objects",
+    "events",
+    "event_object_relations",
+    "object_object_relations",
+    "object_attribute_history",
+    "derived_views",
+    "table_counts",
+    "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-public-process-projection.v1"},
+    "projection_id": {"$ref": "#/$defs/nonempty"},
+    "evidence_class": {"const": "PUBLIC_PROCESS_OBSERVED_DERIVED"},
+    "claim_boundary": {"const": "PUBLIC_SIMULATION_MECHANISM_FIXTURE_NOT_ENTERPRISE_SHADOW_OR_ROI"},
+    "upstream": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["status", "record_id", "doi", "file_name", "size_bytes", "md5", "sha256"],
+      "properties": {
+        "status": {"const": "PASS"},
+        "record_id": {"const": "8337464"},
+        "doi": {"const": "10.5281/zenodo.8337464"},
+        "file_name": {"const": "order-management.sqlite"},
+        "size_bytes": {"const": 9592832},
+        "md5": {"pattern": "^md5:[0-9a-f]{32}$"},
+        "sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["as_of", "changed_object_ref", "rule", "origin"],
+      "properties": {
+        "as_of": {"type": "string", "format": "date-time"},
+        "changed_object_ref": {"$ref": "#/$defs/nonempty"},
+        "rule": {"$ref": "#/$defs/nonempty"},
+        "origin": {"const": "DERIVED"}
+      }
+    },
+    "provenance_legend": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/origin"}
+    },
+    "objects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["object_ref", "object_type", "origin"],
+        "properties": {
+          "object_ref": {"$ref": "#/$defs/nonempty"},
+          "object_type": {"$ref": "#/$defs/nonempty"},
+          "origin": {"const": "OBSERVED"}
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["event_ref", "event_type", "occurred_at", "origin"],
+        "properties": {
+          "event_ref": {"$ref": "#/$defs/nonempty"},
+          "event_type": {"$ref": "#/$defs/nonempty"},
+          "occurred_at": {"type": "string", "format": "date-time"},
+          "origin": {"const": "OBSERVED"}
+        }
+      }
+    },
+    "event_object_relations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["event_ref", "object_ref", "qualifier", "origin"],
+        "properties": {
+          "event_ref": {"$ref": "#/$defs/nonempty"},
+          "object_ref": {"$ref": "#/$defs/nonempty"},
+          "qualifier": {"$ref": "#/$defs/nonempty"},
+          "origin": {"const": "OBSERVED"}
+        }
+      }
+    },
+    "object_object_relations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_ref", "target_ref", "qualifier", "origin"],
+        "properties": {
+          "source_ref": {"$ref": "#/$defs/nonempty"},
+          "target_ref": {"$ref": "#/$defs/nonempty"},
+          "qualifier": {"$ref": "#/$defs/nonempty"},
+          "origin": {"const": "OBSERVED"}
+        }
+      }
+    },
+    "object_attribute_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["object_ref", "object_type", "observed_at", "changed_field", "attributes", "origin"],
+        "properties": {
+          "object_ref": {"$ref": "#/$defs/nonempty"},
+          "object_type": {"$ref": "#/$defs/nonempty"},
+          "observed_at": {"type": "string", "format": "date-time"},
+          "changed_field": {"type": ["string", "null"]},
+          "attributes": {"type": "object"},
+          "origin": {"const": "OBSERVED"}
+        }
+      }
+    },
+    "derived_views": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["open_order_refs", "exact_product_paths", "origin"],
+      "properties": {
+        "open_order_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}},
+        "exact_product_paths": {"type": "object", "additionalProperties": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/nonempty"}}},
+        "origin": {"const": "DERIVED"}
+      }
+    },
+    "table_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objects", "events", "event_object_relations", "object_object_relations", "object_attribute_history"],
+      "properties": {
+        "objects": {"type": "integer", "minimum": 1},
+        "events": {"type": "integer", "minimum": 1},
+        "event_object_relations": {"type": "integer", "minimum": 1},
+        "object_object_relations": {"type": "integer", "minimum": 1},
+        "object_attribute_history": {"type": "integer", "minimum": 1}
+      }
+    },
+    "digest": {"$ref": "#/$defs/digest"}
+  }
+}

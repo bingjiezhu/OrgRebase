@@ -1,0 +1,39 @@
+{
+  "schema_version": "orgrebase.skill-package-manifest.v2",
+  "package_id": "skill-package:enterprise-launch-readiness@1.4.1",
+  "name": "enterprise-launch-readiness",
+  "version": "1.4.1",
+  "entry_point": "LAUNCH_READINESS_V1",
+  "resources": {
+    "skill": {"path": "SKILL.md", "sha256": "sha256:2cd6099d91ebe83cc37d79a2d285d9b2257853a280b5dd890860ae3f45fd3f7b"},
+    "contract": {"path": "contract.json", "sha256": "sha256:760d18a7bcdda37fbe81c19c9e6838a1abbd24c8c6ef8ec77655b4ddcf5a753e"},
+    "program": {"path": "program.json", "sha256": "sha256:24bb8a7fb94a7083abac1b383f7587f7ddb5aa2d76c6b8a42db54637cff731fb"},
+    "input_schema": {"path": "input.schema.json", "sha256": "sha256:f33219dc0d0a9928bacce2857e2e261bd34d4fb96306d4a077bafb2a4124e7a1"},
+    "output_schema": {"path": "output.schema.json", "sha256": "sha256:f32022ec8cb1d6100959c2c165cdfe1d80dee811f6a2272153815d935735f01d"}
+  },
+  "program_content_digest": "sha256:40a4b5159268a7f34cb1972f62d06e50b5499ac45d7aedc9dfc1ef7ca4d46aa7",
+  "input_schema_ref": "schema:orgrebase.launch-readiness-input.v1",
+  "output_schema_ref": "schema:orgrebase.skill-action.v1",
+  "permissions": {"allowed_tools": [], "side_effects": [], "effect_ceiling": "CANDIDATE_ONLY"},
+  "dependencies": {
+    "schema:orgrebase.launch-readiness-input.v1": "sha256:f33219dc0d0a9928bacce2857e2e261bd34d4fb96306d4a077bafb2a4124e7a1",
+    "schema:orgrebase.skill-action.v1": "sha256:f32022ec8cb1d6100959c2c165cdfe1d80dee811f6a2272153815d935735f01d",
+    "policy:agent-boundaries@r1": "sha256:c5d037328560e9feb84c8cc97e9f2028ef9ce277a09924bf4ef56d74a478ce4d"
+  },
+  "evaluation": {
+    "partitions": ["REPLAY", "HELD_OUT", "NEGATIVE_TRANSFER", "PERMISSION", "INJECTION", "MALFORMED", "RESOURCE_OR_DEADLINE", "CANARY"],
+    "functional_min_pass_rate": 1.0,
+    "security_min_pass_rate": 1.0,
+    "target_writes_max": 0
+  },
+  "release_artifact": {
+    "id": "skill-release:enterprise-launch-readiness@1.4.1",
+    "source_candidate_ref": null,
+    "source_candidate_digest": null,
+    "source_candidate_executable": false,
+    "predecessor_package_digest": "sha256:c50c4240ce88ffa592b2b32735b551dda44149d098c4c80b4ae9d362e84bf02b"
+  },
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "provenance_refs": ["skills/enterprise-launch-readiness/contract.json", "qualification:enterprise-launch-readiness@1"],
+  "manifest_digest": "sha256:184b84da6c99ace9a649929ed6aacbfe6e801dea4034891c7f72056ce3172c47"
+}

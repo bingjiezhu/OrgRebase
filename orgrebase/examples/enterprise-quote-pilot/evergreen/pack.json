@@ -1,0 +1,59 @@
+{
+  "schema_version": "orgrebase.enterprise-quote-pilot-pack.v1",
+  "pack_id": "pack:evergreen-enterprise-quote",
+  "revision": "r1",
+  "adapter_id": "enterprise-quote-v1",
+  "profile_path": "profile.json",
+  "components": [
+    {
+      "component_kind": "DOMAIN",
+      "locator": "pilot://evergreen/domain@r1",
+      "path": "components/domain.json"
+    },
+    {
+      "component_kind": "KNOWLEDGE",
+      "locator": "pilot://evergreen/knowledge@r1",
+      "path": "components/knowledge.json"
+    },
+    {
+      "component_kind": "AUTHORITY",
+      "locator": "pilot://evergreen/authority@r1",
+      "path": "components/authority.json"
+    },
+    {
+      "component_kind": "CAPABILITY",
+      "locator": "pilot://evergreen/capability@r1",
+      "path": "components/capability.json"
+    },
+    {
+      "component_kind": "DEPENDENCY",
+      "locator": "pilot://evergreen/dependency@r1",
+      "path": "components/dependency.json"
+    }
+  ],
+  "runtime": {
+    "quote_object_id": "work:quote-blue-harbor",
+    "quote_label": "Blue Harbor Enterprise Quote",
+    "graph_pointer_id": "graph:workspace",
+    "graph_snapshot_id": "workspace-graph:evergreen",
+    "task_receipt_id": "task-receipt:quote-blue-harbor@v1",
+    "default_run_id": "run:workspace:quote-blue-harbor@v1",
+    "universe_artifact_id": "workspace-universe:evergreen@r1",
+    "universe_id": "workspace-universe:evergreen",
+    "universe_revision": "r1",
+    "built_at": "2026-08-27T00:00:00Z"
+  },
+  "scenario": {
+    "label": "Evergreen Industries enterprise quote evolution",
+    "primary_user": "Enterprise Quote Operator",
+    "workflow": "enterprise_quote",
+    "deployment_unit": "single_enterprise_single_quote"
+  },
+  "boundaries": {
+    "execution_profile": "LOCAL_DETERMINISTIC",
+    "enterprise_input": "EXACT_DIRECTORY_PACK",
+    "external_writes": "DISABLED",
+    "approval_mode": "EXPLICIT_OWNER_COMMAND",
+    "deployment_maturity": "SINGLE_ENTERPRISE_PILOT"
+  }
+}

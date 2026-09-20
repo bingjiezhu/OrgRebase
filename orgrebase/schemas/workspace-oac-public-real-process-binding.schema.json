@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-oac-public-real-process-binding.schema.json",
+  "title": "BPI 2019 public real process to OAC binding receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "claim_ceiling",
+    "adaptation_run_id",
+    "execution_run_id",
+    "source_sha256",
+    "dataset_manifest_digest",
+    "projection_digest",
+    "config_digest",
+    "mapping_candidate_digest",
+    "mapping_set_digest",
+    "organizational_demand_digest",
+    "context_capsule_digest",
+    "agentteams",
+    "model_attempt",
+    "selected_mapping_lane",
+    "deterministic_validation",
+    "unknown_dimensions",
+    "review_gate",
+    "human_admission",
+    "typed_scope_execution",
+    "limitations",
+    "candidate_only",
+    "canonical_target_writes",
+    "digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orgrebase.workspace-oac-public-real-process-binding.v1"
+    },
+    "status": {"const": "PASS"},
+    "claim_ceiling": {
+      "const": "PUBLIC_REAL_DATA_OAC_MAPPING_AND_TYPED_SCOPE_EXECUTION"
+    },
+    "adaptation_run_id": {
+      "type": "string",
+      "pattern": "^run:bpi2019-oac-adaptation:"
+    },
+    "execution_run_id": {
+      "type": "string",
+      "pattern": "^run:bpi2019-oac-execution:"
+    },
+    "source_sha256": {
+      "const": "sha256:af63bc687fc4152f2123b05c3af7772b37ef3fce2d3f67f812666c9e356baae7"
+    },
+    "dataset_manifest_digest": {"$ref": "#/$defs/digest"},
+    "projection_digest": {"$ref": "#/$defs/digest"},
+    "config_digest": {"$ref": "#/$defs/digest"},
+    "mapping_candidate_digest": {"$ref": "#/$defs/digest"},
+    "mapping_set_digest": {"$ref": "#/$defs/digest"},
+    "organizational_demand_digest": {"$ref": "#/$defs/digest"},
+    "context_capsule_digest": {"$ref": "#/$defs/digest"},
+    "agentteams": {
+      "type": "object",
+      "required": [
+        "evidence_class",
+        "run_id",
+        "action_sequence",
+        "terminal_state",
+        "candidate_only",
+        "canonical_target_writes"
+      ],
+      "properties": {
+        "evidence_class": {"const": "CONTROLLED_LOCAL_NATIVE_TASKFLOW"},
+        "run_id": {"type": "string"},
+        "action_sequence": {
+          "const": [
+            "create_project",
+            "plan_dag",
+            "ready_nodes",
+            "delegate_task",
+            "ack_task",
+            "submit_task",
+            "check_task",
+            "accept_task_result",
+            "complete_project"
+          ]
+        },
+        "terminal_state": {"const": "completed"},
+        "candidate_only": {"const": true},
+        "canonical_target_writes": {"const": 0}
+      }
+    },
+    "model_attempt": {"type": "object"},
+    "selected_mapping_lane": {
+      "enum": [
+        "LIVE_VERTEX_AGENT_CANDIDATE",
+        "CONTROLLED_LOCAL_DETERMINISTIC_FALLBACK"
+      ]
+    },
+    "deterministic_validation": {
+      "type": "object",
+      "required": ["verdict", "failures", "canonical_target_writes"],
+      "properties": {
+        "verdict": {"const": "PASS"},
+        "failures": {"const": []},
+        "canonical_target_writes": {"const": 0}
+      }
+    },
+    "unknown_dimensions": {
+      "type": "object",
+      "required": [
+        "ORGANIZATION_VALUES",
+        "REAL_RESPONSIBLE_OWNERS",
+        "PERMISSIONS",
+        "APPROVAL_AUTHORITIES"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ORGANIZATION_VALUES": {"$ref": "#/$defs/unknown"},
+        "REAL_RESPONSIBLE_OWNERS": {"$ref": "#/$defs/unknown"},
+        "PERMISSIONS": {"$ref": "#/$defs/unknown"},
+        "APPROVAL_AUTHORITIES": {"$ref": "#/$defs/unknown"}
+      }
+    },
+    "review_gate": {
+      "type": "object",
+      "required": ["review_duration_ms", "prepared_at_epoch_ms", "not_before_epoch_ms"],
+      "properties": {
+        "review_duration_ms": {"const": 4000},
+        "prepared_at_epoch_ms": {"type": "integer", "minimum": 0},
+        "not_before_epoch_ms": {"type": "integer", "minimum": 4000}
+      }
+    },
+    "human_admission": {"type": "object"},
+    "typed_scope_execution": {
+      "type": "object",
+      "required": [
+        "adaptation_run_id",
+        "execution_run_id",
+        "mapping_set_digest",
+        "context_capsule_digest",
+        "organizational_demand_digest",
+        "execution_receipt_digest",
+        "independent_verification_digest",
+        "query_count",
+        "ground_truth_class",
+        "recall",
+        "unsafe_false_unaffected_rate",
+        "canonical_target_writes",
+        "digest"
+      ],
+      "properties": {
+        "adaptation_run_id": {"type": "string"},
+        "execution_run_id": {"type": "string"},
+        "mapping_set_digest": {"$ref": "#/$defs/digest"},
+        "context_capsule_digest": {"$ref": "#/$defs/digest"},
+        "organizational_demand_digest": {"$ref": "#/$defs/digest"},
+        "execution_receipt_digest": {"$ref": "#/$defs/digest"},
+        "independent_verification_digest": {"$ref": "#/$defs/digest"},
+        "query_count": {"const": 128},
+        "ground_truth_class": {"const": "TASK_DEFINED_QUERY_GROUND_TRUTH"},
+        "recall": {"const": 1.0},
+        "unsafe_false_unaffected_rate": {"const": 0.0},
+        "canonical_target_writes": {"const": 0},
+        "digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string"}
+    },
+    "candidate_only": {"const": true},
+    "canonical_target_writes": {"const": 0},
+    "digest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "execution_disposition",
+        "human_supplement_required",
+        "inferred_from_anonymous_log"
+      ],
+      "properties": {
+        "status": {"const": "UNKNOWN"},
+        "execution_disposition": {"const": "HOLD"},
+        "human_supplement_required": {"const": true},
+        "inferred_from_anonymous_log": {"const": false}
+      }
+    }
+  }
+}

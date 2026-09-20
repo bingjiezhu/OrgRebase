@@ -1,0 +1,152 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-promotion-apply-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "after_graph_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "After Graph Digest",
+      "type": "string"
+    },
+    "after_graph_ref": {
+      "minLength": 1,
+      "title": "After Graph Ref",
+      "type": "string"
+    },
+    "after_quote_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "After Quote Digest",
+      "type": "string"
+    },
+    "after_quote_ref": {
+      "minLength": 1,
+      "title": "After Quote Ref",
+      "type": "string"
+    },
+    "before_graph_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Before Graph Digest",
+      "type": "string"
+    },
+    "before_graph_ref": {
+      "minLength": 1,
+      "title": "Before Graph Ref",
+      "type": "string"
+    },
+    "before_quote_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Before Quote Digest",
+      "type": "string"
+    },
+    "before_quote_ref": {
+      "minLength": 1,
+      "title": "Before Quote Ref",
+      "type": "string"
+    },
+    "canonical_target_writes": {
+      "const": 2,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "canonical_write_set": {
+      "items": {
+        "enum": [
+          "work:quote_acme",
+          "graph:workspace"
+        ],
+        "type": "string"
+      },
+      "title": "Canonical Write Set",
+      "type": "array"
+    },
+    "digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Digest",
+      "type": "string"
+    },
+    "event_chain_head_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Event Chain Head Digest",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "launch_date",
+        "currency"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "promotion_approval_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Promotion Approval Digest",
+      "type": "string"
+    },
+    "promotion_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Promotion Digest",
+      "type": "string"
+    },
+    "proposal_plane_target_writes": {
+      "const": 0,
+      "title": "Proposal Plane Target Writes",
+      "type": "integer"
+    },
+    "run_id": {
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.promotion-apply-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "const": "APPLIED",
+      "title": "Status",
+      "type": "string"
+    },
+    "workspace_approval_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Workspace Approval Digest",
+      "type": "string"
+    },
+    "workspace_outcome_artifact_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Workspace Outcome Artifact Digest",
+      "type": "string"
+    },
+    "workspace_rebase_receipt_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Workspace Rebase Receipt Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "digest",
+    "schema_version",
+    "status",
+    "run_id",
+    "kind",
+    "promotion_digest",
+    "promotion_approval_digest",
+    "workspace_approval_digest",
+    "workspace_rebase_receipt_digest",
+    "workspace_outcome_artifact_digest",
+    "before_quote_ref",
+    "before_quote_digest",
+    "after_quote_ref",
+    "after_quote_digest",
+    "before_graph_ref",
+    "before_graph_digest",
+    "after_graph_ref",
+    "after_graph_digest",
+    "canonical_write_set",
+    "canonical_target_writes",
+    "proposal_plane_target_writes",
+    "event_chain_head_digest"
+  ],
+  "title": "PromotionApplyReceipt",
+  "type": "object"
+}

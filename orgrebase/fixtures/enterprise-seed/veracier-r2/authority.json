@@ -1,0 +1,15 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:veracier-supplier-shadow@r2",
+  "organization_id": "org:veracier",
+  "component_kind": "AUTHORITY",
+  "revision": "r2",
+  "runtime_binding_mode": "INTAKE_ONLY",
+  "projection": {
+    "admission_authority_refs": ["human:veracier-shadow-owner"],
+    "owner_refs": ["human:veracier-procurement-owner", "human:veracier-risk-owner"],
+    "demand_ref": "demand:SC-008",
+    "external_effect_authority": "NONE"
+  },
+  "projection_digest": "sha256:d222a3544db70c29d785f9ca10fed719be0b4919be4086ab623a93ab4d07123d"
+}

@@ -1,0 +1,70 @@
+{
+  "dependencies": {
+    "runtime:restricted-skill-interpreter@1": "sha256:0cc45f37cc923583149480b7eebd82a53a6ca18d77fb578c42bac6e9c6822d29",
+    "schema:orgrebase.quote-compose-input.v1": "sha256:240dfb496be710a0a1b711e9874f5f70d9b41958b3f943824157f6e701c68b7f",
+    "schema:orgrebase.skill-eval-output.v1": "sha256:d4e0d470c3f2d8c8fee33b27d5574889e0bc1f1a80ea721ccf1bf83829e02470"
+  },
+  "entry_point": "QUOTE_COMPOSE_V1",
+  "evaluation": {
+    "functional_min_pass_rate": 1.0,
+    "partitions": [
+      "REPLAY",
+      "HELD_OUT",
+      "NEGATIVE_TRANSFER",
+      "PERMISSION",
+      "INJECTION",
+      "MALFORMED",
+      "RESOURCE_OR_DEADLINE",
+      "CANARY"
+    ],
+    "security_min_pass_rate": 1.0,
+    "target_writes_max": 0
+  },
+  "input_schema_ref": "schema:orgrebase.quote-compose-input.v1",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "manifest_digest": "sha256:91398536ad1308de5438a7bf3817ecbd0dcb474abbe929e49100a8452b78540a",
+  "name": "enterprise-quote-compose",
+  "output_schema_ref": "schema:orgrebase.skill-eval-output.v1",
+  "package_id": "skill-package:enterprise-quote-compose@1.3.0",
+  "permissions": {
+    "allowed_tools": [],
+    "effect_ceiling": "CANDIDATE_ONLY",
+    "side_effects": []
+  },
+  "program_content_digest": "sha256:dacf97f2b5d788ad2e963ace2e19466f0e7454f6f572d6cb3abbfa93712bab0d",
+  "provenance_refs": [
+    "skill-candidate:enterprise-quote-compose@1.1",
+    "skill-evaluation:enterprise-quote-compose@1.1"
+  ],
+  "release_artifact": {
+    "id": "skill-release:enterprise-quote-compose@1.3.0",
+    "predecessor_package_digest": "sha256:9c3807acf5c6de8b3629bc0816cea3a7a79f8001d98d20f4eb229f48a5f3cf6e",
+    "source_candidate_digest": "sha256:4afb7a8393b573e72daa815b1019f20ff6f25c2e93715623c18cee635528e233",
+    "source_candidate_executable": false,
+    "source_candidate_ref": "skill-candidate:enterprise-quote-compose@1.1"
+  },
+  "resources": {
+    "contract": {
+      "path": "contract.json",
+      "sha256": "sha256:5560a74bfc45d0c3ea2e8a2bd732da5890c789faf5a994a99a7de68ec889c404"
+    },
+    "input_schema": {
+      "path": "input.schema.json",
+      "sha256": "sha256:240dfb496be710a0a1b711e9874f5f70d9b41958b3f943824157f6e701c68b7f"
+    },
+    "output_schema": {
+      "path": "output.schema.json",
+      "sha256": "sha256:d4e0d470c3f2d8c8fee33b27d5574889e0bc1f1a80ea721ccf1bf83829e02470"
+    },
+    "program": {
+      "path": "program.json",
+      "sha256": "sha256:d39dc2e739b1f9de4fd2123f6d98021b93ee90579be16ced035f31d590b23f19"
+    },
+    "skill": {
+      "path": "SKILL.md",
+      "sha256": "sha256:4d32fbfd94a42025e0ed7b4284d2d46bd4a9a9e030be5d5be08db10736fbfa2b"
+    }
+  },
+  "schema_version": "orgrebase.skill-package-manifest.v2",
+  "version": "1.3.0"
+}

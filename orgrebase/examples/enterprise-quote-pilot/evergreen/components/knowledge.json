@@ -1,0 +1,137 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:evergreen-enterprise-quote@r1",
+  "organization_id": "org:evergreen-industries",
+  "component_kind": "KNOWLEDGE",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "source_values": [
+      {
+        "slot_id": "product_plan",
+        "object_ref": "claim:product.enterprise_plan@v1",
+        "domain_id": "product",
+        "value": "Evergreen Enterprise Plus",
+        "semantic_kind": "CLAIM",
+        "authority_ref": "authority:evergreen-product@v1",
+        "source_id": "source:evergreen-product-catalog",
+        "source_version": "v24",
+        "sensitivity": "INTERNAL",
+        "raw_private_value": null
+      },
+      {
+        "slot_id": "launch_date",
+        "object_ref": "claim:product.launch_date@v1",
+        "domain_id": "product",
+        "value": "2026-10-01",
+        "semantic_kind": "CLAIM",
+        "authority_ref": "authority:evergreen-product@v1",
+        "source_id": "source:evergreen-release-plan",
+        "source_version": "v31",
+        "sensitivity": "INTERNAL",
+        "raw_private_value": null
+      },
+      {
+        "slot_id": "data_residency",
+        "object_ref": "claim:product.residency_capability@v1",
+        "domain_id": "product",
+        "value": "US and EU regions supported",
+        "semantic_kind": "CLAIM",
+        "authority_ref": "authority:evergreen-product@v1",
+        "source_id": "source:evergreen-platform-capability",
+        "source_version": "v11",
+        "sensitivity": "INTERNAL",
+        "raw_private_value": null
+      },
+      {
+        "slot_id": "notice_required",
+        "object_ref": "claim:legal.customer_notice_required@v1",
+        "domain_id": "legal",
+        "value": true,
+        "semantic_kind": "CLAIM",
+        "authority_ref": "authority:evergreen-legal@v1",
+        "source_id": "source:evergreen-contract-register",
+        "source_version": "v18",
+        "sensitivity": "INTERNAL",
+        "raw_private_value": "SYNTHETIC SAMPLE: notify the customer before material schedule changes"
+      },
+      {
+        "slot_id": "price_band",
+        "object_ref": "policy:finance.price_band@v1",
+        "domain_id": "finance",
+        "value": "strategic",
+        "semantic_kind": "POLICY",
+        "authority_ref": "authority:evergreen-finance@v1",
+        "source_id": "source:evergreen-pricing-policy",
+        "source_version": "v9",
+        "sensitivity": "CONFIDENTIAL",
+        "raw_private_value": "SYNTHETIC SAMPLE INTERNAL FLOOR: 85000"
+      },
+      {
+        "slot_id": "currency",
+        "object_ref": "policy:finance.currency@v1",
+        "domain_id": "finance",
+        "value": "USD",
+        "semantic_kind": "POLICY",
+        "authority_ref": "authority:evergreen-finance@v1",
+        "source_id": "source:evergreen-currency-policy",
+        "source_version": "v4",
+        "sensitivity": "CONFIDENTIAL",
+        "raw_private_value": null
+      },
+      {
+        "slot_id": "partner_terms",
+        "object_ref": "claim:gtm.partner_terms@v1",
+        "domain_id": "gtm",
+        "value": "legal-review",
+        "semantic_kind": "CLAIM",
+        "authority_ref": "authority:evergreen-gtm@v1",
+        "source_id": "source:evergreen-partner-policy",
+        "source_version": "v6",
+        "sensitivity": "INTERNAL",
+        "raw_private_value": null
+      },
+      {
+        "slot_id": "quote_compose_skill",
+        "object_ref": "skill:enterprise-quote-compose@1.0",
+        "domain_id": "gtm",
+        "value": "skill:enterprise-quote-compose@1.0",
+        "semantic_kind": "SKILL",
+        "authority_ref": "authority:skill-registry@v1",
+        "source_id": "source:skill-registry",
+        "source_version": "r1",
+        "sensitivity": "INTERNAL",
+        "raw_private_value": null
+      },
+      {
+        "slot_id": "public_message",
+        "object_ref": "claim:gtm.public_launch_message@v1",
+        "domain_id": "gtm",
+        "value": "The enterprise launch remains on the approved schedule.",
+        "semantic_kind": "CLAIM",
+        "authority_ref": "authority:evergreen-gtm@v1",
+        "source_id": "source:evergreen-public-message",
+        "source_version": "v3",
+        "sensitivity": "PUBLIC",
+        "raw_private_value": null
+      }
+    ],
+    "proposed_values": [
+      {
+        "change_kind": "launch_date",
+        "object_ref": "claim:product.launch_date@v2",
+        "value": "2026-10-15",
+        "source_id": "source:evergreen-release-plan",
+        "source_version": "v32"
+      },
+      {
+        "change_kind": "currency",
+        "object_ref": "policy:finance.currency@v2",
+        "value": "EUR",
+        "source_id": "source:evergreen-currency-policy",
+        "source_version": "v5"
+      }
+    ]
+  },
+  "projection_digest": "sha256:7abf49db3497ea8e91a6b430182f8d8fb1cf46ee21fe36b57d82bd482c854844"
+}

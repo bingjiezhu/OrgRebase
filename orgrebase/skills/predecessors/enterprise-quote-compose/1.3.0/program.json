@@ -1,0 +1,57 @@
+{
+  "abstain_flags": [
+    "prompt_injection",
+    "malformed_input",
+    "deadline_expired",
+    "resource_exhausted",
+    "stale_input"
+  ],
+  "allowed_tool_ids": [],
+  "deny_flags": [
+    "permission_expansion",
+    "request_restricted_source",
+    "target_write_requested"
+  ],
+  "digest": "sha256:dacf97f2b5d788ad2e963ace2e19466f0e7454f6f572d6cb3abbfa93712bab0d",
+  "operations": [
+    {
+      "input_fields": [
+        "skill_partition",
+        "candidate_program_digest_required",
+        "dependency_tool_receipt_digest",
+        "dependency_result_digest",
+        "coalition_result_binding_digest",
+        "domain_result_digests"
+      ],
+      "operation": "REQUIRE_FIELDS",
+      "output_field": null,
+      "parameters": {}
+    },
+    {
+      "input_fields": [
+        "skill_partition"
+      ],
+      "operation": "MAP_VALUE",
+      "output_field": "action",
+      "parameters": {
+        "default": "ABSTAIN",
+        "mapping": {
+          "canary": "CANARY",
+          "held_out": "APPLY_QUOTE",
+          "negative_transfer": "KEEP_CURRENT",
+          "replay": "APPLY_QUOTE"
+        }
+      }
+    },
+    {
+      "input_fields": [
+        "action"
+      ],
+      "operation": "RETURN_FIELD",
+      "output_field": null,
+      "parameters": {}
+    }
+  ],
+  "schema_version": "orgrebase.declarative-skill.v1",
+  "side_effects": []
+}

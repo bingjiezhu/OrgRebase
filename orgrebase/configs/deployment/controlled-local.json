@@ -1,0 +1,64 @@
+{
+  "schema_version": "orgrebase.deployment-profile.v1",
+  "profile_id": "controlled-local@v1",
+  "evidence_class": "OBSERVED_CONTROLLED_LOCAL",
+  "production_ready": false,
+  "network": {
+    "bind_host": "127.0.0.1",
+    "port_allocation": "ephemeral",
+    "tls": false,
+    "authentication": "process-scoped bearer token",
+    "external_ingress": false
+  },
+  "components": [
+    {
+      "id": "controlled-enterprise-source-tool",
+      "protocol": "HTTP/1.1 JSON",
+      "health_path": "/healthz",
+      "readiness_path": "/readyz",
+      "canonical_state_authority": false
+    },
+    {
+      "id": "controlled-otlp-receiver",
+      "protocol": "OTLP/HTTP JSON subset",
+      "paths": ["/v1/traces", "/v1/logs", "/v1/metrics"],
+      "canonical_state_authority": false
+    },
+    {
+      "id": "orgrebase-state-store",
+      "protocol": "SQLite",
+      "canonical_state_authority": true
+    },
+    {
+      "id": "telemetry-store",
+      "protocol": "SQLite",
+      "canonical_state_authority": false
+    }
+  ],
+  "retention": {
+    "indexed_telemetry_seconds": 2592000,
+    "rejected_payload_diagnostic_seconds": 604800,
+    "rejected_raw_payload_persisted": false,
+    "canonical_business_evidence_affected": false
+  },
+  "capacity": {
+    "mode": "bounded smoke observation",
+    "sample_count": 25,
+    "contractual_sla": null,
+    "production_capacity_claimed": false
+  },
+  "recovery": {
+    "mode": "quiesced single-node SQLite backup and clean restore",
+    "rpo_seconds_contractual": null,
+    "rto_seconds_contractual": null,
+    "geographic_failover": "NOT_RUN"
+  },
+  "external_connectors": {
+    "crm": "NOT_RUN",
+    "cpq": "NOT_RUN",
+    "erp": "NOT_RUN",
+    "clm": "NOT_RUN",
+    "knowledge_base": "NOT_RUN"
+  },
+  "claim_boundary": "Real loopback protocols with synthetic enterprise data; not HA, multi-tenant, externally integrated, or production certified."
+}

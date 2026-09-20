@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/agentteams-candidate-result.schema.json",
+  "title": "OrgRebase fresh AgentTeams candidate result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "nonce",
+    "worker_name",
+    "candidate_only",
+    "run_envelope_digest",
+    "task_projection_digest",
+    "candidate_schema_digest",
+    "orchestration_plan_digest",
+    "delegation_task_digest",
+    "input_refs",
+    "output",
+    "uncertainty",
+    "tool_receipt_refs",
+    "prohibited_actions_respected"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.candidate-result.v1"},
+    "run_id": {"type": "string", "pattern": "^run:orgrebase:live:"},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "worker_name": {
+      "enum": ["product-steward", "legal-steward", "gtm-steward", "skill-curator"]
+    },
+    "candidate_only": {"const": true},
+    "run_envelope_digest": {"$ref": "#/$defs/digest"},
+    "task_projection_digest": {"$ref": "#/$defs/digest"},
+    "candidate_schema_digest": {"$ref": "#/$defs/digest"},
+    "orchestration_plan_digest": {"$ref": "#/$defs/digest"},
+    "delegation_task_digest": {"$ref": "#/$defs/digest"},
+    "input_refs": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/digest"}
+    },
+    "output": {"type": "object"},
+    "uncertainty": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "tool_receipt_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "prohibited_actions_respected": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "no_canonical_write",
+          "no_approval",
+          "no_apply",
+          "no_cross_domain_authority"
+        ]
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"worker_name": {"const": "product-steward"}}, "required": ["worker_name"]},
+      "then": {
+        "properties": {
+          "output": {"$ref": "#/$defs/productOutput"},
+          "tool_receipt_refs": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"worker_name": {"const": "legal-steward"}}, "required": ["worker_name"]},
+      "then": {
+        "properties": {
+          "output": {"$ref": "#/$defs/legalOutput"},
+          "tool_receipt_refs": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"worker_name": {"const": "gtm-steward"}}, "required": ["worker_name"]},
+      "then": {
+        "properties": {
+          "output": {"$ref": "#/$defs/gtmOutput"},
+          "tool_receipt_refs": {
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^tool:read-projection@sha256:[0-9a-f]{64}$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"worker_name": {"const": "skill-curator"}}, "required": ["worker_name"]},
+      "then": {
+        "properties": {
+          "output": {"$ref": "#/$defs/skillOutput"},
+          "tool_receipt_refs": {"maxItems": 0}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "productOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ClaimDeltaCandidate"],
+      "properties": {
+        "ClaimDeltaCandidate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["object_id", "base_value", "proposed_value", "source_delta_digest"],
+          "properties": {
+            "object_id": {"type": "string", "pattern": "^claim:product\\."},
+            "base_value": {"type": ["string", "number", "integer", "boolean", "null"]},
+            "proposed_value": {"type": ["string", "number", "integer", "boolean", "null"]},
+            "source_delta_digest": {"$ref": "#/$defs/digest"}
+          }
+        }
+      }
+    },
+    "legalOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["MinimalClaimCandidate"],
+      "properties": {
+        "MinimalClaimCandidate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["subject", "value", "policy_ref", "restricted_source_text_disclosed"],
+          "properties": {
+            "subject": {"type": "string", "pattern": "^claim:legal\\."},
+            "value": {"type": ["string", "number", "integer", "boolean", "null"]},
+            "policy_ref": {"type": "string", "minLength": 1},
+            "restricted_source_text_disclosed": {"const": false}
+          }
+        }
+      }
+    },
+    "gtmOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ImpactCandidate"],
+      "properties": {
+        "ImpactCandidate": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {"pattern": "^work:"},
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["classification", "source_result_digest", "tool_receipt_ref"],
+            "properties": {
+              "classification": {
+                "enum": [
+                  "AFFECTED_HARD",
+                  "AFFECTED_REVIEW",
+                  "AFFECTED_INFORMATIONAL",
+                  "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+                  "UNKNOWN"
+                ]
+              },
+              "source_result_digest": {"$ref": "#/$defs/digest"},
+              "tool_receipt_ref": {
+                "type": "string",
+                "pattern": "^tool:read-projection@sha256:[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "skillOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["SkillPatchCandidate"],
+      "properties": {
+        "SkillPatchCandidate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "target",
+            "from_version",
+            "candidate_version",
+            "release_ceiling",
+            "source_result_digest",
+            "runtime_skill_digest"
+          ],
+          "properties": {
+            "target": {"type": "string", "pattern": "^skill:"},
+            "from_version": {"type": "string", "pattern": "^v?[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"},
+            "candidate_version": {"type": "string", "pattern": "^v?[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"},
+            "release_ceiling": {"enum": ["DRAFT", "SHADOW", "CANARY_ONLY"]},
+            "source_result_digest": {"$ref": "#/$defs/digest"},
+            "runtime_skill_digest": {"$ref": "#/$defs/digest"}
+          }
+        }
+      }
+    }
+  }
+}

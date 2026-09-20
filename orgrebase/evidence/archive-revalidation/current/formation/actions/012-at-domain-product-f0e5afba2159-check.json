@@ -1,0 +1,14 @@
+{
+  "action": "check_task",
+  "digest": "sha256:cc0c0f4a157103099506864a909a15a9a4854694d2a505eb01b5652fca5e280e",
+  "error": null,
+  "key": "at-domain-product-f0e5afba2159:check",
+  "ok": true,
+  "payload_digest": "sha256:125bcbc00b250cdf5a05b142d0e706a4e986f5987d329e877302ed0610159979",
+  "raw_ref": "raw-mcp/012-at-domain-product-f0e5afba2159-check-def33fcd.json",
+  "request_digest": "sha256:559e689213ee2893d08f400ff92e3b0dda68b8d58f47d24ff094da42ca1a7938",
+  "response_digest": "sha256:5747b29150a19d8c2ff03f8897e2bd26d70c309ac8d34f2129f5eb9225b04486",
+  "sequence": 12,
+  "status": "submitted",
+  "tool": "taskflow"
+}

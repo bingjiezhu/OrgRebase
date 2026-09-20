@@ -1,0 +1,296 @@
+{
+  "$defs": {
+    "AnnotationAuthoritySpec": {
+      "additionalProperties": false,
+      "properties": {
+        "caseRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "maxItems": 128,
+          "minItems": 1,
+          "title": "Caserefs",
+          "type": "array"
+        },
+        "governanceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Governanceref",
+          "type": "string"
+        },
+        "identities": {
+          "items": {
+            "$ref": "#/$defs/ReviewerIdentity"
+          },
+          "maxItems": 128,
+          "minItems": 1,
+          "title": "Identities",
+          "type": "array"
+        },
+        "qualificationBasis": {
+          "$ref": "#/$defs/QualificationBasis"
+        },
+        "validFrom": {
+          "format": "date-time",
+          "title": "Validfrom",
+          "type": "string"
+        },
+        "validUntil": {
+          "format": "date-time",
+          "title": "Validuntil",
+          "type": "string"
+        }
+      },
+      "required": [
+        "qualificationBasis",
+        "governanceRef",
+        "identities",
+        "caseRefs",
+        "validFrom",
+        "validUntil"
+      ],
+      "title": "AnnotationAuthoritySpec",
+      "type": "object"
+    },
+    "QualificationBasis": {
+      "enum": [
+        "CONTROLLED_LOCAL_FIXTURE",
+        "GOVERNANCE_ATTESTED_HUMAN"
+      ],
+      "type": "string"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "ReviewerIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "actorType": {
+          "enum": [
+            "human",
+            "model",
+            "agent",
+            "ai_controlled",
+            "scripted"
+          ],
+          "title": "Actortype",
+          "type": "string"
+        },
+        "personKey": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Personkey",
+          "type": "string"
+        },
+        "qualificationRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Qualificationrefs",
+          "type": "array"
+        },
+        "subjects": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Subjects",
+          "type": "array"
+        }
+      },
+      "required": [
+        "personKey",
+        "subjects",
+        "actorType",
+        "qualificationRefs"
+      ],
+      "title": "ReviewerIdentity",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/annotation/v1/AnnotationAuthority.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.annotation-document/v1",
+      "default": "oac.annotation-document/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Digest",
+      "type": "string"
+    },
+    "kind": {
+      "const": "AnnotationAuthority",
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/AnnotationAuthoritySpec"
+    }
+  },
+  "required": [
+    "kind",
+    "metadata",
+    "spec",
+    "digest"
+  ],
+  "title": "AnnotationDocument[AnnotationAuthoritySpec]",
+  "type": "object"
+}

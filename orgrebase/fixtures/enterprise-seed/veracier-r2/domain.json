@@ -1,0 +1,17 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:veracier-supplier-shadow@r2",
+  "organization_id": "org:veracier",
+  "component_kind": "DOMAIN",
+  "revision": "r2",
+  "runtime_binding_mode": "INTAKE_ONLY",
+  "projection": {
+    "scenario_id": "veracier-supplier-status-shadow",
+    "business_process": "supplier_status_review",
+    "primary_entity": "alternative:acieries-savoie",
+    "demand_ref": "demand:SC-008",
+    "change_ref": "change:SC-008",
+    "domains": ["procurement", "risk"]
+  },
+  "projection_digest": "sha256:48287f7747e76ae14a6692e0b47cb21224080e4bd960f00f12c02652cf0c0431"
+}

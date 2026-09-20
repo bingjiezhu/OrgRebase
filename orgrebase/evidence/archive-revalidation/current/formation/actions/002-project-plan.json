@@ -1,0 +1,14 @@
+{
+  "action": "plan_dag",
+  "digest": "sha256:b0f261608d90317e87b33333f0957c06048f5b9cd4c551b38ac6d2edd7f09d81",
+  "error": null,
+  "key": "project:plan",
+  "ok": true,
+  "payload_digest": "sha256:f36e70c634565897f2461553f084269a78a6f57c18c8fc3c2d08977667166a55",
+  "raw_ref": "raw-mcp/002-project-plan-1c351f5d.json",
+  "request_digest": "sha256:e60aecdc6af7d164b288329283149204f6ec8e48e7b969973e6065620dc77179",
+  "response_digest": "sha256:47cad7124051546abb452e4f0f9924135828642242d88bc71a693ae0ccd21baf",
+  "sequence": 2,
+  "status": "active",
+  "tool": "projectflow"
+}

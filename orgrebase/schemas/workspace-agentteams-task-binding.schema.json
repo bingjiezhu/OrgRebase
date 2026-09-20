@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-agentteams-task-binding.schema.json",
+  "title": "OrgRebase AgentTeams controlled-local native Task binding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "evidence_class", "run_id", "nonce", "project_id",
+    "task_id", "domain", "attempt", "plan_revision", "predecessor_task_id",
+    "predecessor_attempt", "fencing_token", "attempt_ref", "active_attempt_ref",
+    "assignee", "room_id", "assignment_event_id", "candidate_only",
+    "target_writes", "source_lock_digest", "plan_digest", "delegation_digest",
+    "spec_digest", "context_projection_digest", "expected_result_digest",
+    "observed_result_digest", "deliverable_digest", "status",
+    "observed_state_sequence", "action_receipt_digests",
+    "admission_binding_digest", "control_decision_ref"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-agentteams-task-binding.v1"},
+    "evidence_class": {"const": "CONTROLLED_LOCAL_NATIVE_TASKFLOW"},
+    "run_id": {"type": "string", "minLength": 1},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "project_id": {"$ref": "#/$defs/nativeId"},
+    "task_id": {"$ref": "#/$defs/nativeId"},
+    "domain": {"enum": ["product", "legal", "finance", "gtm"]},
+    "attempt": {"type": "integer", "minimum": 1},
+    "plan_revision": {"type": "integer", "minimum": 1},
+    "predecessor_task_id": {"anyOf": [{"$ref": "#/$defs/nativeId"}, {"type": "null"}]},
+    "predecessor_attempt": {"anyOf": [{"type": "integer", "minimum": 1}, {"type": "null"}]},
+    "fencing_token": {"$ref": "#/$defs/digest"},
+    "attempt_ref": {"$ref": "#/$defs/digest"},
+    "active_attempt_ref": {"$ref": "#/$defs/digest"},
+    "assignee": {"type": "string", "pattern": "^@[^:]+:[^:]+$"},
+    "room_id": {"type": "string", "pattern": "^![^:]+:[^:]+$"},
+    "assignment_event_id": {
+      "anyOf": [{"type": "string", "pattern": "^\\$.+"}, {"type": "null"}]
+    },
+    "candidate_only": {"const": true},
+    "target_writes": {"const": 0},
+    "source_lock_digest": {"$ref": "#/$defs/digest"},
+    "plan_digest": {"$ref": "#/$defs/digest"},
+    "delegation_digest": {"$ref": "#/$defs/digest"},
+    "spec_digest": {"$ref": "#/$defs/digest"},
+    "context_projection_digest": {"$ref": "#/$defs/digest"},
+    "expected_result_digest": {"$ref": "#/$defs/digest"},
+    "observed_result_digest": {
+      "anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]
+    },
+    "deliverable_digest": {"$ref": "#/$defs/digest"},
+    "status": {
+      "enum": [
+        "planned", "assigned", "in_progress", "submitted", "completed",
+        "cancelled", "revision", "blocked"
+      ]
+    },
+    "observed_state_sequence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/stateObservation"}
+    },
+    "action_receipt_digests": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/digest"}
+    },
+    "admission_binding_digest": {
+      "anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]
+    },
+    "control_decision_ref": {
+      "anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]
+    }
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "nativeId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "stateObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence", "action", "action_receipt_digest", "native_status", "semantic_ok"
+      ],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1},
+        "action": {"type": "string", "minLength": 1},
+        "action_receipt_digest": {"$ref": "#/$defs/digest"},
+        "native_status": {"type": "string", "minLength": 1},
+        "semantic_ok": {"type": "boolean"}
+      }
+    }
+  }
+}

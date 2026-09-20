@@ -1,0 +1,295 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-001",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-001-restructuring.json"
+    ]
+  },
+  "digest": "sha256:1e5290d2b1472c2a3a52300d1405c473b6927fc91920fec579ac11cafd7333db",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01",
+      "revision": 1,
+      "digest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-001",
+      "revision": 1,
+      "digest": "sha256:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928"
+    },
+    "observationBoundary": "PROC-01 metadata and admitted profile fixture; PDF bodies not retrieved",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-001-restructuring.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "operating->judicial_restructuring",
+        "evidenceRefs": [
+          "authority:EDITH_PROC_01_QUESTION",
+          "profiles/supplier-change/annotations/SC-001-restructuring.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-50e34f02.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-50e34f02"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-1ceffca1.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-1ceffca1"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-9eff55b9.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-9eff55b9"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-46b05445.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-46b05445"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-a03146b5.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-a03146b5"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-fe8b3af2.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-fe8b3af2"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-7823658d.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-7823658d"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-29949d76.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-29949d76"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-9f36186f.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-9f36186f"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-66804d3f.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-66804d3f"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.exposure-inventory",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-001-restructuring.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.contract-remedies",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-001-restructuring.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.financial-exposure",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-001-restructuring.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.continuity-assessment",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-001-restructuring.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.alternative-qualification",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-001-restructuring.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationRefs": [
+        "urn:oac:mvp:obligation:1061f855b3de04cf67aadbdb",
+        "urn:oac:mvp:obligation:1fa27d0eeb461723763b5ac1",
+        "urn:oac:mvp:obligation:215901d303a17dbdb5227e62",
+        "urn:oac:mvp:obligation:319a6cc216acac3e8c23418d",
+        "urn:oac:mvp:obligation:343ea8b44a693e604c302fe9",
+        "urn:oac:mvp:obligation:40e252fc69acc74100d98199",
+        "urn:oac:mvp:obligation:63b0b3ae5e3211c1f8126971",
+        "urn:oac:mvp:obligation:640fc6a88eed7188110c5198",
+        "urn:oac:mvp:obligation:7f2b6c060a7a836bb18aa87d",
+        "urn:oac:mvp:obligation:9f8fb06dc7ccfb726ae5e20f",
+        "urn:oac:mvp:obligation:a2901910f1a2578ef39eb6f7",
+        "urn:oac:mvp:obligation:d44675e4c20c5392c50c9fa4",
+        "urn:oac:mvp:obligation:d56edad84e47999674895745",
+        "urn:oac:mvp:obligation:d7474d0c6e1bd6fbf53552a5",
+        "urn:oac:mvp:obligation:e1c3b8a6915f709a3959e3ec",
+        "urn:oac:mvp:obligation:e8a644e6aa7ae5a4f5d92079",
+        "urn:oac:mvp:obligation:fad49eaa01d24a985089c746"
+      ],
+      "requiredObligationTypes": [
+        "exposure-inventory",
+        "contract-remedies",
+        "financial-exposure",
+        "continuity-assessment",
+        "alternative-qualification"
+      ],
+      "admissibleRoleRefs": [
+        "role:finance-exposure",
+        "role:legal-reviewer",
+        "role:operations-continuity",
+        "role:procurement-owner",
+        "role:quality-qualification"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:finance-agent",
+        "principal:legal-agent",
+        "principal:operations-agent",
+        "principal:procurement-agent",
+        "principal:quality-agent"
+      ],
+      "forbiddenCombinations": [
+        [
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ]
+      ],
+      "happensBefore": [
+        {
+          "predecessorRef": "role:procurement-owner",
+          "successorRef": "role:finance-exposure",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:derived-role-order:SC-001"
+          ]
+        },
+        {
+          "predecessorRef": "role:procurement-owner",
+          "successorRef": "role:legal-reviewer",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:derived-role-order:SC-001"
+          ]
+        },
+        {
+          "predecessorRef": "role:procurement-owner",
+          "successorRef": "role:operations-continuity",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:derived-role-order:SC-001"
+          ]
+        }
+      ],
+      "evidenceDuties": [
+        "evidence:exposure-calculation",
+        "evidence:msa-review",
+        "evidence:proc01-index",
+        "evidence:production-impact",
+        "evidence:qualification-review",
+        "impact_assessment"
+      ],
+      "acceptableUnknownRefs": [
+        "PDF clause interpretation not observable in metadata-only mode"
+      ],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "ACCEPT"
+      ]
+    },
+    "witnessRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "kind": "OrganizationPlan",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "plan:SC-001:witness-a",
+        "revision": 1,
+        "digest": "sha256:4d65b836b51881fca5f2f30b97c809c2cacb01a491f64529514517947045f5ce"
+      },
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "kind": "OrganizationPlan",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "plan:SC-001:witness-b",
+        "revision": 1,
+        "digest": "sha256:adf3958db849222a903bcd0af8a31c3aa45a07920a31c1ff965317535a114949"
+      }
+    ],
+    "mutationFamily": "omit-obligation,self-review,reverse-order,missing-evidence,redundant-role,input-root-mismatch",
+    "outcomeObservability": "none"
+  }
+}

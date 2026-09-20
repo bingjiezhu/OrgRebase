@@ -1,0 +1,665 @@
+{
+  "$defs": {
+    "AdjudicationCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "const": "ADJUDICATE",
+          "title": "Action",
+          "type": "string"
+        },
+        "constraintSet": {
+          "$ref": "#/$defs/CandidateConstraintSet"
+        },
+        "resolutions": {
+          "items": {
+            "$ref": "#/$defs/AdjudicationResolution"
+          },
+          "title": "Resolutions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "action",
+        "resolutions",
+        "constraintSet"
+      ],
+      "title": "AdjudicationCommand",
+      "type": "object"
+    },
+    "AdjudicationResolution": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptedRationale": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Acceptedrationale",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceCitation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "field": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        },
+        "rejectedRationale": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Rejectedrationale",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "unknown",
+            "contested"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/JsonValue"
+        }
+      },
+      "required": [
+        "field",
+        "value",
+        "status",
+        "evidence",
+        "acceptedRationale",
+        "rejectedRationale"
+      ],
+      "title": "AdjudicationResolution",
+      "type": "object"
+    },
+    "AnnotationAction": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "command": {
+          "discriminator": {
+            "mapping": {
+              "ADJUDICATE": "#/$defs/AdjudicationCommand",
+              "BENCHMARK": "#/$defs/BenchmarkCommand",
+              "DELIVER": "#/$defs/DeliveryCommand",
+              "PROMOTE": "#/$defs/PromotionCommand",
+              "RETRACT": "#/$defs/RetractionCommand",
+              "SUBMIT": "#/$defs/SubmissionCommand"
+            },
+            "propertyName": "action"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/DeliveryCommand"
+            },
+            {
+              "$ref": "#/$defs/SubmissionCommand"
+            },
+            {
+              "$ref": "#/$defs/AdjudicationCommand"
+            },
+            {
+              "$ref": "#/$defs/PromotionCommand"
+            },
+            {
+              "$ref": "#/$defs/BenchmarkCommand"
+            },
+            {
+              "$ref": "#/$defs/RetractionCommand"
+            }
+          ],
+          "title": "Command"
+        },
+        "subject": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject",
+        "at",
+        "command"
+      ],
+      "title": "AnnotationAction",
+      "type": "object"
+    },
+    "AnnotationRound": {
+      "enum": [
+        1,
+        2
+      ],
+      "type": "integer"
+    },
+    "BenchmarkCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "const": "BENCHMARK",
+          "title": "Action",
+          "type": "string"
+        },
+        "dependencies": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Dependencies",
+          "type": "array"
+        },
+        "runDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Rundigest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "runDigest",
+        "dependencies"
+      ],
+      "title": "BenchmarkCommand",
+      "type": "object"
+    },
+    "CandidateConstraintSet": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptableUnknownRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Acceptableunknownrefs",
+          "type": "array"
+        },
+        "acceptableVerdicts": {
+          "items": {
+            "$ref": "#/$defs/Verdict"
+          },
+          "minItems": 1,
+          "title": "Acceptableverdicts",
+          "type": "array"
+        },
+        "admissiblePrincipalRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Admissibleprincipalrefs",
+          "type": "array"
+        },
+        "admissibleRoleRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Admissiblerolerefs",
+          "type": "array"
+        },
+        "evidenceDuties": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidenceduties",
+          "type": "array"
+        },
+        "forbiddenCombinations": {
+          "default": [],
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "maxLength": 512,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "maxLength": 512,
+                "minLength": 1,
+                "type": "string"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Forbiddencombinations",
+          "type": "array"
+        },
+        "happensBefore": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OrderConstraint"
+          },
+          "title": "Happensbefore",
+          "type": "array"
+        },
+        "minimalityLevel": {
+          "enum": [
+            "none",
+            "inclusion_minimal"
+          ],
+          "title": "Minimalitylevel",
+          "type": "string"
+        },
+        "requiredObligationRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Requiredobligationrefs",
+          "type": "array"
+        },
+        "requiredObligationTypes": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Requiredobligationtypes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "admissibleRoleRefs",
+        "admissiblePrincipalRefs",
+        "minimalityLevel",
+        "acceptableVerdicts"
+      ],
+      "title": "CandidateConstraintSet",
+      "type": "object"
+    },
+    "DeliveryCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "const": "DELIVER",
+          "title": "Action",
+          "type": "string"
+        },
+        "round": {
+          "$ref": "#/$defs/AnnotationRound"
+        }
+      },
+      "required": [
+        "action",
+        "round"
+      ],
+      "title": "DeliveryCommand",
+      "type": "object"
+    },
+    "EvidenceCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "pointer": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Pointer",
+          "type": "string"
+        },
+        "resourceRef": {
+          "$ref": "#/$defs/ResourceRef"
+        }
+      },
+      "required": [
+        "resourceRef",
+        "pointer"
+      ],
+      "title": "EvidenceCitation",
+      "type": "object"
+    },
+    "JsonValue": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "array"
+        },
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "OrderConstraint": {
+      "additionalProperties": false,
+      "properties": {
+        "predecessorRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Predecessorref",
+          "type": "string"
+        },
+        "reasonRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reasonrefs",
+          "type": "array"
+        },
+        "relation": {
+          "const": "must_complete_before",
+          "default": "must_complete_before",
+          "title": "Relation",
+          "type": "string"
+        },
+        "successorRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Successorref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "predecessorRef",
+        "successorRef",
+        "reasonRefs"
+      ],
+      "title": "OrderConstraint",
+      "type": "object"
+    },
+    "PromotionCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "const": "PROMOTE",
+          "title": "Action",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "title": "PromotionCommand",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "RetractionCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "const": "RETRACT",
+          "title": "Action",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "targetRef": {
+          "$ref": "#/$defs/ResourceRef"
+        }
+      },
+      "required": [
+        "action",
+        "targetRef",
+        "reason"
+      ],
+      "title": "RetractionCommand",
+      "type": "object"
+    },
+    "ReviewField": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceCitation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "field": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "unknown",
+            "contested"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/JsonValue"
+        }
+      },
+      "required": [
+        "field",
+        "value",
+        "status",
+        "evidence",
+        "rationale"
+      ],
+      "title": "ReviewField",
+      "type": "object"
+    },
+    "SubmissionCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "const": "SUBMIT",
+          "title": "Action",
+          "type": "string"
+        },
+        "deliveryRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/ReviewField"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "modelAssistance": {
+          "title": "Modelassistance",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "action",
+        "deliveryRef",
+        "fields",
+        "modelAssistance"
+      ],
+      "title": "SubmissionCommand",
+      "type": "object"
+    },
+    "Verdict": {
+      "enum": [
+        "ACCEPT",
+        "REJECT",
+        "PROVISIONAL",
+        "UNKNOWN"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "$id": "https://oac.dev/schemas/annotation/v1/AnnotationArchive.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "items": {
+        "$ref": "#/$defs/AnnotationAction"
+      },
+      "title": "Actions",
+      "type": "array"
+    },
+    "authority": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Authority",
+      "type": "object"
+    },
+    "case": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Case",
+      "type": "object"
+    },
+    "head": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Head",
+      "type": "string"
+    },
+    "packet": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Packet",
+      "type": "object"
+    },
+    "protocol": {
+      "const": "oac.annotation-archive/v1",
+      "title": "Protocol",
+      "type": "string"
+    },
+    "qualifications": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Qualifications",
+      "type": "array"
+    },
+    "records": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Records",
+      "type": "array"
+    },
+    "sources": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Sources",
+      "type": "array"
+    }
+  },
+  "required": [
+    "protocol",
+    "authority",
+    "packet",
+    "case",
+    "sources",
+    "qualifications",
+    "records",
+    "actions",
+    "head"
+  ],
+  "title": "AnnotationArchive",
+  "type": "object"
+}

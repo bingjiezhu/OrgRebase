@@ -1,0 +1,60 @@
+{
+  "caseVersion": "1.0",
+  "caseId": "SC-004",
+  "title": "Supplier qualification suspended",
+  "profile": "supplier-change/v0alpha1",
+  "annotationStatus": "exploratory",
+  "annotationProvenance": {
+    "authorClass": "project-authored-candidate",
+    "independentHumanRounds": 0,
+    "adjudicated": false,
+    "mayBeCalledGold": false
+  },
+  "sourceLabels": {
+    "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+    "recordRef": "PROC-01",
+    "labelSetRef": "../source-labels/edith-proc-01.json",
+    "answerKeyGroundTruthEmpty": true,
+    "documentRefs": ["DOC-29949d76", "DOC-7823658d", "DOC-50e34f02"],
+    "claimLimit": "Upstream metadata names an alternative qualification in progress; suspension is not an upstream label."
+  },
+  "counterfactual": {
+    "type": "single-factor",
+    "factor": "supplier.status",
+    "before": "qualified",
+    "after": "qualification_suspended",
+    "assertedBy": "OAC_PROJECT",
+    "notUpstreamOacGroundTruth": true
+  },
+  "frozenInputs": {
+    "snapshotRef": "../inputs/veracier-proc01.snapshot.json",
+    "changeRef": "../inputs/SC-004.change.json",
+    "observationBoundary": "metadata-derived supplier and qualification nodes"
+  },
+  "candidateConstraints": {
+    "requiredObligationTypes": [
+      "stop-new-commitment-review",
+      "alternative-qualification",
+      "continuity-assessment"
+    ],
+    "admissibleRoleRefs": [
+      "role:procurement-owner",
+      "role:quality-qualification",
+      "role:operations-continuity"
+    ],
+    "separation": [["role:procurement-owner", "role:quality-qualification"]],
+    "happensBefore": [
+      ["alternative-qualification", "continuity-assessment"]
+    ],
+    "evidenceDuties": ["qualification decision", "open commitment inventory"],
+    "acceptableUnknown": ["existing-lot disposition"],
+    "candidateOnly": true
+  },
+  "witnessRefs": [],
+  "mutationFamilies": ["self-review", "reverse-order", "unknown-erasure"],
+  "outcomeObservability": {
+    "fromEdith": "not_observable",
+    "fromEnterpriseOpsGym": "not_mapped",
+    "executed": false
+  }
+}

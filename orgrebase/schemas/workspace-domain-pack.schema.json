@@ -1,0 +1,40 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-domain-pack.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Reusable business contract without enterprise identities or future values.",
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "mutable_slots": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Mutable Slots",
+      "type": "array"
+    },
+    "revision": {
+      "title": "Revision",
+      "type": "string"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "revision",
+    "template_ref",
+    "mutable_slots"
+  ],
+  "title": "DomainPack",
+  "type": "object"
+}

@@ -1,0 +1,83 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-promotion-approval.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "minLength": 1,
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Digest",
+      "type": "string"
+    },
+    "input_mode": {
+      "enum": [
+        "CONTROLLED_LOCAL_SCRIPTED_COMMAND",
+        "EXTERNAL_HUMAN_COMMAND"
+      ],
+      "title": "Input Mode",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "launch_date",
+        "currency"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "preview_binding_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Preview Binding Digest",
+      "type": "string"
+    },
+    "promotion_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Promotion Digest",
+      "type": "string"
+    },
+    "run_id": {
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.promotion-approval.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "workspace_approval_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Workspace Approval Digest",
+      "type": "string"
+    },
+    "workspace_preview_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Workspace Preview Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "digest",
+    "schema_version",
+    "run_id",
+    "kind",
+    "promotion_digest",
+    "preview_binding_digest",
+    "workspace_preview_digest",
+    "workspace_approval_digest",
+    "actor_id",
+    "input_mode",
+    "canonical_target_writes"
+  ],
+  "title": "PromotionApproval",
+  "type": "object"
+}

@@ -1,0 +1,14 @@
+{
+  "action": "ready_nodes",
+  "digest": "sha256:426d6ba54d398862c5c5d4b4e8c0eb70e1d6343a444e4dd21eb6169cb2cfe18f",
+  "error": null,
+  "key": "project:ready-reviewer",
+  "ok": true,
+  "payload_digest": "sha256:5b453021d4359f0f46b26e8bd893b576b82e9eb202bd8901c8f6f910509e2111",
+  "raw_ref": "raw-mcp/014-project-ready-reviewer-f2149bb1.json",
+  "request_digest": "sha256:566553c0474c513a9c894aa2c617f743982c6cb6c2faf9ded67cbce0ed749c1d",
+  "response_digest": "sha256:0206c029561428897f5d35507ec28251c2aa1b40f9fe744d2dd15927fe0a2aac",
+  "sequence": 14,
+  "status": "active",
+  "tool": "projectflow"
+}

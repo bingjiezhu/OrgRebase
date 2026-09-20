@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-006",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:finance-exposure",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "sourceRefs": ["edith:MASTER_INDEX:DOC-46b05445", "oac:counterfactual:advance-recovery"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-006",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "replace", "before": {"state": "known", "value": "judicial_restructuring"}, "after": {"state": "known", "value": "payment_recovery_uncertain"}}
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "oac:counterfactual:advance-recovery",
+    "scopeRefs": ["supplier:forges-martelliere", "order:aero-rush", "contract:forges-msa", "ledger:supplier-exposure"],
+    "reason": "test advance-recoverability obligations while preserving unknown amount",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:ef24b8b5c97f6be4ba901e8e0e857849976747ba863ed0fc44e326dcb59bb549"
+}

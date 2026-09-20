@@ -1,0 +1,961 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrganizationSnapshot",
+  "metadata": {
+    "id": "snapshot:veracier-proc01-contextual",
+    "namespace": "oac.examples.supplier",
+    "revision": 2,
+    "ownerRef": "role:evidence-discovery",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T00:00:00Z",
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "hf-file:MASTER_INDEX.csv#PROC-01",
+      "hf-file:ANSWER_KEY.json#PROC-01",
+      "oac:project-authored-fixture",
+      "oac:contextual-applicability-v0.2-fixture"
+    ]
+  },
+  "digest": "sha256:76073e824054b6a6b7de66e2b728069dea6ba83164f47d116f9f6eb0d4b1fe65",
+  "spec": {
+    "nodes": [
+      {
+        "nodeId": "supplier:forges-martelliere",
+        "nodeType": "supplier",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:aero-av3000",
+        "nodeType": "purchase-order",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:energy-nusafe",
+        "nodeType": "purchase-order",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:energy-nuclear",
+        "nodeType": "purchase-order",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:aero-partial",
+        "nodeType": "purchase-order",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:aero-rush",
+        "nodeType": "purchase-order",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:maroc",
+        "nodeType": "purchase-order",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "order:defense",
+        "nodeType": "purchase-order",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "contract:forges-msa",
+        "nodeType": "supplier-contract",
+        "domainRef": "domain:legal",
+        "ownerRoleRef": "role:legal-reviewer",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "ledger:supplier-exposure",
+        "nodeType": "financial-ledger",
+        "domainRef": "domain:finance",
+        "ownerRoleRef": "role:finance-exposure",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "production:aero",
+        "nodeType": "production-scope",
+        "domainRef": "domain:operations",
+        "ownerRoleRef": "role:operations-continuity",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "production:energy",
+        "nodeType": "production-scope",
+        "domainRef": "domain:operations",
+        "ownerRoleRef": "role:operations-continuity",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "production:defense",
+        "nodeType": "production-scope",
+        "domainRef": "domain:operations",
+        "ownerRoleRef": "role:operations-continuity",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "alternative:acieries-savoie",
+        "nodeType": "supplier-alternative",
+        "domainRef": "domain:quality",
+        "ownerRoleRef": "role:quality-qualification",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "control:nuclear-substitution",
+        "nodeType": "compliance-control",
+        "domainRef": "domain:compliance",
+        "ownerRoleRef": "role:compliance-reviewer",
+        "admissionStatus": "candidate"
+      },
+      {
+        "nodeId": "boundary:source-discovery",
+        "nodeType": "evidence-boundary",
+        "domainRef": "domain:evidence",
+        "ownerRoleRef": "role:evidence-discovery",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "roleDefinitions": [
+      {
+        "roleId": "role:procurement-owner",
+        "domainRef": "domain:procurement",
+        "mission": "inventory supplier commitments and coordinate a zero-effect response",
+        "responsibilityTypes": [
+          "supplier-status-validation",
+          "exposure-inventory",
+          "commercial-review"
+        ],
+        "requiredQualifications": [
+          "qualification:procurement-authority"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      },
+      {
+        "roleId": "role:legal-reviewer",
+        "domainRef": "domain:legal",
+        "mission": "review contractual remedies and claims without executing them",
+        "responsibilityTypes": [
+          "contract-remedy-review",
+          "claim-basis-review"
+        ],
+        "requiredQualifications": [
+          "qualification:contract-review"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      },
+      {
+        "roleId": "role:finance-exposure",
+        "domainRef": "domain:finance",
+        "mission": "calculate and evidence bounded financial exposure",
+        "responsibilityTypes": [
+          "exposure-calculation",
+          "ledger-reconciliation"
+        ],
+        "requiredQualifications": [
+          "qualification:finance-analysis"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      },
+      {
+        "roleId": "role:operations-continuity",
+        "domainRef": "domain:operations",
+        "mission": "assess production continuity options without changing schedules",
+        "responsibilityTypes": [
+          "continuity-assessment",
+          "capacity-allocation"
+        ],
+        "requiredQualifications": [
+          "qualification:operations-planning"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      },
+      {
+        "roleId": "role:quality-qualification",
+        "domainRef": "domain:quality",
+        "mission": "independently review supplier or lot qualification evidence",
+        "responsibilityTypes": [
+          "supplier-qualification",
+          "lot-disposition"
+        ],
+        "requiredQualifications": [
+          "qualification:supplier-quality"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      },
+      {
+        "roleId": "role:compliance-reviewer",
+        "domainRef": "domain:compliance",
+        "mission": "identify applicable compliance controls and preserve uncertainty",
+        "responsibilityTypes": [
+          "control-discovery",
+          "compliance-review"
+        ],
+        "requiredQualifications": [
+          "qualification:compliance-review"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      },
+      {
+        "roleId": "role:evidence-discovery",
+        "domainRef": "domain:evidence",
+        "mission": "name missing sources and produce reproducible discovery receipts",
+        "responsibilityTypes": [
+          "source-discovery",
+          "boundary-reporting"
+        ],
+        "requiredQualifications": [
+          "qualification:evidence-curation"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "principals": [
+      {
+        "principalId": "principal:procurement-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "qualificationRefs": [
+          "qualification:procurement-authority"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      },
+      {
+        "principalId": "principal:legal-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:legal-reviewer"
+        ],
+        "qualificationRefs": [
+          "qualification:contract-review"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      },
+      {
+        "principalId": "principal:finance-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:finance-exposure"
+        ],
+        "qualificationRefs": [
+          "qualification:finance-analysis"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      },
+      {
+        "principalId": "principal:operations-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:operations-continuity"
+        ],
+        "qualificationRefs": [
+          "qualification:operations-planning"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      },
+      {
+        "principalId": "principal:quality-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:quality-qualification"
+        ],
+        "qualificationRefs": [
+          "qualification:supplier-quality"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      },
+      {
+        "principalId": "principal:compliance-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:compliance-reviewer"
+        ],
+        "qualificationRefs": [
+          "qualification:compliance-review"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      },
+      {
+        "principalId": "principal:evidence-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:evidence-discovery"
+        ],
+        "qualificationRefs": [
+          "qualification:evidence-curation"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "dependencyEdges": [
+      {
+        "edgeId": "edge:contextual-alternative-aero",
+        "sourceRef": "alternative:acieries-savoie",
+        "targetRef": "production:aero",
+        "relationType": "operational_dependency",
+        "transferPredicate": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "qualified"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "alternative:acieries-savoie"
+            ],
+            "nodeTypes": [
+              "supplier-alternative"
+            ],
+            "domainRefs": [
+              "domain:quality"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "alternative:acieries-savoie",
+              "production:aero"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          },
+          "relationTypes": [
+            "operational_dependency"
+          ]
+        },
+        "admissionStatus": "admitted"
+      },
+      {
+        "edgeId": "edge:contextual-alternative-energy",
+        "sourceRef": "alternative:acieries-savoie",
+        "targetRef": "production:energy",
+        "relationType": "operational_dependency",
+        "transferPredicate": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "qualified"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "alternative:acieries-savoie"
+            ],
+            "nodeTypes": [
+              "supplier-alternative"
+            ],
+            "domainRefs": [
+              "domain:quality"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "alternative:acieries-savoie",
+              "production:energy"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          },
+          "relationTypes": [
+            "operational_dependency"
+          ]
+        },
+        "admissionStatus": "admitted"
+      },
+      {
+        "edgeId": "edge:contextual-supplier-nuclear-order",
+        "sourceRef": "supplier:forges-martelliere",
+        "targetRef": "order:energy-nuclear",
+        "relationType": "business_dependency",
+        "transferPredicate": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "supplier:forges-martelliere",
+              "order:energy-nuclear"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          },
+          "relationTypes": [
+            "business_dependency"
+          ]
+        },
+        "admissionStatus": "admitted"
+      },
+      {
+        "edgeId": "edge:contextual-nuclear-production",
+        "sourceRef": "order:energy-nuclear",
+        "targetRef": "production:energy",
+        "relationType": "operational_dependency",
+        "transferPredicate": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "order:energy-nuclear",
+              "production:energy"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          },
+          "relationTypes": [
+            "operational_dependency"
+          ]
+        },
+        "admissionStatus": "admitted"
+      },
+      {
+        "edgeId": "edge:contextual-production-compliance",
+        "sourceRef": "production:energy",
+        "targetRef": "control:nuclear-substitution",
+        "relationType": "compliance_dependency",
+        "transferPredicate": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "control:nuclear-substitution"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          },
+          "relationTypes": [
+            "compliance_dependency"
+          ]
+        },
+        "admissionStatus": "admitted"
+      },
+      {
+        "edgeId": "edge:contextual-supplier-contract",
+        "sourceRef": "supplier:forges-martelliere",
+        "targetRef": "contract:forges-msa",
+        "relationType": "contractual_dependency",
+        "transferPredicate": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "contract:forges-msa"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          },
+          "relationTypes": [
+            "contractual_dependency"
+          ]
+        },
+        "admissionStatus": "admitted"
+      },
+      {
+        "edgeId": "edge:contextual-supplier-rush-order",
+        "sourceRef": "supplier:forges-martelliere",
+        "targetRef": "order:aero-rush",
+        "relationType": "financial_exposure",
+        "transferPredicate": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "order:aero-rush"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          },
+          "relationTypes": [
+            "financial_exposure"
+          ]
+        },
+        "admissionStatus": "admitted"
+      }
+    ],
+    "impactRules": [
+      {
+        "ruleId": "rule:contextual-qualified-quality",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "qualified"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "alternative:acieries-savoie"
+            ],
+            "nodeTypes": [
+              "supplier-alternative"
+            ],
+            "domainRefs": [
+              "domain:quality"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "alternative:acieries-savoie"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          }
+        },
+        "targetRef": "alternative:acieries-savoie",
+        "requiredRoleRef": "role:quality-qualification",
+        "obligationType": "qualification-evidence-check",
+        "requiredEvidence": [
+          "evidence:approved-qualification-record"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:contextual-qualified-continuity",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "qualified"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "alternative:acieries-savoie"
+            ],
+            "nodeTypes": [
+              "supplier-alternative"
+            ],
+            "domainRefs": [
+              "domain:quality"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "production:aero"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          }
+        },
+        "targetRef": "production:aero",
+        "requiredRoleRef": "role:operations-continuity",
+        "obligationType": "continuity-option-selection",
+        "requiredEvidence": [
+          "evidence:selected-continuity-option"
+        ],
+        "prerequisiteObligationTypes": [
+          "qualification-evidence-check"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:contextual-qualified-commercial",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "qualified"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "alternative:acieries-savoie"
+            ],
+            "nodeTypes": [
+              "supplier-alternative"
+            ],
+            "domainRefs": [
+              "domain:quality"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "production:energy"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          }
+        },
+        "targetRef": "supplier:forges-martelliere",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "commercial-switch-review",
+        "requiredEvidence": [
+          "evidence:commercial-switch-review"
+        ],
+        "prerequisiteObligationTypes": [
+          "continuity-option-selection"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:contextual-nuclear-exposure",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "supplier:forges-martelliere"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          }
+        },
+        "targetRef": "supplier:forges-martelliere",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "exposure-inventory",
+        "requiredEvidence": [
+          "evidence:proc01-index"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:contextual-nuclear-alternative",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "order:energy-nuclear"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          }
+        },
+        "targetRef": "alternative:acieries-savoie",
+        "requiredRoleRef": "role:quality-qualification",
+        "obligationType": "alternative-qualification",
+        "requiredEvidence": [
+          "evidence:nuclear-grade-qualification"
+        ],
+        "prerequisiteObligationTypes": [
+          "compliance-discovery"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:contextual-nuclear-continuity",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "production:energy"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          }
+        },
+        "targetRef": "production:energy",
+        "requiredRoleRef": "role:operations-continuity",
+        "obligationType": "continuity-assessment",
+        "requiredEvidence": [
+          "evidence:nuclear-continuity-assessment"
+        ],
+        "prerequisiteObligationTypes": [
+          "alternative-qualification"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:contextual-nuclear-contract-negative-control",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "contract:forges-msa"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          }
+        },
+        "targetRef": "contract:forges-msa",
+        "requiredRoleRef": "role:legal-reviewer",
+        "obligationType": "contract-remedies",
+        "requiredEvidence": [
+          "evidence:msa-review"
+        ],
+        "admissionStatus": "admitted"
+      },
+      {
+        "ruleId": "rule:contextual-nuclear-finance-negative-control",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "order:aero-rush"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "false"
+          }
+        },
+        "targetRef": "ledger:supplier-exposure",
+        "requiredRoleRef": "role:finance-exposure",
+        "obligationType": "financial-exposure",
+        "requiredEvidence": [
+          "evidence:exposure-calculation"
+        ],
+        "admissionStatus": "admitted"
+      }
+    ],
+    "unknownTransitionDuties": [
+      {
+        "dutyId": "duty:contextual-nuclear-compliance-discovery",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "judicial_restructuring"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "control:nuclear-substitution"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "unknown"
+          }
+        },
+        "targetRef": "control:nuclear-substitution",
+        "requiredRoleRef": "role:compliance-reviewer",
+        "obligationType": "compliance-discovery",
+        "requiredEvidence": [
+          "evidence:applicable-regulatory-basis"
+        ],
+        "admissionStatus": "admitted"
+      }
+    ],
+    "separationConstraints": [
+      {
+        "constraintId": "separation:procurement-quality",
+        "leftRoleRef": "role:procurement-owner",
+        "rightRoleRef": "role:quality-qualification"
+      }
+    ],
+    "completeness": {
+      "status": "complete",
+      "coveredNodeRefs": [
+        "supplier:forges-martelliere",
+        "order:aero-av3000",
+        "order:energy-nusafe",
+        "order:energy-nuclear",
+        "order:aero-partial",
+        "order:aero-rush",
+        "order:maroc",
+        "order:defense",
+        "contract:forges-msa",
+        "ledger:supplier-exposure",
+        "production:aero",
+        "production:energy",
+        "production:defense",
+        "alternative:acieries-savoie",
+        "control:nuclear-substitution",
+        "boundary:source-discovery"
+      ],
+      "coveredRelationTypes": [
+        "business_dependency",
+        "contractual_dependency",
+        "financial_exposure",
+        "compliance_dependency",
+        "operational_dependency"
+      ],
+      "maxDepth": 4,
+      "knownGaps": [],
+      "discoveryRoleRef": "role:evidence-discovery"
+    }
+  }
+}

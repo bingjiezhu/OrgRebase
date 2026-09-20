@@ -1,0 +1,13 @@
+{
+  "checkout": "agentteams://pinned-checkout",
+  "commit": "223ddc2b8073e4c8b93bcbb15e1d717f196c04d9",
+  "files": {
+    "plugins/teamharness/mcp/message_tool.py": "sha256:03e8fcfcaf002c5d9dd0c023b85bd4d2f4641b83cb59c6d89be08a9c1689c47c",
+    "plugins/teamharness/mcp/roomflow_tool.py": "sha256:db127d550cf9155c133657ab7c89fee48292c07587a061954bd60b4c14991680",
+    "plugins/teamharness/mcp/server.py": "sha256:a4d0ea071a6d74411881081a71d29ff69f9b29159728e604386f2395834061df"
+  },
+  "origin": "https://github.com/agentscope-ai/AgentTeams",
+  "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+  "source_lock_digest": "sha256:76acd87b2307e3711de8ecba6cc17073a498e212ba170b36554dd916bab85f9d",
+  "status": "PASS"
+}

@@ -1,0 +1,102 @@
+{
+  "$defs": {
+    "ReadinessGate": {
+      "enum": [
+        "SEED_READY",
+        "SHADOW_READY",
+        "REFERENCE_RUNTIME",
+        "OUTCOME_ASSURANCE"
+      ],
+      "title": "ReadinessGate",
+      "type": "string"
+    },
+    "SeedComponentKind": {
+      "enum": [
+        "DOMAIN",
+        "KNOWLEDGE",
+        "AUTHORITY",
+        "CAPABILITY",
+        "DEPENDENCY"
+      ],
+      "title": "SeedComponentKind",
+      "type": "string"
+    },
+    "SeedGapKind": {
+      "enum": [
+        "MISSING_SOURCE",
+        "INCOMPLETE_COVERAGE",
+        "UNKNOWN_AUTHORITY",
+        "UNVERIFIED_DEPENDENCY",
+        "MISSING_OUTCOME_BASELINE"
+      ],
+      "title": "SeedGapKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-enterprise-seed-gap.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "blocks": {
+      "items": {
+        "$ref": "#/$defs/ReadinessGate"
+      },
+      "title": "Blocks",
+      "type": "array"
+    },
+    "component": {
+      "$ref": "#/$defs/SeedComponentKind"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/SeedGapKind"
+    },
+    "owner_ref": {
+      "minLength": 1,
+      "title": "Owner Ref",
+      "type": "string"
+    },
+    "path": {
+      "minLength": 1,
+      "title": "Path",
+      "type": "string"
+    },
+    "resolution_gate_ref": {
+      "minLength": 1,
+      "title": "Resolution Gate Ref",
+      "type": "string"
+    },
+    "status": {
+      "const": "OPEN",
+      "default": "OPEN",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "component",
+    "path",
+    "description",
+    "owner_ref",
+    "resolution_gate_ref",
+    "blocks"
+  ],
+  "title": "EnterpriseSeedGap",
+  "type": "object"
+}

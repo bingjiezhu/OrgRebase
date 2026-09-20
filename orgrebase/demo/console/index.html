@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f4f1eb" />
+    <title>OrgRebase｜知变 · 企业工作持续演化引擎</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231b1b19'/%3E%3Ctext x='32' y='44' fill='%23f15a29' font-size='36' text-anchor='middle' font-family='serif' font-weight='700'%3E%E7%9F%A5%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/assets/styles.css?v=0.4.0-13" />
+    <link rel="stylesheet" href="/assets/oac-adaptation.css?v=0.4.0-13" />
+    <link rel="stylesheet" href="/assets/workspace-shell.css?v=0.4.0-13" />
+    <link rel="stylesheet" href="/assets/change-workbench.css?v=0.5.0-1" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="OrgRebase 首页" data-i18n-aria-label="a11y.home">
+        <span class="brand-mark" aria-hidden="true">知</span>
+        <span class="brand-copy">
+          <strong>OrgRebase｜知变</strong>
+          <small data-i18n="brand.tagline">企业工作持续演化引擎</small>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <div class="runtime-badges" aria-label="运行边界" data-i18n-aria-label="a11y.runtimeBoundary">
+          <span class="badge badge-dark" data-i18n="header.controlledLocal">本地验证环境</span>
+          <span class="badge" id="profile-data-badge" data-i18n="header.declaredData">数据类型：读取中</span>
+          <span class="badge" id="semifinal-status-badge" data-i18n="header.currentTask.waiting">当前任务：待发起</span>
+          <span class="badge" data-i18n="header.goldenPilot">协作引擎：AgentTeams</span>
+          <span class="badge badge-muted badge-boundary" data-i18n="header.realEnterpriseNotRun" hidden aria-hidden="true">生产就绪：否 · 待企业验证</span>
+        </div>
+        <div class="language-switcher" id="language-switcher" role="group" aria-label="语言" data-i18n-aria-label="language.group">
+          <button class="language-option active" id="language-zh" type="button" data-language="zh-CN" aria-pressed="true" aria-label="切换为中文" title="切换为中文">中文</button>
+          <button class="language-option" id="language-en" type="button" data-language="en" aria-pressed="false" aria-label="Switch to English" title="Switch to English">EN</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="workspace-session" id="workspace-session" aria-label="登录会话">
+      <div><strong id="session-status">正在确认登录状态…</strong><p id="session-description" role="status" aria-live="polite"></p></div>
+      <div id="session-workspace-picker" class="workspace-session-actions" hidden><label><span id="session-workspace-label">工作对象</span><select id="session-workspace"></select></label><button class="button button-secondary" id="session-workspace-switch" type="button" hidden>切换并清空未提交草稿</button></div>
+      <div class="workspace-session-actions">
+        <details id="session-actor-picker" class="session-actor-picker" hidden>
+          <summary id="session-actor-summary">切换演示角色</summary>
+          <label for="session-actor"><span id="session-actor-label">操作身份</span><select id="session-actor"></select></label>
+          <small id="session-actor-note">本地角色模拟；权限由服务端检查。切换后清空未提交内容。</small>
+          <button class="button button-secondary" id="session-actor-switch" type="button">使用此角色</button>
+        </details>
+        <a class="button button-primary" id="session-login" href="/api/session/login" hidden>企业登录</a>
+        <button class="button button-secondary" id="session-refresh" type="button">重试</button>
+        <button class="button button-secondary" id="session-logout" type="button" hidden>退出</button>
+      </div>
+    </section>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow" id="scenario-eyebrow" data-i18n="hero.scenario">企业工作区 / 企业报价</p>
+          <h1 id="hero-title" data-i18n="hero.title">事实变了，工作应该知道哪里失效。</h1>
+          <p data-i18n="hero.body">企业规则变化后，OrgRebase识别受影响的工作，组织领域智能体生成修正候选。指定负责人批准后，控制面更新正式版本。当前支持企业报价流程。</p>
+        </div>
+        <aside class="operator-card" aria-label="当前阶段执行方" data-i18n-aria-label="a11y.currentOperator">
+          <span data-i18n="operator.label">当前阶段执行方</span>
+          <strong id="current-actor" data-i18n="operator.name">报价运营负责人</strong>
+          <small id="actor-role" data-i18n="operator.role">报价运营负责人</small>
+        </aside>
+      </section>
+
+      <section class="complexity-bridge" aria-label="原流程难点与 OrgRebase 解法" data-i18n-aria-label="a11y.complexityBridge">
+        <article>
+          <span data-i18n="complexity.original.kicker">01 · 原流程</span>
+          <strong data-i18n="complexity.original.title">一次变化，穿过五类系统与五类责任人</strong>
+          <small data-i18n="complexity.original.body">CRM / CPQ、产品源、CLM、企业资源计划（ERP）/ 定价系统与市场及商业化组装之间，事实、权限和版本彼此分离。</small>
+        </article>
+        <article>
+          <span data-i18n="complexity.engineering.kicker">02 · 工程难点</span>
+          <strong data-i18n="complexity.engineering.title">算准影响，又不让智能体越权写入</strong>
+          <small data-i18n="complexity.engineering.body">依赖必须可证明，候选与规范状态必须隔离，冲突、陈旧批准与中断必须能恢复。</small>
+        </article>
+        <article class="solution">
+          <span data-i18n="complexity.solution.kicker">03 · OrgRebase 解法</span>
+          <strong data-i18n="complexity.solution.title">组织契约与选择性重构把一次变化收敛为可验证闭环</strong>
+          <small data-i18n="complexity.solution.body">自动形成与预演 → 人工审阅并点击 → 自动选择性重构与证据校验。</small>
+        </article>
+      </section>
+
+      <div class="oac-preflight-mount" id="oac-preflight-mount"></div>
+
+      <section class="journey" aria-labelledby="journey-title">
+        <div class="section-heading compact">
+          <div>
+            <p class="eyebrow" data-i18n="journey.kicker">持久化工作流</p>
+            <h2 id="journey-title" data-i18n="journey.title">一条持久化、可审计的演化时间线</h2>
+          </div>
+          <p id="resume-note" data-i18n="journey.loading">正在读取服务端状态…</p>
+        </div>
+        <ol class="timeline" id="timeline">
+
+        </ol>
+      </section>
+
+      <section class="command-bar" id="command-bar" data-mode="system" aria-label="当前合法操作" data-i18n-aria-label="a11y.currentAction">
+        <div class="command-copy">
+          <span id="command-kicker" data-i18n="command.next">下一步</span>
+          <strong id="command-title" data-i18n="command.loadingTitle">读取工作区状态</strong>
+          <small id="command-detail" data-i18n="command.loadingDetail">页面只显示当前阶段合法的主操作。</small>
+        </div>
+        <div class="command-actions">
+          <button class="button button-primary" id="primary-action" type="button" disabled data-i18n="command.loadingButton">请稍候…</button>
+
+          <button class="button button-secondary" id="download-quote" type="button" disabled hidden data-i18n="command.downloadQuote">下载工作结果</button>
+          <button class="button button-secondary" id="download-evidence" type="button" disabled hidden data-i18n="command.downloadEvidence">下载审计记录</button>
+        </div>
+      </section>
+
+      <section class="evidence-cockpit" aria-labelledby="cockpit-title">
+        <header class="cockpit-head">
+          <div>
+            <p class="eyebrow" data-i18n="cockpit.kicker">单一场景 · 运行实况</p>
+            <h2 id="cockpit-title" data-i18n="cockpit.title">企业执行观测中枢</h2>
+            <p data-i18n="cockpit.body">业务、协作与运维共用同一运行链路；页面只读展示实际进度，不改写业务状态。</p>
+          </div>
+          <div class="cockpit-tabs" role="tablist" aria-label="执行视图" data-i18n-aria-label="a11y.evidenceViews">
+            <button class="cockpit-tab active" id="tab-scene" role="tab" aria-selected="true" aria-controls="cockpit-scene" data-view="scene" type="button" data-i18n="cockpit.tab.scene">业务与数据</button>
+            <button class="cockpit-tab" id="tab-value" role="tab" aria-selected="false" aria-controls="cockpit-value" data-view="value" type="button" data-i18n="cockpit.tab.value">价值与责任</button>
+            <button class="cockpit-tab" id="tab-collaboration" role="tab" aria-selected="false" aria-controls="cockpit-collaboration" data-view="collaboration" type="button" data-i18n="cockpit.tab.collaboration">智能体协作</button>
+            <button class="cockpit-tab" id="tab-operations" role="tab" aria-selected="false" aria-controls="cockpit-operations" data-view="operations" type="button" data-i18n="cockpit.tab.operations">运维与异常</button>
+          </div>
+        </header>
+
+        <div class="cockpit-view active" id="cockpit-scene" role="tabpanel" aria-labelledby="tab-scene">
+          <details class="oac-adaptation" id="oac-adaptation" data-state="PACK_OBSERVED">
+            <summary>
+              <span class="oac-adaptation-mark" aria-hidden="true">OAC</span>
+              <span class="oac-adaptation-summary-copy">
+                <small id="oac-adaptation-kicker">企业适配入口 · 新工作区预演</small>
+                <strong id="oac-adaptation-title">让接入智能体按 OAC 把企业材料编译为可验证工作区</strong>
+              </span>
+              <span class="oac-adaptation-status" id="oac-adaptation-status">正在读取适配状态</span>
+              <span class="oac-adaptation-toggle" aria-hidden="true">＋</span>
+            </summary>
+            <div class="oac-adaptation-body">
+              <div class="oac-adaptation-intro">
+                <div>
+                  <span id="oac-adaptation-intro-label">组织智能体契约（OAC）企业适配层</span>
+                  <strong id="oac-adaptation-intro-title">智能体降低适配成本，契约和人工负责人保留最终权威</strong>
+                </div>
+                <button class="button button-secondary" id="oac-review-jump" type="button">查看审阅与操作</button>
+                <p id="oac-adaptation-intro-body">OAC 定义智能体必须遵守的输入、权限、交接与准入规则；接入智能体只产生候选，确定性校验与指定负责人决定是否放行。页面正在读取后端执行策略。</p>
+              </div>
+
+              <div class="oac-adaptation-rail" id="oac-adaptation-rail" aria-label="OAC 企业接入六阶段" data-i18n-aria-label="a11y.oacAdaptationStages">
+                <article data-step="inputs"><span>01</span><strong id="oac-step-inputs-title">企业材料</strong><small id="oac-step-inputs-detail">领域 · 知识 · 权威 · 能力 · 依赖</small></article>
+                <i aria-hidden="true">→</i>
+                <article data-step="mapping"><span>02</span><strong id="oac-step-mapping-title">候选映射</strong><small id="oac-step-mapping-detail">接入智能体只生成建议</small></article>
+                <i aria-hidden="true">→</i>
+                <article data-step="validation"><span>03</span><strong id="oac-step-validation-title">OAC 契约校验</strong><small id="oac-step-validation-detail">来源 · 需求 · 权威 · 未知项</small></article>
+                <i aria-hidden="true">→</i>
+                <article data-step="admission"><span>04</span><strong id="oac-step-admission-title">4 秒人工准入</strong><small id="oac-step-admission-detail">精确摘要 · 指定负责人</small></article>
+                <i aria-hidden="true">→</i>
+                <article data-step="activation"><span>05</span><strong id="oac-step-activation-title">契约激活</strong><small id="oac-step-activation-detail">精确绑定当前工作区</small></article>
+                <i aria-hidden="true">→</i>
+                <article data-step="consumption"><span>06</span><strong id="oac-step-consumption-title">业务消费</strong><small id="oac-step-consumption-detail">后续变化运行引用已激活契约</small></article>
+              </div>
+
+              <section class="oac-owner-review" id="oac-owner-review" aria-labelledby="oac-owner-review-title" aria-live="polite">
+                <header>
+                  <div>
+                    <span id="oac-owner-review-kicker">负责人审阅对象</span>
+                    <strong id="oac-owner-review-title">将企业材料编译为可执行的组织契约</strong>
+                    <small id="oac-owner-review-detail">候选尚未生成；准入前必须审阅业务语义和效应边界。</small>
+                  </div>
+                  <b class="oac-source-maturity" id="oac-source-maturity" data-maturity="PENDING">等待识别材料性质</b>
+                </header>
+
+                <div class="oac-review-overview" aria-label="契约审阅概览" data-i18n-aria-label="a11y.oacReviewOverview">
+                  <article><span id="oac-review-organization-label">组织与任务</span><strong id="oac-review-organization">等待候选映射</strong><small id="oac-review-task">—</small></article>
+                  <article><span id="oac-review-domain-label">领域范围</span><strong id="oac-review-domain">—</strong><small id="oac-review-domain-detail">等待识别</small></article>
+                  <article><span id="oac-review-fact-label">事实与权威</span><strong id="oac-review-fact">—</strong><small id="oac-review-authority">等待识别</small></article>
+                  <article><span id="oac-review-dependency-label">依赖与变更</span><strong id="oac-review-dependency">—</strong><small id="oac-review-change">等待识别</small></article>
+                </div>
+
+                <div class="oac-review-components" id="oac-review-components" aria-label="五类企业材料如何形成契约" data-i18n-aria-label="a11y.oacReviewComponents"></div>
+                <p class="oac-review-runtime-boundary" id="oac-review-runtime-boundary">当前 OAC 绑定来源、角色与主体、需求和准入；能力卡与依赖边供 OrgRebase 运行时投影和影响计算使用。OAC 不直接生成报价业务内容。</p>
+
+                <div class="oac-review-decision">
+                  <article class="oac-review-unknowns" id="oac-review-unknowns" data-state="WAITING">
+                    <span id="oac-review-unknowns-label">待人判断的未知项</span>
+                    <strong id="oac-review-unknowns-title">等待候选映射</strong>
+                    <ul id="oac-review-unknowns-list"><li>系统会保留不确定性，不会自行补全企业事实。</li></ul>
+                  </article>
+                  <article class="oac-review-effects positive">
+                    <span id="oac-review-effects-label">批准后会发生</span>
+                    <ul id="oac-review-effects"><li>激活经审阅的组织契约</li><li>放行当前工作区的任务形成门</li></ul>
+                  </article>
+                  <article class="oac-review-effects boundary">
+                    <span id="oac-review-non-effects-label">批准后不会发生</span>
+                    <ul id="oac-review-non-effects"><li>不会批准任何报价业务结果</li><li>不会写入企业外部系统</li><li>不会扩大智能体权限</li></ul>
+                  </article>
+                </div>
+
+                <fieldset class="oac-review-acknowledgements" id="oac-review-acknowledgements" tabindex="-1" hidden>
+                  <legend id="oac-review-acknowledgements-title">准入前请逐项确认</legend>
+                  <label><input id="oac-ack-summary" type="checkbox" value="REVIEWED_SOURCE_TO_CONTRACT_SUMMARY" /> <span id="oac-ack-summary-label">我已审阅企业材料到组织契约的对应关系</span></label>
+                  <label><input id="oac-ack-unknowns" type="checkbox" value="ACCEPTED_DECLARED_UNKNOWNS" /> <span id="oac-ack-unknowns-label">我已了解并接受当前保留的未知项</span></label>
+                  <label><input id="oac-ack-boundary" type="checkbox" value="UNDERSTAND_NO_BUSINESS_APPROVAL" /> <span id="oac-ack-boundary-label">我了解本次准入不等于报价审批，也不会写入外部系统</span></label>
+                  <small id="oac-review-acknowledgements-note">三项确认与服务端 4 秒时间门同时通过后，才能准入。</small>
+                </fieldset>
+              </section>
+
+              <div class="oac-product-outcomes" aria-label="OAC 企业适配结果" data-i18n-aria-label="a11y.oacAdaptationOutcomes" id="oac-product-outcomes">
+                <article class="oac-business-gate" id="oac-business-gate" data-gate-state="BLOCKED_PENDING_OAC" aria-live="polite"><span id="oac-product-business-label">业务启动门</span><strong id="oac-product-business">正在检查 OAC 准入</strong><small id="oac-product-business-detail">未核实前不形成报价</small></article>
+                <article><span id="oac-product-agent-label">接入智能体</span><strong id="oac-product-agent">等待生成候选</strong><small id="oac-product-agent-detail">真实模型回执与 AgentTeams 动作将在这里显示</small></article>
+                <article><span id="oac-product-gap-label">企业事实缺口</span><strong id="oac-product-gap">正在检查</strong><small id="oac-product-gap-detail">不确定时停下等人</small></article>
+                <article><span id="oac-product-validation-label">契约校验</span><strong id="oac-product-validation">等待候选</strong><small id="oac-product-validation-detail">来源、权威和需求必须精确对应</small></article>
+                <article><span id="oac-product-admission-label">人工准入</span><strong id="oac-product-admission">等待契约校验</strong><small id="oac-product-admission-detail">只有指定负责人可批准</small></article>
+                <article><span id="oac-product-activation-label">契约激活</span><strong id="oac-product-activation">等待人工准入</strong><small id="oac-product-activation-detail">激活后才能进入持续演化工作台</small></article>
+                <article><span id="oac-product-effect-label">当前效应边界</span><strong id="oac-product-effect">声明上限：禁止外部写入</strong><small id="oac-product-effect-detail">尚未产生执行回执；不冒充已观测的 0 次写入</small></article>
+              </div>
+
+              <details class="oac-enhanced-assurance" id="oac-enhanced-assurance" hidden aria-hidden="true">
+                <summary>
+                  <span id="oac-enhanced-title">增强验收（可选）</span>
+                  <small id="oac-enhanced-detail">上下文编译与影子运行用于加强信心，不是企业接入的必经步骤。</small>
+                  <b aria-hidden="true">＋</b>
+                </summary>
+                <div class="oac-enhanced-body">
+                  <div class="oac-enhanced-status">
+                    <div><span id="oac-product-shadow-label">影子运行</span><strong id="oac-product-shadow">等待人工准入</strong><small id="oac-product-shadow-detail">验证适配结果，不影响正式状态</small></div>
+                    <button class="button button-secondary" id="oac-enhanced-action" type="button" disabled>等待契约激活</button>
+                  </div>
+                  <section class="oac-context-model" id="oac-context-model" aria-labelledby="oac-context-title">
+                    <header>
+                      <div><span id="oac-context-kicker">上下文住在哪里</span><strong id="oac-context-title">任务协调器只持有运行摘要，领域智能体只接收本次必需内容</strong></div>
+                      <small id="oac-context-status">等待人工准入后编译</small>
+                    </header>
+                    <div>
+                      <article><span>01</span><strong id="oac-context-manager-title">确定性任务协调器 · 管理角色</strong><small id="oac-context-manager-detail">组织需求摘要 + 当前任务 + 最小团队</small><b class="mono" id="oac-context-manager-digest">—</b></article>
+                      <i aria-hidden="true">→</i>
+                      <article><span>02</span><strong id="oac-context-resident-title">领域常驻契约</strong><small id="oac-context-resident-detail">权威源类型 · 允许的工具 / Skill · 退让规则</small><b class="mono" id="oac-context-resident-digest">—</b></article>
+                      <i aria-hidden="true">→</i>
+                      <article><span>03</span><strong id="oac-context-task-title">本次任务投影</strong><small id="oac-context-task-detail">用途 · 接收者 · 到期时间 · 修订锁</small><b class="mono" id="oac-context-task-digest">—</b></article>
+                      <i aria-hidden="true">→</i>
+                      <article><span>04</span><strong id="oac-context-return-title">结果回收</strong><small id="oac-context-return-detail">候选结果 → 审查智能体 → 确定性控制面</small><b class="mono" id="oac-context-return-digest">规范写入 0</b></article>
+                    </div>
+                  </section>
+                </div>
+              </details>
+
+              <details class="oac-verification-evidence" id="oac-verification-evidence" hidden>
+                <summary>
+                  <span id="oac-verification-title">高级审计证据</span>
+                  <small id="oac-verification-detail">摘要、内部路径、运行绑定与技术回执；常规审阅无需阅读。</small>
+                  <b aria-hidden="true">＋</b>
+                </summary>
+                <div class="oac-verification-body">
+              <div class="oac-source-grid" id="oac-source-grid" aria-label="五类企业输入的技术绑定" data-i18n-aria-label="a11y.oacSourceBindings"></div>
+
+              <div class="oac-adaptation-evidence">
+                <article>
+                  <span id="oac-fact-run-label">适配运行</span>
+                  <strong class="mono" id="oac-fact-run">—</strong>
+                  <small id="oac-fact-run-detail">独立适配任务，不影响当前业务运行</small>
+                </article>
+                <article>
+                  <span id="oac-fact-agent-label">接入智能体</span>
+                  <strong id="oac-fact-agent">等待生成候选</strong>
+                  <small class="mono" id="oac-fact-agent-detail">AgentTeams → Gemini → 确定性校验</small>
+                </article>
+                <article>
+                  <span id="oac-fact-contract-label">OAC 契约绑定</span>
+                  <strong class="mono" id="oac-fact-contract">—</strong>
+                  <small id="oac-fact-contract-detail">来源 / 需求 / 准入摘要</small>
+                </article>
+                <article>
+                  <span id="oac-fact-gap-label">缺口与原因</span>
+                  <strong id="oac-fact-gap">正在检查</strong>
+                  <small class="mono" id="oac-fact-gap-detail">—</small>
+                </article>
+                <article>
+                  <span id="oac-fact-effect-label">效应上限</span>
+                  <strong id="oac-fact-effect">声明上限：禁止外部写入</strong>
+                  <small id="oac-fact-effect-detail">尚未产生执行回执；不冒充已观测的 0 次写入</small>
+                </article>
+                <article>
+                  <span id="oac-fact-binding-label">运行绑定</span>
+                  <strong class="mono" id="oac-fact-binding">尚未绑定</strong>
+                  <small class="mono" id="oac-fact-binding-detail">适配运行 → 适配胶囊 → 执行运行</small>
+                </article>
+              </div>
+
+                </div>
+              </details>
+
+              <div class="oac-adaptation-control" id="oac-adaptation-control" tabindex="-1">
+                <div>
+                  <span id="oac-control-owner-label">人工权威</span>
+                  <strong class="mono" id="oac-control-owner">企业工作台负责人</strong>
+                  <small id="oac-control-note">4 秒倒计时只是界面提示；服务端时间门和精确摘要才是权威。</small>
+                </div>
+                <button class="button button-secondary" id="oac-refresh" type="button">刷新适配状态</button>
+                <button class="button button-primary" id="oac-primary-action" type="button" disabled>等待执行策略</button>
+              </div>
+              <p class="oac-adaptation-boundary" id="oac-adaptation-boundary">页面会按后端实际运行策略标明候选来源与外部模型调用边界。接入智能体只提议，OAC 校验与指定负责人决定是否激活。</p>
+            </div>
+          </details>
+          <section class="enterprise-data-journey" id="enterprise-data-journey" data-state="WAITING" aria-labelledby="enterprise-data-journey-title">
+            <header>
+              <div>
+                <span data-i18n="dataJourney.kicker">本次任务 · 变更与验收</span>
+                <strong id="enterprise-data-journey-title" data-i18n="dataJourney.title">变化影响与报价后继版本</strong>
+              </div>
+              <small id="enterprise-data-journey-status" data-i18n="dataJourney.waiting">等待已准入的运行事实</small>
+            </header>
+            <div class="enterprise-data-journey-rail" id="enterprise-data-journey-rail" role="list" aria-label="报价任务四段版本链" data-i18n-aria-label="dataJourney.aria">
+              <article class="enterprise-data-journey-step" id="enterprise-data-journey-source" data-state="waiting" role="listitem">
+                <span>01</span><strong data-i18n="dataJourney.source.title">已准入企业基线</strong><small data-i18n="dataJourney.source.waiting">尚未观测到已准入业务槽位</small>
+              </article>
+              <i aria-hidden="true">→</i>
+              <article class="enterprise-data-journey-step" id="enterprise-data-journey-oac" data-state="waiting" role="listitem">
+                <span>02</span><strong data-i18n="dataJourney.oac.title">OAC 约束已绑定</strong><small data-i18n="dataJourney.oac.waiting">尚未观测到完整契约绑定</small>
+              </article>
+              <i aria-hidden="true">→</i>
+              <article class="enterprise-data-journey-step" id="enterprise-data-journey-context" data-state="waiting" role="listitem">
+                <span>03</span><strong data-i18n="dataJourney.context.title">OrgRebase 最小上下文</strong><small data-i18n="dataJourney.context.waiting">尚未观测到任务投影</small>
+              </article>
+              <i aria-hidden="true">→</i>
+              <article class="enterprise-data-journey-step" id="enterprise-data-journey-quotes" data-state="waiting" role="listitem">
+                <span>04</span><strong data-i18n="dataJourney.quotes.title">报价版本链</strong><small data-i18n="dataJourney.quotes.waiting">尚未形成内部报价修订</small>
+              </article>
+            </div>
+            <div class="enterprise-data-journey-changes" id="enterprise-data-journey-changes" aria-live="polite" hidden>
+              <p data-i18n="dataJourney.changes.waiting">尚未观测到业务变化，不补造变更或批准。</p>
+            </div>
+            <footer>
+              <p id="enterprise-data-journey-boundary" data-i18n="dataJourney.boundary">前两段是已准入基线。变化到达后先显示零写预演与候选影响；只有匹配负责人批准后，才显示后继报价版本和选择性重构回执。</p>
+              <div class="enterprise-data-evidence-boundaries" aria-label="证据边界" data-i18n-aria-label="dataJourney.boundaries.aria">
+                <span data-evidence="fixture" data-i18n="dataJourney.boundaries.fixture">受控实例：证明结构闭环</span>
+                <span data-evidence="public" data-i18n="dataJourney.boundaries.public">公开流程：独立验证跨流程映射</span>
+                <span data-evidence="pilot" data-i18n="dataJourney.boundaries.pilot">企业试点：真实连接器与 ROI 需在企业环境验证</span>
+              </div>
+            </footer>
+          </section>
+          <section class="business-change-board" id="business-change-board" aria-labelledby="business-change-title" hidden>
+            <header>
+              <div>
+                <span data-i18n="businessChange.kicker">审批前看候选影响 · 审批后看后继版本</span>
+                <strong id="business-change-title" data-i18n="businessChange.title">同一变化的预演与应用分开呈现</strong>
+              </div>
+              <small id="business-change-version" data-i18n="businessChange.waiting">等待变更运行</small>
+            </header>
+            <div class="business-change-rounds" id="business-change-rounds"></div>
+            <div class="business-change-total" id="business-change-total"></div>
+            <div class="business-change-next"><button class="button button-primary" id="business-change-next" type="button" data-route-target="quote" hidden>返回当前负责人审批</button></div>
+          </section>
+          <section class="authority-ladder" id="authority-ladder" aria-labelledby="authority-ladder-title" hidden>
+            <header>
+              <span data-i18n="authorityLadder.kicker">初始形成与本次变更分别核对</span>
+              <strong id="authority-ladder-title" data-i18n="authorityLadder.title">从团队交付到规则生效</strong>
+            </header>
+            <p id="authority-ladder-context"></p>
+            <div class="authority-ladder-steps" id="authority-ladder-steps"></div>
+          </section>
+
+          <details class="technical-evidence-details" id="active-technical-evidence" hidden>
+            <summary>
+              <span data-i18n="technicalEvidence.title">技术证据详情</span>
+              <strong data-i18n="technicalEvidence.sceneSummary">运行编号、候选链路与同运行操作台账</strong>
+              <b aria-hidden="true">＋</b>
+            </summary>
+            <div class="technical-evidence-body">
+              <div class="run-summary-grid">
+                <article><span data-i18n="scene.activeRun">当前运行</span><strong class="mono" id="active-run-id" data-i18n="common.loading">读取中…</strong><small data-i18n="scene.goldenRun">业务端到端运行</small></article>
+                <article><span data-i18n="scene.stage">当前阶段</span><strong id="active-stage" data-i18n="enum.empty">尚未开始</strong><small id="active-stage-detail" data-i18n="scene.waiting">等待任务形成</small></article>
+                <article><span data-i18n="scene.packProfile">报价包 / 配置档案</span><strong class="mono" id="active-pack">—</strong><small id="active-profile">—</small></article>
+                <article><span data-i18n="scene.authority">规范状态权威</span><strong id="active-authority">OrgRebase 规范状态控制面</strong><small data-i18n="scene.authority.detail">智能体 / Tool / Skill 只能产生候选结果与审计记录</small></article>
+              </div>
+              <div class="active-spine" id="active-evidence-spine" aria-label="本次运行链路" data-i18n-aria-label="a11y.activeEvidenceSpine"></div>
+              <div class="ledger-shell">
+                <div class="ledger-title"><strong data-i18n="scene.ledger.title">本次运行操作台账</strong><span id="active-ledger-count" data-i18n="scene.ledger.zero">0 个操作</span></div>
+                <div class="ledger-scroll">
+                  <table class="action-ledger">
+                    <thead><tr><th>#</th><th data-i18n="table.type">类型</th><th data-i18n="table.actor">主体</th><th data-i18n="table.action">做了什么</th><th data-i18n="table.status">状态</th><th data-i18n="table.writes">写入</th><th data-i18n="table.receipt">回执</th></tr></thead>
+                    <tbody id="active-action-ledger"><tr><td colspan="7" data-i18n="scene.ledger.waiting">等待形成运行事实…</td></tr></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="cockpit-view" id="cockpit-value" role="tabpanel" aria-labelledby="tab-value" hidden>
+          <section class="current-task-acceptance" id="current-task-acceptance">
+          <div class="lane-note value-lane">
+            <span data-i18n="value.kicker">变化响应 · 单一主用户</span>
+            <strong id="value-primary-user" data-i18n="value.primaryRole">报价运营负责人</strong>
+          <small id="value-process-boundary" data-i18n="value.boundary.initial">八步流程用于现状人工基线与 RACI 对照；系统实测和人工等待必须分开读取。</small>
+          </div>
+          <section class="acceptance-story" id="acceptance-story" aria-labelledby="acceptance-story-title">
+            <header class="acceptance-story-header">
+              <div>
+                <span data-shell-copy="acceptanceStoryKicker"></span>
+                <strong id="acceptance-story-title" data-shell-copy="acceptanceStoryTitle"></strong>
+                <small data-shell-copy="acceptanceStoryBody"></small>
+              </div>
+              <em id="acceptance-story-status" data-state="loading" data-shell-copy="acceptanceStoryWaiting"></em>
+            </header>
+            <div class="acceptance-story-steps" id="acceptance-story-steps">
+              <article><strong data-shell-copy="acceptanceStepsWaiting"></strong></article>
+            </div>
+            <div class="acceptance-story-changes" id="acceptance-change-summary">
+              <article><strong data-shell-copy="acceptanceChangesWaiting"></strong></article>
+            </div>
+            <div id="acceptance-final-output">
+              <article><strong data-shell-copy="acceptanceFinalWaiting"></strong></article>
+            </div>
+            <div class="acceptance-story-actions">
+              <button class="button button-secondary" id="acceptance-view-data" type="button" data-route-target="data" data-shell-copy="acceptanceViewData"></button>
+              <button class="button button-secondary" id="acceptance-download-quote" type="button" disabled data-shell-copy="acceptanceDownloadQuote"></button>
+              <button class="button button-secondary" id="acceptance-download-evidence" type="button" disabled data-shell-copy="acceptanceDownloadEvidence"></button>
+            </div>
+          </section>
+          <details class="acceptance-support-details">
+            <summary><span data-shell-copy="acceptanceProcessDetails"></span><b aria-hidden="true">＋</b></summary>
+            <div class="value-section">
+              <div class="ledger-title"><strong data-i18n="value.process.title">八步报价责任链</strong><span id="value-process-status" data-i18n="value.process.initial">八步责任链已配置</span></div>
+              <p class="value-table-legend" data-i18n="value.raci.legend">现状 R 是当前人工执行者；变化后执行者是智能体或受控系统；A 仍是最终负责与批准的人。</p>
+              <div class="ledger-scroll value-process-scroll">
+                <table class="action-ledger value-process-table">
+                  <thead><tr><th>#</th><th data-i18n="value.table.step">步骤</th><th data-i18n="value.table.system">现状系统类</th><th data-i18n="value.table.asIsResponsible">现状人工执行者（R）</th><th data-i18n="value.table.toBeResponsible">变化后执行者</th><th data-i18n="value.table.accountable">人工批准责任（A）</th><th data-i18n="value.table.target">参考人工基线</th><th data-i18n="value.table.connector">连接器</th></tr></thead>
+                  <tbody id="value-process-steps"><tr><td colspan="8" data-i18n="common.loading">读取签名基线…</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+          <div class="value-section">
+            <div class="ledger-title"><strong data-i18n="value.metrics.title">本次任务验收</strong><span data-i18n="value.metrics.boundary">只展示当前运行已经产生并校验的回执</span></div>
+            <div class="value-metric-grid" id="value-metrics"></div>
+          </div>
+          <div class="cost-model-ribbon" id="value-cost-model">
+            <span data-i18n="value.current.cost.label">本次运行结构性结果</span>
+            <strong data-i18n="value.current.cost.waiting">等待本次任务运行完成</strong>
+            <small data-i18n="value.current.cost.waitingDetail">历史成本模型不作为本次结果；周期、工时、返工率与 ROI 需企业观察窗口。</small>
+          </div>
+          </section>
+          <nav id="validation-directory" class="validation-directory" aria-label="运行记录与验证">
+            <a href="#current-run-archive" data-validation-entry="current"><strong>本次任务记录</strong><span>核对交付版本、批准人与生效依据。</span><small>来源：当前工作区已保存的运行回执</small></a>
+            <a href="#public-real-process-validation" data-validation-entry="public"><strong>公开数据案例</strong><span>采购规则变化会影响哪些订单？</span><small>BPI 2019 匿名采购日志 · 机制案例</small></a>
+            <a href="#archive-revalidation" data-validation-entry="reliability"><strong>可靠性验证</strong><span>检查组队、恢复与权限隔离的验证结果。</span><small>独立验证运行 · 保留失败与适用范围</small></a>
+          </nav>
+          <section class="current-run-archive" id="current-run-archive" data-state="PENDING" aria-labelledby="current-run-archive-title" aria-live="polite">
+            <header>
+              <div>
+                <span data-i18n="currentArchive.kicker">本次运行档案 · 完成态</span>
+                <strong id="current-run-archive-title" data-i18n="currentArchive.title">完成后，同一 run_id 自动进入只读运行档案</strong>
+                <small data-i18n="currentArchive.description">这不是第二次执行；档案只投影当前任务已持久化的任务、AgentTeams、人工批准、选择性重构和最终报价回执。</small>
+              </div>
+              <em id="current-run-archive-status" data-state="pending" data-i18n="currentArchive.pending">等待当前任务完成</em>
+            </header>
+            <div class="current-run-archive-grid">
+              <article><span data-i18n="currentArchive.runId">本次运行 run_id</span><strong class="mono" id="current-run-archive-id">—</strong><small data-i18n="currentArchive.sameRun">与刚完成的报价任务相同</small></article>
+              <article><span data-i18n="currentArchive.finalQuote">最终交付</span><strong id="current-run-archive-quote">—</strong><small id="current-run-archive-fields">—</small></article>
+              <article><span data-i18n="currentArchive.receipts">权威回执</span><strong id="current-run-archive-receipts">—</strong><small data-i18n="currentArchive.receiptsDetail">精确人工批准 + 选择性重构</small></article>
+              <article><span data-i18n="currentArchive.authority">规范状态权威</span><strong id="current-run-archive-authority">—</strong><small data-i18n="currentArchive.authorityDetail">智能体 / Tool / Skill 都不能写入本档案结论</small></article>
+            </div>
+            <p id="current-run-archive-boundary" data-i18n="currentArchive.boundary">只有当前终态报价、同运行回执、本次运行全部必要的精确人工批准与选择性重构，以及报价事件链同时闭合时，本卡才会显示“已归档”。</p>
+            <div id="current-run-evidence-retry-panel" hidden>
+              <button class="button button-secondary" id="current-run-evidence-retry" type="button" data-i18n="currentArchive.retry">重新读取证据</button>
+              <p data-i18n="currentArchive.retryBoundary">只重新读取当前运行未能取得的档案或可观测证据，不重跑任务、不重发审批。</p>
+            </div>
+          </section>
+          <section id="archive-revalidation" class="archive-revalidation" aria-live="polite"></section>
+          <div class="lane-note retained-lane" id="frozen-validation-archive-boundary" role="note">
+            <span data-i18n="archive.frozen.kicker">独立冻结档案</span>
+            <strong data-i18n="archive.frozen.title">以下证据验证产品机制，不代表本次任务状态</strong>
+            <small data-i18n="archive.frozen.boundary">每张档案保留自己的 run_id，不与本次运行合并，也不借用彼此的事实。</small>
+          </div>
+          <details class="current-proof-overview historical-validation-record" id="current-proof-overview" aria-labelledby="current-proof-title">
+            <summary>
+              <div>
+                <span data-i18n="proofOverview.kicker">发布验证档案 · 服务端校验投影</span>
+                <strong id="current-proof-title" data-i18n="proofOverview.title">五条证据分别回答五个问题</strong>
+              </div>
+              <div><small data-i18n="proofOverview.boundary">彼此独立 · 不合并运行编号 · 不借用事实</small><b aria-hidden="true">＋</b></div>
+            </summary>
+            <div class="current-proof-grid">
+              <article><span>01</span><strong data-i18n="proofOverview.golden.title">发布样例业务闭环（冻结回执，非当前任务）</strong><small data-i18n="proofOverview.golden.detail">OAC → AgentTeams → Tool / Skill → 两次人工门 → 选择性重构 → 完成态复核</small><em id="proof-chain-golden" data-state="loading" data-i18n="proofOverview.loading">正在校验证据…</em></article>
+              <article><span>02</span><strong data-i18n="proofOverview.oac.title">OAC 企业适配</strong><small data-i18n="proofOverview.oac.detail">五类材料、未知项、负责人准入与精确激活绑定</small><em id="proof-chain-oac" data-state="loading" data-i18n="proofOverview.loading">正在校验证据…</em></article>
+              <article><span>03</span><strong data-i18n="proofOverview.bpi.title">公开真实流程</strong><small data-i18n="proofOverview.bpi.detail">BPI 2019 真实匿名采购到付款日志上的作用域复验</small><em id="proof-chain-bpi" data-state="loading" data-i18n="proofOverview.loading">正在校验证据…</em></article>
+              <article><span>04</span><strong data-i18n="proofOverview.formation.title">按需动态组队</strong><small data-i18n="proofOverview.formation.detail">不同需求形成不同领域智能体与审查智能体拓扑</small><em id="proof-chain-formation" data-state="loading" data-i18n="proofOverview.loading">正在校验证据…</em></article>
+              <article><span>05</span><strong data-i18n="proofOverview.agentic.title">智能体候选适配</strong><small data-i18n="proofOverview.agentic.detail">智能体提议 BPI→OAC 映射，确定性控制保留权限与缺口</small><em id="proof-chain-agentic" data-state="loading" data-i18n="proofOverview.loading">正在校验证据…</em></article>
+            </div>
+            <article class="product-path-gate" id="product-path-gate">
+              <div><span data-i18n="proofOverview.product.kicker">产品路径回归验证 · 不是第六条业务链</span><strong data-i18n="proofOverview.product.title">真实 HTTP 入口、攻击变体与重启重放</strong><small id="product-path-detail" data-i18n="proofOverview.product.loading">正在读取当前产品路径验证收据…</small></div>
+              <em id="proof-product-path" data-state="loading" data-i18n="proofOverview.loading">正在校验证据…</em>
+            </article>
+          </details>
+          <details class="mechanism-comparison historical-validation-record" id="mechanism-comparison">
+            <summary data-i18n="mechanism.title">合成机制参考实现对照</summary>
+            <p data-i18n="mechanism.boundary">OWB v1.1 · 平行 ReferenceWorkspaceBenchmarkSUT · 每策略 192 个合成案例。不是打包产品或真实 LLM 对比，不代表当前任务、客户效果或 ROI。</p>
+            <p data-i18n="mechanism.caution">100 为受控参考基准的满值，不代表实际业务收益。总分达到 90 分仍须通过全部硬门；部分消融通过，不能据此证明每个机制在所有场景都有增益。固定 completed_at 不作为真实执行时间。</p>
+            <p id="mechanism-comparison-status" role="status" data-i18n="common.loading">读取中…</p>
+            <div id="mechanism-comparison-results" hidden>
+              <div class="mechanism-comparison-scroll" role="region" tabindex="0" aria-label="OWB v1.1">
+                <table>
+                  <caption data-i18n="mechanism.threshold">通过阈值：90 + 全部硬门</caption>
+                  <thead><tr><th scope="col" data-i18n="mechanism.profile">策略</th><th scope="col" data-i18n="mechanism.score">基准分 / 100</th><th scope="col" data-i18n="mechanism.gates">硬门</th><th scope="col" data-i18n="mechanism.result">综合判定</th></tr></thead>
+                  <tbody id="mechanism-comparison-rows"></tbody>
+                </table>
+              </div>
+            </div>
+            <p><span data-i18n="mechanism.source">源文件 SHA-256</span>: <code id="mechanism-comparison-source">—</code></p>
+            <p><span data-i18n="mechanism.path">源码包内路径</span>: <code id="mechanism-comparison-path">—</code></p>
+            <p><span data-i18n="mechanism.quoteDigest">绑定报价价值回执摘要</span>: <code id="mechanism-comparison-quote-digest">—</code></p>
+            <p><span data-i18n="mechanism.registryDigest">基准规则摘要</span>: <code id="mechanism-comparison-registry-digest">—</code></p>
+          </details>
+          <details class="public-validation-card historical-validation-record" id="public-real-process-validation" aria-labelledby="public-validation-title">
+            <summary>
+              <div>
+                <span data-i18n="publicValidation.kicker">独立冻结档案 · 公开真实流程数据</span>
+                <strong id="public-validation-title" data-i18n="publicValidation.title">BPI 2019 公开真实采购到付款机制验证</strong>
+              </div>
+              <div><em id="public-validation-status" data-state="loading" data-i18n="publicValidation.loading">读取收据…</em><small class="mono" id="public-validation-run-id-summary">独立 run_id · —</small><b aria-hidden="true">＋</b></div>
+            </summary>
+            <p id="public-validation-description" data-i18n="publicValidation.description">BPI Challenge 2019 是真实匿名跨国企业的公开采购到付款日志，用于验证变更影响范围能否安全收缩；它不是企业报价数据。</p>
+            <p class="public-validation-boundary" id="public-validation-method" data-i18n="publicValidation.method">官方真实日志 → 摘要固定投影 → OAC 类型化作用域 → 独立离线复验</p>
+            <dl class="historical-validation-meta">
+              <div><dt data-i18n="publicValidation.archiveStatus">档案状态</dt><dd data-i18n="publicValidation.archiveFrozen">已冻结 · 非当前报价任务</dd></div>
+              <div><dt data-i18n="publicValidation.runId">公开流程机制验证运行</dt><dd id="public-validation-run-id">—</dd></div>
+              <div><dt data-i18n="publicValidation.archiveTime">原始档案摘要</dt><dd id="public-validation-archive-time">—</dd></div>
+            </dl>
+            <section id="public-oac-adaptation" aria-label="BPI 2019 公开真实采购到付款机制的 OAC 适配附加验证" data-i18n-aria-label="publicValidation.adaptation.aria" hidden>
+              <div class="lane-note retained-lane">
+                <span data-i18n="publicValidation.adaptation.kicker">BPI → OAC 附加验证</span>
+                <strong data-i18n="publicValidation.adaptation.title">智能体候选映射与确定性准入</strong>
+                <small data-i18n="publicValidation.adaptation.runBoundary">候选适配与作用域执行是两条独立运行；不与 BPI 范围基准混成同一 run_id。</small>
+              </div>
+              <dl class="historical-validation-meta">
+                <div><dt data-i18n="publicValidation.adaptationRunId">独立 OAC 候选适配运行</dt><dd id="public-adaptation-run-id-visible">—</dd></div>
+                <div><dt data-i18n="publicValidation.executionRunId">独立类型化作用域执行运行</dt><dd id="public-execution-run-id-visible">—</dd></div>
+                <div><dt data-i18n="publicValidation.adaptation.runRelation">运行关系</dt><dd data-i18n="publicValidation.adaptation.runRelationValue">分离留证 · 不合并运行编号</dd></div>
+              </dl>
+              <div class="public-dataset-facts">
+                <div><span data-i18n="publicValidation.adaptation.mapper">候选映射</span><strong id="public-adaptation-mapper">—</strong></div>
+                <div><span data-i18n="publicValidation.adaptation.validator">确定性 OAC 校验</span><strong id="public-adaptation-validator">—</strong></div>
+                <div><span data-i18n="publicValidation.adaptation.unknowns">企业事实缺口</span><strong id="public-adaptation-unknowns">—</strong></div>
+                <div><span data-i18n="publicValidation.adaptation.gate">受控本地审批等待门</span><strong id="public-adaptation-gate">—</strong></div>
+              </div>
+              <div class="public-dataset-facts">
+                <div><span data-i18n="publicValidation.adaptation.queries">类型化作用域执行</span><strong id="public-adaptation-queries">—</strong></div>
+                <div><span data-i18n="publicValidation.adaptation.recall">独立复验召回</span><strong id="public-adaptation-recall">—</strong></div>
+                <div><span data-i18n="publicValidation.adaptation.falseUnaffected">错误判为无影响</span><strong id="public-adaptation-unsafe">—</strong></div>
+                <div><span data-i18n="publicValidation.adaptation.writes">规范状态写入</span><strong id="public-adaptation-writes">—</strong></div>
+              </div>
+              <p class="public-validation-boundary" id="public-adaptation-boundary" data-i18n="publicValidation.adaptation.boundary">BPI 采购到付款附加验证：只验证真实公开日志到受限 OAC 候选与类型化作用域的链路，不代表任意企业自动适配。</p>
+            </section>
+            <div class="public-dataset-facts">
+              <div><span data-i18n="publicValidation.traces">采购订单项目轨迹</span><strong id="public-validation-traces">—</strong></div>
+              <div><span data-i18n="publicValidation.events">事件</span><strong id="public-validation-events">—</strong></div>
+              <div><span data-i18n="publicValidation.activities">活动类型</span><strong id="public-validation-activities">—</strong></div>
+              <div><span data-i18n="publicValidation.queries">固定价格变更查询</span><strong id="public-validation-queries">—</strong></div>
+            </div>
+            <div class="public-scope-comparison" aria-label="影响作用域安全收缩" data-i18n-aria-label="publicValidation.scopeAria">
+              <div><span data-i18n="publicValidation.scope.vendor">供应商级广播</span><strong id="public-scope-vendor">—</strong><small data-i18n="publicValidation.scope.baseline">对照作用域</small></div>
+              <b aria-hidden="true">→</b>
+              <div><span data-i18n="publicValidation.scope.document">采购单级约束</span><strong id="public-scope-document">—</strong><small id="public-scope-document-reduction">—</small></div>
+              <b aria-hidden="true">→</b>
+              <div><span data-i18n="publicValidation.scope.oac">OAC 类型化作用域（机制验证）</span><strong id="public-scope-oac">—</strong><small id="public-scope-oac-reduction">—</small></div>
+            </div>
+            <div class="public-assurance-facts">
+              <div><span data-i18n="publicValidation.recall">查询合同召回</span><strong id="public-validation-recall">—</strong></div>
+              <div><span data-i18n="publicValidation.unsafe">错误判为无影响</span><strong id="public-validation-unsafe">—</strong></div>
+              <div><span data-i18n="publicValidation.lineage">来源链闭合</span><strong id="public-validation-lineage">—</strong></div>
+            </div>
+            <p class="public-validation-boundary" id="public-validation-selection" data-i18n="publicValidation.selectionWaiting">读取样本选择与任务规则判定基准…</p>
+            <p class="public-validation-boundary" id="public-validation-boundary" data-i18n="publicValidation.boundary">已验证类型化范围、保守停手和来源血缘；尚未证明 BPI 数据经智能体自动生成 OAC 并绑定 OrgRebase 运行。任务规则判定基准是非人工因果标注、非报价数据、非 ROI 证据。</p>
+            <details class="public-source-details">
+              <summary><span data-i18n="publicValidation.details">查看官方来源、许可与复验边界</span><b aria-hidden="true">＋</b></summary>
+              <dl>
+                <div hidden><dt data-i18n="publicValidation.adaptationRunId">OAC 候选适配运行</dt><dd id="public-adaptation-run-id">—</dd></div>
+                <div hidden><dt data-i18n="publicValidation.executionRunId">类型化作用域执行运行</dt><dd id="public-execution-run-id">—</dd></div>
+                <div><dt data-i18n="publicValidation.source">官方数据源</dt><dd><a id="public-validation-source" rel="noopener noreferrer" target="_blank">—</a></dd></div>
+                <div><dt>DOI</dt><dd id="public-validation-doi">—</dd></div>
+                <div><dt data-i18n="publicValidation.license">许可</dt><dd id="public-validation-license">—</dd></div>
+                <div hidden><dt data-i18n="publicValidation.rawHash">原始文件 SHA-256</dt><dd id="public-validation-source-hash">—</dd></div>
+                <div hidden><dt data-i18n="publicValidation.receipt">基准回执</dt><dd id="public-validation-receipt">—</dd></div>
+                <div hidden><dt data-i18n="publicValidation.verification">独立复验回执</dt><dd id="public-validation-verification">—</dd></div>
+              </dl>
+              <p data-i18n="publicValidation.redistribution">原始 XES 不随代码包分发；交付包保留可复现的固定投影、完整性校验与 CC BY 4.0 归属。</p>
+            </details>
+          </details>
+        </div>
+
+        <div class="cockpit-view" id="cockpit-collaboration" role="tabpanel" aria-labelledby="tab-collaboration" hidden>
+          <div class="lane-note current-lane" data-evidence-phase="quote-v1-baseline-formation">
+            <span data-i18n="collaboration.currentRun">当前业务运行</span>
+            <strong id="current-lane-title" data-i18n="collaboration.waiting.title">等待启动变化驱动案例</strong>
+            <small id="current-lane-detail" data-i18n="collaboration.waiting.detail">形成报价后，这里会展示同一运行的控制面任务协调器、领域智能体、审查智能体，以及智能体调用的 Tool / Skill 和控制面记录。</small>
+          </div>
+          <div id="agent-context-model-mount"></div>
+          <div class="topology-boundary" id="active-topology-boundary" data-evidence-phase="quote-v1-baseline-formation" data-i18n="collaboration.boundary.initial">当前 · 等待启动变化驱动案例</div>
+          <div class="agent-topology" id="active-agent-topology" data-evidence-phase="quote-v1-baseline-formation" aria-label="当前报价业务智能体有向拓扑" data-i18n-aria-label="a11y.activeTopology"></div>
+          <section class="agent-work-observability" id="agent-work-observability" aria-labelledby="agent-work-title" data-evidence-phase="quote-v1-baseline-formation" hidden>
+            <header>
+              <div>
+                <span data-i18n="agentWork.kicker">同一运行 · 逐智能体可观测</span>
+                <strong id="agent-work-title" data-i18n="agentWork.title">每个智能体收到什么、调用什么、产出什么</strong>
+                <small id="agent-work-summary" data-i18n="agentWork.waiting">等待同运行智能体回执</small>
+              </div>
+              <div class="agent-work-actions" role="group" aria-label="智能体工作明细展开控制" data-i18n-aria-label="agentWork.controlsAria">
+                <button type="button" id="agent-work-expand" data-i18n="agentWork.expandAll">展开全部</button>
+                <button type="button" id="agent-work-collapse" data-i18n="agentWork.collapseAll">收起全部</button>
+              </div>
+            </header>
+            <div class="agent-work-facts" id="agent-work-facts"></div>
+            <div class="agent-work-list" id="agent-work-list"></div>
+            <footer>
+              <p data-i18n="agentWork.boundary">智能体提交候选，Reviewer复核，指定负责人批准；正式版本由控制面更新。</p>
+              <button class="button button-secondary" type="button" data-route-target="data" data-i18n="agentWork.viewEvolution">继续查看业务数据演化</button>
+            </footer>
+          </section>
+          <section class="native-lifecycle" id="active-native-lifecycle" aria-labelledby="active-native-lifecycle-title" data-evidence-phase="quote-v1-baseline-formation" hidden>
+            <header>
+              <div>
+                <span data-i18n="lifecycle.kicker">本次已验证业务运行</span>
+                <strong id="active-native-lifecycle-title" data-i18n="lifecycle.title">AgentTeams 原生任务生命周期</strong>
+              </div>
+              <small id="active-native-lifecycle-run" data-i18n="lifecycle.waiting">等待当前运行</small>
+            </header>
+            <div class="native-lifecycle-rail" id="active-native-lifecycle-rail"></div>
+            <div class="native-lifecycle-authority">
+              <strong data-i18n="lifecycle.authorityBoundary">AgentTeams 已接收 ≠ 控制面已准入 ≠ 人工已批准 ≠ 规范状态已写入</strong>
+              <small id="active-native-lifecycle-boundary" data-i18n="lifecycle.boundary">本轨只显示本次已验证业务运行的原生任务事实；冲突重派、进程恢复与补偿属于独立验证运行，不并入本轨。</small>
+            </div>
+          </section>
+          <section class="current-change-evidence" id="current-change-evidence" aria-labelledby="current-change-evidence-title" data-evidence-phase="changeset-minimum-team" hidden>
+            <header>
+              <div>
+                <span data-i18n="currentChange.kicker">当前变更集 · 本地确定性智能体运行</span>
+                <strong id="current-change-evidence-title" data-i18n="currentChange.title">当前变化只投影最小团队，不重跑报价 v1 基线组队</strong>
+              </div>
+              <small id="current-change-evidence-summary" data-i18n="currentChange.waiting">等待当前变更集预演</small>
+            </header>
+            <div class="current-change-evidence-rounds" id="current-change-evidence-rounds"></div>
+            <footer data-i18n="currentChange.boundary">Tool / Skill 仅显示智能体运行记录的能力版本引用；Skill 引用不冒充已装载调用。当前变化轮未新建独立审查任务，验收结果来自确定性候选准入回执。全部候选规范写入为 0。</footer>
+          </section>
+          <section class="selective-change-card" id="selective-change-card" aria-labelledby="selective-change-title" aria-hidden="true" data-replaced-by="business-change-board" hidden>
+            <header>
+              <div><span data-i18n="collaboration.terminal.kicker">终态交付物</span><strong id="selective-change-title" data-i18n="collaboration.terminal.title">协作工作稿 → 币种确认稿的选择性变化</strong></div>
+              <small id="selective-change-final" data-i18n="enum.notObserved">未观测</small>
+            </header>
+            <div class="selective-rounds" id="selective-change-rounds"></div>
+          </section>
+
+          <details class="experience-governance" id="experience-governance" hidden>
+            <summary>
+              <span data-i18n="experience.kicker">业务终态后的治理扩展</span>
+              <strong data-i18n="experience.title">经验候选 → 受治理 Skill</strong>
+              <small id="experience-status" data-i18n="enum.notRun">等待报价终态</small>
+              <b aria-hidden="true">＋</b>
+            </summary>
+            <div class="experience-body">
+              <p id="experience-explanation" data-i18n="experience.explanation">系统只从本次真实重规划与补证轨迹提炼候选；候选不会自动改写 Skill，必须由 Skill 治理负责人审阅。</p>
+              <div class="experience-facts">
+                <article><span data-i18n="experience.source">来源</span><strong id="experience-source">—</strong><small id="experience-pattern">—</small></article>
+                <article><span data-i18n="experience.evaluation">评测</span><strong id="experience-evaluation">—</strong><small data-i18n="experience.evaluation.detail">八分区 · 规范写入=0</small></article>
+                <article><span data-i18n="experience.authority">权威边界</span><strong id="experience-authority">—</strong><small data-i18n="experience.authority.detail">未批准不可发现、装载或调用</small></article>
+                <article><span data-i18n="experience.release">发布结果</span><strong id="experience-release">—</strong><small id="experience-release-detail">—</small></article>
+              </div>
+              <div class="experience-actions">
+                <div>
+                  <span data-i18n="experience.steward">人工责任人</span>
+                  <strong id="experience-owner">Skill 治理负责人</strong>
+                  <small id="experience-review-note" data-i18n="experience.waitingTerminal">等待内部变更闭环终态</small>
+                </div>
+                <button class="button button-secondary" id="experience-reject" type="button" data-i18n="experience.reject">拒绝候选</button>
+                <button class="button button-primary" id="experience-approve" type="button" data-i18n="experience.approve">批准进入受控灰度试调用</button>
+              </div>
+              <p class="experience-boundary" data-i18n="experience.boundary">单次运行经验种子 · 本次报价不消费该候选 · 批准后仅做受控本地发布试调用，不宣称生产泛化。</p>
+            </div>
+          </details>
+
+          <details class="retained-mechanism-archive" id="retained-mechanism" aria-label="已验证的动态组队与控制语义" data-i18n-aria-label="a11y.retainedEvidence">
+          <summary>
+            <div><span data-i18n="retained.kicker">独立机制验证档案</span><strong data-i18n="retained.archive.title">动态组队与控制语义</strong><small data-i18n="retained.archive.summary">受控本地已验证 · 独立冻结运行 · 不代表当前任务已执行</small></div>
+            <b aria-hidden="true">＋</b>
+          </summary>
+          <div class="retained-mechanism-body">
+          <div class="lane-note retained-lane">
+            <span data-i18n="retained.kicker">独立机制验证档案</span>
+            <strong id="retained-run-id" data-i18n="common.loading">读取机制验证记录…</strong>
+            <small data-i18n="retained.description">另一条冻结运行：先对账两领域动态组队计划与实际 AgentTeams 拓扑，再独立检查权威边界、冲突裁决、重派和迟到结果隔离。它不是当前报价任务的第二次执行。</small>
+          </div>
+          <dl class="historical-validation-meta retained-archive-meta">
+            <div><dt data-i18n="publicValidation.archiveStatus">档案状态</dt><dd data-i18n="publicValidation.archiveFrozen">已冻结 · 非当前报价任务</dd></div>
+            <div><dt data-i18n="publicValidation.archiveTime">原始档案摘要</dt><dd id="retained-archive-time">—</dd></div>
+          </dl>
+          <section class="formation-proof-card" id="formation-proof-card" aria-labelledby="formation-proof-title" hidden>
+            <header>
+              <div>
+                <span data-i18n="formationProof.kicker">按需组队证明 · 独立运行</span>
+                <strong id="formation-proof-title" data-i18n="formationProof.title">动态组队计划对账</strong>
+              </div>
+              <small id="formation-proof-summary" data-i18n="formationProof.loading">读取动态组队运行…</small>
+            </header>
+            <div class="formation-proof-boundary" id="formation-proof-boundary" data-i18n="formationProof.unavailable">动态组队证据不可用 · 保持关闭 · 未展示计划或实际拓扑</div>
+            <div class="agent-topology formation-topology" id="formation-agent-topology" aria-label="两领域动态组队 AgentTeams 拓扑" data-i18n-aria-label="a11y.formationTopology"></div>
+          </section>
+          <details class="retained-control-semantics">
+          <summary class="retained-topology-heading">
+            <span data-i18n="retained.quoteLoop.kicker">控制语义审计</span>
+            <strong data-i18n="retained.quoteLoop.title">权威边界、冲突与结果隔离</strong>
+            <small data-i18n="retained.quoteLoop.boundary">另一条受控验证运行 · 只证明控制语义 · 不重复当前业务流程</small>
+          </summary>
+          <div class="retained-control-semantics-body">
+          <div class="topology-boundary retained" id="retained-topology-boundary" data-i18n="retained.boundary.initial">已验证 · 本地环境 · 固定版本进程内 · 非实时分布式</div>
+          <div class="agent-topology retained-topology" id="retained-agent-topology" aria-label="保留的 AgentTeams 有向拓扑" data-i18n-aria-label="a11y.retainedTopology"></div>
+          <div class="retained-contract-strip">
+            <div class="evidence-spine retained-lifecycle" id="retained-lifecycle"></div>
+            <div class="contract-facts">
+              <article><span data-i18n="retained.authority">权威边界</span><strong id="retained-authority" data-i18n="common.loading">读取中…</strong><small data-i18n="retained.authority.detail">AgentTeams 只产生调度与候选事实</small></article>
+              <article><span data-i18n="retained.runBoundary">运行边界</span><strong id="retained-run-separation" data-i18n="common.loading">读取中…</strong><small data-i18n="retained.boundary.detail">保留的后继运行与当前试点不合并</small></article>
+              <article><span data-i18n="retained.exceptions">控制异常</span><strong id="retained-exception-semantics" data-i18n="common.loading">读取中…</strong><small data-i18n="retained.exceptions.detail">冲突 · 重派 · 迟到结果隔离</small></article>
+              <article><span data-i18n="retained.successor">受治理后继状态</span><strong id="retained-governed-successor" data-i18n="common.loading">读取中…</strong><small data-i18n="retained.successor.detail">脚本化本地批准 · 仅 OrgRebase 规范状态控制面可写</small></article>
+            </div>
+          </div>
+          <div class="retained-layout">
+            <div>
+              <div class="evidence-spine retained-spine" id="retained-evidence-spine"></div>
+              <div class="binding-grid skill-grid" id="retained-skills"></div>
+            </div>
+            <details class="ledger-shell retained-ledger-shell">
+              <summary class="ledger-title"><strong data-i18n="retained.ledger.title">AgentTeams 原生操作台账</strong><span id="retained-ledger-count">—</span><b aria-hidden="true">＋</b></summary>
+              <div class="ledger-scroll tall">
+                <table class="action-ledger">
+                  <thead><tr><th>#</th><th data-i18n="table.tool">工具</th><th data-i18n="table.action">操作</th><th data-i18n="table.status">状态</th><th data-i18n="table.receipt">回执</th></tr></thead>
+                  <tbody id="retained-action-ledger"><tr><td colspan="5" data-i18n="retained.ledger.loading">读取并校验运行记录…</td></tr></tbody>
+                </table>
+              </div>
+            </details>
+          </div>
+          </div>
+          </details>
+          </div>
+          </details>
+        </div>
+
+        <div class="cockpit-view capability-center" id="cockpit-skills" role="tabpanel" hidden>
+          <section class="capability-intro">
+            <div>
+              <span data-shell-copy="skillCenterKicker">跨运行能力治理</span>
+              <h2 data-shell-copy="skillCenterTitle">智能体使用受版本管理的能力，经验只能经人审批后发布</h2>
+              <p data-shell-copy="skillCenterBody">本页不参与当前报价决策。它把真实调用、已发布 Skill 与终态运行归纳的经验候选分开。</p>
+            </div>
+            <b data-shell-copy="skillCenterBadge">Skill 治理</b>
+          </section>
+          <section class="capability-section" aria-labelledby="skill-current-title">
+            <header><div><span>01</span><strong id="skill-current-title" data-shell-copy="skillCurrentTitle">本次任务的能力调用</strong></div><small data-shell-copy="skillCurrentBoundary">只在同一运行的智能体、Skill 活动行与回执精确匹配后显示</small></header>
+            <div class="capability-current" id="skill-current-invocation" data-state="waiting">
+              <article><span data-shell-copy="skillCurrentAgent">调用智能体</span><strong id="skill-current-agent">—</strong></article>
+              <article><span data-shell-copy="skillCurrentCapability">能力与版本</span><strong id="skill-current-name">—</strong></article>
+              <article><span data-shell-copy="skillCurrentPurpose">为什么调用</span><strong id="skill-current-purpose">等待当前任务产生 Skill 调用回执</strong></article>
+              <article><span data-shell-copy="skillCurrentEffect">结果与权威边界</span><strong id="skill-current-effect">—</strong><small id="skill-current-receipt"></small></article>
+            </div>
+          </section>
+          <section class="capability-section" aria-labelledby="skill-published-title">
+            <header><div><span>02</span><strong id="skill-published-title" data-shell-copy="skillPublishedTitle">已发布能力</strong></div><small data-shell-copy="skillPublishedBoundary">可发现 · 精确版本 · 评测后发布</small></header>
+            <div id="published-skills-mount"></div>
+            <div id="skill-validation-mount"></div>
+            <div class="skill-source-catalog" id="skill-source-catalog" data-state="loading" aria-live="polite"></div>
+          </section>
+          <section class="capability-section" aria-labelledby="skill-experience-title">
+            <header><div><span>03</span><strong id="skill-experience-title" data-shell-copy="skillExperienceTitle">经验候选审阅</strong></div><small data-shell-copy="skillExperienceBoundary">运行经验只是候选；人工决策是 Skill 发布批准，不是业务结果批准</small></header>
+            <div id="experience-governance-mount"></div>
+          </section>
+          <p class="capability-lifecycle" data-shell-copy="skillLifecycle">完成运行 → 经验候选 → 独立评测 → 人工决策 → 受控灰度试调用</p>
+
+        <dialog class="skill-source-dialog" id="skill-source-dialog" aria-labelledby="skill-source-dialog-title">
+          <div class="skill-source-dialog-shell">
+            <header>
+              <div>
+                <span data-i18n="skill.source.kicker">已发布 Skill 审阅</span>
+                <h3 id="skill-source-dialog-title">—</h3>
+                <p data-i18n="skill.source.boundary">已发布原文只读且不可覆盖；修改会保存为待评测的候选草稿，不影响当前智能体运行。</p>
+              </div>
+              <button class="skill-source-close" id="skill-source-close" type="button" data-i18n-aria-label="skill.source.close" aria-label="关闭">&times;</button>
+            </header>
+            <div class="skill-source-summary">
+              <article><span data-i18n="skill.source.version">已发布版本</span><strong id="skill-source-version">—</strong></article>
+              <article><span data-i18n="skill.source.state">当前状态</span><strong id="skill-source-state">—</strong></article>
+              <article><span data-i18n="skill.source.draftCount">已保存候选</span><strong id="skill-source-draft-count">—</strong></article>
+            </div>
+            <label class="skill-source-version-field" id="skill-source-version-field" hidden>
+              <span data-i18n="skill.source.proposedVersion">候选版本</span>
+              <input id="skill-source-proposed-version" type="text" inputmode="text" autocomplete="off" />
+              <small data-i18n="skill.source.versionHint">新版本必须与原文头部的 version 完全一致。</small>
+            </label>
+            <label class="skill-source-editor-label" for="skill-source-editor">
+              <span id="skill-source-editor-label" data-i18n="skill.source.publishedText">已发布原文（只读）</span>
+            </label>
+            <textarea class="skill-source-editor" id="skill-source-editor" readonly spellcheck="false"></textarea>
+            <p class="skill-source-status" id="skill-source-status" data-tone="neutral" aria-live="polite"></p>
+            <details class="skill-source-technical">
+              <summary><span data-i18n="skill.source.technical">技术校验信息</span><b aria-hidden="true">＋</b></summary>
+              <dl>
+                <div><dt data-i18n="skill.source.packageDigest">能力包摘要</dt><dd id="skill-source-package-digest">—</dd></div>
+                <div><dt data-i18n="skill.source.textDigest">原文摘要</dt><dd id="skill-source-text-digest">—</dd></div>
+              </dl>
+            </details>
+            <section class="skill-source-drafts" aria-labelledby="skill-source-drafts-title">
+              <header><strong id="skill-source-drafts-title" data-i18n="skill.source.savedDrafts">已保存候选草稿</strong><small data-i18n="skill.source.draftsBoundary">只是草稿；尚未评测、尚未发布、不可执行</small></header>
+              <div id="skill-source-draft-list"></div>
+            </section>
+            <footer>
+              <button class="button button-quiet" id="skill-source-cancel" type="button" hidden data-i18n="skill.source.cancel">取消修订</button>
+              <button class="button button-secondary" id="skill-source-revise" type="button" data-i18n="skill.source.revise">基于此版本创建修订</button>
+              <button class="button button-primary" id="skill-source-save" type="button" hidden data-i18n="skill.source.save">保存候选草稿</button>
+            </footer>
+          </div>
+        </dialog>
+        </div>
+
+        <div class="cockpit-view" id="cockpit-operations" role="tabpanel" aria-labelledby="tab-operations" hidden>
+          <div class="operations-grid">
+            <article><span data-i18n="operations.apiHealth">API 健康状态</span><strong id="ops-health" data-i18n="enum.checking">检查中</strong><small id="ops-health-detail">/api/health</small></article>
+            <article><span data-i18n="operations.workspaceReady">工作区就绪状态</span><strong id="ops-ready" data-i18n="enum.checking">检查中</strong><small id="ops-ready-detail">/readyz</small></article>
+            <article><span data-i18n="operations.eventChain">工作区全局审计链</span><strong id="ops-event-chain" data-i18n="enum.waiting">等待中</strong><small id="ops-event-detail" data-i18n="operations.events.waiting">等待事件</small></article>
+            <article><span data-i18n="operations.persistence">持久化</span><strong id="ops-persistence" data-i18n="operations.sqliteLocal">SQLite · 本地</strong><small id="ops-persistence-detail" data-i18n="operations.persistence.detail">持久化与恢复状态</small></article>
+          </div>
+          <section class="ops-run-proof" id="ops-current-run-proof" aria-labelledby="ops-proof-title">
+            <header>
+              <div><span data-i18n="operations.sameRun.kicker">当前业务运行证据</span><strong class="mono" id="ops-proof-title" data-i18n="common.loading">读取中…</strong></div>
+              <small id="ops-proof-status" data-i18n="enum.checking">检查中</small>
+            </header>
+            <div class="evidence-spine ops-proof-spine" id="ops-proof-spine"></div>
+            <p id="ops-proof-boundary" data-i18n="operations.sameRun.boundary">本区只消费当前工作区的运行回执；下方独立工程验证档案不代表本次任务已经执行。</p>
+          </section>
+          <div class="ops-section">
+            <div class="ledger-title"><strong data-i18n="operations.retained.title">独立工程验证档案</strong><span data-i18n="operations.retained.boundary">另一条冻结运行 · 不代表当前任务状态</span></div>
+            <div class="ops-receipts" id="ops-receipts"></div>
+            <details class="ops-audit-details evidence-index-archive" id="evidence-index-archive" data-evidence-lane="frozen-independent-validation">
+              <summary><div><strong data-i18n="operations.evidenceIndex.title">证据索引 · 冻结独立验证档案</strong><small data-i18n="operations.evidenceIndex.summary">展开查看经校验的索引、证据等级与隐私拒绝结果</small></div><b aria-hidden="true">＋</b><em id="evidence-index-status" data-i18n="enum.checking">检查中</em></summary>
+              <div class="ops-audit-body" id="evidence-index-content">
+                <div class="ops-audit-grid">
+                  <section class="ops-audit-group" aria-labelledby="evidence-index-facts-title">
+                    <h4 id="evidence-index-facts-title" data-i18n="operations.evidenceIndex.facts">冻结索引最小投影</h4>
+                    <dl class="ops-audit-facts">
+                      <div><dt data-i18n="operations.evidenceIndex.runId">档案运行编号</dt><dd class="ops-audit-run-id" id="evidence-index-run-id">—</dd></div>
+                      <div><dt data-i18n="operations.evidenceIndex.entryCount">索引条目</dt><dd id="evidence-index-entry-count">—</dd></div>
+                      <div><dt data-i18n="operations.evidenceIndex.indexDigest">索引摘要</dt><dd class="mono" id="evidence-index-digest">—</dd></div>
+                      <div><dt data-i18n="operations.evidenceIndex.packDigest">证据包摘要</dt><dd class="mono" id="evidence-index-pack-digest">—</dd></div>
+                      <div><dt data-i18n="operations.evidenceIndex.classes">证据等级</dt><dd id="evidence-index-classes">—</dd></div>
+                      <div><dt data-i18n="operations.evidenceIndex.verifier">索引验证器</dt><dd id="evidence-index-verifier">—</dd></div>
+                      <div><dt data-i18n="operations.evidenceIndex.privacy">隐私探针 / 拒绝</dt><dd id="evidence-index-privacy">—</dd></div>
+                      <div><dt data-i18n="operations.evidenceIndex.targetWrites">只读索引目标写入</dt><dd id="evidence-index-target-writes">—</dd></div>
+                    </dl>
+                  </section>
+                </div>
+                <p class="ops-audit-boundary" id="evidence-index-boundary" data-i18n="operations.evidenceIndex.boundary">另一条冻结运行 · 非本次报价运行 · 不借证；只展示摘要、证据等级和拒绝原因，不展开原始或敏感值。</p>
+              </div>
+            </details>
+          </div>
+          <div class="ops-section">
+            <div class="ledger-title"><strong data-i18n="operations.delivery.title">独立工程交付验证</strong><span data-i18n="operations.delivery.scope">HTTP · OTLP · 部署 · 供应链</span></div>
+            <div class="engineering-grid">
+              <article><span data-i18n="operations.sourceTool">数据源 + 工具</span><strong id="ops-integrations" data-i18n="common.loading">读取中…</strong><small data-i18n="operations.sourceTool.detail">真实 HTTP 协议 ≠ 企业连接器</small></article>
+              <article><span data-i18n="operations.otlpFields">OTLP 关键字段</span><strong id="ops-otlp-fields" data-i18n="common.loading">读取中…</strong><small data-i18n="operations.otlp.detail">追踪 / 日志 / 指标可查询</small></article>
+              <article><span data-i18n="operations.deploySupply">部署 / SBOM / 指南</span><strong id="ops-enterprise-readiness" data-i18n="common.loading">读取中…</strong><small data-i18n="operations.readiness.detail">本机制品已验证；生产能力需企业环境验收</small></article>
+            </div>
+            <details class="ops-audit-details" id="ops-audit-details">
+              <summary><div><strong data-i18n="operations.audit.title">运行保障详情</strong><small data-i18n="operations.audit.summary">展开查看可观测、连接、留存与生产验收边界</small></div><b aria-hidden="true">＋</b></summary>
+              <div class="ops-audit-body" id="ops-audit-content"><p data-i18n="common.loading">正在读取经校验的运维摘要…</p></div>
+            </details>
+          </div>
+          <div class="ops-section">
+            <div class="ledger-title"><strong data-i18n="operations.failures.title">异常处理规则</strong><span data-i18n="operations.failures.boundary">静态处理规则 · 运行收据见本页独立验证档案</span></div>
+            <div class="failure-grid" id="ops-failures">
+              <article><b>403</b><span data-i18n="operations.failure.403.title">负责人不匹配</span><small data-i18n="operations.failure.403.detail">拒绝批准 · 规范写入=0</small></article>
+              <article><b>409</b><span data-i18n="operations.failure.409.title">陈旧 / 冲突</span><small data-i18n="operations.failure.409.detail">拒绝应用 · 保留当前规范状态</small></article>
+              <article><b data-i18n="enum.startupBlocked">启动阻断</b><span data-i18n="operations.failure.block.title">报价包 / 数据库不匹配</span><small data-i18n="operations.failure.block.detail">启动前阻断 · 不自动迁移</small></article>
+              <article><b>SIGKILL</b><span data-i18n="operations.failure.kill.title">独立进程恢复</span><small data-i18n="operations.failure.kill.detail">独立受控本地运行 · 重试意图 / 采纳已提交结果</small></article>
+            </div>
+          </div>
+          <p class="operations-boundary" id="ops-boundary" data-i18n="operations.boundary.inactive">当前只证明受控本地试点与运维合同；真实连接器、真实企业 ROI、生产 SLA / HA / 异地灾备 / 多租户没有被升级为已完成。</p>
+        </div>
+      </section>
+
+      <section class="workspace" aria-live="polite" aria-busy="true" id="workspace">
+        <article class="quote-panel panel">
+          <header class="panel-head">
+            <div>
+              <p class="eyebrow" data-i18n="quote.kicker">当前交付物</p>
+              <h2 id="quote-heading" data-i18n="quote.defaultLabel">企业报价条件包</h2>
+            </div>
+            <span class="version-pill" id="quote-version" data-i18n="enum.notFormed">尚未形成</span>
+          </header>
+          <div class="quote-empty" id="quote-empty">
+            <strong data-i18n="quote.empty.title">尚未形成报价</strong>
+            <p data-i18n="quote.empty.body">OAC 企业接入完成后，才能生成报价 v1 协作工作稿。启动后先执行固定版本的基线组队；后续变更集才从持久收据投影最小变更团队。</p>
+          </div>
+          <dl class="quote-grid" id="quote-grid" hidden>
+            <div class="wide"><dt data-i18n="quote.field.customer">客户 / 报价负责人</dt><dd id="quote-customer">—</dd></div>
+            <div><dt data-i18n="quote.field.workflow">内部工作状态</dt><dd id="quote-workflow-status">—</dd></div>
+            <div><dt data-i18n="quote.field.decision">当前变更决策</dt><dd id="quote-decision">—</dd></div>
+            <div class="wide"><dt data-i18n="quote.field.externalLifecycle">外部商业生命周期</dt><dd id="quote-external-lifecycle">—</dd></div>
+            <div><dt data-i18n="quote.field.plan">企业方案</dt><dd id="quote-plan">—</dd></div>
+            <div><dt data-i18n="quote.field.launch">上线日期</dt><dd id="quote-launch">—</dd></div>
+            <div><dt data-i18n="quote.field.residency">数据驻留</dt><dd id="quote-residency">—</dd></div>
+            <div><dt data-i18n="quote.field.notice">客户通知</dt><dd id="quote-notice">—</dd></div>
+            <div><dt data-i18n="quote.field.price">价格带</dt><dd id="quote-price">—</dd></div>
+            <div><dt data-i18n="quote.field.currency">币种</dt><dd id="quote-currency">—</dd></div>
+            <div class="wide"><dt data-i18n="quote.field.terms">合作条款</dt><dd id="quote-terms">—</dd></div>
+            <div class="wide"><dt data-i18n="quote.field.lineage">修订轨迹</dt><dd class="mono" id="quote-lineage">—</dd></div>
+          </dl>
+          <section id="quote-pricing" class="quote-pricing" aria-live="polite" hidden></section>
+          <div class="coalition-block">
+            <div class="subhead"><strong data-i18n="quote.coalition.title">最小领域联盟</strong><span id="coalition-status" data-i18n="enum.waiting">等待中</span></div>
+            <div class="coalition" id="coalition">
+              <div data-domain="product"><b>P</b><span data-i18n="domain.product">产品</span><small data-i18n="domain.product.detail">方案 · 日期 · 驻留</small></div>
+              <div data-domain="legal"><b>L</b><span data-i18n="domain.legal">法务</span><small data-i18n="domain.legal.detail">通知义务</small></div>
+              <div data-domain="finance"><b>F</b><span data-i18n="domain.finance">财务</span><small data-i18n="domain.finance.detail">价格带 · 币种</small></div>
+              <div data-domain="gtm"><b>G</b><span data-i18n="domain.gtm">市场与商业化</span><small data-i18n="domain.gtm.detail">报价组装 · 合作条款</small></div>
+            </div>
+          </div>
+        </article>
+
+        <div class="right-stack">
+          <article class="impact-panel panel">
+            <header class="panel-head">
+              <div>
+                <p class="eyebrow" data-i18n="impact.kicker">影响判定 · 审批前</p>
+                <h2 data-i18n="impact.title">审批前预演 + 最小重构证书（VMRC）</h2>
+              </div>
+              <span class="status-pill" id="preview-status" data-i18n="enum.notRun">等待提交变更</span>
+            </header>
+            <p class="vmrc-boundary" id="vmrc-boundary" data-i18n="impact.vmrcBoundary">VMRC 将变更集、预演与逐对象效果精确绑定：漏重建、多重建，或把未知项当作可保留，都会拒绝应用。</p>
+            <div class="impact-summary" id="impact-summary">
+              <div><b id="affected-count">—</b><span data-i18n="impact.rebuild">必须重建</span></div>
+              <div><b id="bounded-count">—</b><span data-i18n="impact.preserve">证明可留</span></div>
+              <div><b id="unknown-count">—</b><span data-i18n="impact.unknown">证据不足</span></div>
+              <div><b id="skill-count">—</b><span data-i18n="impact.requalify">Skill 重验</span></div>
+            </div>
+            <div class="impact-list" id="impact-list">
+              <p class="empty-copy" data-i18n="impact.empty">变更预演后，这里会显示每个目标的分类、证明路径与证书。</p>
+            </div>
+            <dl class="digest-list">
+              <div><dt data-i18n="impact.previewDigest">预演摘要</dt><dd id="preview-digest">—</dd></div>
+              <div><dt data-i18n="impact.minimalCertificate">VMRC 证书绑定</dt><dd id="certificate-digest" data-state="unobserved">—</dd></div>
+            </dl>
+          </article>
+
+          <article class="governance-panel panel">
+            <header class="panel-head">
+              <div>
+                <p class="eyebrow" data-i18n="governance.kicker">治理与恢复</p>
+                <h2 data-i18n="governance.title">批准、继任图与事件链</h2>
+              </div>
+              <span class="integrity-seal" id="integrity-seal" data-state="waiting" data-i18n="governance.waitSeal">待</span>
+            </header>
+            <div class="governance-grid">
+              <dl>
+                <div><dt data-i18n="governance.approver">批准人</dt><dd id="approval-actor">—</dd></div>
+                <div><dt data-i18n="governance.approvalDigest">批准摘要</dt><dd id="approval-digest">—</dd></div>
+                <div><dt data-i18n="governance.successorGraph">后继图</dt><dd id="successor-graph">—</dd></div>
+                <div><dt data-i18n="governance.recovery">恢复状态</dt><dd id="recovery-status" data-i18n="enum.waiting">等待中</dd></div>
+                <div><dt data-i18n="governance.dependencyTool">依赖工具</dt><dd id="dependency-tool-status" data-i18n="enum.notRun">报价形成时自动读取</dd></div>
+                <div><dt data-i18n="governance.toolReceipt">工具回执</dt><dd id="dependency-tool-receipt">—</dd></div>
+              </dl>
+              <div class="chain-card">
+                <span data-i18n="governance.eventChain">事件链</span>
+                <strong id="event-chain-status" data-i18n="enum.waiting">等待中</strong>
+                <small id="event-chain-detail" data-i18n="governance.noEvents">未产生业务事件</small>
+              </div>
+            </div>
+            <p class="boundary-note" id="active-boundary-note" data-i18n="active.boundary.initial">本次业务运行尚未形成。只有 AgentTeams 候选结果、审查智能体、Tool 和 Skill 经完整性校验后，控制面才能形成报价；后续高风险变更仍需匹配负责人显式批准。</p>
+          <details class="active-scope-details"><summary data-i18n="active.boundary.scopeTitle">查看适用范围与发布边界</summary><p data-i18n="active.boundary.productionScope">分布式生产 AgentTeams 与真实企业 ROI 仍需企业环境验收；智能体候选和内部批准不能替代客户发布与接受证明。</p></details>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span data-i18n="footer.copy">OrgRebase · 企业工作持续演化引擎 · 受控演示场景</span>
+      <a href="/docs" data-i18n="footer.api">开发者接口（OpenAPI）</a>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/assets/wire.js?v=1" defer></script>
+    <script src="/assets/workspace-client.js?v=0.5.0-3" defer></script>
+    <script src="/assets/source-readmission-proof.js?v=1" defer></script>
+    <script src="/assets/archive-revalidation.js?v=1" defer></script>
+    <script src="/assets/app.js?v=0.4.0-15" defer></script>
+    <script src="/assets/oac-adaptation.js?v=0.4.0-14" defer></script>
+    <script src="/assets/workspace-shell.js?v=0.4.0-13" defer></script>
+    <script src="/assets/change-recovery.js?v=0.5.0-1" defer></script>
+    <script src="/assets/change-workbench.js?v=0.5.0-6" defer></script>
+    <script src="/assets/skill-validation.js?v=0.5.0-2" defer></script>
+    <script src="/assets/effect-workbench.js?v=0.5.0-1" defer></script>
+    <script src="/assets/source-readmission.js?v=0.5.0-1" defer></script>
+    <script src="/assets/source-binding.js?v=0.5.0-4" defer></script>
+    <script src="/assets/owner-change.js?v=0.5.0-1" defer></script>
+  </body>
+</html>

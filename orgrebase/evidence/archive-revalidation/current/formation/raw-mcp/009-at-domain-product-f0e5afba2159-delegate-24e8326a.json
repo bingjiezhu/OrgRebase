@@ -1,0 +1,29 @@
+{
+  "action": "delegate_task",
+  "key": "at-domain-product-f0e5afba2159:delegate",
+  "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+  "representation": "SEMANTIC_MCP_WRAPPER_PUBLIC_PATH_REDACTED",
+  "request": {
+    "action": "delegate_task",
+    "payload": {
+      "assignedTo": "@product-steward:controlled.local",
+      "projectId": "orgrebase-formation-905f9cf1a656",
+      "roomId": "!orgrebase-formation:controlled.local",
+      "spec": "{\n  \"candidate_only\": true,\n  \"canonical_target_writes\": 0,\n  \"effect_ceiling\": \"ZERO_EXTERNAL_EFFECTS\",\n  \"execution_plan_digest\": \"sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e\",\n  \"execution_plan_id\": \"agentteams-execution-plan:evergreen-residency-faq-two-domain\",\n  \"execution_task\": {\n    \"actor_projection_digest\": \"sha256:3228b88d6376da93aa99c6740b234a075ab0e3c230cbd7013300b0af420e9dcf\",\n    \"actor_projection_ref\": \"projection:evergreen-residency-faq-product@v1\",\n    \"assignee_actor_id\": \"product-steward\",\n    \"candidate_only\": true,\n    \"canonical_target_writes\": 0,\n    \"capability_card_digest\": \"sha256:0f8881b1dd9cb46892f979d2a730d08e07703ecc0362a03b189de0a4a45466ec\",\n    \"capability_card_ref\": \"capability-card:product@v1\",\n    \"context_envelope_digest\": \"sha256:96dc2b1c0c0ecadf8f9ae015abc62d8dc7a33a75f2c29c5a79eb3ca8f9e5fdc0\",\n    \"context_envelope_ref\": \"task-agent-context:evergreen-residency-faq-two-domain@v1\",\n    \"depends_on\": [],\n    \"digest\": \"sha256:ddd087bbe962f28e23af3ccd9ac356d6dbbd98fa47ffde10e7fd3b96ed7fa20c\",\n    \"domain_id\": \"product\",\n    \"effect_ceiling\": \"ZERO_EXTERNAL_EFFECTS\",\n    \"formation_receipt_digest\": \"sha256:5dee3e2cea0a17182775d43cb6f7c9dec7e1c284f749f09b98b3c1f45f5d7ab2\",\n    \"formation_receipt_id\": \"task-formation-decision:evergreen-residency-faq-two-domain\",\n    \"input_schema_digest\": \"sha256:8d0ebcd9f35d3cdb6493e61caeabd30633a7be01c9f0cdba2aeced925a642d57\",\n    \"input_schema_refs\": [\n      \"schema:workspace.domain-delegation@v1\"\n    ],\n    \"output_schema_digest\": \"sha256:997c6f8e05ea5da383cf7cb3dfe09ae5e2cb448e550b6e4e2da43ff830d6c34d\",\n    \"output_schema_refs\": [\n      \"schema:workspace.domain-candidate-bundle@v1\"\n    ],\n    \"task_id\": \"at-domain-product-f0e5afba2159\",\n    \"task_kind\": \"DOMAIN\"\n  },\n  \"project_id\": \"orgrebase-formation-905f9cf1a656\",\n  \"run_id\": \"run:formation-recheck:f256f60b26e54dd7802677eecfc395cd\",\n  \"schema_version\": \"orgrebase.formation-taskflow-native-spec.v1\"\n}",
+      "taskId": "at-domain-product-f0e5afba2159"
+    },
+    "role": "leader",
+    "workspaceDir": "orgrebase://runtime-workspace"
+  },
+  "response": {
+    "content": [
+      {
+        "text": "{\"ok\": true, \"tool\": \"taskflow\", \"action\": \"delegate_task\", \"task\": {\"task_id\": \"at-domain-product-f0e5afba2159\", \"project_id\": \"orgrebase-formation-905f9cf1a656\", \"room_id\": \"!orgrebase-formation:controlled.local\", \"status\": \"assigned\", \"spec_path\": \"shared/tasks/at-domain-product-f0e5afba2159/spec.md\", \"assigned_to\": \"@product-steward:controlled.local\", \"task_title\": \"Product domain candidate\", \"assigned_at\": \"2026-09-19T12:35:15Z\", \"notification\": {\"sent\": true, \"eventId\": \"$controlled-87d5d87086c5af6735aebb0c\", \"roomId\": \"!orgrebase-formation:controlled.local\", \"assignee\": \"@product-steward:controlled.local\"}, \"eventId\": \"$controlled-87d5d87086c5af6735aebb0c\"}, \"synced\": true, \"notification\": {\"sent\": true, \"eventId\": \"$controlled-87d5d87086c5af6735aebb0c\", \"roomId\": \"!orgrebase-formation:controlled.local\", \"assignee\": \"@product-steward:controlled.local\"}, \"notificationNeeded\": {\"event\": \"delegate_task\", \"projectId\": \"orgrebase-formation-905f9cf1a656\", \"summary\": \"delegate_task: at-domain-product-f0e5afba2159 assigned to @product-steward:controlled.local\", \"targetRoom\": \"!orgrebase-formation:controlled.local\"}}",
+        "type": "text"
+      }
+    ]
+  },
+  "schema_version": "orgrebase.teamharness-raw-mcp-action.v1",
+  "sequence": 9,
+  "tool": "taskflow"
+}

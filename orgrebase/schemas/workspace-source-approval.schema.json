@@ -1,0 +1,102 @@
+{
+  "$defs": {
+    "Approval": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "approved_at": {
+          "title": "Approved At",
+          "type": "string"
+        },
+        "authority_scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Authority Scope",
+          "type": "array"
+        },
+        "authorization_revision": {
+          "title": "Authorization Revision",
+          "type": "string"
+        },
+        "change_set_digest": {
+          "title": "Change Set Digest",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "expires_at": {
+          "title": "Expires At",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "minimal_rebase_certificate_digest": {
+          "title": "Minimal Rebase Certificate Digest",
+          "type": "string"
+        },
+        "preview_digest": {
+          "title": "Preview Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "actor_id",
+        "change_set_digest",
+        "preview_digest",
+        "minimal_rebase_certificate_digest",
+        "authorization_revision",
+        "authority_scope",
+        "approved_at",
+        "expires_at",
+        "method"
+      ],
+      "title": "Approval",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-source-approval.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "approval": {
+      "$ref": "#/$defs/Approval"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "owner_id": {
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "source_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "owner_id",
+    "source_ids",
+    "approval"
+  ],
+  "title": "SourceApproval",
+  "type": "object"
+}

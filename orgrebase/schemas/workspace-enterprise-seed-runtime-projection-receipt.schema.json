@@ -1,0 +1,110 @@
+{
+  "$defs": {
+    "RuntimeProjectionObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "admitted_projection_digest": {
+          "title": "Admitted Projection Digest",
+          "type": "string"
+        },
+        "component_kind": {
+          "$ref": "#/$defs/SeedComponentKind"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "runtime_projection_digest": {
+          "title": "Runtime Projection Digest",
+          "type": "string"
+        },
+        "status": {
+          "const": "MATCH",
+          "default": "MATCH",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_kind",
+        "admitted_projection_digest",
+        "runtime_projection_digest"
+      ],
+      "title": "RuntimeProjectionObservation",
+      "type": "object"
+    },
+    "SeedComponentKind": {
+      "enum": [
+        "DOMAIN",
+        "KNOWLEDGE",
+        "AUTHORITY",
+        "CAPABILITY",
+        "DEPENDENCY"
+      ],
+      "title": "SeedComponentKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-enterprise-seed-runtime-projection-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/RuntimeProjectionObservation"
+      },
+      "title": "Observations",
+      "type": "array"
+    },
+    "profile_digest": {
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "profile_ref": {
+      "minLength": 1,
+      "title": "Profile Ref",
+      "type": "string"
+    },
+    "runtime_projection_digest": {
+      "title": "Runtime Projection Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.enterprise-seed-runtime-projection-receipt.v1",
+      "default": "orgrebase.enterprise-seed-runtime-projection-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_admission_receipt_digest": {
+      "title": "Source Admission Receipt Digest",
+      "type": "string"
+    },
+    "verdict": {
+      "const": "MATCH",
+      "default": "MATCH",
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_ref",
+    "profile_digest",
+    "source_admission_receipt_digest",
+    "observations",
+    "runtime_projection_digest"
+  ],
+  "title": "EnterpriseSeedRuntimeProjectionReceipt",
+  "type": "object"
+}

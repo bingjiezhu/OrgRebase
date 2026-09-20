@@ -1,0 +1,56 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-model-input-projection.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Already-admitted input material; a digest alone is not model context.",
+  "properties": {
+    "content": {
+      "$ref": "#/$defs/JsonValue"
+    },
+    "content_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Content Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "domain_id": {
+      "minLength": 1,
+      "title": "Domain Id",
+      "type": "string"
+    },
+    "object_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Object Ids",
+      "type": "array"
+    },
+    "ref": {
+      "minLength": 1,
+      "title": "Ref",
+      "type": "string"
+    },
+    "source_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Source Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "ref",
+    "source_digest",
+    "domain_id",
+    "object_ids",
+    "content",
+    "content_digest"
+  ],
+  "title": "ModelInputProjection",
+  "type": "object"
+}

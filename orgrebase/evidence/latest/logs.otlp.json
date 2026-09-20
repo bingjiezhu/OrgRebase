@@ -1,0 +1,438 @@
+{
+  "resourceLogs": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "deployment.environment.name",
+            "value": {
+              "stringValue": "local-deterministic"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "orgrebase"
+            }
+          },
+          {
+            "key": "service.version",
+            "value": {
+              "stringValue": "0.3.0"
+            }
+          }
+        ]
+      },
+      "scopeLogs": [
+        {
+          "logRecords": [
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:995742bf07d6831aaa94a69da15e0ffc7630ea7838978de31328ffc7ffe9c0a8"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "1"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "FIXTURE_LOADED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000001000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:029d7d675f640fe98ff837793f34437b41e0b3865b2dd27ca6007941212c6df7"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:995742bf07d6831aaa94a69da15e0ffc7630ea7838978de31328ffc7ffe9c0a8"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "2"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "TOOL_INVOKED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000002000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:7ed7541c2abb04039684dd9aea0a110a1126c19ddb9c07fb41c316d25f283a69"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:029d7d675f640fe98ff837793f34437b41e0b3865b2dd27ca6007941212c6df7"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "3"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "IMPACT_PREVIEWED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000003000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:e552ca8e2a52ad05e79a720bce1862ec3807dd58aa26560bd64a6d380ee03942"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:7ed7541c2abb04039684dd9aea0a110a1126c19ddb9c07fb41c316d25f283a69"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "4"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "REBASE_APPLIED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000004000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:d89cbfbcce75e73bd162e193e1df78903f6ef0a1ed82d5ca6440a0c2d547d66c"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:e552ca8e2a52ad05e79a720bce1862ec3807dd58aa26560bd64a6d380ee03942"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "5"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "CONFLICT_RESOLVED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000005000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:9092c1478422c184ad580313e48aaf62a071333c4be66e4862008a8e6c51308d"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:d89cbfbcce75e73bd162e193e1df78903f6ef0a1ed82d5ca6440a0c2d547d66c"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "6"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "APPLY_REJECTED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000006000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:f061c01017406b73e6b5c6df0f30cf6dfcea489613f8f7cb738605cfa636c843"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:9092c1478422c184ad580313e48aaf62a071333c4be66e4862008a8e6c51308d"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "7"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "DOWNSTREAM_EFFECTS_COMPENSATED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000007000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:061fa24c0914bd652376689d0d6e311344020e1fc8f8bd96245596f7fc1b709d"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:f061c01017406b73e6b5c6df0f30cf6dfcea489613f8f7cb738605cfa636c843"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "8"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "REAL_GIT_TOOL_INVOKED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000008000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:148a1ec2f2841ec4bf12eb0600526d0201a6715dd144f7798543251417db809d"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:061fa24c0914bd652376689d0d6e311344020e1fc8f8bd96245596f7fc1b709d"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "9"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "REAL_GIT_TOOL_INVOKED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000009000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "orgrebase.event.digest",
+                  "value": {
+                    "stringValue": "sha256:50eca4b34e4dd0179d3e4dd1bac1bfc1d7f652a965f00d80004e6392e511e4c8"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.previous_digest",
+                  "value": {
+                    "stringValue": "sha256:148a1ec2f2841ec4bf12eb0600526d0201a6715dd144f7798543251417db809d"
+                  }
+                },
+                {
+                  "key": "orgrebase.event.sequence",
+                  "value": {
+                    "intValue": "10"
+                  }
+                },
+                {
+                  "key": "orgrebase.run.nonce",
+                  "value": {
+                    "stringValue": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932"
+                  }
+                },
+                {
+                  "key": "orgrebase.workflow.run_id",
+                  "value": {
+                    "stringValue": "run:orgrebase:launch-date:local@1"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "COMPENSATION_SAGA_UPDATED"
+              },
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "1776000000010000000"
+            }
+          ],
+          "scope": {
+            "name": "orgrebase",
+            "version": "0.3.0"
+          }
+        }
+      ]
+    }
+  ]
+}

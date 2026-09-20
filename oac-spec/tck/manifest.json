@@ -1,0 +1,269 @@
+{
+  "apiVersion": "oac.dev/tck/v0alpha1",
+  "suiteId": "oac-shadow-mvp-supplier-change",
+  "claimLimit": "C0/C2 mechanics-only development kit; passing does not establish formal conformance, human Ground Truth, enterprise effectiveness, or runtime portability.",
+  "cases": [
+    {
+      "id": "C0-SNAPSHOT-DIGEST-POSITIVE",
+      "operation": "validate",
+      "resourceRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "PASS", "reasonCodes": []}
+    },
+    {
+      "id": "C0-CHANGE-DIGEST-POSITIVE",
+      "operation": "validate",
+      "resourceRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "PASS", "reasonCodes": []}
+    },
+    {
+      "id": "C0-CONTEXTUAL-SNAPSHOT-DIGEST-POSITIVE",
+      "operation": "validate",
+      "resourceRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "PASS", "reasonCodes": []}
+    },
+    {
+      "id": "C0-CONTEXTUAL-TRUNCATED-SNAPSHOT-DIGEST-POSITIVE",
+      "operation": "validate",
+      "resourceRef": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "PASS", "reasonCodes": []}
+    },
+    {
+      "id": "C0-CASE-DIGEST-POSITIVE",
+      "operation": "validate",
+      "resourceRef": "profiles/supplier-change/cases/SC-001-restructuring.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "PASS", "reasonCodes": []}
+    },
+    {
+      "id": "C0-WITNESS-A-DIGEST-POSITIVE",
+      "operation": "validate",
+      "resourceRef": "profiles/supplier-change/witnesses/SC-001-witness-a.plan.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "PASS", "reasonCodes": []}
+    },
+    {
+      "id": "C0-WITNESS-B-DIGEST-POSITIVE",
+      "operation": "validate",
+      "resourceRef": "profiles/supplier-change/witnesses/SC-001-witness-b.plan.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "PASS", "reasonCodes": []}
+    },
+    {
+      "id": "C2-PLURAL-WITNESS-A-ACCEPT",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "profiles/supplier-change/witnesses/SC-001-witness-a.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "ACCEPT", "reasonCodes": []}
+    },
+    {
+      "id": "C2-PLURAL-WITNESS-B-ACCEPT",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "profiles/supplier-change/witnesses/SC-001-witness-b.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "ACCEPT", "reasonCodes": []}
+    },
+    {
+      "id": "C2-CONTEXTUAL-SUBJECT-SCOPE-ACCEPT",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "ACCEPT", "reasonCodes": []}
+    },
+    {
+      "id": "C2-CONTEXTUAL-DERIVED-UNKNOWN-PROVISIONAL",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-009.change.json",
+      "planRef": "tck/fixtures/positive/SC-009-contextual.plan.json",
+      "expect": {
+        "outcome": "PASS",
+        "verdict": "PROVISIONAL",
+        "reasonCodes": ["CANDIDATE_INPUT_NOT_AUTHORITY"],
+        "match": "contains"
+      }
+    },
+    {
+      "id": "C2-CONTEXTUAL-ROOT-UNKNOWN-PRESERVED",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-010.change.json",
+      "planRef": "tck/fixtures/positive/SC-010-unknown.plan.json",
+      "expect": {
+        "outcome": "PASS",
+        "verdict": "UNKNOWN",
+        "reasonCodes": ["ROOT_APPLICABILITY_UNKNOWN"],
+        "match": "contains"
+      }
+    },
+    {
+      "id": "NEG-OMIT-OBLIGATION",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/omit-obligation.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["OBLIGATION_UNSATISFIED"], "match": "contains"}
+    },
+    {
+      "id": "NEG-SELF-REVIEW",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/self-review.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["QUALIFICATION_INVALID", "SEPARATION_OF_DUTIES_VIOLATION"], "match": "contains"}
+    },
+    {
+      "id": "NEG-REVERSE-ORDER",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/reverse-order.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["ORDER_CONSTRAINT_MISSING"], "match": "contains"}
+    },
+    {
+      "id": "NEG-MISSING-EVIDENCE",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/missing-evidence.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["EVIDENCE_DUTY_MISSING"], "match": "contains"}
+    },
+    {
+      "id": "NEG-REDUNDANT-ROLE",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/redundant-role.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["OBLIGATION_UNSATISFIED"], "match": "contains"}
+    },
+    {
+      "id": "NEG-INPUT-ROOT-MISMATCH",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/input-root-mismatch.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["INPUT_ROOT_MISMATCH"], "match": "contains"}
+    },
+    {
+      "id": "NEG-UNKNOWN-ERASURE",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-010.change.json",
+      "planRef": "tck/fixtures/negative/unknown-erasure.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["UNKNOWN_NOT_PRESERVED"], "match": "contains"}
+    },
+    {
+      "id": "NEG-FALSE-NON-IMPACT",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-010.change.json",
+      "planRef": "tck/fixtures/negative/false-non-impact.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["IMPACT_PATH_OMITTED"], "match": "contains"}
+    },
+    {
+      "id": "NEG-APPLICABILITY-EVALUATION-OMISSION",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/negative/applicability-evaluation-omission.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["APPLICABILITY_EVALUATION_MISSING"], "match": "contains"}
+    },
+    {
+      "id": "NEG-APPLICABILITY-RESULT-FORGERY",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/negative/applicability-result-forgery.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["APPLICABILITY_EVALUATION_MISMATCH"], "match": "contains"}
+    },
+    {
+      "id": "NEG-APPLICABILITY-WITNESS-FORGERY",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/negative/applicability-witness-forgery.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["APPLICABILITY_WITNESS_MISMATCH"], "match": "contains"}
+    },
+    {
+      "id": "NEG-FALSE-PREDICATE-TRAVERSAL",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-009.change.json",
+      "planRef": "tck/fixtures/negative/false-predicate-traversal.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["PREDICATE_FALSE_PATH_INCLUDED"], "match": "contains"}
+    },
+    {
+      "id": "NEG-UNKNOWN-DUTY-OMISSION",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-009.change.json",
+      "planRef": "tck/fixtures/negative/unknown-duty-omission.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["UNKNOWN_TRANSITION_DUTY_MISSING"], "match": "contains"}
+    },
+    {
+      "id": "NEG-CONTEXTUAL-PREREQUISITE-REMOVAL",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/negative/contextual-prerequisite-removal.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["PREREQUISITE_OBLIGATION_ORDER_MISSING"], "match": "contains"}
+    },
+    {
+      "id": "NEG-ROOT-UNKNOWN-COLLAPSE",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-010.change.json",
+      "planRef": "tck/fixtures/negative/root-unknown-collapse.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["APPLICABILITY_EVALUATION_MISMATCH", "ROOT_APPLICABILITY_UNKNOWN"], "match": "contains"}
+    },
+    {
+      "id": "NEG-EXTRA-SUPPLIER-DELTA",
+      "operation": "verify",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "tck/fixtures/negative/extra-delta.change.json",
+      "planRef": "tck/fixtures/negative/extra-delta.plan.json",
+      "expect": {"outcome": "PASS", "verdict": "REJECT", "reasonCodes": ["SUPPLIER_STATUS_DELTA_SET_INVALID"], "match": "contains"}
+    },
+    {
+      "id": "NEG-PLAN-DIGEST-MISMATCH",
+      "operation": "validate",
+      "resourceRef": "tck/fixtures/negative/digest-mismatch.plan.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "ERROR", "reasonCodes": ["PLAN_DIGEST_MISMATCH"]}
+    },
+    {
+      "id": "NEG-EFFECT-CEILING-SCHEMA",
+      "operation": "validate",
+      "resourceRef": "tck/fixtures/negative/invalid-effect.plan.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "ERROR", "reasonCodes": ["CORE_SCHEMA_INVALID"]}
+    },
+    {
+      "id": "NEG-DIGEST-MISSING",
+      "operation": "validate",
+      "resourceRef": "tck/fixtures/negative/missing-digest.snapshot.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "ERROR", "reasonCodes": ["DIGEST_MISSING"]}
+    },
+    {
+      "id": "NEG-KIND-UNKNOWN",
+      "operation": "validate",
+      "resourceRef": "tck/fixtures/negative/unknown-kind.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "ERROR", "reasonCodes": ["CORE_KIND_UNKNOWN"]}
+    },
+    {
+      "id": "NEG-DUPLICATE-KEY",
+      "operation": "validate",
+      "resourceRef": "tck/fixtures/negative/duplicate-key.json",
+      "verifyDigest": true,
+      "expect": {"outcome": "ERROR", "reasonCodes": ["CORE_SCHEMA_INVALID"]}
+    }
+  ]
+}

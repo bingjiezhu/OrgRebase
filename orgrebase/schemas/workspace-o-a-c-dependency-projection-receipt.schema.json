@@ -1,0 +1,145 @@
+{
+  "$defs": {
+    "OACDependencyProjectionBinding": {
+      "additionalProperties": false,
+      "description": "One exact Workspace edge to portable OAC edge content binding.",
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "oac_edge_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Oac Edge Digest",
+          "type": "string"
+        },
+        "oac_edge_id": {
+          "minLength": 1,
+          "title": "Oac Edge Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "orgrebase.oac-dependency-projection-binding.v1",
+          "default": "orgrebase.oac-dependency-projection-binding.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "workspace_edge_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Workspace Edge Digest",
+          "type": "string"
+        },
+        "workspace_edge_id": {
+          "minLength": 1,
+          "title": "Workspace Edge Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace_edge_id",
+        "workspace_edge_digest",
+        "oac_edge_id",
+        "oac_edge_digest"
+      ],
+      "title": "OACDependencyProjectionBinding",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-dependency-projection-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Content-addressed proof of the bounded dependency projection.\n\nThe receipt binds exact Enterprise Pack bytes to the already compiled\nWorkspace universe and then to a portable OAC edge set.  It deliberately\ncarries no impact result and grants no canonical-write authority.",
+  "properties": {
+    "bindings": {
+      "items": {
+        "$ref": "#/$defs/OACDependencyProjectionBinding"
+      },
+      "minItems": 1,
+      "title": "Bindings",
+      "type": "array"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "edge_count": {
+      "exclusiveMinimum": 0,
+      "title": "Edge Count",
+      "type": "integer"
+    },
+    "mapping_rule_set_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Mapping Rule Set Digest",
+      "type": "string"
+    },
+    "oac_edge_set_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Oac Edge Set Digest",
+      "type": "string"
+    },
+    "organization_snapshot_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Organization Snapshot Digest",
+      "type": "string"
+    },
+    "pack_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "profile_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-dependency-projection-receipt.v1",
+      "default": "orgrebase.oac-dependency-projection-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_dependency_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Source Dependency Digest",
+      "type": "string"
+    },
+    "verdict": {
+      "const": "PASS",
+      "default": "PASS",
+      "title": "Verdict",
+      "type": "string"
+    },
+    "workspace_edge_set_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Workspace Edge Set Digest",
+      "type": "string"
+    },
+    "workspace_universe_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Workspace Universe Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_digest",
+    "pack_digest",
+    "source_dependency_digest",
+    "mapping_rule_set_digest",
+    "workspace_universe_digest",
+    "workspace_edge_set_digest",
+    "organization_snapshot_digest",
+    "oac_edge_set_digest",
+    "edge_count",
+    "bindings"
+  ],
+  "title": "OACDependencyProjectionReceipt",
+  "type": "object"
+}

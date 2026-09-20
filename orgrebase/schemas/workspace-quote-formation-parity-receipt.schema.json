@@ -1,0 +1,323 @@
+{
+  "$defs": {
+    "QuoteFormationObligation": {
+      "enum": [
+        "PRODUCT_FACTS",
+        "LEGAL_POLICY",
+        "FINANCE_POLICY",
+        "GTM_COMPOSITION",
+        "INDEPENDENT_REVIEW"
+      ],
+      "title": "QuoteFormationObligation",
+      "type": "string"
+    },
+    "QuoteFormationTaskAttempt": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt": {
+          "maximum": 2,
+          "minimum": 1,
+          "title": "Attempt",
+          "type": "integer"
+        },
+        "candidate_only": {
+          "const": true,
+          "default": true,
+          "title": "Candidate Only",
+          "type": "boolean"
+        },
+        "correlation_id": {
+          "minLength": 1,
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "domain": {
+          "enum": [
+            "product",
+            "legal",
+            "finance",
+            "gtm",
+            "coalition"
+          ],
+          "title": "Domain",
+          "type": "string"
+        },
+        "input_digest": {
+          "title": "Input Digest",
+          "type": "string"
+        },
+        "obligation_ref": {
+          "$ref": "#/$defs/QuoteFormationObligation"
+        },
+        "outcome": {
+          "enum": [
+            "PASS",
+            "ABSTAIN",
+            "REPLAN"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "predecessor_task_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Predecessor Task Refs",
+          "type": "array"
+        },
+        "principal_ref": {
+          "minLength": 1,
+          "title": "Principal Ref",
+          "type": "string"
+        },
+        "result_digest": {
+          "title": "Result Digest",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "DOMAIN_WORKER",
+            "REVIEWER"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "target_writes": {
+          "const": 0,
+          "default": 0,
+          "title": "Target Writes",
+          "type": "integer"
+        },
+        "task_id": {
+          "minLength": 1,
+          "title": "Task Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "correlation_id",
+        "task_id",
+        "role",
+        "domain",
+        "attempt",
+        "principal_ref",
+        "obligation_ref",
+        "outcome",
+        "input_digest",
+        "result_digest"
+      ],
+      "title": "QuoteFormationTaskAttempt",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-quote-formation-parity-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adaptation_draft_digest": {
+      "title": "Adaptation Draft Digest",
+      "type": "string"
+    },
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "attempt_set_digest": {
+      "title": "Attempt Set Digest",
+      "type": "string"
+    },
+    "authority_binding_digest": {
+      "title": "Authority Binding Digest",
+      "type": "string"
+    },
+    "authorized_principal_refs": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Authorized Principal Refs",
+      "type": "array"
+    },
+    "binding_timing": {
+      "const": "POST_RUN_SAME_RUN_REPLAY",
+      "default": "POST_RUN_SAME_RUN_REPLAY",
+      "title": "Binding Timing",
+      "type": "string"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "checked": {
+      "default": [
+        "FIVE_LOGICAL_OBLIGATIONS_COVERED",
+        "SEVEN_DYNAMIC_TASK_ATTEMPTS_RETAINED",
+        "FINANCE_ABSTAIN_THEN_PASS",
+        "REVIEWER_REPLAN_THEN_PASS",
+        "HAPPENS_BEFORE_ACYCLIC_AND_COMPLETE",
+        "WORKER_REVIEWER_SEPARATION",
+        "AUTHORIZED_PRINCIPALS_EXACT",
+        "CANDIDATE_ONLY_ZERO_TARGET_WRITES",
+        "EXACT_PROFILE_PACK_ADAPTATION_BINDING"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Checked",
+      "type": "array"
+    },
+    "claim": {
+      "const": "OAC_SOURCE_DEMAND_ADMITTED_AND_ORGREBASE_FORMATION_PARITY",
+      "default": "OAC_SOURCE_DEMAND_ADMITTED_AND_ORGREBASE_FORMATION_PARITY",
+      "title": "Claim",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "dynamic_task_attempt_count": {
+      "const": 7,
+      "default": 7,
+      "title": "Dynamic Task Attempt Count",
+      "type": "integer"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "finance_predecessor_transition": {
+      "const": "ABSTAIN_TO_PASS",
+      "default": "ABSTAIN_TO_PASS",
+      "title": "Finance Predecessor Transition",
+      "type": "string"
+    },
+    "formation_authority": {
+      "const": "ORGREBASE_CONTROL_PLANE",
+      "default": "ORGREBASE_CONTROL_PLANE",
+      "title": "Formation Authority",
+      "type": "string"
+    },
+    "golden_correlation_id": {
+      "minLength": 1,
+      "title": "Golden Correlation Id",
+      "type": "string"
+    },
+    "golden_run_id": {
+      "minLength": 1,
+      "title": "Golden Run Id",
+      "type": "string"
+    },
+    "golden_summary_digest": {
+      "title": "Golden Summary Digest",
+      "type": "string"
+    },
+    "happens_before_digest": {
+      "title": "Happens Before Digest",
+      "type": "string"
+    },
+    "logical_obligation_count": {
+      "const": 5,
+      "default": 5,
+      "title": "Logical Obligation Count",
+      "type": "integer"
+    },
+    "mapping_set_digest": {
+      "title": "Mapping Set Digest",
+      "type": "string"
+    },
+    "oac_plan_certificate_produced": {
+      "const": false,
+      "default": false,
+      "title": "Oac Plan Certificate Produced",
+      "type": "boolean"
+    },
+    "oac_plan_produced": {
+      "const": false,
+      "default": false,
+      "title": "Oac Plan Produced",
+      "type": "boolean"
+    },
+    "oac_runtime_invoked": {
+      "const": false,
+      "default": false,
+      "title": "Oac Runtime Invoked",
+      "type": "boolean"
+    },
+    "obligation_coverage_digest": {
+      "title": "Obligation Coverage Digest",
+      "type": "string"
+    },
+    "pack_digest": {
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "profile_digest": {
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "reviewer_transition": {
+      "const": "REPLAN_TO_PASS",
+      "default": "REPLAN_TO_PASS",
+      "title": "Reviewer Transition",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.quote-formation-parity-receipt.v1",
+      "default": "orgrebase.quote-formation-parity-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_attempts": {
+      "items": {
+        "$ref": "#/$defs/QuoteFormationTaskAttempt"
+      },
+      "maxItems": 7,
+      "minItems": 7,
+      "title": "Task Attempts",
+      "type": "array"
+    },
+    "verdict": {
+      "const": "PASS",
+      "default": "PASS",
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adaptation_run_id",
+    "adaptation_draft_digest",
+    "mapping_set_digest",
+    "profile_digest",
+    "pack_digest",
+    "golden_run_id",
+    "golden_correlation_id",
+    "golden_summary_digest",
+    "task_attempts",
+    "authorized_principal_refs",
+    "authority_binding_digest",
+    "attempt_set_digest",
+    "obligation_coverage_digest",
+    "happens_before_digest"
+  ],
+  "title": "QuoteFormationParityReceipt",
+  "type": "object"
+}

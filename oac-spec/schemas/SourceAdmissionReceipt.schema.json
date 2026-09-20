@@ -1,0 +1,344 @@
+{
+  "$defs": {
+    "AdmissionVerdict": {
+      "enum": [
+        "ADMITTED",
+        "REJECTED",
+        "UNKNOWN"
+      ],
+      "title": "AdmissionVerdict",
+      "type": "string"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "SourceAdmissionReceiptSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionPurpose": {
+          "enum": [
+            "enterprise_intake",
+            "successor_promotion"
+          ],
+          "title": "Admissionpurpose",
+          "type": "string"
+        },
+        "admittedSubjectRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Admittedsubjectrefs",
+          "type": "array"
+        },
+        "candidateRef": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "decisionAuthorityRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "evolutionRoot": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evolutionroot"
+        },
+        "governanceDecisionRef": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "intakeManifestDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Intakemanifestdigest",
+          "type": "string"
+        },
+        "intakeProfileRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "predecessorSourceRoot": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Predecessorsourceroot"
+        },
+        "proposerRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Proposerrefs",
+          "type": "array"
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "reviewerRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Reviewerrefs",
+          "type": "array"
+        },
+        "ruleSetDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Rulesetdigest",
+          "type": "string"
+        },
+        "subjectRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Subjectrefs",
+          "type": "array"
+        },
+        "unresolvedRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Unresolvedrefs",
+          "type": "array"
+        },
+        "verdict": {
+          "$ref": "#/$defs/AdmissionVerdict"
+        }
+      },
+      "required": [
+        "admissionPurpose",
+        "subjectRefs",
+        "intakeManifestDigest",
+        "intakeProfileRef",
+        "ruleSetDigest",
+        "proposerRefs",
+        "decisionAuthorityRef",
+        "reviewerRefs",
+        "verdict"
+      ],
+      "title": "SourceAdmissionReceiptSpec",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/SourceAdmissionReceipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "SourceAdmissionReceipt",
+      "default": "SourceAdmissionReceipt",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/SourceAdmissionReceiptSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "SourceAdmissionReceipt",
+  "type": "object"
+}

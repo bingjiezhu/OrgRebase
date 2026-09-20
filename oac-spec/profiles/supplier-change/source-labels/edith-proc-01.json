@@ -1,0 +1,158 @@
+{
+  "labelSetVersion": "1.0",
+  "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+  "questionId": "PROC-01",
+  "question": "Forges Martelliere en redressement judiciaire. Exposition?",
+  "role": "Directrice Achats",
+  "asker": "Isabelle Roche",
+  "entity": "veracier_sa",
+  "declaredDocumentCount": 19,
+  "answerKey": {
+    "groundTruth": {},
+    "groundTruthIsEmpty": true,
+    "difficultyFactors": ["cross_entity", "urgency"]
+  },
+  "masterIndexLabels": [
+    {
+      "docId": "DOC-50e34f02",
+      "entity": "veracier_aero",
+      "filename": "correspondance/bdc/bdc_forges_martelliere_2025_001.pdf",
+      "classification": "AT_RISK",
+      "description": "PO 340k forgings AV-3000"
+    },
+    {
+      "docId": "DOC-1ceffca1",
+      "entity": "veracier_energie",
+      "filename": "correspondance/bdc/bdc_forges_martelliere_2025_002.pdf",
+      "classification": "AT_RISK",
+      "description": "PO 180k NuSafe valve bodies"
+    },
+    {
+      "docId": "DOC-626ac773",
+      "entity": "veracier_aero",
+      "filename": "correspondance/bdc/bdc_forges_martelliere_2024_015.pdf",
+      "classification": "AT_RISK",
+      "description": "Partially delivered 95k outstanding"
+    },
+    {
+      "docId": "DOC-fa6b00bb",
+      "entity": "veracier_gmbh",
+      "filename": "correspondance/bdc/bdc_rhein_metall_2025_001.pdf",
+      "classification": "NOT_AT_RISK",
+      "description": "Different supplier"
+    },
+    {
+      "docId": "DOC-9f0ca817",
+      "entity": "veracier_inc",
+      "filename": "correspondance/bdc/bdc_titan_fluid_2025_001.pdf",
+      "classification": "NOT_AT_RISK",
+      "description": "Different supplier"
+    },
+    {
+      "docId": "DOC-9eff55b9",
+      "entity": "veracier_energie",
+      "filename": "correspondance/bdc/bdc_forges_martelliere_2025_003.pdf",
+      "classification": "AT_RISK",
+      "description": "PO nuclear-grade steel"
+    },
+    {
+      "docId": "DOC-cc41d4aa",
+      "entity": "veracier_sa",
+      "filename": "correspondance/bdc/bdc_acieries_savoie_2025_001.pdf",
+      "classification": "NOT_AT_RISK",
+      "description": "Potential replacement supplier"
+    },
+    {
+      "docId": "DOC-46b05445",
+      "entity": "veracier_aero",
+      "filename": "correspondance/bdc/bdc_forges_martelliere_2024_urgence.pdf",
+      "classification": "AT_RISK",
+      "description": "Rush order 120k advance at risk"
+    },
+    {
+      "docId": "DOC-fdfc1a37",
+      "entity": "veracier_sa",
+      "filename": "rapports/achats/synthese_exposition_forges_martelliere.pdf",
+      "classification": "SUMMARY",
+      "description": "Exposure summary report"
+    },
+    {
+      "docId": "DOC-4ec474fb",
+      "entity": "veracier_aero",
+      "filename": "correspondance/bdc/bdc_fonderie_piemontese_2025_001.pdf",
+      "classification": "NOT_AT_RISK",
+      "description": "Different supplier"
+    },
+    {
+      "docId": "DOC-a03146b5",
+      "entity": "veracier_sa",
+      "filename": "contrats/fournisseur/forges_martelliere_msa_2022.pdf",
+      "classification": "REFERENCE",
+      "description": "MSA with insolvency clauses"
+    },
+    {
+      "docId": "DOC-8578d50a",
+      "entity": "veracier_maroc",
+      "filename": "correspondance/bdc/bdc_forges_martelliere_maroc_2025.pdf",
+      "classification": "AT_RISK",
+      "description": "PO from Veracier Maroc"
+    },
+    {
+      "docId": "DOC-a981c109",
+      "entity": "veracier_defense",
+      "filename": "correspondance/bdc/bdc_forges_martelliere_2024_012.pdf",
+      "classification": "AT_RISK",
+      "description": "BDC Forges Martelliere pour pieces forgees optronique - 175 kEUR"
+    },
+    {
+      "docId": "DOC-fe8b3af2",
+      "entity": "veracier_sa",
+      "filename": "correspondance/emails/email_urgence_forges_martelliere_rj.pdf",
+      "classification": "REFERENCE",
+      "description": "Email urgence - notification RJ Forges Martelliere et plan de contingence"
+    },
+    {
+      "docId": "DOC-7823658d",
+      "entity": "veracier_sa",
+      "filename": "rapports/achats/plan_contingence_forges_martelliere.pdf",
+      "classification": "REFERENCE",
+      "description": "Plan de contingence approvisionnement titane - alternatives Acieries de Savoie et Aubert & Duval"
+    },
+    {
+      "docId": "DOC-f8f427f8",
+      "entity": "veracier_defense",
+      "filename": "correspondance/bdc/bdc_forges_martelliere_defense_2025.pdf",
+      "classification": "AT_RISK",
+      "description": "BDC Forges Martelliere pour pieces forgees optronique OptiShield — 175 kEUR"
+    },
+    {
+      "docId": "DOC-29949d76",
+      "entity": "veracier_sa",
+      "filename": "rapports/achats/evaluation_alternative_acieries_savoie.pdf",
+      "classification": "REFERENCE",
+      "description": "Evaluation fournisseur alternatif Acieries de Savoie — qualification titane en cours"
+    },
+    {
+      "docId": "DOC-9f36186f",
+      "entity": "veracier_sa",
+      "filename": "rapports/achats/impact_production_rj_forges_martelliere.pdf",
+      "classification": "REFERENCE",
+      "description": "Analyse d'impact production du RJ Forges Martelliere — 3 lignes affectees"
+    },
+    {
+      "docId": "DOC-66804d3f",
+      "entity": "veracier_sa",
+      "filename": "correspondance/emails/email_administrateur_judiciaire_mars2025.pdf",
+      "classification": "REFERENCE",
+      "description": "Courrier administrateur judiciaire Forges Martelliere — declaration de creances"
+    }
+  ],
+  "interpretation": {
+    "AT_RISK": "Upstream PROC-01 document classification; not an OAC impact-path label.",
+    "NOT_AT_RISK": "Upstream PROC-01 document classification; not proof of organizational non-impact.",
+    "REFERENCE": "Upstream contextual-document label; not an admitted OAC rule or policy.",
+    "SUMMARY": "Upstream summary-document label; not an independent evidence source."
+  },
+  "oacGroundTruthStatus": "ABSENT",
+  "claimLimit": "This is a provenance-preserving transcription of upstream metadata, not a human annotation, certified constraint set, or Human Gold."
+}

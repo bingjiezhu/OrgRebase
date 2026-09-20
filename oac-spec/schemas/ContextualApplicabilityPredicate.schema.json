@@ -1,0 +1,170 @@
+{
+  "$defs": {
+    "RelationType": {
+      "enum": [
+        "business_dependency",
+        "contractual_dependency",
+        "financial_exposure",
+        "compliance_dependency",
+        "operational_dependency",
+        "traceability",
+        "similarity",
+        "correlation"
+      ],
+      "title": "RelationType",
+      "type": "string"
+    },
+    "ScopeSelector": {
+      "additionalProperties": false,
+      "description": "Explicit interpretation of change ``scopeRefs`` for one predicate.",
+      "properties": {
+        "matchMode": {
+          "enum": [
+            "all",
+            "any"
+          ],
+          "title": "Matchmode",
+          "type": "string"
+        },
+        "missingBehavior": {
+          "enum": [
+            "false",
+            "unknown"
+          ],
+          "title": "Missingbehavior",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "refs",
+        "matchMode",
+        "missingBehavior"
+      ],
+      "title": "ScopeSelector",
+      "type": "object"
+    },
+    "SubjectSelector": {
+      "additionalProperties": false,
+      "description": "Bounded subject atoms; no arbitrary attributes or executable expressions.",
+      "properties": {
+        "domainRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Domainrefs",
+          "type": "array"
+        },
+        "nodeTypes": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Nodetypes",
+          "type": "array"
+        },
+        "subjectRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Subjectrefs",
+          "type": "array"
+        }
+      },
+      "title": "SubjectSelector",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/ContextualApplicabilityPredicate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Versioned, non-executable conjunction evaluated with strong Kleene logic.",
+  "properties": {
+    "afterState": {
+      "enum": [
+        "known",
+        "unknown",
+        "not_observable",
+        "not_applicable"
+      ],
+      "title": "Afterstate",
+      "type": "string"
+    },
+    "afterValues": {
+      "default": [],
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Aftervalues",
+      "type": "array"
+    },
+    "predicateVersion": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Predicateversion",
+      "type": "string"
+    },
+    "relationTypes": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/RelationType"
+      },
+      "title": "Relationtypes",
+      "type": "array"
+    },
+    "scopeSelector": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ScopeSelector"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "semanticType": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Semantictype",
+      "type": "string"
+    },
+    "subjectSelector": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SubjectSelector"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "predicateVersion",
+    "semanticType",
+    "afterState"
+  ],
+  "title": "ContextualApplicabilityPredicate",
+  "type": "object"
+}

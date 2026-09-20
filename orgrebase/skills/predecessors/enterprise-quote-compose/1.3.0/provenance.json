@@ -1,0 +1,42 @@
+{
+  "claim_boundary": "Exact read-only extraction of the six enterprise-quote-compose 1.3.0 text resources from one retained wheel; not a reconstruction and not proof of enterprise production use.",
+  "contract_content_digest": "sha256:71f41593a3c35b42efdec3e1d1f1be8fa4f7c5cb144e019af5442448d74744d0",
+  "digest": "sha256:364e41ac6da4b7b895243f628ac0b6b026c3cc018ddd1caf330431b06baaa5c6",
+  "extracted_resources": {
+    "SKILL.md": {
+      "sha256": "sha256:4d32fbfd94a42025e0ed7b4284d2d46bd4a9a9e030be5d5be08db10736fbfa2b",
+      "wheel_member": "orgrebase/skill_packages/enterprise-quote-compose/SKILL.md"
+    },
+    "contract.json": {
+      "sha256": "sha256:5560a74bfc45d0c3ea2e8a2bd732da5890c789faf5a994a99a7de68ec889c404",
+      "wheel_member": "orgrebase/skill_packages/enterprise-quote-compose/contract.json"
+    },
+    "input.schema.json": {
+      "sha256": "sha256:240dfb496be710a0a1b711e9874f5f70d9b41958b3f943824157f6e701c68b7f",
+      "wheel_member": "orgrebase/skill_packages/enterprise-quote-compose/input.schema.json"
+    },
+    "output.schema.json": {
+      "sha256": "sha256:d4e0d470c3f2d8c8fee33b27d5574889e0bc1f1a80ea721ccf1bf83829e02470",
+      "wheel_member": "orgrebase/skill_packages/enterprise-quote-compose/output.schema.json"
+    },
+    "package.json": {
+      "sha256": "sha256:4ccf4872a856c6b95daca3d809e55417b49fef4c7172d9656b7adbc13dc4d1a4",
+      "wheel_member": "orgrebase/skill_packages/enterprise-quote-compose/package.json"
+    },
+    "program.json": {
+      "sha256": "sha256:d39dc2e739b1f9de4fd2123f6d98021b93ee90579be16ced035f31d590b23f19",
+      "wheel_member": "orgrebase/skill_packages/enterprise-quote-compose/program.json"
+    }
+  },
+  "manifest_digest": "sha256:91398536ad1308de5438a7bf3817ecbd0dcb474abbe929e49100a8452b78540a",
+  "program_content_digest": "sha256:dacf97f2b5d788ad2e963ace2e19466f0e7454f6f572d6cb3abbfa93712bab0d",
+  "schema_version": "orgrebase.skill-predecessor-source.v1",
+  "skill_name": "enterprise-quote-compose",
+  "skill_version": "1.3.0",
+  "source_kind": "RETAINED_WHEEL_READ_ONLY_EXTRACTION",
+  "source_wheel": {
+    "bytes": 898452,
+    "relative_path": "vendor/predecessors/enterprise-quote-compose/1.3.0/orgrebase-0.4.0-py3-none-any.whl",
+    "sha256": "sha256:92c9e9f64ad4562a4ec4b300de716e71aa18fd1fe1e2026598e157aa4959ec59"
+  }
+}

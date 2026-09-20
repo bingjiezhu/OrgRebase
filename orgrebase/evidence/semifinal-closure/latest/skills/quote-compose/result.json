@@ -1,0 +1,17 @@
+{
+  "action": "APPLY_QUOTE",
+  "candidate_only": true,
+  "coalition_result_binding_digest": "sha256:fdb2d65dcc6d6fcf208a8fa745b1f9923804646bfcfcc24f439920866db06296",
+  "dependency_result_digest": "sha256:5b520b7f7cf9ef822b33e81f486b5b85a8bce545bcdb2ea99fbe4104bf9700ab",
+  "dependency_tool_receipt_digest": "sha256:bd6930602287a3f1639550b3d23d553329c16cd24d54ed9683adb5836b60d349",
+  "domain_result_digests": {
+    "finance": "sha256:d81ba4ac32a385086f0f3a5f9cf98ac31fbcfcbc415654729370ef70195f9fac",
+    "gtm": "sha256:3cd09044919c723ff5a9d5817d3b1f5563419587c903817a4c40fa054f231569",
+    "legal": "sha256:ef1002a6a034bc600680049d4233ccbe22f8113840183825193ca380343ac612",
+    "product": "sha256:ca9ce8f97b03618c65552b6d0972f5f9c0c9c2f75e211495f93dbbf150885012"
+  },
+  "package_digest": "sha256:64da732b086e7b85fb4ea31aeb60b28dd8bcb22c98ceb38fca03fb4f8907ffca",
+  "reason": "EXACT_DECLARATIVE_PROGRAM",
+  "schema_version": "orgrebase.skill-result-candidate.v1",
+  "target_writes": 0
+}

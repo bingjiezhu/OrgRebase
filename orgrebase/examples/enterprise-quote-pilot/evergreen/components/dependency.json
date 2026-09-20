@@ -1,0 +1,76 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:evergreen-enterprise-quote@r1",
+  "organization_id": "org:evergreen-industries",
+  "component_kind": "DEPENDENCY",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "targets": [
+      {
+        "id": "work:finance-approval",
+        "version": "v1",
+        "kind": "WorkItemVersion",
+        "label": "Enterprise Quote Finance Approval",
+        "domain": "finance",
+        "state": "CURRENT",
+        "owner": "human:evergreen-finance-owner",
+        "dependencies": [
+          {
+            "slot_id": "price-band",
+            "source_slot": "price_band",
+            "relation": "REQUIRES_POLICY",
+            "strength": "HARD",
+            "coverage_basis": "OWNER_DECLARED_COMPLETE"
+          }
+        ]
+      },
+      {
+        "id": "work:partner-brief",
+        "version": "v1",
+        "kind": "WorkItemVersion",
+        "label": "Enterprise Partner Brief",
+        "domain": "gtm",
+        "state": "CURRENT",
+        "owner": "human:evergreen-gtm-owner",
+        "dependencies": [
+          {
+            "slot_id": "launch-date",
+            "source_slot": "launch_date",
+            "relation": "ASSUMES",
+            "strength": "REVIEW",
+            "coverage_basis": "AGENT_INFERRED"
+          }
+        ]
+      },
+      {
+        "id": "work:launch-readiness-review",
+        "version": "v1",
+        "kind": "WorkItemVersion",
+        "label": "Enterprise Launch Readiness Review",
+        "domain": "gtm",
+        "state": "CURRENT",
+        "owner": "human:evergreen-gtm-owner",
+        "dependencies": [
+          {
+            "slot_id": "public-message",
+            "source_slot": "public_message",
+            "relation": "USES_MESSAGE",
+            "strength": "INFORMATIONAL",
+            "coverage_basis": "CONTRACT_DECLARED"
+          }
+        ]
+      }
+    ],
+    "source_refs": [
+      "enterprise-quote-pilot-pack:evergreen@v1"
+    ],
+    "completeness_basis": [
+      "RUNTIME_OBSERVED",
+      "OWNER_DECLARED_COMPLETE",
+      "CONTRACT_DECLARED",
+      "AGENT_INFERRED"
+    ]
+  },
+  "projection_digest": "sha256:36216b96357580674bcc20c9bf6e46ea3056194223b666236cec3b7c6fa11c6a"
+}

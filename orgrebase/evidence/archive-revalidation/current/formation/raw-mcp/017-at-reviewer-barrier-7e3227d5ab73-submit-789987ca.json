@@ -1,0 +1,28 @@
+{
+  "action": "submit_task",
+  "key": "at-reviewer-barrier-7e3227d5ab73:submit",
+  "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+  "representation": "SEMANTIC_MCP_WRAPPER_PUBLIC_PATH_REDACTED",
+  "request": {
+    "action": "submit_task",
+    "payload": {
+      "deliverables": [],
+      "status": "SUCCESS",
+      "summary": "{\"candidate_only\":true,\"canonical_target_writes\":0,\"control_plane_admission_required\":true,\"domain_id\":\"reviewer\",\"execution_plan_digest\":\"sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e\",\"execution_task_digest\":\"sha256:251a014d568254aa52ec9e0f12be1e2e98ad9b94d1d47cd3251d9cb901d211f3\",\"project_id\":\"orgrebase-formation-905f9cf1a656\",\"reviewed_task_ids\":[\"at-domain-legal-a3f56c48b0c5\",\"at-domain-product-f0e5afba2159\"],\"run_id\":\"run:formation-recheck:f256f60b26e54dd7802677eecfc395cd\",\"schema_version\":\"orgrebase.formation-taskflow-candidate.v1\",\"task_id\":\"at-reviewer-barrier-7e3227d5ab73\",\"task_kind\":\"REVIEWER_BARRIER\",\"verdict_candidate\":\"PASS\"}",
+      "taskId": "at-reviewer-barrier-7e3227d5ab73"
+    },
+    "role": "worker",
+    "workspaceDir": "orgrebase://runtime-workspace"
+  },
+  "response": {
+    "content": [
+      {
+        "text": "{\"ok\": true, \"tool\": \"taskflow\", \"action\": \"submit_task\", \"task\": {\"acknowledged_by_role\": \"worker\", \"assigned_at\": \"2026-09-19T12:35:16Z\", \"assigned_to\": \"@independent-reviewer:controlled.local\", \"eventId\": \"$controlled-9e65ece4f21a89d4590aad6a\", \"notification\": {\"assignee\": \"@independent-reviewer:controlled.local\", \"eventId\": \"$controlled-9e65ece4f21a89d4590aad6a\", \"roomId\": \"!orgrebase-formation:controlled.local\", \"sent\": true}, \"project_id\": \"orgrebase-formation-905f9cf1a656\", \"room_id\": \"!orgrebase-formation:controlled.local\", \"spec_path\": \"shared/tasks/at-reviewer-barrier-7e3227d5ab73/spec.md\", \"status\": \"submitted\", \"task_id\": \"at-reviewer-barrier-7e3227d5ab73\", \"task_title\": \"Independent reviewer barrier\", \"result_status\": \"SUCCESS\", \"summary\": \"{\\\"candidate_only\\\":true,\\\"canonical_target_writes\\\":0,\\\"control_plane_admission_required\\\":true,\\\"domain_id\\\":\\\"reviewer\\\",\\\"execution_plan_digest\\\":\\\"sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e\\\",\\\"execution_task_digest\\\":\\\"sha256:251a014d568254aa52ec9e0f12be1e2e98ad9b94d1d47cd3251d9cb901d211f3\\\",\\\"project_id\\\":\\\"orgrebase-formation-905f9cf1a656\\\",\\\"reviewed_task_ids\\\":[\\\"at-domain-legal-a3f56c48b0c5\\\",\\\"at-domain-product-f0e5afba2159\\\"],\\\"run_id\\\":\\\"run:formation-recheck:f256f60b26e54dd7802677eecfc395cd\\\",\\\"schema_version\\\":\\\"orgrebase.formation-taskflow-candidate.v1\\\",\\\"task_id\\\":\\\"at-reviewer-barrier-7e3227d5ab73\\\",\\\"task_kind\\\":\\\"REVIEWER_BARRIER\\\",\\\"verdict_candidate\\\":\\\"PASS\\\"}\", \"deliverables\": [], \"submitted_by_role\": \"worker\"}, \"publishedArtifacts\": [], \"synced\": true, \"notificationNeeded\": {\"event\": \"submit_task\", \"projectId\": \"orgrebase-formation-905f9cf1a656\", \"summary\": \"submit_task: at-reviewer-barrier-7e3227d5ab73 (SUCCESS)\", \"targetRoom\": \"!orgrebase-formation:controlled.local\"}}",
+        "type": "text"
+      }
+    ]
+  },
+  "schema_version": "orgrebase.teamharness-raw-mcp-action.v1",
+  "sequence": 17,
+  "tool": "taskflow"
+}

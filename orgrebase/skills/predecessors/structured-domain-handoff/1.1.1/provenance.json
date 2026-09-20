@@ -1,0 +1,42 @@
+{
+  "claim_boundary": "Exact read-only extraction of the six structured-domain-handoff 1.1.1 resources from a retained wheel. This provenance does not establish production use.",
+  "contract_content_digest": "sha256:923deeba0683d4a2def8556e27e3ada466d8e5f1f6b7dba5b656747c6aa3036f",
+  "digest": "sha256:bc9a5c9962148f6b17602365118910c193e20d0c5fc22ccf4c94d3864f82e068",
+  "extracted_resources": {
+    "SKILL.md": {
+      "sha256": "sha256:4c51a0bff0250e9582c1f5190440b0a688cf59c2cc2457e5e72117ef4e4fe28d",
+      "wheel_member": "orgrebase/skill_packages/structured-domain-handoff/SKILL.md"
+    },
+    "contract.json": {
+      "sha256": "sha256:f19ec4330375c3e2e245aca795ea008c0ff206d85daed75e4d16dc8cfde742e1",
+      "wheel_member": "orgrebase/skill_packages/structured-domain-handoff/contract.json"
+    },
+    "input.schema.json": {
+      "sha256": "sha256:2a10bdf91aa29cbcf1644db1247d3e69374c62a9cc0973fee8b4fce7b9ba75c5",
+      "wheel_member": "orgrebase/skill_packages/structured-domain-handoff/input.schema.json"
+    },
+    "output.schema.json": {
+      "sha256": "sha256:9007f560a373ab35ef27a6880082d8c9a200bdcd66452f99690b07d4d9786132",
+      "wheel_member": "orgrebase/skill_packages/structured-domain-handoff/output.schema.json"
+    },
+    "package.json": {
+      "sha256": "sha256:50bc71c94756077011c1147631e7b1b0e77dd3cf18666f636ae4763df4515811",
+      "wheel_member": "orgrebase/skill_packages/structured-domain-handoff/package.json"
+    },
+    "program.json": {
+      "sha256": "sha256:dce8a74720b2308e2dd2d1b8f391cd3ecfbdc1f43536153416eaed47105a0bfe",
+      "wheel_member": "orgrebase/skill_packages/structured-domain-handoff/program.json"
+    }
+  },
+  "manifest_digest": "sha256:7c6cc80c6c8076e3a8015eb106844b1cd6edc4b0dd1d859b05d231b7f32a84c1",
+  "program_content_digest": "sha256:494cfcf17dafecbb0a4902d1d6b6c7bc60a4e6bb7037213f159350acaf3d97ab",
+  "schema_version": "orgrebase.skill-predecessor-source.v1",
+  "skill_name": "structured-domain-handoff",
+  "skill_version": "1.1.1",
+  "source_kind": "RETAINED_WHEEL_READ_ONLY_EXTRACTION",
+  "source_wheel": {
+    "bytes": 898452,
+    "relative_path": "vendor/predecessors/enterprise-quote-compose/1.3.0/orgrebase-0.4.0-py3-none-any.whl",
+    "sha256": "sha256:92c9e9f64ad4562a4ec4b300de716e71aa18fd1fe1e2026598e157aa4959ec59"
+  }
+}

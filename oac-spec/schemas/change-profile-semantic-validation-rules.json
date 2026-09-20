@@ -1,0 +1,39 @@
+{
+  "apiVersion": "oac.change-profile/v0.1",
+  "authority": "No profile, plan or PlanCertificate grants execution authority.",
+  "descriptorDigest": "sha256:2238581f84f2e2d2980e3e21d4143b4cad54d2216a78e0e879ac62c5856ea491",
+  "jsonSchemaValidationScope": "structural_only",
+  "procedureRef": "profiles/change-profiles/retail-cancellation-review-v0.1/README.md",
+  "profileChoices": [
+    "oac.supplier.transfer/v0.2",
+    "oac.retail.cancellation-review/v0.1"
+  ],
+  "rules": [
+    {
+      "failureReason": "CHANGE_PROFILE_UNKNOWN",
+      "id": "CP-001",
+      "requirement": "Select an explicit package-supported profile; do not infer it from untrusted source or plan fields."
+    },
+    {
+      "failureReason": "CHANGE_PROFILE_INVALID",
+      "id": "CP-002",
+      "requirement": "The closed descriptor must match its package-pinned RFC 8785 SHA-256 digest."
+    },
+    {
+      "failureReason": "CHANGE_PROFILE_BINDING_MISMATCH",
+      "id": "CP-003",
+      "requirement": "Plan profileId, profileVersion and profileDigest must exactly equal the selected descriptor binding. The verifier emits the same binding into its PlanCertificate."
+    },
+    {
+      "failureReason": "CHANGE_PROFILE_DELTA_SET_INVALID",
+      "id": "CP-004",
+      "requirement": "The change contains exactly one delta at the selected path; all predicate evaluations receive that same path."
+    },
+    {
+      "failureReason": "UNSUPPORTED_SEMANTICS",
+      "id": "CP-005",
+      "requirement": "The selected semanticType, explicit Unknown states, source coherence, frozen roots, evidence, ordering and zero-effect ceiling use the existing shared relation."
+    }
+  ],
+  "verificationCommand": "oac verify SNAPSHOT CHANGE PLAN --profile PROFILE"
+}

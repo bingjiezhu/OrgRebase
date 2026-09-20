@@ -1,0 +1,270 @@
+{
+  "$defs": {
+    "EvidenceObligationFormationBinding": {
+      "additionalProperties": false,
+      "description": "One explicit causal edge from an OAC obligation to executable coverage.",
+      "properties": {
+        "capability_card_digests": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Capability Card Digests",
+          "type": "array"
+        },
+        "capability_card_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Capability Card Refs",
+          "type": "array"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "domain_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Domain Ids",
+          "type": "array"
+        },
+        "evidence_obligation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Evidence Obligation Digest",
+          "type": "string"
+        },
+        "evidence_obligation_ref": {
+          "additionalProperties": true,
+          "title": "Evidence Obligation Ref",
+          "type": "object"
+        },
+        "evidence_obligation_resource_id": {
+          "minLength": 1,
+          "title": "Evidence Obligation Resource Id",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "requirement_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requirement Refs",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "MAPPED_DOMAIN",
+            "MAPPED_CONTROL",
+            "UNKNOWN"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_obligation_ref",
+        "evidence_obligation_resource_id",
+        "evidence_obligation_digest",
+        "status",
+        "requirement_refs",
+        "domain_ids",
+        "capability_card_refs",
+        "capability_card_digests",
+        "reason_codes"
+      ],
+      "title": "EvidenceObligationFormationBinding",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-task-formation-decision-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Candidate-only, deterministic explanation of one minimum coalition.",
+  "properties": {
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "capability_catalog_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Capability Catalog Digest",
+      "type": "string"
+    },
+    "coalition_plan_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Coalition Plan Digest",
+      "type": "string"
+    },
+    "coalition_plan_ref": {
+      "minLength": 1,
+      "title": "Coalition Plan Ref",
+      "type": "string"
+    },
+    "compiler_version": {
+      "const": "organizational-demand-formation-compiler@1.0.0",
+      "default": "organizational-demand-formation-compiler@1.0.0",
+      "title": "Compiler Version",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "objective": {
+      "minLength": 1,
+      "title": "Objective",
+      "type": "string"
+    },
+    "obligation_bindings": {
+      "items": {
+        "$ref": "#/$defs/EvidenceObligationFormationBinding"
+      },
+      "minItems": 1,
+      "title": "Obligation Bindings",
+      "type": "array"
+    },
+    "organization_snapshot_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Organization Snapshot Digest",
+      "type": "string"
+    },
+    "organization_snapshot_ref": {
+      "minLength": 1,
+      "title": "Organization Snapshot Ref",
+      "type": "string"
+    },
+    "organizational_demand_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Organizational Demand Digest",
+      "type": "string"
+    },
+    "organizational_demand_ref": {
+      "minLength": 1,
+      "title": "Organizational Demand Ref",
+      "type": "string"
+    },
+    "policy_digests": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Policy Digests",
+      "type": "object"
+    },
+    "requirement_obligation_set_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Requirement Obligation Set Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.task-formation-decision-receipt.v1",
+      "default": "orgrebase.task-formation-decision-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selected_card_digests": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Selected Card Digests",
+      "type": "array"
+    },
+    "selected_card_refs": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Selected Card Refs",
+      "type": "array"
+    },
+    "selected_domain_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Selected Domain Ids",
+      "type": "array"
+    },
+    "task_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Task Digest",
+      "type": "string"
+    },
+    "task_ref": {
+      "minLength": 1,
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "template_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Template Digest",
+      "type": "string"
+    },
+    "template_ref": {
+      "minLength": 1,
+      "title": "Template Ref",
+      "type": "string"
+    },
+    "unknown_obligation_resource_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unknown Obligation Resource Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "organization_snapshot_ref",
+    "organization_snapshot_digest",
+    "organizational_demand_ref",
+    "organizational_demand_digest",
+    "task_ref",
+    "task_digest",
+    "template_ref",
+    "template_digest",
+    "coalition_plan_ref",
+    "coalition_plan_digest",
+    "capability_catalog_digest",
+    "policy_digests",
+    "objective",
+    "obligation_bindings",
+    "unknown_obligation_resource_ids",
+    "selected_domain_ids",
+    "selected_card_refs",
+    "selected_card_digests",
+    "requirement_obligation_set_digest"
+  ],
+  "title": "TaskFormationDecisionReceipt",
+  "type": "object"
+}

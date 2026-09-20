@@ -1,0 +1,153 @@
+{
+  "apiVersion": "oac.profile.semantic-rules/v0alpha1",
+  "kind": "ProfileSemanticRuleSet",
+  "ruleSetId": "oac.supplier.transfer/semantic-rules/v0.2-revision-2",
+  "profileId": "oac.supplier.transfer",
+  "profileVersion": "v0.2",
+  "rules": [
+    {
+      "ruleId": "OAC-SUP-SEM-001",
+      "ruleVersion": "1.0.0",
+      "scope": "root_authority",
+      "statement": "A retracted changed subject fails before closure; candidate or disputed changed subjects seed Unknown, set rootApplicabilityUnknown, and cannot be upgraded by a rule or later edge.",
+      "normativeRef": "profiles/supplier-change/profile.md#impact-closure",
+      "reasonCodes": [
+        "CANDIDATE_INPUT_NOT_AUTHORITY",
+        "RETRACTED_SOURCE_EXCLUDED"
+      ],
+      "testClasses": [
+        "candidate-root",
+        "disputed-root",
+        "retracted-root"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-002",
+      "ruleVersion": "1.0.0",
+      "scope": "applicability_ledger",
+      "statement": "Every declared edge, rule, and duty has an applicability evaluation; a retracted source evaluates FALSE and cannot materialize a path but remains visible in the ledger.",
+      "normativeRef": "profiles/supplier-change/profile.md#versioned-applicability",
+      "reasonCodes": [
+        "RETRACTED_SOURCE_EXCLUDED"
+      ],
+      "testClasses": [
+        "retracted-edge-ledger",
+        "retracted-rule-ledger",
+        "retracted-duty-ledger"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-003",
+      "ruleVersion": "1.0.0",
+      "scope": "reason_projection",
+      "statement": "Candidate or disputed source authority uses CANDIDATE_INPUT_NOT_AUTHORITY in predicate evaluation; dependency closure additionally uses CANDIDATE_EDGE_NOT_AUTHORITY on a guarded candidate edge path.",
+      "normativeRef": "profiles/supplier-change/profile.md#versioned-applicability",
+      "reasonCodes": [
+        "CANDIDATE_EDGE_NOT_AUTHORITY",
+        "CANDIDATE_INPUT_NOT_AUTHORITY"
+      ],
+      "testClasses": [
+        "candidate-edge-reason",
+        "disputed-edge-reason"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-004",
+      "ruleVersion": "1.0.0",
+      "scope": "impact_closure",
+      "statement": "All independent node-simple paths are preserved through maxDepth; an admitted continuation beyond the limit converts the frontier and conservatively reachable residuals to Unknown rather than proving non-impact.",
+      "normativeRef": "profiles/supplier-change/profile.md#impact-closure",
+      "reasonCodes": [
+        "IMPACT_SEARCH_TRUNCATED"
+      ],
+      "testClasses": [
+        "max-depth-one",
+        "max-depth-two",
+        "candidate-downstream-source"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-005",
+      "ruleVersion": "1.0.0",
+      "scope": "bounded_non_impact",
+      "statement": "unaffected_proven requires an admitted root, admitted TRUE prefix, admitted FALSE cut, no bypass, complete coverage, decisive evaluation references, and no reachable continuation hidden beyond maxDepth.",
+      "normativeRef": "profiles/supplier-change/profile.md#impact-closure",
+      "reasonCodes": [],
+      "testClasses": [
+        "candidate-residual-with-authoritative-cut",
+        "candidate-residual-without-authoritative-cut",
+        "truncated-residual"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-006",
+      "ruleVersion": "1.0.0",
+      "scope": "residual_projection",
+      "statement": "A complete-boundary retracted residual node emits an out_of_declared_scope path with origin excluded; candidate, disputed, or uncovered residuals remain Unknown unless OAC-SUP-SEM-005 is satisfied.",
+      "normativeRef": "profiles/supplier-change/profile.md#impact-closure",
+      "reasonCodes": [
+        "CANDIDATE_INPUT_NOT_AUTHORITY",
+        "GRAPH_COVERAGE_PARTIAL",
+        "RETRACTED_SOURCE_EXCLUDED"
+      ],
+      "testClasses": [
+        "retracted-residual",
+        "candidate-residual",
+        "uncovered-residual"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-007",
+      "ruleVersion": "1.0.0",
+      "scope": "discovery_obligation",
+      "statement": "Legacy per-target discovery uses obligationType discover_dependency and requiredEvidence dependency_admission_decision; contextual aggregate discovery uses its explicit target, type, and evidence triple.",
+      "normativeRef": "profiles/supplier-change/profile.md#impact-closure",
+      "reasonCodes": [],
+      "testClasses": [
+        "legacy-discovery-fallback",
+        "contextual-discovery-aggregate"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-008",
+      "ruleVersion": "1.0.0",
+      "scope": "boundary_identity",
+      "statement": "A partial or unknown completeness manifest with no known gap and no explicit discovery target emits urn:oac:boundary:unobserved as its implicit gap target.",
+      "normativeRef": "profiles/supplier-change/profile.md#impact-closure",
+      "reasonCodes": [
+        "GRAPH_COVERAGE_PARTIAL"
+      ],
+      "testClasses": [
+        "partial-implicit-boundary"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-009",
+      "ruleVersion": "1.0.0",
+      "scope": "unresolved_projection",
+      "statement": "unresolvedRefs contains emitted Unknown paths, Unknown evaluations referenced by emitted paths, and the change ID for an Unknown root; unrelated Unknown evaluations remain ledger-only.",
+      "normativeRef": "profiles/supplier-change/profile.md#profilederivationreport-projection",
+      "reasonCodes": [],
+      "testClasses": [
+        "referenced-unknown-evaluation",
+        "unreferenced-unknown-evaluation"
+      ]
+    },
+    {
+      "ruleId": "OAC-SUP-SEM-010",
+      "ruleVersion": "1.0.0",
+      "scope": "error_precedence",
+      "statement": "An admitted UnknownTransitionDuty that evaluates UNKNOWN without an admitted target and required role fails UNKNOWN_TRANSITION_DUTY_INVALID before prerequisite-order construction.",
+      "normativeRef": "profiles/supplier-change/profile.md#impact-closure",
+      "reasonCodes": [
+        "UNKNOWN_TRANSITION_DUTY_INVALID"
+      ],
+      "testClasses": [
+        "candidate-duty-role",
+        "disputed-duty-role",
+        "retracted-duty-role"
+      ]
+    }
+  ],
+  "digest": "sha256:b1f390a1c664b45c1762732aeca6fa7bb4f9238fe25f0183e774146c05ea12e8"
+}

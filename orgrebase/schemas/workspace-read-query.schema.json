@@ -1,0 +1,82 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-read-query.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connector_id": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Connector Id",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "field": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9_]{0,127}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Field"
+    },
+    "operator": {
+      "enum": [
+        "eq",
+        "is_missing"
+      ],
+      "title": "Operator",
+      "type": "string"
+    },
+    "record_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 1000,
+      "minItems": 1,
+      "title": "Record Ids",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "orgrebase.bounded-read-query.v1",
+      "default": "orgrebase.bounded-read-query.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Value"
+    }
+  },
+  "required": [
+    "connector_id",
+    "record_ids",
+    "operator"
+  ],
+  "title": "ReadQuery",
+  "type": "object"
+}

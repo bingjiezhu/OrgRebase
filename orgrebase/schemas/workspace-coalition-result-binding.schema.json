@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-coalition-result-binding.schema.json",
+  "$defs": {
+    "CoalitionDomainResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {"enum": ["product", "legal", "finance", "gtm"]},
+        "task_id": {"type": "string", "minLength": 1},
+        "attempt": {"const": 1},
+        "plan_revision": {"const": 1},
+        "task_binding_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "admission_binding_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "delegation_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "context_projection_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "source_lock_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "observed_result_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "control_decision_ref": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "status": {"const": "completed"},
+        "candidate_only": {"const": true},
+        "target_writes": {"const": 0}
+      },
+      "required": [
+        "domain",
+        "task_id",
+        "attempt",
+        "plan_revision",
+        "task_binding_digest",
+        "admission_binding_digest",
+        "delegation_digest",
+        "context_projection_digest",
+        "source_lock_digest",
+        "observed_result_digest",
+        "control_decision_ref",
+        "status",
+        "candidate_only",
+        "target_writes"
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-coalition-result-binding.v1"},
+    "evidence_class": {"const": "CONTROLLED_LOCAL_FOUR_DOMAIN_CANDIDATE_COMPOSITION"},
+    "claim_boundary": {"const": "FOUR_ADMITTED_CONTROLLED_CANDIDATES_NOT_INDEPENDENT_AGENT_REASONING"},
+    "run_id": {"type": "string", "minLength": 1},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "project_id": {"type": "string", "minLength": 1},
+    "plan_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "native_receipt_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "members": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/CoalitionDomainResult"}, {"properties": {"domain": {"const": "product"}}}]},
+        {"allOf": [{"$ref": "#/$defs/CoalitionDomainResult"}, {"properties": {"domain": {"const": "legal"}}}]},
+        {"allOf": [{"$ref": "#/$defs/CoalitionDomainResult"}, {"properties": {"domain": {"const": "finance"}}}]},
+        {"allOf": [{"$ref": "#/$defs/CoalitionDomainResult"}, {"properties": {"domain": {"const": "gtm"}}}]}
+      ],
+      "items": false
+    },
+    "candidate_only": {"const": true},
+    "target_writes": {"const": 0},
+    "coalition_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "required": [
+    "schema_version",
+    "evidence_class",
+    "claim_boundary",
+    "run_id",
+    "nonce",
+    "project_id",
+    "plan_digest",
+    "native_receipt_digest",
+    "members",
+    "candidate_only",
+    "target_writes",
+    "coalition_digest"
+  ]
+}

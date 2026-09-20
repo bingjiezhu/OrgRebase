@@ -1,0 +1,2 @@
+# Exact generator recorded in the independently installed tau2 WHEEL metadata.
+hatchling==1.32.0

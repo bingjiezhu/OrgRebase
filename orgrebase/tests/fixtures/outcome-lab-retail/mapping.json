@@ -1,0 +1,182 @@
+{
+  "digest": "sha256:c11d434db25f71f1ca0ba4e28d95a3f2ef63a9388ac41c6717f367ad76447cff",
+  "schema_version": "orgrebase.outcome-lab.mapping.v1",
+  "upstream_repository": "https://github.com/sierra-research/tau2-bench",
+  "upstream_revision": "672227c6b6676edc20d57ea53b7000262aae77b9",
+  "task_id": "113",
+  "oac_profile": "oac.retail.cancellation-review/v0.1",
+  "task_digest": "sha256:b99f88d7068b70e913aba09e9e4200b38bfa8a64c8c05ffb2d46262834b19ed9",
+  "environment_build_digest": "sha256:1c9853f66a02fa6ede41370fc11bca9d7ea42679302caec282a7550912e8aa1b",
+  "seed_root": "sha256:3ca5bd70e621602e23d909c87f26224a1a486e75955d8a6da53721ec224b23dc",
+  "snapshot_digest": "sha256:12861e2957b302302c8a5b5882901acf11b0cc7362396d5cfa70aa6249f558a7",
+  "change_digest": "sha256:9c6e4ea4469944992f785cbfbd35a8e94daece00cf713a6646f88b247a314129",
+  "plan_digest": "sha256:d0bb58fb7231df43c7eb248494669e538998fde59dc270f390ae5c11fe4f14ce",
+  "subjects": {
+    "request:113": "/users/yara_muller_8652",
+    "order:5056519": "/orders/#W5056519",
+    "order:5995614": "/orders/#W5995614"
+  },
+  "grants": [
+    {
+      "digest": "sha256:3ffacc92608f4f44e5679f9bb93585d7ba0c3c0429cc553eb2804d3f7a458c9d",
+      "request": {
+        "digest": "sha256:b4367eac72be487bd320ce7b899416fd90d872ea3ef632070f24560d4d778902",
+        "tool": "find_user_id_by_name_zip",
+        "arguments": {
+          "first_name": "Yara",
+          "last_name": "Muller",
+          "zip": "85041"
+        }
+      },
+      "role": "role:review",
+      "obligation_ref": "urn:oac:mvp:obligation:804447066f14c5fb9926fcea",
+      "evidence_ref": "evidence:review",
+      "mutates_state": false
+    },
+    {
+      "digest": "sha256:26b1b404853984d1889dd2d1180ef8eb9c4a134f4a81094b0647be33949230f5",
+      "request": {
+        "digest": "sha256:822769862cbdbb54f52fd0de3b0bd4420997506488ad30b3cf8c5197d6c243be",
+        "tool": "get_user_details",
+        "arguments": {
+          "user_id": "yara_muller_8652"
+        }
+      },
+      "role": "role:review",
+      "obligation_ref": "urn:oac:mvp:obligation:804447066f14c5fb9926fcea",
+      "evidence_ref": "evidence:review",
+      "mutates_state": false
+    },
+    {
+      "digest": "sha256:92fcad95a383f368cba846ea7615a55268f7f6ca6c8ad24df55a831690766974",
+      "request": {
+        "digest": "sha256:e6fdc969577f9508eaf9c86793670ab88513203801c65b83c77e000316d5c18c",
+        "tool": "get_order_details",
+        "arguments": {
+          "order_id": "#W9384736"
+        }
+      },
+      "role": "role:review",
+      "obligation_ref": "urn:oac:mvp:obligation:804447066f14c5fb9926fcea",
+      "evidence_ref": "evidence:review",
+      "mutates_state": false
+    },
+    {
+      "digest": "sha256:23631abf2f54d06d714c71e1566b9e0cc6d12c0738aaf6e77be7f224fb26bed8",
+      "request": {
+        "digest": "sha256:4f578401ea3d0c7c0b712e2eb2934bb4a650f5520741ecb2304247149e072ad9",
+        "tool": "get_order_details",
+        "arguments": {
+          "order_id": "#W5056519"
+        }
+      },
+      "role": "role:review",
+      "obligation_ref": "urn:oac:mvp:obligation:804447066f14c5fb9926fcea",
+      "evidence_ref": "evidence:review",
+      "mutates_state": false
+    },
+    {
+      "digest": "sha256:285c984973c31b6d221d48467013697ca52e98edf2f742058ea9d0ecf435ddb7",
+      "request": {
+        "digest": "sha256:56930b0c34e50f43f3c62e271a471e50db7c982cec95760f34eccae3fe2e8cbd",
+        "tool": "get_order_details",
+        "arguments": {
+          "order_id": "#W5995614"
+        }
+      },
+      "role": "role:review",
+      "obligation_ref": "urn:oac:mvp:obligation:804447066f14c5fb9926fcea",
+      "evidence_ref": "evidence:review",
+      "mutates_state": false
+    },
+    {
+      "digest": "sha256:6a32cadad72b17288697f620c1b21635d0c3f85df8e830b4e4419b58d466c329",
+      "request": {
+        "digest": "sha256:8d63f3595c59036ed371894796fbe840ee289113e385b91b8d2777df9b29efb8",
+        "tool": "get_order_details",
+        "arguments": {
+          "order_id": "#W8277957"
+        }
+      },
+      "role": "role:review",
+      "obligation_ref": "urn:oac:mvp:obligation:804447066f14c5fb9926fcea",
+      "evidence_ref": "evidence:review",
+      "mutates_state": false
+    },
+    {
+      "digest": "sha256:bfbe8e4de906a5ae0969332509f29100a25c7e2e475601b4532815fc86add962",
+      "request": {
+        "digest": "sha256:94b8a0f7a77f470c68c2a15651b5709d630fc6b5751202a12fb62fd13a3e9802",
+        "tool": "cancel_pending_order",
+        "arguments": {
+          "order_id": "#W5056519",
+          "reason": "ordered by mistake"
+        }
+      },
+      "role": "role:cancel",
+      "obligation_ref": "urn:oac:mvp:obligation:2d756684e7039f393e2e732c",
+      "evidence_ref": "evidence:cancel:5056519",
+      "mutates_state": true
+    },
+    {
+      "digest": "sha256:65d67a9369d879ff62987cf7cfd57ff0e84a22306965d3d9229bc7a6ff6c56db",
+      "request": {
+        "digest": "sha256:67046dba3aa512db3845a41dd359aad6c46012de0ff07ac9c3ce3a1cdc41fd70",
+        "tool": "cancel_pending_order",
+        "arguments": {
+          "order_id": "#W5995614",
+          "reason": "ordered by mistake"
+        }
+      },
+      "role": "role:cancel",
+      "obligation_ref": "urn:oac:mvp:obligation:f43382c6b7e69b3175120b8e",
+      "evidence_ref": "evidence:cancel:5995614",
+      "mutates_state": true
+    }
+  ],
+  "system_roles": {
+    "fixed-team": [
+      "role:cancel",
+      "role:review"
+    ],
+    "initiator-only": [
+      "role:review"
+    ],
+    "graph-only": [
+      "role:review"
+    ],
+    "oac": [
+      "role:cancel",
+      "role:review"
+    ]
+  },
+  "writable_paths": [
+    "/orders/#W5056519/cancel_reason",
+    "/orders/#W5056519/payment_history",
+    "/orders/#W5056519/status",
+    "/orders/#W5995614/cancel_reason",
+    "/orders/#W5995614/payment_history",
+    "/orders/#W5995614/status"
+  ],
+  "required_evidence": [
+    "evidence:cancel:5056519",
+    "evidence:cancel:5995614",
+    "evidence:review"
+  ],
+  "oracle_digest": "sha256:c21edbc6527870eb3c4a9c48aa3a8e7a875c30bbccde89c956c07da5fa99db48",
+  "unsupported": [
+    "interactive-user-simulation",
+    "natural-language-assertion-grading",
+    "real-user-identity",
+    "real-refund-effects",
+    "other-retail-tasks",
+    "organization-ground-truth",
+    "enterprise-roi"
+  ],
+  "budget": {
+    "digest": "sha256:7f1b6b6169f8a4ce2725cade3749371d5ff3d39cf7bf9e1610f017c6c5cf8c64",
+    "tool_calls": 12,
+    "write_calls": 2,
+    "elapsed_seconds": 120.0
+  }
+}

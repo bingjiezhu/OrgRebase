@@ -1,0 +1,665 @@
+{
+  "$defs": {
+    "CandidateSemanticMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptation_run_id": {
+          "minLength": 1,
+          "title": "Adaptation Run Id",
+          "type": "string"
+        },
+        "candidate_only": {
+          "const": true,
+          "default": true,
+          "title": "Candidate Only",
+          "type": "boolean"
+        },
+        "canonical_target_writes": {
+          "const": 0,
+          "default": 0,
+          "title": "Canonical Target Writes",
+          "type": "integer"
+        },
+        "component_kind": {
+          "$ref": "#/$defs/SeedComponentKind"
+        },
+        "declared_unknowns": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Declared Unknowns",
+          "type": "array"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "effect_ceiling": {
+          "const": "ZERO_EXTERNAL_EFFECTS",
+          "default": "ZERO_EXTERNAL_EFFECTS",
+          "title": "Effect Ceiling",
+          "type": "string"
+        },
+        "producer": {
+          "minLength": 1,
+          "title": "Producer",
+          "type": "string"
+        },
+        "reason_codes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "orgrebase.oac-candidate-semantic-mapping.v1",
+          "default": "orgrebase.oac-candidate-semantic-mapping.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Digest",
+          "type": "string"
+        },
+        "source_root_ref": {
+          "minLength": 1,
+          "title": "Source Root Ref",
+          "type": "string"
+        },
+        "target_oac_paths": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Target Oac Paths",
+          "type": "array"
+        },
+        "task_id": {
+          "minLength": 1,
+          "title": "Task Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "adaptation_run_id",
+        "component_kind",
+        "source_root_ref",
+        "source_digest",
+        "producer",
+        "task_id",
+        "target_oac_paths"
+      ],
+      "title": "CandidateSemanticMapping",
+      "type": "object"
+    },
+    "OACAgentModelObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "credential_material_persisted": {
+          "const": false,
+          "default": false,
+          "title": "Credential Material Persisted",
+          "type": "boolean"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Code"
+        },
+        "evidence_class": {
+          "minLength": 1,
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "finish_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Finish Reason"
+        },
+        "input_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Input Digest",
+          "type": "string"
+        },
+        "input_tokens": {
+          "minimum": 0,
+          "title": "Input Tokens",
+          "type": "integer"
+        },
+        "latency_ms": {
+          "minimum": 0,
+          "title": "Latency Ms",
+          "type": "integer"
+        },
+        "model_id": {
+          "enum": [
+            "gemini-3.7-flash",
+            "gemini-3.8-flash"
+          ],
+          "title": "Model Id",
+          "type": "string"
+        },
+        "model_version": {
+          "enum": [
+            "gemini-3.7-flash",
+            "gemini-3.8-flash"
+          ],
+          "title": "Model Version",
+          "type": "string"
+        },
+        "output_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Digest"
+        },
+        "output_schema_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Output Schema Digest",
+          "type": "string"
+        },
+        "output_tokens": {
+          "minimum": 0,
+          "title": "Output Tokens",
+          "type": "integer"
+        },
+        "provider": {
+          "const": "vertex-ai",
+          "default": "vertex-ai",
+          "title": "Provider",
+          "type": "string"
+        },
+        "provider_request_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider Request Id"
+        },
+        "provider_response_receipt_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Provider Response Receipt Digest",
+          "type": "string"
+        },
+        "raw_prompt_persisted": {
+          "const": false,
+          "default": false,
+          "title": "Raw Prompt Persisted",
+          "type": "boolean"
+        },
+        "raw_provider_body_persisted": {
+          "const": false,
+          "default": false,
+          "title": "Raw Provider Body Persisted",
+          "type": "boolean"
+        },
+        "request_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Request Digest",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "orgrebase.oac-agent-model-observation.v1",
+          "default": "orgrebase.oac-agent-model-observation.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "VALID",
+            "ABSTAIN",
+            "SCHEMA_ERROR",
+            "PROVIDER_ERROR",
+            "NOT_RUN"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_id",
+        "model_version",
+        "request_digest",
+        "input_digest",
+        "output_schema_digest",
+        "provider_response_receipt_digest",
+        "status",
+        "evidence_class",
+        "input_tokens",
+        "output_tokens",
+        "latency_ms"
+      ],
+      "title": "OACAgentModelObservation",
+      "type": "object"
+    },
+    "OACAgentTeamsMappingLifecycle": {
+      "additionalProperties": false,
+      "properties": {
+        "action_sequence": {
+          "items": {
+            "enum": [
+              "create_project",
+              "plan_dag",
+              "ready_nodes",
+              "delegate_task",
+              "ack_task",
+              "submit_task",
+              "check_task",
+              "accept_task_result",
+              "complete_project"
+            ],
+            "type": "string"
+          },
+          "title": "Action Sequence",
+          "type": "array"
+        },
+        "actions": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "maxItems": 9,
+          "minItems": 9,
+          "title": "Actions",
+          "type": "array"
+        },
+        "agentteams_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Agentteams Commit",
+          "type": "string"
+        },
+        "agentteams_version": {
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Agentteams Version",
+          "type": "string"
+        },
+        "assignment_event_id": {
+          "minLength": 1,
+          "title": "Assignment Event Id",
+          "type": "string"
+        },
+        "candidate_only": {
+          "const": true,
+          "default": true,
+          "title": "Candidate Only",
+          "type": "boolean"
+        },
+        "canonical_target_writes": {
+          "const": 0,
+          "default": 0,
+          "title": "Canonical Target Writes",
+          "type": "integer"
+        },
+        "claim_boundary": {
+          "const": "PINNED_IN_PROCESS_CALL_TOOL_WITH_LIVE_MODEL_CANDIDATE_NOT_LIVE_DISTRIBUTED_WORKER",
+          "default": "PINNED_IN_PROCESS_CALL_TOOL_WITH_LIVE_MODEL_CANDIDATE_NOT_LIVE_DISTRIBUTED_WORKER",
+          "title": "Claim Boundary",
+          "type": "string"
+        },
+        "context_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Context Digest",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "evidence_class": {
+          "const": "CONTROLLED_LOCAL_NATIVE_TASKFLOW",
+          "default": "CONTROLLED_LOCAL_NATIVE_TASKFLOW",
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "matrix_request_count": {
+          "minimum": 1,
+          "title": "Matrix Request Count",
+          "type": "integer"
+        },
+        "observed_result_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Observed Result Digest",
+          "type": "string"
+        },
+        "project_id": {
+          "minLength": 1,
+          "title": "Project Id",
+          "type": "string"
+        },
+        "project_terminal_state": {
+          "const": "completed",
+          "default": "completed",
+          "title": "Project Terminal State",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "orgrebase.oac-agentteams-mapping-lifecycle.v1",
+          "default": "orgrebase.oac-agentteams-mapping-lifecycle.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_lock_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Lock Digest",
+          "type": "string"
+        },
+        "submitted_result_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Submitted Result Digest",
+          "type": "string"
+        },
+        "task_id": {
+          "minLength": 1,
+          "title": "Task Id",
+          "type": "string"
+        },
+        "task_spec_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Task Spec Digest",
+          "type": "string"
+        },
+        "worker_ref": {
+          "const": "@oac-intake-mapper:controlled.local",
+          "default": "@oac-intake-mapper:controlled.local",
+          "title": "Worker Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "agentteams_version",
+        "agentteams_commit",
+        "source_lock_digest",
+        "run_id",
+        "project_id",
+        "task_id",
+        "context_digest",
+        "task_spec_digest",
+        "submitted_result_digest",
+        "observed_result_digest",
+        "actions",
+        "action_sequence",
+        "matrix_request_count",
+        "assignment_event_id"
+      ],
+      "title": "OACAgentTeamsMappingLifecycle",
+      "type": "object"
+    },
+    "OACAgentValidationCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "check_id": {
+          "minLength": 1,
+          "title": "Check Id",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "reason_code": {
+          "minLength": 1,
+          "title": "Reason Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "check_id",
+        "passed",
+        "reason_code"
+      ],
+      "title": "OACAgentValidationCheck",
+      "type": "object"
+    },
+    "OACAgentValidationReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_mapping_set_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Accepted Mapping Set Digest"
+        },
+        "candidate_only": {
+          "const": true,
+          "default": true,
+          "title": "Candidate Only",
+          "type": "boolean"
+        },
+        "canonical_target_writes": {
+          "const": 0,
+          "default": 0,
+          "title": "Canonical Target Writes",
+          "type": "integer"
+        },
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/OACAgentValidationCheck"
+          },
+          "minItems": 1,
+          "title": "Checks",
+          "type": "array"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "orgrebase.oac-agent-validation.v1",
+          "default": "orgrebase.oac-agent-validation.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        }
+      },
+      "required": [
+        "verdict",
+        "checks",
+        "reason_codes"
+      ],
+      "title": "OACAgentValidationReceipt",
+      "type": "object"
+    },
+    "SeedComponentKind": {
+      "enum": [
+        "DOMAIN",
+        "KNOWLEDGE",
+        "AUTHORITY",
+        "CAPABILITY",
+        "DEPENDENCY"
+      ],
+      "title": "SeedComponentKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accepted_mapping_set_digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Accepted Mapping Set Digest"
+    },
+    "accepted_mappings": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CandidateSemanticMapping"
+      },
+      "title": "Accepted Mappings",
+      "type": "array"
+    },
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "baseline_mapping_set_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Baseline Mapping Set Digest",
+      "type": "string"
+    },
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "human_approval_granted": {
+      "const": false,
+      "default": false,
+      "title": "Human Approval Granted",
+      "type": "boolean"
+    },
+    "input_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Input Digest",
+      "type": "string"
+    },
+    "mapping_mode": {
+      "const": "LIVE_AGENT_ATTEMPT",
+      "default": "LIVE_AGENT_ATTEMPT",
+      "title": "Mapping Mode",
+      "type": "string"
+    },
+    "model_observation": {
+      "$ref": "#/$defs/OACAgentModelObservation"
+    },
+    "native_agentteams": {
+      "$ref": "#/$defs/OACAgentTeamsMappingLifecycle"
+    },
+    "oac_source_admitted": {
+      "const": false,
+      "default": false,
+      "title": "Oac Source Admitted",
+      "type": "boolean"
+    },
+    "pack_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "profile_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-agent-mapping-receipt.v1",
+      "default": "orgrebase.oac-agent-mapping-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "VALIDATED_CANDIDATE",
+        "HOLD"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "validation": {
+      "$ref": "#/$defs/OACAgentValidationReceipt"
+    }
+  },
+  "required": [
+    "status",
+    "adaptation_run_id",
+    "profile_digest",
+    "pack_digest",
+    "baseline_mapping_set_digest",
+    "input_digest",
+    "model_observation",
+    "native_agentteams",
+    "validation"
+  ],
+  "title": "OACAgentMappingReceipt",
+  "type": "object"
+}

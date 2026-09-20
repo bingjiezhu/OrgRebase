@@ -1,0 +1,84 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "implementationBindings": {
+    "python": {
+      "cli": "oac validate RESOURCE",
+      "library": "oac.canonical.parse_resource"
+    }
+  },
+  "registries": [
+    "kind-registry.json",
+    "predicate-version-registry.json",
+    "reason-code-registry.json",
+    "semantic-validation-rules.json",
+    "normative-semantic-validation-rules.json",
+    "runtime-lowering-semantic-validation-rules.json",
+    "normative-runtime-lowering-semantic-validation-rules.json",
+    "evolution-semantic-validation-rules.json",
+    "change-profile-semantic-validation-rules.json",
+    "outcome-profile-semantic-validation-rules.json"
+  ],
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "schemas": [
+    "OrgChangeCase.schema.json",
+    "OrganizationPlan.schema.json",
+    "OrganizationSnapshot.schema.json",
+    "OrganizationalDemand.schema.json",
+    "OutcomeCertificate.schema.json",
+    "PlanCertificate.schema.json",
+    "RuntimeBinding.schema.json",
+    "RuntimeLoweringReceipt.schema.json",
+    "SemanticChangeSet.schema.json",
+    "SourceAdmissionReceipt.schema.json",
+    "ZeroEffectRuntimeBundle.schema.json",
+    "ApplicabilityEvaluation.schema.json",
+    "ChangeProfileDescriptor.schema.json",
+    "ContextualApplicabilityPredicate.schema.json",
+    "OutcomeProfileDescriptor.schema.json",
+    "ProfileDerivationReport.schema.json",
+    "UnknownTransitionDuty.schema.json"
+  ],
+  "validationScope": {
+    "extensionSemanticValidation": [
+      {
+        "appliesWhen": "spec.profileBinding is present",
+        "developmentRegistry": "outcome-profile-semantic-validation-rules.json",
+        "kinds": [
+          "OutcomeCertificate"
+        ],
+        "normativeProcedureRef": "profiles/outcome-profiles/disposable-local-v0.1/README.md"
+      },
+      {
+        "appliesWhen": "spec.profileBinding is present",
+        "developmentRegistry": "change-profile-semantic-validation-rules.json",
+        "kinds": [
+          "OrganizationPlan",
+          "PlanCertificate"
+        ],
+        "normativeProcedureRef": "profiles/change-profiles/retail-cancellation-review-v0.1/README.md"
+      },
+      {
+        "developmentRegistry": "runtime-lowering-semantic-validation-rules.json",
+        "kinds": [
+          "RuntimeBinding",
+          "RuntimeLoweringReceipt",
+          "ZeroEffectRuntimeBundle"
+        ],
+        "normativeProcedureRef": "standard/oac-runtime-lowering-v0.1.md",
+        "normativeRegistry": "normative-runtime-lowering-semantic-validation-rules.json"
+      },
+      {
+        "developmentRegistry": "evolution-semantic-validation-rules.json",
+        "kinds": [
+          "OrganizationalDemand",
+          "OutcomeCertificate",
+          "SourceAdmissionReceipt"
+        ],
+        "normativeProcedureRef": "specs/009-proof-carrying-evolution-minimum-profile/spec.md"
+      }
+    ],
+    "jsonSchema": "structural_only",
+    "normativeProcedureRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+    "semanticValidationRequired": true
+  }
+}

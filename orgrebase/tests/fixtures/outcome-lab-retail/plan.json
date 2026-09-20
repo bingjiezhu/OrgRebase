@@ -1,0 +1,321 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "digest": "sha256:d0bb58fb7231df43c7eb248494669e538998fde59dc270f390ae5c11fe4f14ce",
+  "kind": "OrganizationPlan",
+  "metadata": {
+    "createdAt": "2026-09-10T00:00:00Z",
+    "effectiveFrom": "2026-09-10T00:00:00Z",
+    "effectiveTo": null,
+    "governanceRef": "governance:local-lab",
+    "id": "urn:oac:change-plan:2238581f84f2e2d2980e3e21d4143b4cad54d2216a78e0e879ac62c5856ea491:12861e2957b302302c8a5b5882901acf11b0cc7362396d5cfa70aa6249f558a7:9c6e4ea4469944992f785cbfbd35a8e94daece00cf713a6646f88b247a314129",
+    "namespace": "orgrebase.lab.retail",
+    "ownerRef": "role:review",
+    "revision": 1,
+    "sourceRefs": [
+      "snapshot:retail-113",
+      "change:retail-113"
+    ]
+  },
+  "spec": {
+    "applicabilityEvaluations": [
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:082e1612220bd824c4d016bb",
+        "predicateVersion": "oac.supplier.transfer/v0alpha1",
+        "reasonCodes": [],
+        "result": "TRUE",
+        "sourceRef": "rule:cancel:5056519",
+        "witnessRefs": [
+          "change:retail-113#/digest",
+          "change:retail-113#/spec/admissionStatus",
+          "change:retail-113#/spec/deltas/0/after/state",
+          "change:retail-113#/spec/deltas/0/after/value",
+          "change:retail-113#/spec/semanticType",
+          "snapshot:retail-113#/digest",
+          "snapshot:retail-113#/spec/impactRules/0",
+          "snapshot:retail-113#/spec/impactRules/0/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:1191d6c524fc4ee29aba21bf",
+        "predicateVersion": "oac.supplier.transfer/v0alpha1",
+        "reasonCodes": [],
+        "result": "TRUE",
+        "sourceRef": "rule:review",
+        "witnessRefs": [
+          "change:retail-113#/digest",
+          "change:retail-113#/spec/admissionStatus",
+          "change:retail-113#/spec/deltas/0/after/state",
+          "change:retail-113#/spec/deltas/0/after/value",
+          "change:retail-113#/spec/semanticType",
+          "snapshot:retail-113#/digest",
+          "snapshot:retail-113#/spec/impactRules/2",
+          "snapshot:retail-113#/spec/impactRules/2/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:fb534fe027b6856ed51e3d30",
+        "predicateVersion": "oac.supplier.transfer/v0alpha1",
+        "reasonCodes": [],
+        "result": "TRUE",
+        "sourceRef": "rule:cancel:5995614",
+        "witnessRefs": [
+          "change:retail-113#/digest",
+          "change:retail-113#/spec/admissionStatus",
+          "change:retail-113#/spec/deltas/0/after/state",
+          "change:retail-113#/spec/deltas/0/after/value",
+          "change:retail-113#/spec/semanticType",
+          "snapshot:retail-113#/digest",
+          "snapshot:retail-113#/spec/impactRules/1",
+          "snapshot:retail-113#/spec/impactRules/1/admissionStatus"
+        ]
+      }
+    ],
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:9c6e4ea4469944992f785cbfbd35a8e94daece00cf713a6646f88b247a314129",
+      "kind": "SemanticChangeSet",
+      "namespace": "orgrebase.lab.retail",
+      "resourceId": "change:retail-113",
+      "revision": 1
+    },
+    "compilerId": "oac.reference.declarative-change",
+    "compilerVersion": "0.3.0a0",
+    "decisions": [
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:61c84008a288258605c8ccfa6d5180eb41989b327c1da1986cf9456263f72a37",
+        "disposition": "included",
+        "inputClass": "admitted",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ],
+        "subjectRef": "principal:review"
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:834e79628c3805399ba1db715ea24b54696fd6f58d070905e3fe4e55dfe73f41",
+        "disposition": "included",
+        "inputClass": "admitted",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ],
+        "subjectRef": "role:review"
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:92edf8eb8e449973a407b730308e315e0fa54640e473d08839f9c57542a74a8d",
+        "disposition": "included",
+        "inputClass": "admitted",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ],
+        "subjectRef": "role:cancel"
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:a5b4589bd52e427138e4cdd462111b0f5b1d09df197cdd066e45e53b63e5c3fb",
+        "disposition": "included",
+        "inputClass": "admitted",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ],
+        "subjectRef": "principal:cancel"
+      }
+    ],
+    "effectCeiling": "zero_effect",
+    "happensBefore": [],
+    "impactPaths": [
+      {
+        "edgeRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:fb534fe027b6856ed51e3d30"
+        ],
+        "origin": "rule",
+        "pathId": "urn:oac:mvp:path:11d84c3b488eab43369d5bba",
+        "reasonCodes": [],
+        "ruleRefs": [
+          "rule:cancel:5995614"
+        ],
+        "state": "affected",
+        "targetRef": "order:5995614",
+        "truncated": false
+      },
+      {
+        "edgeRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:082e1612220bd824c4d016bb"
+        ],
+        "origin": "rule",
+        "pathId": "urn:oac:mvp:path:2486cb13c1dbae7aa822fd83",
+        "reasonCodes": [],
+        "ruleRefs": [
+          "rule:cancel:5056519"
+        ],
+        "state": "affected",
+        "targetRef": "order:5056519",
+        "truncated": false
+      },
+      {
+        "edgeRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:1191d6c524fc4ee29aba21bf"
+        ],
+        "origin": "rule",
+        "pathId": "urn:oac:mvp:path:77425c6c6a2f3244c46dfa77",
+        "reasonCodes": [],
+        "ruleRefs": [
+          "rule:review"
+        ],
+        "state": "affected",
+        "targetRef": "request:113",
+        "truncated": false
+      },
+      {
+        "edgeRefs": [],
+        "origin": "dependency",
+        "pathId": "urn:oac:mvp:path:f43de8be44aae817bd252790",
+        "reasonCodes": [],
+        "ruleRefs": [],
+        "state": "affected",
+        "targetRef": "request:113",
+        "truncated": false
+      }
+    ],
+    "minimality": {
+      "consideredPrincipalRefs": [
+        "principal:cancel",
+        "principal:review"
+      ],
+      "consideredRoleRefs": [
+        "role:cancel",
+        "role:review"
+      ],
+      "level": "inclusion_minimal",
+      "nonRemovableRefs": [
+        "urn:oac:id:sha256:v1:role-instance:855b892c3519390b591993c47b7e169d4cc590bf513225351e8da98dda4cb7f3",
+        "urn:oac:id:sha256:v1:role-instance:936ec8e1fd527135cac0001fce34166fac46e64922d57f3c9205ed966bd0d966",
+        "urn:oac:id:sha256:v1:work-unit:b06989ab357bd553a660f25c08b78377dab42d48a6dc39c43610233ef3bb9a1f",
+        "urn:oac:id:sha256:v1:work-unit:df4961cccfa4b6929b6ef80627a1ef0b23862cb76ed12040ee1b0d72befaeede"
+      ]
+    },
+    "obligations": [
+      {
+        "domainRef": "domain:retail",
+        "obligationId": "urn:oac:mvp:obligation:2d756684e7039f393e2e732c",
+        "obligationType": "cancel_order",
+        "origin": "organizational_rule",
+        "pathRefs": [
+          "urn:oac:mvp:path:2486cb13c1dbae7aa822fd83"
+        ],
+        "requiredEvidence": [
+          "evidence:cancel:5056519"
+        ],
+        "requiredRoleRef": "role:cancel",
+        "resolutionState": "affected",
+        "targetRef": "order:5056519"
+      },
+      {
+        "domainRef": "domain:retail",
+        "obligationId": "urn:oac:mvp:obligation:804447066f14c5fb9926fcea",
+        "obligationType": "review_order",
+        "origin": "organizational_rule",
+        "pathRefs": [
+          "urn:oac:mvp:path:77425c6c6a2f3244c46dfa77"
+        ],
+        "requiredEvidence": [
+          "evidence:review"
+        ],
+        "requiredRoleRef": "role:review",
+        "resolutionState": "affected",
+        "targetRef": "request:113"
+      },
+      {
+        "domainRef": "domain:retail",
+        "obligationId": "urn:oac:mvp:obligation:f43382c6b7e69b3175120b8e",
+        "obligationType": "cancel_order",
+        "origin": "organizational_rule",
+        "pathRefs": [
+          "urn:oac:mvp:path:11d84c3b488eab43369d5bba"
+        ],
+        "requiredEvidence": [
+          "evidence:cancel:5995614"
+        ],
+        "requiredRoleRef": "role:cancel",
+        "resolutionState": "affected",
+        "targetRef": "order:5995614"
+      }
+    ],
+    "profileBinding": {
+      "profileDigest": "sha256:2238581f84f2e2d2980e3e21d4143b4cad54d2216a78e0e879ac62c5856ea491",
+      "profileId": "oac.retail.cancellation-review",
+      "profileVersion": "v0.1"
+    },
+    "roleInstances": [
+      {
+        "effectCeiling": "zero_effect",
+        "mission": "Review cancel obligations in a disposable environment",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:2d756684e7039f393e2e732c",
+          "urn:oac:mvp:obligation:f43382c6b7e69b3175120b8e"
+        ],
+        "principalRef": "principal:cancel",
+        "qualificationRefs": [
+          "qualification:cancel"
+        ],
+        "roleDefinitionRef": "role:cancel",
+        "roleInstanceId": "urn:oac:id:sha256:v1:role-instance:855b892c3519390b591993c47b7e169d4cc590bf513225351e8da98dda4cb7f3"
+      },
+      {
+        "effectCeiling": "zero_effect",
+        "mission": "Review review obligations in a disposable environment",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:804447066f14c5fb9926fcea"
+        ],
+        "principalRef": "principal:review",
+        "qualificationRefs": [
+          "qualification:review"
+        ],
+        "roleDefinitionRef": "role:review",
+        "roleInstanceId": "urn:oac:id:sha256:v1:role-instance:936ec8e1fd527135cac0001fce34166fac46e64922d57f3c9205ed966bd0d966"
+      }
+    ],
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:12861e2957b302302c8a5b5882901acf11b0cc7362396d5cfa70aa6249f558a7",
+      "kind": "OrganizationSnapshot",
+      "namespace": "orgrebase.lab.retail",
+      "resourceId": "snapshot:retail-113",
+      "revision": 1
+    },
+    "status": "planned",
+    "unresolvedRefs": [],
+    "workUnits": [
+      {
+        "accountableRoleInstanceRef": "urn:oac:id:sha256:v1:role-instance:855b892c3519390b591993c47b7e169d4cc590bf513225351e8da98dda4cb7f3",
+        "effectCeiling": "zero_effect",
+        "evidenceOutputs": [
+          "evidence:cancel:5056519",
+          "evidence:cancel:5995614"
+        ],
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:2d756684e7039f393e2e732c",
+          "urn:oac:mvp:obligation:f43382c6b7e69b3175120b8e"
+        ],
+        "roleInstanceRefs": [
+          "urn:oac:id:sha256:v1:role-instance:855b892c3519390b591993c47b7e169d4cc590bf513225351e8da98dda4cb7f3"
+        ],
+        "workUnitId": "urn:oac:id:sha256:v1:work-unit:b06989ab357bd553a660f25c08b78377dab42d48a6dc39c43610233ef3bb9a1f"
+      },
+      {
+        "accountableRoleInstanceRef": "urn:oac:id:sha256:v1:role-instance:936ec8e1fd527135cac0001fce34166fac46e64922d57f3c9205ed966bd0d966",
+        "effectCeiling": "zero_effect",
+        "evidenceOutputs": [
+          "evidence:review"
+        ],
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:804447066f14c5fb9926fcea"
+        ],
+        "roleInstanceRefs": [
+          "urn:oac:id:sha256:v1:role-instance:936ec8e1fd527135cac0001fce34166fac46e64922d57f3c9205ed966bd0d966"
+        ],
+        "workUnitId": "urn:oac:id:sha256:v1:work-unit:df4961cccfa4b6929b6ef80627a1ef0b23862cb76ed12040ee1b0d72befaeede"
+      }
+    ]
+  }
+}

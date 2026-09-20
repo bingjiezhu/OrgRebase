@@ -1,0 +1,68 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-001:extra-delta",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:procurement-owner",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "effectiveTo": null,
+    "sourceRefs": [
+      "edith:PROC-01:question",
+      "oac:project-authored-fixture"
+    ]
+  },
+  "digest": "sha256:60ff4f4f7654b8de1084727ec29c95d22eb00a97bc26ba46a2e5f7d46b07bf6d",
+  "spec": {
+    "demandRef": "demand:SC-001",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {
+        "path": "/status",
+        "operation": "replace",
+        "before": {
+          "state": "known",
+          "value": "operating"
+        },
+        "after": {
+          "state": "known",
+          "value": "judicial_restructuring"
+        },
+        "beforeVersion": null,
+        "afterVersion": null
+      },
+      {
+        "path": "/renewalTerms",
+        "operation": "replace",
+        "before": {
+          "state": "known",
+          "value": "net-30"
+        },
+        "after": {
+          "state": "known",
+          "value": "net-15"
+        },
+        "beforeVersion": "supplier-terms@12",
+        "afterVersion": "supplier-terms@13"
+      }
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "edith:PROC-01:question",
+    "scopeRefs": [
+      "supplier:forges-martelliere",
+      "contract:forges-msa",
+      "ledger:supplier-exposure",
+      "production:aero",
+      "production:energy",
+      "production:defense",
+      "alternative:acieries-savoie"
+    ],
+    "reason": "evaluate cross-entity exposure after judicial restructuring notice",
+    "admissionStatus": "admitted"
+  }
+}

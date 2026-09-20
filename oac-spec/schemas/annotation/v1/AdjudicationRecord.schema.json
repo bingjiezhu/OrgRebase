@@ -1,0 +1,522 @@
+{
+  "$defs": {
+    "AdjudicationRecordSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "adjudicatorKey": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Adjudicatorkey",
+          "type": "string"
+        },
+        "conflictFields": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Conflictfields",
+          "type": "array"
+        },
+        "constraintDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Constraintdigest",
+          "type": "string"
+        },
+        "constraintSet": {
+          "$ref": "#/$defs/CandidateConstraintSet"
+        },
+        "packetRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "resolutions": {
+          "items": {
+            "$ref": "#/$defs/AdjudicationResolution"
+          },
+          "maxItems": 32,
+          "title": "Resolutions",
+          "type": "array"
+        },
+        "reviewRefs": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/ResourceRef"
+            },
+            {
+              "$ref": "#/$defs/ResourceRef"
+            }
+          ],
+          "title": "Reviewrefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "packetRef",
+        "reviewRefs",
+        "adjudicatorKey",
+        "conflictFields",
+        "resolutions",
+        "constraintSet",
+        "constraintDigest"
+      ],
+      "title": "AdjudicationRecordSpec",
+      "type": "object"
+    },
+    "AdjudicationResolution": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptedRationale": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Acceptedrationale",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceCitation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "field": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        },
+        "rejectedRationale": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Rejectedrationale",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "unknown",
+            "contested"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/JsonValue"
+        }
+      },
+      "required": [
+        "field",
+        "value",
+        "status",
+        "evidence",
+        "acceptedRationale",
+        "rejectedRationale"
+      ],
+      "title": "AdjudicationResolution",
+      "type": "object"
+    },
+    "CandidateConstraintSet": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptableUnknownRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Acceptableunknownrefs",
+          "type": "array"
+        },
+        "acceptableVerdicts": {
+          "items": {
+            "$ref": "#/$defs/Verdict"
+          },
+          "minItems": 1,
+          "title": "Acceptableverdicts",
+          "type": "array"
+        },
+        "admissiblePrincipalRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Admissibleprincipalrefs",
+          "type": "array"
+        },
+        "admissibleRoleRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Admissiblerolerefs",
+          "type": "array"
+        },
+        "evidenceDuties": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidenceduties",
+          "type": "array"
+        },
+        "forbiddenCombinations": {
+          "default": [],
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "maxLength": 512,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "maxLength": 512,
+                "minLength": 1,
+                "type": "string"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Forbiddencombinations",
+          "type": "array"
+        },
+        "happensBefore": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OrderConstraint"
+          },
+          "title": "Happensbefore",
+          "type": "array"
+        },
+        "minimalityLevel": {
+          "enum": [
+            "none",
+            "inclusion_minimal"
+          ],
+          "title": "Minimalitylevel",
+          "type": "string"
+        },
+        "requiredObligationRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Requiredobligationrefs",
+          "type": "array"
+        },
+        "requiredObligationTypes": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Requiredobligationtypes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "admissibleRoleRefs",
+        "admissiblePrincipalRefs",
+        "minimalityLevel",
+        "acceptableVerdicts"
+      ],
+      "title": "CandidateConstraintSet",
+      "type": "object"
+    },
+    "EvidenceCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "pointer": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Pointer",
+          "type": "string"
+        },
+        "resourceRef": {
+          "$ref": "#/$defs/ResourceRef"
+        }
+      },
+      "required": [
+        "resourceRef",
+        "pointer"
+      ],
+      "title": "EvidenceCitation",
+      "type": "object"
+    },
+    "JsonValue": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "array"
+        },
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "OrderConstraint": {
+      "additionalProperties": false,
+      "properties": {
+        "predecessorRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Predecessorref",
+          "type": "string"
+        },
+        "reasonRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reasonrefs",
+          "type": "array"
+        },
+        "relation": {
+          "const": "must_complete_before",
+          "default": "must_complete_before",
+          "title": "Relation",
+          "type": "string"
+        },
+        "successorRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Successorref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "predecessorRef",
+        "successorRef",
+        "reasonRefs"
+      ],
+      "title": "OrderConstraint",
+      "type": "object"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "Verdict": {
+      "enum": [
+        "ACCEPT",
+        "REJECT",
+        "PROVISIONAL",
+        "UNKNOWN"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "$id": "https://oac.dev/schemas/annotation/v1/AdjudicationRecord.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.annotation-document/v1",
+      "default": "oac.annotation-document/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Digest",
+      "type": "string"
+    },
+    "kind": {
+      "const": "AdjudicationRecord",
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/AdjudicationRecordSpec"
+    }
+  },
+  "required": [
+    "kind",
+    "metadata",
+    "spec",
+    "digest"
+  ],
+  "title": "AnnotationDocument[AdjudicationRecordSpec]",
+  "type": "object"
+}

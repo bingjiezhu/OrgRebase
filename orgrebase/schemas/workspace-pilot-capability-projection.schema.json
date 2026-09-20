@@ -1,0 +1,52 @@
+{
+  "$defs": {
+    "PilotComponentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "title": "Digest",
+          "type": "string"
+        },
+        "ref": {
+          "title": "Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref",
+        "digest"
+      ],
+      "title": "PilotComponentBinding",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-pilot-capability-projection.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "capability_cards": {
+      "items": {
+        "$ref": "#/$defs/PilotComponentBinding"
+      },
+      "title": "Capability Cards",
+      "type": "array"
+    },
+    "runtime_components": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Runtime Components",
+      "type": "object"
+    },
+    "template": {
+      "$ref": "#/$defs/PilotComponentBinding"
+    }
+  },
+  "required": [
+    "template",
+    "capability_cards",
+    "runtime_components"
+  ],
+  "title": "PilotCapabilityProjection",
+  "type": "object"
+}

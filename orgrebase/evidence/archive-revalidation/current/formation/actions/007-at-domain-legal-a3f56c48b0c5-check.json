@@ -1,0 +1,14 @@
+{
+  "action": "check_task",
+  "digest": "sha256:602fe17a88d20034c25bdfb9e6ea8f8d5be6439a5f61f53974b85b6b007493ab",
+  "error": null,
+  "key": "at-domain-legal-a3f56c48b0c5:check",
+  "ok": true,
+  "payload_digest": "sha256:e5ed7df904f4c8f1c0a533bc2ccad0023930b298a3b97c1464af8ddf48b0e022",
+  "raw_ref": "raw-mcp/007-at-domain-legal-a3f56c48b0c5-check-55d3de46.json",
+  "request_digest": "sha256:3f95729ffdb2e6b20d269ee33c3d302af107edf5f0629793850dba6cc4847d7d",
+  "response_digest": "sha256:61158ff6d4c1ffcf609c31c07275dcc9f6dd219311f27535088e5aa1b6d332e1",
+  "sequence": 7,
+  "status": "submitted",
+  "tool": "taskflow"
+}

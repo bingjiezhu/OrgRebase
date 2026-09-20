@@ -1,0 +1,872 @@
+{
+  "$defs": {
+    "ApplicabilityEvaluation": {
+      "additionalProperties": false,
+      "description": "Deterministic ledger fact for one edge, rule, or unknown-transition duty.",
+      "properties": {
+        "evaluationId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Evaluationid",
+          "type": "string"
+        },
+        "predicateVersion": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Predicateversion",
+          "type": "string"
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "result": {
+          "$ref": "#/$defs/ApplicabilityResult"
+        },
+        "sourceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Sourceref",
+          "type": "string"
+        },
+        "witnessRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Witnessrefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evaluationId",
+        "sourceRef",
+        "predicateVersion",
+        "result",
+        "witnessRefs"
+      ],
+      "title": "ApplicabilityEvaluation",
+      "type": "object"
+    },
+    "ApplicabilityResult": {
+      "description": "Strong-Kleene result emitted by a contextual predicate evaluation.",
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ],
+      "title": "ApplicabilityResult",
+      "type": "string"
+    },
+    "ChangeProfileBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "profileDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Profiledigest",
+          "type": "string"
+        },
+        "profileId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Profileid",
+          "type": "string"
+        },
+        "profileVersion": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Profileversion",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profileId",
+        "profileVersion",
+        "profileDigest"
+      ],
+      "title": "ChangeProfileBinding",
+      "type": "object"
+    },
+    "CoverageObligation": {
+      "additionalProperties": false,
+      "properties": {
+        "domainRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Domainref",
+          "type": "string"
+        },
+        "obligationId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationid",
+          "type": "string"
+        },
+        "obligationType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationtype",
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "dependency_path",
+            "organizational_rule",
+            "discovery_gap"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "pathRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Pathrefs",
+          "type": "array"
+        },
+        "requiredEvidence": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requiredevidence",
+          "type": "array"
+        },
+        "requiredRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Requiredroleref",
+          "type": "string"
+        },
+        "resolutionState": {
+          "enum": [
+            "affected",
+            "unknown",
+            "unresolved"
+          ],
+          "title": "Resolutionstate",
+          "type": "string"
+        },
+        "targetRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Targetref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "obligationId",
+        "origin",
+        "targetRef",
+        "domainRef",
+        "requiredRoleRef",
+        "obligationType",
+        "requiredEvidence",
+        "pathRefs",
+        "resolutionState"
+      ],
+      "title": "CoverageObligation",
+      "type": "object"
+    },
+    "EffectCeiling": {
+      "enum": [
+        "zero_effect"
+      ],
+      "title": "EffectCeiling",
+      "type": "string"
+    },
+    "ImpactPath": {
+      "additionalProperties": false,
+      "properties": {
+        "dutyRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Dutyrefs",
+          "type": "array"
+        },
+        "edgeRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Edgerefs",
+          "type": "array"
+        },
+        "evaluationRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evaluationrefs",
+          "type": "array"
+        },
+        "origin": {
+          "enum": [
+            "dependency",
+            "rule",
+            "gap",
+            "bounded_non_impact",
+            "excluded"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "pathId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Pathid",
+          "type": "string"
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "ruleRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Rulerefs",
+          "type": "array"
+        },
+        "state": {
+          "$ref": "#/$defs/ImpactState"
+        },
+        "targetRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Targetref",
+          "type": "string"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "pathId",
+        "targetRef",
+        "state",
+        "origin"
+      ],
+      "title": "ImpactPath",
+      "type": "object"
+    },
+    "ImpactState": {
+      "enum": [
+        "affected",
+        "unaffected_proven",
+        "unknown",
+        "out_of_declared_scope"
+      ],
+      "title": "ImpactState",
+      "type": "string"
+    },
+    "MinimalityClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "consideredPrincipalRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Consideredprincipalrefs",
+          "type": "array"
+        },
+        "consideredRoleRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Consideredrolerefs",
+          "type": "array"
+        },
+        "level": {
+          "enum": [
+            "none",
+            "inclusion_minimal"
+          ],
+          "title": "Level",
+          "type": "string"
+        },
+        "nonRemovableRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Nonremovablerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "level",
+        "consideredRoleRefs",
+        "consideredPrincipalRefs",
+        "nonRemovableRefs"
+      ],
+      "title": "MinimalityClaim",
+      "type": "object"
+    },
+    "OrderConstraint": {
+      "additionalProperties": false,
+      "properties": {
+        "predecessorRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Predecessorref",
+          "type": "string"
+        },
+        "reasonRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reasonrefs",
+          "type": "array"
+        },
+        "relation": {
+          "const": "must_complete_before",
+          "default": "must_complete_before",
+          "title": "Relation",
+          "type": "string"
+        },
+        "successorRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Successorref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "predecessorRef",
+        "successorRef",
+        "reasonRefs"
+      ],
+      "title": "OrderConstraint",
+      "type": "object"
+    },
+    "OrganizationPlanSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "applicabilityEvaluations": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ApplicabilityEvaluation"
+          },
+          "title": "Applicabilityevaluations",
+          "type": "array"
+        },
+        "changeRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "compilerId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Compilerid",
+          "type": "string"
+        },
+        "compilerVersion": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Compilerversion",
+          "type": "string"
+        },
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/PlanDecision"
+          },
+          "title": "Decisions",
+          "type": "array"
+        },
+        "effectCeiling": {
+          "$ref": "#/$defs/EffectCeiling"
+        },
+        "happensBefore": {
+          "items": {
+            "$ref": "#/$defs/OrderConstraint"
+          },
+          "title": "Happensbefore",
+          "type": "array"
+        },
+        "impactPaths": {
+          "items": {
+            "$ref": "#/$defs/ImpactPath"
+          },
+          "title": "Impactpaths",
+          "type": "array"
+        },
+        "minimality": {
+          "$ref": "#/$defs/MinimalityClaim"
+        },
+        "obligations": {
+          "items": {
+            "$ref": "#/$defs/CoverageObligation"
+          },
+          "title": "Obligations",
+          "type": "array"
+        },
+        "profileBinding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ChangeProfileBinding"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "roleInstances": {
+          "items": {
+            "$ref": "#/$defs/RoleInstance"
+          },
+          "title": "Roleinstances",
+          "type": "array"
+        },
+        "snapshotRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "guarded_unresolved"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unresolvedRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unresolvedrefs",
+          "type": "array"
+        },
+        "workUnits": {
+          "items": {
+            "$ref": "#/$defs/WorkUnit"
+          },
+          "title": "Workunits",
+          "type": "array"
+        }
+      },
+      "required": [
+        "snapshotRef",
+        "changeRef",
+        "status",
+        "effectCeiling",
+        "compilerId",
+        "compilerVersion",
+        "impactPaths",
+        "obligations",
+        "roleInstances",
+        "workUnits",
+        "happensBefore",
+        "decisions",
+        "unresolvedRefs",
+        "minimality"
+      ],
+      "title": "OrganizationPlanSpec",
+      "type": "object"
+    },
+    "PlanDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "decisionId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Decisionid",
+          "type": "string"
+        },
+        "disposition": {
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "inputClass": {
+          "enum": [
+            "admitted",
+            "candidate",
+            "disputed",
+            "retracted"
+          ],
+          "title": "Inputclass",
+          "type": "string"
+        },
+        "reasonCodes": {
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "subjectRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Subjectref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "decisionId",
+        "subjectRef",
+        "inputClass",
+        "disposition",
+        "reasonCodes"
+      ],
+      "title": "PlanDecision",
+      "type": "object"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "RoleInstance": {
+      "additionalProperties": false,
+      "properties": {
+        "effectCeiling": {
+          "$ref": "#/$defs/EffectCeiling"
+        },
+        "mission": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Mission",
+          "type": "string"
+        },
+        "obligationRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Obligationrefs",
+          "type": "array"
+        },
+        "principalRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Principalref",
+          "type": "string"
+        },
+        "qualificationRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Qualificationrefs",
+          "type": "array"
+        },
+        "roleDefinitionRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Roledefinitionref",
+          "type": "string"
+        },
+        "roleInstanceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Roleinstanceid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "roleInstanceId",
+        "roleDefinitionRef",
+        "principalRef",
+        "mission",
+        "obligationRefs",
+        "qualificationRefs",
+        "effectCeiling"
+      ],
+      "title": "RoleInstance",
+      "type": "object"
+    },
+    "WorkUnit": {
+      "additionalProperties": false,
+      "properties": {
+        "accountableRoleInstanceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Accountableroleinstanceref",
+          "type": "string"
+        },
+        "effectCeiling": {
+          "$ref": "#/$defs/EffectCeiling"
+        },
+        "evidenceOutputs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidenceoutputs",
+          "type": "array"
+        },
+        "obligationRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Obligationrefs",
+          "type": "array"
+        },
+        "roleInstanceRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Roleinstancerefs",
+          "type": "array"
+        },
+        "workUnitId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Workunitid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workUnitId",
+        "roleInstanceRefs",
+        "accountableRoleInstanceRef",
+        "obligationRefs",
+        "evidenceOutputs",
+        "effectCeiling"
+      ],
+      "title": "WorkUnit",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/OrganizationPlan.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "OrganizationPlan",
+      "default": "OrganizationPlan",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/OrganizationPlanSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "OrganizationPlan",
+  "type": "object"
+}

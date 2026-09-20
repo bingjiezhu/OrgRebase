@@ -1,0 +1,83 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "CONTROLLED_LOCAL_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-live-agent-candidate-score.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_version": {
+      "title": "Benchmark Version",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        {
+          "enum": [
+            "DESIGN",
+            "LIVE_MODEL",
+            "LOCAL_OLLAMA_MODEL",
+            "USER_STUDY"
+          ],
+          "type": "string"
+        }
+      ],
+      "title": "Evidence Class"
+    },
+    "metric_values": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Metric Values",
+      "type": "object"
+    },
+    "model_profile": {
+      "title": "Model Profile",
+      "type": "string"
+    },
+    "repetitions": {
+      "minimum": 1,
+      "title": "Repetitions",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_RUN"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "benchmark_version",
+    "model_profile",
+    "repetitions",
+    "metric_values",
+    "status",
+    "evidence_class"
+  ],
+  "title": "LiveAgentCandidateScore",
+  "type": "object"
+}

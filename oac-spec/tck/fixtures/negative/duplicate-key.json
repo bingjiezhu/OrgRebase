@@ -1,0 +1,8 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrganizationSnapshot",
+  "kind": "SemanticChangeSet",
+  "metadata": {},
+  "spec": {},
+  "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

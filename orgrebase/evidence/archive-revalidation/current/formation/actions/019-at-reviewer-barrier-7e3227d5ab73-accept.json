@@ -1,0 +1,14 @@
+{
+  "action": "accept_task_result",
+  "digest": "sha256:f150b44ed7c5ec88c617d40f98f54119119080ff3d1eb7c5c08d567905fddbdd",
+  "error": null,
+  "key": "at-reviewer-barrier-7e3227d5ab73:accept",
+  "ok": true,
+  "payload_digest": "sha256:91f48e046351a3d2fb2b89273cac4e90b431fb32f161627025daa84226cbd6be",
+  "raw_ref": "raw-mcp/019-at-reviewer-barrier-7e3227d5ab73-accept-edf7aca4.json",
+  "request_digest": "sha256:08f6b018276e7be1f1c428d8c13b33e05f4d5c68415d42787fcb8a5bfa0f988c",
+  "response_digest": "sha256:f3871b582e52636c2677320bb0b78e4c87bec13b35a9a1f9fbfd4cbd8c7005c6",
+  "sequence": 19,
+  "status": "completed",
+  "tool": "projectflow"
+}

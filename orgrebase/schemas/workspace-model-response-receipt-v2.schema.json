@@ -1,0 +1,252 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-model-response-receipt-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Observed protocol outcome. Missing usage or model metadata remains unknown.",
+  "properties": {
+    "body_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Body Digest"
+    },
+    "contract_version": {
+      "const": "2",
+      "default": "2",
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "dispatch_state": {
+      "enum": [
+        "NOT_SENT",
+        "SENT_UNKNOWN",
+        "RESPONSE_RECEIVED"
+      ],
+      "title": "Dispatch State",
+      "type": "string"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Code"
+    },
+    "evidence_class": {
+      "enum": [
+        "LIVE_MODEL",
+        "MODEL_ATTEMPT",
+        "NOT_RUN"
+      ],
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "finish_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Finish Reason"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "input_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Input Tokens"
+    },
+    "latency_ms": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Latency Ms",
+      "type": "integer"
+    },
+    "observed_at": {
+      "title": "Observed At",
+      "type": "string"
+    },
+    "observed_model_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Observed Model Id"
+    },
+    "output_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Output Digest"
+    },
+    "output_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Output Tokens"
+    },
+    "prompt_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Prompt Digest"
+    },
+    "provider": {
+      "const": "openai-responses",
+      "default": "openai-responses",
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_request_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Request Id"
+    },
+    "provider_response_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Response Id"
+    },
+    "request_digest": {
+      "title": "Request Digest",
+      "type": "string"
+    },
+    "request_ref": {
+      "title": "Request Ref",
+      "type": "string"
+    },
+    "requested_model_id": {
+      "title": "Requested Model Id",
+      "type": "string"
+    },
+    "schema_digest": {
+      "title": "Schema Digest",
+      "type": "string"
+    },
+    "schema_valid": {
+      "default": false,
+      "title": "Schema Valid",
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "VALID",
+        "ABSTAIN",
+        "SCHEMA_ERROR",
+        "PROVIDER_ERROR",
+        "NOT_RUN",
+        "INCOMPLETE",
+        "CANCELLED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JsonValue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "wire_schema_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Wire Schema Digest"
+    }
+  },
+  "required": [
+    "id",
+    "request_ref",
+    "request_digest",
+    "status",
+    "dispatch_state",
+    "requested_model_id",
+    "schema_digest",
+    "observed_at",
+    "evidence_class"
+  ],
+  "title": "ModelResponseReceiptV2",
+  "type": "object"
+}

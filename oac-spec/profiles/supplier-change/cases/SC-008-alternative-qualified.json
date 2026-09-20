@@ -1,0 +1,167 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-008",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-008-alternative-qualified.json"
+    ]
+  },
+  "digest": "sha256:22be5bcd811500f87ed40946bf67c16fdece9a0819fe554040d0b69395b78a06",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01-contextual",
+      "revision": 2,
+      "digest": "sha256:76073e824054b6a6b7de66e2b728069dea6ba83164f47d116f9f6eb0d4b1fe65"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-008",
+      "revision": 1,
+      "digest": "sha256:69ec666f7453286983111ec0254f8c67213156561224e05d958eea8aedc8d40c"
+    },
+    "observationBoundary": "alternative-supplier and contingency metadata",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-008-alternative-qualified.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "qualification_in_progress->qualified",
+        "evidenceRefs": [
+          "authority:OAC_PROJECT",
+          "profiles/supplier-change/annotations/SC-008-alternative-qualified.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-cc41d4aa.classification",
+        "value": "NOT_AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-cc41d4aa"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-29949d76.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-29949d76"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-7823658d.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-7823658d"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.qualification-evidence-check",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-008-alternative-qualified.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.continuity-option-selection",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-008-alternative-qualified.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.commercial-switch-review",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-008-alternative-qualified.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationTypes": [
+        "qualification-evidence-check",
+        "continuity-option-selection",
+        "commercial-switch-review"
+      ],
+      "admissibleRoleRefs": [
+        "role:quality-qualification",
+        "role:operations-continuity",
+        "role:procurement-owner"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:operations-agent",
+        "principal:procurement-agent",
+        "principal:quality-agent"
+      ],
+      "forbiddenCombinations": [
+        [
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ]
+      ],
+      "happensBefore": [
+        {
+          "predecessorRef": "qualification-evidence-check",
+          "successorRef": "continuity-option-selection",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-008"
+          ]
+        },
+        {
+          "predecessorRef": "continuity-option-selection",
+          "successorRef": "commercial-switch-review",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-008"
+          ]
+        }
+      ],
+      "evidenceDuties": [
+        "approved qualification record",
+        "selected continuity option"
+      ],
+      "acceptableUnknownRefs": [],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "ACCEPT"
+      ]
+    },
+    "witnessRefs": [],
+    "mutationFamily": "self-review,reverse-order,missing-evidence",
+    "outcomeObservability": "none"
+  }
+}

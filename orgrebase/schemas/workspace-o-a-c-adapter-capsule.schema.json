@@ -1,0 +1,143 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-adapter-capsule.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "approval_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Approval Digest",
+      "type": "string"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "claim": {
+      "const": "OAC_SOURCE_DEMAND_ADMITTED_AND_ORGREBASE_FORMATION_PARITY",
+      "default": "OAC_SOURCE_DEMAND_ADMITTED_AND_ORGREBASE_FORMATION_PARITY",
+      "title": "Claim",
+      "type": "string"
+    },
+    "dependency_projection_receipt_digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dependency Projection Receipt Digest"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "formation_authority": {
+      "const": "ORGREBASE_CONTROL_PLANE",
+      "default": "ORGREBASE_CONTROL_PLANE",
+      "title": "Formation Authority",
+      "type": "string"
+    },
+    "mapping_set_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Mapping Set Digest",
+      "type": "string"
+    },
+    "oac_plan_certificate_produced": {
+      "const": false,
+      "default": false,
+      "title": "Oac Plan Certificate Produced",
+      "type": "boolean"
+    },
+    "oac_plan_produced": {
+      "const": false,
+      "default": false,
+      "title": "Oac Plan Produced",
+      "type": "boolean"
+    },
+    "oac_runtime_invoked": {
+      "const": false,
+      "default": false,
+      "title": "Oac Runtime Invoked",
+      "type": "boolean"
+    },
+    "organization_snapshot_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Organization Snapshot Digest",
+      "type": "string"
+    },
+    "organizational_demand_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Organizational Demand Digest",
+      "type": "string"
+    },
+    "owner_review_summary_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Owner Review Summary Digest",
+      "type": "string"
+    },
+    "pack_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "profile_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "quote_formation_parity_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Quote Formation Parity Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-quote-adapter-capsule.v1",
+      "default": "orgrebase.oac-quote-adapter-capsule.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_admission_receipt_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Source Admission Receipt Digest",
+      "type": "string"
+    },
+    "status": {
+      "const": "READY_FOR_ORGREBASE",
+      "default": "READY_FOR_ORGREBASE",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adaptation_run_id",
+    "profile_digest",
+    "pack_digest",
+    "mapping_set_digest",
+    "owner_review_summary_digest",
+    "organization_snapshot_digest",
+    "organizational_demand_digest",
+    "source_admission_receipt_digest",
+    "approval_digest",
+    "quote_formation_parity_digest"
+  ],
+  "title": "OACAdapterCapsule",
+  "type": "object"
+}

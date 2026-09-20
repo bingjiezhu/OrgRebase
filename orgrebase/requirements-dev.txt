@@ -1,0 +1,10 @@
+# Dev extras on top of requirements.txt. Generated from uv.lock.
+
+coverage==7.15.4
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+pygments==2.20.0
+pytest==9.1.1
+pytest-cov==7.1.0
+ruff==0.16.3

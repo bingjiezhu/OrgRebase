@@ -1,0 +1,62 @@
+{
+  "caseVersion": "1.0",
+  "caseId": "SC-006",
+  "title": "Prepaid rush order exposed",
+  "profile": "supplier-change/v0alpha1",
+  "annotationStatus": "exploratory",
+  "annotationProvenance": {
+    "authorClass": "project-authored-candidate",
+    "independentHumanRounds": 0,
+    "adjudicated": false,
+    "mayBeCalledGold": false
+  },
+  "sourceLabels": {
+    "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+    "recordRef": "PROC-01",
+    "labelSetRef": "../source-labels/edith-proc-01.json",
+    "answerKeyGroundTruthEmpty": true,
+    "documentRefs": ["DOC-46b05445", "DOC-a03146b5", "DOC-66804d3f"],
+    "claimLimit": "The advance-at-risk phrase is upstream description metadata; organizational duties are OAC candidates."
+  },
+  "counterfactual": {
+    "type": "single-factor",
+    "factor": "supplier.status",
+    "before": "judicial_restructuring",
+    "after": "payment_recovery_uncertain",
+    "assertedBy": "OAC_PROJECT",
+    "notUpstreamOacGroundTruth": true
+  },
+  "frozenInputs": {
+    "snapshotRef": "../inputs/veracier-proc01.snapshot.json",
+    "changeRef": "../inputs/SC-006.change.json",
+    "observationBoundary": "rush-order, MSA, and administrator-letter metadata"
+  },
+  "candidateConstraints": {
+    "requiredObligationTypes": [
+      "exposure-inventory",
+      "contract-remedies",
+      "claim-filing",
+      "financial-exposure"
+    ],
+    "admissibleRoleRefs": [
+      "role:procurement-owner",
+      "role:legal-reviewer",
+      "role:finance-exposure"
+    ],
+    "separation": [],
+    "happensBefore": [
+      ["contract-remedies", "claim-filing"],
+      ["exposure-inventory", "financial-exposure"]
+    ],
+    "evidenceDuties": ["payment evidence", "claim basis", "recognized exposure"],
+    "acceptableUnknown": ["recoverable amount", "recovery date"],
+    "candidateOnly": true
+  },
+  "witnessRefs": [],
+  "mutationFamilies": ["reverse-order", "missing-evidence", "unknown-erasure"],
+  "outcomeObservability": {
+    "fromEdith": "not_observable",
+    "fromEnterpriseOpsGym": "not_mapped",
+    "executed": false
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "manifestVersion": "1.0",
+  "datasetId": "hf:ServiceNow-AI/EnterpriseOps-Gym",
+  "name": "EnterpriseOps-Gym",
+  "upstreamUrl": "https://huggingface.co/datasets/ServiceNow-AI/EnterpriseOps-Gym",
+  "revision": "c8e538eae8a6205294f0a86675fefdc1fac408f6",
+  "revisionUrl": "https://huggingface.co/datasets/ServiceNow-AI/EnterpriseOps-Gym/tree/c8e538eae8a6205294f0a86675fefdc1fac408f6",
+  "license": "Apache-2.0",
+  "retrievedAt": "2026-08-23",
+  "retrievalMode": "README-and-repository-metadata-only",
+  "redistributionMode": "identifiers-only",
+  "usedFiles": [
+    {
+      "path": "README.md",
+      "sha256": "cf559d619ad720c652c038d1b5fa9c541c45f83bac93a5d535c7fb3e7a091820"
+    }
+  ],
+  "declaredCapabilities": [
+    "containerized resettable enterprise simulation",
+    "eight enterprise-operation domains",
+    "SQL-based final-state verifiers",
+    "policy and access constraints",
+    "multi-domain hybrid tasks"
+  ],
+  "currentMvpUse": "future outcome-oracle substrate only",
+  "notPerformed": [
+    "task parquet download",
+    "container image download",
+    "task execution",
+    "cross-dataset alignment",
+    "supplier-domain score claim"
+  ],
+  "notObserved": [
+    "EDiTh PROC-01 supplier facts",
+    "required organizational participation",
+    "OAC impact propagation labels",
+    "OAC plural-valid organization sets"
+  ],
+  "claimLimit": "EnterpriseOps-Gym demonstrates a public outcome-verification substrate; this repository has not established a supplier-profile execution mapping."
+}

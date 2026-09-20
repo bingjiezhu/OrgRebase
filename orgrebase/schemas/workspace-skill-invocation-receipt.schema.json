@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-skill-invocation-receipt.schema.json",
+  "title": "SkillInvocationReceipt",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "Digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "required": [
+    "schema_version", "id", "run_id", "task_id", "delegation_id", "actor_id",
+    "package_id", "package_digest", "manifest_digest", "program_digest",
+    "release_artifact_id", "entry_point", "authorization_mode", "release_receipt_digest",
+    "input_digest", "output_digest", "outcome", "candidate_only", "target_writes",
+    "created_at", "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.skill-invocation-receipt.v1"},
+    "id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "delegation_id": {"type": "string", "minLength": 1},
+    "actor_id": {"type": "string", "minLength": 1},
+    "package_id": {"type": "string", "minLength": 1},
+    "package_digest": {"$ref": "#/$defs/Digest"},
+    "manifest_digest": {"$ref": "#/$defs/Digest"},
+    "program_digest": {"$ref": "#/$defs/Digest"},
+    "release_artifact_id": {"type": "string", "minLength": 1},
+    "entry_point": {"type": "string", "minLength": 1},
+    "authorization_mode": {"enum": ["EVALUATION", "RELEASE"]},
+    "release_receipt_digest": {"anyOf": [{"$ref": "#/$defs/Digest"}, {"type": "null"}]},
+    "input_digest": {"$ref": "#/$defs/Digest"},
+    "output_digest": {"$ref": "#/$defs/Digest"},
+    "outcome": {"enum": ["SUCCESS", "ABSTAIN", "DENY"]},
+    "candidate_only": {"const": true},
+    "target_writes": {"const": 0},
+    "created_at": {"type": "string", "format": "date-time"},
+    "digest": {"$ref": "#/$defs/Digest"}
+  }
+}

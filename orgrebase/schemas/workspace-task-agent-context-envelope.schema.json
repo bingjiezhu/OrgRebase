@@ -1,0 +1,162 @@
+{
+  "$defs": {
+    "DomainContextResidencyBinding": {
+      "additionalProperties": false,
+      "description": "Digest-only binding from one authority domain to its task projection.",
+      "properties": {
+        "actor_projection_digest": {
+          "title": "Actor Projection Digest",
+          "type": "string"
+        },
+        "actor_projection_ref": {
+          "title": "Actor Projection Ref",
+          "type": "string"
+        },
+        "capability_card_digest": {
+          "title": "Capability Card Digest",
+          "type": "string"
+        },
+        "capability_card_ref": {
+          "title": "Capability Card Ref",
+          "type": "string"
+        },
+        "domain_id": {
+          "title": "Domain Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "domain_id",
+        "capability_card_ref",
+        "capability_card_digest",
+        "actor_projection_ref",
+        "actor_projection_digest"
+      ],
+      "title": "DomainContextResidencyBinding",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-task-agent-context-envelope.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Minimum context identity the task agent may use for one coalition.\n\nBusiness values remain in the admitted task context and actor projections.\nThe envelope only binds their identities, a separately admitted\norganizational-intent digest, and a fail-closed effect ceiling.",
+  "properties": {
+    "admitted_organizational_intent_digest": {
+      "title": "Admitted Organizational Intent Digest",
+      "type": "string"
+    },
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "coalition_plan_digest": {
+      "title": "Coalition Plan Digest",
+      "type": "string"
+    },
+    "coalition_plan_ref": {
+      "title": "Coalition Plan Ref",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "domain_bindings": {
+      "items": {
+        "$ref": "#/$defs/DomainContextResidencyBinding"
+      },
+      "title": "Domain Bindings",
+      "type": "array"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "revision_lock": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Revision Lock",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "orgrebase.task-agent-context-envelope.v1",
+      "default": "orgrebase.task-agent-context-envelope.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_context_digest": {
+      "title": "Task Context Digest",
+      "type": "string"
+    },
+    "task_context_ref": {
+      "title": "Task Context Ref",
+      "type": "string"
+    },
+    "task_digest": {
+      "title": "Task Digest",
+      "type": "string"
+    },
+    "task_formation_decision_receipt_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Formation Decision Receipt Digest"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "version": {
+      "const": "v1",
+      "default": "v1",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "task_ref",
+    "task_digest",
+    "admitted_organizational_intent_digest",
+    "coalition_plan_ref",
+    "coalition_plan_digest",
+    "task_context_ref",
+    "task_context_digest",
+    "domain_bindings",
+    "revision_lock",
+    "created_at",
+    "expires_at"
+  ],
+  "title": "TaskAgentContextEnvelope",
+  "type": "object"
+}

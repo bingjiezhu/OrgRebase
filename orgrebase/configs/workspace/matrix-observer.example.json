@@ -1,0 +1,10 @@
+{
+  "homeserver_url": "http://127.0.0.1:18090",
+  "element_url": "http://127.0.0.1:18091",
+  "access_token": "PLACEHOLDER",
+  "user_id": "@orgrebase_observer:orgrebase.local",
+  "allowed_workspace_ids": [
+    "org:evergreen-industries/default"
+  ],
+  "viewer_user_id": "@orgrebase_viewer:orgrebase.local"
+}

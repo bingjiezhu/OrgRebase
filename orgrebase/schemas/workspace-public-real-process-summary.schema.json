@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-public-real-process-summary.schema.json",
+  "title": "Compact Real Process Summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "run_id", "title_zh", "title_en", "data_domain",
+    "source_nature_zh", "source_nature_en", "query_count", "unique_observed_event_count",
+    "counting_unit", "strategies", "provider_rule_obligations", "claim_boundary", "boundary_zh", "boundary_en",
+    "not_run", "receipt_digest", "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-public-real-process-summary.v1"},
+    "status": {"const": "PASS"},
+    "run_id": {"type": "string", "minLength": 1},
+    "title_zh": {"type": "string", "minLength": 1},
+    "title_en": {"type": "string", "minLength": 1},
+    "data_domain": {"const": "PURCHASE_TO_PAY"},
+    "source_nature_zh": {"type": "string", "minLength": 1},
+    "source_nature_en": {"type": "string", "minLength": 1},
+    "query_count": {"const": 128},
+    "unique_observed_event_count": {"type": "integer", "minimum": 1},
+    "counting_unit": {"const": "QUERY_EVENT_PAIR"},
+    "strategies": {"type": "array", "minItems": 3, "maxItems": 3},
+    "provider_rule_obligations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mapped_queries", "abstained_queries", "evidence_class"],
+      "properties": {
+        "mapped_queries": {"type": "integer", "minimum": 0},
+        "abstained_queries": {"type": "integer", "minimum": 0},
+        "evidence_class": {"const": "PROVIDER_DOCUMENTED_RULE_DERIVED"}
+      }
+    },
+    "claim_boundary": {"const": "NOT_REAL_QUOTE_DATA_NOT_CAUSAL_GROUND_TRUTH_NOT_REALIZED_ROI_NOT_PRODUCTION"},
+    "boundary_zh": {"type": "string", "minLength": 1},
+    "boundary_en": {"type": "string", "minLength": 1},
+    "not_run": {"type": "object"},
+    "receipt_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

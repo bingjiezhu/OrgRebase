@@ -1,0 +1,80 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-telemetry-query-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "count": {
+      "minimum": 0,
+      "title": "Count",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "const": "OBSERVED_CONTROLLED_LOCAL",
+      "default": "OBSERVED_CONTROLLED_LOCAL",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "matched_ingestion_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Matched Ingestion Ids",
+      "type": "array"
+    },
+    "matched_payload_digests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Matched Payload Digests",
+      "type": "array"
+    },
+    "query": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "title": "Query",
+      "type": "object"
+    },
+    "query_digest": {
+      "title": "Query Digest",
+      "type": "string"
+    },
+    "result_digest": {
+      "title": "Result Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.telemetry-query-receipt.v1",
+      "default": "orgrebase.telemetry-query-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "query",
+    "query_digest",
+    "matched_ingestion_ids",
+    "matched_payload_digests",
+    "result_digest",
+    "count"
+  ],
+  "title": "TelemetryQueryReceipt",
+  "type": "object"
+}

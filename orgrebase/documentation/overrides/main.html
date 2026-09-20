@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block site_meta %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="{{ page.meta.description if page and page.meta.description else config.site_description }}">
+  {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
+  {% if page and page.previous_page %}<link rel="prev" href="{{ page.previous_page.url | url }}">{% endif %}
+  {% if page and page.next_page %}<link rel="next" href="{{ page.next_page.url | url }}">{% endif %}
+  <link rel="icon" href="{{ config.theme.favicon | url }}">
+  <meta name="generator" content="MkDocs {{ mkdocs_version }}">
+  {# The i18n plugin already computes exact page alternates in the header menu.
+     Material 9.7's additional head-link discovery would request sitemap.xml
+     under those page URLs. Keep one language router; the generated sitemap
+     retains localized pages for deployed-site discovery. #}
+{% endblock %}

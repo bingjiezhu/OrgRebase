@@ -1,0 +1,25 @@
+{
+  "action": "create_project",
+  "key": "project:create",
+  "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+  "representation": "SEMANTIC_MCP_WRAPPER_PUBLIC_PATH_REDACTED",
+  "request": {
+    "action": "create_project",
+    "payload": {
+      "projectId": "orgrebase-formation-905f9cf1a656",
+      "title": "Formation-compiled two-domain topology probe"
+    },
+    "workspaceDir": "orgrebase://runtime-workspace"
+  },
+  "response": {
+    "content": [
+      {
+        "text": "{\"ok\": true, \"tool\": \"projectflow\", \"action\": \"create_project\", \"project\": {\"project_id\": \"orgrebase-formation-905f9cf1a656\", \"title\": \"Formation-compiled two-domain topology probe\", \"source\": \"\", \"requester\": \"\", \"team_id\": \"\", \"status\": \"active\", \"tasks\": []}, \"notificationNeeded\": {\"event\": \"create_project\", \"projectId\": \"orgrebase-formation-905f9cf1a656\", \"summary\": \"create_project: Formation-compiled two-domain topology probe\"}}",
+        "type": "text"
+      }
+    ]
+  },
+  "schema_version": "orgrebase.teamharness-raw-mcp-action.v1",
+  "sequence": 1,
+  "tool": "projectflow"
+}

@@ -1,0 +1,109 @@
+{
+  "$defs": {
+    "SourceScope": {
+      "additionalProperties": false,
+      "properties": {
+        "ca_bundle": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ca Bundle"
+        },
+        "connector_id": {
+          "pattern": "^[A-Za-z0-9_.:-]{1,80}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "entity_set": {
+          "const": "quotes",
+          "default": "quotes",
+          "title": "Entity Set",
+          "type": "string"
+        },
+        "instance_url": {
+          "title": "Instance Url",
+          "type": "string"
+        },
+        "page_size": {
+          "default": 100,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Page Size",
+          "type": "integer"
+        },
+        "record_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Record Ids",
+          "type": "array"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connector_id",
+        "tenant_id",
+        "instance_url",
+        "record_ids"
+      ],
+      "title": "SourceScope",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-source-binding-config.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "access_token_variable": {
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$",
+      "title": "Access Token Variable",
+      "type": "string"
+    },
+    "freshness_seconds": {
+      "default": 300,
+      "maximum": 900,
+      "minimum": 30,
+      "title": "Freshness Seconds",
+      "type": "integer"
+    },
+    "organization_id": {
+      "pattern": "^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$",
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/SourceScope"
+    },
+    "source_token_variable": {
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$",
+      "title": "Source Token Variable",
+      "type": "string"
+    },
+    "workspace_id": {
+      "default": "default",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "title": "Workspace Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source",
+    "organization_id",
+    "source_token_variable",
+    "access_token_variable"
+  ],
+  "title": "SourceBindingConfig",
+  "type": "object"
+}

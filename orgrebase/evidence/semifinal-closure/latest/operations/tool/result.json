@@ -1,0 +1,12 @@
+{
+  "dependencies": [
+    "claim:product.launch_date@v7",
+    "policy:finance.currency@v1"
+  ],
+  "graph_digest": "sha256:83dc8737ca62c732650e845150ee4303df71794bb0e4f2cf2876238574b6c1ac",
+  "run_id": "run:orgrebase:semifinal-closure:quote-001",
+  "schema_version": "orgrebase.controlled-dependency-result.v1",
+  "target_id": "work:enterprise-quote",
+  "target_writes": 0,
+  "task_id": "orgrebase-native-quote-001-gtm-a1"
+}

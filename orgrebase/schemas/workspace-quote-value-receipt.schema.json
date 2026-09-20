@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-quote-value-receipt.schema.json",
+  "title": "Quote operator controlled-value receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "benchmark_version",
+    "assessed_at",
+    "primary_user",
+    "primary_deliverable",
+    "verification_status",
+    "evidence_ceiling",
+    "claim_boundary",
+    "source_evidence",
+    "input_gates",
+    "target_universe",
+    "cost_model",
+    "rebase_cases",
+    "aggregate_cost",
+    "sensitivity",
+    "metrics",
+    "limitations",
+    "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-quote-value-receipt.v1"},
+    "id": {"type": "string", "minLength": 1},
+    "benchmark_version": {"const": "QuoteValue-v0.1"},
+    "assessed_at": {"type": "string", "format": "date-time"},
+    "primary_user": {"const": "Enterprise Quote Operator"},
+    "primary_deliverable": {"const": "Enterprise Quote"},
+    "verification_status": {"enum": ["PASS", "FAIL"]},
+    "evidence_ceiling": {"const": "SYNTHETIC_CONTROLLED_VALUE_PROOF"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "source_evidence": {"type": "array", "minItems": 9, "maxItems": 9, "items": {"$ref": "#/$defs/SourceEvidence"}},
+    "input_gates": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/InputGate"}},
+    "target_universe": {"$ref": "#/$defs/TargetUniverse"},
+    "cost_model": {"$ref": "#/$defs/CostModelBinding"},
+    "rebase_cases": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/RebaseCase"}},
+    "aggregate_cost": {"$ref": "#/$defs/CostResult"},
+    "sensitivity": {"$ref": "#/$defs/Sensitivity"},
+    "metrics": {"type": "array", "minItems": 9, "maxItems": 9, "items": {"$ref": "#/$defs/Metric"}},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "EvidenceClass": {
+      "enum": ["SYNTHETIC_GOLD", "OBSERVED_LOCAL_PRODUCT", "MODELLED_COUNTERFACTUAL", "NOT_RUN"]
+    },
+    "SourceEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "file_sha256", "evidence_class"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "file_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "evidence_class": {"$ref": "#/$defs/EvidenceClass"}
+      }
+    },
+    "InputGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "details"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "status": {"enum": ["PASS", "NOT_RUN"]},
+        "details": {"type": "object"}
+      }
+    },
+    "TargetUniverse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_ids", "target_count", "digest"],
+      "properties": {
+        "target_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "target_count": {"type": "integer", "minimum": 1},
+        "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "CostModelBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_version", "unit", "digest"],
+      "properties": {
+        "model_version": {"const": "quote-action-cost@0.1.0"},
+        "unit": {"const": "NORMALIZED_ACTION_COST"},
+        "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "CostResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["full_rebuild", "selective_rebase", "saving", "saving_rate", "target_universe_digest", "cost_model_digest"],
+      "properties": {
+        "full_rebuild": {"type": "number", "exclusiveMinimum": 0},
+        "selective_rebase": {"type": "number", "minimum": 0},
+        "saving": {"type": "number"},
+        "saving_rate": {"type": "number"},
+        "target_universe_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "cost_model_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "RebaseCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "vmrc_ref", "vmrc_artifact_digest", "evidence_class", "action_counts", "cost"],
+      "properties": {
+        "case_id": {"type": "string", "minLength": 1},
+        "vmrc_ref": {"type": "string", "minLength": 1},
+        "vmrc_artifact_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "evidence_class": {"const": "OBSERVED_LOCAL_PRODUCT"},
+        "action_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["PRESERVE_WITHIN_BOUNDARY", "HOLD_FOR_REVIEW", "REQUALIFY", "REBUILD"],
+          "properties": {
+            "PRESERVE_WITHIN_BOUNDARY": {"type": "integer", "minimum": 0},
+            "HOLD_FOR_REVIEW": {"type": "integer", "minimum": 0},
+            "REQUALIFY": {"type": "integer", "minimum": 0},
+            "REBUILD": {"type": "integer", "minimum": 0}
+          }
+        },
+        "cost": {"$ref": "#/$defs/CostResult"}
+      }
+    },
+    "SensitivityScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "cost_model_digest", "full_rebuild", "selective_rebase", "saving_rate"],
+      "properties": {
+        "id": {
+          "enum": [
+            "LOW_REVIEW_BURDEN",
+            "HIGH_REVIEW_BURDEN",
+            "BREAK_EVEN_REVIEW_BURDEN",
+            "ADVERSE_REVIEW_BURDEN"
+          ]
+        },
+        "cost_model_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "full_rebuild": {"type": "number", "exclusiveMinimum": 0},
+        "selective_rebase": {"type": "number", "minimum": 0},
+        "saving_rate": {"type": "number"}
+      }
+    },
+    "Sensitivity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenarios", "declared_review_burden_envelope", "stress_envelope"],
+      "properties": {
+        "scenarios": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/SensitivityScenario"}},
+        "declared_review_burden_envelope": {"$ref": "#/$defs/ScenarioEnvelope"},
+        "stress_envelope": {"$ref": "#/$defs/ScenarioEnvelope"}
+      }
+    },
+    "ScenarioEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario_ids", "lower", "upper", "interpretation"],
+      "properties": {
+        "scenario_ids": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "LOW_REVIEW_BURDEN",
+              "HIGH_REVIEW_BURDEN",
+              "BREAK_EVEN_REVIEW_BURDEN",
+              "ADVERSE_REVIEW_BURDEN"
+            ]
+          }
+        },
+        "lower": {"type": "number"},
+        "upper": {"type": "number"},
+        "interpretation": {"const": "DECLARED_SCENARIO_ENVELOPE_NOT_CONFIDENCE_INTERVAL"}
+      }
+    },
+    "Metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric_id", "formula", "value", "numerator", "denominator", "unit", "status", "evidence_class", "observation_window", "source_refs", "limitations"],
+      "properties": {
+        "metric_id": {
+          "enum": [
+            "quote_cycle_elapsed_minutes",
+            "policy_confirmation_active_minutes",
+            "impact_exact_mismatch_case_rate",
+            "first_pass_rework_rate",
+            "unauthorized_access_success_rate",
+            "hold_for_review_decision_rate",
+            "full_rebuild_normalized_cost",
+            "selective_rebase_normalized_cost",
+            "selective_rebase_cost_saving_rate"
+          ]
+        },
+        "formula": {"type": "string", "minLength": 1},
+        "value": {"type": ["number", "null"]},
+        "numerator": {"type": ["number", "null"]},
+        "denominator": {"type": ["number", "null"]},
+        "unit": {"enum": ["MINUTE", "RATIO", "NORMALIZED_ACTION_COST"]},
+        "status": {"enum": ["CALCULATED", "NOT_RUN"]},
+        "evidence_class": {"$ref": "#/$defs/EvidenceClass"},
+        "observation_window": {"type": "string", "minLength": 1},
+        "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-007",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-007-partial-delivery.json"
+    ]
+  },
+  "digest": "sha256:87f8b02669680997c92a6b9d2f6a690e83591a979d9a6f57c92780d5c6df19cb",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01",
+      "revision": 1,
+      "digest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-007",
+      "revision": 1,
+      "digest": "sha256:213d18071490e91e57178e2e01840c5403bb4e3c14e60fa2e194b2e7511de21a"
+    },
+    "observationBoundary": "partial-order and production-impact metadata",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-007-partial-delivery.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "partial_delivery->delivery_interrupted",
+        "evidenceRefs": [
+          "authority:OAC_PROJECT",
+          "profiles/supplier-change/annotations/SC-007-partial-delivery.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-626ac773.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-626ac773"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-9f36186f.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-9f36186f"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-29949d76.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-29949d76"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.received-lot-reconciliation",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-007-partial-delivery.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.financial-exposure",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-007-partial-delivery.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.continuity-assessment",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-007-partial-delivery.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.existing-lot-disposition",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-007-partial-delivery.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationTypes": [
+        "received-lot-reconciliation",
+        "financial-exposure",
+        "continuity-assessment",
+        "existing-lot-disposition"
+      ],
+      "admissibleRoleRefs": [
+        "role:procurement-owner",
+        "role:finance-exposure",
+        "role:operations-continuity",
+        "role:quality-qualification"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:finance-agent",
+        "principal:operations-agent",
+        "principal:procurement-agent",
+        "principal:quality-agent"
+      ],
+      "forbiddenCombinations": [
+        [
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ]
+      ],
+      "happensBefore": [
+        {
+          "predecessorRef": "received-lot-reconciliation",
+          "successorRef": "financial-exposure",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-007"
+          ]
+        },
+        {
+          "predecessorRef": "existing-lot-disposition",
+          "successorRef": "continuity-assessment",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-007"
+          ]
+        }
+      ],
+      "evidenceDuties": [
+        "received quantity",
+        "lot acceptance state",
+        "production demand"
+      ],
+      "acceptableUnknownRefs": [
+        "future delivery quantity"
+      ],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "ACCEPT"
+      ]
+    },
+    "witnessRefs": [],
+    "mutationFamily": "self-review,reverse-order,unknown-erasure",
+    "outcomeObservability": "none"
+  }
+}

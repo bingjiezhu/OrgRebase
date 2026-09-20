@@ -1,0 +1,636 @@
+{
+  "compensation": {
+    "contract": {
+      "audit_fields": [
+        "actor_id",
+        "approval_digest",
+        "request_digest",
+        "repository_id",
+        "parent_commit",
+        "commit",
+        "before_content_digest",
+        "after_content_digest"
+      ],
+      "auth": {
+        "agent_credentials": false,
+        "scheme": "control-plane workload identity + approval digest"
+      },
+      "degradation": {
+        "mode": "NO_WRITE",
+        "rule": "Any auth, approval, path, worktree, head, or content drift aborts before commit."
+      },
+      "digest": "sha256:77ddf8b6a0d8e402f822d065541a76d50bba14aa97b6287045d202743b64f26d",
+      "endpoint": "local-process://orgrebase/git-downstream-artifact",
+      "error_codes": [
+        "AUTHZ_DENIED",
+        "APPROVAL_REQUIRED",
+        "REPOSITORY_NOT_CLEAN",
+        "HEAD_DRIFT",
+        "CONTENT_DRIFT",
+        "PATH_OUTSIDE_ALLOWLIST",
+        "IDEMPOTENCY_CONFLICT",
+        "GIT_OPERATION_FAILED"
+      ],
+      "id": "tool:git-downstream-artifact",
+      "idempotency": {
+        "conflict": "fail-closed",
+        "required": true,
+        "scope": "repository+actor+operation+request"
+      },
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "approval_digest": {
+            "pattern": "^sha256:",
+            "type": "string"
+          },
+          "content": {
+            "maxLength": 65536,
+            "type": "string"
+          },
+          "expected_content_digest": {
+            "pattern": "^sha256:",
+            "type": "string"
+          },
+          "expected_head": {
+            "maxLength": 64,
+            "minLength": 40,
+            "type": "string"
+          },
+          "idempotency_key": {
+            "minLength": 8,
+            "type": "string"
+          },
+          "patch_receipt": {
+            "type": "object"
+          },
+          "relative_path": {
+            "pattern": "^downstream/",
+            "type": "string"
+          }
+        },
+        "required": [
+          "relative_path",
+          "expected_head",
+          "expected_content_digest",
+          "approval_digest",
+          "idempotency_key"
+        ],
+        "type": "object"
+      },
+      "mcp_migration": {
+        "business_logic_change": false,
+        "estimated_adapter_surface": "one transport adapter; Git invariants remain local",
+        "transport_change": "Wrap the same executor behind an MCP tool after remote sandboxing."
+      },
+      "method": "PATCH|COMPENSATE",
+      "name": "orgrebase.git_downstream_artifact",
+      "output_schema": {
+        "required": [
+          "repository_id",
+          "relative_path",
+          "parent_commit",
+          "commit",
+          "before_content_digest",
+          "after_content_digest",
+          "receipt"
+        ],
+        "type": "object"
+      },
+      "permissions": {
+        "allowed_actors": [
+          "control-plane:git-executor"
+        ],
+        "allowed_path_prefix": "downstream/",
+        "candidate_submitters": [
+          "gtm-steward",
+          "support-steward"
+        ],
+        "canonical_state_write": false,
+        "effect": "write_reversible_external_artifact",
+        "network": false
+      },
+      "purpose": "Apply an approved downstream candidate as a real Git commit and compensate it with git revert. Agents may propose content but cannot execute this tool.",
+      "retry_policy": {
+        "max_attempts": 2,
+        "non_retryable": [
+          "HEAD_DRIFT",
+          "CONTENT_DRIFT",
+          "REPOSITORY_NOT_CLEAN"
+        ],
+        "retryable": [
+          "PROCESS_INTERRUPTED_BEFORE_COMMIT"
+        ],
+        "safe": "only with the same idempotency key and request digest"
+      },
+      "version": "1.0.0"
+    },
+    "receipt": {
+      "actor_id": "control-plane:git-executor",
+      "after_state_digest": "sha256:d5d3f4138f535b6959d9e11ed60930e16a74fddab22347ddaa6e67684b896188",
+      "audit_event_digest": "sha256:148a1ec2f2841ec4bf12eb0600526d0201a6715dd144f7798543251417db809d",
+      "before_state_digest": "sha256:954a875230472365428ce2f9d6e42e36a9189034f6586ccf58d64c2963ccf066",
+      "compensation_ref": "sha256:6ac2a97676c48dde1f610d4db30991a617d22ca07b4fc6abe5da49f843c95bc4",
+      "completed_at": "2026-08-14T00:04:31Z",
+      "digest": "sha256:81847511cfe564896c660a8158d1936244dbe8cc9e8cc51534ddd37e41d121fe",
+      "error_code": null,
+      "evidence_class": "LOCAL_REAL_TOOL",
+      "external_operation_id": "d1dd370774156ed7e9744a433735f79cf504f2cc",
+      "id": "git-tool-call:git-revert-f1174f842c56:git",
+      "request_digest": "sha256:d663c5d9d57e3e7a6923a73e81efefec3c5e474fd1c8d80a6998c9c357f7bbcd",
+      "result_digest": "sha256:ed22f5ae270fe16fe75a3052b722cd18bc0d800de559fbd37812aab7c7419204",
+      "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+      "started_at": "2026-08-14T00:04:30Z",
+      "status": "SUCCEEDED",
+      "tool_ref": "tool:git-downstream-artifact@1.0.0",
+      "workflow_run_id": "run:orgrebase:launch-date:local@1"
+    },
+    "result": {
+      "after_content_digest": "sha256:d5d3f4138f535b6959d9e11ed60930e16a74fddab22347ddaa6e67684b896188",
+      "before_content_digest": "sha256:954a875230472365428ce2f9d6e42e36a9189034f6586ccf58d64c2963ccf066",
+      "commit": "d1dd370774156ed7e9744a433735f79cf504f2cc",
+      "compensates_commit": "f1174f842c56349b6676f3fa96ef15d68f995290",
+      "compensates_receipt_digest": "sha256:6ac2a97676c48dde1f610d4db30991a617d22ca07b4fc6abe5da49f843c95bc4",
+      "operation": "COMPENSATE",
+      "parent_commit": "f1174f842c56349b6676f3fa96ef15d68f995290",
+      "relative_path": "downstream/launch.json",
+      "repository_id": "sha256:2872c28b0d64191743355753d2c7269820c86be22e04e3745dab26e42ad71af8"
+    }
+  },
+  "compensation_saga": {
+    "attempt": 1,
+    "digest": "sha256:f561263104b420798b76cd047ff9e3a73338e2f0a280cb8afa5b5dee0a6c9a19",
+    "evidence_class": "LOCAL_REAL_TOOL",
+    "external_compensation": {
+      "external_operation_id": "d1dd370774156ed7e9744a433735f79cf504f2cc",
+      "invocation": {
+        "contract": {
+          "audit_fields": [
+            "actor_id",
+            "approval_digest",
+            "request_digest",
+            "repository_id",
+            "parent_commit",
+            "commit",
+            "before_content_digest",
+            "after_content_digest"
+          ],
+          "auth": {
+            "agent_credentials": false,
+            "scheme": "control-plane workload identity + approval digest"
+          },
+          "degradation": {
+            "mode": "NO_WRITE",
+            "rule": "Any auth, approval, path, worktree, head, or content drift aborts before commit."
+          },
+          "digest": "sha256:77ddf8b6a0d8e402f822d065541a76d50bba14aa97b6287045d202743b64f26d",
+          "endpoint": "local-process://orgrebase/git-downstream-artifact",
+          "error_codes": [
+            "AUTHZ_DENIED",
+            "APPROVAL_REQUIRED",
+            "REPOSITORY_NOT_CLEAN",
+            "HEAD_DRIFT",
+            "CONTENT_DRIFT",
+            "PATH_OUTSIDE_ALLOWLIST",
+            "IDEMPOTENCY_CONFLICT",
+            "GIT_OPERATION_FAILED"
+          ],
+          "id": "tool:git-downstream-artifact",
+          "idempotency": {
+            "conflict": "fail-closed",
+            "required": true,
+            "scope": "repository+actor+operation+request"
+          },
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "approval_digest": {
+                "pattern": "^sha256:",
+                "type": "string"
+              },
+              "content": {
+                "maxLength": 65536,
+                "type": "string"
+              },
+              "expected_content_digest": {
+                "pattern": "^sha256:",
+                "type": "string"
+              },
+              "expected_head": {
+                "maxLength": 64,
+                "minLength": 40,
+                "type": "string"
+              },
+              "idempotency_key": {
+                "minLength": 8,
+                "type": "string"
+              },
+              "patch_receipt": {
+                "type": "object"
+              },
+              "relative_path": {
+                "pattern": "^downstream/",
+                "type": "string"
+              }
+            },
+            "required": [
+              "relative_path",
+              "expected_head",
+              "expected_content_digest",
+              "approval_digest",
+              "idempotency_key"
+            ],
+            "type": "object"
+          },
+          "mcp_migration": {
+            "business_logic_change": false,
+            "estimated_adapter_surface": "one transport adapter; Git invariants remain local",
+            "transport_change": "Wrap the same executor behind an MCP tool after remote sandboxing."
+          },
+          "method": "PATCH|COMPENSATE",
+          "name": "orgrebase.git_downstream_artifact",
+          "output_schema": {
+            "required": [
+              "repository_id",
+              "relative_path",
+              "parent_commit",
+              "commit",
+              "before_content_digest",
+              "after_content_digest",
+              "receipt"
+            ],
+            "type": "object"
+          },
+          "permissions": {
+            "allowed_actors": [
+              "control-plane:git-executor"
+            ],
+            "allowed_path_prefix": "downstream/",
+            "candidate_submitters": [
+              "gtm-steward",
+              "support-steward"
+            ],
+            "canonical_state_write": false,
+            "effect": "write_reversible_external_artifact",
+            "network": false
+          },
+          "purpose": "Apply an approved downstream candidate as a real Git commit and compensate it with git revert. Agents may propose content but cannot execute this tool.",
+          "retry_policy": {
+            "max_attempts": 2,
+            "non_retryable": [
+              "HEAD_DRIFT",
+              "CONTENT_DRIFT",
+              "REPOSITORY_NOT_CLEAN"
+            ],
+            "retryable": [
+              "PROCESS_INTERRUPTED_BEFORE_COMMIT"
+            ],
+            "safe": "only with the same idempotency key and request digest"
+          },
+          "version": "1.0.0"
+        },
+        "receipt": {
+          "actor_id": "control-plane:git-executor",
+          "after_state_digest": "sha256:d5d3f4138f535b6959d9e11ed60930e16a74fddab22347ddaa6e67684b896188",
+          "audit_event_digest": "sha256:148a1ec2f2841ec4bf12eb0600526d0201a6715dd144f7798543251417db809d",
+          "before_state_digest": "sha256:954a875230472365428ce2f9d6e42e36a9189034f6586ccf58d64c2963ccf066",
+          "compensation_ref": "sha256:6ac2a97676c48dde1f610d4db30991a617d22ca07b4fc6abe5da49f843c95bc4",
+          "completed_at": "2026-08-14T00:04:31Z",
+          "digest": "sha256:81847511cfe564896c660a8158d1936244dbe8cc9e8cc51534ddd37e41d121fe",
+          "error_code": null,
+          "evidence_class": "LOCAL_REAL_TOOL",
+          "external_operation_id": "d1dd370774156ed7e9744a433735f79cf504f2cc",
+          "id": "git-tool-call:git-revert-f1174f842c56:git",
+          "request_digest": "sha256:d663c5d9d57e3e7a6923a73e81efefec3c5e474fd1c8d80a6998c9c357f7bbcd",
+          "result_digest": "sha256:ed22f5ae270fe16fe75a3052b722cd18bc0d800de559fbd37812aab7c7419204",
+          "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+          "started_at": "2026-08-14T00:04:30Z",
+          "status": "SUCCEEDED",
+          "tool_ref": "tool:git-downstream-artifact@1.0.0",
+          "workflow_run_id": "run:orgrebase:launch-date:local@1"
+        },
+        "result": {
+          "after_content_digest": "sha256:d5d3f4138f535b6959d9e11ed60930e16a74fddab22347ddaa6e67684b896188",
+          "before_content_digest": "sha256:954a875230472365428ce2f9d6e42e36a9189034f6586ccf58d64c2963ccf066",
+          "commit": "d1dd370774156ed7e9744a433735f79cf504f2cc",
+          "compensates_commit": "f1174f842c56349b6676f3fa96ef15d68f995290",
+          "compensates_receipt_digest": "sha256:6ac2a97676c48dde1f610d4db30991a617d22ca07b4fc6abe5da49f843c95bc4",
+          "operation": "COMPENSATE",
+          "parent_commit": "f1174f842c56349b6676f3fa96ef15d68f995290",
+          "relative_path": "downstream/launch.json",
+          "repository_id": "sha256:2872c28b0d64191743355753d2c7269820c86be22e04e3745dab26e42ad71af8"
+        }
+      },
+      "receipt_digest": "sha256:81847511cfe564896c660a8158d1936244dbe8cc9e8cc51534ddd37e41d121fe",
+      "status": "SUCCEEDED"
+    },
+    "git_patch_receipt_digest": "sha256:6ac2a97676c48dde1f610d4db30991a617d22ca07b4fc6abe5da49f843c95bc4",
+    "id": "compensation-saga:git-revert-f1174f842c56@attempt-1",
+    "internal_compensation": {
+      "authoritative_claim_unchanged": true,
+      "receipt_digest": "sha256:bfd49d7f9d3fdf03568c5ad78ae066bb55d487912fa389653da5c2fd36167076",
+      "status": "SUCCEEDED"
+    },
+    "next_action": null,
+    "residual_effects": [],
+    "rollback_approval_digest": "sha256:8a66b02e300c66d9d988c8a431dc13f1cdd919f976f8bfead03d38572551d585",
+    "rollback_receipt_digest": "sha256:bfd49d7f9d3fdf03568c5ad78ae066bb55d487912fa389653da5c2fd36167076",
+    "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+    "status": "ROLLED_BACK_PENDING_REBASE",
+    "workflow_run_id": "run:orgrebase:launch-date:local@1"
+  },
+  "contract": {
+    "audit_fields": [
+      "actor_id",
+      "approval_digest",
+      "request_digest",
+      "repository_id",
+      "parent_commit",
+      "commit",
+      "before_content_digest",
+      "after_content_digest"
+    ],
+    "auth": {
+      "agent_credentials": false,
+      "scheme": "control-plane workload identity + approval digest"
+    },
+    "degradation": {
+      "mode": "NO_WRITE",
+      "rule": "Any auth, approval, path, worktree, head, or content drift aborts before commit."
+    },
+    "digest": "sha256:77ddf8b6a0d8e402f822d065541a76d50bba14aa97b6287045d202743b64f26d",
+    "endpoint": "local-process://orgrebase/git-downstream-artifact",
+    "error_codes": [
+      "AUTHZ_DENIED",
+      "APPROVAL_REQUIRED",
+      "REPOSITORY_NOT_CLEAN",
+      "HEAD_DRIFT",
+      "CONTENT_DRIFT",
+      "PATH_OUTSIDE_ALLOWLIST",
+      "IDEMPOTENCY_CONFLICT",
+      "GIT_OPERATION_FAILED"
+    ],
+    "id": "tool:git-downstream-artifact",
+    "idempotency": {
+      "conflict": "fail-closed",
+      "required": true,
+      "scope": "repository+actor+operation+request"
+    },
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "approval_digest": {
+          "pattern": "^sha256:",
+          "type": "string"
+        },
+        "content": {
+          "maxLength": 65536,
+          "type": "string"
+        },
+        "expected_content_digest": {
+          "pattern": "^sha256:",
+          "type": "string"
+        },
+        "expected_head": {
+          "maxLength": 64,
+          "minLength": 40,
+          "type": "string"
+        },
+        "idempotency_key": {
+          "minLength": 8,
+          "type": "string"
+        },
+        "patch_receipt": {
+          "type": "object"
+        },
+        "relative_path": {
+          "pattern": "^downstream/",
+          "type": "string"
+        }
+      },
+      "required": [
+        "relative_path",
+        "expected_head",
+        "expected_content_digest",
+        "approval_digest",
+        "idempotency_key"
+      ],
+      "type": "object"
+    },
+    "mcp_migration": {
+      "business_logic_change": false,
+      "estimated_adapter_surface": "one transport adapter; Git invariants remain local",
+      "transport_change": "Wrap the same executor behind an MCP tool after remote sandboxing."
+    },
+    "method": "PATCH|COMPENSATE",
+    "name": "orgrebase.git_downstream_artifact",
+    "output_schema": {
+      "required": [
+        "repository_id",
+        "relative_path",
+        "parent_commit",
+        "commit",
+        "before_content_digest",
+        "after_content_digest",
+        "receipt"
+      ],
+      "type": "object"
+    },
+    "permissions": {
+      "allowed_actors": [
+        "control-plane:git-executor"
+      ],
+      "allowed_path_prefix": "downstream/",
+      "candidate_submitters": [
+        "gtm-steward",
+        "support-steward"
+      ],
+      "canonical_state_write": false,
+      "effect": "write_reversible_external_artifact",
+      "network": false
+    },
+    "purpose": "Apply an approved downstream candidate as a real Git commit and compensate it with git revert. Agents may propose content but cannot execute this tool.",
+    "retry_policy": {
+      "max_attempts": 2,
+      "non_retryable": [
+        "HEAD_DRIFT",
+        "CONTENT_DRIFT",
+        "REPOSITORY_NOT_CLEAN"
+      ],
+      "retryable": [
+        "PROCESS_INTERRUPTED_BEFORE_COMMIT"
+      ],
+      "safe": "only with the same idempotency key and request digest"
+    },
+    "version": "1.0.0"
+  },
+  "evidence_boundary": "LOCAL_REAL_TOOL",
+  "fixture_boundary": "SYNTHETIC_FIXTURE",
+  "patch": {
+    "contract": {
+      "audit_fields": [
+        "actor_id",
+        "approval_digest",
+        "request_digest",
+        "repository_id",
+        "parent_commit",
+        "commit",
+        "before_content_digest",
+        "after_content_digest"
+      ],
+      "auth": {
+        "agent_credentials": false,
+        "scheme": "control-plane workload identity + approval digest"
+      },
+      "degradation": {
+        "mode": "NO_WRITE",
+        "rule": "Any auth, approval, path, worktree, head, or content drift aborts before commit."
+      },
+      "digest": "sha256:77ddf8b6a0d8e402f822d065541a76d50bba14aa97b6287045d202743b64f26d",
+      "endpoint": "local-process://orgrebase/git-downstream-artifact",
+      "error_codes": [
+        "AUTHZ_DENIED",
+        "APPROVAL_REQUIRED",
+        "REPOSITORY_NOT_CLEAN",
+        "HEAD_DRIFT",
+        "CONTENT_DRIFT",
+        "PATH_OUTSIDE_ALLOWLIST",
+        "IDEMPOTENCY_CONFLICT",
+        "GIT_OPERATION_FAILED"
+      ],
+      "id": "tool:git-downstream-artifact",
+      "idempotency": {
+        "conflict": "fail-closed",
+        "required": true,
+        "scope": "repository+actor+operation+request"
+      },
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "approval_digest": {
+            "pattern": "^sha256:",
+            "type": "string"
+          },
+          "content": {
+            "maxLength": 65536,
+            "type": "string"
+          },
+          "expected_content_digest": {
+            "pattern": "^sha256:",
+            "type": "string"
+          },
+          "expected_head": {
+            "maxLength": 64,
+            "minLength": 40,
+            "type": "string"
+          },
+          "idempotency_key": {
+            "minLength": 8,
+            "type": "string"
+          },
+          "patch_receipt": {
+            "type": "object"
+          },
+          "relative_path": {
+            "pattern": "^downstream/",
+            "type": "string"
+          }
+        },
+        "required": [
+          "relative_path",
+          "expected_head",
+          "expected_content_digest",
+          "approval_digest",
+          "idempotency_key"
+        ],
+        "type": "object"
+      },
+      "mcp_migration": {
+        "business_logic_change": false,
+        "estimated_adapter_surface": "one transport adapter; Git invariants remain local",
+        "transport_change": "Wrap the same executor behind an MCP tool after remote sandboxing."
+      },
+      "method": "PATCH|COMPENSATE",
+      "name": "orgrebase.git_downstream_artifact",
+      "output_schema": {
+        "required": [
+          "repository_id",
+          "relative_path",
+          "parent_commit",
+          "commit",
+          "before_content_digest",
+          "after_content_digest",
+          "receipt"
+        ],
+        "type": "object"
+      },
+      "permissions": {
+        "allowed_actors": [
+          "control-plane:git-executor"
+        ],
+        "allowed_path_prefix": "downstream/",
+        "candidate_submitters": [
+          "gtm-steward",
+          "support-steward"
+        ],
+        "canonical_state_write": false,
+        "effect": "write_reversible_external_artifact",
+        "network": false
+      },
+      "purpose": "Apply an approved downstream candidate as a real Git commit and compensate it with git revert. Agents may propose content but cannot execute this tool.",
+      "retry_policy": {
+        "max_attempts": 2,
+        "non_retryable": [
+          "HEAD_DRIFT",
+          "CONTENT_DRIFT",
+          "REPOSITORY_NOT_CLEAN"
+        ],
+        "retryable": [
+          "PROCESS_INTERRUPTED_BEFORE_COMMIT"
+        ],
+        "safe": "only with the same idempotency key and request digest"
+      },
+      "version": "1.0.0"
+    },
+    "receipt": {
+      "actor_id": "control-plane:git-executor",
+      "after_state_digest": "sha256:954a875230472365428ce2f9d6e42e36a9189034f6586ccf58d64c2963ccf066",
+      "audit_event_digest": "sha256:061fa24c0914bd652376689d0d6e311344020e1fc8f8bd96245596f7fc1b709d",
+      "before_state_digest": "sha256:d5d3f4138f535b6959d9e11ed60930e16a74fddab22347ddaa6e67684b896188",
+      "compensation_ref": null,
+      "completed_at": "2026-08-14T00:04:31Z",
+      "digest": "sha256:6ac2a97676c48dde1f610d4db30991a617d22ca07b4fc6abe5da49f843c95bc4",
+      "error_code": null,
+      "evidence_class": "LOCAL_REAL_TOOL",
+      "external_operation_id": "f1174f842c56349b6676f3fa96ef15d68f995290",
+      "id": "git-tool-call:git-patch-14e3dc6f5fca",
+      "request_digest": "sha256:d5f694eebdda62119dda3b6e38b635e5c3c96e28eade900e6ec3532e4deacf08",
+      "result_digest": "sha256:6835c7ac123a167782d3bfcc0346ed282be526337d6ecb342814011b46f92b61",
+      "run_nonce": "5a28ca19805ab1cd1d705c64be417509cb2f673ea47ee49856626b32aa151932",
+      "started_at": "2026-08-14T00:04:30Z",
+      "status": "SUCCEEDED",
+      "tool_ref": "tool:git-downstream-artifact@1.0.0",
+      "workflow_run_id": "run:orgrebase:launch-date:local@1"
+    },
+    "result": {
+      "after_content_digest": "sha256:954a875230472365428ce2f9d6e42e36a9189034f6586ccf58d64c2963ccf066",
+      "before_content_digest": "sha256:d5d3f4138f535b6959d9e11ed60930e16a74fddab22347ddaa6e67684b896188",
+      "commit": "f1174f842c56349b6676f3fa96ef15d68f995290",
+      "operation": "PATCH",
+      "parent_commit": "14e3dc6f5fca5a5d00c55b225e6f70a631387ce1",
+      "relative_path": "downstream/launch.json",
+      "repository_id": "sha256:2872c28b0d64191743355753d2c7269820c86be22e04e3745dab26e42ad71af8"
+    }
+  },
+  "verification": {
+    "compensation_commit": "d1dd370774156ed7e9744a433735f79cf504f2cc",
+    "compensation_receipt_digest": "sha256:81847511cfe564896c660a8158d1936244dbe8cc9e8cc51534ddd37e41d121fe",
+    "git_fsck": "PASS",
+    "patch_commit": "f1174f842c56349b6676f3fa96ef15d68f995290",
+    "patch_receipt_digest": "sha256:6ac2a97676c48dde1f610d4db30991a617d22ca07b4fc6abe5da49f843c95bc4",
+    "postcondition_digest": "sha256:d5d3f4138f535b6959d9e11ed60930e16a74fddab22347ddaa6e67684b896188",
+    "repository_id": "sha256:2872c28b0d64191743355753d2c7269820c86be22e04e3745dab26e42ad71af8",
+    "status": "PASS",
+    "worktree_clean": true
+  }
+}

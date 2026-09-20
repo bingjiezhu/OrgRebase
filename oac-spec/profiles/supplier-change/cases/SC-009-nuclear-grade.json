@@ -1,0 +1,188 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-009",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-009-nuclear-grade.json"
+    ]
+  },
+  "digest": "sha256:354409e6c41a135ffa926a78a94cbbb918e97b2d07984e6b7b40df2974e5bbe3",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01-contextual",
+      "revision": 2,
+      "digest": "sha256:76073e824054b6a6b7de66e2b728069dea6ba83164f47d116f9f6eb0d4b1fe65"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-009",
+      "revision": 1,
+      "digest": "sha256:1cb4f27562a8a156cb6448bf9b65e2060905b917c16a696d1464fb5b1ffaac56"
+    },
+    "observationBoundary": "nuclear-grade order metadata; regulatory rule corpus absent",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-009-nuclear-grade.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "operating->judicial_restructuring",
+        "evidenceRefs": [
+          "authority:OAC_PROJECT",
+          "profiles/supplier-change/annotations/SC-009-nuclear-grade.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-9eff55b9.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-9eff55b9"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-1ceffca1.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-1ceffca1"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-a03146b5.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-a03146b5"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-29949d76.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-29949d76"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.exposure-inventory",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-009-nuclear-grade.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.continuity-assessment",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-009-nuclear-grade.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.alternative-qualification",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-009-nuclear-grade.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.compliance-discovery",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-009-nuclear-grade.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationTypes": [
+        "exposure-inventory",
+        "continuity-assessment",
+        "alternative-qualification",
+        "compliance-discovery"
+      ],
+      "admissibleRoleRefs": [
+        "role:procurement-owner",
+        "role:operations-continuity",
+        "role:quality-qualification",
+        "role:compliance-reviewer"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:compliance-agent",
+        "principal:operations-agent",
+        "principal:procurement-agent",
+        "principal:quality-agent"
+      ],
+      "forbiddenCombinations": [
+        [
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ]
+      ],
+      "happensBefore": [
+        {
+          "predecessorRef": "compliance-discovery",
+          "successorRef": "alternative-qualification",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-009"
+          ]
+        },
+        {
+          "predecessorRef": "alternative-qualification",
+          "successorRef": "continuity-assessment",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-009"
+          ]
+        }
+      ],
+      "evidenceDuties": [
+        "applicable regulatory basis",
+        "nuclear-grade qualification evidence"
+      ],
+      "acceptableUnknownRefs": [
+        "applicable nuclear substitution rule"
+      ],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "PROVISIONAL"
+      ]
+    },
+    "witnessRefs": [],
+    "mutationFamily": "unknown-erasure,missing-evidence,reverse-order",
+    "outcomeObservability": "none"
+  }
+}

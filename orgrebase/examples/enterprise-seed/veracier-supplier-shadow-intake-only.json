@@ -1,0 +1,140 @@
+{
+  "digest": "sha256:4f60cf1b06451778cfec0e624a57fc5f9d133307a12e4af22dec9d85b94020a6",
+  "schema_version": "orgrebase.enterprise-seed-profile.v1",
+  "profile_id": "profile:veracier-supplier-shadow",
+  "revision": "r1",
+  "scenario_id": "veracier-supplier-status-shadow",
+  "organization_id": "org:veracier",
+  "synthetic": true,
+  "source_roots": [
+    {
+      "id": "source:veracier:domain",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "fixture://veracier/domain@r1",
+      "declared_digest": "sha256:6f6ff65d5fb1ff5ede680374edbe708bb82957f8c17f91084ae6b49a17fcfc91"
+    },
+    {
+      "id": "source:veracier:knowledge",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "fixture://veracier/knowledge@r1",
+      "declared_digest": "sha256:3e9eefa9049f91d396436a69979234bad3dcdc4d3bc765e10364980fca0d69bb"
+    },
+    {
+      "id": "source:veracier:authority",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "fixture://veracier/authority@r1",
+      "declared_digest": "sha256:8197f00b5a5b7a9f78c9fe00f727a1cfa69ef0a92e25793af176ea3e971cae26"
+    },
+    {
+      "id": "source:veracier:capability",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "fixture://veracier/capability@r1",
+      "declared_digest": "sha256:0437e4bd129096ae706f1085eabe8d1fc4583bac663db532316dcf51f132440b"
+    },
+    {
+      "id": "source:veracier:dependency",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "fixture://veracier/dependency@r1",
+      "declared_digest": "sha256:08af649d4861b7ee5ac42bb8e8d2738d2e221101e35a23fc4385c32cad7240bd"
+    }
+  ],
+  "components": [
+    {
+      "kind": "DOMAIN",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:veracier:domain"],
+      "declared_digest": "sha256:cbe6a039245d10f09d849cb8194f2a572ce6749f910bf0d97b116794b6348ef8"
+    },
+    {
+      "kind": "KNOWLEDGE",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:veracier:knowledge"],
+      "declared_digest": "sha256:0e93023bc4e113768824b624b65902011a7a5d89ae06dd291cee3a1a8b29f0a8"
+    },
+    {
+      "kind": "AUTHORITY",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:veracier:authority"],
+      "declared_digest": "sha256:4aca877b526cf00d578bfcfca927a54231e53e05bfb83264e5d1aca3ab852d3b"
+    },
+    {
+      "kind": "CAPABILITY",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:veracier:capability"],
+      "declared_digest": "sha256:74aaa847fcb086b49d37637cc150e2f6fbe808725b4abc57c296553eb86a782e"
+    },
+    {
+      "kind": "DEPENDENCY",
+      "completeness": "PARTIAL",
+      "source_root_refs": ["source:veracier:dependency"],
+      "declared_digest": "sha256:ca9f70c63638694ce6c0569b56a832b376319c9ac8df2011e2f3f2945f043860"
+    }
+  ],
+  "governance": {
+    "admission_authority_refs": ["human:veracier-shadow-owner"],
+    "owner_refs": [
+      "human:veracier-procurement-owner",
+      "human:veracier-risk-owner"
+    ],
+    "rejection_path_ref": "procedure:veracier-intake-reject@r1",
+    "unknown_path_ref": "procedure:veracier-unknown-review@r1"
+  },
+  "default_task": {
+    "id": "task:supplier_status_review",
+    "actor_id": "human:veracier-procurement-owner",
+    "purpose": "supplier_status_review",
+    "deliverable_kind": "SUPPLIER_STATUS_REVIEW",
+    "requested_at": "2026-08-25T00:00:00Z",
+    "template_ref": "template:supplier_status_review@v1",
+    "customer_id": null,
+    "idempotency_key": "veracier:shadow:supplier-status@r1",
+    "input_values": [{"key": "supplier_id", "value": "supplier:atlas"}]
+  },
+  "change_family": [
+    {
+      "kind": "supplier_status",
+      "owner_id": "human:veracier-procurement-owner",
+      "change_id": "changeset:veracier-supplier-status",
+      "revision": "r1",
+      "purpose": "supplier_status_review",
+      "object_id": "supplier:atlas.status",
+      "base_version": "v4",
+      "proposed_version": "v5",
+      "idempotency_key": "veracier:shadow:supplier-status-change@r1"
+    }
+  ],
+  "gaps": [
+    {
+      "digest": "sha256:1061cb28b680e925ca60d3e49e14e5f5dab3c8be6dec04cb641fb073b4620684",
+      "id": "gap:veracier:historical-outcome-baseline",
+      "kind": "MISSING_OUTCOME_BASELINE",
+      "component": "DEPENDENCY",
+      "path": "dependencies.historicalOutcomeBaseline",
+      "description": "Historical accepted outcome labels are not present in this public fixture.",
+      "owner_ref": "human:veracier-procurement-owner",
+      "resolution_gate_ref": "gate:veracier-outcome-assurance@r1",
+      "blocks": ["OUTCOME_ASSURANCE"],
+      "status": "OPEN"
+    }
+  ],
+  "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+  "data_class": "SYNTHETIC_FIXTURE",
+  "requested_growth_level": "G0_DESCRIBE",
+  "runtime_compatibility": {
+    "mode": "INTAKE_ONLY",
+    "handler_profile": null
+  },
+  "declared_limitation_codes": [
+    "SYNTHETIC_DATA_ONLY",
+    "INTAKE_ONLY",
+    "PARTIAL_COVERAGE",
+    "OPEN_GAPS_RETAINED",
+    "NO_EXTERNAL_ENTERPRISE_VALIDATION",
+    "NO_OUTCOME_ASSURANCE"
+  ]
+}

@@ -1,0 +1,63 @@
+name: Documentation
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: Publish the reviewed documentation to GitHub Pages
+        type: boolean
+        default: false
+      site_url:
+        description: Optional final HTTPS Pages URL (including repository base path)
+        type: string
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: documentation-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: orgrebase
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: orgrebase/documentation/uv.lock
+      - name: Install isolated documentation toolchain
+        run: uv sync --project documentation --locked --python 3.12.13
+      - name: Build static documentation
+        env:
+          DOCS_SITE_URL: ${{ inputs.site_url }}
+        run: |
+          args=(--output "$RUNNER_TEMP/orgrebase-docs")
+          if [ -n "$DOCS_SITE_URL" ]; then args+=(--site-url "$DOCS_SITE_URL"); fi
+          uv run --project documentation --frozen python documentation/build.py "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: documentation-preview
+          path: ${{ runner.temp }}/orgrebase-docs
+      - uses: actions/upload-pages-artifact@v3
+        if: inputs.deploy
+        with:
+          path: ${{ runner.temp }}/orgrebase-docs
+  deploy:
+    if: inputs.deploy
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy reviewed static site
+        id: deployment
+        uses: actions/deploy-pages@v4

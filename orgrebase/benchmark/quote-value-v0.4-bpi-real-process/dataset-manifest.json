@@ -1,0 +1,39 @@
+{
+  "schema_version": "orgrebase.workspace-public-real-process-dataset-manifest.v1",
+  "dataset_id": "bpi-challenge-2019-4tu-12715853",
+  "dataset_kind": "REAL_ANONYMIZED_ENTERPRISE_PURCHASE_TO_PAY_EVENT_LOG",
+  "title": "BPI Challenge 2019",
+  "organization_profile": "LARGE_MULTINATIONAL_COATINGS_AND_PAINT_COMPANY",
+  "source_description": "Anonymized real SAP purchase-to-pay event log from a large multinational coatings and paints company.",
+  "official_record": "https://data.4tu.nl/articles/dataset/BPI_Challenge_2019/12715853",
+  "doi": "10.4121/uuid:d06aff4b-79f0-45e6-8ec8-e19730c248f1",
+  "artifact": {
+    "file_name": "BPI_Challenge_2019.xes",
+    "file_id": "24072995",
+    "download_url": "https://data.4tu.nl/ndownloader/files/24072995",
+    "size_bytes": 728558522,
+    "md5": "md5:4eb909242351193a61e1c15b9c3cc814",
+    "sha256": "sha256:af63bc687fc4152f2123b05c3af7772b37ef3fce2d3f67f812666c9e356baae7",
+    "raw_bytes_in_repository": false
+  },
+  "official_counts": {
+    "purchase_order_items": 251734,
+    "events": 1595923,
+    "activity_types": 42,
+    "anonymous_identities": 627
+  },
+  "license": "CC-BY-4.0",
+  "projection_path": "projection/bpi2019-real-process-projection.json",
+  "projection_digest": "sha256:bb705b4e5f6d568b533ae99f1dfd33e0f536bea3c3d90d1ae0715c66a0e9518c",
+  "license_manifest_path": "LICENSES.json",
+  "license_manifest_digest": "sha256:62fdf3b95043c51be5551c7e8fd5e2c75a216a4633e05c8096845adfbc4c3d64",
+  "reproduction": {
+    "fetch_command": "uv run python scripts/data_adapters/fetch_bpi_challenge_2019.py",
+    "projection_command": "uv run python scripts/data_adapters/build_bpi2019_real_process_projection.py --source /tmp/orgrebase-bpi2019-raw.xes",
+    "offline_replay_command": "uv run python scripts/run_bpi2019_real_process_benchmark.py",
+    "offline_verification_command": "uv run python scripts/verify_bpi2019_real_process_benchmark.py"
+  },
+  "evidence_class": "PUBLIC_REAL_ANONYMIZED_ENTERPRISE_EVENT_LOG",
+  "claim_boundary": "REAL_P2P_PROCESS_NOT_REAL_QUOTE_DATA_OR_CAUSAL_GROUND_TRUTH_OR_ROI",
+  "digest": "sha256:fc2128e3c84dcb33a9370057fd6122eafe8af2a8a10f41258048a4a3f081d1f2"
+}

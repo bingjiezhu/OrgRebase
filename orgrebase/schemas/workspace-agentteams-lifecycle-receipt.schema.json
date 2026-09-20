@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-agentteams-lifecycle-receipt.schema.json",
+  "title": "OrgRebase AgentTeams controlled-local native lifecycle receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "evidence_class", "claim_boundary", "oac_integration_status",
+    "path_disclosure_status", "raw_mcp_representation",
+    "run_id", "nonce", "project_id", "source_verification", "plan_digest",
+    "terminal_plan_digest", "plan_revisions", "bindings", "actions",
+    "control_decisions", "matrix_transport", "process_storage_adapter",
+    "project_terminal_state", "canonical_target_writes",
+    "external_promotion_status", "receipt_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-agentteams-lifecycle-receipt.v1"},
+    "evidence_class": {"const": "CONTROLLED_LOCAL_NATIVE_TASKFLOW"},
+    "claim_boundary": {"const": "PINNED_IN_PROCESS_CALL_TOOL_NOT_LIVE_WORKER_HANDOFF"},
+    "oac_integration_status": {"const": "NOT_INTEGRATED"},
+    "path_disclosure_status": {"const": "PUBLIC_PATH_REDACTED"},
+    "raw_mcp_representation": {"const": "SEMANTIC_MCP_WRAPPER_PUBLIC_PATH_REDACTED"},
+    "run_id": {"type": "string", "minLength": 1},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "project_id": {"type": "string", "minLength": 1},
+    "source_verification": {"$ref": "#/$defs/sourceVerification"},
+    "plan_digest": {"$ref": "#/$defs/digest"},
+    "terminal_plan_digest": {"$ref": "#/$defs/digest"},
+    "plan_revisions": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"$ref": "#/$defs/planRevision"}
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 6,
+      "items": {"$ref": "workspace-agentteams-task-binding.schema.json"}
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/action"}
+    },
+    "control_decisions": {
+      "type": "array",
+      "minItems": 7,
+      "items": {"$ref": "workspace-agentteams-control-decision.schema.json"}
+    },
+    "matrix_transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "unique_assignment_events", "request_count"],
+      "properties": {
+        "mode": {"const": "CONTROLLED_LOCAL_HTTP_STUB"},
+        "unique_assignment_events": {"type": "integer", "minimum": 1},
+        "request_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "process_storage_adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode", "process_invocations", "invocation_log_ref",
+        "path_disclosure_status"
+      ],
+      "properties": {
+        "mode": {"const": "CONTROLLED_LOCAL_MC_PROCESS_ADAPTER"},
+        "process_invocations": {"type": "integer", "minimum": 1},
+        "invocation_log_ref": {"const": "runtime/mc-process-invocations.jsonl"},
+        "path_disclosure_status": {"const": "PUBLIC_PATH_REDACTED"}
+      }
+    },
+    "project_terminal_state": {"const": "completed"},
+    "canonical_target_writes": {"const": 0},
+    "external_promotion_status": {"const": "NOT_RUN"},
+    "receipt_digest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sourceVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkout", "origin", "commit", "source_lock_digest", "files",
+        "path_disclosure_status", "status"
+      ],
+      "properties": {
+        "checkout": {"const": "agentteams://pinned-checkout"},
+        "origin": {"type": "string"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_lock_digest": {"$ref": "#/$defs/digest"},
+        "files": {
+          "type": "object",
+          "minProperties": 3,
+          "additionalProperties": {"$ref": "#/$defs/digest"}
+        },
+        "path_disclosure_status": {"const": "PUBLIC_PATH_REDACTED"},
+        "status": {"const": "PASS"}
+      }
+    },
+    "planRevision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision", "plan_digest", "task_ids", "action_receipt_digest"],
+      "properties": {
+        "revision": {"type": "integer", "minimum": 1},
+        "plan_digest": {"$ref": "#/$defs/digest"},
+        "task_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "action_receipt_digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence", "key", "tool", "action", "request_digest",
+        "response_digest", "payload_digest", "raw_ref", "ok", "status",
+        "error", "digest"
+      ],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1},
+        "key": {"type": "string", "minLength": 1},
+        "tool": {"enum": ["projectflow", "taskflow"]},
+        "action": {"type": "string", "minLength": 1},
+        "request_digest": {"$ref": "#/$defs/digest"},
+        "response_digest": {"$ref": "#/$defs/digest"},
+        "payload_digest": {"$ref": "#/$defs/digest"},
+        "raw_ref": {"type": "string", "pattern": "^raw-mcp/[0-9]{3}-[A-Za-z0-9._-]+\\.json$"},
+        "ok": {"type": "boolean"},
+        "status": {"type": ["string", "null"]},
+        "error": {"type": ["string", "null"]},
+        "digest": {"$ref": "#/$defs/digest"}
+      }
+    }
+  }
+}

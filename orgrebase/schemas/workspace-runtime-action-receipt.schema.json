@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-runtime-action-receipt.schema.json",
+  "title": "OrgRebase durable runtime action receipt",
+  "description": "Append-only INTENT/COMMITTED transition receipt. Business authority remains outside this runtime journal.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "sequence",
+    "run_id",
+    "action_key",
+    "action_type",
+    "request_digest",
+    "state",
+    "transition",
+    "attempt",
+    "fencing_token",
+    "checkpoint_digest",
+    "result_digest",
+    "recovery_disposition",
+    "previous_action_digest",
+    "created_at",
+    "digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orgrebase.workspace-runtime-action-receipt.v1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "request_digest": {
+      "$ref": "#/$defs/digest"
+    },
+    "state": {
+      "enum": [
+        "INTENT",
+        "COMMITTED"
+      ]
+    },
+    "transition": {
+      "enum": [
+        "INTENT_STARTED",
+        "INTENT_RECOVERED",
+        "ACTION_COMMITTED"
+      ]
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "fencing_token": {
+      "$ref": "#/$defs/digest"
+    },
+    "checkpoint_digest": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/digest"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "result_digest": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/digest"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "recovery_disposition": {
+      "anyOf": [
+        {
+          "const": "RETRY_INTENT"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "previous_action_digest": {
+      "$ref": "#/$defs/digest"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "digest": {
+      "$ref": "#/$defs/digest"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "COMMITTED"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "transition": {
+            "const": "ACTION_COMMITTED"
+          },
+          "result_digest": {
+            "$ref": "#/$defs/digest"
+          },
+          "recovery_disposition": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "result_digest": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transition": {
+            "const": "INTENT_RECOVERED"
+          }
+        },
+        "required": [
+          "transition"
+        ]
+      },
+      "then": {
+        "properties": {
+          "recovery_disposition": {
+            "const": "RETRY_INTENT"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "recovery_disposition": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

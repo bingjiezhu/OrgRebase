@@ -1,0 +1,184 @@
+{
+  "$defs": {
+    "PilotProposedValue": {
+      "additionalProperties": false,
+      "properties": {
+        "change_kind": {
+          "enum": [
+            "launch_date",
+            "currency",
+            "product_plan",
+            "quote_basket",
+            "pricing_policy"
+          ],
+          "title": "Change Kind",
+          "type": "string"
+        },
+        "object_ref": {
+          "minLength": 1,
+          "title": "Object Ref",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_version": {
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "change_kind",
+        "object_ref",
+        "value",
+        "source_id",
+        "source_version"
+      ],
+      "title": "PilotProposedValue",
+      "type": "object"
+    },
+    "PilotSourceValue": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_ref": {
+          "minLength": 1,
+          "title": "Authority Ref",
+          "type": "string"
+        },
+        "domain_id": {
+          "enum": [
+            "product",
+            "legal",
+            "finance",
+            "gtm"
+          ],
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "object_ref": {
+          "minLength": 1,
+          "title": "Object Ref",
+          "type": "string"
+        },
+        "raw_private_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Private Value"
+        },
+        "semantic_kind": {
+          "$ref": "#/$defs/SemanticKind"
+        },
+        "sensitivity": {
+          "default": "INTERNAL",
+          "enum": [
+            "PUBLIC",
+            "INTERNAL",
+            "CONFIDENTIAL"
+          ],
+          "title": "Sensitivity",
+          "type": "string"
+        },
+        "slot_id": {
+          "minLength": 1,
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_version": {
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "slot_id",
+        "object_ref",
+        "domain_id",
+        "value",
+        "semantic_kind",
+        "authority_ref",
+        "source_id",
+        "source_version"
+      ],
+      "title": "PilotSourceValue",
+      "type": "object"
+    },
+    "SemanticKind": {
+      "enum": [
+        "CLAIM",
+        "POLICY",
+        "SKILL",
+        "TOOL",
+        "LITERAL"
+      ],
+      "title": "SemanticKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-pilot-knowledge-projection.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "proposed_values": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PilotProposedValue"
+      },
+      "title": "Proposed Values",
+      "type": "array"
+    },
+    "source_values": {
+      "items": {
+        "$ref": "#/$defs/PilotSourceValue"
+      },
+      "title": "Source Values",
+      "type": "array"
+    }
+  },
+  "required": [
+    "source_values"
+  ],
+  "title": "PilotKnowledgeProjection",
+  "type": "object"
+}

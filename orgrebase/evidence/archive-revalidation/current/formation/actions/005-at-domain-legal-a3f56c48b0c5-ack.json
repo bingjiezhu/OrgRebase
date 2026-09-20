@@ -1,0 +1,14 @@
+{
+  "action": "ack_task",
+  "digest": "sha256:e5bcf1eca828451304a14c69a8983a804afbb43fe93c3c225198986c4d6af5ed",
+  "error": null,
+  "key": "at-domain-legal-a3f56c48b0c5:ack",
+  "ok": true,
+  "payload_digest": "sha256:75c574bf807d04fa6816d2f1d62a99a4dedb2aadad3e93eaadcf14f02af68c17",
+  "raw_ref": "raw-mcp/005-at-domain-legal-a3f56c48b0c5-ack-66120913.json",
+  "request_digest": "sha256:015ca484ae2c7d624f501a0c2c5d414d1e5a29db421312646e9947a72f6940b2",
+  "response_digest": "sha256:86de9acb805b2065251d0a6fa99b1e4c15caff4473f65a60646d5feb0bb38329",
+  "sequence": 5,
+  "status": "in_progress",
+  "tool": "taskflow"
+}

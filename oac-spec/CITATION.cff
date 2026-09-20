@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this experimental OAC draft, cite this repository and the exact revision."
+title: "Organizational Agent Contract"
+type: software
+version: 0.3.0-alpha
+date-released: 2026-08-23
+license: Apache-2.0
+authors:
+  - name: OAC Contributors
+keywords:
+  - organizational agents
+  - enterprise AI
+  - conformance
+  - dynamic organization
+abstract: >-
+  An experimental contract, contextual applicability evaluator, reference compiler,
+  compiler-independent plan verifier, self-contained Phase A conformance bundle, black-box runner,
+  and internally authored cross-language differential seed for compiling admitted enterprise
+  organization facts and semantic changes into obligation-bound task plans.

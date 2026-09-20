@@ -1,0 +1,75 @@
+{
+  "schema_version": "orgrebase.public-retail-quote-dataset.v1",
+  "source": {
+    "title": "Online Retail",
+    "creator": "Daqing Chen",
+    "repository": "UCI Machine Learning Repository",
+    "doi": "10.24432/C5BW33",
+    "official_record": "https://archive.ics.uci.edu/dataset/352/online+retail",
+    "license": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "source_nature": "REAL_HISTORICAL_TRANSACTIONS_NOT_ORIGINAL_QUOTES",
+    "currency": "GBP",
+    "xlsx_sha256": "43465a06f2ccf7c8b5bd2892bc7defb52f97487934fe93b16ae4c3936424676d",
+    "xlsx_size_bytes": 23715344,
+    "original_columns": [
+      "InvoiceNo",
+      "StockCode",
+      "Description",
+      "Quantity",
+      "InvoiceDate",
+      "UnitPrice",
+      "CustomerID",
+      "Country"
+    ],
+    "transformations": "whole-invoice eligibility filtering, deterministic invoice sampling, exact derived subtotals",
+    "worksheet_name": "Online Retail",
+    "worksheet_xml_path": "xl/worksheets/sheet1.xml",
+    "excel_date_system": "1900"
+  },
+  "sample": {
+    "path": "sample.json",
+    "sha256": "eaf5b166a5aa14d5186e69bc5537f4985657c2a9d6d8270cfb2d6492fec8b128",
+    "bytes": 186936,
+    "invoices": 24,
+    "lines": 355
+  },
+  "selection": {
+    "unit_of_exclusion": "whole_invoice",
+    "selection": "ascending SHA256(UTF-8 invoice_id), then invoice_id; first sample_size eligible invoices",
+    "sample_size": 24,
+    "goods_stock_code_rule": "five digits followed by zero to two ASCII letters; syntactic filter only",
+    "required_fields": [
+      "InvoiceNo",
+      "StockCode",
+      "Description",
+      "Quantity",
+      "InvoiceDate",
+      "UnitPrice",
+      "CustomerID",
+      "Country"
+    ],
+    "numeric_rules": "positive integral Quantity; positive finite decimal UnitPrice and InvoiceDate",
+    "invoice_id_rule": "six digits, with all C-prefixed cancellation invoices excluded",
+    "customer_id_rule": "five digits as provided by anonymized source",
+    "consistent_within_invoice": [
+      "CustomerID",
+      "Country",
+      "InvoiceDate"
+    ],
+    "duplicates": "identical values in all eight columns exclude the whole invoice; business meaning unknown",
+    "quality_counts": "independent reasons can overlap; duplicate counts include original observations",
+    "exact_subtotal": "sum(Quantity * original XML UnitPrice decimal), with no line rounding",
+    "display_subtotal": "presentation assumption only: exact subtotal rounded once to GBP 0.01, ROUND_HALF_UP",
+    "tax_discount_shipping": "not invented; source rows with non-goods codes exclude their whole invoice"
+  },
+  "ground_truth": "Original observed SKU, description, quantity, price, row coordinates; no original invoice totals or tax/discount labels",
+  "controlled_assumptions": {
+    "discount_bps_before": 0,
+    "discount_bps_after": 1000,
+    "tax_bps": 2000,
+    "organization": "synthetic",
+    "approval_identity": "controlled local existing Owner ID"
+  },
+  "validation_scope": "Historical transaction inputs for deterministic pricing and governed changes; not production customer or ROI proof"
+}

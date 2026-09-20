@@ -1,0 +1,77 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-replay-case.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "minLength": 1,
+      "title": "Case Id",
+      "type": "string"
+    },
+    "counterfactual_of": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Counterfactual Of"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "expected_action": {
+      "minLength": 1,
+      "title": "Expected Action",
+      "type": "string"
+    },
+    "partition": {
+      "enum": [
+        "REPLAY",
+        "HELD_OUT",
+        "NEGATIVE_TRANSFER",
+        "PERMISSION",
+        "INJECTION",
+        "MALFORMED",
+        "RESOURCE_OR_DEADLINE",
+        "CANARY"
+      ],
+      "title": "Partition",
+      "type": "string"
+    },
+    "public_input": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Public Input",
+      "type": "object"
+    },
+    "role": {
+      "enum": [
+        "HELD_OUT",
+        "COUNTERFACTUAL",
+        "PRIOR_VERSION",
+        "REGRESSION"
+      ],
+      "title": "Role",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "partition",
+    "role",
+    "public_input",
+    "expected_action"
+  ],
+  "title": "ReplayCase",
+  "type": "object"
+}

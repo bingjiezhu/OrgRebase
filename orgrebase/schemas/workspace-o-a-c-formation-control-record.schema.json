@@ -1,0 +1,111 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-formation-control-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activated_at": {
+      "title": "Activated At",
+      "type": "string"
+    },
+    "agent_execution": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Agent Execution",
+      "type": "string"
+    },
+    "approval_digest": {
+      "title": "Approval Digest",
+      "type": "string"
+    },
+    "capsule_digest": {
+      "title": "Capsule Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "effect_scope": {
+      "const": "LOCAL_CONTROL_PLANE",
+      "default": "LOCAL_CONTROL_PLANE",
+      "title": "Effect Scope",
+      "type": "string"
+    },
+    "handler_execution": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Handler Execution",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "plan_digest": {
+      "title": "Plan Digest",
+      "type": "string"
+    },
+    "preview_digest": {
+      "title": "Preview Digest",
+      "type": "string"
+    },
+    "runtime_binding_digest": {
+      "title": "Runtime Binding Digest",
+      "type": "string"
+    },
+    "runtime_bundle_digest": {
+      "title": "Runtime Bundle Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-formation-control-record.v1",
+      "default": "orgrebase.oac-formation-control-record.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "state": {
+      "const": "ACTIVE",
+      "default": "ACTIVE",
+      "title": "State",
+      "type": "string"
+    },
+    "target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Target Writes",
+      "type": "integer"
+    },
+    "topology_digest": {
+      "title": "Topology Digest",
+      "type": "string"
+    },
+    "version": {
+      "const": "v1",
+      "default": "v1",
+      "title": "Version",
+      "type": "string"
+    },
+    "work_unit_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Work Unit Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "capsule_digest",
+    "preview_digest",
+    "approval_digest",
+    "plan_digest",
+    "runtime_binding_digest",
+    "runtime_bundle_digest",
+    "topology_digest",
+    "work_unit_refs",
+    "activated_at"
+  ],
+  "title": "OACFormationControlRecord",
+  "type": "object"
+}

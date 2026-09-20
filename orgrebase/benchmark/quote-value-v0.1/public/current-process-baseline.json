@@ -1,0 +1,234 @@
+{
+  "schema_version": "orgrebase.workspace-current-process-baseline.v1",
+  "id": "quote-process-baseline:northstar-reference@v1",
+  "primary_user": "Enterprise Quote Operator",
+  "primary_deliverable": "Enterprise Quote",
+  "process_profile": "REFERENCE_QUOTE_FLOW_MEASUREMENT_TEMPLATE",
+  "status": "NOT_RUN",
+  "evidence_class": "NOT_RUN",
+  "observation_window": {
+    "started_at": null,
+    "ended_at": null,
+    "timezone": null
+  },
+  "process_steps": [
+    {
+      "id": "quote-step:intake",
+      "label": "Quote request intake and admission",
+      "systems": {
+        "as_is_interface_class": "CRM_OR_CPQ_REQUEST_QUEUE",
+        "to_be_interface_class": "CRM_OR_CPQ_REQUEST_ADAPTER",
+        "named_connector_status": "NOT_RUN"
+      },
+      "input": "Customer, product, commercial and delivery constraints",
+      "output": "Admitted quote task or a structured return-for-completion decision",
+      "target_response": {
+        "value": 30,
+        "unit": "MINUTE",
+        "basis": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"
+      },
+      "responsible": ["Quote Operator"],
+      "to_be_responsible": ["Quote Operator"],
+      "accountable": "GTM Owner",
+      "consulted": ["Product Owner", "Legal Owner", "Finance Owner"],
+      "informed": ["Customer-facing team"],
+      "approval_condition": "Required request fields and purpose are admitted",
+      "failure_paths": ["RETURN_FOR_COMPLETION", "ESCALATE_SCOPE_CONFLICT"]
+    },
+    {
+      "id": "quote-step:product-confirmation",
+      "label": "Product capability and launch confirmation",
+      "systems": {
+        "as_is_interface_class": "PRODUCT_CATALOG_OR_RELEASE_SOURCE",
+        "to_be_interface_class": "PRODUCT_DOMAIN_READ_PROJECTION",
+        "named_connector_status": "NOT_RUN"
+      },
+      "input": "Admitted product requirements",
+      "output": "Versioned product claims with exact source references",
+      "target_response": {
+        "value": 4,
+        "unit": "BUSINESS_HOUR",
+        "basis": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"
+      },
+      "responsible": ["Product Owner"],
+      "to_be_responsible": ["Product Agent"],
+      "accountable": "Product Owner",
+      "consulted": ["Quote Operator"],
+      "informed": ["GTM Owner"],
+      "approval_condition": "Every product claim is bound to an admitted source version",
+      "failure_paths": ["REQUEST_PRODUCT_EVIDENCE", "HOLD_FOR_PRODUCT_REVIEW"]
+    },
+    {
+      "id": "quote-step:legal-confirmation",
+      "label": "Legal obligation confirmation",
+      "systems": {
+        "as_is_interface_class": "CLM_OR_RESTRICTED_LEGAL_SOURCE",
+        "to_be_interface_class": "PURPOSE_BOUND_LEGAL_READ_PROJECTION",
+        "named_connector_status": "NOT_RUN"
+      },
+      "input": "Customer terms and admitted legal purpose",
+      "output": "Derived legal obligations without restricted-source disclosure",
+      "target_response": {
+        "value": 1,
+        "unit": "BUSINESS_DAY",
+        "basis": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"
+      },
+      "responsible": ["Legal Owner"],
+      "to_be_responsible": ["Legal Agent"],
+      "accountable": "Legal Owner",
+      "consulted": ["Quote Operator"],
+      "informed": ["GTM Owner"],
+      "approval_condition": "Derived obligation is approved for the declared purpose",
+      "failure_paths": ["DENY_UNAUTHORIZED_READ", "HOLD_FOR_LEGAL_REVIEW"]
+    },
+    {
+      "id": "quote-step:finance-confirmation",
+      "label": "Pricing and currency policy confirmation",
+      "systems": {
+        "as_is_interface_class": "ERP_OR_PRICING_POLICY_SOURCE",
+        "to_be_interface_class": "FINANCE_DOMAIN_READ_PROJECTION",
+        "named_connector_status": "NOT_RUN"
+      },
+      "input": "Product, customer and commercial terms",
+      "output": "Approved pricing-policy version and bounded financial analysis",
+      "target_response": {
+        "value": 4,
+        "unit": "BUSINESS_HOUR",
+        "basis": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"
+      },
+      "responsible": ["Finance Owner"],
+      "to_be_responsible": ["Finance Agent"],
+      "accountable": "Finance Owner",
+      "consulted": ["Quote Operator"],
+      "informed": ["GTM Owner"],
+      "approval_condition": "Policy version, currency and price band are approved",
+      "failure_paths": ["REQUEST_FINANCE_EVIDENCE", "HOLD_FOR_FINANCE_REVIEW"]
+    },
+    {
+      "id": "quote-step:composition",
+      "label": "Quote composition and evidence binding",
+      "systems": {
+        "as_is_interface_class": "DOCUMENT_OR_CPQ_COMPOSER",
+        "to_be_interface_class": "ORGREBASE_WORKSPACE",
+        "named_connector_status": "NOT_RUN"
+      },
+      "input": "Admitted Product, Legal and Finance projections",
+      "output": "Enterprise Quote, WorkTrace and dependency manifest",
+      "target_response": {
+        "value": 30,
+        "unit": "MINUTE",
+        "basis": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"
+      },
+      "responsible": ["Quote Operator"],
+      "to_be_responsible": ["GTM Agent"],
+      "accountable": "Quote Operator",
+      "consulted": ["Product Owner", "Legal Owner", "Finance Owner"],
+      "informed": ["GTM Owner"],
+      "approval_condition": "All required slots are satisfied and provenance is complete",
+      "failure_paths": ["ABSTAIN_MISSING_REQUIREMENT", "RETURN_TO_DOMAIN_OWNER"]
+    },
+    {
+      "id": "quote-step:delivery-acceptance",
+      "label": "Customer-facing delivery acceptance",
+      "systems": {
+        "as_is_interface_class": "CPQ_OR_DOCUMENT_OUTPUT",
+        "to_be_interface_class": "GOVERNED_DELIVERABLE_EXPORT",
+        "named_connector_status": "NOT_RUN"
+      },
+      "input": "Completed quote and evidence summary",
+      "output": "Accepted deliverable or correction request",
+      "target_response": {
+        "value": 1,
+        "unit": "BUSINESS_DAY",
+        "basis": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"
+      },
+      "responsible": ["Quote Operator"],
+      "to_be_responsible": ["Quote Operator"],
+      "accountable": "GTM Owner",
+      "consulted": ["Customer-facing team"],
+      "informed": ["Product Owner", "Legal Owner", "Finance Owner"],
+      "approval_condition": "GTM Owner accepts the customer-facing deliverable",
+      "failure_paths": ["REQUEST_CORRECTION", "ESCALATE_COMMERCIAL_EXCEPTION"]
+    },
+    {
+      "id": "quote-step:change-impact",
+      "label": "Post-delivery change impact preview",
+      "systems": {
+        "as_is_interface_class": "MANUAL_CROSS_SYSTEM_CHANGE_REVIEW",
+        "to_be_interface_class": "ORGREBASE_DETERMINISTIC_CONTROL_PLANE",
+        "named_connector_status": "NOT_RUN"
+      },
+      "input": "Owner-admitted source or policy change",
+      "output": "Impact preview, VMRC and explicit uncertainty escalations",
+      "target_response": {
+        "value": 30,
+        "unit": "MINUTE",
+        "basis": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"
+      },
+      "responsible": ["Changed-source Owner"],
+      "to_be_responsible": ["Deterministic Control"],
+      "accountable": "Changed-source Owner",
+      "consulted": ["Quote Operator", "Affected domain owners"],
+      "informed": ["GTM Owner"],
+      "approval_condition": "Revision lock and target universe are frozen",
+      "failure_paths": ["HOLD_FOR_REVIEW", "REJECT_STALE_PREVIEW"]
+    },
+    {
+      "id": "quote-step:selective-update",
+      "label": "Approved selective update and canonical commit",
+      "systems": {
+        "as_is_interface_class": "MANUAL_DOCUMENT_AND_SYSTEM_REWORK",
+        "to_be_interface_class": "ORGREBASE_BOUNDED_RUNTIME_AND_CANONICAL_WRITER",
+        "named_connector_status": "NOT_RUN"
+      },
+      "input": "Approved impact preview and exact owner authorization",
+      "output": "Successor quote, updated graph and atomic receipt",
+      "target_response": {
+        "value": 2,
+        "unit": "BUSINESS_HOUR",
+        "basis": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"
+      },
+      "responsible": ["Exact Approval Owner"],
+      "to_be_responsible": ["Bounded Runtime", "Canonical Writer"],
+      "accountable": "Exact Approval Owner",
+      "consulted": ["Quote Operator", "Affected domain owners"],
+      "informed": ["GTM Owner", "Customer-facing team"],
+      "approval_condition": "Approval binds the exact preview, owner and target universe",
+      "failure_paths": ["COMPENSATE_FAILED_WRITE", "RESUME_FROM_DURABLE_CHECKPOINT", "ROLL_BACK_SUCCESSOR"]
+    }
+  ],
+  "metrics": [
+    {
+      "metric_id": "quote_cycle_elapsed_minutes",
+      "status": "NOT_RUN",
+      "value": null,
+      "unit": "MINUTE",
+      "numerator": null,
+      "denominator": null,
+      "source_refs": []
+    },
+    {
+      "metric_id": "policy_confirmation_active_minutes",
+      "status": "NOT_RUN",
+      "value": null,
+      "unit": "MINUTE",
+      "numerator": null,
+      "denominator": null,
+      "source_refs": []
+    },
+    {
+      "metric_id": "first_pass_rework_rate",
+      "status": "NOT_RUN",
+      "value": null,
+      "unit": "RATIO",
+      "numerator": null,
+      "denominator": null,
+      "source_refs": []
+    }
+  ],
+  "limitations": [
+    "This is a reference measurement template, not an observation of a named enterprise.",
+    "Response times are design targets and must not be reported as current-cycle performance.",
+    "A shadow pilot must replace NOT_RUN values with consented timestamp and active-time records."
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "$defs": {
+    "ComponentAdmission": {
+      "additionalProperties": false,
+      "properties": {
+        "admitted_projection_digest": {
+          "title": "Admitted Projection Digest",
+          "type": "string"
+        },
+        "component_kind": {
+          "$ref": "#/$defs/SeedComponentKind"
+        },
+        "computed_component_digest": {
+          "title": "Computed Component Digest",
+          "type": "string"
+        },
+        "declared_component_digest": {
+          "title": "Declared Component Digest",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "source_root_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Root Refs",
+          "type": "array"
+        },
+        "verdict": {
+          "const": "ADMITTED",
+          "default": "ADMITTED",
+          "title": "Verdict",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_kind",
+        "source_root_refs",
+        "declared_component_digest",
+        "computed_component_digest",
+        "admitted_projection_digest",
+        "reason_codes"
+      ],
+      "title": "ComponentAdmission",
+      "type": "object"
+    },
+    "ProjectionDigestBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "component_kind": {
+          "$ref": "#/$defs/SeedComponentKind"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "projection_digest": {
+          "title": "Projection Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_kind",
+        "projection_digest"
+      ],
+      "title": "ProjectionDigestBinding",
+      "type": "object"
+    },
+    "SeedComponentKind": {
+      "enum": [
+        "DOMAIN",
+        "KNOWLEDGE",
+        "AUTHORITY",
+        "CAPABILITY",
+        "DEPENDENCY"
+      ],
+      "title": "SeedComponentKind",
+      "type": "string"
+    },
+    "SourceRootObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "byte_length": {
+          "exclusiveMinimum": 0,
+          "maximum": 1048576,
+          "title": "Byte Length",
+          "type": "integer"
+        },
+        "component_kind": {
+          "$ref": "#/$defs/SeedComponentKind"
+        },
+        "declared_digest": {
+          "title": "Declared Digest",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "logical_asset_ref": {
+          "minLength": 1,
+          "title": "Logical Asset Ref",
+          "type": "string"
+        },
+        "media_type": {
+          "const": "application/vnd.orgrebase.enterprise-seed-component+json",
+          "default": "application/vnd.orgrebase.enterprise-seed-component+json",
+          "title": "Media Type",
+          "type": "string"
+        },
+        "observed_digest": {
+          "title": "Observed Digest",
+          "type": "string"
+        },
+        "projection_digest": {
+          "title": "Projection Digest",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "source_root_ref": {
+          "minLength": 1,
+          "title": "Source Root Ref",
+          "type": "string"
+        },
+        "verdict": {
+          "const": "ADMITTED",
+          "default": "ADMITTED",
+          "title": "Verdict",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_root_ref",
+        "locator",
+        "logical_asset_ref",
+        "declared_digest",
+        "observed_digest",
+        "byte_length",
+        "component_kind",
+        "projection_digest",
+        "reason_codes"
+      ],
+      "title": "SourceRootObservation",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-enterprise-seed-source-admission-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "admission_policy_ref": {
+      "const": "policy:orgrebase-enterprise-seed-source-admission@v1",
+      "default": "policy:orgrebase-enterprise-seed-source-admission@v1",
+      "title": "Admission Policy Ref",
+      "type": "string"
+    },
+    "admitted_projection_bindings": {
+      "items": {
+        "$ref": "#/$defs/ProjectionDigestBinding"
+      },
+      "title": "Admitted Projection Bindings",
+      "type": "array"
+    },
+    "authority_assurance": {
+      "const": "DECLARED_NOT_AUTHENTICATED",
+      "default": "DECLARED_NOT_AUTHENTICATED",
+      "title": "Authority Assurance",
+      "type": "string"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "component_admissions": {
+      "items": {
+        "$ref": "#/$defs/ComponentAdmission"
+      },
+      "title": "Component Admissions",
+      "type": "array"
+    },
+    "component_projection_digest": {
+      "title": "Component Projection Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "profile_digest": {
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "profile_projection_digest": {
+      "title": "Profile Projection Digest",
+      "type": "string"
+    },
+    "profile_ref": {
+      "minLength": 1,
+      "title": "Profile Ref",
+      "type": "string"
+    },
+    "root_observations": {
+      "items": {
+        "$ref": "#/$defs/SourceRootObservation"
+      },
+      "title": "Root Observations",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "orgrebase.enterprise-seed-source-admission-receipt.v1",
+      "default": "orgrebase.enterprise-seed-source-admission-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_projection_digest": {
+      "title": "Source Projection Digest",
+      "type": "string"
+    },
+    "unresolved_refs": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Unresolved Refs",
+      "type": "array"
+    },
+    "verdict": {
+      "const": "ADMITTED",
+      "default": "ADMITTED",
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_ref",
+    "profile_digest",
+    "root_observations",
+    "component_admissions",
+    "admitted_projection_bindings",
+    "source_projection_digest",
+    "component_projection_digest",
+    "profile_projection_digest",
+    "limitations"
+  ],
+  "title": "EnterpriseSeedSourceAdmissionReceipt",
+  "type": "object"
+}

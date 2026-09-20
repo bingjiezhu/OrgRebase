@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-current-process-baseline.schema.json",
+  "title": "Enterprise quote current-process baseline",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "primary_user",
+    "primary_deliverable",
+    "process_profile",
+    "status",
+    "evidence_class",
+    "observation_window",
+    "process_steps",
+    "metrics",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orgrebase.workspace-current-process-baseline.v1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "primary_user": {
+      "const": "Enterprise Quote Operator"
+    },
+    "primary_deliverable": {
+      "const": "Enterprise Quote"
+    },
+    "process_profile": {
+      "const": "REFERENCE_QUOTE_FLOW_MEASUREMENT_TEMPLATE"
+    },
+    "status": {
+      "enum": ["OBSERVED", "NOT_RUN"]
+    },
+    "evidence_class": {
+      "enum": ["OBSERVED_ENTERPRISE_SHADOW", "NOT_RUN"]
+    },
+    "observation_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["started_at", "ended_at", "timezone"],
+      "properties": {
+        "started_at": {"type": ["string", "null"]},
+        "ended_at": {"type": ["string", "null"]},
+        "timezone": {"type": ["string", "null"]}
+      }
+    },
+    "process_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/ProcessStep"}
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/BaselineMetric"}
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "SystemBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "as_is_interface_class",
+        "to_be_interface_class",
+        "named_connector_status"
+      ],
+      "properties": {
+        "as_is_interface_class": {"type": "string", "minLength": 1},
+        "to_be_interface_class": {"type": "string", "minLength": 1},
+        "named_connector_status": {"const": "NOT_RUN"}
+      }
+    },
+    "TargetResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit", "basis"],
+      "properties": {
+        "value": {"type": "number", "exclusiveMinimum": 0},
+        "unit": {
+          "enum": ["MINUTE", "BUSINESS_HOUR", "BUSINESS_DAY"]
+        },
+        "basis": {"const": "DESIGN_TARGET_NOT_OBSERVED_BASELINE"}
+      }
+    },
+    "ProcessStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "systems",
+        "input",
+        "output",
+        "target_response",
+        "responsible",
+        "to_be_responsible",
+        "accountable",
+        "consulted",
+        "informed",
+        "approval_condition",
+        "failure_paths"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^quote-step:[a-z0-9-]+$"},
+        "label": {"type": "string", "minLength": 1},
+        "systems": {"$ref": "#/$defs/SystemBoundary"},
+        "input": {"type": "string", "minLength": 1},
+        "output": {"type": "string", "minLength": 1},
+        "target_response": {"$ref": "#/$defs/TargetResponse"},
+        "responsible": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "to_be_responsible": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "accountable": {"type": "string", "minLength": 1},
+        "consulted": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "informed": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "approval_condition": {"type": "string", "minLength": 1},
+        "failure_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "BaselineMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric_id",
+        "status",
+        "value",
+        "unit",
+        "numerator",
+        "denominator",
+        "source_refs"
+      ],
+      "properties": {
+        "metric_id": {
+          "enum": [
+            "quote_cycle_elapsed_minutes",
+            "policy_confirmation_active_minutes",
+            "first_pass_rework_rate"
+          ]
+        },
+        "status": {"enum": ["OBSERVED", "NOT_RUN"]},
+        "value": {"type": ["number", "null"]},
+        "unit": {"enum": ["MINUTE", "RATIO"]},
+        "numerator": {"type": ["number", "null"]},
+        "denominator": {"type": ["number", "null"]},
+        "source_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

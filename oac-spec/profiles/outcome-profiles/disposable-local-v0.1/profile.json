@@ -1,0 +1,24 @@
+{
+  "apiVersion": "oac.outcome-profile/v0.1",
+  "evidencePolicy": "per-dimension-refs-with-exact-reason-and-unresolved-unions",
+  "executionAuthority": "separate-disposable-local-controller-grant",
+  "executionAuthorizationKind": "DisposableExecutionGrant",
+  "executionReceiptKind": "ExecutionReceipt",
+  "executionRootDomain": "oac.state/disposable-execution-evidence/v0.1",
+  "kind": "OutcomeProfile",
+  "planEffectCeiling": "zero_effect",
+  "profileId": "oac.outcome.disposable-local",
+  "profileVersion": "v0.1",
+  "requiredDimensions": [
+    "task_goal",
+    "forbidden_effects",
+    "evidence_completion",
+    "scope",
+    "replayability",
+    "unresolved_observations"
+  ],
+  "runtimeBindingKind": "DisposableRuntimeBinding",
+  "runtimeBundleKind": "DisposableRuntimeBundle",
+  "verdictPolicy": "FAIL-reject-else-UNKNOWN-unknown-else-all-PASS-accept",
+  "verificationScope": "reference-root-and-verdict-consistency-only"
+}

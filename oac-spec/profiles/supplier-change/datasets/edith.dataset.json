@@ -1,0 +1,53 @@
+{
+  "manifestVersion": "1.0",
+  "datasetId": "hf:lightonai/veracier-industries",
+  "name": "EDiTh — Véracier Industries",
+  "upstreamUrl": "https://huggingface.co/datasets/lightonai/veracier-industries",
+  "revision": "844264a930674feacf6dee1844da77b0c4d66b2a",
+  "revisionUrl": "https://huggingface.co/datasets/lightonai/veracier-industries/tree/844264a930674feacf6dee1844da77b0c4d66b2a",
+  "license": "Apache-2.0",
+  "retrievedAt": "2026-08-23",
+  "retrievalMode": "metadata-only",
+  "redistributionMode": "identifiers-and-new-oac-annotations-only",
+  "usedFiles": [
+    {
+      "path": "ANSWER_KEY.json",
+      "sha256": "6aff2211fd5681aaa734a0c5d0eed5a518ef0146e0cd4df6bd7d4fac6d6bbe78"
+    },
+    {
+      "path": "MASTER_INDEX.csv",
+      "sha256": "0b5498d97f6fedfdd5a93fd03dfa53a17d9210b6c96de5ea2fa43775e674029c"
+    },
+    {
+      "path": "README.md",
+      "sha256": "381f6a1367431a73ddec147656ba68fb01f67585940647d91dc6e70833faab7e"
+    }
+  ],
+  "excludedAssets": [
+    "by_entity.tar.gz",
+    "all PDF content"
+  ],
+  "selectedRecords": ["PROC-01"],
+  "sourceLabelCapabilities": {
+    "answerKeyGroundTruthPresent": false,
+    "answerKeyGroundTruthValue": {},
+    "masterIndexClassificationsPresent": true,
+    "masterIndexClassificationVocabulary": [
+      "AT_RISK",
+      "NOT_AT_RISK",
+      "REFERENCE",
+      "SUMMARY"
+    ],
+    "masterIndexRecordCount": 19
+  },
+  "notObserved": [
+    "required organizational domains or roles",
+    "dependency and impact paths",
+    "authority and separation-of-duty constraints",
+    "happens-before constraints",
+    "evidence duties",
+    "acceptable plan set",
+    "enterprise outcome state"
+  ],
+  "claimLimit": "EDiTh supplies synthetic enterprise document metadata and task-relative source labels; it does not supply OAC organizational Ground Truth."
+}

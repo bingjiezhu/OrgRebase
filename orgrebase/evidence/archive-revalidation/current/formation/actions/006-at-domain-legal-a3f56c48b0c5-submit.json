@@ -1,0 +1,14 @@
+{
+  "action": "submit_task",
+  "digest": "sha256:7f3e771be904b883e394ddc7f0a3e34cd62f8bbddf5490ca169cca4d81fa5008",
+  "error": null,
+  "key": "at-domain-legal-a3f56c48b0c5:submit",
+  "ok": true,
+  "payload_digest": "sha256:26862190a016b4c0eb2c2566fd04954cb716c29fb74c78f1062fd6da752c9785",
+  "raw_ref": "raw-mcp/006-at-domain-legal-a3f56c48b0c5-submit-ffb3adc1.json",
+  "request_digest": "sha256:01d3b0d66c18fcfb93c0f39448123b21aa745f634c803239f30ca39fc39c27e3",
+  "response_digest": "sha256:5391feaeb440b91775c0b46cb7615958d4909f301a62ef37e9f2bf1c4ca202ab",
+  "sequence": 6,
+  "status": "submitted",
+  "tool": "taskflow"
+}

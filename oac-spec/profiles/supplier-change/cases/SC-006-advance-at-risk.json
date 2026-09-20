@@ -1,0 +1,175 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-006",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-006-advance-at-risk.json"
+    ]
+  },
+  "digest": "sha256:f6f09084c29b4c00944a6a59655bf3153a4c488d66aa0d7557d052fb9070ce9f",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01",
+      "revision": 1,
+      "digest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-006",
+      "revision": 1,
+      "digest": "sha256:ef24b8b5c97f6be4ba901e8e0e857849976747ba863ed0fc44e326dcb59bb549"
+    },
+    "observationBoundary": "rush-order, MSA, and administrator-letter metadata",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-006-advance-at-risk.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "judicial_restructuring->payment_recovery_uncertain",
+        "evidenceRefs": [
+          "authority:OAC_PROJECT",
+          "profiles/supplier-change/annotations/SC-006-advance-at-risk.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-46b05445.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-46b05445"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-a03146b5.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-a03146b5"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-66804d3f.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-66804d3f"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.exposure-inventory",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-006-advance-at-risk.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.contract-remedies",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-006-advance-at-risk.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.claim-filing",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-006-advance-at-risk.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.financial-exposure",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-006-advance-at-risk.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationTypes": [
+        "exposure-inventory",
+        "contract-remedies",
+        "claim-filing",
+        "financial-exposure"
+      ],
+      "admissibleRoleRefs": [
+        "role:procurement-owner",
+        "role:legal-reviewer",
+        "role:finance-exposure"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:finance-agent",
+        "principal:legal-agent",
+        "principal:procurement-agent"
+      ],
+      "forbiddenCombinations": [],
+      "happensBefore": [
+        {
+          "predecessorRef": "contract-remedies",
+          "successorRef": "claim-filing",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-006"
+          ]
+        },
+        {
+          "predecessorRef": "exposure-inventory",
+          "successorRef": "financial-exposure",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-006"
+          ]
+        }
+      ],
+      "evidenceDuties": [
+        "payment evidence",
+        "claim basis",
+        "recognized exposure"
+      ],
+      "acceptableUnknownRefs": [
+        "recoverable amount",
+        "recovery date"
+      ],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "ACCEPT"
+      ]
+    },
+    "witnessRefs": [],
+    "mutationFamily": "reverse-order,missing-evidence,unknown-erasure",
+    "outcomeObservability": "none"
+  }
+}

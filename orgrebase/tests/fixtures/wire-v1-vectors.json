@@ -1,0 +1,24 @@
+{
+  "scheme": "orgrebase.jcs-safe-number.v1",
+  "accepted": [
+    {"name":"null-and-booleans","input":"{\"z\":null,\"b\":false,\"a\":true}","canonical":"{\"a\":true,\"b\":false,\"z\":null}"},
+    {"name":"negative-zero","input":"[-0,-0.0,0.0]","canonical":"[0,0,0]"},
+    {"name":"exponent-boundaries","input":"[1e-6,1e-7,1e15,1e-27]","canonical":"[0.000001,1e-7,1000000000000000,1e-27]"},
+    {"name":"binary64-rounding","input":"[333333333.33333329,4.50,2e-3]","canonical":"[333333333.3333333,4.5,0.002]"},
+    {"name":"safe-integer-edges","input":"[-9007199254740991,9007199254740991]","canonical":"[-9007199254740991,9007199254740991]"},
+    {"name":"decimal-money-and-big-identifier","input":"{\"money\":\"100.00\",\"id\":\"9007199254740993\"}","canonical":"{\"id\":\"9007199254740993\",\"money\":\"100.00\"}"},
+    {"name":"utf16-property-order","input":"{\"דּ\":7,\"😀\":6,\"€\":5,\"ö\":4,\"\":3,\"1\":2,\"\\r\":1}","canonical":"{\"\\r\":1,\"1\":2,\"\":3,\"ö\":4,\"€\":5,\"😀\":6,\"דּ\":7}"},
+    {"name":"preserve-unicode-normalization","input":"{\"composed\":\"é\",\"decomposed\":\"é\",\"chinese\":\"知变\"}","canonical":"{\"chinese\":\"知变\",\"composed\":\"é\",\"decomposed\":\"é\"}"},
+    {"name":"numeric-looking-keys","input":"{\"2\":\"b\",\"10\":\"a\",\"01\":\"c\"}","canonical":"{\"01\":\"c\",\"10\":\"a\",\"2\":\"b\"}"},
+    {"name":"ordered-arrays","input":"[{\"b\":2,\"a\":1},[],{},\"/\",\"\\u000f\\n\\t\"]","canonical":"[{\"a\":1,\"b\":2},[],{},\"/\",\"\\u000f\\n\\t\"]"}
+  ],
+  "rejected": [
+    {"name":"unsafe-integer","input":"9007199254740992"},
+    {"name":"rounded-big-integer","input":"9007199254740993"},
+    {"name":"negative-unsafe-integer","input":"-9007199254740992"},
+    {"name":"large-exponent","input":"1e30"},
+    {"name":"non-finite","input":"1e999"},
+    {"name":"unpaired-high-surrogate","input":"\"\\ud800\""},
+    {"name":"unpaired-low-surrogate","input":"{\"\\udfff\":1}"}
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:retail-113",
+    "namespace": "orgrebase.lab.retail",
+    "revision": 1,
+    "ownerRef": "role:review",
+    "governanceRef": "governance:local-lab",
+    "createdAt": "2026-09-10T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "https://github.com/sierra-research/tau2-bench/tree/672227c6b6676edc20d57ea53b7000262aae77b9",
+      "orgrebase:local-proposed-mapping"
+    ]
+  },
+  "digest": "sha256:9c6e4ea4469944992f785cbfbd35a8e94daece00cf713a6646f88b247a314129",
+  "spec": {
+    "demandRef": "demand:retail-113",
+    "subjectRef": "request:113",
+    "semanticType": "retail.cancel_requested",
+    "deltas": [
+      {
+        "path": "/request",
+        "operation": "replace",
+        "before": {
+          "state": "known",
+          "value": "pending"
+        },
+        "after": {
+          "state": "known",
+          "value": "confirmed"
+        },
+        "beforeVersion": "1",
+        "afterVersion": "2"
+      }
+    ],
+    "observedAt": "2026-09-10T00:00:00Z",
+    "effectiveAt": "2026-09-10T00:00:00Z",
+    "sourceRef": "https://github.com/sierra-research/tau2-bench/tree/672227c6b6676edc20d57ea53b7000262aae77b9",
+    "scopeRefs": [
+      "request:113",
+      "order:5056519",
+      "order:5995614"
+    ],
+    "reason": "Controlled scripted confirmation of the mapped public task state operations",
+    "admissionStatus": "admitted"
+  }
+}

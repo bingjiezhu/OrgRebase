@@ -1,0 +1,441 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "codes": [
+    {
+      "code": "APPLICABILITY_AFTER_STATE_MISMATCH",
+      "description": "The observed after-state does not match the predicate."
+    },
+    {
+      "code": "APPLICABILITY_AFTER_VALUE_MISMATCH",
+      "description": "The known observed after-value does not match the predicate vocabulary."
+    },
+    {
+      "code": "APPLICABILITY_EVALUATION_MISMATCH",
+      "description": "A Plan applicability result differs from independent recomputation."
+    },
+    {
+      "code": "APPLICABILITY_EVALUATION_MISSING",
+      "description": "A required applicability ledger fact is absent from the Plan."
+    },
+    {
+      "code": "APPLICABILITY_INPUT_MISSING",
+      "description": "A source field required by the predicate is absent."
+    },
+    {
+      "code": "APPLICABILITY_INPUT_UNKNOWN",
+      "description": "A source field required by the predicate is explicitly Unknown."
+    },
+    {
+      "code": "APPLICABILITY_RELATION_TYPE_MISMATCH",
+      "description": "The dependency relation does not satisfy the predicate relationTypes."
+    },
+    {
+      "code": "APPLICABILITY_SCOPE_MISMATCH",
+      "description": "The declared context anchors do not satisfy the scope selector."
+    },
+    {
+      "code": "APPLICABILITY_SCOPE_WIDENED",
+      "description": "Derived closure escaped the frozen contextual selector."
+    },
+    {
+      "code": "APPLICABILITY_SEMANTIC_TYPE_MISMATCH",
+      "description": "The change semantic type does not match the predicate."
+    },
+    {
+      "code": "APPLICABILITY_SOURCE_MISMATCH",
+      "description": "The supplied predicate differs from its frozen Snapshot source."
+    },
+    {
+      "code": "APPLICABILITY_SOURCE_MISSING",
+      "description": "The evaluated edge, rule, or duty does not resolve in the frozen Snapshot."
+    },
+    {
+      "code": "APPLICABILITY_SUBJECT_MISMATCH",
+      "description": "The admitted subject does not satisfy the bounded subject selector."
+    },
+    {
+      "code": "APPLICABILITY_WITNESS_MISMATCH",
+      "description": "Applicability witness refs are missing, forged, or non-canonical."
+    },
+    {
+      "code": "CANDIDATE_EDGE_NOT_AUTHORITY",
+      "description": "A candidate or disputed edge is preserved but not authoritative."
+    },
+    {
+      "code": "CANDIDATE_INPUT_NOT_AUTHORITY",
+      "description": "A candidate or disputed endpoint cannot establish mandatory truth."
+    },
+    {
+      "code": "CANONICAL_ADMISSION_MISMATCH",
+      "description": "Typed validation changed an admitted decoded resource."
+    },
+    {
+      "code": "CHANGE_NOT_ADMITTED",
+      "description": "The semantic change is not an admitted source fact."
+    },
+    {
+      "code": "CHANGE_OPERATION_INCONSISTENT",
+      "description": "A delta operation contradicts its explicit before/after value states."
+    },
+    {
+      "code": "CHANGE_PROFILE_BINDING_MISMATCH",
+      "description": "The plan or certificate does not bind the selected change profile identity."
+    },
+    {
+      "code": "CHANGE_PROFILE_DELTA_SET_INVALID",
+      "description": "The change does not contain exactly the selected profile delta path."
+    },
+    {
+      "code": "CHANGE_PROFILE_INVALID",
+      "description": "The descriptor does not match its closed, package-pinned change profile."
+    },
+    {
+      "code": "CHANGE_PROFILE_UNKNOWN",
+      "description": "The requested change profile is not registered in this package."
+    },
+    {
+      "code": "CHANGE_VALUE_UNKNOWN",
+      "description": "The supplier status transition is not observable as a known value."
+    },
+    {
+      "code": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED",
+      "description": "A conformance resource ceiling was exceeded; no partial domain result is permitted."
+    },
+    {
+      "code": "CORE_KIND_UNKNOWN",
+      "description": "The resource kind is not implemented by this profile."
+    },
+    {
+      "code": "CORE_SCHEMA_INVALID",
+      "description": "The JSON resource does not satisfy its registered strict model."
+    },
+    {
+      "code": "DEMAND_AUTHORITY_UNRESOLVED",
+      "description": "The demand requester or accountable role is absent, inactive, non-admitted, or ineligible."
+    },
+    {
+      "code": "DEMAND_ROOT_MISMATCH",
+      "description": "An OrganizationalDemand does not bind the exact admitted Snapshot root."
+    },
+    {
+      "code": "DIGEST_MISSING",
+      "description": "A required detached SHA-256 digest is absent."
+    },
+    {
+      "code": "DUPLICATE_ID",
+      "description": "A set-like resource collection contains a duplicate identifier."
+    },
+    {
+      "code": "EFFECT_CEILING_EXCEEDED",
+      "description": "The plan exceeds the zero-effect Shadow boundary."
+    },
+    {
+      "code": "EVIDENCE_DUTY_MISSING",
+      "description": "A WorkUnit omits evidence required by an obligation."
+    },
+    {
+      "code": "EVOLUTION_AUTHORITY_MISMATCH",
+      "description": "A governance or authority coordinate differs from the exact admitted lineage."
+    },
+    {
+      "code": "EVOLUTION_AUTO_PROMOTION_FORBIDDEN",
+      "description": "An evolution candidate was used without an exact external admission decision."
+    },
+    {
+      "code": "EVOLUTION_DUPLICATE_REF",
+      "description": "A lifecycle root or evidence set contains a duplicate exact ResourceRef."
+    },
+    {
+      "code": "EVOLUTION_NAMESPACE_MISMATCH",
+      "description": "Lifecycle resources cross enterprise namespaces."
+    },
+    {
+      "code": "EVOLUTION_PROVENANCE_MISMATCH",
+      "description": "Lifecycle metadata.sourceRefs does not equal the required ordered provenance."
+    },
+    {
+      "code": "EVOLUTION_REF_KIND_MISMATCH",
+      "description": "A lifecycle ResourceRef has the wrong exact kind."
+    },
+    {
+      "code": "EVOLUTION_ROOT_INCOMPLETE",
+      "description": "A lifecycle root lacks a mandatory exact reference class."
+    },
+    {
+      "code": "EVOLUTION_ROOT_MISMATCH",
+      "description": "A supplied lifecycle root differs from independent recomputation."
+    },
+    {
+      "code": "EVOLUTION_SELF_ADMISSION_FORBIDDEN",
+      "description": "A proposal producer participates in admitting its own Source candidate."
+    },
+    {
+      "code": "GRAPH_COVERAGE_PARTIAL",
+      "description": "The declared dependency boundary is incomplete."
+    },
+    {
+      "code": "IMPACT_PATH_OMITTED",
+      "description": "The plan omitted a required affected, unknown, or bounded path."
+    },
+    {
+      "code": "IMPACT_SEARCH_TRUNCATED",
+      "description": "The declared impact search depth cut off a possible path."
+    },
+    {
+      "code": "INPUT_ROOT_MISMATCH",
+      "description": "The plan does not bind the exact supplied source roots."
+    },
+    {
+      "code": "LOWERING_BINDING_DIGEST_INVALID",
+      "description": "The RuntimeBinding detached digest is missing or does not match its canonical projection; lowering admission fails without a receipt."
+    },
+    {
+      "code": "LOWERING_BINDING_INCOMPLETE",
+      "description": "Runtime role bindings are missing, duplicated, or extend beyond the exact Plan RoleInstances."
+    },
+    {
+      "code": "LOWERING_BINDING_NOT_ADMITTED",
+      "description": "The RuntimeBinding digest is absent from the runner-owned admission allowlist."
+    },
+    {
+      "code": "LOWERING_BINDING_ROOT_MISMATCH",
+      "description": "The RuntimeBinding does not bind the exact supplied OrganizationPlan, recomputed PlanCertificate, and authority envelope."
+    },
+    {
+      "code": "LOWERING_CAPABILITY_MISSING",
+      "description": "A selected runtime subject does not declare the capability required by its obligation handler."
+    },
+    {
+      "code": "LOWERING_CAPABILITY_SET_MISMATCH",
+      "description": "A runtime role capability set is not the exact canonical set required by that role's obligation handlers."
+    },
+    {
+      "code": "LOWERING_CERTIFICATE_MISMATCH",
+      "description": "The supplied PlanCertificate is not exactly the sealed certificate recomputed from the supplied roots."
+    },
+    {
+      "code": "LOWERING_DIMENSION_NOT_PASS",
+      "description": "At least one recomputed verification dimension is not PASS."
+    },
+    {
+      "code": "LOWERING_EFFECT_EXPANSION",
+      "description": "A Plan or RuntimeBinding value exceeds the zero-effect lowering ceiling."
+    },
+    {
+      "code": "LOWERING_HANDLER_INCOMPLETE",
+      "description": "Obligation handler bindings are missing, duplicated, extra, or disagree with required evidence outputs."
+    },
+    {
+      "code": "LOWERING_INPUT_DIGEST_INVALID",
+      "description": "A non-binding sealed lowering input has a missing detached digest or one that does not match its canonical projection; lowering admission fails without a receipt."
+    },
+    {
+      "code": "LOWERING_ORDER_CYCLE",
+      "description": "The WorkUnit happens-before projection cannot be canonically topologically ordered."
+    },
+    {
+      "code": "LOWERING_PLAN_PROJECTION_UNSUPPORTED",
+      "description": "An otherwise admitted Plan cannot be projected exactly because lowering-consumed references or evidence sets are duplicated, dangling, empty, or over-complete."
+    },
+    {
+      "code": "LOWERING_PRINCIPAL_MISMATCH",
+      "description": "A RuntimeBinding principal does not equal the principal selected by the exact Plan RoleInstance."
+    },
+    {
+      "code": "LOWERING_RESTRICTIONS_PRESENT",
+      "description": "The recomputed PlanCertificate still carries restrictions."
+    },
+    {
+      "code": "LOWERING_RUNTIME_SUBJECT_COLLISION",
+      "description": "Different selected principals collapse to the same runtimeSubject."
+    },
+    {
+      "code": "LOWERING_UNRESOLVED_REFS_PRESENT",
+      "description": "The recomputed PlanCertificate still carries unresolved references."
+    },
+    {
+      "code": "LOWERING_VERDICT_NOT_ACCEPT",
+      "description": "The recomputed PlanCertificate verdict is not ACCEPT."
+    },
+    {
+      "code": "NON_I_JSON",
+      "description": "The value cannot be represented by RFC 8785 over I-JSON."
+    },
+    {
+      "code": "NOT_REQUIRED_BY_CONTRACT",
+      "description": "An admitted role is outside the derived obligation set."
+    },
+    {
+      "code": "OBLIGATION_SET_MISMATCH",
+      "description": "Plan obligations differ from independent derivation."
+    },
+    {
+      "code": "OBLIGATION_UNSATISFIED",
+      "description": "A mandatory obligation has no unique admissible discharge."
+    },
+    {
+      "code": "ORDER_CONSTRAINT_INVALID",
+      "description": "A happens-before relation is duplicated, dangling, unjustified, or carries forged reason references."
+    },
+    {
+      "code": "ORDER_CONSTRAINT_MISSING",
+      "description": "A required happens-before relation is absent."
+    },
+    {
+      "code": "ORDER_CYCLE",
+      "description": "The mandatory happens-before graph contains a cycle."
+    },
+    {
+      "code": "OUTCOME_DIMENSION_EVIDENCE_INVALID",
+      "description": "Dimension evidence, reasons, and unresolved observations do not close over the certificate."
+    },
+    {
+      "code": "OUTCOME_DIMENSION_SET_INVALID",
+      "description": "The disposable outcome lacks the exact six required dimensions."
+    },
+    {
+      "code": "OUTCOME_EXECUTION_AUTHORIZATION_INVALID",
+      "description": "The disposable execution root lacks its separate sandbox grant, or a default root carries one."
+    },
+    {
+      "code": "OUTCOME_FORBIDDEN_EFFECT_OBSERVED",
+      "description": "Independent observation found an effect forbidden by the admitted demand."
+    },
+    {
+      "code": "OUTCOME_OBSERVATION_UNRESOLVED",
+      "description": "The independent oracle could not observe a required outcome dimension."
+    },
+    {
+      "code": "OUTCOME_PROFILE_INVALID",
+      "description": "The outcome descriptor or its exact binding differs from the pinned profile."
+    },
+    {
+      "code": "OUTCOME_PROFILE_UNKNOWN",
+      "description": "An outcome profile identity or version is not package-supported."
+    },
+    {
+      "code": "OUTCOME_SELF_CERTIFICATION_FORBIDDEN",
+      "description": "The acting runtime or its execution evidence attempts to certify the business outcome."
+    },
+    {
+      "code": "OUTCOME_VERDICT_INVALID",
+      "description": "Outcome verdict, dimensions, reasons, and unresolved evidence disagree."
+    },
+    {
+      "code": "PLAN_DIGEST_MISMATCH",
+      "description": "The sealed OrganizationPlan digest is invalid."
+    },
+    {
+      "code": "PLAN_NOT_MINIMAL",
+      "description": "A selected plan element has no necessary contract-relative work."
+    },
+    {
+      "code": "PLAN_STATUS_MISMATCH",
+      "description": "Plan status is inconsistent with its derived unresolved set."
+    },
+    {
+      "code": "PREDICATE_DEFINITION_INVALID",
+      "description": "The predicate combines operators in a form forbidden by its registered version."
+    },
+    {
+      "code": "PREDICATE_FALSE_PATH_INCLUDED",
+      "description": "A path continued through a predicate whose result was FALSE."
+    },
+    {
+      "code": "PREDICATE_VERSION_UNSUPPORTED",
+      "description": "The predicateVersion is not present in the implemented predicate-version registry."
+    },
+    {
+      "code": "PREREQUISITE_OBLIGATION_ORDER_MISSING",
+      "description": "A contextual prerequisite obligation is not represented by happensBefore."
+    },
+    {
+      "code": "PRINCIPAL_NOT_SELECTED",
+      "description": "An eligible principal was considered but not selected."
+    },
+    {
+      "code": "PRINCIPAL_SELECTED_QUALIFIED",
+      "description": "A principal is the deterministic qualified binding."
+    },
+    {
+      "code": "QUALIFICATION_INVALID",
+      "description": "A selected principal lacks a required admitted qualification."
+    },
+    {
+      "code": "RESOURCE_COHERENCE_VIOLATION",
+      "description": "Single-enterprise roots disagree on namespace, governance, owner authority, provenance, or scope."
+    },
+    {
+      "code": "RESPONSIBILITY_BINDING_INVALID",
+      "description": "A WorkUnit binds obligations to roles that do not own those obligations."
+    },
+    {
+      "code": "RETRACTED_SOURCE_EXCLUDED",
+      "description": "A retracted source input cannot contribute current authority."
+    },
+    {
+      "code": "ROLE_SCOPE_WIDENED",
+      "description": "A RoleInstance is not a monotone narrowing of its RoleDefinition."
+    },
+    {
+      "code": "ROLE_SELECTED_FOR_OBLIGATION",
+      "description": "A role is required by at least one derived obligation."
+    },
+    {
+      "code": "ROOT_APPLICABILITY_UNKNOWN",
+      "description": "A root predicate input is Unknown and the final verdict must remain UNKNOWN."
+    },
+    {
+      "code": "ROOT_DIGEST_MISMATCH",
+      "description": "Canonical bytes do not match the pinned digest."
+    },
+    {
+      "code": "SEPARATION_OF_DUTIES_VIOLATION",
+      "description": "Separated roles resolve to the same principal."
+    },
+    {
+      "code": "SOURCE_ADMISSION_SUBJECT_MISMATCH",
+      "description": "Admitted Source refs are not an exact subset of reviewed subjects."
+    },
+    {
+      "code": "SOURCE_ADMISSION_VERDICT_INVALID",
+      "description": "Source admission verdict, reasons, unresolved refs, and admitted refs disagree."
+    },
+    {
+      "code": "SUCCESSOR_LINEAGE_INCOMPLETE",
+      "description": "A successor admission lacks its exact predecessor, candidate, evolution, or governance lineage."
+    },
+    {
+      "code": "SUCCESSOR_PREDECESSOR_MISMATCH",
+      "description": "A successor admission references a different predecessor Source root."
+    },
+    {
+      "code": "SUPPLIER_STATUS_DELTA_SET_INVALID",
+      "description": "The Supplier Status Change Profile requires exactly one delta at /status."
+    },
+    {
+      "code": "SYNTHETIC_UNKNOWN_VALUE",
+      "description": "The literal string unknown was supplied as a known business value."
+    },
+    {
+      "code": "TCK_MANIFEST_INVALID",
+      "description": "The TCK manifest or one of its fixture references is unreadable or invalid."
+    },
+    {
+      "code": "UNKNOWN_NOT_PRESERVED",
+      "description": "An input or derived Unknown was erased or upgraded."
+    },
+    {
+      "code": "UNKNOWN_TRANSITION_DUTY_INVALID",
+      "description": "An unknown-transition duty fired without an Unknown evaluation or valid source binding."
+    },
+    {
+      "code": "UNKNOWN_TRANSITION_DUTY_MISSING",
+      "description": "An admitted duty for an Unknown evaluation was not materialized."
+    },
+    {
+      "code": "UNSUPPORTED_SEMANTICS",
+      "description": "The profile cannot evaluate the requested semantics."
+    }
+  ]
+}

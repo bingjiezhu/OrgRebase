@@ -1,0 +1,72 @@
+{
+  "caseVersion": "1.0",
+  "caseId": "SC-005",
+  "title": "Supplier capacity reduced",
+  "profile": "supplier-change/v0alpha1",
+  "annotationStatus": "exploratory",
+  "annotationProvenance": {
+    "authorClass": "project-authored-candidate",
+    "independentHumanRounds": 0,
+    "adjudicated": false,
+    "mayBeCalledGold": false
+  },
+  "sourceLabels": {
+    "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+    "recordRef": "PROC-01",
+    "labelSetRef": "../source-labels/edith-proc-01.json",
+    "answerKeyGroundTruthEmpty": true,
+    "documentRefs": ["DOC-9f36186f", "DOC-7823658d", "DOC-50e34f02", "DOC-1ceffca1"],
+    "claimLimit": "Production-impact metadata is relevant context; the capacity-constrained state and percentage are project-authored."
+  },
+  "counterfactual": {
+    "type": "single-factor",
+    "factor": "supplier.status",
+    "before": "operating",
+    "after": "capacity_constrained",
+    "assertedBy": "OAC_PROJECT",
+    "notUpstreamOacGroundTruth": true
+  },
+  "contextOnlyObservations": [
+    {
+      "path": "/capacityPercent",
+      "before": 100,
+      "after": 40,
+      "authority": "OAC_PROJECT",
+      "profileInput": false,
+      "claimLimit": "Exploratory context only; excluded from the exact Supplier Status Profile input."
+    }
+  ],
+  "frozenInputs": {
+    "snapshotRef": "../inputs/veracier-proc01.snapshot.json",
+    "changeRef": "../inputs/SC-005.change.json",
+    "observationBoundary": "metadata-derived orders and production-impact reference"
+  },
+  "candidateConstraints": {
+    "requiredObligationTypes": [
+      "allocation-inventory",
+      "continuity-assessment",
+      "alternative-qualification",
+      "financial-exposure"
+    ],
+    "admissibleRoleRefs": [
+      "role:procurement-owner",
+      "role:operations-continuity",
+      "role:quality-qualification",
+      "role:finance-exposure"
+    ],
+    "separation": [["role:procurement-owner", "role:quality-qualification"]],
+    "happensBefore": [
+      ["allocation-inventory", "continuity-assessment"]
+    ],
+    "evidenceDuties": ["capacity allocation", "affected production lines", "qualified alternatives"],
+    "acceptableUnknown": ["recovery date"],
+    "candidateOnly": true
+  },
+  "witnessRefs": [],
+  "mutationFamilies": ["omit-obligation", "missing-evidence", "spurious-impact"],
+  "outcomeObservability": {
+    "fromEdith": "not_observable",
+    "fromEnterpriseOpsGym": "not_mapped",
+    "executed": false
+  }
+}

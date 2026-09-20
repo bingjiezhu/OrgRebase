@@ -1,0 +1,54 @@
+{
+  "schema_version": "orgrebase.goai-agentteams-config.v2",
+  "profile": "core-change-advisory",
+  "execution_mode": "LOCAL_DETERMINISTIC_REFERENCE",
+  "run_classification": {
+    "evidence_class": "LOCAL_DETERMINISTIC_REFERENCE",
+    "semantic_acceptance": "REFERENCE_FIXTURE_ONLY",
+    "autonomous_collaboration": false,
+    "current_workspace_live": "NOT_RUN"
+  },
+  "entrypoint": "uv run orgrebase agentteams-demo",
+  "sample_input": "examples/agentteams/change-request.json",
+  "sample_output": "examples/agentteams/run-summary.example.json",
+  "runtime_evidence": "evidence/goai-agentteams/latest/run-summary.json",
+  "agentteams": {
+    "version": "v1.2.2",
+    "source_commit": "849182af8e017168a5a200a87b1062142caf462d",
+    "team_asset": "agentteams/team.yaml",
+    "identity_directory": "agentteams/identities",
+    "historical_transport_fixture": "evidence/agentteams/public/historical-transport-v1.2.2.json",
+    "fresh_core_evidence": {
+      "bundle_dir": "evidence/agentteams/fresh-live/2026-08-25-561171ed039b",
+      "run_summary": "evidence/agentteams/fresh-live/2026-08-25-561171ed039b/RUN-SUMMARY.json",
+      "live_receipt": "evidence/agentteams/fresh-live/2026-08-25-561171ed039b/live-receipt.json",
+      "semantic_ingestion": "evidence/agentteams/fresh-live/2026-08-25-561171ed039b/semantic-ingestion.json",
+      "checksums": "evidence/agentteams/fresh-live/2026-08-25-561171ed039b/SHA256SUMS"
+    }
+  },
+  "scenario": {
+    "fixture": "fixtures/canonical-enterprise.json",
+    "change_set": "changeset:launch-date@r1",
+    "purpose": "change_rebase"
+  },
+  "required_outputs": [
+    "demo.json",
+    "preview.json",
+    "rebase-receipt.json",
+    "conflict-receipt.json",
+    "failure-receipt.json",
+    "rollback-receipt.json",
+    "traces.otlp.json",
+    "logs.otlp.json",
+    "metrics.otlp.json",
+    "manifest.json",
+    "run-summary.json"
+  ],
+  "claim_boundaries": {
+    "local_run": "Five deterministic candidate-only Agent roles execute one frozen authority-bound fixture without external model credentials. This is an executable reference, not autonomous model collaboration.",
+    "historical_transport_receipt": "The public allowlisted historical fixture records only AgentTeams v1.2.2 transport/runtime metadata. Its status is TRANSPORT_ONLY: semantic acceptance and autonomous candidate derivation are not established.",
+    "fresh_core_live": "The frozen fresh bundle proves one LIVE_AGENTTEAMS Core proposal-plane run with four independent provider executions and four semantically admitted advisory candidates. Direct OpenClaw gateway was the execution transport; Matrix records identity and publication, not inbound delegation.",
+    "workspace": "The separate Quote Workspace product uses local deterministic Domain providers; its Workspace-specific AgentTeams live run remains NOT_RUN.",
+    "oac_runtime_bridge": "This AgentTeams Core run did not use the separate local OAC Runtime Admission bridge (NOT_USED_IN_THIS_RUN)."
+  }
+}

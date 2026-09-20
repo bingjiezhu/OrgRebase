@@ -1,0 +1,65 @@
+{
+  "$defs": {
+    "WitnessReference": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^read-witness:[0-9a-f]{64}$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "expected_result": {
+          "enum": [
+            "TRUE",
+            "FALSE"
+          ],
+          "title": "Expected Result",
+          "type": "string"
+        },
+        "query_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Query Digest",
+          "type": "string"
+        },
+        "witness_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Witness Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "witness_digest",
+        "query_digest",
+        "expected_result"
+      ],
+      "title": "WitnessReference",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-read-dependencies.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "orgrebase.read-dependencies.v1",
+      "default": "orgrebase.read-dependencies.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "witnesses": {
+      "items": {
+        "$ref": "#/$defs/WitnessReference"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "title": "Witnesses",
+      "type": "array"
+    }
+  },
+  "required": [
+    "witnesses"
+  ],
+  "title": "ReadDependencies",
+  "type": "object"
+}

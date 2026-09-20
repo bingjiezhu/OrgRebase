@@ -1,0 +1,94 @@
+{
+  "schema_version": "orgrebase.skill-contract.v1",
+  "content_digest": "sha256:c7d012b04e12f2eb0b5c0ce58504d965768a592ace048556563406384fdd211a",
+  "name": "enterprise-launch-readiness",
+  "version": "1.4",
+  "owner": "skill-platform-owner",
+  "purpose": "Turn deterministic impact classifications into bounded rebase actions.",
+  "use_cases": ["enterprise fact change", "launch readiness", "selective work rebase"],
+  "inputs": {
+    "schema": "orgrebase.launch-readiness-input.v1",
+    "required": ["classification", "object_id", "reason_code", "preview_receipt_digest", "approval_receipt_digest"]
+  },
+  "outputs": {
+    "schema": "orgrebase.skill-action.v1",
+    "actions": ["REBASE", "REVIEW", "NOTIFY", "KEEP_CURRENT", "ESCALATE", "DENY", "ABSTAIN"]
+  },
+  "preconditions": [
+    "Impact result came from a fresh deterministic preview",
+    "Caller presents non-zero preview and approval receipt digests",
+    "Object is inside the approved evaluation scope"
+  ],
+  "call_conditions": {
+    "when": [
+      "An admitted semantic ChangeSet has a fresh ImpactPreview",
+      "The caller needs a bounded action proposal for one ImpactResult"
+    ],
+    "never_when": [
+      "The Preview revision lock is stale",
+      "The object is outside evaluation scope",
+      "The caller asks the Skill to admit facts or write canonical state"
+    ]
+  },
+  "postconditions": [
+    "No canonical state is changed by the adapter",
+    "Every proposed action cites its input impact result"
+  ],
+  "failure_behavior": {
+    "mode": "FAIL_CLOSED",
+    "escalation": "Return ABSTAIN or ESCALATE with a machine-readable reason."
+  },
+  "verification": {
+    "method": "Schema validation plus frozen partitioned evaluation",
+    "receipt": "orgrebase.qualification-report.v1",
+    "independence": "Candidate cannot read expected answers, edit evaluator, or publish itself"
+  },
+  "dependencies": {
+    "claims": [{"id": "claim:product.launch_date", "strength": "HARD"}],
+    "policies": [{"id": "policy:agent-boundaries@r1", "strength": "HARD"}],
+    "schemas": ["orgrebase.launch-readiness-input.v1", "orgrebase.skill-action.v1"],
+    "tools": [],
+    "skills": [],
+    "runtime_profiles": ["runtime:agentteams-v1.2.2-adapter@v1", "runtime:skill-evaluator@v1"]
+  },
+  "permissions": {
+    "allowed_data_domains": ["product", "gtm", "derived-legal-claims"],
+    "sensitivity_ceiling": "INTERNAL",
+    "allowed_tools": [],
+    "side_effects": [],
+    "approval_requirements": ["caller-attested preview receipt binding", "caller-attested approval receipt binding"]
+  },
+  "evaluation": {
+    "suite_ref": "evaluation:launch-readiness@r1",
+    "success_conditions": [
+      {"metric": "missed_hard_dependencies", "operator": "==", "value": 0},
+      {"metric": "false_invalidations", "operator": "==", "value": 0},
+      {"metric": "unauthorized_disclosures", "operator": "==", "value": 0},
+      {"metric": "negative_transfer_failures", "operator": "==", "value": 0}
+    ],
+    "negative_transfer_suite": "partition:negative_transfer",
+    "security_suite": "partition:permission,prompt_injection,malformed"
+  },
+  "release": {
+    "states": ["DRAFT", "EVALUATED", "REQUALIFICATION_REQUIRED", "SHADOW", "CANARY", "ACTIVE", "QUARANTINED", "ROLLBACK_DECISION_RECORDED"],
+    "canary_policy": {"organization": "org:northstar", "domain": "gtm", "task_type": "launch-readiness"},
+    "rollback_decision_target": "enterprise-launch-readiness@1.3",
+    "executable_predecessor_restore": "NOT_RUN"
+  },
+  "reuse": {
+    "portable_boundary": "Any system that emits the public Launch Readiness input schema",
+    "organization_specific_inputs": ["authority policy", "typed dependency manifest"],
+    "organization_specific_code_required": false
+  },
+  "multi_agent_relation": {
+    "consumer": "skill-curator",
+    "upstream": ["product-steward", "legal-steward", "gtm-steward"],
+    "coordinator": "change-coordinator",
+    "authority": "proposal only; control plane owns release state"
+  },
+  "distribution": {
+    "license": "PolyForm-Noncommercial-1.0.0",
+    "adapter": "agentteams/skills/enterprise-launch-readiness/SKILL.md",
+    "contract_stability": "JSON Schema and action enum are versioned"
+  }
+}

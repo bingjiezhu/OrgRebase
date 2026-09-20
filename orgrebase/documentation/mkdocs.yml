@@ -1,0 +1,120 @@
+site_name: OrgRebase 文档
+site_description: 企业规则变化的受治理执行：安装、运行、接入、开发与验证。
+use_directory_urls: true
+strict: true
+theme:
+  name: material
+  language: zh
+  font: false
+  icon:
+    logo: material/layers-triple-outline
+  palette:
+  - scheme: default
+    primary: white
+    accent: deep orange
+    toggle:
+      icon: material/weather-night
+      name: 切换深色显示
+  - scheme: slate
+    primary: black
+    accent: deep orange
+    toggle:
+      icon: material/weather-sunny
+      name: 切换浅色显示
+  features:
+  - navigation.sections
+  - navigation.top
+  - navigation.footer
+  - search.suggest
+  - search.highlight
+  - content.code.copy
+plugins:
+- search: {}
+- i18n:
+    docs_structure: suffix
+    fallback_to_default: true
+    reconfigure_material: true
+    reconfigure_search: true
+    languages:
+    - locale: zh
+      default: true
+      name: 简体中文
+      build: true
+      site_name: OrgRebase 文档
+    - locale: en
+      name: English
+      build: true
+      site_name: OrgRebase Docs
+      nav_translations:
+        开始使用: Getting started
+        产品简介: Introduction
+        安装与快速开始: Installation and quickstart
+        模型接入: Model providers
+        Vertex Gemini: Vertex Gemini
+        DeepSeek: DeepSeek
+        运行与集成: Run and integrate
+        Demo与验证: Demo and verification
+        AgentTeams协作: AgentTeams collaboration
+        部署与运维: Deployment and operations
+        Skill与企业包复用: Skills and Pack reuse
+        架构与权威边界: Architecture and authority
+        开发与发布: Develop and publish
+        贡献与安全反馈: Contributing and security
+        GitHub发布与部署: GitHub releases and deployment
+        许可与来源: Licensing and provenance
+        许可与证据范围: Licensing and evidence scope
+        本站源码与下载: Site source and downloads
+        文档站工具链许可: Documentation toolchain licenses
+        深层技术资料（原文）: Detailed references (original languages)
+      site_description: 'Governed execution of enterprise rule changes: installation,
+        model integration, deployment, architecture and verification.'
+      theme:
+        palette:
+        - scheme: default
+          primary: white
+          accent: deep orange
+          toggle:
+            icon: material/weather-night
+            name: Switch to dark mode
+        - scheme: slate
+          primary: black
+          accent: deep orange
+          toggle:
+            icon: material/weather-sunny
+            name: Switch to light mode
+markdown_extensions:
+- admonition
+- attr_list
+- tables
+- toc:
+    permalink: true
+- pymdownx.highlight
+- pymdownx.superfences
+extra_css:
+- assets/site.css
+validation:
+  nav:
+    omitted_files: info
+  links:
+    anchors: warn
+nav:
+- 开始使用:
+  - 产品简介: index.md
+  - 安装与快速开始: guides/quickstart.md
+- 模型接入:
+  - Vertex Gemini: guides/models-vertex.md
+  - DeepSeek: guides/models-deepseek.md
+- 运行与集成:
+  - Demo与验证: guides/demo.md
+  - AgentTeams协作: guides/agentteams.md
+  - 部署与运维: guides/deployment.md
+  - Skill与企业包复用: guides/skills.md
+  - 架构与权威边界: guides/architecture.md
+- 开发与发布:
+  - 贡献与安全反馈: guides/contributing.md
+  - GitHub发布与部署: guides/publishing.md
+- 许可与来源:
+  - 许可与证据范围: guides/licensing.md
+  - 本站源码与下载: source-version.md
+  - 文档站工具链许可: site-third-party.md
+  - 深层技术资料（原文）: guides/reference.md

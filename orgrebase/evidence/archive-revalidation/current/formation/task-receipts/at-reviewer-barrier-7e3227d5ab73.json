@@ -1,0 +1,26 @@
+{
+  "action_digests": {
+    "accept_task_result": "sha256:f150b44ed7c5ec88c617d40f98f54119119080ff3d1eb7c5c08d567905fddbdd",
+    "ack_task": "sha256:1e038d75ec729a791d8e6cc8cb4e850ad882c8ad8929b7f2439c9eed0e463be7",
+    "check_task": "sha256:e2356ab9f996176514c0ba097a01c8d6ba27aa4cfc5016ee5a1bc48bcd7ecefd",
+    "delegate_task": "sha256:2a92cbc75c2ac40cc167df7e4de8d911d172b5c38b055af1c29bfa187a73627f",
+    "submit_task": "sha256:ef456702df73b2883c3139bb06e5820bf07fb3e6cfbad94ce8a61efdc437f3b4"
+  },
+  "assignee_actor_id": "independent-reviewer",
+  "candidate_only": true,
+  "canonical_target_writes": 0,
+  "depends_on": [
+    "at-domain-legal-a3f56c48b0c5",
+    "at-domain-product-f0e5afba2159"
+  ],
+  "digest": "sha256:358f4d4c70e0571c365e64a43c0c392e85773ed9d9bfd9814b9a3ce74da13a7c",
+  "domain_id": "reviewer",
+  "execution_task_digest": "sha256:251a014d568254aa52ec9e0f12be1e2e98ad9b94d1d47cd3251d9cb901d211f3",
+  "result_digest": "sha256:0bcdf7aa98326d85cdca094d2a377f14529fc6eef534b3f23e5044fb6a385386",
+  "schema_version": "orgrebase.formation-taskflow-task-receipt.v1",
+  "task_id": "at-reviewer-barrier-7e3227d5ab73",
+  "task_kind": "REVIEWER_BARRIER",
+  "task_spec_digest": "sha256:2b70451f1f319595b2f3001f87b44b299f583b7f4459d5cbd06e20b0573932b9",
+  "terminal_status": "completed",
+  "transport_assignee": "@independent-reviewer:controlled.local"
+}

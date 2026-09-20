@@ -1,0 +1,171 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrganizationSnapshot",
+  "metadata": {
+    "id": "snapshot:veracier-proc01-truncated-contextual",
+    "namespace": "oac.examples.supplier",
+    "revision": 2,
+    "ownerRef": "role:evidence-discovery",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T00:00:00Z",
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "hf-file:MASTER_INDEX.csv#PROC-01:truncated-two-anchor-view",
+      "oac:project-authored-fixture",
+      "oac:contextual-applicability-v0.2-fixture"
+    ]
+  },
+  "digest": "sha256:0a2e623bebc8ca3eba838416c1dcd326030697efd74c20ec312c5df30ca5e301",
+  "spec": {
+    "nodes": [
+      {
+        "nodeId": "supplier:forges-martelliere",
+        "nodeType": "supplier",
+        "domainRef": "domain:procurement",
+        "ownerRoleRef": "role:procurement-owner",
+        "admissionStatus": "admitted"
+      },
+      {
+        "nodeId": "boundary:source-discovery",
+        "nodeType": "evidence-boundary",
+        "domainRef": "domain:evidence",
+        "ownerRoleRef": "role:evidence-discovery",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "roleDefinitions": [
+      {
+        "roleId": "role:procurement-owner",
+        "domainRef": "domain:procurement",
+        "mission": "validate supplier status without asserting complete exposure",
+        "responsibilityTypes": [
+          "supplier-status-validation"
+        ],
+        "requiredQualifications": [
+          "qualification:procurement-authority"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      },
+      {
+        "roleId": "role:evidence-discovery",
+        "domainRef": "domain:evidence",
+        "mission": "name missing sources and preserve Unknown",
+        "responsibilityTypes": [
+          "source-discovery",
+          "boundary-reporting"
+        ],
+        "requiredQualifications": [
+          "qualification:evidence-curation"
+        ],
+        "effectCeiling": "zero_effect",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "principals": [
+      {
+        "principalId": "principal:procurement-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "qualificationRefs": [
+          "qualification:procurement-authority"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      },
+      {
+        "principalId": "principal:evidence-agent",
+        "principalType": "agent",
+        "eligibleRoleRefs": [
+          "role:evidence-discovery"
+        ],
+        "qualificationRefs": [
+          "qualification:evidence-curation"
+        ],
+        "status": "active",
+        "admissionStatus": "admitted"
+      }
+    ],
+    "dependencyEdges": [],
+    "impactRules": [],
+    "unknownTransitionDuties": [
+      {
+        "dutyId": "duty:contextual-root-unknown-preservation",
+        "applicability": {
+          "predicateVersion": "oac.supplier.applicability/v0.2",
+          "semanticType": "supplier.status",
+          "afterState": "known",
+          "afterValues": [
+            "operating",
+            "judicial_restructuring",
+            "liquidation",
+            "qualification_suspended",
+            "capacity_constrained",
+            "delivery_interrupted"
+          ],
+          "subjectSelector": {
+            "subjectRefs": [
+              "supplier:forges-martelliere"
+            ],
+            "nodeTypes": [
+              "supplier"
+            ],
+            "domainRefs": [
+              "domain:procurement"
+            ]
+          },
+          "scopeSelector": {
+            "refs": [
+              "supplier:forges-martelliere"
+            ],
+            "matchMode": "all",
+            "missingBehavior": "unknown"
+          }
+        },
+        "targetRef": "supplier:forges-martelliere",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "unknown-preservation",
+        "requiredEvidence": [
+          "evidence:confirmed-status-or-unknown-receipt"
+        ],
+        "prerequisiteObligationTypes": [
+          "source-discovery"
+        ],
+        "admissionStatus": "admitted"
+      }
+    ],
+    "separationConstraints": [],
+    "completeness": {
+      "status": "partial",
+      "coveredNodeRefs": [
+        "supplier:forges-martelliere",
+        "boundary:source-discovery"
+      ],
+      "coveredRelationTypes": [
+        "business_dependency",
+        "contractual_dependency",
+        "financial_exposure",
+        "operational_dependency"
+      ],
+      "maxDepth": 1,
+      "knownGaps": [
+        "contracts",
+        "orders",
+        "subsidiaries",
+        "production",
+        "financial-ledger"
+      ],
+      "discoveryRoleRef": "role:evidence-discovery",
+      "discoveryTargetRef": "boundary:source-discovery",
+      "discoveryObligationType": "source-discovery",
+      "discoveryEvidence": [
+        "evidence:named-graph-gaps",
+        "evidence:dependency-discovery-query-receipt"
+      ]
+    }
+  }
+}

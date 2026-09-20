@@ -1,0 +1,209 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "digest": "sha256:c516d7657e679685ca559b6f8fce489614b1fc648c0ef374aa6fba0930929faf",
+  "registryKind": "NormativeSemanticRuleRegistry",
+  "rules": [
+    {
+      "appliesToKinds": [
+        "OrgChangeCase",
+        "OrganizationPlan",
+        "OrganizationSnapshot",
+        "OrganizationalDemand",
+        "OutcomeCertificate",
+        "PlanCertificate",
+        "SemanticChangeSet",
+        "SourceAdmissionReceipt"
+      ],
+      "description": "effectiveTo must be later than effectiveFrom when both are present.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-SEM-001",
+      "ruleVersion": "1.0.0",
+      "scope": "cross_field"
+    },
+    {
+      "appliesToKinds": [
+        "OrganizationSnapshot"
+      ],
+      "description": "A complete boundary cannot declare known gaps; contextual discovery target, obligation type, and evidence are declared all-or-none.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-SEM-002",
+      "ruleVersion": "1.0.0",
+      "scope": "cross_field"
+    },
+    {
+      "appliesToKinds": [
+        "OrganizationSnapshot"
+      ],
+      "description": "Node, role, principal, edge, rule, unknown-transition-duty, applicability-source, and separation-constraint IDs are unique within their collections.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_declared_collection",
+      "ruleId": "OAC-SEM-003",
+      "ruleVersion": "1.0.0",
+      "scope": "set_uniqueness"
+    },
+    {
+      "appliesToKinds": [
+        "OrganizationSnapshot"
+      ],
+      "description": "Authority-like, graph, contextual-duty, and discovery-boundary references resolve to declared snapshot collections and represented domains; admission is checked separately.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_reference",
+      "ruleId": "OAC-SEM-004",
+      "ruleVersion": "1.0.0",
+      "scope": "referential_integrity"
+    },
+    {
+      "appliesToKinds": [
+        "SemanticChangeSet"
+      ],
+      "description": "Known observations carry a value and non-known observations do not.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-SEM-005",
+      "ruleVersion": "1.0.0",
+      "scope": "cross_field"
+    },
+    {
+      "appliesToKinds": [
+        "SemanticChangeSet"
+      ],
+      "description": "Delta paths are unique within one SemanticChangeSet.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_declared_collection",
+      "ruleId": "OAC-SEM-006",
+      "ruleVersion": "1.0.0",
+      "scope": "set_uniqueness"
+    },
+    {
+      "appliesToKinds": [
+        "OrganizationPlan"
+      ],
+      "description": "Applicability-evaluation, impact-path, obligation, role-instance, work-unit, and decision IDs are unique; every path evaluationRef resolves inside the plan.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_declared_collection",
+      "ruleId": "OAC-SEM-007",
+      "ruleVersion": "1.0.0",
+      "scope": "set_uniqueness"
+    },
+    {
+      "appliesToKinds": [
+        "OrgChangeCase"
+      ],
+      "description": "Candidate or exploratory OAC annotations cannot be represented as source ground truth.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_annotation",
+      "ruleId": "OAC-SEM-008",
+      "ruleVersion": "1.0.0",
+      "scope": "provenance_state"
+    },
+    {
+      "appliesToKinds": [
+        "OrganizationSnapshot"
+      ],
+      "description": "An organization snapshot owner resolves to an admitted resource-custodian RoleDefinition; governance and source identifiers remain declared external pins.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_authority_envelope",
+      "ruleId": "OAC-SEM-009",
+      "ruleVersion": "1.0.0",
+      "scope": "authority_envelope"
+    },
+    {
+      "appliesToKinds": [
+        "SemanticChangeSet"
+      ],
+      "description": "Each delta operation is consistent with its before and after observation states.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-SEM-010",
+      "ruleVersion": "1.0.0",
+      "scope": "cross_field"
+    },
+    {
+      "appliesToKinds": [
+        "SemanticChangeSet"
+      ],
+      "description": "A change declares owner and governance authority and its semantic source resolves through metadata.sourceRefs.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_authority_envelope",
+      "ruleId": "OAC-SEM-011",
+      "ruleVersion": "1.0.0",
+      "scope": "authority_envelope"
+    },
+    {
+      "appliesToKinds": [
+        "OrganizationPlan"
+      ],
+      "description": "A happens-before edge is not a self-edge and carries unique reason references.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_order_constraint",
+      "ruleId": "OAC-SEM-012",
+      "ruleVersion": "1.0.0",
+      "scope": "graph_integrity"
+    },
+    {
+      "appliesToKinds": [
+        "OrganizationPlan"
+      ],
+      "description": "Plan roots have the registered kinds, one namespace, declared authority, and exact ordered source provenance.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_authority_envelope",
+      "ruleId": "OAC-SEM-013",
+      "ruleVersion": "1.0.0",
+      "scope": "authority_envelope"
+    },
+    {
+      "appliesToKinds": [
+        "PlanCertificate"
+      ],
+      "description": "Certificate witnesses are unique and deterministically sorted; the schema separately enforces the size bound.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_verification_dimension",
+      "ruleId": "OAC-SEM-014",
+      "ruleVersion": "1.0.0",
+      "scope": "deterministic_evidence"
+    },
+    {
+      "appliesToKinds": [
+        "PlanCertificate"
+      ],
+      "description": "Certificate roots have registered kinds, one namespace, declared authority, and exact ordered source provenance.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-core-v0.1.md#semantic-validation-rules",
+      "quantifier": "for_each_authority_envelope",
+      "ruleId": "OAC-SEM-015",
+      "ruleVersion": "1.0.0",
+      "scope": "authority_envelope"
+    }
+  ]
+}

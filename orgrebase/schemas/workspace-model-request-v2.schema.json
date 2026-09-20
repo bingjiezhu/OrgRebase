@@ -1,0 +1,237 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "ModelInputProjection": {
+      "additionalProperties": false,
+      "description": "Already-admitted input material; a digest alone is not model context.",
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "content_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Content Digest",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "domain_id": {
+          "minLength": 1,
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "object_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Object Ids",
+          "type": "array"
+        },
+        "ref": {
+          "minLength": 1,
+          "title": "Ref",
+          "type": "string"
+        },
+        "source_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref",
+        "source_digest",
+        "domain_id",
+        "object_ids",
+        "content",
+        "content_digest"
+      ],
+      "title": "ModelInputProjection",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-model-request-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Explicit native protocol request, separate from frozen V1 records.",
+  "properties": {
+    "actor_id": {
+      "minLength": 1,
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "attempt": {
+      "default": 0,
+      "maximum": 2,
+      "minimum": 0,
+      "title": "Attempt",
+      "type": "integer"
+    },
+    "contract_version": {
+      "const": "2",
+      "default": "2",
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "domain_id": {
+      "minLength": 1,
+      "title": "Domain Id",
+      "type": "string"
+    },
+    "expected_model_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expected Model Id"
+    },
+    "input_projections": {
+      "items": {
+        "$ref": "#/$defs/ModelInputProjection"
+      },
+      "minItems": 1,
+      "title": "Input Projections",
+      "type": "array"
+    },
+    "max_output_tokens": {
+      "exclusiveMinimum": 0,
+      "maximum": 32768,
+      "title": "Max Output Tokens",
+      "type": "integer"
+    },
+    "model_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Model Id",
+      "type": "string"
+    },
+    "nonce": {
+      "minLength": 1,
+      "title": "Nonce",
+      "type": "string"
+    },
+    "object_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Object Ids",
+      "type": "array"
+    },
+    "prompt_template": {
+      "minLength": 1,
+      "title": "Prompt Template",
+      "type": "string"
+    },
+    "prompt_template_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Prompt Template Digest",
+      "type": "string"
+    },
+    "prompt_template_ref": {
+      "minLength": 1,
+      "title": "Prompt Template Ref",
+      "type": "string"
+    },
+    "provider": {
+      "const": "openai-responses",
+      "default": "openai-responses",
+      "title": "Provider",
+      "type": "string"
+    },
+    "purpose": {
+      "minLength": 1,
+      "title": "Purpose",
+      "type": "string"
+    },
+    "reasoning_effort": {
+      "anyOf": [
+        {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reasoning Effort"
+    },
+    "request_id": {
+      "minLength": 1,
+      "title": "Request Id",
+      "type": "string"
+    },
+    "run_id": {
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Schema Digest",
+      "type": "string"
+    },
+    "schema_name": {
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "title": "Schema Name",
+      "type": "string"
+    },
+    "task_ref": {
+      "minLength": 1,
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "tenant_id": {
+      "minLength": 1,
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "workspace_id": {
+      "minLength": 1,
+      "title": "Workspace Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "request_id",
+    "tenant_id",
+    "workspace_id",
+    "run_id",
+    "nonce",
+    "task_ref",
+    "actor_id",
+    "purpose",
+    "domain_id",
+    "object_ids",
+    "input_projections",
+    "schema_name",
+    "schema_digest",
+    "prompt_template_ref",
+    "prompt_template",
+    "prompt_template_digest",
+    "model_id",
+    "max_output_tokens"
+  ],
+  "title": "ModelRequestV2",
+  "type": "object"
+}

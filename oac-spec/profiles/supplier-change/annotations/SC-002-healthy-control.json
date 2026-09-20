@@ -1,0 +1,55 @@
+{
+  "caseVersion": "1.0",
+  "caseId": "SC-002",
+  "title": "Healthy-supplier negative control",
+  "profile": "supplier-change/v0alpha1",
+  "annotationStatus": "exploratory",
+  "annotationProvenance": {
+    "authorClass": "project-authored-candidate",
+    "independentHumanRounds": 0,
+    "adjudicated": false,
+    "mayBeCalledGold": false
+  },
+  "sourceLabels": {
+    "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+    "recordRef": "PROC-01",
+    "labelSetRef": "../source-labels/edith-proc-01.json",
+    "answerKeyGroundTruthEmpty": true,
+    "documentRefs": ["DOC-fa6b00bb", "DOC-9f0ca817", "DOC-4ec474fb"],
+    "claimLimit": "NOT_AT_RISK labels identify other-supplier documents; they do not prove a healthy Forges Martelliere state."
+  },
+  "counterfactual": {
+    "type": "single-factor-control",
+    "factor": "supplier.status",
+    "before": "status_unverified",
+    "after": "operating",
+    "assertedBy": "OAC_PROJECT",
+    "notUpstreamOacGroundTruth": true
+  },
+  "frozenInputs": {
+    "snapshotRef": "../inputs/veracier-proc01.snapshot.json",
+    "changeRef": "../inputs/SC-002.change.json",
+    "observationBoundary": "synthetic control over the same admitted profile fixture"
+  },
+  "candidateConstraints": {
+    "requiredObligationTypes": ["status-verification"],
+    "admissibleRoleRefs": ["role:procurement-owner"],
+    "separation": [],
+    "happensBefore": [],
+    "evidenceDuties": ["status source verification"],
+    "acceptableUnknown": [],
+    "forbiddenObligationTypes": [
+      "contract-remedies",
+      "financial-exposure",
+      "continuity-assessment"
+    ],
+    "candidateOnly": true
+  },
+  "witnessRefs": [],
+  "mutationFamilies": ["spurious-impact", "redundant-role"],
+  "outcomeObservability": {
+    "fromEdith": "not_observable",
+    "fromEnterpriseOpsGym": "not_mapped",
+    "executed": false
+  }
+}

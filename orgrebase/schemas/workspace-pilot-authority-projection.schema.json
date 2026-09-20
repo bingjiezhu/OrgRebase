@@ -1,0 +1,39 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-pilot-authority-projection.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "admission_controller_contract": {
+      "const": "orgrebase.workspace.admission.AdmissionController@v1",
+      "title": "Admission Controller Contract",
+      "type": "string"
+    },
+    "capability_authority_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Capability Authority Refs",
+      "type": "array"
+    },
+    "governance": {
+      "additionalProperties": true,
+      "title": "Governance",
+      "type": "object"
+    },
+    "source_authority_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Authority Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "governance",
+    "source_authority_refs",
+    "capability_authority_refs",
+    "admission_controller_contract"
+  ],
+  "title": "PilotAuthorityProjection",
+  "type": "object"
+}

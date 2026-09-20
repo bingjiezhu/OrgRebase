@@ -1,0 +1,28 @@
+{
+  "action": "submit_task",
+  "key": "at-domain-legal-a3f56c48b0c5:submit",
+  "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+  "representation": "SEMANTIC_MCP_WRAPPER_PUBLIC_PATH_REDACTED",
+  "request": {
+    "action": "submit_task",
+    "payload": {
+      "deliverables": [],
+      "status": "SUCCESS",
+      "summary": "{\"candidate_only\":true,\"candidate_status\":\"DOMAIN_CANDIDATE_PREPARED\",\"canonical_target_writes\":0,\"domain_id\":\"legal\",\"execution_plan_digest\":\"sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e\",\"execution_task_digest\":\"sha256:24cc97661c351f1e69f5f975c1c0a1a4e43588c89e6221226dd1181f31d5d45a\",\"project_id\":\"orgrebase-formation-905f9cf1a656\",\"run_id\":\"run:formation-recheck:f256f60b26e54dd7802677eecfc395cd\",\"schema_version\":\"orgrebase.formation-taskflow-candidate.v1\",\"task_id\":\"at-domain-legal-a3f56c48b0c5\",\"task_kind\":\"DOMAIN\"}",
+      "taskId": "at-domain-legal-a3f56c48b0c5"
+    },
+    "role": "worker",
+    "workspaceDir": "orgrebase://runtime-workspace"
+  },
+  "response": {
+    "content": [
+      {
+        "text": "{\"ok\": true, \"tool\": \"taskflow\", \"action\": \"submit_task\", \"task\": {\"acknowledged_by_role\": \"worker\", \"assigned_at\": \"2026-09-19T12:35:15Z\", \"assigned_to\": \"@legal-steward:controlled.local\", \"eventId\": \"$controlled-5342f9d7ea9ee9dcffc8ac83\", \"notification\": {\"assignee\": \"@legal-steward:controlled.local\", \"eventId\": \"$controlled-5342f9d7ea9ee9dcffc8ac83\", \"roomId\": \"!orgrebase-formation:controlled.local\", \"sent\": true}, \"project_id\": \"orgrebase-formation-905f9cf1a656\", \"room_id\": \"!orgrebase-formation:controlled.local\", \"spec_path\": \"shared/tasks/at-domain-legal-a3f56c48b0c5/spec.md\", \"status\": \"submitted\", \"task_id\": \"at-domain-legal-a3f56c48b0c5\", \"task_title\": \"Legal domain candidate\", \"result_status\": \"SUCCESS\", \"summary\": \"{\\\"candidate_only\\\":true,\\\"candidate_status\\\":\\\"DOMAIN_CANDIDATE_PREPARED\\\",\\\"canonical_target_writes\\\":0,\\\"domain_id\\\":\\\"legal\\\",\\\"execution_plan_digest\\\":\\\"sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e\\\",\\\"execution_task_digest\\\":\\\"sha256:24cc97661c351f1e69f5f975c1c0a1a4e43588c89e6221226dd1181f31d5d45a\\\",\\\"project_id\\\":\\\"orgrebase-formation-905f9cf1a656\\\",\\\"run_id\\\":\\\"run:formation-recheck:f256f60b26e54dd7802677eecfc395cd\\\",\\\"schema_version\\\":\\\"orgrebase.formation-taskflow-candidate.v1\\\",\\\"task_id\\\":\\\"at-domain-legal-a3f56c48b0c5\\\",\\\"task_kind\\\":\\\"DOMAIN\\\"}\", \"deliverables\": [], \"submitted_by_role\": \"worker\"}, \"publishedArtifacts\": [], \"synced\": true, \"notificationNeeded\": {\"event\": \"submit_task\", \"projectId\": \"orgrebase-formation-905f9cf1a656\", \"summary\": \"submit_task: at-domain-legal-a3f56c48b0c5 (SUCCESS)\", \"targetRoom\": \"!orgrebase-formation:controlled.local\"}}",
+        "type": "text"
+      }
+    ]
+  },
+  "schema_version": "orgrebase.teamharness-raw-mcp-action.v1",
+  "sequence": 6,
+  "tool": "taskflow"
+}

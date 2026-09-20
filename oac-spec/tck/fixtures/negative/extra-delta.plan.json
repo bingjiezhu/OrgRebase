@@ -1,0 +1,925 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrganizationPlan",
+  "metadata": {
+    "id": "plan:negative:extra-delta",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:evidence-discovery",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2025-03-01T09:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "effectiveTo": null,
+    "sourceRefs": [
+      "snapshot:veracier-proc01",
+      "change:SC-001:extra-delta"
+    ]
+  },
+  "digest": "sha256:4d204d74798f2fdd92f91c5c6f435ceb0b4a7b79ed297349223aa43e9574bda0",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01",
+      "revision": 1,
+      "digest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-001:extra-delta",
+      "revision": 1,
+      "digest": "sha256:60ff4f4f7654b8de1084727ec29c95d22eb00a97bc26ba46a2e5f7d46b07bf6d"
+    },
+    "status": "planned",
+    "effectCeiling": "zero_effect",
+    "compilerId": "oac.reference.supplier-change",
+    "compilerVersion": "0.1.0a0",
+    "impactPaths": [
+      {
+        "pathId": "urn:oac:mvp:path:01e7fbad0174ed5d8bf901c2",
+        "targetRef": "contract:forges-msa",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [
+          "rule:insolvency-contract"
+        ],
+        "origin": "rule",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:02f2a3b1888f434aff36c3ed",
+        "targetRef": "production:energy",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-energy",
+          "edge:energy-production"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:0a5c18757f27561fc72dbef6",
+        "targetRef": "production:aero",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [
+          "rule:insolvency-continuity"
+        ],
+        "origin": "rule",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:0f86e20ed2055a59d768e290",
+        "targetRef": "production:energy",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-nuclear",
+          "edge:nuclear-production"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:1736e5360d8b32540e00e671",
+        "targetRef": "order:aero-partial",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-partial"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:1aa3c33bc7f009f2336d8ce7",
+        "targetRef": "production:defense",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-defense",
+          "edge:defense-production"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:1c00f93331e161194194337f",
+        "targetRef": "contract:forges-msa",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-contract"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:24229a2e67782cba5df70a2d",
+        "targetRef": "ledger:supplier-exposure",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [
+          "rule:insolvency-finance"
+        ],
+        "origin": "rule",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:794089691ec68e22a6bdade4",
+        "targetRef": "order:energy-nuclear",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-nuclear"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:79d82fddda081f1a51d1ced2",
+        "targetRef": "alternative:acieries-savoie",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [
+          "rule:insolvency-alternative"
+        ],
+        "origin": "rule",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:7fee245763a89b870c2a23a6",
+        "targetRef": "control:nuclear-substitution",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:91349efa1cd9a8d58001e4c3",
+        "targetRef": "production:aero",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-partial",
+          "edge:partial-production"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:9971d5c2f9b8a2937661c298",
+        "targetRef": "boundary:source-discovery",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:a125c46bdfa604f266869888",
+        "targetRef": "order:energy-nusafe",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-energy"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:c88698ecaa0b991216e3c6fc",
+        "targetRef": "order:aero-av3000",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-aero"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:c896be8a818099ab6d7d8123",
+        "targetRef": "production:aero",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-aero",
+          "edge:aero-production"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:dc9343485dbcbd5d5e4d33c2",
+        "targetRef": "supplier:forges-martelliere",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [
+          "rule:insolvency-exposure"
+        ],
+        "origin": "rule",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:e31530f8baeafa641696d2da",
+        "targetRef": "ledger:supplier-exposure",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-rush",
+          "edge:orders-ledger"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:e8b9d37e16dbcc5388db508f",
+        "targetRef": "order:maroc",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-maroc"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:e9135f706dec7a9987bcba0d",
+        "targetRef": "order:aero-rush",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-rush"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:eedb268404b69d19f490b7b4",
+        "targetRef": "supplier:forges-martelliere",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:f6198e0b1a71dfb48abbde9b",
+        "targetRef": "order:defense",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:supplier-order-defense"
+        ],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      }
+    ],
+    "obligations": [
+      {
+        "obligationId": "urn:oac:mvp:obligation:1061f855b3de04cf67aadbdb",
+        "origin": "dependency_path",
+        "targetRef": "order:aero-partial",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:1736e5360d8b32540e00e671"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:1fa27d0eeb461723763b5ac1",
+        "origin": "organizational_rule",
+        "targetRef": "production:aero",
+        "domainRef": "domain:operations",
+        "requiredRoleRef": "role:operations-continuity",
+        "obligationType": "continuity-assessment",
+        "requiredEvidence": [
+          "evidence:production-impact"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:0a5c18757f27561fc72dbef6"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:215901d303a17dbdb5227e62",
+        "origin": "organizational_rule",
+        "targetRef": "alternative:acieries-savoie",
+        "domainRef": "domain:quality",
+        "requiredRoleRef": "role:quality-qualification",
+        "obligationType": "alternative-qualification",
+        "requiredEvidence": [
+          "evidence:qualification-review"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:79d82fddda081f1a51d1ced2"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:319a6cc216acac3e8c23418d",
+        "origin": "organizational_rule",
+        "targetRef": "ledger:supplier-exposure",
+        "domainRef": "domain:finance",
+        "requiredRoleRef": "role:finance-exposure",
+        "obligationType": "financial-exposure",
+        "requiredEvidence": [
+          "evidence:exposure-calculation"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:24229a2e67782cba5df70a2d"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:343ea8b44a693e604c302fe9",
+        "origin": "dependency_path",
+        "targetRef": "order:energy-nusafe",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:a125c46bdfa604f266869888"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:40e252fc69acc74100d98199",
+        "origin": "dependency_path",
+        "targetRef": "order:energy-nuclear",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:794089691ec68e22a6bdade4"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:63b0b3ae5e3211c1f8126971",
+        "origin": "dependency_path",
+        "targetRef": "ledger:supplier-exposure",
+        "domainRef": "domain:finance",
+        "requiredRoleRef": "role:finance-exposure",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:e31530f8baeafa641696d2da"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:640fc6a88eed7188110c5198",
+        "origin": "dependency_path",
+        "targetRef": "production:energy",
+        "domainRef": "domain:operations",
+        "requiredRoleRef": "role:operations-continuity",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:02f2a3b1888f434aff36c3ed",
+          "urn:oac:mvp:path:0f86e20ed2055a59d768e290"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:7f2b6c060a7a836bb18aa87d",
+        "origin": "organizational_rule",
+        "targetRef": "supplier:forges-martelliere",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "exposure-inventory",
+        "requiredEvidence": [
+          "evidence:proc01-index"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:dc9343485dbcbd5d5e4d33c2"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:9f8fb06dc7ccfb726ae5e20f",
+        "origin": "dependency_path",
+        "targetRef": "contract:forges-msa",
+        "domainRef": "domain:legal",
+        "requiredRoleRef": "role:legal-reviewer",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:1c00f93331e161194194337f"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:a2901910f1a2578ef39eb6f7",
+        "origin": "dependency_path",
+        "targetRef": "order:defense",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:f6198e0b1a71dfb48abbde9b"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:d44675e4c20c5392c50c9fa4",
+        "origin": "dependency_path",
+        "targetRef": "production:aero",
+        "domainRef": "domain:operations",
+        "requiredRoleRef": "role:operations-continuity",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:91349efa1cd9a8d58001e4c3",
+          "urn:oac:mvp:path:c896be8a818099ab6d7d8123"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:d56edad84e47999674895745",
+        "origin": "organizational_rule",
+        "targetRef": "contract:forges-msa",
+        "domainRef": "domain:legal",
+        "requiredRoleRef": "role:legal-reviewer",
+        "obligationType": "contract-remedies",
+        "requiredEvidence": [
+          "evidence:msa-review"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:01e7fbad0174ed5d8bf901c2"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:d7474d0c6e1bd6fbf53552a5",
+        "origin": "dependency_path",
+        "targetRef": "order:aero-rush",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:e9135f706dec7a9987bcba0d"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:e1c3b8a6915f709a3959e3ec",
+        "origin": "dependency_path",
+        "targetRef": "order:maroc",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:e8b9d37e16dbcc5388db508f"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:e8a644e6aa7ae5a4f5d92079",
+        "origin": "dependency_path",
+        "targetRef": "order:aero-av3000",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:c88698ecaa0b991216e3c6fc"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:fad49eaa01d24a985089c746",
+        "origin": "dependency_path",
+        "targetRef": "production:defense",
+        "domainRef": "domain:operations",
+        "requiredRoleRef": "role:operations-continuity",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:1aa3c33bc7f009f2336d8ce7"
+        ],
+        "resolutionState": "affected"
+      }
+    ],
+    "roleInstances": [
+      {
+        "roleInstanceId": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:finance-exposure",
+        "roleDefinitionRef": "role:finance-exposure",
+        "principalRef": "principal:finance-agent",
+        "mission": "calculate and evidence bounded financial exposure",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:319a6cc216acac3e8c23418d",
+          "urn:oac:mvp:obligation:63b0b3ae5e3211c1f8126971"
+        ],
+        "qualificationRefs": [
+          "qualification:finance-analysis"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "roleInstanceId": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:legal-reviewer",
+        "roleDefinitionRef": "role:legal-reviewer",
+        "principalRef": "principal:legal-agent",
+        "mission": "review contractual remedies and claims without executing them",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:9f8fb06dc7ccfb726ae5e20f",
+          "urn:oac:mvp:obligation:d56edad84e47999674895745"
+        ],
+        "qualificationRefs": [
+          "qualification:contract-review"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "roleInstanceId": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:operations-continuity",
+        "roleDefinitionRef": "role:operations-continuity",
+        "principalRef": "principal:operations-agent",
+        "mission": "assess production continuity options without changing schedules",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:1fa27d0eeb461723763b5ac1",
+          "urn:oac:mvp:obligation:640fc6a88eed7188110c5198",
+          "urn:oac:mvp:obligation:d44675e4c20c5392c50c9fa4",
+          "urn:oac:mvp:obligation:fad49eaa01d24a985089c746"
+        ],
+        "qualificationRefs": [
+          "qualification:operations-planning"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "roleInstanceId": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner",
+        "roleDefinitionRef": "role:procurement-owner",
+        "principalRef": "principal:procurement-agent",
+        "mission": "inventory supplier commitments and coordinate a zero-effect response",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:1061f855b3de04cf67aadbdb",
+          "urn:oac:mvp:obligation:343ea8b44a693e604c302fe9",
+          "urn:oac:mvp:obligation:40e252fc69acc74100d98199",
+          "urn:oac:mvp:obligation:7f2b6c060a7a836bb18aa87d",
+          "urn:oac:mvp:obligation:a2901910f1a2578ef39eb6f7",
+          "urn:oac:mvp:obligation:d7474d0c6e1bd6fbf53552a5",
+          "urn:oac:mvp:obligation:e1c3b8a6915f709a3959e3ec",
+          "urn:oac:mvp:obligation:e8a644e6aa7ae5a4f5d92079"
+        ],
+        "qualificationRefs": [
+          "qualification:procurement-authority"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "roleInstanceId": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:quality-qualification",
+        "roleDefinitionRef": "role:quality-qualification",
+        "principalRef": "principal:quality-agent",
+        "mission": "independently review supplier or lot qualification evidence",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:215901d303a17dbdb5227e62"
+        ],
+        "qualificationRefs": [
+          "qualification:supplier-quality"
+        ],
+        "effectCeiling": "zero_effect"
+      }
+    ],
+    "workUnits": [
+      {
+        "workUnitId": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:finance-exposure",
+        "roleInstanceRefs": [
+          "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:finance-exposure"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:finance-exposure",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:319a6cc216acac3e8c23418d",
+          "urn:oac:mvp:obligation:63b0b3ae5e3211c1f8126971"
+        ],
+        "evidenceOutputs": [
+          "evidence:exposure-calculation",
+          "impact_assessment"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "workUnitId": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:legal-reviewer",
+        "roleInstanceRefs": [
+          "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:legal-reviewer"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:legal-reviewer",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:9f8fb06dc7ccfb726ae5e20f",
+          "urn:oac:mvp:obligation:d56edad84e47999674895745"
+        ],
+        "evidenceOutputs": [
+          "evidence:msa-review",
+          "impact_assessment"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "workUnitId": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:operations-continuity",
+        "roleInstanceRefs": [
+          "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:operations-continuity"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:operations-continuity",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:1fa27d0eeb461723763b5ac1",
+          "urn:oac:mvp:obligation:640fc6a88eed7188110c5198",
+          "urn:oac:mvp:obligation:d44675e4c20c5392c50c9fa4",
+          "urn:oac:mvp:obligation:fad49eaa01d24a985089c746"
+        ],
+        "evidenceOutputs": [
+          "evidence:production-impact",
+          "impact_assessment"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "workUnitId": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner",
+        "roleInstanceRefs": [
+          "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:1061f855b3de04cf67aadbdb",
+          "urn:oac:mvp:obligation:343ea8b44a693e604c302fe9",
+          "urn:oac:mvp:obligation:40e252fc69acc74100d98199",
+          "urn:oac:mvp:obligation:7f2b6c060a7a836bb18aa87d",
+          "urn:oac:mvp:obligation:a2901910f1a2578ef39eb6f7",
+          "urn:oac:mvp:obligation:d7474d0c6e1bd6fbf53552a5",
+          "urn:oac:mvp:obligation:e1c3b8a6915f709a3959e3ec",
+          "urn:oac:mvp:obligation:e8a644e6aa7ae5a4f5d92079"
+        ],
+        "evidenceOutputs": [
+          "evidence:proc01-index",
+          "impact_assessment"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "workUnitId": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:quality-qualification",
+        "roleInstanceRefs": [
+          "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:quality-qualification"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:quality-qualification",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:215901d303a17dbdb5227e62"
+        ],
+        "evidenceOutputs": [
+          "evidence:qualification-review"
+        ],
+        "effectCeiling": "zero_effect"
+      }
+    ],
+    "happensBefore": [
+      {
+        "predecessorRef": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner",
+        "successorRef": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:finance-exposure",
+        "relation": "must_complete_before",
+        "reasonRefs": [
+          "urn:oac:mvp:path:e31530f8baeafa641696d2da"
+        ]
+      },
+      {
+        "predecessorRef": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner",
+        "successorRef": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:legal-reviewer",
+        "relation": "must_complete_before",
+        "reasonRefs": [
+          "urn:oac:mvp:path:1c00f93331e161194194337f"
+        ]
+      },
+      {
+        "predecessorRef": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner",
+        "successorRef": "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:operations-continuity",
+        "relation": "must_complete_before",
+        "reasonRefs": [
+          "urn:oac:mvp:path:02f2a3b1888f434aff36c3ed",
+          "urn:oac:mvp:path:0f86e20ed2055a59d768e290",
+          "urn:oac:mvp:path:1aa3c33bc7f009f2336d8ce7",
+          "urn:oac:mvp:path:91349efa1cd9a8d58001e4c3",
+          "urn:oac:mvp:path:c896be8a818099ab6d7d8123"
+        ]
+      }
+    ],
+    "decisions": [
+      {
+        "decisionId": "urn:oac:mvp:decision:principal:compliance-agent",
+        "subjectRef": "principal:compliance-agent",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "PRINCIPAL_NOT_SELECTED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:principal:evidence-agent",
+        "subjectRef": "principal:evidence-agent",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "PRINCIPAL_NOT_SELECTED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:principal:finance-agent",
+        "subjectRef": "principal:finance-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:principal:legal-agent",
+        "subjectRef": "principal:legal-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:principal:operations-agent",
+        "subjectRef": "principal:operations-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:principal:procurement-agent",
+        "subjectRef": "principal:procurement-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:principal:quality-agent",
+        "subjectRef": "principal:quality-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:role:compliance-reviewer",
+        "subjectRef": "role:compliance-reviewer",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "NOT_REQUIRED_BY_CONTRACT"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:role:evidence-discovery",
+        "subjectRef": "role:evidence-discovery",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "NOT_REQUIRED_BY_CONTRACT"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:role:finance-exposure",
+        "subjectRef": "role:finance-exposure",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:role:legal-reviewer",
+        "subjectRef": "role:legal-reviewer",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:role:operations-continuity",
+        "subjectRef": "role:operations-continuity",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:role:procurement-owner",
+        "subjectRef": "role:procurement-owner",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:mvp:decision:role:quality-qualification",
+        "subjectRef": "role:quality-qualification",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      }
+    ],
+    "unresolvedRefs": [],
+    "minimality": {
+      "level": "inclusion_minimal",
+      "consideredRoleRefs": [
+        "role:compliance-reviewer",
+        "role:evidence-discovery",
+        "role:finance-exposure",
+        "role:legal-reviewer",
+        "role:operations-continuity",
+        "role:procurement-owner",
+        "role:quality-qualification"
+      ],
+      "consideredPrincipalRefs": [
+        "principal:compliance-agent",
+        "principal:evidence-agent",
+        "principal:finance-agent",
+        "principal:legal-agent",
+        "principal:operations-agent",
+        "principal:procurement-agent",
+        "principal:quality-agent"
+      ],
+      "nonRemovableRefs": [
+        "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:finance-exposure",
+        "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:legal-reviewer",
+        "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:operations-continuity",
+        "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner",
+        "urn:oac:mvp:role-instance:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:quality-qualification",
+        "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:finance-exposure",
+        "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:legal-reviewer",
+        "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:operations-continuity",
+        "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:procurement-owner",
+        "urn:oac:mvp:work-unit:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928:quality-qualification"
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-002",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:procurement-owner",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "sourceRefs": ["oac:counterfactual:healthy-control"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-002",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "replace", "before": {"state": "known", "value": "status_unverified"}, "after": {"state": "known", "value": "operating"}}
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "oac:counterfactual:healthy-control",
+    "scopeRefs": ["supplier:forges-martelliere"],
+    "reason": "negative control for spurious organizational activation",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:bb616755bc700c31127150fa73ed82fc9f942f03e40a1ab55469b222cb090d81"
+}

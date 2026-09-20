@@ -1,0 +1,35 @@
+{
+  "apiVersion": "oac.outcome-profile/v0.1",
+  "authority": "Plans remain zero_effect and grant no credentials. Reference consistency does not authenticate grant issuers or independently execute an oracle.",
+  "binding": {
+    "profileDigest": "sha256:73d922826b1eef350a13a81fb4626ccfff1aca68b426eacc79d9db84311d9e58",
+    "profileId": "oac.outcome.disposable-local",
+    "profileVersion": "v0.1"
+  },
+  "jsonSchemaValidationScope": "structural_only",
+  "procedureRef": "profiles/outcome-profiles/disposable-local-v0.1/README.md",
+  "rules": [
+    {
+      "failureReason": "OUTCOME_PROFILE_INVALID",
+      "id": "OP-001",
+      "requirement": "Exact package-pinned descriptor identity, version and digest; explicit binding selects the profile."
+    },
+    {
+      "failureReason": "OUTCOME_EXECUTION_AUTHORIZATION_INVALID",
+      "id": "OP-002",
+      "requirement": "Exact disposable binding/bundle, receipt, and independent grant are bound in a separate execution-root domain."
+    },
+    {
+      "failureReason": "OUTCOME_DIMENSION_EVIDENCE_INVALID",
+      "id": "OP-003",
+      "requirement": "Exactly six named dimensions carry explicit evidence and close over certificate reasons and unresolved refs."
+    },
+    {
+      "failureReason": "OUTCOME_VERDICT_INVALID",
+      "id": "OP-004",
+      "requirement": "FAIL dominates UNKNOWN; UNKNOWN dominates PASS. No PROVISIONAL or success promotion is permitted."
+    }
+  ],
+  "validator": "oac.evolution.verify_outcome_certificate",
+  "verificationCommand": "oac validate-evolution OUTCOME_CERTIFICATE"
+}

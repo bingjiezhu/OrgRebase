@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-007",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:procurement-owner",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "sourceRefs": ["edith:MASTER_INDEX:DOC-626ac773", "oac:counterfactual:delivery-interrupted"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-007",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "replace", "before": {"state": "known", "value": "partial_delivery"}, "after": {"state": "known", "value": "delivery_interrupted"}}
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "oac:counterfactual:delivery-interrupted",
+    "scopeRefs": ["supplier:forges-martelliere", "order:aero-partial", "production:aero", "ledger:supplier-exposure"],
+    "reason": "test partial-delivery reconciliation and lot disposition",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:213d18071490e91e57178e2e01840c5403bb4e3c14e60fa2e194b2e7511de21a"
+}

@@ -1,0 +1,324 @@
+{
+  "$defs": {
+    "EnterpriseBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "domain_pack_digest": {
+          "title": "Domain Pack Digest",
+          "type": "string"
+        },
+        "organization_id": {
+          "title": "Organization Id",
+          "type": "string"
+        },
+        "quote_object_id": {
+          "title": "Quote Object Id",
+          "type": "string"
+        },
+        "resources": {
+          "items": {
+            "$ref": "#/$defs/EnterpriseResourceBinding"
+          },
+          "title": "Resources",
+          "type": "array"
+        }
+      },
+      "required": [
+        "organization_id",
+        "quote_object_id",
+        "domain_pack_digest",
+        "resources"
+      ],
+      "title": "EnterpriseBinding",
+      "type": "object"
+    },
+    "EnterpriseResourceBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "domain_id": {
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "object_id": {
+          "title": "Object Id",
+          "type": "string"
+        },
+        "owner_id": {
+          "title": "Owner Id",
+          "type": "string"
+        },
+        "slot_id": {
+          "title": "Slot Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "slot_id",
+        "object_id",
+        "domain_id",
+        "owner_id"
+      ],
+      "title": "EnterpriseResourceBinding",
+      "type": "object"
+    },
+    "PilotBoundaryDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "approval_mode": {
+          "const": "EXPLICIT_OWNER_COMMAND",
+          "default": "EXPLICIT_OWNER_COMMAND",
+          "title": "Approval Mode",
+          "type": "string"
+        },
+        "deployment_maturity": {
+          "default": "SINGLE_ENTERPRISE_PILOT",
+          "enum": [
+            "SINGLE_ENTERPRISE_PILOT",
+            "AUTHENTICATED_SINGLE_TENANT"
+          ],
+          "title": "Deployment Maturity",
+          "type": "string"
+        },
+        "enterprise_input": {
+          "const": "EXACT_DIRECTORY_PACK",
+          "default": "EXACT_DIRECTORY_PACK",
+          "title": "Enterprise Input",
+          "type": "string"
+        },
+        "execution_profile": {
+          "default": "LOCAL_DETERMINISTIC",
+          "enum": [
+            "LOCAL_DETERMINISTIC",
+            "AUTHENTICATED_SINGLE_TENANT"
+          ],
+          "title": "Execution Profile",
+          "type": "string"
+        },
+        "external_writes": {
+          "const": "DISABLED",
+          "default": "DISABLED",
+          "title": "External Writes",
+          "type": "string"
+        }
+      },
+      "title": "PilotBoundaryDeclaration",
+      "type": "object"
+    },
+    "PilotLocatorBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "component_kind": {
+          "$ref": "#/$defs/SeedComponentKind"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_kind",
+        "locator",
+        "path"
+      ],
+      "title": "PilotLocatorBinding",
+      "type": "object"
+    },
+    "PilotRuntimeDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "built_at": {
+          "minLength": 1,
+          "title": "Built At",
+          "type": "string"
+        },
+        "default_run_id": {
+          "minLength": 1,
+          "title": "Default Run Id",
+          "type": "string"
+        },
+        "graph_pointer_id": {
+          "minLength": 1,
+          "title": "Graph Pointer Id",
+          "type": "string"
+        },
+        "graph_snapshot_id": {
+          "minLength": 1,
+          "title": "Graph Snapshot Id",
+          "type": "string"
+        },
+        "quote_label": {
+          "minLength": 1,
+          "title": "Quote Label",
+          "type": "string"
+        },
+        "quote_object_id": {
+          "minLength": 1,
+          "title": "Quote Object Id",
+          "type": "string"
+        },
+        "task_receipt_id": {
+          "minLength": 1,
+          "title": "Task Receipt Id",
+          "type": "string"
+        },
+        "universe_artifact_id": {
+          "minLength": 1,
+          "title": "Universe Artifact Id",
+          "type": "string"
+        },
+        "universe_id": {
+          "minLength": 1,
+          "title": "Universe Id",
+          "type": "string"
+        },
+        "universe_revision": {
+          "minLength": 1,
+          "title": "Universe Revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "quote_object_id",
+        "quote_label",
+        "graph_pointer_id",
+        "graph_snapshot_id",
+        "task_receipt_id",
+        "default_run_id",
+        "universe_artifact_id",
+        "universe_id",
+        "universe_revision",
+        "built_at"
+      ],
+      "title": "PilotRuntimeDeclaration",
+      "type": "object"
+    },
+    "PilotScenarioDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "deployment_unit": {
+          "const": "single_enterprise_single_quote",
+          "default": "single_enterprise_single_quote",
+          "title": "Deployment Unit",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "primary_user": {
+          "const": "Enterprise Quote Operator",
+          "default": "Enterprise Quote Operator",
+          "title": "Primary User",
+          "type": "string"
+        },
+        "workflow": {
+          "const": "enterprise_quote",
+          "default": "enterprise_quote",
+          "title": "Workflow",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "PilotScenarioDeclaration",
+      "type": "object"
+    },
+    "SeedComponentKind": {
+      "enum": [
+        "DOMAIN",
+        "KNOWLEDGE",
+        "AUTHORITY",
+        "CAPABILITY",
+        "DEPENDENCY"
+      ],
+      "title": "SeedComponentKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-enterprise-quote-pilot-pack.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adapter_id": {
+      "const": "enterprise-quote-v1",
+      "default": "enterprise-quote-v1",
+      "title": "Adapter Id",
+      "type": "string"
+    },
+    "boundaries": {
+      "$ref": "#/$defs/PilotBoundaryDeclaration"
+    },
+    "components": {
+      "items": {
+        "$ref": "#/$defs/PilotLocatorBinding"
+      },
+      "title": "Components",
+      "type": "array"
+    },
+    "enterprise_binding": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EnterpriseBinding"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "pack_id": {
+      "minLength": 1,
+      "title": "Pack Id",
+      "type": "string"
+    },
+    "profile_path": {
+      "minLength": 1,
+      "title": "Profile Path",
+      "type": "string"
+    },
+    "revision": {
+      "minLength": 1,
+      "title": "Revision",
+      "type": "string"
+    },
+    "runtime": {
+      "$ref": "#/$defs/PilotRuntimeDeclaration"
+    },
+    "scenario": {
+      "$ref": "#/$defs/PilotScenarioDeclaration"
+    },
+    "schema_version": {
+      "default": "orgrebase.enterprise-quote-pilot-pack.v1",
+      "enum": [
+        "orgrebase.enterprise-quote-pilot-pack.v1",
+        "orgrebase.enterprise-quote-pilot-pack.v2"
+      ],
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "pack_id",
+    "revision",
+    "profile_path",
+    "components",
+    "runtime",
+    "scenario",
+    "boundaries"
+  ],
+  "title": "EnterpriseQuotePilotPack",
+  "type": "object"
+}

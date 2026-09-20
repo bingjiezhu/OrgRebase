@@ -1,0 +1,75 @@
+{
+  "schema_version": "orgrebase.workspace-public-process-mapping.v1",
+  "mapping_id": "ocel-order-management-to-oac-dependency-v1",
+  "source_dataset": "10.5281/zenodo.8337464/order-management.sqlite",
+  "evidence_class": "PUBLIC_PROCESS_OBSERVED_DERIVED",
+  "claim_boundary": "RELATION_MAPPING_FOR_MECHANISM_BENCHMARK_NOT_ENTERPRISE_SEMANTICS",
+  "object_roles": [
+    {
+      "source_object_type": "products",
+      "benchmark_role": "CHANGE_SOURCE",
+      "origin": "DERIVED"
+    },
+    {
+      "source_object_type": "orders",
+      "benchmark_role": "WORK_TARGET",
+      "origin": "DERIVED"
+    },
+    {
+      "source_object_type": "items",
+      "benchmark_role": "DEPENDENCY_CARRIER",
+      "origin": "DERIVED"
+    },
+    {
+      "source_object_type": "customers",
+      "benchmark_role": "ORGANIZATIONAL_CONTEXT",
+      "origin": "DERIVED"
+    },
+    {
+      "source_object_type": "employees",
+      "benchmark_role": "ORGANIZATIONAL_CONTEXT",
+      "origin": "DERIVED"
+    }
+  ],
+  "relation_rules": [
+    {
+      "source_qualifier": "is a",
+      "dependency_kind": "INFERRED",
+      "causal_traversal": true,
+      "origin": "DERIVED",
+      "warning": "Observed object relation supports a path but is not an observed policy read."
+    },
+    {
+      "source_qualifier": "comprises",
+      "dependency_kind": "INFERRED",
+      "causal_traversal": true,
+      "origin": "DERIVED",
+      "warning": "Observed containment supports a path but is not an observed policy read."
+    },
+    {
+      "source_qualifier": "places",
+      "dependency_kind": "ORGANIZATIONAL_CONTEXT",
+      "causal_traversal": false,
+      "origin": "DERIVED"
+    },
+    {
+      "source_qualifier": "primarySalesRep",
+      "dependency_kind": "ORGANIZATIONAL_CONTEXT",
+      "causal_traversal": false,
+      "origin": "DERIVED"
+    },
+    {
+      "source_qualifier": "secondarySalesRep",
+      "dependency_kind": "ORGANIZATIONAL_CONTEXT",
+      "causal_traversal": false,
+      "origin": "DERIVED"
+    }
+  ],
+  "missing_semantics": "UNKNOWN",
+  "forbidden_promotions": [
+    "OBSERVED_ENTERPRISE_SHADOW",
+    "OBSERVED_ENTERPRISE_CAUSALITY",
+    "REALIZED_ENTERPRISE_ROI"
+  ],
+  "digest": "sha256:c64d1dc6d9b7b6a89b7a3513fe86facc1d09797f60e4ee45d59414b3f2b0f661"
+}

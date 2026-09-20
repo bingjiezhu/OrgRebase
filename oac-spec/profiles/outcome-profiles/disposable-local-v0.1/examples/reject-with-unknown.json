@@ -1,0 +1,302 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "digest": "sha256:76b7016280f1025048d1dc31f7e861a4caedfdea875cce421092182810ad2082",
+  "kind": "OutcomeCertificate",
+  "metadata": {
+    "createdAt": "2026-08-26T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "id": "outcome:SC-008:ACCEPT",
+    "namespace": "oac.examples.supplier",
+    "ownerRef": "role:evidence-discovery",
+    "revision": 1,
+    "sourceRefs": [
+      "snapshot:veracier-proc01",
+      "receipt:supplier-intake-1",
+      "demand:supplier-status-review",
+      "change:SC-008",
+      "plan:SC-008:BASE",
+      "certificate:SC-008:BASE",
+      "binding:disposable-local",
+      "bundle:disposable-local",
+      "execution:SC-008:BASE:COMPLETED",
+      "evidence:runtime:SC-008",
+      "observation:independent",
+      "oracle:supplier-status@1",
+      "profile:supplier-outcome@1",
+      "evidence:oracle:SC-008",
+      "observation:worker-state-unavailable",
+      "grant:one-use-local-sandbox"
+    ]
+  },
+  "spec": {
+    "actingPrincipalRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "digest": "sha256:6995b04b3ce6605d638ee6ba1439b3c4d8e8b24879b5ba07fd6868de97ffd071",
+        "kind": "Principal",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "principal:runtime-agent",
+        "revision": 1
+      }
+    ],
+    "changeRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "digest": "sha256:fee664c4db2703538b35950a5a5cf0c126f5ca0c04b7a56502f04718402754d3",
+        "kind": "SemanticChangeSet",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "change:SC-008",
+        "revision": 1
+      }
+    ],
+    "demandRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:01084c1cdebf8968b2d004c4118bb89da7f5e87d4f5fcb037a8c2376847ac923",
+      "kind": "OrganizationalDemand",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "demand:supplier-status-review",
+      "revision": 1
+    },
+    "demandRoot": "sha256:3f8dd3b8c2956c183076efb4d18816c807f535afdaac5374ca1f0d9b5d21067d",
+    "dimensions": [
+      {
+        "evidenceRefs": [
+          {
+            "apiVersion": "oac.dev/v0alpha1",
+            "digest": "sha256:5e0ba93715c8ca15875502e99acfb390c6ceb03331ae08ca7769ba868f445dfb",
+            "kind": "OutcomeEvidence",
+            "namespace": "oac.examples.supplier",
+            "resourceId": "evidence:oracle:SC-008",
+            "revision": 1
+          }
+        ],
+        "name": "task_goal",
+        "reasonCodes": [],
+        "unresolvedRefs": [],
+        "verdict": "PASS"
+      },
+      {
+        "evidenceRefs": [
+          {
+            "apiVersion": "oac.dev/v0alpha1",
+            "digest": "sha256:5e0ba93715c8ca15875502e99acfb390c6ceb03331ae08ca7769ba868f445dfb",
+            "kind": "OutcomeEvidence",
+            "namespace": "oac.examples.supplier",
+            "resourceId": "evidence:oracle:SC-008",
+            "revision": 1
+          }
+        ],
+        "name": "forbidden_effects",
+        "reasonCodes": [
+          "OUTCOME_FORBIDDEN_EFFECT_OBSERVED"
+        ],
+        "unresolvedRefs": [],
+        "verdict": "FAIL"
+      },
+      {
+        "evidenceRefs": [
+          {
+            "apiVersion": "oac.dev/v0alpha1",
+            "digest": "sha256:5e0ba93715c8ca15875502e99acfb390c6ceb03331ae08ca7769ba868f445dfb",
+            "kind": "OutcomeEvidence",
+            "namespace": "oac.examples.supplier",
+            "resourceId": "evidence:oracle:SC-008",
+            "revision": 1
+          }
+        ],
+        "name": "evidence_completion",
+        "reasonCodes": [],
+        "unresolvedRefs": [],
+        "verdict": "PASS"
+      },
+      {
+        "evidenceRefs": [
+          {
+            "apiVersion": "oac.dev/v0alpha1",
+            "digest": "sha256:5e0ba93715c8ca15875502e99acfb390c6ceb03331ae08ca7769ba868f445dfb",
+            "kind": "OutcomeEvidence",
+            "namespace": "oac.examples.supplier",
+            "resourceId": "evidence:oracle:SC-008",
+            "revision": 1
+          }
+        ],
+        "name": "scope",
+        "reasonCodes": [],
+        "unresolvedRefs": [],
+        "verdict": "PASS"
+      },
+      {
+        "evidenceRefs": [],
+        "name": "replayability",
+        "reasonCodes": [
+          "OUTCOME_OBSERVATION_UNRESOLVED"
+        ],
+        "unresolvedRefs": [
+          {
+            "apiVersion": "oac.dev/v0alpha1",
+            "digest": "sha256:85a864593d87ebd7be57c39dea045c9c1d4f6c0ffcf5c769de5e1edf64ae82bf",
+            "kind": "OutcomeObservation",
+            "namespace": "oac.examples.supplier",
+            "resourceId": "observation:worker-state-unavailable",
+            "revision": 1
+          }
+        ],
+        "verdict": "UNKNOWN"
+      },
+      {
+        "evidenceRefs": [
+          {
+            "apiVersion": "oac.dev/v0alpha1",
+            "digest": "sha256:5e0ba93715c8ca15875502e99acfb390c6ceb03331ae08ca7769ba868f445dfb",
+            "kind": "OutcomeEvidence",
+            "namespace": "oac.examples.supplier",
+            "resourceId": "evidence:oracle:SC-008",
+            "revision": 1
+          }
+        ],
+        "name": "unresolved_observations",
+        "reasonCodes": [],
+        "unresolvedRefs": [],
+        "verdict": "PASS"
+      }
+    ],
+    "evidenceRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "digest": "sha256:5e0ba93715c8ca15875502e99acfb390c6ceb03331ae08ca7769ba868f445dfb",
+        "kind": "OutcomeEvidence",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "evidence:oracle:SC-008",
+        "revision": 1
+      }
+    ],
+    "executionAuthorizationRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:1126b8bdd57b29abee56cacaf2ce8cad1b3f6c04d97f2c4d4d9e1898ba05b8a5",
+      "kind": "DisposableExecutionGrant",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "grant:one-use-local-sandbox",
+      "revision": 1
+    },
+    "executionEvidenceRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "digest": "sha256:e20d9178e02484b2eebb76895501ac4e22edca4394a9e6cce655aea427c2c1ad",
+        "kind": "ExecutionEvidence",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "evidence:runtime:SC-008",
+        "revision": 1
+      }
+    ],
+    "executionReceiptRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:9dbdd03466477a34806490bd2d0866112d6f2683add3fd2e1f741bc30bef245e",
+      "kind": "ExecutionReceipt",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "execution:SC-008:BASE:COMPLETED",
+      "revision": 1
+    },
+    "executionRoot": "sha256:84b23bf2073f45fd4d48f758403d2ba8344a819fff824b5671fd4f72af06ed3b",
+    "observationProfileRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:8b0161adee11b30b01486bfc934911830ec0584e18516c9143ffb6f8395d36e2",
+      "kind": "ObservationProfile",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "profile:supplier-outcome@1",
+      "revision": 1
+    },
+    "observationRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "digest": "sha256:98a3cc2b6ce03a0d3457eef41d69b6f779c22afdbed1387a4862402694f6c085",
+        "kind": "OutcomeObservation",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "observation:independent",
+        "revision": 1
+      }
+    ],
+    "oracleBuildDigest": "sha256:3fe8987f04afd3ff2900a996c7c8564ac4e12c2a4f4ad0478ea331bdaadbb676",
+    "oracleRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:c7ad91a9e79eb86336eb10dc2764ba80a4eba753caea23d2231e237470d597f0",
+      "kind": "OutcomeOracle",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "oracle:supplier-status@1",
+      "revision": 1
+    },
+    "planCertificateRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:61910539bc876b0a670221a8dec8cd4b841a7c00d53a2727d4fc607f297429f2",
+      "kind": "PlanCertificate",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "certificate:SC-008:BASE",
+      "revision": 1
+    },
+    "planRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:5870179500c52bf7530969583d60678045492eee26001ffe7fabda74391a572f",
+      "kind": "OrganizationPlan",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "plan:SC-008:BASE",
+      "revision": 1
+    },
+    "planRoot": "sha256:eefa0013da85bed746581548be181abec972831260b0d9a711878f6244040287",
+    "profileBinding": {
+      "profileDigest": "sha256:73d922826b1eef350a13a81fb4626ccfff1aca68b426eacc79d9db84311d9e58",
+      "profileId": "oac.outcome.disposable-local",
+      "profileVersion": "v0.1"
+    },
+    "reasonCodes": [
+      "OUTCOME_FORBIDDEN_EFFECT_OBSERVED",
+      "OUTCOME_OBSERVATION_UNRESOLVED"
+    ],
+    "runtimeBindingRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:38171b3624c18b353cfaf4748f5e434d6d0f9f21c47f2686b1fd99c995091dff",
+      "kind": "DisposableRuntimeBinding",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "binding:disposable-local",
+      "revision": 1
+    },
+    "runtimeBundleRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:4938273a4ed5a5854bf6ebea5f609bc3968f4592bbc00eb4bf513f8b724cde90",
+      "kind": "DisposableRuntimeBundle",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "bundle:disposable-local",
+      "revision": 1
+    },
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01",
+      "revision": 1
+    },
+    "sourceAdmissionReceiptRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "digest": "sha256:743d1613a3ef95958b8fe7bc931564b16295a34c17445387bb206b5a4964856c",
+        "kind": "SourceAdmissionReceipt",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "receipt:supplier-intake-1",
+        "revision": 1
+      }
+    ],
+    "sourceRoot": "sha256:4bd85c46efb8c7c9036eac014cf2741e504a7dae738f423373d68952e58d4512",
+    "unresolvedRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "digest": "sha256:85a864593d87ebd7be57c39dea045c9c1d4f6c0ffcf5c769de5e1edf64ae82bf",
+        "kind": "OutcomeObservation",
+        "namespace": "oac.examples.supplier",
+        "resourceId": "observation:worker-state-unavailable",
+        "revision": 1
+      }
+    ],
+    "verdict": "REJECT"
+  }
+}

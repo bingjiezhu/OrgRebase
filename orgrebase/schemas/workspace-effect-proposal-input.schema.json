@@ -1,0 +1,38 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-effect-proposal-input.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "changes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Changes",
+      "type": "object"
+    },
+    "observation_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$",
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "proposal_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "title": "Proposal Id",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "proposal_id",
+    "observation_id",
+    "changes",
+    "reason"
+  ],
+  "title": "EffectProposalInput",
+  "type": "object"
+}

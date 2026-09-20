@@ -1,0 +1,189 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OutcomeCertificate",
+  "metadata": {
+    "id": "outcome:a",
+    "namespace": "comparison.provenance",
+    "revision": 1,
+    "ownerRef": "owner:a",
+    "governanceRef": "governance:a",
+    "createdAt": "2026-09-13T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "snapshot:a",
+      "intake:a",
+      "demand:a",
+      "change:a",
+      "plan:a",
+      "plan-certificate:a",
+      "binding:a",
+      "bundle:a",
+      "execution:a",
+      "runtime-evidence:a",
+      "observation:a",
+      "oracle:a",
+      "observation-profile:a",
+      "observation:a"
+    ]
+  },
+  "digest": "sha256:a0d3ceabc15ddf55403a34220b4c5e6b3e65ff8e84faef384273cf104771574c",
+  "spec": {
+    "sourceRoot": "sha256:0fb6f23327a5fd23bfa08c83f329d340dfd5a7dd3ed876d644955668a6366450",
+    "demandRoot": "sha256:c10cc124662cabb40a1c615dd19466f3cc4c92304559c7075e7f50c1f51ef069",
+    "planRoot": "sha256:f7661762d7e37881322c6ec157b958816b18482353eab1d8e44623bf79c4ebf9",
+    "executionRoot": "sha256:816368c6946f407f525b3ec781ef17a8a0be96668f26323ecef1d79bc864669a",
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "comparison.provenance",
+      "resourceId": "snapshot:a",
+      "revision": 1,
+      "digest": "sha256:2e3079d8e27afbd030698c491b961248071307f498b28b5d465f5291ebcd0a42"
+    },
+    "sourceAdmissionReceiptRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "kind": "SourceAdmissionReceipt",
+        "namespace": "comparison.provenance",
+        "resourceId": "intake:a",
+        "revision": 1,
+        "digest": "sha256:6c4a04c0b8787c496ac9b294d5d5a9fcbc6af9a363d1e19f7c316f1f23d0cf10"
+      }
+    ],
+    "demandRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationalDemand",
+      "namespace": "comparison.provenance",
+      "resourceId": "demand:a",
+      "revision": 1,
+      "digest": "sha256:2c5ee5253248b96b636a23818501b44739a6a055923821bb600f73b89e0e2255"
+    },
+    "changeRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "kind": "SemanticChangeSet",
+        "namespace": "comparison.provenance",
+        "resourceId": "change:a",
+        "revision": 1,
+        "digest": "sha256:370d9a07d35b67e4e762268e88c6e8090fdd5b42894f688c8b26a33e9b740633"
+      }
+    ],
+    "planRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationPlan",
+      "namespace": "comparison.provenance",
+      "resourceId": "plan:a",
+      "revision": 1,
+      "digest": "sha256:7f0d86e6e5a175521da35410e3f89256d90c0ec10df37a724a9b5510895c92c2"
+    },
+    "planCertificateRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "PlanCertificate",
+      "namespace": "comparison.provenance",
+      "resourceId": "plan-certificate:a",
+      "revision": 1,
+      "digest": "sha256:6546e77c0b51d226d6f8ddc835ad08a729cb222b6942688c8295cafa255f0e96"
+    },
+    "runtimeBindingRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "RuntimeBinding",
+      "namespace": "comparison.provenance",
+      "resourceId": "binding:a",
+      "revision": 1,
+      "digest": "sha256:bcc6bc7acde9c6bcb844c4c2eacb0cd73817ff52f0d3c094c8c75fe449009cad"
+    },
+    "runtimeBundleRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "ZeroEffectRuntimeBundle",
+      "namespace": "comparison.provenance",
+      "resourceId": "bundle:a",
+      "revision": 1,
+      "digest": "sha256:8ca3e88076a3576986713b1eae1c2154be5eff5323b6121443058ad76eb4ba2f"
+    },
+    "executionReceiptRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "ExecutionReceipt",
+      "namespace": "comparison.provenance",
+      "resourceId": "execution:a",
+      "revision": 1,
+      "digest": "sha256:13614c3802ee5ef8c0031427cf455feb80cedbd6892660161ca4876d45f94abd"
+    },
+    "executionEvidenceRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "kind": "ExecutionEvidence",
+        "namespace": "comparison.provenance",
+        "resourceId": "runtime-evidence:a",
+        "revision": 1,
+        "digest": "sha256:fc53a1d64501e6d3e9ad40ad47c22d9565528bc3532fca3972d624be6243915f"
+      }
+    ],
+    "observationRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "kind": "OutcomeObservation",
+        "namespace": "comparison.provenance",
+        "resourceId": "observation:a",
+        "revision": 1,
+        "digest": "sha256:a19a02aac7fe70cd916fbcaec4d5201ba828518fe1b3d45a7b9e6a74c026333e"
+      }
+    ],
+    "actingPrincipalRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "kind": "Principal",
+        "namespace": "comparison.provenance",
+        "resourceId": "principal:runtime",
+        "revision": 1,
+        "digest": "sha256:34349b719fa4311c44983d0557d012d8def2d341f490b057e66177480c5e7786"
+      }
+    ],
+    "oracleRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OutcomeOracle",
+      "namespace": "comparison.provenance",
+      "resourceId": "oracle:a",
+      "revision": 1,
+      "digest": "sha256:67cfdcf1f601859eef6ccd11fc76abaefe446420663a0e77b6adb274ae36e12f"
+    },
+    "oracleBuildDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observationProfileRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "ObservationProfile",
+      "namespace": "comparison.provenance",
+      "resourceId": "observation-profile:a",
+      "revision": 1,
+      "digest": "sha256:0184a6cd25a26652928e48c658f0a509c012dbcab15c28839da4279af74c289f"
+    },
+    "verdict": "ACCEPT",
+    "dimensions": [
+      {
+        "name": "task_goal",
+        "verdict": "PASS",
+        "reasonCodes": [],
+        "evidenceRefs": [],
+        "unresolvedRefs": []
+      },
+      {
+        "name": "forbidden_effects",
+        "verdict": "PASS",
+        "reasonCodes": [],
+        "evidenceRefs": [],
+        "unresolvedRefs": []
+      }
+    ],
+    "reasonCodes": [],
+    "evidenceRefs": [
+      {
+        "apiVersion": "oac.dev/v0alpha1",
+        "kind": "OutcomeObservation",
+        "namespace": "comparison.provenance",
+        "resourceId": "observation:a",
+        "revision": 1,
+        "digest": "sha256:a19a02aac7fe70cd916fbcaec4d5201ba828518fe1b3d45a7b9e6a74c026333e"
+      }
+    ],
+    "unresolvedRefs": []
+  }
+}

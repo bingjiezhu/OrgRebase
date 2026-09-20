@@ -1,0 +1,309 @@
+{
+  "$defs": {
+    "ActorContextProjection": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "evidence_class": {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        "excluded": {
+          "items": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Excluded",
+          "type": "array"
+        },
+        "expires_at": {
+          "title": "Expires At",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "included_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Included Refs",
+          "type": "array"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "task_context_ref": {
+          "title": "Task Context Ref",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "actor_id",
+        "task_context_ref",
+        "purpose",
+        "included_refs",
+        "excluded",
+        "expires_at",
+        "evidence_class"
+      ],
+      "title": "ActorContextProjection",
+      "type": "object"
+    },
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "CONTROLLED_LOCAL_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-controlled-agent-teams-formation-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Exact zero-write roots required before controlled candidates can commit.",
+  "properties": {
+    "actual_agentteams_domain_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Actual Agentteams Domain Ids",
+      "type": "array"
+    },
+    "agentteams_action_count": {
+      "minimum": 1,
+      "title": "Agentteams Action Count",
+      "type": "integer"
+    },
+    "agentteams_action_digests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Agentteams Action Digests",
+      "type": "array"
+    },
+    "agentteams_execution_plan_digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Agentteams Execution Plan Digest"
+    },
+    "candidate_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Candidate Target Writes",
+      "type": "integer"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "claim_boundary": {
+      "title": "Claim Boundary",
+      "type": "string"
+    },
+    "claim_candidate_digests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Claim Candidate Digests",
+      "type": "array"
+    },
+    "correlation_id": {
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "domain_bundle_digests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Domain Bundle Digests",
+      "type": "array"
+    },
+    "domain_result_digests": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Domain Result Digests",
+      "type": "object"
+    },
+    "evidence_class": {
+      "const": "CONTROLLED_LOCAL_AGENTTEAMS",
+      "default": "CONTROLLED_LOCAL_AGENTTEAMS",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "manager_source_bindings": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "type": "object"
+      },
+      "title": "Manager Source Bindings",
+      "type": "object"
+    },
+    "planned_domain_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Planned Domain Ids",
+      "type": "array"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "project_terminal_state": {
+      "const": "completed",
+      "default": "completed",
+      "title": "Project Terminal State",
+      "type": "string"
+    },
+    "reviewer_input_digest": {
+      "title": "Reviewer Input Digest",
+      "type": "string"
+    },
+    "reviewer_result_digest": {
+      "title": "Reviewer Result Digest",
+      "type": "string"
+    },
+    "reviewer_verdict": {
+      "const": "PASS",
+      "default": "PASS",
+      "title": "Reviewer Verdict",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.controlled-agentteams-formation-receipt.v1",
+      "default": "orgrebase.controlled-agentteams-formation-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "skill_invocation_receipt_digest": {
+      "title": "Skill Invocation Receipt Digest",
+      "type": "string"
+    },
+    "source_projections": {
+      "items": {
+        "$ref": "#/$defs/ActorContextProjection"
+      },
+      "title": "Source Projections",
+      "type": "array"
+    },
+    "source_verification_digest": {
+      "title": "Source Verification Digest",
+      "type": "string"
+    },
+    "task_binding_digests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Task Binding Digests",
+      "type": "array"
+    },
+    "task_purpose": {
+      "title": "Task Purpose",
+      "type": "string"
+    },
+    "tool_receipt_digest": {
+      "title": "Tool Receipt Digest",
+      "type": "string"
+    },
+    "tool_result_digest": {
+      "title": "Tool Result Digest",
+      "type": "string"
+    },
+    "topology_match": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Topology Match"
+    },
+    "verified_at": {
+      "title": "Verified At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "run_id",
+    "correlation_id",
+    "project_id",
+    "source_projections",
+    "task_binding_digests",
+    "domain_result_digests",
+    "manager_source_bindings",
+    "task_purpose",
+    "claim_candidate_digests",
+    "domain_bundle_digests",
+    "reviewer_input_digest",
+    "reviewer_result_digest",
+    "tool_receipt_digest",
+    "tool_result_digest",
+    "skill_invocation_receipt_digest",
+    "source_verification_digest",
+    "agentteams_action_digests",
+    "agentteams_action_count",
+    "verified_at",
+    "claim_boundary"
+  ],
+  "title": "ControlledAgentTeamsFormationReceipt",
+  "type": "object"
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-skill-structured-domain-handoff-input.schema.json",
+  "title": "StructuredDomainHandoffInput",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "run_id",
+    "task_id",
+    "delegation_id",
+    "delegation_task_digest",
+    "context_projection_digest",
+    "candidate_bundle"
+  ],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "delegation_id": {"type": "string", "minLength": 1},
+    "delegation_task_digest": {"$ref": "#/$defs/Digest"},
+    "context_projection_digest": {"$ref": "#/$defs/Digest"},
+    "candidate_bundle": {"type": "object"},
+    "request_restricted_source": {"type": "boolean"},
+    "permission_expansion": {"type": "boolean"},
+    "recipient_expansion": {"type": "boolean"},
+    "schema_expansion": {"type": "boolean"},
+    "target_write_requested": {"type": "boolean"},
+    "prompt_injection": {"type": "boolean"},
+    "malformed_input": {"type": "boolean"},
+    "deadline_expired": {"type": "boolean"},
+    "resource_exhausted": {"type": "boolean"},
+    "stale_input": {"type": "boolean"}
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-runtime-approval.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "approved_at": {
+      "title": "Approved At",
+      "type": "string"
+    },
+    "capsule_digest": {
+      "title": "Capsule Digest",
+      "type": "string"
+    },
+    "command_id": {
+      "title": "Command Id",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "preview_digest": {
+      "title": "Preview Digest",
+      "type": "string"
+    },
+    "preview_ref": {
+      "title": "Preview Ref",
+      "type": "string"
+    },
+    "runtime_binding_digest": {
+      "title": "Runtime Binding Digest",
+      "type": "string"
+    },
+    "runtime_owner_id": {
+      "title": "Runtime Owner Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-runtime-approval.v1",
+      "default": "orgrebase.oac-runtime-approval.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scope": {
+      "const": "LOCAL_FORMATION_CONTROL_PLANE_ONLY",
+      "default": "LOCAL_FORMATION_CONTROL_PLANE_ONLY",
+      "title": "Scope",
+      "type": "string"
+    },
+    "target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Target Writes",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "preview_ref",
+    "preview_digest",
+    "capsule_digest",
+    "runtime_binding_digest",
+    "runtime_owner_id",
+    "command_id",
+    "approved_at"
+  ],
+  "title": "OACRuntimeApproval",
+  "type": "object"
+}

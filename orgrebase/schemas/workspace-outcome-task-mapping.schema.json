@@ -1,0 +1,276 @@
+{
+  "$defs": {
+    "LabBudget": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "elapsed_seconds": {
+          "exclusiveMinimum": 0,
+          "maximum": 3600,
+          "title": "Elapsed Seconds",
+          "type": "number"
+        },
+        "tool_calls": {
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Tool Calls",
+          "type": "integer"
+        },
+        "write_calls": {
+          "maximum": 1000,
+          "minimum": 0,
+          "title": "Write Calls",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tool_calls",
+        "write_calls",
+        "elapsed_seconds"
+      ],
+      "title": "LabBudget",
+      "type": "object"
+    },
+    "LabToolGrant": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "evidence_ref": {
+          "minLength": 1,
+          "title": "Evidence Ref",
+          "type": "string"
+        },
+        "mutates_state": {
+          "title": "Mutates State",
+          "type": "boolean"
+        },
+        "obligation_ref": {
+          "minLength": 1,
+          "title": "Obligation Ref",
+          "type": "string"
+        },
+        "request": {
+          "$ref": "#/$defs/LabToolRequest"
+        },
+        "role": {
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "work_unit_ref": {
+          "minLength": 1,
+          "title": "Work Unit Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request",
+        "role",
+        "obligation_ref",
+        "work_unit_ref",
+        "evidence_ref",
+        "mutates_state"
+      ],
+      "title": "LabToolGrant",
+      "type": "object"
+    },
+    "LabToolRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "arguments"
+      ],
+      "title": "LabToolRequest",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-outcome-task-mapping.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "budget": {
+      "$ref": "#/$defs/LabBudget"
+    },
+    "change_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Change Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "environment_build_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Environment Build Digest",
+      "type": "string"
+    },
+    "grants": {
+      "items": {
+        "$ref": "#/$defs/LabToolGrant"
+      },
+      "minItems": 1,
+      "title": "Grants",
+      "type": "array"
+    },
+    "oac_profile": {
+      "minLength": 1,
+      "title": "Oac Profile",
+      "type": "string"
+    },
+    "oracle_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Oracle Digest",
+      "type": "string"
+    },
+    "plan_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Plan Digest",
+      "type": "string"
+    },
+    "required_evidence": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Required Evidence",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "orgrebase.outcome-lab.mapping.v1",
+      "default": "orgrebase.outcome-lab.mapping.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "seed_root": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Seed Root",
+      "type": "string"
+    },
+    "snapshot_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Snapshot Digest",
+      "type": "string"
+    },
+    "subjects": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Subjects",
+      "type": "object"
+    },
+    "system_roles": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "propertyNames": {
+        "enum": [
+          "fixed-team",
+          "initiator-only",
+          "graph-only",
+          "oac"
+        ]
+      },
+      "title": "System Roles",
+      "type": "object"
+    },
+    "task_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Task Digest",
+      "type": "string"
+    },
+    "task_id": {
+      "minLength": 1,
+      "title": "Task Id",
+      "type": "string"
+    },
+    "unsupported": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unsupported",
+      "type": "array"
+    },
+    "upstream_repository": {
+      "minLength": 1,
+      "title": "Upstream Repository",
+      "type": "string"
+    },
+    "upstream_revision": {
+      "pattern": "^[0-9a-f]{40}$",
+      "title": "Upstream Revision",
+      "type": "string"
+    },
+    "work_unit_predecessors": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "minProperties": 1,
+      "title": "Work Unit Predecessors",
+      "type": "object"
+    },
+    "writable_paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Writable Paths",
+      "type": "array"
+    }
+  },
+  "required": [
+    "upstream_repository",
+    "upstream_revision",
+    "task_id",
+    "oac_profile",
+    "task_digest",
+    "environment_build_digest",
+    "seed_root",
+    "snapshot_digest",
+    "change_digest",
+    "plan_digest",
+    "subjects",
+    "grants",
+    "work_unit_predecessors",
+    "system_roles",
+    "writable_paths",
+    "required_evidence",
+    "oracle_digest",
+    "unsupported",
+    "budget"
+  ],
+  "title": "OutcomeTaskMapping",
+  "type": "object"
+}

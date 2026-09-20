@@ -1,0 +1,88 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "CONTROLLED_LOCAL_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-task-interpretation-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "candidate_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Candidate Refs",
+      "type": "array"
+    },
+    "candidate_set_digest": {
+      "title": "Candidate Set Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        {
+          "enum": [
+            "DESIGN",
+            "LIVE_MODEL",
+            "LOCAL_OLLAMA_MODEL",
+            "USER_STUDY"
+          ],
+          "type": "string"
+        }
+      ],
+      "title": "Evidence Class"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "interpreter_version": {
+      "title": "Interpreter Version",
+      "type": "string"
+    },
+    "task_ref": {
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "template_ref": {
+      "title": "Template Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "task_ref",
+    "template_ref",
+    "candidate_refs",
+    "candidate_set_digest",
+    "interpreter_version",
+    "evidence_class"
+  ],
+  "title": "TaskInterpretationReceipt",
+  "type": "object"
+}

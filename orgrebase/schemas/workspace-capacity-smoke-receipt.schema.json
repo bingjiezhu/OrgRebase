@@ -1,0 +1,107 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-capacity-smoke-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "elapsed_ms": {
+      "minimum": 0,
+      "title": "Elapsed Ms",
+      "type": "integer"
+    },
+    "environment_facts": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "title": "Environment Facts",
+      "type": "object"
+    },
+    "evidence_class": {
+      "const": "OBSERVED_CONTROLLED_LOCAL",
+      "default": "OBSERVED_CONTROLLED_LOCAL",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "failures": {
+      "minimum": 0,
+      "title": "Failures",
+      "type": "integer"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "latency_p50_ms": {
+      "minimum": 0,
+      "title": "Latency P50 Ms",
+      "type": "number"
+    },
+    "latency_p95_ms": {
+      "minimum": 0,
+      "title": "Latency P95 Ms",
+      "type": "number"
+    },
+    "observed_requests_per_second": {
+      "minimum": 0,
+      "title": "Observed Requests Per Second",
+      "type": "number"
+    },
+    "operation": {
+      "title": "Operation",
+      "type": "string"
+    },
+    "production_ready_claimed": {
+      "const": false,
+      "default": false,
+      "title": "Production Ready Claimed",
+      "type": "boolean"
+    },
+    "sample_count": {
+      "exclusiveMinimum": 0,
+      "title": "Sample Count",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "orgrebase.capacity-smoke-receipt.v1",
+      "default": "orgrebase.capacity-smoke-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sla_met_claimed": {
+      "const": false,
+      "default": false,
+      "title": "Sla Met Claimed",
+      "type": "boolean"
+    },
+    "successes": {
+      "minimum": 0,
+      "title": "Successes",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "operation",
+    "sample_count",
+    "successes",
+    "failures",
+    "elapsed_ms",
+    "latency_p50_ms",
+    "latency_p95_ms",
+    "observed_requests_per_second",
+    "environment_facts"
+  ],
+  "title": "CapacitySmokeReceipt",
+  "type": "object"
+}

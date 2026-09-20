@@ -1,0 +1,28 @@
+{
+  "digest": "sha256:ce276f471a48f63a72893d4a380d8bbf523427df8ecd5215317e557e3a069c07",
+  "probes": {
+    "authority": {
+      "expected_error": "SKILL_PREDECESSOR_ROLLBACK_AUTHORITY_DENIED",
+      "observed_error": "SKILL_PREDECESSOR_ROLLBACK_AUTHORITY_DENIED",
+      "status": "PASS"
+    },
+    "direct_lineage": {
+      "expected_error": "SKILL_PREDECESSOR_DIRECT_LINEAGE_MISMATCH",
+      "observed_error": "SKILL_PREDECESSOR_DIRECT_LINEAGE_MISMATCH",
+      "status": "PASS"
+    },
+    "idempotency_conflict": {
+      "expected_error": "SKILL_PREDECESSOR_ROLLBACK_IDEMPOTENCY_CONFLICT",
+      "observed_error": "SKILL_PREDECESSOR_ROLLBACK_IDEMPOTENCY_CONFLICT",
+      "status": "PASS"
+    },
+    "tool_result_tamper": {
+      "expected_error": "SKILL_ROLLBACK_TOOL_BINDING_INVALID",
+      "observed_error": "SKILL_ROLLBACK_TOOL_BINDING_INVALID",
+      "status": "PASS"
+    }
+  },
+  "run_id": "run:orgrebase:semifinal-closure:quote-001",
+  "schema_version": "orgrebase.skill-predecessor-rollback-negative-probes.v1",
+  "status": "PASS"
+}

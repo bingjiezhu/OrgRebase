@@ -1,0 +1,14 @@
+{
+  "action": "delegate_task",
+  "digest": "sha256:2a92cbc75c2ac40cc167df7e4de8d911d172b5c38b055af1c29bfa187a73627f",
+  "error": null,
+  "key": "at-reviewer-barrier-7e3227d5ab73:delegate",
+  "ok": true,
+  "payload_digest": "sha256:416986fe6d5d13adbf46ec5324890af45a886a0f8f8f47a5ac1c09d264496bde",
+  "raw_ref": "raw-mcp/015-at-reviewer-barrier-7e3227d5ab73-delegate-90d973c4.json",
+  "request_digest": "sha256:dbf044cb28da464a81df4efa50216f67ad1814e20f35e6510aef612d1d3f54a7",
+  "response_digest": "sha256:0e491e65574e1e572580a3962b88b4b67c3a9ef82c28f24f7f78c664d3002905",
+  "sequence": 15,
+  "status": "assigned",
+  "tool": "taskflow"
+}

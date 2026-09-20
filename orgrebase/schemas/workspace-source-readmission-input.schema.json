@@ -1,0 +1,60 @@
+{
+  "$defs": {
+    "SourceEventRef": {
+      "additionalProperties": false,
+      "properties": {
+        "event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Event Digest",
+          "type": "string"
+        },
+        "event_id": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "event_digest"
+      ],
+      "title": "SourceEventRef",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-source-readmission-input.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "events": {
+      "items": {
+        "$ref": "#/$defs/SourceEventRef"
+      },
+      "maxItems": 3,
+      "minItems": 2,
+      "title": "Events",
+      "type": "array"
+    },
+    "group_id": {
+      "maxLength": 160,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+      "title": "Group Id",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "group_id",
+    "events",
+    "reason"
+  ],
+  "title": "SourceReadmissionInput",
+  "type": "object"
+}

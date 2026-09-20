@@ -1,0 +1,23 @@
+{
+  "actor_id": "worker:gtm-steward",
+  "authorization_mode": "RELEASE",
+  "candidate_only": true,
+  "created_at": "2026-08-26T00:00:02Z",
+  "delegation_id": "sha256:8dab4aab575ae1de893502da2245e5f8b110d2faffac4c840bcd4d913b920464",
+  "digest": "sha256:ea3549fcaadadaa951dbb5b882cc5674b5e91f1aee66cdbbba3bcba4194c60cd",
+  "entry_point": "QUOTE_COMPOSE_V1",
+  "id": "skill-invocation:b338fe28023aa88f1084d74a7f6d7064ead003978b35759b59ccedfd1e38cb77",
+  "input_digest": "sha256:753b31ab91c588911d54a5ffe1c76c34e03738a6a0ec764e6e88883baf015dbb",
+  "manifest_digest": "sha256:64da732b086e7b85fb4ea31aeb60b28dd8bcb22c98ceb38fca03fb4f8907ffca",
+  "outcome": "SUCCESS",
+  "output_digest": "sha256:7ccb88e6b0eae908526dba8641769cd3ff6350cb5a81f4214e4e8ee2c1c3efc1",
+  "package_digest": "sha256:64da732b086e7b85fb4ea31aeb60b28dd8bcb22c98ceb38fca03fb4f8907ffca",
+  "package_id": "skill-package:enterprise-quote-compose@1.3.1",
+  "program_digest": "sha256:dacf97f2b5d788ad2e963ace2e19466f0e7454f6f572d6cb3abbfa93712bab0d",
+  "release_artifact_id": "skill-release:enterprise-quote-compose@1.3.1",
+  "release_receipt_digest": "sha256:764456770d3a753cf5c51f589eb16224bfe7118119a64db8005b460106849a90",
+  "run_id": "run:orgrebase:semifinal-closure:quote-001",
+  "schema_version": "orgrebase.skill-invocation-receipt.v1",
+  "target_writes": 0,
+  "task_id": "orgrebase-native-quote-001-gtm-a1"
+}

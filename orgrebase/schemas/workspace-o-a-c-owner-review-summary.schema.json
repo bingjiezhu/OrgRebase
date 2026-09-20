@@ -1,0 +1,326 @@
+{
+  "$defs": {
+    "OACOwnerReviewComponent": {
+      "additionalProperties": false,
+      "description": "One safe, business-facing slice of the source-to-contract review.",
+      "properties": {
+        "completeness": {
+          "minLength": 1,
+          "title": "Completeness",
+          "type": "string"
+        },
+        "component_kind": {
+          "$ref": "#/$defs/SeedComponentKind"
+        },
+        "contract_effects": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Contract Effects",
+          "type": "array"
+        },
+        "declared_unknowns": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Declared Unknowns",
+          "type": "array"
+        },
+        "observed_item_count": {
+          "minimum": 0,
+          "title": "Observed Item Count",
+          "type": "integer"
+        },
+        "reason_codes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "responsible_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Responsible Refs",
+          "type": "array"
+        },
+        "sample_items": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Sample Items",
+          "type": "array"
+        },
+        "source_root_ref": {
+          "minLength": 1,
+          "title": "Source Root Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_kind",
+        "completeness",
+        "source_root_ref",
+        "observed_item_count",
+        "contract_effects"
+      ],
+      "title": "OACOwnerReviewComponent",
+      "type": "object"
+    },
+    "SeedComponentKind": {
+      "enum": [
+        "DOMAIN",
+        "KNOWLEDGE",
+        "AUTHORITY",
+        "CAPABILITY",
+        "DEPENDENCY"
+      ],
+      "title": "SeedComponentKind",
+      "type": "string"
+    },
+    "SeedDataClass": {
+      "enum": [
+        "SYNTHETIC_FIXTURE",
+        "PUBLIC",
+        "INTERNAL",
+        "CONFIDENTIAL"
+      ],
+      "title": "SeedDataClass",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-owner-review-summary.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Human-readable approval subject derived from the exact admitted Pack.\n\nThe summary is deliberately a safe projection: it carries no local paths,\nraw private values, provider identifiers, or authority to mutate business\nstate.  Its digest is bound into the time gate, approval, adapter capsule,\nand therefore the later Workspace activation/consumption chain.",
+  "properties": {
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "approval_effects": {
+      "default": [
+        "ACTIVATE_EXACT_ORGANIZATION_CONTRACT",
+        "ALLOW_EXACT_WORKSPACE_FORMATION_GATE"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Approval Effects",
+      "type": "array"
+    },
+    "authority_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Authority Refs",
+      "type": "array"
+    },
+    "candidate_mapping_set_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Candidate Mapping Set Digest",
+      "type": "string"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "capability_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Capability Refs",
+      "type": "array"
+    },
+    "change_kinds": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Change Kinds",
+      "type": "array"
+    },
+    "component_reviews": {
+      "items": {
+        "$ref": "#/$defs/OACOwnerReviewComponent"
+      },
+      "maxItems": 5,
+      "minItems": 5,
+      "title": "Component Reviews",
+      "type": "array"
+    },
+    "data_class": {
+      "$ref": "#/$defs/SeedDataClass"
+    },
+    "decision_owner_ref": {
+      "minLength": 1,
+      "title": "Decision Owner Ref",
+      "type": "string"
+    },
+    "declared_unknowns": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Declared Unknowns",
+      "type": "array"
+    },
+    "dependency_edge_count": {
+      "minimum": 0,
+      "title": "Dependency Edge Count",
+      "type": "integer"
+    },
+    "dependency_owner_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Dependency Owner Refs",
+      "type": "array"
+    },
+    "dependency_target_count": {
+      "minimum": 0,
+      "title": "Dependency Target Count",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "domain_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Domain Ids",
+      "type": "array"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "evidence_label": {
+      "enum": [
+        "CONTROLLED_SYNTHETIC_ENTERPRISE_INPUT",
+        "PUBLIC_DATA_INPUT",
+        "ENTERPRISE_INTERNAL_DECLARED_INPUT",
+        "ENTERPRISE_CONFIDENTIAL_DECLARED_INPUT"
+      ],
+      "title": "Evidence Label",
+      "type": "string"
+    },
+    "fact_count": {
+      "minimum": 0,
+      "title": "Fact Count",
+      "type": "integer"
+    },
+    "input_format": {
+      "const": "FIVE_CLASS_JSON_ENTERPRISE_PACK",
+      "default": "FIVE_CLASS_JSON_ENTERPRISE_PACK",
+      "title": "Input Format",
+      "type": "string"
+    },
+    "non_effects": {
+      "default": [
+        "NO_QUOTE_BUSINESS_APPROVAL",
+        "NO_EXTERNAL_SYSTEM_WRITE",
+        "NO_AGENT_AUTHORITY_EXPANSION"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Non Effects",
+      "type": "array"
+    },
+    "organization_id": {
+      "minLength": 1,
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "pack_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "pack_ref": {
+      "minLength": 1,
+      "title": "Pack Ref",
+      "type": "string"
+    },
+    "profile_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "profile_ref": {
+      "minLength": 1,
+      "title": "Profile Ref",
+      "type": "string"
+    },
+    "proposer_reviewer_separated": {
+      "const": true,
+      "default": true,
+      "title": "Proposer Reviewer Separated",
+      "type": "boolean"
+    },
+    "reason_codes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-owner-review-summary.v1",
+      "default": "orgrebase.oac-owner-review-summary.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "synthetic": {
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "task_scope": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Task Scope",
+      "type": "object"
+    }
+  },
+  "required": [
+    "adaptation_run_id",
+    "organization_id",
+    "profile_ref",
+    "profile_digest",
+    "pack_ref",
+    "pack_digest",
+    "data_class",
+    "synthetic",
+    "evidence_label",
+    "task_scope",
+    "domain_ids",
+    "fact_count",
+    "authority_refs",
+    "capability_refs",
+    "dependency_target_count",
+    "dependency_edge_count",
+    "dependency_owner_refs",
+    "change_kinds",
+    "component_reviews",
+    "candidate_mapping_set_digest",
+    "decision_owner_ref"
+  ],
+  "title": "OACOwnerReviewSummary",
+  "type": "object"
+}

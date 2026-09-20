@@ -1,0 +1,34 @@
+{
+  "archiveEntryPoint": "oac.annotation.restore_annotation_archive",
+  "authority": "separately caller-pinned governance, qualification bytes, authenticated subject and archive head",
+  "canonicalization": "SealedResource RFC8785 decoded raw-map minus top-level digest",
+  "kinds": [
+    "AdjudicationRecord",
+    "AnnotationAuthority",
+    "AnnotationBenchmarkClaim",
+    "AnnotationPacket",
+    "AnnotationRetraction",
+    "BlindDelivery",
+    "GoldPromotionCertificate",
+    "ReviewAttestation",
+    "ReviewerQualification"
+  ],
+  "owner": "Spec004/HumanAnnotationEvidence/v1",
+  "protocol": "oac.annotation-document/v1",
+  "reasonCodes": {
+    "ANNOTATION_ADJUDICATION_INVALID": "Conflicts, distinct adjudicator or exact resolved constraint set do not verify.",
+    "ANNOTATION_ARCHIVE_INVALID": "An archive does not bind its caller-pinned root or replayed protocol history.",
+    "ANNOTATION_AUTHORITY_DENIED": "The current subject lacks live, exact-scope human qualification.",
+    "ANNOTATION_BLINDING_VIOLATION": "The requested delivery violates the independent blind round protocol.",
+    "ANNOTATION_DOCUMENT_INVALID": "A versioned annotation document is malformed or changes under typed admission.",
+    "ANNOTATION_EVIDENCE_INVALID": "A field does not cite exact admitted, packet-approved source evidence.",
+    "ANNOTATION_FIELD_COVERAGE_INVALID": "Review or adjudication fields do not cover the complete declared constraint contract.",
+    "ANNOTATION_GOLD_NOT_QUALIFIED": "A controlled-local fixture does not establish governance-attested human qualification.",
+    "ANNOTATION_PIN_MISMATCH": "The material does not match a separately pinned exact authority, packet or resource reference.",
+    "ANNOTATION_PROMOTION_INVALID": "Promotion does not bind the complete exact qualified proof chain.",
+    "ANNOTATION_RETRACTED": "A proof dependency has been immutably retracted.",
+    "ANNOTATION_REVIEW_INVALID": "The immutable review does not bind its one authorized blind delivery."
+  },
+  "semanticEntryPoint": "oac.annotation.AnnotationLedger",
+  "structuralAdmissionIsAuthority": false
+}

@@ -1,0 +1,748 @@
+{
+  "digest": "sha256:f8bbcdad589ef510048a601b7ab21ee641021d8cbc7e28c9bbe1d83316c4d6fc",
+  "entries": [
+    {
+      "bytes": 22805,
+      "path": "agentteams/action-journal.json",
+      "sha256": "sha256:4f5709e9c41b308baea8c575022b0bc14fc4cc6e888608ac7109b82fc0396357"
+    },
+    {
+      "bytes": 585,
+      "path": "agentteams/actions/001-project-create.json",
+      "sha256": "sha256:683b1f90bebca70879b5b6dfd57f5e20f688afc6dd99154ae4264c8fc436f446"
+    },
+    {
+      "bytes": 575,
+      "path": "agentteams/actions/002-project-plan.json",
+      "sha256": "sha256:b399f1dc70b17aee1e107290e5b7bc1445a750e21d8105c85bb63c1f55cb56c5"
+    },
+    {
+      "bytes": 580,
+      "path": "agentteams/actions/003-project-ready.json",
+      "sha256": "sha256:7d71216af81a7d06a0bbfb27212a70cf5d419d62bfc7986233448057d4e51163"
+    },
+    {
+      "bytes": 647,
+      "path": "agentteams/actions/004-orgrebase-native-quote-001-product-a1-delegate.json",
+      "sha256": "sha256:1ded5b5a05b1f473428e46842238f7a811255bf1c76349e89858f8baf91e51d1"
+    },
+    {
+      "bytes": 667,
+      "path": "agentteams/actions/005-orgrebase-native-quote-001-product-a1-delegate-duplicate.json",
+      "sha256": "sha256:a95d56e1ab17c696501fccb9f5dd6c3c502eaa0484eeedb5e656da8ae0ce69a6"
+    },
+    {
+      "bytes": 635,
+      "path": "agentteams/actions/006-orgrebase-native-quote-001-product-a1-ack.json",
+      "sha256": "sha256:1eb12809982bd95b484411057603ab1ab050d0326dc246346b5ec3f5b2c043d0"
+    },
+    {
+      "bytes": 642,
+      "path": "agentteams/actions/007-orgrebase-native-quote-001-product-a1-submit.json",
+      "sha256": "sha256:8e6a35e3aaae9525cea0789f6e85710c9126efbda16733b369dc834ad3a7ce1f"
+    },
+    {
+      "bytes": 639,
+      "path": "agentteams/actions/008-orgrebase-native-quote-001-product-a1-check.json",
+      "sha256": "sha256:dfb192e886a0328e59b592f5693278d6450538931d695fdc70cc833635ccdbe6"
+    },
+    {
+      "bytes": 652,
+      "path": "agentteams/actions/009-orgrebase-native-quote-001-product-a1-accept.json",
+      "sha256": "sha256:f9c29ee225bf5184d09239274bb7862406afeb848a518a6e3f8bb6debbf458a8"
+    },
+    {
+      "bytes": 644,
+      "path": "agentteams/actions/010-orgrebase-native-quote-001-legal-a1-delegate.json",
+      "sha256": "sha256:9953c0ea31697e86aeb5d48083020dddd2a8b2f8f8aba10fb4e92d94510779d8"
+    },
+    {
+      "bytes": 632,
+      "path": "agentteams/actions/011-orgrebase-native-quote-001-legal-a1-ack.json",
+      "sha256": "sha256:414cff404dc909672b6e237d7349e342d5274c72e2206a255b8e85401a827621"
+    },
+    {
+      "bytes": 639,
+      "path": "agentteams/actions/012-orgrebase-native-quote-001-legal-a1-submit.json",
+      "sha256": "sha256:a847fd3a8de79f958820c5310132918dad074cfe81c93faf9c124e83ef3c6796"
+    },
+    {
+      "bytes": 636,
+      "path": "agentteams/actions/013-orgrebase-native-quote-001-legal-a1-check.json",
+      "sha256": "sha256:5bf12e98712ebe3eab8520f385d60ca1b6cd5b09266159e5114f8c2469f50224"
+    },
+    {
+      "bytes": 649,
+      "path": "agentteams/actions/014-orgrebase-native-quote-001-legal-a1-accept.json",
+      "sha256": "sha256:1ab54ddd120a6c80f4301167d2f949714d0c56fa9388eaab541fdb1e84b6d94f"
+    },
+    {
+      "bytes": 648,
+      "path": "agentteams/actions/015-orgrebase-native-quote-001-finance-a1-delegate.json",
+      "sha256": "sha256:91d881260ef1f320fe0495631f44eea9ba658077f216c29b91c7a88515f324c2"
+    },
+    {
+      "bytes": 636,
+      "path": "agentteams/actions/016-orgrebase-native-quote-001-finance-a1-ack.json",
+      "sha256": "sha256:e8490a8eaaf239fded2fc55e42a5bf90eb54d0cf6108000b746d8e4265f0db7d"
+    },
+    {
+      "bytes": 643,
+      "path": "agentteams/actions/017-orgrebase-native-quote-001-finance-a1-submit.json",
+      "sha256": "sha256:60279140296806e510ae5a6a6540ec46725c3df161c7464ad371aeb0e66775ba"
+    },
+    {
+      "bytes": 640,
+      "path": "agentteams/actions/018-orgrebase-native-quote-001-finance-a1-check.json",
+      "sha256": "sha256:e468c67cfb9c5c74f70bc4a8c4c11f0977b461ffb285151d0fb4d8f26593eafa"
+    },
+    {
+      "bytes": 653,
+      "path": "agentteams/actions/019-orgrebase-native-quote-001-finance-a1-accept.json",
+      "sha256": "sha256:60203ed13a0d78f5d2e5bf6efb56d8016f0b9581afd5027bf717814bb58e1f00"
+    },
+    {
+      "bytes": 640,
+      "path": "agentteams/actions/020-orgrebase-native-quote-001-gtm-a1-delegate.json",
+      "sha256": "sha256:0ed0b3dd0d643851cda44c41b487ebbf977e15cddd46c09c7b3b9162aebb2da2"
+    },
+    {
+      "bytes": 628,
+      "path": "agentteams/actions/021-orgrebase-native-quote-001-gtm-a1-ack.json",
+      "sha256": "sha256:359faf9f8fd0d7a225beda02df92e23272dc58db4b70efc0115915651db517f9"
+    },
+    {
+      "bytes": 635,
+      "path": "agentteams/actions/022-orgrebase-native-quote-001-gtm-a1-submit.json",
+      "sha256": "sha256:26107ad888a35089e52f1c41ca93aac3953e42ac71ffb1680ff36bd6d31779c9"
+    },
+    {
+      "bytes": 632,
+      "path": "agentteams/actions/023-orgrebase-native-quote-001-gtm-a1-check.json",
+      "sha256": "sha256:3ee4aff04de04c61d8a89128f027c249918031deed3662749e3744a6f37db7f8"
+    },
+    {
+      "bytes": 645,
+      "path": "agentteams/actions/024-orgrebase-native-quote-001-gtm-a1-accept.json",
+      "sha256": "sha256:7754937bbfb2c25ccd5de424e5809d252293f70006ed7618060d9ff9669539bc"
+    },
+    {
+      "bytes": 666,
+      "path": "agentteams/actions/025-orgrebase-native-quote-001-product-reassign-a1-delegate.json",
+      "sha256": "sha256:900af784ce069d147ccd364787de7a54ba33e3bb7f709dfd0ae2d121cdd82fe4"
+    },
+    {
+      "bytes": 661,
+      "path": "agentteams/actions/026-orgrebase-native-quote-001-product-reassign-a1-cancel.json",
+      "sha256": "sha256:e8ca5afe4219edc3b0cbf3de8a6b6359625be4935c0a66a0b02964de4db9c9df"
+    },
+    {
+      "bytes": 606,
+      "path": "agentteams/actions/027-project-replan-reassignment.json",
+      "sha256": "sha256:2b3d4a59160d7a7702a096c7ed14eb4eb3d8f017147a299550a6b0007f5697ab"
+    },
+    {
+      "bytes": 716,
+      "path": "agentteams/actions/028-orgrebase-native-quote-001-product-reassign-a1-late-submit.json",
+      "sha256": "sha256:25185aed5e9af18deb8ea0b0b7c96ef1a7cf2fba1f5c70899910f01611c636ce"
+    },
+    {
+      "bytes": 676,
+      "path": "agentteams/actions/029-orgrebase-native-quote-001-product-reassign-a2-delegate_task.json",
+      "sha256": "sha256:0f5ae91d07707965700cc8adb9d210ed06f14af47f2518586238ec6069b06e9e"
+    },
+    {
+      "bytes": 664,
+      "path": "agentteams/actions/030-orgrebase-native-quote-001-product-reassign-a2-ack_task.json",
+      "sha256": "sha256:321f534876e12efd5224706e9bded3328448b449c1f5b2821882c01500b983c8"
+    },
+    {
+      "bytes": 671,
+      "path": "agentteams/actions/031-orgrebase-native-quote-001-product-reassign-a2-submit_task.json",
+      "sha256": "sha256:73d8486e8237e70f96d9835b9e11fb67c4942e6d620bd42423d9f979e2f6d0b8"
+    },
+    {
+      "bytes": 668,
+      "path": "agentteams/actions/032-orgrebase-native-quote-001-product-reassign-a2-check_task.json",
+      "sha256": "sha256:fd5d645240b25a600a9c688098924d1141e083d97de664a366768485d0832c6b"
+    },
+    {
+      "bytes": 671,
+      "path": "agentteams/actions/033-orgrebase-native-quote-001-product-reassign-a2-accept.json",
+      "sha256": "sha256:757b4f61547bf62268469b1c5f498083c30630dd1c2af4e65ef39aa8d06ab60c"
+    },
+    {
+      "bytes": 595,
+      "path": "agentteams/actions/034-project-complete.json",
+      "sha256": "sha256:226b2a4e9daa8c20903cf9d235303829e7cefe3c64a684d0af4cc624feacd952"
+    },
+    {
+      "bytes": 3646,
+      "path": "agentteams/bindings/orgrebase-native-quote-001-finance-a1.json",
+      "sha256": "sha256:be4b1ce6ea24cc0566e962551e0f440f5b9148b60211badaff3022458d6c5fba"
+    },
+    {
+      "bytes": 3634,
+      "path": "agentteams/bindings/orgrebase-native-quote-001-gtm-a1.json",
+      "sha256": "sha256:7076210e683cc5391ef049f725252c27fdb2fbbc88927d1a85335e86ea3c5c87"
+    },
+    {
+      "bytes": 3640,
+      "path": "agentteams/bindings/orgrebase-native-quote-001-legal-a1.json",
+      "sha256": "sha256:4e3b5c3f7a9142eb7061e0433153ab8b5188105d67ed9e7e17e5c96325504860"
+    },
+    {
+      "bytes": 3959,
+      "path": "agentteams/bindings/orgrebase-native-quote-001-product-a1.json",
+      "sha256": "sha256:1861eda05f11655fd3f7939df8d962ce6deb15504bccbb0139648e25ec8f260d"
+    },
+    {
+      "bytes": 2958,
+      "path": "agentteams/bindings/orgrebase-native-quote-001-product-reassign-a1.json",
+      "sha256": "sha256:777feb2bd161970526f60fad6b2fbd9401afe5f263e7322a026c4391d20a3b70"
+    },
+    {
+      "bytes": 3696,
+      "path": "agentteams/bindings/orgrebase-native-quote-001-product-reassign-a2.json",
+      "sha256": "sha256:6433c66e040a74da60f58f845176ed899f0413fa973cd0dfd874858f0fdaf3f8"
+    },
+    {
+      "bytes": 4639,
+      "path": "agentteams/coalition-result-binding.json",
+      "sha256": "sha256:d7663123fdf3605f5db44f7558efe33020875bb9c9fd57fdb4f754db31cb72ea"
+    },
+    {
+      "bytes": 58617,
+      "path": "agentteams/lifecycle-receipt.json",
+      "sha256": "sha256:0f2bc80f6dcff66e5c5ae9fcb89ee7db1271dcccfe4add1d2f57950dd9f86453"
+    },
+    {
+      "bytes": 1028,
+      "path": "agentteams/raw-mcp/001-project-create-151c52fe.json",
+      "sha256": "sha256:ab4f4da5f3de70522517a6f5898b435fa76ab5b919bbbadf127934ce24d0906e"
+    },
+    {
+      "bytes": 4039,
+      "path": "agentteams/raw-mcp/002-project-plan-1c351f5d.json",
+      "sha256": "sha256:cd0f24a46f824791b3c77c44b3f08c7268912feb1a56715356dac8565426a267"
+    },
+    {
+      "bytes": 2810,
+      "path": "agentteams/raw-mcp/003-project-ready-1fb0c8ad.json",
+      "sha256": "sha256:1a7fa14ec298cd528a197f0b336fdb999bb9f2fad715c18a1773dfee0d8a2aab"
+    },
+    {
+      "bytes": 3373,
+      "path": "agentteams/raw-mcp/004-orgrebase-native-quote-001-product-a1-delegate-dae692c2.json",
+      "sha256": "sha256:a41a2a2627d6676bbbef19581fa245d59d0b85ff422495703c2cdf66cf344443"
+    },
+    {
+      "bytes": 3419,
+      "path": "agentteams/raw-mcp/005-orgrebase-native-quote-001-product-a1-delegate-duplicate-23559303.json",
+      "sha256": "sha256:ec28abd122456932a74e4dd9ded380dc8b4a0d5c2d95de7c610b2465c25d678c"
+    },
+    {
+      "bytes": 2947,
+      "path": "agentteams/raw-mcp/006-orgrebase-native-quote-001-product-a1-ack-82102477.json",
+      "sha256": "sha256:e56addb62078df892d348148b1a378553e4d06ba1828707dee36bd8127a6ea7f"
+    },
+    {
+      "bytes": 2589,
+      "path": "agentteams/raw-mcp/007-orgrebase-native-quote-001-product-a1-submit-69974213.json",
+      "sha256": "sha256:45ef36522d85d1c5f42cd38662ef809613b67882a2107457980075dfa47f25f3"
+    },
+    {
+      "bytes": 2430,
+      "path": "agentteams/raw-mcp/008-orgrebase-native-quote-001-product-a1-check-950f07b9.json",
+      "sha256": "sha256:76c45b9e70ec06f9747cb9271f3134f5230e38fc65a71988de3a2bf60a45fb4e"
+    },
+    {
+      "bytes": 2573,
+      "path": "agentteams/raw-mcp/009-orgrebase-native-quote-001-product-a1-accept-93b30ede.json",
+      "sha256": "sha256:0f6b15cb824651490e3edede49296cfeff2154427e01bb4393b29e6f2825a5a4"
+    },
+    {
+      "bytes": 3346,
+      "path": "agentteams/raw-mcp/010-orgrebase-native-quote-001-legal-a1-delegate-c88018f1.json",
+      "sha256": "sha256:4f2b4c259d6c6a64612e88ef0f4d8f51a627dcb8884b9858ed3fbcb64a338049"
+    },
+    {
+      "bytes": 2928,
+      "path": "agentteams/raw-mcp/011-orgrebase-native-quote-001-legal-a1-ack-767a6af9.json",
+      "sha256": "sha256:58a6ff30da2c5a9df5fca268d54339101cd738cf9d62100c419fcd0c8677cf46"
+    },
+    {
+      "bytes": 2566,
+      "path": "agentteams/raw-mcp/012-orgrebase-native-quote-001-legal-a1-submit-f0d7b28c.json",
+      "sha256": "sha256:3fef3f0951b524f95de1936a784b0533e0a4e55e4495291892ad071b616ddeb9"
+    },
+    {
+      "bytes": 2409,
+      "path": "agentteams/raw-mcp/013-orgrebase-native-quote-001-legal-a1-check-3f76dab4.json",
+      "sha256": "sha256:929322e9aa43a70bd14c88a4e668dfc8e795098230ffa58df244f1b26716b8e2"
+    },
+    {
+      "bytes": 2566,
+      "path": "agentteams/raw-mcp/014-orgrebase-native-quote-001-legal-a1-accept-c1751487.json",
+      "sha256": "sha256:c4d3a3bec439a5564086307b7d7c2aef8cf2992347b3c184839f64182817ba0a"
+    },
+    {
+      "bytes": 3374,
+      "path": "agentteams/raw-mcp/015-orgrebase-native-quote-001-finance-a1-delegate-708e6d32.json",
+      "sha256": "sha256:125e622165626ac2fa695b6a3682e8a002c5e5093c459c961cb4857e53a9be6f"
+    },
+    {
+      "bytes": 2948,
+      "path": "agentteams/raw-mcp/016-orgrebase-native-quote-001-finance-a1-ack-d279b50f.json",
+      "sha256": "sha256:7bfdd312ee11a5b92f027b53cd58a3a10bf9897bcab26f4a5e14c67e6d6b8f29"
+    },
+    {
+      "bytes": 2590,
+      "path": "agentteams/raw-mcp/017-orgrebase-native-quote-001-finance-a1-submit-29e185df.json",
+      "sha256": "sha256:b16b5011aa727ea697de4f6f881417f7156bc619b33c1fa141ed7f7c3dd59be7"
+    },
+    {
+      "bytes": 2431,
+      "path": "agentteams/raw-mcp/018-orgrebase-native-quote-001-finance-a1-check-d1c7415b.json",
+      "sha256": "sha256:c094d39dce31eac20ca9470e1fcc989829089c813ceff399af37b75b627a568a"
+    },
+    {
+      "bytes": 2578,
+      "path": "agentteams/raw-mcp/019-orgrebase-native-quote-001-finance-a1-accept-5792276e.json",
+      "sha256": "sha256:e4afb81ea801494bd1a26f0f2bddfd3c55b12c5631d492964a2852a384d1a77f"
+    },
+    {
+      "bytes": 3318,
+      "path": "agentteams/raw-mcp/020-orgrebase-native-quote-001-gtm-a1-delegate-26e1b2f7.json",
+      "sha256": "sha256:e839cb213ae83365bcb3652a7b5da93c5eb410a9cc5469b8b7c5b0d08949193d"
+    },
+    {
+      "bytes": 2908,
+      "path": "agentteams/raw-mcp/021-orgrebase-native-quote-001-gtm-a1-ack-127fa0ad.json",
+      "sha256": "sha256:966e00ca8c7f0172298db89e72cd88aa88169f6e924256c8b1fb80d532bc164b"
+    },
+    {
+      "bytes": 2542,
+      "path": "agentteams/raw-mcp/022-orgrebase-native-quote-001-gtm-a1-submit-725459ab.json",
+      "sha256": "sha256:aecbb808cf8b06516ccba374bacc61fde066ff3a94e71979d2016f772c3c51be"
+    },
+    {
+      "bytes": 2387,
+      "path": "agentteams/raw-mcp/023-orgrebase-native-quote-001-gtm-a1-check-bf0966ff.json",
+      "sha256": "sha256:d4ceeee56c2947b8118b2311bda4b9560b52826e62e4966ab3b0f82b4b49deb5"
+    },
+    {
+      "bytes": 2560,
+      "path": "agentteams/raw-mcp/024-orgrebase-native-quote-001-gtm-a1-accept-2fbcdcfc.json",
+      "sha256": "sha256:03ad93604bf61666e3e2f3aded04d74a17d08fc2afb888c6dae84bcd2aef6ea3"
+    },
+    {
+      "bytes": 3443,
+      "path": "agentteams/raw-mcp/025-orgrebase-native-quote-001-product-reassign-a1-delegate-9371f765.json",
+      "sha256": "sha256:c1e63841d6bef579a7a83fa3733f770601b61ab5220f0de25f72db93d7d6c497"
+    },
+    {
+      "bytes": 3128,
+      "path": "agentteams/raw-mcp/026-orgrebase-native-quote-001-product-reassign-a1-cancel-f094c929.json",
+      "sha256": "sha256:89add62bf0745a768e5ac1aa78917e14ea6296c060ebc7ae922eefb51892953c"
+    },
+    {
+      "bytes": 4046,
+      "path": "agentteams/raw-mcp/027-project-replan-reassignment-467e6de8.json",
+      "sha256": "sha256:0a0c9de567cacce9c1fa618a8df05b35f554eba1b24aa8a7d03b2536774cfd5f"
+    },
+    {
+      "bytes": 1188,
+      "path": "agentteams/raw-mcp/028-orgrebase-native-quote-001-product-reassign-a1-late-submit-74549d79.json",
+      "sha256": "sha256:0bad143631c92e19f9a41a7e2a3c21eae3c365ff5786b6d0527e0b5d99d1537b"
+    },
+    {
+      "bytes": 3501,
+      "path": "agentteams/raw-mcp/029-orgrebase-native-quote-001-product-reassign-a2-delegate_task-552cfda9.json",
+      "sha256": "sha256:82c0ccf7131f40267eee09c0548a1fb4cb074f8163f52527a9089c853770b594"
+    },
+    {
+      "bytes": 3070,
+      "path": "agentteams/raw-mcp/030-orgrebase-native-quote-001-product-reassign-a2-ack_task-32a18e93.json",
+      "sha256": "sha256:f8cd617e88cdbd5652095e0ec7426b84bfbdfb93dd9acfdf96c8dc2462cb7cde"
+    },
+    {
+      "bytes": 2665,
+      "path": "agentteams/raw-mcp/031-orgrebase-native-quote-001-product-reassign-a2-submit_task-d5b1351f.json",
+      "sha256": "sha256:64987593f03656a0da3860c80e7bb2c5e81e5cc2dea7574baeecacf29d1d5791"
+    },
+    {
+      "bytes": 2497,
+      "path": "agentteams/raw-mcp/032-orgrebase-native-quote-001-product-reassign-a2-check_task-cdc56a28.json",
+      "sha256": "sha256:1fc7cd8496a241096abeaf43cb6c81844b2cefb4f4e196eaf6adaa4f4b5383b8"
+    },
+    {
+      "bytes": 2858,
+      "path": "agentteams/raw-mcp/033-orgrebase-native-quote-001-product-reassign-a2-accept-8c0c03cc.json",
+      "sha256": "sha256:d78c6c7d0308fcd0fe51905237bbba887fe23bcd2af98d88f96732307350b011"
+    },
+    {
+      "bytes": 2515,
+      "path": "agentteams/raw-mcp/034-project-complete-1a1cf51b.json",
+      "sha256": "sha256:eb4b52e0ad8e1045f32396860e8110f657db4e3a5e3f1926d73f3d14114fb419"
+    },
+    {
+      "bytes": 417,
+      "path": "agentteams/runtime/adapter-bin/mc",
+      "sha256": "sha256:9bca1fb759b6d39e1d681133668b7981dea4b1230cede3e74028b704f2820284"
+    },
+    {
+      "bytes": 6458,
+      "path": "agentteams/runtime/mc-process-invocations.jsonl",
+      "sha256": "sha256:99204d31061afe3287e6e8fb930014d49328436a8494a5e0c76cc4ae12745a09"
+    },
+    {
+      "bytes": 1821,
+      "path": "agentteams/runtime/shared/projects/orgrebase-native-quote-001/meta.json",
+      "sha256": "sha256:fb03f9f69982cb8d6afcbd52379517f0f80b485e02ce61b1e894ffb56c679177"
+    },
+    {
+      "bytes": 944,
+      "path": "agentteams/runtime/shared/projects/orgrebase-native-quote-001/plan.md",
+      "sha256": "sha256:df7eb6ec8068ffb3205f454d619c0b6d73109ef147928ed506c7d35dbce95591"
+    },
+    {
+      "bytes": 1126,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-finance-a1/meta.json",
+      "sha256": "sha256:fb198b5dab267527f0c11519da16338429b62f8852a3df7083f0389175d85558"
+    },
+    {
+      "bytes": 1260,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-finance-a1/spec.md",
+      "sha256": "sha256:95b8e72f61c76765a621decb68891926ef06f5eb0126165e2bd791bf2e781bc3"
+    },
+    {
+      "bytes": 1098,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-gtm-a1/meta.json",
+      "sha256": "sha256:0b80b77e0ec133fa2cdae52e99aec3ccdc1543b6dc6e0ec8f25fe2359880246d"
+    },
+    {
+      "bytes": 1248,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-gtm-a1/spec.md",
+      "sha256": "sha256:ff4401a28e1463c2ff57fb569372106c2a2db6e125fe9b449e80091636c9e4b9"
+    },
+    {
+      "bytes": 1112,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-legal-a1/meta.json",
+      "sha256": "sha256:ac7e5ee69d89e038d73cf138f2bf79f3b65659fe33d542f401e06c059e932c9d"
+    },
+    {
+      "bytes": 1254,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-legal-a1/spec.md",
+      "sha256": "sha256:a160f40371f051dee74be598299cfcfcb23b6776501dac4f857560d8a59dd6fe"
+    },
+    {
+      "bytes": 1126,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-product-a1/meta.json",
+      "sha256": "sha256:3bb68a260ac2c34df5d6670091dcfe75dfb3f1e97d18b2253de085fc9e6f4ff0"
+    },
+    {
+      "bytes": 1260,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-product-a1/spec.md",
+      "sha256": "sha256:103cec478b53421ef462c49f87d41bb09f98f34408935912f1afad0b211ec969"
+    },
+    {
+      "bytes": 805,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-product-reassign-a1/meta.json",
+      "sha256": "sha256:130571498218c3e9015dbf01af41ecc9baa05aab692da8e8efe8b5f94310f1f7"
+    },
+    {
+      "bytes": 1269,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-product-reassign-a1/spec.md",
+      "sha256": "sha256:adada0390d4bba9b328a034687d3f71ed384e8ee71f21510677c643dd80234ec"
+    },
+    {
+      "bytes": 1169,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-product-reassign-a2/meta.json",
+      "sha256": "sha256:ebbcbc99d9573146da1bf7dd68e0e221db32d280c8ef5ab54d502f3b4832d423"
+    },
+    {
+      "bytes": 1310,
+      "path": "agentteams/runtime/shared/tasks/orgrebase-native-quote-001-product-reassign-a2/spec.md",
+      "sha256": "sha256:8cf980ccd051e65b52f9a309c57e49134a4539a1fa101518504622ccccf252a0"
+    },
+    {
+      "bytes": 713,
+      "path": "agentteams/source-verification.json",
+      "sha256": "sha256:30c96bdd37ce3f580cc7bb7b296c6aff4cd9d0d1aa42e683525e5b99376fdc71"
+    },
+    {
+      "bytes": 978488,
+      "path": "artifacts/orgrebase-0.4.0-py3-none-any.whl",
+      "sha256": "sha256:90ec3e2bb41efcf84c05f6ab9696610bdd517c5c80eefb04480a36a50bf3b47e"
+    },
+    {
+      "bytes": 4576,
+      "path": "operations/evidence-index.json",
+      "sha256": "sha256:511eecabe6b72818fc178c7cff7f91a9ad6d5c4b6ece0c84a18012af4f8c2134"
+    },
+    {
+      "bytes": 656,
+      "path": "operations/observability/alert-receipt.json",
+      "sha256": "sha256:19504e2dad2577577ee034b86b169d8b310b5d319bde11c4078d1e386578b634"
+    },
+    {
+      "bytes": 2260,
+      "path": "operations/observability/export-receipts.json",
+      "sha256": "sha256:3cd5f6147539046a9bea84addf4b4b296690da50a29561ddb416f1529277bf11"
+    },
+    {
+      "bytes": 48074,
+      "path": "operations/observability/logs.otlp.json",
+      "sha256": "sha256:7105f5f1a0ed711f1ddcc3c45761c218c6bd1cf527246a3608c78bd34f0b7cc7"
+    },
+    {
+      "bytes": 11150,
+      "path": "operations/observability/metrics.otlp.json",
+      "sha256": "sha256:e5738f0898a0bde82da6c1607941caef3387f8cc02a0d0f8125eee8e86b5be2a"
+    },
+    {
+      "bytes": 3515,
+      "path": "operations/observability/negative-alert-probe.json",
+      "sha256": "sha256:ae9f683ebfdb08eda6a632a1aa06fa61a93126e6f98a4af87fdc6f92c46a6eff"
+    },
+    {
+      "bytes": 140,
+      "path": "operations/observability/privacy-probe.json",
+      "sha256": "sha256:06a058b282af4fc0318d7b61f2228a37e770889ef7da17692d90a5d7a88bcc5b"
+    },
+    {
+      "bytes": 273,
+      "path": "operations/observability/privacy-rejection.json",
+      "sha256": "sha256:344b593efaaca6f2e2fe721d83fd2e306489c56fa240f8771bb5d98671eed134"
+    },
+    {
+      "bytes": 941,
+      "path": "operations/observability/query-receipt.json",
+      "sha256": "sha256:8e4bc5eaed3bf08acd3069d763cc4de7c65d945440a23d5c2c4d999ac78a06c4"
+    },
+    {
+      "bytes": 505,
+      "path": "operations/observability/retention-receipt.json",
+      "sha256": "sha256:5277dbf870689a8842ac50940a0c9d919f57fec7e8877a0448d6ba5547419521"
+    },
+    {
+      "bytes": 90112,
+      "path": "operations/observability/telemetry.sqlite",
+      "sha256": "sha256:1dbab8feb330b1c8de4f1048403fdf2e98e8d800b3966674970ac7ef3caf2e89"
+    },
+    {
+      "bytes": 48662,
+      "path": "operations/observability/traces.otlp.json",
+      "sha256": "sha256:f043e7cc65f2f96719ab8950896b2e38de9325f079ea85079434cb83a636426d"
+    },
+    {
+      "bytes": 845,
+      "path": "operations/operations/backup-restore-receipt.json",
+      "sha256": "sha256:c38063a8ea7d9f287940bfe250bd2271ebcaa17d352d2bd7e8adbaae1e338d68"
+    },
+    {
+      "bytes": 77824,
+      "path": "operations/operations/canonical-state.backup.sqlite",
+      "sha256": "sha256:8967f25bd3e3f5c3e27d8d2a92346b9a407843aa3438f3a7ecc18c3d08abd3ca"
+    },
+    {
+      "bytes": 77824,
+      "path": "operations/operations/canonical-state.restored.sqlite",
+      "sha256": "sha256:8967f25bd3e3f5c3e27d8d2a92346b9a407843aa3438f3a7ecc18c3d08abd3ca"
+    },
+    {
+      "bytes": 77824,
+      "path": "operations/operations/canonical-state.sqlite",
+      "sha256": "sha256:7ee6cb6f6906fdee59c52774828677c3a8a6b2469839dd8fddc43cfc7138a06d"
+    },
+    {
+      "bytes": 699,
+      "path": "operations/operations/capacity-smoke-receipt.json",
+      "sha256": "sha256:7aef4ba8ecdaa6d017e438335bdeb6c88688eff6b6478507f6487091ee01438d"
+    },
+    {
+      "bytes": 1915,
+      "path": "operations/operations/deployment-profile.json",
+      "sha256": "sha256:2d2defaaa48ea21b06fc111b617b231d06cdf9de18d46929fe44e274753184b6"
+    },
+    {
+      "bytes": 16632,
+      "path": "operations/operations/sbom.cdx.json",
+      "sha256": "sha256:b172b376dff0d1ee01a0dc36b165cbaef77540f9edcba009a7b9ffd5d9dd6115"
+    },
+    {
+      "bytes": 54,
+      "path": "operations/source/health.json",
+      "sha256": "sha256:2435510845319e9a79928be7321ae56fe182f326fe53f85d8e74e7c2465ae521"
+    },
+    {
+      "bytes": 786,
+      "path": "operations/source/not-modified-receipt.json",
+      "sha256": "sha256:638d231c587d73a1685d7be81f0b52aa81ae9c82f4348ae88e9a00874f12ec07"
+    },
+    {
+      "bytes": 223,
+      "path": "operations/source/payload.json",
+      "sha256": "sha256:d42e8973a1bd19bf718e1d545045f888d935e93e1613a439c680c32d96630bd9"
+    },
+    {
+      "bytes": 783,
+      "path": "operations/source/receipt.json",
+      "sha256": "sha256:59b7e9e38116767e9050dd191924793ce254acd67813feca457f2a13287e7768"
+    },
+    {
+      "bytes": 2999,
+      "path": "operations/summary.json",
+      "sha256": "sha256:e48040ca7dbbfbd261896d96e8d0c3d25dbd59e31ee8bbe651e61824740ded31"
+    },
+    {
+      "bytes": 754,
+      "path": "operations/tool/receipt.json",
+      "sha256": "sha256:cb1c676ba84fa00f55a2b20ce9a431c19152a932ae7b35f054bdf274937c2113"
+    },
+    {
+      "bytes": 424,
+      "path": "operations/tool/result.json",
+      "sha256": "sha256:df3962a108ff4a099059730e46618a518afd4d10c5a5fd00f4068d44dff74ccf"
+    },
+    {
+      "bytes": 507,
+      "path": "quote-shadow/evidence-index.json",
+      "sha256": "sha256:92d6e9b2c89e16955e6b4b3d1f0d0ed10f1f9164b390aa6da6a9cf683ae28118"
+    },
+    {
+      "bytes": 7436,
+      "path": "quote-shadow/quote-shadow-admission-receipt.json",
+      "sha256": "sha256:7e8b2a407709d72cad9ed19037d9a85cfcd5cb8289afea3b187ff347e1f32b1f"
+    },
+    {
+      "bytes": 613,
+      "path": "quote-shadow/verification.json",
+      "sha256": "sha256:018f2763088c2d3eba3acf29e4e2840fb28dce21dcc17c98219453683a939d71"
+    },
+    {
+      "bytes": 485,
+      "path": "quote-value/evidence-index.json",
+      "sha256": "sha256:0b7d43903eec51fb2b7ae0e10e41dcb59271efc107de0d1c5aa950808c40806f"
+    },
+    {
+      "bytes": 15737,
+      "path": "quote-value/quote-value-receipt.json",
+      "sha256": "sha256:3f113cb46c5ee7d3923af24f520779b7c15361551e09518b3b445502dc332f45"
+    },
+    {
+      "bytes": 549,
+      "path": "quote-value/verification.json",
+      "sha256": "sha256:8e064917e1a70d85691a1076f591208629bdc86c98ecc15080b563739146b8a9"
+    },
+    {
+      "bytes": 2749,
+      "path": "skills/discovery.json",
+      "sha256": "sha256:4300779c9de08aebadf769c87bbfeb66b75b30ef30ca7206add9fa96f477dcd1"
+    },
+    {
+      "bytes": 781,
+      "path": "skills/distribution/installed-wheel-receipt.json",
+      "sha256": "sha256:3f1c228dd1b07fecfde01fd2373ac6e85248654302c378948a77523423f0604a"
+    },
+    {
+      "bytes": 6721,
+      "path": "skills/evaluations/enterprise-launch-readiness.json",
+      "sha256": "sha256:76629d6956e87e2b0bf2370dac2e38f926df6943a9229baf53eff4d93fca90fb"
+    },
+    {
+      "bytes": 6707,
+      "path": "skills/evaluations/enterprise-quote-compose.json",
+      "sha256": "sha256:3f31940b09c5d10be16648837bfd5daa2a0fde7a6a846bffc2a5c9430e7fe1a0"
+    },
+    {
+      "bytes": 6725,
+      "path": "skills/evaluations/structured-domain-handoff.json",
+      "sha256": "sha256:e5b10d9bcf691490222b11c4caf7e4606f244475e7b8fd295b5d77053c0981f7"
+    },
+    {
+      "bytes": 3587,
+      "path": "skills/evidence-index.json",
+      "sha256": "sha256:26817667f5925abe14f459d801a342e2c13e6d646265034d6c3bd476656fcc26"
+    },
+    {
+      "bytes": 863,
+      "path": "skills/quote-compose/input.json",
+      "sha256": "sha256:3682b5768b1091cd6f193864930e3923c75e3e41dca90a66a4423a93414176c1"
+    },
+    {
+      "bytes": 1378,
+      "path": "skills/quote-compose/invocation-receipt.json",
+      "sha256": "sha256:854751d4051235909843c3ec3366e9b5419e292cc0b0a75bc66a60fcb2f12472"
+    },
+    {
+      "bytes": 988,
+      "path": "skills/quote-compose/result.json",
+      "sha256": "sha256:900a72068dcfd00503e21bb67799e05c93fc1961534bf0cd20e145eb963674d7"
+    },
+    {
+      "bytes": 10381,
+      "path": "skills/releases/enterprise-launch-readiness.json",
+      "sha256": "sha256:c4b1183a5baeac08c6b3c19fc069c3b9fc285cc5276f11db234ab0cea0f71852"
+    },
+    {
+      "bytes": 11107,
+      "path": "skills/releases/enterprise-quote-compose.json",
+      "sha256": "sha256:c7e1cd0b5432f7458f923cec897688102f2281f0ae1f67f9b0265d71f2fe21ef"
+    },
+    {
+      "bytes": 10355,
+      "path": "skills/releases/structured-domain-handoff.json",
+      "sha256": "sha256:7dcb325b1a974a2ba79b8e6be3e27e8150e4ba91a224f86a51aca1f7c6ebd2f3"
+    },
+    {
+      "bytes": 6721,
+      "path": "skills/requalifications/evaluations/enterprise-launch-readiness.json",
+      "sha256": "sha256:e6a379dc1cd7398fd307177f972614072e282f0236cc746b6cca0a162fd013cf"
+    },
+    {
+      "bytes": 6707,
+      "path": "skills/requalifications/evaluations/enterprise-quote-compose.json",
+      "sha256": "sha256:ae0d3cb8749141f17fccb27fa1829170ca385fbee83f9670bf7d864445c549db"
+    },
+    {
+      "bytes": 6725,
+      "path": "skills/requalifications/evaluations/structured-domain-handoff.json",
+      "sha256": "sha256:d3ed5aca876ef4b617972aee5fb491e7bc2b914cc14ec8c6155ac37feef69ba3"
+    },
+    {
+      "bytes": 7455,
+      "path": "skills/rollback-decision-probes/enterprise-launch-readiness.json",
+      "sha256": "sha256:2466d1e81295f0d93bd6e31cad177f131630cfc9cc654594f6030976dd8b4069"
+    },
+    {
+      "bytes": 7977,
+      "path": "skills/rollback-decision-probes/enterprise-quote-compose.json",
+      "sha256": "sha256:f73568d6ae13d56db6a066ab659689115cc1a8e6fc917ecce042befedc495dd2"
+    },
+    {
+      "bytes": 7441,
+      "path": "skills/rollback-decision-probes/structured-domain-handoff.json",
+      "sha256": "sha256:505415107e482a77b47b47bb8e0a7fa9a0b203ccd3a7047edc547c93e91a7ad7"
+    },
+    {
+      "bytes": 5202,
+      "path": "skills/summary.json",
+      "sha256": "sha256:497c5cc1ea2c8045f1a86ff0c75a246050a85e92b7f143ed02e04f19b15c81f0"
+    },
+    {
+      "bytes": 3347,
+      "path": "summary.json",
+      "sha256": "sha256:440c99b247a530a9bbee957d7a2414fd137c2b9b0091ccf71d91a07d07fe728c"
+    },
+    {
+      "bytes": 996,
+      "path": "verification/child-verifiers.json",
+      "sha256": "sha256:00bc03c5e3ec8e7b18015bc7452546cfb64ffa77cd72a7d286807ca52468f4cc"
+    }
+  ],
+  "entry_count": 148,
+  "pack_digest": "sha256:2f22aa960088a9c4a9212751dc12cd7bf34ab1a983743a6d31b318b0462c347e",
+  "schema_version": "orgrebase.semifinal-closure-evidence-index.v1"
+}

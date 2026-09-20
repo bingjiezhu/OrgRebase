@@ -1,0 +1,14 @@
+{
+  "digest": "sha256:61b7983ffde7a6e83d2a0e5d3c0c9bcae741e1549861961d19fe6f7b76b9b9eb",
+  "first_receipt_digest": "sha256:af75fd7df55dbdeabc8b01d3694781f328fa36452f9d21134c1d645408abccff",
+  "idempotency_key": "skill-predecessor-rollback:run:orgrebase:semifinal-closure:quote-001:enterprise-quote-compose",
+  "ledger_event_count_after_rehydration": 1,
+  "ledger_event_count_after_replay": 1,
+  "preexisting_ledger_event_count": 0,
+  "process_state_rehydration": "PASS",
+  "rehydrated_replay_receipt_digest": "sha256:af75fd7df55dbdeabc8b01d3694781f328fa36452f9d21134c1d645408abccff",
+  "replay_receipt_digest": "sha256:af75fd7df55dbdeabc8b01d3694781f328fa36452f9d21134c1d645408abccff",
+  "run_id": "run:orgrebase:semifinal-closure:quote-001",
+  "schema_version": "orgrebase.skill-predecessor-rollback-idempotency-proof.v1",
+  "status": "PASS"
+}

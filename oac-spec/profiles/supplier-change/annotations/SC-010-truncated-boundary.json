@@ -1,0 +1,60 @@
+{
+  "caseVersion": "1.0",
+  "caseId": "SC-010",
+  "title": "Truncated observation boundary preserves Unknown",
+  "profile": "supplier-change/v0.2-contextual",
+  "annotationStatus": "exploratory",
+  "annotationProvenance": {
+    "authorClass": "project-authored-candidate",
+    "independentHumanRounds": 0,
+    "adjudicated": false,
+    "mayBeCalledGold": false
+  },
+  "sourceLabels": {
+    "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+    "recordRef": "PROC-01",
+    "labelSetRef": "../source-labels/edith-proc-01.json",
+    "answerKeyGroundTruthEmpty": true,
+    "documentRefs": ["DOC-fdfc1a37", "DOC-fe8b3af2"],
+    "claimLimit": "Only two metadata anchors are exposed; absence of other rows is not a NOT_AT_RISK fact."
+  },
+  "counterfactual": {
+    "type": "single-factor-boundary",
+    "factor": "supplier.status",
+    "before": "operating",
+    "after": "unknown",
+    "assertedBy": "OAC_PROJECT",
+    "notUpstreamOacGroundTruth": true
+  },
+  "frozenInputs": {
+    "snapshotRef": "../inputs/veracier-proc01-truncated-contextual.snapshot.json",
+    "changeRef": "../inputs/SC-010.change.json",
+    "observationBoundary": "two source anchors; dependency coverage explicitly incomplete"
+  },
+  "candidateConstraints": {
+    "requiredObligationTypes": [
+      "source-discovery",
+      "unknown-preservation"
+    ],
+    "admissibleRoleRefs": ["role:procurement-owner", "role:evidence-discovery"],
+    "separation": [],
+    "happensBefore": [["source-discovery", "unknown-preservation"]],
+    "evidenceDuties": ["named missing graph coverage", "discovery query receipt"],
+    "acceptableUnknown": [
+      "affected entities",
+      "contract remedies",
+      "financial exposure",
+      "production impact"
+    ],
+    "forbiddenClaims": ["bounded_non_impact", "complete_exposure", "ready_for_external_effect"],
+    "requiredVerdictUntilDiscovery": "UNKNOWN",
+    "candidateOnly": true
+  },
+  "witnessRefs": [],
+  "mutationFamilies": ["unknown-erasure", "false-non-impact", "missing-evidence"],
+  "outcomeObservability": {
+    "fromEdith": "not_observable",
+    "fromEnterpriseOpsGym": "not_mapped",
+    "executed": false
+  }
+}

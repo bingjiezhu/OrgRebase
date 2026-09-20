@@ -1,0 +1,154 @@
+{
+  "$defs": {
+    "CoverageBasis": {
+      "enum": [
+        "RUNTIME_OBSERVED",
+        "OWNER_DECLARED_COMPLETE",
+        "CONTRACT_DECLARED",
+        "IMPORTED_VERIFIED",
+        "AGENT_INFERRED",
+        "UNKNOWN_COVERAGE"
+      ],
+      "title": "CoverageBasis",
+      "type": "string"
+    },
+    "DependencyStrength": {
+      "enum": [
+        "HARD",
+        "REVIEW",
+        "INFORMATIONAL"
+      ],
+      "title": "DependencyStrength",
+      "type": "string"
+    },
+    "PilotDependencyDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_basis": {
+          "$ref": "#/$defs/CoverageBasis"
+        },
+        "relation": {
+          "minLength": 1,
+          "title": "Relation",
+          "type": "string"
+        },
+        "slot_id": {
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "source_slot": {
+          "title": "Source Slot",
+          "type": "string"
+        },
+        "strength": {
+          "$ref": "#/$defs/DependencyStrength"
+        }
+      },
+      "required": [
+        "slot_id",
+        "source_slot",
+        "relation",
+        "strength",
+        "coverage_basis"
+      ],
+      "title": "PilotDependencyDeclaration",
+      "type": "object"
+    },
+    "PilotTargetDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "dependencies": {
+          "items": {
+            "$ref": "#/$defs/PilotDependencyDeclaration"
+          },
+          "minItems": 1,
+          "title": "Dependencies",
+          "type": "array"
+        },
+        "domain": {
+          "minLength": 1,
+          "title": "Domain",
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "WorkItemVersion",
+          "default": "WorkItemVersion",
+          "title": "Kind",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "owner": {
+          "minLength": 1,
+          "title": "Owner",
+          "type": "string"
+        },
+        "state": {
+          "const": "CURRENT",
+          "default": "CURRENT",
+          "title": "State",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "label",
+        "domain",
+        "owner",
+        "dependencies"
+      ],
+      "title": "PilotTargetDeclaration",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-pilot-dependency-projection.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "completeness_basis": {
+      "items": {
+        "$ref": "#/$defs/CoverageBasis"
+      },
+      "minItems": 1,
+      "title": "Completeness Basis",
+      "type": "array"
+    },
+    "source_refs": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Source Refs",
+      "type": "array"
+    },
+    "targets": {
+      "items": {
+        "$ref": "#/$defs/PilotTargetDeclaration"
+      },
+      "minItems": 1,
+      "title": "Targets",
+      "type": "array"
+    }
+  },
+  "required": [
+    "targets",
+    "source_refs",
+    "completeness_basis"
+  ],
+  "title": "PilotDependencyProjection",
+  "type": "object"
+}

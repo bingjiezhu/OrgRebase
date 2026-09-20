@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-approval-binding.schema.json",
+  "title": "OrgRebase Workspace Approval Binding v1",
+  "description": "Binds one persisted Approval to the exact run, enterprise Pack, Profile, Quote predecessor, Preview and Owner.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "digest",
+    "schema_version",
+    "id",
+    "approval_ref",
+    "approval_digest",
+    "change_kind",
+    "workflow_run_id",
+    "run_nonce",
+    "pack_digest",
+    "profile_digest",
+    "predecessor_ref",
+    "predecessor_digest",
+    "change_set_digest",
+    "preview_digest",
+    "minimal_rebase_certificate_digest",
+    "owner_id",
+    "target_writes"
+  ],
+  "properties": {
+    "digest": {"$ref": "#/$defs/digest"},
+    "schema_version": {"const": "orgrebase.workspace-approval-binding.v1"},
+    "id": {"type": "string", "minLength": 1},
+    "approval_ref": {"type": "string", "minLength": 1},
+    "approval_digest": {"$ref": "#/$defs/digest"},
+    "change_kind": {"type": "string", "minLength": 1},
+    "workflow_run_id": {"type": "string", "minLength": 1},
+    "run_nonce": {"type": "string", "minLength": 1},
+    "pack_digest": {
+      "oneOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]
+    },
+    "profile_digest": {"$ref": "#/$defs/digest"},
+    "predecessor_ref": {"type": "string", "minLength": 1},
+    "predecessor_digest": {"$ref": "#/$defs/digest"},
+    "change_set_digest": {"$ref": "#/$defs/digest"},
+    "preview_digest": {"$ref": "#/$defs/digest"},
+    "minimal_rebase_certificate_digest": {"$ref": "#/$defs/digest"},
+    "owner_id": {"type": "string", "minLength": 1},
+    "target_writes": {"const": 0}
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

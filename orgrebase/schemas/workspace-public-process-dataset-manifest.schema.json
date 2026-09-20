@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-public-process-dataset-manifest.schema.json",
+  "title": "Public Process Dataset Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "dataset_kind",
+    "title",
+    "creators",
+    "publication_date",
+    "official_record",
+    "doi",
+    "artifact",
+    "official_counts",
+    "license",
+    "projection_path",
+    "projection_digest",
+    "overlay_path",
+    "overlay_digest",
+    "mapping_path",
+    "mapping_digest",
+    "reproduction",
+    "evidence_class",
+    "claim_boundary",
+    "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-public-process-dataset-manifest.v1"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "dataset_kind": {"const": "ARTIFICIAL_PUBLIC_OCEL_2_0_SIMULATION"},
+    "title": {"type": "string", "minLength": 1},
+    "creators": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "publication_date": {"type": "string", "format": "date"},
+    "official_record": {"type": "string", "format": "uri"},
+    "doi": {"const": "10.5281/zenodo.8337464"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file_name", "download_url", "size_bytes", "zenodo_md5", "sha256", "raw_bytes_in_repository"],
+      "properties": {
+        "file_name": {"const": "order-management.sqlite"},
+        "download_url": {"type": "string", "format": "uri"},
+        "size_bytes": {"const": 9592832},
+        "zenodo_md5": {"pattern": "^md5:[0-9a-f]{32}$"},
+        "sha256": {"pattern": "^sha256:[0-9a-f]{64}$"},
+        "raw_bytes_in_repository": {"const": false}
+      }
+    },
+    "official_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_types", "object_types", "events", "objects"],
+      "properties": {
+        "event_types": {"const": 11},
+        "object_types": {"const": 6},
+        "events": {"const": 21008},
+        "objects": {"const": 10840}
+      }
+    },
+    "license": {"const": "CC-BY-4.0"},
+    "projection_path": {"type": "string", "minLength": 1},
+    "projection_digest": {"pattern": "^sha256:[0-9a-f]{64}$"},
+    "overlay_path": {"type": "string", "minLength": 1},
+    "overlay_digest": {"pattern": "^sha256:[0-9a-f]{64}$"},
+    "mapping_path": {"type": "string", "minLength": 1},
+    "mapping_digest": {"pattern": "^sha256:[0-9a-f]{64}$"},
+    "reproduction": {"type": "object", "minProperties": 4, "additionalProperties": {"type": "string", "minLength": 1}},
+    "evidence_class": {"const": "PUBLIC_SOURCE_DERIVED_SYNTHETIC"},
+    "claim_boundary": {"const": "MECHANISM_BENCHMARK_ONLY_NOT_ENTERPRISE_SHADOW_OR_REALIZED_ROI"},
+    "digest": {"pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "$defs": {
+    "AgentTeamsExecutionTask": {
+      "additionalProperties": false,
+      "description": "One exact task the AgentTeams transport may materialize.",
+      "properties": {
+        "actor_projection_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actor Projection Digest"
+        },
+        "actor_projection_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actor Projection Ref"
+        },
+        "assignee_actor_id": {
+          "minLength": 1,
+          "title": "Assignee Actor Id",
+          "type": "string"
+        },
+        "candidate_only": {
+          "const": true,
+          "default": true,
+          "title": "Candidate Only",
+          "type": "boolean"
+        },
+        "canonical_target_writes": {
+          "const": 0,
+          "default": 0,
+          "title": "Canonical Target Writes",
+          "type": "integer"
+        },
+        "capability_card_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Capability Card Digest"
+        },
+        "capability_card_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Capability Card Ref"
+        },
+        "context_envelope_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Context Envelope Digest",
+          "type": "string"
+        },
+        "context_envelope_ref": {
+          "minLength": 1,
+          "title": "Context Envelope Ref",
+          "type": "string"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "domain_id": {
+          "minLength": 1,
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "effect_ceiling": {
+          "const": "ZERO_EXTERNAL_EFFECTS",
+          "default": "ZERO_EXTERNAL_EFFECTS",
+          "title": "Effect Ceiling",
+          "type": "string"
+        },
+        "formation_receipt_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Formation Receipt Digest",
+          "type": "string"
+        },
+        "formation_receipt_id": {
+          "minLength": 1,
+          "title": "Formation Receipt Id",
+          "type": "string"
+        },
+        "input_schema_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Input Schema Digest",
+          "type": "string"
+        },
+        "input_schema_refs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Input Schema Refs",
+          "type": "array"
+        },
+        "output_schema_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Output Schema Digest",
+          "type": "string"
+        },
+        "output_schema_refs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Output Schema Refs",
+          "type": "array"
+        },
+        "task_id": {
+          "minLength": 1,
+          "title": "Task Id",
+          "type": "string"
+        },
+        "task_kind": {
+          "enum": [
+            "DOMAIN",
+            "REVIEWER_BARRIER"
+          ],
+          "title": "Task Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "task_kind",
+        "domain_id",
+        "assignee_actor_id",
+        "depends_on",
+        "formation_receipt_id",
+        "formation_receipt_digest",
+        "context_envelope_ref",
+        "context_envelope_digest",
+        "input_schema_refs",
+        "input_schema_digest",
+        "output_schema_refs",
+        "output_schema_digest"
+      ],
+      "title": "AgentTeamsExecutionTask",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-agentteams-execution-plan.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Sealed domain-task set plus a reviewer barrier; never runtime truth.",
+  "properties": {
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "coalition_plan_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Coalition Plan Digest",
+      "type": "string"
+    },
+    "coalition_plan_ref": {
+      "minLength": 1,
+      "title": "Coalition Plan Ref",
+      "type": "string"
+    },
+    "compiler_version": {
+      "const": "agentteams-execution-plan-compiler@1.0.0",
+      "default": "agentteams-execution-plan-compiler@1.0.0",
+      "title": "Compiler Version",
+      "type": "string"
+    },
+    "context_envelope_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Context Envelope Digest",
+      "type": "string"
+    },
+    "context_envelope_ref": {
+      "minLength": 1,
+      "title": "Context Envelope Ref",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "formation_receipt_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Formation Receipt Digest",
+      "type": "string"
+    },
+    "formation_receipt_id": {
+      "minLength": 1,
+      "title": "Formation Receipt Id",
+      "type": "string"
+    },
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "revision_lock": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Revision Lock",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "orgrebase.agentteams-execution-plan.v1",
+      "default": "orgrebase.agentteams-execution-plan.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selected_domain_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Selected Domain Ids",
+      "type": "array"
+    },
+    "task_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Task Digest",
+      "type": "string"
+    },
+    "task_ref": {
+      "minLength": 1,
+      "title": "Task Ref",
+      "type": "string"
+    },
+    "tasks": {
+      "items": {
+        "$ref": "#/$defs/AgentTeamsExecutionTask"
+      },
+      "minItems": 2,
+      "title": "Tasks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "task_ref",
+    "task_digest",
+    "formation_receipt_id",
+    "formation_receipt_digest",
+    "context_envelope_ref",
+    "context_envelope_digest",
+    "coalition_plan_ref",
+    "coalition_plan_digest",
+    "selected_domain_ids",
+    "tasks",
+    "revision_lock"
+  ],
+  "title": "AgentTeamsExecutionPlan",
+  "type": "object"
+}

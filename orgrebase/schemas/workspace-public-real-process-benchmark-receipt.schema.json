@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-public-real-process-benchmark-receipt.schema.json",
+  "title": "BPI 2019 Real Process Benchmark Receipt",
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "numerator", "denominator", "formula"],
+      "properties": {
+        "value": {"type": "number", "minimum": 0, "maximum": 1},
+        "numerator": {"type": "integer", "minimum": 0},
+        "denominator": {"type": "integer", "minimum": 1},
+        "formula": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "benchmark_version", "run_id", "status", "data_domain", "evidence_class",
+    "source_evidence_class", "query_ground_truth_evidence_class", "outcome_proxy_evidence_class",
+    "claim_boundary", "input_closure", "scenario", "strategies", "provider_rule_obligations",
+    "not_run", "limitations", "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-public-real-process-benchmark-receipt.v1"},
+    "benchmark_version": {"const": "QuoteValue-v0.4-bpi-real-process"},
+    "run_id": {"type": "string", "pattern": "^run:bpi2019-real-process:[0-9a-f]{16}$"},
+    "status": {"const": "PASS"},
+    "data_domain": {"const": "PURCHASE_TO_PAY"},
+    "evidence_class": {"const": "PUBLIC_REAL_PROCESS_RULE_DERIVED_MECHANISM_VALIDATION"},
+    "source_evidence_class": {"const": "PUBLIC_REAL_ANONYMIZED_ENTERPRISE_EVENT_LOG"},
+    "query_ground_truth_evidence_class": {"const": "TASK_DEFINED_QUERY_GROUND_TRUTH"},
+    "outcome_proxy_evidence_class": {"const": "OBSERVED_DOWNSTREAM_EVENT_PROXY"},
+    "claim_boundary": {"const": "NOT_REAL_QUOTE_DATA_NOT_CAUSAL_GROUND_TRUTH_NOT_REALIZED_ROI_NOT_PRODUCTION"},
+    "input_closure": {"type": "object", "required": ["projection_digest", "dataset_manifest_digest", "license_manifest_digest", "manifest_file_sha256"]},
+    "scenario": {"type": "object", "required": ["task_id", "query_count", "observed_event_count", "window_days", "change_event_type", "ground_truth_available_to_strategy", "counting_unit"]},
+    "strategies": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["strategy_id", "scenarios", "counts", "metrics"],
+        "properties": {
+          "strategy_id": {"enum": ["VENDOR_BROADCAST", "PURCHASE_DOCUMENT_SCOPE", "OAC_TYPED_ITEM_SCOPE"]},
+          "scenarios": {"type": "array", "minItems": 128, "maxItems": 128},
+          "counts": {"type": "object"},
+          "metrics": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["precision", "recall", "f1", "false_invalidation_rate", "safe_scope_reduction_vs_vendor_broadcast", "unsafe_false_unaffected_rate", "lineage_closure_rate", "abstention_rate"],
+            "properties": {
+              "precision": {"$ref": "#/$defs/metric"},
+              "recall": {"$ref": "#/$defs/metric"},
+              "f1": {"$ref": "#/$defs/metric"},
+              "false_invalidation_rate": {"$ref": "#/$defs/metric"},
+              "safe_scope_reduction_vs_vendor_broadcast": {"$ref": "#/$defs/metric"},
+              "unsafe_false_unaffected_rate": {"$ref": "#/$defs/metric"},
+              "lineage_closure_rate": {"$ref": "#/$defs/metric"},
+              "abstention_rate": {"$ref": "#/$defs/metric"}
+            }
+          }
+        }
+      }
+    },
+    "provider_rule_obligations": {
+      "type": "array",
+      "minItems": 128,
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["query_id", "source_attribute", "observed_value", "evidence_class", "status", "rule_id", "required_evidence_families", "reason"],
+        "properties": {
+          "query_id": {"type": "string", "minLength": 1},
+          "source_attribute": {"const": "Item Category"},
+          "observed_value": {"type": "string"},
+          "evidence_class": {"const": "PROVIDER_DOCUMENTED_RULE_DERIVED"},
+          "status": {"enum": ["PASS", "ABSTAIN"]},
+          "rule_id": {"type": ["string", "null"]},
+          "required_evidence_families": {"type": "array", "items": {"type": "string"}},
+          "reason": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "not_run": {"const": {"real_enterprise_quote_data": "NOT_RUN", "real_enterprise_quote_roi": "NOT_RUN", "production_deployment": "NOT_RUN"}},
+    "limitations": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

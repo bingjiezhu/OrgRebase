@@ -1,0 +1,167 @@
+{
+  "$defs": {
+    "SkillBoundary": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_tools": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Tools",
+          "type": "array"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "effect_ceiling": {
+          "const": "CANDIDATE_ONLY_ZERO_TARGET_WRITES",
+          "default": "CANDIDATE_ONLY_ZERO_TARGET_WRITES",
+          "title": "Effect Ceiling",
+          "type": "string"
+        },
+        "evidence_duties": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Duties",
+          "type": "array"
+        },
+        "known_failure_envelope": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Known Failure Envelope",
+          "type": "array"
+        },
+        "preconditions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Preconditions",
+          "type": "array"
+        },
+        "required_knowledge": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Knowledge",
+          "type": "array"
+        },
+        "required_qualifications": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Qualifications",
+          "type": "array"
+        },
+        "rollback_package_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Rollback Package Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "preconditions",
+        "required_knowledge",
+        "required_qualifications",
+        "evidence_duties",
+        "rollback_package_digest",
+        "known_failure_envelope"
+      ],
+      "title": "SkillBoundary",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-pattern-skill-candidate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "author_id": {
+      "title": "Author Id",
+      "type": "string"
+    },
+    "base_package_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Base Package Digest",
+      "type": "string"
+    },
+    "boundary": {
+      "$ref": "#/$defs/SkillBoundary"
+    },
+    "claim_boundary": {
+      "const": "LOCAL_GOVERNED_CANDIDATE_NOT_ENTERPRISE_EFFECTIVENESS",
+      "default": "LOCAL_GOVERNED_CANDIDATE_NOT_ENTERPRISE_EFFECTIVENESS",
+      "title": "Claim Boundary",
+      "type": "string"
+    },
+    "corpus_ref": {
+      "title": "Corpus Ref",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "executable": {
+      "const": false,
+      "default": false,
+      "title": "Executable",
+      "type": "boolean"
+    },
+    "kind": {
+      "const": "skill-candidate",
+      "default": "skill-candidate",
+      "title": "Kind",
+      "type": "string"
+    },
+    "pattern_ref": {
+      "title": "Pattern Ref",
+      "type": "string"
+    },
+    "proposal_ref": {
+      "title": "Proposal Ref",
+      "type": "string"
+    },
+    "replay_ref": {
+      "title": "Replay Ref",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.pattern-evolution.v1",
+      "default": "orgrebase.pattern-evolution.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "skill_name": {
+      "title": "Skill Name",
+      "type": "string"
+    },
+    "status": {
+      "const": "CANDIDATE",
+      "default": "CANDIDATE",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "proposal_ref",
+    "pattern_ref",
+    "corpus_ref",
+    "replay_ref",
+    "skill_name",
+    "base_package_digest",
+    "boundary",
+    "author_id"
+  ],
+  "title": "PatternSkillCandidate",
+  "type": "object"
+}

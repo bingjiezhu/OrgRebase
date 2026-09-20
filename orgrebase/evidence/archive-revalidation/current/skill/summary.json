@@ -1,0 +1,21 @@
+{
+  "append_only_events": 1,
+  "candidate_only": true,
+  "claim_boundary": "Exact retained 1.3.0 Skill bytes were restored as the direct release head and its restricted program was invoked against the same-run Tool bindings. This is controlled-local release rollback evidence, not enterprise production rollout.",
+  "digest": "sha256:e96f178b50175dd3d5843e8c4fe0582df86eb073701cc01231a318e4802298f1",
+  "effective_package_digest": "sha256:91398536ad1308de5438a7bf3817ecbd0dcb474abbe929e49100a8452b78540a",
+  "evidence_class": "CONTROLLED_LOCAL_EXECUTABLE_DIRECT_PREDECESSOR_ROLLBACK",
+  "execution_receipt_digest": "sha256:af75fd7df55dbdeabc8b01d3694781f328fa36452f9d21134c1d645408abccff",
+  "from_package_digest": "sha256:64da732b086e7b85fb4ea31aeb60b28dd8bcb22c98ceb38fca03fb4f8907ffca",
+  "idempotent_replay": true,
+  "lineage_status": "DIRECT_DECLARED_PREDECESSOR",
+  "negative_probe_count": 4,
+  "predecessor_action": "APPLY_QUOTE",
+  "process_state_rehydration": "PASS",
+  "restoration_status": "EXECUTED_AND_INVOKED",
+  "run_id": "run:orgrebase:semifinal-closure:quote-001",
+  "schema_version": "orgrebase.skill-predecessor-rollback-summary.v1",
+  "source_wheel_digest": "sha256:92c9e9f64ad4562a4ec4b300de716e71aa18fd1fe1e2026598e157aa4959ec59",
+  "status": "PASS",
+  "target_writes": 0
+}

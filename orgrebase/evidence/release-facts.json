@@ -1,0 +1,830 @@
+{
+  "schema_version": "orgrebase.release-facts.v9",
+  "project": "OrgRebase",
+  "release": "0.4.0",
+  "system_thesis": "contract-defined enterprise world model, task-conditioned organizational compilation, and proof-carrying governed evolution",
+  "product_identity": {
+    "category": "ENTERPRISE_AGENT_SUBSTRATE",
+    "definition_zh": "基于 OAC 的组织工作编译与持续演化基座",
+    "oac_role": "INDEPENDENT_CANDIDATE_STANDARD_AND_ACCEPTANCE_RELATION",
+    "oac_is_agent": false,
+    "oac_is_runtime": false,
+    "reference_runtime_capability": "ENTERPRISE_WORK_CONTINUOUS_EVOLUTION_ENGINE",
+    "authority_roots": [
+      "SOURCE",
+      "DEMAND",
+      "PLAN",
+      "OUTCOME",
+      "EVOLUTION"
+    ],
+    "execution_role": "EVIDENCED_RUNTIME_STATE_NOT_AUTHORITY_ROOT"
+  },
+  "innovation_hypothesis": {
+    "claim_type": "COMBINATION_HYPOTHESIS_NOT_WORLD_FIRST_CLAIM",
+    "dimensions": [
+      {
+        "id": "CONTRACT_DEFINED_ENTERPRISE_WORLD_MODEL",
+        "status": "BOUNDED_IMPLEMENTED"
+      },
+      {
+        "id": "TASK_CONDITIONED_ORGANIZATIONAL_COMPILATION",
+        "status": "BOUNDED_SPLIT_EVIDENCE"
+      },
+      {
+        "id": "PROOF_CARRYING_GOVERNED_EVOLUTION",
+        "status": "BOUNDED_SYNTHETIC_CONTROLLED_REFERENCE_MVP"
+      }
+    ]
+  },
+  "deployment_readiness": {
+    "competition_technical_mvp": "GO",
+    "isolated_read_only_single_enterprise_shadow_pilot": "CONDITIONAL_GO",
+    "arbitrary_enterprise_production": "NO_GO"
+  },
+  "release_scope": "CODE_ONLY",
+  "current_semifinal_delivery": {
+    "status": "PASS",
+    "fact_role": "CURRENT_SEMIFINAL_DELIVERY",
+    "evidence_generation": "CURRENT_MACHINE_EVIDENCE_DERIVED",
+    "failures": [],
+    "golden_quote_delivery": {
+      "status": "PASS",
+      "evidence_role": "CURRENT_GOLDEN_DELIVERY",
+      "evidence_paths": {
+        "verification": "evidence/golden-competition/latest/pilot/verification.json",
+        "summary": "evidence/golden-competition/latest/pilot/golden-run/summary.json",
+        "state": "evidence/golden-competition/latest/pilot/state.json",
+        "evidence_export": "evidence/golden-competition/latest/pilot/evidence-export.json"
+      },
+      "failures": [],
+      "run_id": "run:golden-competition:6f93ae34-aa58-488c-8455-2238bcb311a7",
+      "quote": {
+        "status": "PASS",
+        "stage": "QUOTE_V3",
+        "ref": "work:quote-blue-harbor@v3",
+        "version": "v3",
+        "digest": "sha256:6154320353318a4e55e4a6b7c80ac72fa4d74c2019e9fa9694d1169bb637f3b7",
+        "launch_date": "2026-10-15",
+        "currency": "EUR"
+      },
+      "agentteams": {
+        "status": "PASS",
+        "action_count": 40,
+        "task_binding_count": 7,
+        "independent_domain_worker_processes": 5,
+        "independent_reviewer_processes": 2
+      },
+      "human_owner_gates": {
+        "status": "PASS",
+        "count": 2,
+        "server_review_duration_ms": 4000,
+        "identity_mode": "CONTROLLED_LOCAL_HEADER_IDENTITY",
+        "external_iam": "NOT_RUN",
+        "gates": [
+          {
+            "change_kind": "launch_date",
+            "owner_id": "human:evergreen-product-owner",
+            "run_id": "run:golden-competition:6f93ae34-aa58-488c-8455-2238bcb311a7",
+            "review_duration_ms": 4000,
+            "review_wait_satisfied": true,
+            "approval_digest": "sha256:e4042cb6c9bb2ad6cb5eaeb24495e8256b098ad811e80dfdee9f201e93c10e7e",
+            "binding_digest": "sha256:5d143e30b58b44ae84bc95828e16160c950d7e5c948531f7e0b51959b703708e"
+          },
+          {
+            "change_kind": "currency",
+            "owner_id": "human:evergreen-finance-owner",
+            "run_id": "run:golden-competition:6f93ae34-aa58-488c-8455-2238bcb311a7",
+            "review_duration_ms": 4000,
+            "review_wait_satisfied": true,
+            "approval_digest": "sha256:90808e6c484b1908376f5cbaf93be33e4063501419024fcd90a04efe79b13d28",
+            "binding_digest": "sha256:33fbe7bf1b25e6a1a964b8f22b71b2d0da20d563a2d97476a1fc421cc5498588"
+          }
+        ]
+      },
+      "same_run_agentteams_skill_tool": {
+        "status": "PASS",
+        "run_id": "run:golden-competition:6f93ae34-aa58-488c-8455-2238bcb311a7",
+        "agentteams_summary_digest": "sha256:5adbf49f43d7fdbb300d259d70f3cacf399101cbea4b2b2225cfc0f81e80f153",
+        "tool_receipt_digest": "sha256:b4465957895ad15443c5cbebf68023e43c2db25ccb3b84fbafb5a0fd914d6a39",
+        "skill_invocation_receipt_digest": "sha256:412935a4a6e88195a849361ff87ab8d4cd69c17d06b921145b1b6525b8e9b862"
+      },
+      "oac_bound_task_formation": {
+        "status": "PASS",
+        "evidence_role": "GOLDEN_SAME_RUN_OAC_BOUND_TASK_FORMATION",
+        "run_id": "run:golden-competition:6f93ae34-aa58-488c-8455-2238bcb311a7",
+        "failures": [],
+        "task_intake_status": "FORMATION_COMPLETED",
+        "activation_status": "CONSUMED_BY_QUOTE_FORMATION",
+        "activation_binding_digest": "sha256:f0152b954b431d5a82c83b324f9aba7689f12bd04cad4763db453a21d43baf57",
+        "task_formation_decision_receipt_digest": "sha256:5d3dd72941aa39b26a226c992f56bf3c5f8543aa5a43ed38b9879ef85bdbf488",
+        "context_envelope_digest": "sha256:a9815a00bb5e32fd776f79bc06afffc1c29c8a4f6ee686bf0a96384cf158e5fa",
+        "agentteams_execution_plan_digest": "sha256:e424a4d369c48c2bec8a305830f8e1050a878548cfa30efaea064672bcb1eec3",
+        "planned_domain_ids": [
+          "finance",
+          "gtm",
+          "legal",
+          "product"
+        ],
+        "actual_agentteams_domain_ids": [
+          "finance",
+          "gtm",
+          "legal",
+          "product"
+        ],
+        "topology_match": true,
+        "candidate_only": true,
+        "canonical_target_writes": 0,
+        "claim_boundary": "OAC_BINDING_CONSUMED_NOT_BUSINESS_APPROVAL_OR_PRODUCTION_PROOF"
+      },
+      "experience_governance": {
+        "status": "APPROVED_CANARY",
+        "maturity": "SINGLE_RUN_SEED",
+        "evaluation_partition_count": 8,
+        "release_state": "CANARY",
+        "candidate_only": true,
+        "canonical_target_writes": 0,
+        "claim_boundary": "CONTROLLED_LOCAL_SINGLE_RUN_SEED_NOT_PRODUCTION_GENERALIZATION"
+      },
+      "candidate_layer_canonical_target_writes": 0,
+      "evidence_class": "CONTROLLED_LOCAL_GOLDEN_COMPETITION",
+      "claim_boundary": "PINNED_IN_PROCESS_TEAMHARNESS_WITH_INDEPENDENT_LOCAL_WORKER_PROCESSES_NOT_DISTRIBUTED_PRODUCTION",
+      "agents_are_candidate_only": true,
+      "external_enterprise_systems": "NOT_RUN",
+      "production_ready": false
+    },
+    "dynamic_formation_validation": {
+      "status": "PASS",
+      "evidence_role": "INDEPENDENT_DYNAMIC_FORMATION_RUN",
+      "evidence_paths": {
+        "verification": "evidence/formation-taskflow/latest/verification.json",
+        "receipt": "evidence/formation-taskflow/latest/probe-receipt.json"
+      },
+      "failures": [],
+      "run_id": "run:orgrebase:formation-taskflow:residency-faq-two-domain",
+      "evidence_class": "CONTROLLED_LOCAL_FORMATION_COMPILED_AGENTTEAMS",
+      "selected_domain_ids": [
+        "legal",
+        "product"
+      ],
+      "domain_task_count": 2,
+      "reviewer_task_count": 1,
+      "agentteams_action_count": 20,
+      "task_binding_count": 3,
+      "topology_match": true,
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "claim_boundary": "PINNED_IN_PROCESS_TEAMHARNESS_DYNAMIC_TOPOLOGY_NOT_LIVE_WORKER_OR_BUSINESS_ADMISSION",
+      "production_ready": false
+    },
+    "claim_boundary": {
+      "evidence_maturity": "VALIDATED_CONTROLLED_LOCAL",
+      "agents_tools_skills_are_candidate_only": true,
+      "golden_and_dynamic_formation_are_independent_runs": true,
+      "real_enterprise_connectors": "NOT_RUN",
+      "external_human_iam": "NOT_RUN",
+      "distributed_production_workers": "NOT_RUN",
+      "production_ha_dr_sla": "NOT_RUN",
+      "production_ready": false
+    }
+  },
+  "enterprise_seed_intake": {
+    "status": "PASS",
+    "current_claim_ceiling": "REFERENCE_PROFILE_SOURCE_BOUND",
+    "profile_count": 2,
+    "synthetic_profile_count": 2,
+    "fixed_exact_source_component_root_count": 10,
+    "admitted_source_component_root_count": 10,
+    "authority_assurance": "DECLARED_NOT_AUTHENTICATED",
+    "reference_runtime_profile_refs": [
+      "profile:northstar-acme-quote@r1"
+    ],
+    "intake_only_profile_refs": [
+      "profile:veracier-supplier-shadow@r1"
+    ],
+    "runtime_projection_match": {
+      "matched": 5,
+      "total": 5
+    },
+    "canonical_target_writes": 0,
+    "profiles": [
+      {
+        "profile_ref": "profile:northstar-acme-quote@r1",
+        "profile_digest": "sha256:c3c81dbc91485c7d4e940999af30547c140873c0cb6c2defdc845ef5689da37f",
+        "profile_schema_version": "orgrebase.enterprise-seed-profile.v1",
+        "admission_receipt_digest": "sha256:88594f8ef78fedbf16068cd2bb7b0a36bce6eb594d01412d31675925a909375a",
+        "organization_id": "org:northstar",
+        "scenario_id": "northstar-acme-enterprise-quote",
+        "synthetic": true,
+        "data_class": "SYNTHETIC_FIXTURE",
+        "runtime_mode": "REFERENCE_HANDLER",
+        "intake_only": false,
+        "seed_ready": true,
+        "shadow_intake_admissible": true,
+        "reference_runtime_compatible": true,
+        "admitted_claim_ceiling": "REFERENCE_PROFILE_INTAKE",
+        "source_admission": {
+          "status": "ADMITTED",
+          "receipt_digest": "sha256:7bde5725ce38e7e40acc7994d889524880a0925424f661544ea69373de382ebd",
+          "admission_policy_ref": "policy:orgrebase-enterprise-seed-source-admission@v1",
+          "authority_assurance": "DECLARED_NOT_AUTHENTICATED",
+          "fixed_exact_source_component_roots": 5,
+          "component_admissions": 5,
+          "source_projection_digest": "sha256:6fdaaa288acd201812ca64c429f78ac316a2b0aa35426ba77a7a52277761ee08",
+          "component_projection_digest": "sha256:0243de52088fbb79e3f46c15168dcda413c0d6972b69008e4fb1600b56cddd37",
+          "profile_projection_digest": "sha256:f226ea1943d8d86e72f4b6d2efc7d65786ce3c5e4df11189bcca007745610954",
+          "canonical_target_writes": 0,
+          "root_observations": [
+            {
+              "source_root_ref": "source:northstar:domain@r1",
+              "locator": "packaged://northstar/domain@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/northstar/domain.json",
+              "component_kind": "DOMAIN",
+              "observed_digest": "sha256:48f36b7d1c315b7012e0319dedc72ad045fd78c0610b496ae3d38ed9dd141339",
+              "byte_length": 1753
+            },
+            {
+              "source_root_ref": "source:northstar:knowledge@r1",
+              "locator": "packaged://northstar/knowledge@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/northstar/knowledge.json",
+              "component_kind": "KNOWLEDGE",
+              "observed_digest": "sha256:7a8981032e0a6564b40f92247b0855703f2e3416f7a1c4a54da687673802edff",
+              "byte_length": 3305
+            },
+            {
+              "source_root_ref": "source:northstar:authority@r1",
+              "locator": "packaged://northstar/authority@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/northstar/authority.json",
+              "component_kind": "AUTHORITY",
+              "observed_digest": "sha256:fd03a8fbb8b72242c1cca767e7daa3917f93283c41d2dd2c0f5c41b705b9ce2d",
+              "byte_length": 1081
+            },
+            {
+              "source_root_ref": "source:northstar:capability@r1",
+              "locator": "packaged://northstar/capability@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/northstar/capability.json",
+              "component_kind": "CAPABILITY",
+              "observed_digest": "sha256:ffe9233079bd1a6d06cb6fa035218803a7ad3ed49503229ac592f2439056d2f8",
+              "byte_length": 1814
+            },
+            {
+              "source_root_ref": "source:northstar:dependency@r1",
+              "locator": "packaged://northstar/dependency@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/northstar/dependency.json",
+              "component_kind": "DEPENDENCY",
+              "observed_digest": "sha256:8277aab48f2a025d1b4b2be9edf177d73ac955cfe98a90277a6cced7997ec16d",
+              "byte_length": 3835
+            }
+          ]
+        },
+        "runtime_projection": {
+          "status": "MATCH",
+          "receipt_digest": "sha256:00e0fadede15434fc9a1d82556574c3e22f61d48df853b6478e26f285b4237f0",
+          "matched": 5,
+          "total": 5,
+          "runtime_projection_digest": "sha256:d6a44e125f94a1f03e49d189e8cbed624d646f6a3c125d397aedfae4f2cb2567",
+          "canonical_target_writes": 0
+        },
+        "canonical_target_writes": 0
+      },
+      {
+        "profile_ref": "profile:veracier-supplier-shadow@r1",
+        "profile_digest": "sha256:4f60cf1b06451778cfec0e624a57fc5f9d133307a12e4af22dec9d85b94020a6",
+        "profile_schema_version": "orgrebase.enterprise-seed-profile.v1",
+        "admission_receipt_digest": "sha256:e38eca332b8dde69c4895003f3094006e0283395969ab5db319fc3a1cab37ebd",
+        "organization_id": "org:veracier",
+        "scenario_id": "veracier-supplier-status-shadow",
+        "synthetic": true,
+        "data_class": "SYNTHETIC_FIXTURE",
+        "runtime_mode": "INTAKE_ONLY",
+        "intake_only": true,
+        "seed_ready": true,
+        "shadow_intake_admissible": true,
+        "reference_runtime_compatible": false,
+        "admitted_claim_ceiling": "INTAKE_VALIDATED",
+        "source_admission": {
+          "status": "ADMITTED",
+          "receipt_digest": "sha256:3c297f285c6ac41378c5af28cadb41ab9205fa6a290e1a464d6cf5986d4fbd89",
+          "admission_policy_ref": "policy:orgrebase-enterprise-seed-source-admission@v1",
+          "authority_assurance": "DECLARED_NOT_AUTHENTICATED",
+          "fixed_exact_source_component_roots": 5,
+          "component_admissions": 5,
+          "source_projection_digest": "sha256:0b5de1d297543946eccb98a08ec1c6036ea3d75e627228d6fd3619e8c97dee10",
+          "component_projection_digest": "sha256:c47dc1d42ba0412696b8eafd01b8db54c8af5ccc7720e82fa0a090e892299f9e",
+          "profile_projection_digest": "sha256:b92debd9b27385216b95b8ad095e34fb86006239c2e657cdcd8b7e0085d02ff4",
+          "canonical_target_writes": 0,
+          "root_observations": [
+            {
+              "source_root_ref": "source:veracier:domain@r1",
+              "locator": "fixture://veracier/domain@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/veracier/domain.json",
+              "component_kind": "DOMAIN",
+              "observed_digest": "sha256:6f6ff65d5fb1ff5ede680374edbe708bb82957f8c17f91084ae6b49a17fcfc91",
+              "byte_length": 558
+            },
+            {
+              "source_root_ref": "source:veracier:knowledge@r1",
+              "locator": "fixture://veracier/knowledge@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/veracier/knowledge.json",
+              "component_kind": "KNOWLEDGE",
+              "observed_digest": "sha256:3e9eefa9049f91d396436a69979234bad3dcdc4d3bc765e10364980fca0d69bb",
+              "byte_length": 561
+            },
+            {
+              "source_root_ref": "source:veracier:authority@r1",
+              "locator": "fixture://veracier/authority@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/veracier/authority.json",
+              "component_kind": "AUTHORITY",
+              "observed_digest": "sha256:8197f00b5a5b7a9f78c9fe00f727a1cfa69ef0a92e25793af176ea3e971cae26",
+              "byte_length": 568
+            },
+            {
+              "source_root_ref": "source:veracier:capability@r1",
+              "locator": "fixture://veracier/capability@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/veracier/capability.json",
+              "component_kind": "CAPABILITY",
+              "observed_digest": "sha256:0437e4bd129096ae706f1085eabe8d1fc4583bac663db532316dcf51f132440b",
+              "byte_length": 585
+            },
+            {
+              "source_root_ref": "source:veracier:dependency@r1",
+              "locator": "fixture://veracier/dependency@r1",
+              "logical_asset_ref": "fixtures/enterprise-seed/veracier/dependency.json",
+              "component_kind": "DEPENDENCY",
+              "observed_digest": "sha256:08af649d4861b7ee5ac42bb8e8d2738d2e221101e35a23fc4385c32cad7240bd",
+              "byte_length": 580
+            }
+          ]
+        },
+        "runtime_projection": null,
+        "canonical_target_writes": 0
+      }
+    ],
+    "limitations": [
+      "SHIPPED_SYNTHETIC_REFERENCE_PROFILES_ONLY",
+      "FIXED_EXACT_LOCATORS_ONLY",
+      "SOURCE_AUTHORITY_DECLARED_NOT_AUTHENTICATED",
+      "NO_REAL_ENTERPRISE_GENERALIZATION",
+      "INTAKE_ONLY_PROFILES_HAVE_NO_HANDLER_EXECUTION"
+    ]
+  },
+  "workspace": {
+    "fact_role": "HISTORICAL_COMPATIBILITY_BASELINE",
+    "current_semifinal_delivery": false,
+    "baseline_note": "Retained pre-Golden Workspace compatibility surface; current semifinal claims are authoritative only under current_semifinal_delivery.",
+    "local_status": "PASS",
+    "final_quote_ref": "work:quote_acme@v3",
+    "final_quote_digest": "sha256:0212b4cfc2a86552beb1aea4aa35e5771e7c6204a4c45f0d7f9dc59379953b44",
+    "launch_date": "2026-09-15",
+    "currency": "EUR",
+    "final_graph_ref": "graph:workspace@v3",
+    "evaluation_score": 100.0,
+    "skill_status": "CANARY",
+    "agentteams_static": "PASS",
+    "agentteams_live": "NOT_RUN",
+    "user_validation": "NOT_RUN",
+    "approval_mode": "EXPLICIT_OWNER_COMMAND",
+    "approval_input_mode": "CONTROLLED_LOCAL_SCRIPTED_COMMAND",
+    "external_human_approval": "NOT_RUN",
+    "one_shot_routes": "RETIRED_FAIL_CLOSED_410_STAGED_COMMANDS_REQUIRED",
+    "dependency_evidence_tool": {
+      "status": "SUCCEEDED",
+      "evidence_class": "LOCAL_REAL_TOOL",
+      "target_writes": 0,
+      "invocation_receipt_ref": "tool-call:gtm-steward:workspace-quote-v1-dependency-evidence",
+      "request_digest": "sha256:67e8736241f27136304c5d25e7a7052738b56680d0e95ce1fc85169a398ad735",
+      "result_digest": "sha256:53ed7ab7780412693e2046fba7b0ae156cb71e9346a4ac76def2829fa01a00aa",
+      "tool_called_event_ref": "tool-called:dependency-evidence@v1"
+    },
+    "evidence_index_digest": "sha256:dcbbd43f4cf0b51c2c545527c1e5929a1a72fb87fbc75900ad4bf22061d39179",
+    "oac_runtime_bridge": "NOT_USED_IN_THIS_RUN"
+  },
+  "oac_local_runtime_admission": {
+    "status": "LOCAL_RUNTIME_ADMISSION_PASS",
+    "profile": "oac.runtime-lowering/zero-effect/v0.1",
+    "case_count": 2,
+    "cases": [
+      {
+        "approval_command_id": "demo-base-001",
+        "approval_digest": "sha256:fe097818c644e41bb711444a6b6515034b92ec862bad69a1c686241ccd4b13cf",
+        "capsule_digest": "sha256:7ef6b2ee4061aefedb2021047a9d19e93f7685d520ea8f5eb1c3eae0202809db",
+        "case_id": "BASE",
+        "certificate_digest": "sha256:3f0be0947d7cef81ba58df012f8ada2a017aa913186357bb75656c6a6ada90a5",
+        "formation_digest": "sha256:ab897b46457244b1ec5a249ed4cb91cd486b890ffc94dc83c912c2ea03959572",
+        "lowering_receipt_digest": "sha256:fe79e62e3f4ba823cdeb7249049a3fb6df331f69e3f101c1ff6ffa9d6c7f13fb",
+        "plan_digest": "sha256:cc9948ef3a869b279924ca5f1e0161145aad51b3ea470fa21659fd5ef2176dea",
+        "plan_source": "OAC_REFERENCE_COMPILER",
+        "preview_digest": "sha256:e6db05f5e538c1abb7398d8fc2b9594509389b0c399c39bd7d893e4712f3f7da",
+        "receipt_digest": "sha256:543b0f7a615ce46905d10c608b6ca7b545a08d5b08420ecc29395651701d483e",
+        "runtime_binding_digest": "sha256:6565411b8b08197597ee22b40e92bcfe91496c3158a9809d65536c135f4143a6",
+        "runtime_bundle_digest": "sha256:0d6eb22557ee9da85d8f42cb1c76d339d5bb7f1fbcea6566e29a66f22f389c70",
+        "runtime_control_plane_writes": 1,
+        "status": "LOCAL_RUNTIME_ADMISSION_PASS",
+        "step_count": 3,
+        "target_writes": 0,
+        "topology_digest": "sha256:38a12bd4b2ea7237ac5cae1e61308da3360c42647cffc09849f5f2e75551a7bd"
+      },
+      {
+        "approval_command_id": "demo-split-001",
+        "approval_digest": "sha256:a7c404d4c7f48e619b95b63846465b49efe6ffb0fc1440c7816391acba24cbb8",
+        "capsule_digest": "sha256:01798b72b2b9d8955eb298291b2b53f9790251f98a15ee37c3f6117e0998664f",
+        "case_id": "SPLIT",
+        "certificate_digest": "sha256:8a203828b11e125428f72deafc8451ca9b16534005ec6eba9031ba3cc081a2a5",
+        "formation_digest": "sha256:f4c26e17d1e1ad9d10d20f08d9fe59164a8faccc5cdab2d8f074651d3381111e",
+        "lowering_receipt_digest": "sha256:0b68ac31d38e7a2f8ce7902c3f7b5a469c33b46a8e5ceede074d2ac75e6d4b0a",
+        "plan_digest": "sha256:e893ce3e94d2811b8b1a96011998f3be3d815c77eb9b0870e4254588f2cb7a69",
+        "plan_source": "OAC_PUBLIC_VERIFIER_ACCEPTED_FIXTURE",
+        "preview_digest": "sha256:69b7089dd3266b4500653a8937e4e5187c5847ee622506ec35bd16adf8089c03",
+        "receipt_digest": "sha256:a8aab3a01eb41ec7cec4e4e76c4f20d6843979001e59ff7c2d1ed6d09d5f7329",
+        "runtime_binding_digest": "sha256:aac4679ab57b0d093ae85e0d15b618d89982a28983fac640dfc1eaace78e03e9",
+        "runtime_bundle_digest": "sha256:6d396522a77f042e287bd3c4e3d44d405d501da325c05dbd107265800c93d34b",
+        "runtime_control_plane_writes": 1,
+        "status": "LOCAL_RUNTIME_ADMISSION_PASS",
+        "step_count": 4,
+        "target_writes": 0,
+        "topology_digest": "sha256:33bb0ad8755fc01c9dc285969c15df7d3246f7777bddd7afa19eb8bd71427690"
+      }
+    ],
+    "oac_source": {
+      "cli_version": "0.3.0a0",
+      "fingerprint": "sha256:69f85099bee17fe4713d6a8c0338c9e8b049c7e4aa509b1f246486d290d8787f",
+      "manifest_schema": "orgrebase.oac-public-source-manifest.v1"
+    },
+    "policy_digest": "sha256:9d3d64c2c5fb1276568e074dbfa2cf6991424dfb81c476ab9024965dba89e62c",
+    "event_chain_head": "sha256:97854c7ba295a59fef9bc6da2e9d73bbee609666b9b7d8be7c3c90f873afe5b4",
+    "restart": {
+      "formation_count": 2,
+      "receipt_count_after_reopen": 2,
+      "state_digest_after_reopen": "sha256:0fb6eeb01f12d86a9ef3b20bd21ad6879373de458074667b8bd586a530fc9fed",
+      "state_digest_before_close": "sha256:0fb6eeb01f12d86a9ef3b20bd21ad6879373de458074667b8bd586a530fc9fed",
+      "store_profile": "FILE_BACKED_SQLITE"
+    },
+    "target_writes": 0,
+    "runtime_owner_approval_input": "CONTROLLED_LOCAL_SCRIPTED_COMMAND",
+    "external_human_approval": "NOT_RUN",
+    "handler_execution": "NOT_RUN",
+    "agent_execution": "NOT_RUN",
+    "outcome_certificate": "NOT_IMPLEMENTED",
+    "real_enterprise": "NOT_RUN",
+    "evidence_path": "evidence/oac-bridge/latest"
+  },
+  "oac_governed_evolution": {
+    "status": "PASS",
+    "maturity": "SYNTHETIC_CONTROLLED_REFERENCE_MVP",
+    "claim_ceiling": "ONE_GOVERNED_EVOLUTION_REFERENCE_MVP_WITH_PRELIMINARY_REGRESSION",
+    "artifact_count": 51,
+    "event_count": 13,
+    "pack_digest": "sha256:40b2f34f2542b8ae0d263f987dacae3fcf99af98dd6c2ac7809adb930ba67cd8",
+    "event_chain_head": "sha256:beb03c5005ec380cd5ecf338831c52aae4a925648c901b86f15d775b7e731c6b",
+    "independent_evaluator": {
+      "status": "PASS",
+      "product_imports": 0,
+      "implementation": "scripts/verify_oac_evolution_evidence.py"
+    },
+    "dual_wheel": {
+      "status": "PASS",
+      "offline_build": true,
+      "clean_temporary_working_directory": true,
+      "oac_source_material_mode": "READ_ONLY_PUBLIC_SOURCE_COMMITMENT",
+      "modules_loaded_from_wheel": [
+        "oac",
+        "orgrebase"
+      ],
+      "wheel_names": [
+        "oac_contract-0.3.0a0-py3-none-any.whl",
+        "orgrebase-0.4.0-py3-none-any.whl"
+      ],
+      "evidence_path": "evidence/oac-evolution/wheel-check/wheel-check.json"
+    },
+    "source": {
+      "aligned_profile_digest": "sha256:82af1e95b91b42fbc007700fd6c4b69d3a22f15e90385ab739fe80da47dac4d8",
+      "aligned_profile_ref": "profile:veracier-supplier-shadow@r2",
+      "demand_digest": "sha256:aef1f8fee5c8d18f5c4d3b1f96a7b8335bfd8d14773c73e8a1dd1a7dbf60c2b9",
+      "historical_profile_digest": "sha256:4f60cf1b06451778cfec0e624a57fc5f9d133307a12e4af22dec9d85b94020a6",
+      "historical_profile_ref": "profile:veracier-supplier-shadow@r1",
+      "migration_digest": "sha256:dd73248d5084f97d543aadecbad6bd5be705cf5613ab63766e711574ad97b843"
+    },
+    "plan_count": 2,
+    "plan_ids": [
+      "BASE",
+      "SPLIT"
+    ],
+    "distinct_topology_count": 2,
+    "runs": {
+      "base-accepted": {
+        "execution_status": "COMPLETED",
+        "outcome_verdict": "ACCEPT",
+        "plan_status": "ACCEPT"
+      },
+      "split-accepted": {
+        "execution_status": "COMPLETED",
+        "outcome_verdict": "ACCEPT",
+        "plan_status": "ACCEPT"
+      },
+      "split-rejected": {
+        "execution_status": "COMPLETED",
+        "outcome_verdict": "REJECT",
+        "plan_status": "ACCEPT"
+      }
+    },
+    "evolution": {
+      "active_pointer": "r1",
+      "candidate_digest": "sha256:70eb9fdb7ce085092533087371fa5b6b56c26f66413710a775aa15d800e790e0",
+      "governance_actor": "scripted:veracier-governance-demo",
+      "governance_mode": "SCRIPTED_GOVERNANCE_IDENTITY",
+      "human_review": "NOT_RUN",
+      "profile_successor_digest": "sha256:191f2d73c04b56376d43e4baa634fd7cd581454a5cbe3fd35c952331c96c68fc",
+      "promotion": "r1_TO_r2",
+      "proposal_digest": "sha256:50ee1024aa306d0abc5bbe8b9ef94433c9fc45c9ca134ccb0f7730851d6fb698",
+      "rollback": "r2_TO_r1",
+      "snapshot_successor_digest": "sha256:a7deb354e69335ac5ecf3abf0ab960adf042e8da4772ecc345d677667c379e49"
+    },
+    "restart": {
+      "artifacts_after_replay": 28,
+      "artifacts_before_close": 28,
+      "closed_after_execution": true,
+      "event_head_unchanged": true,
+      "events_after_replay": 5,
+      "events_before_close": 5,
+      "execution_receipt_digests_after_reopen": [
+        "sha256:17b61a6574cb1ce58e4975676bb8c8ae3c12ae7e003bc040f0783a1db8d3b452",
+        "sha256:c05e6953e1cbab3d0c59d054e4abc13b83d9198989dea6abcd59e8181e96bdf7",
+        "sha256:c5ca67335d123b35a79d1302af6f4dab26d23e797fee8adf8cda465b965f8eea"
+      ],
+      "idempotent_execution_replay": "PASS",
+      "replay_artifact_delta": 0,
+      "replay_event_delta": 0,
+      "store_profile": "FILE_BACKED_SQLITE"
+    },
+    "preliminary_regression": {
+      "actual_quote_digest": "sha256:0212b4cfc2a86552beb1aea4aa35e5771e7c6204a4c45f0d7f9dc59379953b44",
+      "expected_quote_digest": "sha256:0212b4cfc2a86552beb1aea4aa35e5771e7c6204a4c45f0d7f9dc59379953b44",
+      "status": "PASS"
+    },
+    "boundaries": {
+      "assurance": "SYNTHETIC_CONTROLLED_PROCESS_ASSURANCE_ONLY",
+      "authority_assurance": "DECLARED_NOT_AUTHENTICATED",
+      "data": "SYNTHETIC_FIXTURE",
+      "demand_admission": "NO_INDEPENDENT_KIND_SCHEMA_VALIDATED_AND_EXECUTION_APPROVAL_BOUND",
+      "external_effects": "NONE",
+      "human_review": "NOT_RUN",
+      "observation": "SYNTHETIC_CONTROLLED_OBSERVATION_NOT_EXTERNAL_GROUND_TRUTH",
+      "production_ready": false,
+      "real_enterprise": "NOT_RUN",
+      "runtime_evidence": "ZERO_EFFECT_HANDLER_COMPLETION_NOT_BUSINESS_TRUTH",
+      "source_admission_authority": "human:veracier-shadow-owner",
+      "target_writes": 0
+    },
+    "evidence_path": "evidence/oac-evolution/latest"
+  },
+  "product_path_blackbox": {
+    "fact_role": "HISTORICAL_COMPATIBILITY_BASELINE",
+    "current_release_qualified": false,
+    "status": "PASS",
+    "benchmark_version": "ProductPath-v0.3-task-intake-bound",
+    "evidence_class": "LOCAL_REAL_HTTP_BLACKBOX",
+    "execution_mode": "BUILT_WHEEL_UNPACKED_HTTP_UVICORN",
+    "uvicorn_processes_started": 15,
+    "real_process_restarts": 3,
+    "case_count": 12,
+    "cases_passed": 12,
+    "pp001_event_count": 12,
+    "mutation_count": 11,
+    "mutations_killed": 11,
+    "integrity_attacks": 5,
+    "integrity_attacks_rejected": 5,
+    "gate_attacks": 2,
+    "gate_attacks_rejected": 2,
+    "single_byte_tamper": "PASS",
+    "retained_evaluator_replay": "PASS",
+    "reconstructed_wheel_bytes": "NOT_RUN",
+    "retained_raw_observations": "PASS",
+    "artifact_bindings": 8,
+    "independent_evaluator": "SEPARATE_PROCESS_NO_ORGREBASE_IMPORT",
+    "task_intake_binding_scope": "candidate/confirmation/run receipt content addresses, exact run and dynamic workspace nonce equality, Profile/Task/Formation/Quote bindings, and the WORKSPACE_TASK_INTAKE_BOUND event",
+    "approval_review_gate_scope": "persisted four-second Preview gate, controlled-local Header identity, Approval binding, not-before evidence and Approval event cross-binding",
+    "task_intake_status": "FORMATION_COMPLETED",
+    "task_intake_same_run_id": true,
+    "task_intake_same_workspace_nonce": true,
+    "task_intake_natural_language_authority": false,
+    "review_duration_ms": 4000,
+    "review_gate_store": "FILE_BACKED_SQLITE_ARTIFACT",
+    "identity_mode": "CONTROLLED_LOCAL_HEADER_IDENTITY",
+    "external_iam": "NOT_RUN",
+    "direct_form_status": 410,
+    "direct_form_code": "WORKSPACE_TASK_INTAKE_REQUIRED",
+    "source_bound_oracle": "PASS",
+    "source_component_roots": 5,
+    "source_runtime_projection": {
+      "matched": 5,
+      "total": 5
+    },
+    "source_canonical_target_writes": 0,
+    "benchmark_migration": "PASS",
+    "rfc8785_quote": "MATCH",
+    "rfc8785_evidence": "NUMERIC_REPRESENTATION_DIFFERENCE",
+    "data_profile": "SYNTHETIC_NORTHSTAR_ACME",
+    "external_participants": 0,
+    "real_enterprise_generalization": "NOT_CLAIMED",
+    "evidence_path": "evidence/workspace/latest/product-path-blackbox.json"
+  },
+  "semifinal_integrated_candidate_closure": {
+    "status": "PASS",
+    "fact_role": "HISTORICAL_COMPATIBILITY_BASELINE",
+    "current_release_qualified": false,
+    "current_build_binding": {
+      "files": [
+        {
+          "current_sha256": "6cfdfc444016d1b318313447964456d2ecad57e4aacf868e8c3610c8629c6a3d",
+          "path": "uv.lock",
+          "retained_sha256": "c12f80a25e1c2dc9590a7a3b5236f17bd2a609cf7a060a2ff7d61a4888e08807",
+          "status": "MISMATCH"
+        },
+        {
+          "current_sha256": "49de30bb8ecbeb168c2c9448907d57b612d1554c761da9a7134dafd1faa674df",
+          "path": "pyproject.toml",
+          "retained_sha256": "012fba366e711aa15ef054a9bc8afe891b003ead90f597668dd00c6390c8579f",
+          "status": "MISMATCH"
+        }
+      ],
+      "scope": "UV_LOCK_AND_PROJECT_METADATA_ONLY",
+      "status": "MISMATCH"
+    },
+    "current_release_status": "NOT_QUALIFIED_BY_RETAINED_EVIDENCE",
+    "evidence_class": "CONTROLLED_LOCAL_INTEGRATED_VERTICAL_SLICE",
+    "run_id": "run:orgrebase:semifinal-closure:quote-001",
+    "task_id": "orgrebase-native-quote-001-gtm-a1",
+    "terminal_state": "CANDIDATE_ACCEPTED",
+    "canonical_target_writes": 0,
+    "business_value_same_run": false,
+    "completion_matrix": {
+      "agentteams_native_taskflow": "VALIDATED_CONTROLLED_LOCAL",
+      "enterprise_quote_operating_model": "VALIDATED_SYNTHETIC_AND_MODELLED",
+      "enterprise_shadow_observation_contract": "VALIDATED_SYNTHETIC_CONTRACT",
+      "four_domain_coalition_binding": "VALIDATED_CONTROLLED_LOCAL",
+      "live_distributed_agentteams": "NOT_RUN",
+      "production_ha_dr_sla": "NOT_RUN",
+      "real_enterprise_connectors": "NOT_RUN",
+      "real_enterprise_value": "NOT_RUN",
+      "skill_package_lifecycle": "VALIDATED_RUN_LOCAL",
+      "source_tool_otlp_operations": "VALIDATED_CONTROLLED_LOCAL",
+      "workspace_approval_apply_same_run": "NOT_RUN"
+    },
+    "production_readiness": false,
+    "verification_mode": "EXTERNAL_POST_WHEEL_PARENT_VERIFIER",
+    "artifact_digests": "OMITTED_TO_AVOID_RELEASE_FACTS_WHEEL_SELF_REFERENCE",
+    "evidence_path": "evidence/semifinal-closure/latest"
+  },
+  "local_control_plane": {
+    "status": "PASS",
+    "change_set_digest": "sha256:b77167b642e10601341ecd82576cd0908754a67ca72595caee29aac3819f6d75",
+    "preview_digest": "sha256:3f63d00ac12f4fa000ca90e26ce63824877b41f96c4c97705e609c5d94d18741",
+    "impact_algorithm": "impact-max-severity@1.1.0",
+    "impact_counts": {
+      "affected_hard": 2,
+      "bounded_unaffected": 2,
+      "skill_requalification": 1,
+      "unknown": 1
+    },
+    "impact_certificate_count": 6,
+    "minimal_rebase_certificate_digest": "sha256:2dd3a778bcd936e5d51bc548a25bba758f54c23a6059083db12acb1a59c6603f",
+    "rebase_receipt_digest": "sha256:33e9b3167cef4f809a1cd441c401e2d29b236d75aa0cde6a322dcf4a3dd2a592",
+    "candidate_ingestion_digest": "sha256:6d2f93def973d9e7e02225aeea9201e75e558961c622599780d0683c836fe6f3",
+    "evidence_manifest_artifacts": 16
+  },
+  "agent_orchestration": {
+    "status": "PASS",
+    "compiler": "orgrebase.authority-aware-orchestration-compiler@1.0.0",
+    "plan_digest": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d",
+    "coordination_receipt_digest": "sha256:e2eb4ccea279d74a68eaf646c4e2f63b62e5d62c8b0ac9d0f3979fdbc12302b1",
+    "compilation_receipt_digest": "sha256:63d0faa014e90b3464ecc30f5b52e0f670b7463644cfea66ea2c799773e14b5e",
+    "task_count": 5,
+    "authority_domains": [
+      "coordination",
+      "gtm",
+      "legal",
+      "product",
+      "skill-governance"
+    ],
+    "input_commitments_per_task": [
+      3
+    ],
+    "checked_invariants": [
+      "exactly_one_task_per_declared_agent",
+      "acyclic_declared_dependencies",
+      "capabilities_and_outputs_are_identity_subsets",
+      "all_tasks_bind_exact_changeset_preview_and_revision_lock",
+      "candidate_only_no_normative_state_writer"
+    ]
+  },
+  "skill_governance": {
+    "status": "PASS",
+    "contract_digest": "sha256:e4605d4010346671009e87266f5580d2ebb32605d7498b904ee8a8e0fa25133c",
+    "evaluation_set_digest": "sha256:20a0dea9e2cfae0c30a9e8a5a52ec5ddcf6e957bef32c0911ba7f00c4376a412",
+    "candidate_adapter_version": "enterprise-launch-readiness@1.3",
+    "bound_action_candidates": 8,
+    "release_state": "CANARY"
+  },
+  "historical_agentteams_transport": {
+    "status": "TRANSPORT_ONLY",
+    "evidence_class": "TRANSPORT_ONLY",
+    "semantic_acceptance": "NOT_ESTABLISHED",
+    "autonomous_collaboration": false,
+    "current_workspace_live": "NOT_RUN",
+    "fixture_path": "evidence/agentteams/public/historical-transport-v1.2.2.json",
+    "fixture_raw_sha256": "sha256:acfb611ce51d5c699a08dc48ebc553660e8dd0433ee5e878b266f1744c49bb95",
+    "claim_boundary": "This allowlisted public fixture records only historical AgentTeams v1.2.2 transport/runtime metadata. It does not establish semantic acceptance, autonomous candidate derivation, or a current Workspace live run, and this historical run did not use the separately verified local OAC Runtime Admission bridge."
+  },
+  "core_change_advisory_live_agentteams": {
+    "status": "PASS",
+    "evidence_class": "LIVE_AGENTTEAMS",
+    "scope_evidence_class": "LIVE_AGENTTEAMS_CORE_PROPOSAL_PLANE",
+    "receipt_digest": "sha256:4e7244e50ac392b6ddc671eebaad2b4838bfed6eb592ddf0f874c371bd6e0b9d",
+    "run_id": "run:orgrebase:live:1787626143172:561171ed039b",
+    "agentteams_version": "v1.2.2",
+    "source_commit": "849182af8e017168a5a200a87b1062142caf462d",
+    "worker_count": 5,
+    "successful_model_calls": 4,
+    "model_ids": [
+      "google/gemini-3.1-flash-lite"
+    ],
+    "execution_transport": "DIRECT_OPENCLAW_GATEWAY_NOT_MATRIX_INBOUND",
+    "matrix_role": "IDENTITY_PUBLICATION_COLLECTION_NOT_INBOUND_DELEGATION",
+    "bundle_path": "evidence/agentteams/fresh-live/2026-08-25-561171ed039b",
+    "run_summary_path": "evidence/agentteams/fresh-live/2026-08-25-561171ed039b/RUN-SUMMARY.json",
+    "runtime_skill": {
+      "name": "enterprise-launch-readiness",
+      "digest": "sha256:6328d70a88fe4fe22637371c3f0ecd36c988e5f54d4cd8db67721364c20e3b93",
+      "assigned_worker": "skill-curator"
+    },
+    "current_workspace_live": "NOT_RUN",
+    "oac_runtime_bridge": "NOT_USED_IN_THIS_RUN"
+  },
+  "candidate_control_plane": {
+    "status": "PASS",
+    "receipt_digest": "sha256:1f80ca881135131b0b609d7395cdefe28bb073c2555783fe91eacf84e45e1668",
+    "orchestration_plan_digest": "sha256:2869a6106aa4b032b4c12370f6e437b3561fc6f4d05c1cd0145bc3bf5738f85d",
+    "evaluated": 4,
+    "advisory_accepted": 4,
+    "rejected": 0,
+    "target_writes": 0,
+    "admitted_effects": 0,
+    "rejection_reason_counts": {
+      "EXACTLY_BOUND_ADVISORY": 4
+    },
+    "receipt_path": "evidence/agentteams/fresh-live/2026-08-25-561171ed039b/semantic-ingestion.json"
+  },
+  "code_release_gate": {
+    "current_release_status": "NOT_QUALIFIED_BY_RETAINED_EVIDENCE",
+    "status": "HISTORICAL_PASS_CURRENT_BUILD_UNQUALIFIED",
+    "fact_role": "HISTORICAL_COMPATIBILITY_BASELINE",
+    "current_release_qualified": false,
+    "current_build_binding": {
+      "files": [
+        {
+          "current_sha256": "6cfdfc444016d1b318313447964456d2ecad57e4aacf868e8c3610c8629c6a3d",
+          "path": "uv.lock",
+          "retained_sha256": "c12f80a25e1c2dc9590a7a3b5236f17bd2a609cf7a060a2ff7d61a4888e08807",
+          "status": "MISMATCH"
+        },
+        {
+          "current_sha256": "49de30bb8ecbeb168c2c9448907d57b612d1554c761da9a7134dafd1faa674df",
+          "path": "pyproject.toml",
+          "retained_sha256": "012fba366e711aa15ef054a9bc8afe891b003ead90f597668dd00c6390c8579f",
+          "status": "MISMATCH"
+        }
+      ],
+      "scope": "UV_LOCK_AND_PROJECT_METADATA_ONLY",
+      "status": "MISMATCH"
+    },
+    "checks": {
+      "workspace_local_loop": "PASS",
+      "workspace_skill": "CANARY",
+      "workspace_agentteams_static": "PASS",
+      "review_readiness": "PASS",
+      "core_evidence_manifest": "PASS",
+      "oac_local_runtime_admission": "LOCAL_RUNTIME_ADMISSION_PASS",
+      "oac_governed_evolution": "PASS",
+      "product_path_blackbox": "PASS",
+      "semifinal_integrated_candidate_closure": "PASS"
+    },
+    "external_milestones": {
+      "real_enterprise_connectors": "NOT_RUN",
+      "real_user_validation": "NOT_RUN",
+      "workspace_agentteams_live": "NOT_RUN"
+    }
+  },
+  "claim_boundaries": [
+    "Business objects and benchmark outcomes use a synthetic fixture.",
+    "The frozen fresh Core bundle proves one observed LIVE_AGENTTEAMS proposal-plane run; Workspace formation live remains NOT_RUN and that run did not use the separately verified local OAC Runtime Admission bridge.",
+    "The separate OAC bridge proves local zero-effect Runtime admission, exact Runtime Owner identity/digest binding through a controlled-local scripted command, Formation persistence, and evidence replay only; external human approval, handler and Agent execution remain NOT_RUN and OutcomeCertificate is NOT_IMPLEMENTED.",
+    "All four observed live candidates carried the Leader-committed plan, exact task, and exact input bindings; the control plane admitted them as advisory only with zero target writes.",
+    "Direct OpenClaw gateway executed the four provider calls. Matrix records identity, publication, and collection; Matrix-inbound delegation is not claimed.",
+    "Workspace batch and OAC one-command acceptance use controlled-local scripted owner commands; no external human approval is claimed.",
+    "The governed-evolution pack proves one synthetic controlled Veracier Source-to-Demand-to-plural-Plan-to-Execution-to-independent-Outcome-to-promotion-and-rollback reference loop plus exact Northstar Quote regression. Governance is scripted, human review and real-enterprise validation remain NOT_RUN, and production readiness remains false.",
+    "ProductPath-v0.3-task-intake-bound runs 12/12 black-box cases from a built wheel over HTTP and kills 11/11 registered result mutations on the frozen synthetic Northstar/Acme profile. The same suite binds employee Task Intake to one run and workspace nonce, observes the persisted four-second review gate, and proves the retired direct Form returns 410 without state drift; this is not arbitrary-enterprise validation.",
+    "The Quote export matches RFC 8785; the Evidence export retains a documented integral-float numeric-format difference and is a P1 migration debt.",
+    "The Specs 045-049 parent gate proves one controlled-local Source, native AgentTeams, four-domain coalition, Tool, installed-wheel Quote Skill, and causal OTLP candidate chain under one run ID. It stops at CANDIDATE_ACCEPTED with zero canonical writes; same-run Workspace Approval/Apply, distributed workers, real enterprise connectors and value, HA, geographic DR, and contractual SLA remain NOT_RUN. Exact parent artifact digests stay outside packaged release facts to avoid a release-facts/wheel self-reference cycle.",
+    "No real enterprise connector or Matrix human approval is claimed.",
+    "Submission documents and video are outside this code-only fact surface."
+  ]
+}

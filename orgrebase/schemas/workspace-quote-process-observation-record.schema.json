@@ -1,0 +1,698 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-quote-process-observation-record.schema.json",
+  "$defs": {
+    "AccessAttempt": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_role": {
+          "minLength": 1,
+          "title": "Actor Role",
+          "type": "string"
+        },
+        "authorized": {
+          "title": "Authorized",
+          "type": "boolean"
+        },
+        "succeeded": {
+          "title": "Succeeded",
+          "type": "boolean"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "source_ref": {
+          "pattern": "^source:[a-z0-9][a-z0-9._-]*$",
+          "title": "Source Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "actor_role",
+        "authorized",
+        "succeeded",
+        "occurred_at",
+        "source_ref"
+      ],
+      "title": "AccessAttempt",
+      "type": "object"
+    },
+    "ActiveInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "owner_role": {
+          "minLength": 1,
+          "title": "Owner Role",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "ended_at": {
+          "format": "date-time",
+          "title": "Ended At",
+          "type": "string"
+        },
+        "source_ref": {
+          "pattern": "^source:[a-z0-9][a-z0-9._-]*$",
+          "title": "Source Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "owner_role",
+        "started_at",
+        "ended_at",
+        "source_ref"
+      ],
+      "title": "ActiveInterval",
+      "type": "object"
+    },
+    "ApprovalDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "outcome": {
+          "const": "APPROVED",
+          "title": "Outcome",
+          "type": "string"
+        },
+        "approver_role": {
+          "minLength": 1,
+          "title": "Approver Role",
+          "type": "string"
+        },
+        "decided_at": {
+          "format": "date-time",
+          "title": "Decided At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "outcome",
+        "approver_role",
+        "decided_at"
+      ],
+      "title": "ApprovalDecision",
+      "type": "object"
+    },
+    "DeliveryCorrection": {
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "source_ref": {
+          "pattern": "^source:[a-z0-9][a-z0-9._-]*$",
+          "title": "Source Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "required",
+        "source_ref"
+      ],
+      "title": "DeliveryCorrection",
+      "type": "object"
+    },
+    "ImpactAdjudication": {
+      "additionalProperties": false,
+      "properties": {
+        "change_id": {
+          "minLength": 1,
+          "title": "Change Id",
+          "type": "string"
+        },
+        "target_id": {
+          "minLength": 1,
+          "title": "Target Id",
+          "type": "string"
+        },
+        "expected_affected": {
+          "title": "Expected Affected",
+          "type": "boolean"
+        },
+        "identified_affected": {
+          "title": "Identified Affected",
+          "type": "boolean"
+        },
+        "adjudicator_role": {
+          "minLength": 1,
+          "title": "Adjudicator Role",
+          "type": "string"
+        },
+        "source_ref": {
+          "pattern": "^source:[a-z0-9][a-z0-9._-]*$",
+          "title": "Source Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "change_id",
+        "target_id",
+        "expected_affected",
+        "identified_affected",
+        "adjudicator_role",
+        "source_ref"
+      ],
+      "title": "ImpactAdjudication",
+      "type": "object"
+    },
+    "ManualEscalation": {
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "owner_role": {
+          "minLength": 1,
+          "title": "Owner Role",
+          "type": "string"
+        },
+        "opened_at": {
+          "format": "date-time",
+          "title": "Opened At",
+          "type": "string"
+        },
+        "closed_at": {
+          "format": "date-time",
+          "title": "Closed At",
+          "type": "string"
+        },
+        "terminal_status": {
+          "enum": [
+            "RESOLVED",
+            "REJECTED"
+          ],
+          "title": "Terminal Status",
+          "type": "string"
+        },
+        "source_ref": {
+          "pattern": "^source:[a-z0-9][a-z0-9._-]*$",
+          "title": "Source Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason",
+        "owner_role",
+        "opened_at",
+        "closed_at",
+        "terminal_status",
+        "source_ref"
+      ],
+      "title": "ManualEscalation",
+      "type": "object"
+    },
+    "ObservationWindow": {
+      "additionalProperties": false,
+      "properties": {
+        "started_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Started At"
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ended At"
+        },
+        "timezone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timezone"
+        }
+      },
+      "title": "ObservationWindow",
+      "type": "object"
+    },
+    "QuoteObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "quote_id": {
+          "minLength": 1,
+          "title": "Quote Id",
+          "type": "string"
+        },
+        "request_admitted_at": {
+          "format": "date-time",
+          "title": "Request Admitted At",
+          "type": "string"
+        },
+        "delivery_accepted_at": {
+          "format": "date-time",
+          "title": "Delivery Accepted At",
+          "type": "string"
+        },
+        "step_executions": {
+          "items": {
+            "$ref": "#/$defs/StepExecution"
+          },
+          "maxItems": 8,
+          "minItems": 8,
+          "title": "Step Executions",
+          "type": "array"
+        },
+        "policy_owner_active_intervals": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ActiveInterval"
+          },
+          "title": "Policy Owner Active Intervals",
+          "type": "array"
+        },
+        "impact_adjudications": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ImpactAdjudication"
+          },
+          "title": "Impact Adjudications",
+          "type": "array"
+        },
+        "delivery_correction": {
+          "$ref": "#/$defs/DeliveryCorrection"
+        },
+        "access_attempts": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AccessAttempt"
+          },
+          "title": "Access Attempts",
+          "type": "array"
+        },
+        "manual_escalations": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ManualEscalation"
+          },
+          "title": "Manual Escalations",
+          "type": "array"
+        },
+        "selective_rebase_cost": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SelectiveRebaseCostObservation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "quote_id",
+        "request_admitted_at",
+        "delivery_accepted_at",
+        "step_executions",
+        "delivery_correction"
+      ],
+      "title": "QuoteObservation",
+      "type": "object"
+    },
+    "RoleClass": {
+      "enum": [
+        "HUMAN_OPERATOR",
+        "HUMAN_OWNER",
+        "WORKER_AGENT",
+        "CONTROL_PLANE",
+        "BOUNDED_RUNTIME",
+        "CANONICAL_WRITER"
+      ],
+      "title": "RoleClass",
+      "type": "string"
+    },
+    "RoleEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "role_id": {
+          "minLength": 1,
+          "title": "Role Id",
+          "type": "string"
+        },
+        "role_class": {
+          "$ref": "#/$defs/RoleClass"
+        }
+      },
+      "required": [
+        "role_id",
+        "role_class"
+      ],
+      "title": "RoleEntry",
+      "type": "object"
+    },
+    "RoleRegistry": {
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": "enterprise-quote-roles@1.0.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "roles": {
+          "items": {
+            "$ref": "#/$defs/RoleEntry"
+          },
+          "minItems": 1,
+          "title": "Roles",
+          "type": "array"
+        }
+      },
+      "required": [
+        "version",
+        "roles"
+      ],
+      "title": "RoleRegistry",
+      "type": "object"
+    },
+    "SelectiveRebaseCostObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "full_rebuild_comparator_cost": {
+          "exclusiveMinimum": 0,
+          "title": "Full Rebuild Comparator Cost",
+          "type": "number"
+        },
+        "selective_rebase_actual_cost": {
+          "minimum": 0,
+          "title": "Selective Rebase Actual Cost",
+          "type": "number"
+        },
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "comparator_basis": {
+          "enum": [
+            "OBSERVED_MATCHED_COMPARATOR",
+            "MODELLED_COUNTERFACTUAL"
+          ],
+          "title": "Comparator Basis",
+          "type": "string"
+        },
+        "source_ref": {
+          "pattern": "^source:[a-z0-9][a-z0-9._-]*$",
+          "title": "Source Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "full_rebuild_comparator_cost",
+        "selective_rebase_actual_cost",
+        "unit",
+        "comparator_basis",
+        "source_ref"
+      ],
+      "title": "SelectiveRebaseCostObservation",
+      "type": "object"
+    },
+    "ShadowEvidenceClass": {
+      "enum": [
+        "NOT_RUN",
+        "SYNTHETIC_CONTRACT_FIXTURE",
+        "OBSERVED_ENTERPRISE_SHADOW"
+      ],
+      "title": "ShadowEvidenceClass",
+      "type": "string"
+    },
+    "SourceFileRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^source:[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "file_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "File Sha256",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/SourceKind"
+        },
+        "provenance": {
+          "$ref": "#/$defs/SourceProvenance"
+        },
+        "complete_for_window": {
+          "const": true,
+          "title": "Complete For Window",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "file_sha256",
+        "kind",
+        "provenance",
+        "complete_for_window"
+      ],
+      "title": "SourceFileRef",
+      "type": "object"
+    },
+    "SourceKind": {
+      "enum": [
+        "WORKFLOW_EVENT_LOG",
+        "ACTIVE_TIME_LOG",
+        "ACCESS_EVENT_LOG",
+        "IMPACT_ADJUDICATION_LOG",
+        "COST_LEDGER"
+      ],
+      "title": "SourceKind",
+      "type": "string"
+    },
+    "SourceProvenance": {
+      "enum": [
+        "SYNTHETIC_FIXTURE",
+        "ENTERPRISE_EXTRACT"
+      ],
+      "title": "SourceProvenance",
+      "type": "string"
+    },
+    "StepExecution": {
+      "additionalProperties": false,
+      "properties": {
+        "step_id": {
+          "pattern": "^quote-step:[a-z0-9-]+$",
+          "title": "Step Id",
+          "type": "string"
+        },
+        "system_class": {
+          "minLength": 1,
+          "title": "System Class",
+          "type": "string"
+        },
+        "system_instance_ref": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "System Instance Ref",
+          "type": "string"
+        },
+        "responsible_roles": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Responsible Roles",
+          "type": "array"
+        },
+        "accountable_role": {
+          "minLength": 1,
+          "title": "Accountable Role",
+          "type": "string"
+        },
+        "queued_at": {
+          "format": "date-time",
+          "title": "Queued At",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "accepted_at": {
+          "format": "date-time",
+          "title": "Accepted At",
+          "type": "string"
+        },
+        "approval": {
+          "$ref": "#/$defs/ApprovalDecision"
+        },
+        "source_ref": {
+          "pattern": "^source:[a-z0-9][a-z0-9._-]*$",
+          "title": "Source Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "step_id",
+        "system_class",
+        "system_instance_ref",
+        "responsible_roles",
+        "accountable_role",
+        "queued_at",
+        "started_at",
+        "completed_at",
+        "accepted_at",
+        "approval",
+        "source_ref"
+      ],
+      "title": "StepExecution",
+      "type": "object"
+    },
+    "SystemClassRegistry": {
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": "enterprise-quote-systems@1.0.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "classes": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Classes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "version",
+        "classes"
+      ],
+      "title": "SystemClassRegistry",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.workspace-quote-process-observation-record.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "prepared_at": {
+      "format": "date-time",
+      "title": "Prepared At",
+      "type": "string"
+    },
+    "process_profile": {
+      "const": "ENTERPRISE_QUOTE_OPERATOR_V1",
+      "title": "Process Profile",
+      "type": "string"
+    },
+    "evidence_class": {
+      "$ref": "#/$defs/ShadowEvidenceClass"
+    },
+    "enterprise_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Enterprise Ref"
+    },
+    "observation_window": {
+      "$ref": "#/$defs/ObservationWindow"
+    },
+    "role_registry": {
+      "$ref": "#/$defs/RoleRegistry"
+    },
+    "system_class_registry": {
+      "$ref": "#/$defs/SystemClassRegistry"
+    },
+    "source_file_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SourceFileRef"
+      },
+      "title": "Source File Refs",
+      "type": "array"
+    },
+    "quote_observations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/QuoteObservation"
+      },
+      "title": "Quote Observations",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "prepared_at",
+    "process_profile",
+    "evidence_class",
+    "observation_window",
+    "role_registry",
+    "system_class_registry",
+    "limitations"
+  ],
+  "title": "QuoteProcessObservationRecord",
+  "type": "object"
+}

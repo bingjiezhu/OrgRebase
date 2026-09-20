@@ -1,0 +1,194 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "orgrebase"
+version = "0.4.0"
+description = "Enterprise Work Build & Recovery System with certified selective rebase for governed agents"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+license = { text = "PolyForm-Noncommercial-1.0.0" }
+license-files = ["LICENSE", "COMMERCIAL-LICENSE.md", "NOTICE.md"]
+authors = [{ name = "Bingjie Zhu" }]
+keywords = [
+  "agents",
+  "enterprise",
+  "evidence",
+  "governance",
+  "selective-rebase",
+  "skills",
+  "source-available",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: Other/Proprietary License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business",
+]
+dependencies = [
+  "authlib>=1.8,<2",
+  "cryptography>=50,<51",
+  "fastapi>=0.116,<1",
+  "httpx2>=2.12,<3",
+  "psycopg[binary]>=3.2,<4",
+  "pydantic>=2.11,<3",
+  "pyjwt[crypto]>=2.10,<3",
+  "rfc8785>=0.1.4,<0.2",
+  "sqlalchemy>=2.0,<3",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4,<10",
+  "pytest-cov>=6.2,<8",
+  "pyyaml>=6.0.2,<7",
+  "ruff>=0.12,<1",
+]
+
+[project.urls]
+Homepage = "https://github.com/bingjiezhu/OrgRebase"
+Documentation = "https://github.com/bingjiezhu/OrgRebase/tree/main/docs"
+Issues = "https://github.com/bingjiezhu/OrgRebase/issues"
+Changelog = "https://github.com/bingjiezhu/OrgRebase/blob/main/CHANGELOG.md"
+Source = "https://github.com/bingjiezhu/OrgRebase"
+
+[project.scripts]
+orgrebase = "orgrebase.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/orgrebase"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"demo/console" = "orgrebase/static"
+"skills/enterprise-launch-readiness/contract.json" = "orgrebase/skill_contracts/enterprise-launch-readiness.json"
+"skills/enterprise-launch-readiness/legacy-contract-v1.3.json" = "orgrebase/skill_contracts/enterprise-launch-readiness-legacy-v1.3.json"
+"fixtures/canonical-enterprise.json" = "orgrebase/_assets/fixtures/canonical-enterprise.json"
+"fixtures/enterprise-seed" = "orgrebase/_assets/fixtures/enterprise-seed"
+"orchestration/task-intents.json" = "orgrebase/_assets/orchestration/task-intents.json"
+"agentteams/identities" = "orgrebase/_assets/agentteams/identities"
+"agentteams/source-lock.json" = "orgrebase/_assets/agentteams/source-lock.json"
+"agentteams/teamharness-lock.json" = "orgrebase/_assets/agentteams/teamharness-lock.json"
+"benchmark/orgworkbench" = "orgrebase/_assets/benchmark/orgworkbench"
+"benchmark/quote-value-v0.1/public/current-process-baseline.json" = "orgrebase/_assets/benchmark/quote-value-v0.1/public/current-process-baseline.json"
+"configs/workspace/metric-registry.json" = "orgrebase/_assets/configs/workspace/metric-registry.json"
+"configs/workspace/skill-registry.json" = "orgrebase/_assets/configs/workspace/skill-registry.json"
+"skills/enterprise-quote-compose" = "orgrebase/skill_packages/enterprise-quote-compose"
+"skills/predecessors" = "orgrebase/skill_predecessors"
+"skills/structured-domain-handoff" = "orgrebase/skill_packages/structured-domain-handoff"
+"skills/enterprise-launch-readiness" = "orgrebase/skill_packages/enterprise-launch-readiness"
+"configs/oac/runtime-admission-policy.json" = "orgrebase/_assets/configs/oac/runtime-admission-policy.json"
+"evidence/release-facts.json" = "orgrebase/_assets/evidence/release-facts.json"
+"examples/enterprise-quote-pilot/evergreen" = "orgrebase/_assets/examples/enterprise-quote-pilot/evergreen"
+"scripts/verify_enterprise_quote_pilot.py" = "orgrebase/_assets/scripts/verify_enterprise_quote_pilot.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  # Hatch omits nested .git metadata. Shipping only its working tree would make the
+  # first extracted demo fail closed as a non-empty, non-repository directory.
+  "/evidence/goai-agentteams/latest/git-tool-repo",
+  "/evidence/**/git-tool-repo",
+  # Cold/failed generations are recoverable operator archives, never release input.
+  "/evidence/**/archive",
+  "/evidence/**/failed",
+  # Never package nested repository internals even below an otherwise public root.
+  "/**/.git",
+  # Authoritative public staging denylist. Release staging must be derived from
+  # this sdist, never from a broad copy of the working tree.
+  "/evidence/agentteams/live-receipt.json",
+  "/evidence/agentteams/candidate-ingestion-receipt.json",
+  "/evidence/agentteams/preflight.json",
+  "/evidence/agentteams/vertex-provider-probe.json",
+  "/evidence/agentteams/nonce-ledger.json",
+  "/evidence/agentteams/.nonce-ledger.json.lock",
+  "/evidence/agentteams/**/.nonce-ledger.json.lock",
+  "/evidence/agentteams/live-sources",
+  "/evidence/agentteams/**/live-sources",
+  "/evidence/agentteams/private-sessions",
+  "/evidence/agentteams/**/private-sessions",
+  "/evidence/agentteams/debug",
+  "/evidence/agentteams/**/debug",
+  "/evidence/agentteams/debug-*",
+  "/evidence/agentteams/**/debug-*",
+  "/evidence/agentteams/**/*debug*",
+  "/evidence/agentteams/dispatch-logs",
+  "/evidence/agentteams/**/dispatch-logs",
+  "/evidence/agentteams/dispatch-*",
+  "/evidence/agentteams/**/dispatch-*",
+  # SQLite transient journals are runtime state, never source or evidence.
+  "/**/*.db-shm",
+  "/**/*.db-wal",
+  "/**/*.sqlite-shm",
+  "/**/*.sqlite-wal",
+  "/**/*.sqlite3-shm",
+  "/**/*.sqlite3-wal",
+]
+include = [
+  ".python-version",
+  ".github/pull_request_template.md",
+  "src",
+  "tests",
+  "vendor",
+  "scripts",
+  "agentteams",
+  "benchmark",
+  "configs",
+  "contracts",
+  "demo/console",
+  "docs",
+  "evidence",
+  "examples",
+  "fixtures",
+  "orchestration",
+  "schemas",
+  "skills",
+  "CHANGELOG.md",
+  "CODE_OF_CONDUCT.md",
+  "CONTRIBUTING.md",
+  "LICENSE",
+  "COMMERCIAL-LICENSE.md",
+  "Makefile",
+  "NOTICE.md",
+  "RELEASE-VERIFICATION.md",
+  "README.md",
+  "README.zh-CN.md",
+  "run-agentteams-demo.sh",
+  "run-enterprise-pilot.sh",
+  "run-semifinal-demo.sh",
+  "SECURITY.md",
+  "pyproject.toml",
+  "requirements.txt",
+  "requirements-dev.txt",
+  "uv.lock",
+  "verify-agentteams-demo.sh",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers --disable-warnings"
+junit_family = "xunit1"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["orgrebase"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 85
+
+[tool.ruff]
+target-version = "py312"
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/conftest.py" = ["E402"]
+"tests/workspace/test_console_*.py" = ["RUF001"] # Intentional Chinese product-copy punctuation.

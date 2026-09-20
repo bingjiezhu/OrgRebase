@@ -1,0 +1,37 @@
+{
+  "schema_version": "oac.annotation-example-pins/v1",
+  "evidence_class": "SYNTHETIC_PROTOCOL_FIXTURE_NOT_HUMAN_GOLD",
+  "qualification_basis": "CONTROLLED_LOCAL_FIXTURE",
+  "authority_ref": {
+    "apiVersion": "oac.dev/v0alpha1",
+    "kind": "AnnotationAuthority",
+    "namespace": "oac.examples.supplier",
+    "resourceId": "authority:annotation",
+    "revision": 1,
+    "digest": "sha256:a10721e7e98f6228bf2446d86700729aa423d3d868dbcb14695cfc7e11eb2930"
+  },
+  "packet_ref": {
+    "apiVersion": "oac.dev/v0alpha1",
+    "kind": "AnnotationPacket",
+    "namespace": "oac.examples.supplier",
+    "resourceId": "packet:SC-008",
+    "revision": 1,
+    "digest": "sha256:4ea88476a84b3d68a835d497644e06e48d2c8037dc641baa85e1ffb2e7296f69"
+  },
+  "benchmark_claim_ref": {
+    "apiVersion": "oac.dev/v0alpha1",
+    "kind": "AnnotationBenchmarkClaim",
+    "namespace": "oac.examples.supplier",
+    "resourceId": "packet:SC-008/7",
+    "revision": 1,
+    "digest": "sha256:cb7091bbda2ccb3d4cf8a96ba3eb114c3503e23f69f0f183b6ea73983028405e"
+  },
+  "approved_archive_digest": "sha256:29528054c3bb8dcfebc53a05a76c296032e613a4340bc2e2cdd2f921e2713f32",
+  "retracted_archive_digest": "sha256:e6d9bf4f04fb796b4e7a0f9b654bb72e3455381a7ca6278294c09e306b91e8a0",
+  "clock": "2026-09-10T12:00:00Z",
+  "expected": {
+    "approved": "QUALIFIED_ANNOTATION_LINEAGE",
+    "retracted": "ANNOTATION_RETRACTED"
+  },
+  "default_human_qualification": "ANNOTATION_GOLD_NOT_QUALIFIED"
+}

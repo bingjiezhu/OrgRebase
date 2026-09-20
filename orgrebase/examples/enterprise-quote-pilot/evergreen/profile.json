@@ -1,0 +1,156 @@
+{
+  "digest": "sha256:eebd6ed6ff6ffe105793a44d2da763cf95f2e6adf135fc4ce882547e43d372f0",
+  "schema_version": "orgrebase.enterprise-seed-profile.v1",
+  "profile_id": "profile:evergreen-enterprise-quote",
+  "revision": "r1",
+  "scenario_id": "evergreen-blue-harbor-enterprise-quote",
+  "organization_id": "org:evergreen-industries",
+  "synthetic": true,
+  "source_roots": [
+    {
+      "id": "source:evergreen:domain",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "pilot://evergreen/domain@r1",
+      "declared_digest": "sha256:08bea3bbc74f0ae690e7352e306c3642e113c6d1934260f0d4f8934d28e0e440"
+    },
+    {
+      "id": "source:evergreen:knowledge",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "pilot://evergreen/knowledge@r1",
+      "declared_digest": "sha256:91b87e2714d4ec4290a2c35f9722093ba438c1ec36eea996ea960efa6331d9a4"
+    },
+    {
+      "id": "source:evergreen:authority",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "pilot://evergreen/authority@r1",
+      "declared_digest": "sha256:b71c748c58b4e2293e0ffa924426ba4c66621ab7cadc8f7b219731915db45972"
+    },
+    {
+      "id": "source:evergreen:capability",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "pilot://evergreen/capability@r1",
+      "declared_digest": "sha256:528db9ebc04e0b695fb7a1c2c06d5d28f42cf6aff477fe95786f8b8f97d832ce"
+    },
+    {
+      "id": "source:evergreen:dependency",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "pilot://evergreen/dependency@r1",
+      "declared_digest": "sha256:34e59d1fa8671cc192ee3f76e4b26f37047b90e69d6107fb5aad1322138abca4"
+    }
+  ],
+  "components": [
+    {
+      "kind": "DOMAIN",
+      "completeness": "COMPLETE",
+      "source_root_refs": [
+        "source:evergreen:domain"
+      ],
+      "declared_digest": "sha256:20923b633a142e621f2d7ecc3da3692c0a66dfd086af598c118fb2784e10a62e"
+    },
+    {
+      "kind": "KNOWLEDGE",
+      "completeness": "COMPLETE",
+      "source_root_refs": [
+        "source:evergreen:knowledge"
+      ],
+      "declared_digest": "sha256:ae4bd6981fc4353358f1f8ba248c4716d22a038ac39c3531be2d14075c9b0dad"
+    },
+    {
+      "kind": "AUTHORITY",
+      "completeness": "COMPLETE",
+      "source_root_refs": [
+        "source:evergreen:authority"
+      ],
+      "declared_digest": "sha256:97bb5225fa5792aa59a247f604d5a370909bc5c0d765556174e14252878ab907"
+    },
+    {
+      "kind": "CAPABILITY",
+      "completeness": "COMPLETE",
+      "source_root_refs": [
+        "source:evergreen:capability"
+      ],
+      "declared_digest": "sha256:abbd08111e7c78b1cdb2041fbfd362e9c4812d7bd4434d96a23e6fde669aa6a8"
+    },
+    {
+      "kind": "DEPENDENCY",
+      "completeness": "COMPLETE",
+      "source_root_refs": [
+        "source:evergreen:dependency"
+      ],
+      "declared_digest": "sha256:47751b260a4865d2981500fbd52d9c06e7da33e1a38cd904b16ffcd1b39df5a5"
+    }
+  ],
+  "governance": {
+    "admission_authority_refs": [
+      "human:evergreen-workspace-owner"
+    ],
+    "owner_refs": [
+      "human:evergreen-product-owner",
+      "human:evergreen-legal-owner",
+      "human:evergreen-finance-owner",
+      "human:evergreen-gtm-owner",
+      "employee:enterprise-quote-operator"
+    ],
+    "rejection_path_ref": "procedure:evergreen-workspace-intake-reject@r1",
+    "unknown_path_ref": "procedure:evergreen-workspace-unknown-review@r1"
+  },
+  "default_task": {
+    "id": "task:quote-blue-harbor",
+    "actor_id": "employee:enterprise-quote-operator",
+    "purpose": "enterprise_quote",
+    "deliverable_kind": "QUOTE",
+    "requested_at": "2026-08-27T00:00:00Z",
+    "template_ref": "template:enterprise_quote@v1",
+    "customer_id": "customer:blue-harbor",
+    "idempotency_key": "workspace:form:quote-blue-harbor@v1",
+    "input_values": [
+      {
+        "key": "owner",
+        "value": "enterprise-quote-operator"
+      }
+    ]
+  },
+  "change_family": [
+    {
+      "kind": "launch_date",
+      "owner_id": "human:evergreen-product-owner",
+      "change_id": "changeset:evergreen-launch-date",
+      "revision": "r1",
+      "purpose": "change_rebase",
+      "object_id": "claim:product.launch_date",
+      "base_version": "v1",
+      "proposed_version": "v2",
+      "idempotency_key": "workspace:apply:evergreen-launch-date@r1"
+    },
+    {
+      "kind": "currency",
+      "owner_id": "human:evergreen-finance-owner",
+      "change_id": "changeset:evergreen-currency",
+      "revision": "r1",
+      "purpose": "change_rebase",
+      "object_id": "policy:finance.currency",
+      "base_version": "v1",
+      "proposed_version": "v2",
+      "idempotency_key": "workspace:apply:evergreen-currency@r1"
+    }
+  ],
+  "gaps": [],
+  "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+  "data_class": "SYNTHETIC_FIXTURE",
+  "requested_growth_level": "G1_SELECT",
+  "runtime_compatibility": {
+    "mode": "REFERENCE_HANDLER",
+    "handler_profile": "enterprise-quote-pilot-v1"
+  },
+  "declared_limitation_codes": [
+    "SYNTHETIC_DATA_ONLY",
+    "NO_EXTERNAL_CONNECTORS",
+    "NO_OUTCOME_ASSURANCE",
+    "NO_EXTERNAL_ENTERPRISE_VALIDATION"
+  ]
+}

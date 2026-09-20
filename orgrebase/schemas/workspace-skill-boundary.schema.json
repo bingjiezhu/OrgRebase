@@ -1,0 +1,81 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-skill-boundary.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tools": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tools",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "effect_ceiling": {
+      "const": "CANDIDATE_ONLY_ZERO_TARGET_WRITES",
+      "default": "CANDIDATE_ONLY_ZERO_TARGET_WRITES",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "evidence_duties": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Duties",
+      "type": "array"
+    },
+    "known_failure_envelope": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Known Failure Envelope",
+      "type": "array"
+    },
+    "preconditions": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Preconditions",
+      "type": "array"
+    },
+    "required_knowledge": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Required Knowledge",
+      "type": "array"
+    },
+    "required_qualifications": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Required Qualifications",
+      "type": "array"
+    },
+    "rollback_package_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Rollback Package Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "preconditions",
+    "required_knowledge",
+    "required_qualifications",
+    "evidence_duties",
+    "rollback_package_digest",
+    "known_failure_envelope"
+  ],
+  "title": "SkillBoundary",
+  "type": "object"
+}

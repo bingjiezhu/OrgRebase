@@ -1,0 +1,14 @@
+{
+  "action": "complete_project",
+  "digest": "sha256:1a26d755a64c341f4dff3a5b8a5214f8b96ae0c924f31c991b7e9ef746378edb",
+  "error": null,
+  "key": "project:complete",
+  "ok": true,
+  "payload_digest": "sha256:889c41c397663c7fe8402b3852a6ed90c9a7d7412c9ab3753201b8a2189f306b",
+  "raw_ref": "raw-mcp/020-project-complete-1a1cf51b.json",
+  "request_digest": "sha256:f9ab306e7d7cf72d5a92836a2916ae63096e8ef774bbbfa55f7e5a41f0e5a9f0",
+  "response_digest": "sha256:51efb71b8bae0aba3991a9a106b323022be0f18b81ab0d8449d481ea70b0a8ac",
+  "sequence": 20,
+  "status": "completed",
+  "tool": "projectflow"
+}

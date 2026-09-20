@@ -1,0 +1,108 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-controlled-h-t-t-p-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "attempts": {
+      "minimum": 1,
+      "title": "Attempts",
+      "type": "integer"
+    },
+    "connector_kind": {
+      "enum": [
+        "SOURCE",
+        "TOOL",
+        "OTLP"
+      ],
+      "title": "Connector Kind",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "endpoint_class": {
+      "const": "LOOPBACK_TCP",
+      "default": "LOOPBACK_TCP",
+      "title": "Endpoint Class",
+      "type": "string"
+    },
+    "etag": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Etag"
+    },
+    "evidence_class": {
+      "const": "CONTROLLED_LOCAL_REAL_HTTP",
+      "default": "CONTROLLED_LOCAL_REAL_HTTP",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "http_status": {
+      "title": "Http Status",
+      "type": "integer"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "operation": {
+      "title": "Operation",
+      "type": "string"
+    },
+    "request_digest": {
+      "title": "Request Digest",
+      "type": "string"
+    },
+    "response_digest": {
+      "title": "Response Digest",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.controlled-http-receipt.v1",
+      "default": "orgrebase.controlled-http-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "SUCCEEDED",
+        "NOT_MODIFIED",
+        "FAILED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "target_writes": {
+      "minimum": 0,
+      "title": "Target Writes",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "connector_kind",
+    "operation",
+    "run_id",
+    "request_digest",
+    "response_digest",
+    "status",
+    "http_status",
+    "attempts",
+    "target_writes"
+  ],
+  "title": "ControlledHTTPReceipt",
+  "type": "object"
+}

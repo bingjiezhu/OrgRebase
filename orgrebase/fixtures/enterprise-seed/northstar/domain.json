@@ -1,0 +1,49 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:northstar-acme-quote@r1",
+  "organization_id": "org:northstar",
+  "component_kind": "DOMAIN",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "organization_id": "org:northstar",
+    "scenario_id": "northstar-acme-enterprise-quote",
+    "default_task": {
+      "id": "task:quote_acme",
+      "actor_id": "employee:sales-owner",
+      "purpose": "enterprise_quote",
+      "deliverable_kind": "QUOTE",
+      "requested_at": "2026-08-15T00:00:00Z",
+      "template_ref": "template:enterprise_quote@v1",
+      "customer_id": "customer:acme",
+      "idempotency_key": "workspace:form:quote-acme@v1",
+      "input_values": [{"key": "owner", "value": "sales-owner"}]
+    },
+    "change_family": [
+      {
+        "kind": "launch_date",
+        "owner_id": "human:product-owner",
+        "change_id": "changeset:workspace-launch-date",
+        "revision": "r1",
+        "purpose": "change_rebase",
+        "object_id": "claim:product.launch_date",
+        "base_version": "v7",
+        "proposed_version": "v8",
+        "idempotency_key": "workspace:apply:launch-date@r1"
+      },
+      {
+        "kind": "currency",
+        "owner_id": "human:finance-owner",
+        "change_id": "changeset:workspace-currency",
+        "revision": "r1",
+        "purpose": "change_rebase",
+        "object_id": "policy:finance.currency",
+        "base_version": "v1",
+        "proposed_version": "v2",
+        "idempotency_key": "workspace:apply:currency@r1"
+      }
+    ],
+    "domains": ["finance", "gtm", "legal", "product"]
+  },
+  "projection_digest": "sha256:478944902c4728314b32fb4be0f1a44bb1815b6a74a9610ed5a8e47d5b073a6a"
+}

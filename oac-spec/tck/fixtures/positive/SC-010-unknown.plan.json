@@ -1,0 +1,329 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrganizationPlan",
+  "metadata": {
+    "id": "plan:SC-010:unknown",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:evidence-discovery",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2025-03-01T09:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "effectiveTo": null,
+    "sourceRefs": [
+      "snapshot:veracier-proc01-truncated-contextual",
+      "change:SC-010"
+    ]
+  },
+  "digest": "sha256:9a74bac1a4ac1c8d49f73cd81c1f3df6865dd8070765c94be0214ad063d516a0",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01-truncated-contextual",
+      "revision": 2,
+      "digest": "sha256:0a2e623bebc8ca3eba838416c1dcd326030697efd74c20ec312c5df30ca5e301"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-010",
+      "revision": 1,
+      "digest": "sha256:be2131dc99c711e30031adb336fd9da4ee3f611e8b56d42239297951f39354d2"
+    },
+    "status": "guarded_unresolved",
+    "effectCeiling": "zero_effect",
+    "compilerId": "oac.reference.supplier-change",
+    "compilerVersion": "0.3.0a0",
+    "applicabilityEvaluations": [
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:da29746e911a78aa0b6f56b9",
+        "sourceRef": "duty:contextual-root-unknown-preservation",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "UNKNOWN",
+        "reasonCodes": [
+          "APPLICABILITY_INPUT_UNKNOWN"
+        ],
+        "witnessRefs": [
+          "change:SC-010#/digest",
+          "change:SC-010#/spec/admissionStatus",
+          "change:SC-010#/spec/deltas/0/after/state",
+          "change:SC-010#/spec/scopeRefs",
+          "change:SC-010#/spec/semanticType",
+          "change:SC-010#/spec/subjectRef",
+          "snapshot:veracier-proc01-truncated-contextual#/digest",
+          "snapshot:veracier-proc01-truncated-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-truncated-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-truncated-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-truncated-contextual#/spec/unknownTransitionDuties/0/admissionStatus",
+          "snapshot:veracier-proc01-truncated-contextual#/spec/unknownTransitionDuties/0/applicability"
+        ]
+      }
+    ],
+    "impactPaths": [
+      {
+        "pathId": "urn:oac:mvp:path:64ece2700823f741e4c4699e",
+        "targetRef": "contracts",
+        "state": "unknown",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "gap",
+        "reasonCodes": [
+          "GRAPH_COVERAGE_PARTIAL"
+        ],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:67995aef731cc0c296257004",
+        "targetRef": "subsidiaries",
+        "state": "unknown",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "gap",
+        "reasonCodes": [
+          "GRAPH_COVERAGE_PARTIAL"
+        ],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:758f015d9e449efd4ada01a0",
+        "targetRef": "orders",
+        "state": "unknown",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "gap",
+        "reasonCodes": [
+          "GRAPH_COVERAGE_PARTIAL"
+        ],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:aa1e848639d77c9541501843",
+        "targetRef": "production",
+        "state": "unknown",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "gap",
+        "reasonCodes": [
+          "GRAPH_COVERAGE_PARTIAL"
+        ],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:bf9d027fe47e9e262bcf6470",
+        "targetRef": "financial-ledger",
+        "state": "unknown",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "gap",
+        "reasonCodes": [
+          "GRAPH_COVERAGE_PARTIAL"
+        ],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:e3062cee487d15b54b3b9497",
+        "targetRef": "supplier:forges-martelliere",
+        "state": "unknown",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:da29746e911a78aa0b6f56b9"
+        ],
+        "dutyRefs": [
+          "duty:contextual-root-unknown-preservation"
+        ],
+        "origin": "gap",
+        "reasonCodes": [
+          "APPLICABILITY_INPUT_UNKNOWN"
+        ],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:e796156114d570a2c478201b",
+        "targetRef": "supplier:forges-martelliere",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      }
+    ],
+    "obligations": [
+      {
+        "obligationId": "urn:oac:mvp:obligation:d6f8dd5ad8c9c9add088bf7b",
+        "origin": "organizational_rule",
+        "targetRef": "supplier:forges-martelliere",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "unknown-preservation",
+        "requiredEvidence": [
+          "evidence:confirmed-status-or-unknown-receipt"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:e3062cee487d15b54b3b9497"
+        ],
+        "resolutionState": "unknown"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:db0603f1f5ea6361716bf241",
+        "origin": "discovery_gap",
+        "targetRef": "boundary:source-discovery",
+        "domainRef": "domain:evidence",
+        "requiredRoleRef": "role:evidence-discovery",
+        "obligationType": "source-discovery",
+        "requiredEvidence": [
+          "evidence:dependency-discovery-query-receipt",
+          "evidence:named-graph-gaps"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:64ece2700823f741e4c4699e",
+          "urn:oac:mvp:path:67995aef731cc0c296257004",
+          "urn:oac:mvp:path:758f015d9e449efd4ada01a0",
+          "urn:oac:mvp:path:aa1e848639d77c9541501843",
+          "urn:oac:mvp:path:bf9d027fe47e9e262bcf6470"
+        ],
+        "resolutionState": "unknown"
+      }
+    ],
+    "roleInstances": [
+      {
+        "roleInstanceId": "urn:oac:id:sha256:v1:role-instance:f707d693d5161a551c022f4e6b473209aeb4e5a5cb6fc3adec71ce35ab5dd5e1",
+        "roleDefinitionRef": "role:evidence-discovery",
+        "principalRef": "principal:evidence-agent",
+        "mission": "name missing sources and preserve Unknown",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:db0603f1f5ea6361716bf241"
+        ],
+        "qualificationRefs": [
+          "qualification:evidence-curation"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "roleInstanceId": "urn:oac:id:sha256:v1:role-instance:a41a18908c2479f01adc77dd7503b990aae04fc55d4aee8e918f152463d2055a",
+        "roleDefinitionRef": "role:procurement-owner",
+        "principalRef": "principal:procurement-agent",
+        "mission": "validate supplier status without asserting complete exposure",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:d6f8dd5ad8c9c9add088bf7b"
+        ],
+        "qualificationRefs": [
+          "qualification:procurement-authority"
+        ],
+        "effectCeiling": "zero_effect"
+      }
+    ],
+    "workUnits": [
+      {
+        "workUnitId": "urn:oac:id:sha256:v1:work-unit:98fc212d58fd83c4ce644709af0c4eb0f6a0960ca3d9006ba803989425569908",
+        "roleInstanceRefs": [
+          "urn:oac:id:sha256:v1:role-instance:f707d693d5161a551c022f4e6b473209aeb4e5a5cb6fc3adec71ce35ab5dd5e1"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:id:sha256:v1:role-instance:f707d693d5161a551c022f4e6b473209aeb4e5a5cb6fc3adec71ce35ab5dd5e1",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:db0603f1f5ea6361716bf241"
+        ],
+        "evidenceOutputs": [
+          "evidence:dependency-discovery-query-receipt",
+          "evidence:named-graph-gaps"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "workUnitId": "urn:oac:id:sha256:v1:work-unit:3031983d44695705e504de98ddb0d77718417aa9df9c25e5f25e5b31e2701fb8",
+        "roleInstanceRefs": [
+          "urn:oac:id:sha256:v1:role-instance:a41a18908c2479f01adc77dd7503b990aae04fc55d4aee8e918f152463d2055a"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:id:sha256:v1:role-instance:a41a18908c2479f01adc77dd7503b990aae04fc55d4aee8e918f152463d2055a",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:d6f8dd5ad8c9c9add088bf7b"
+        ],
+        "evidenceOutputs": [
+          "evidence:confirmed-status-or-unknown-receipt"
+        ],
+        "effectCeiling": "zero_effect"
+      }
+    ],
+    "happensBefore": [
+      {
+        "predecessorRef": "urn:oac:id:sha256:v1:work-unit:98fc212d58fd83c4ce644709af0c4eb0f6a0960ca3d9006ba803989425569908",
+        "successorRef": "urn:oac:id:sha256:v1:work-unit:3031983d44695705e504de98ddb0d77718417aa9df9c25e5f25e5b31e2701fb8",
+        "relation": "must_complete_before",
+        "reasonRefs": [
+          "urn:oac:mvp:obligation:d6f8dd5ad8c9c9add088bf7b",
+          "urn:oac:mvp:obligation:db0603f1f5ea6361716bf241",
+          "urn:oac:mvp:path:e3062cee487d15b54b3b9497"
+        ]
+      }
+    ],
+    "decisions": [
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:32c416aa9451e9204c3c0a5ff0d2a8b0ac92d252d83ea686b0171d74b97f6440",
+        "subjectRef": "role:procurement-owner",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:46452e16576a4d4ed38df197ea8e90e6776ef215a734686502f68694368688db",
+        "subjectRef": "principal:evidence-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:5c60ed5ba295ec12a83f5f791c466682d9874d55342167e2b0af4b3cd236a2ea",
+        "subjectRef": "role:evidence-discovery",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:83b168872de3335d32e6df3ab5b9627e8d68ea09cafc0cb5897b14edc2020448",
+        "subjectRef": "principal:procurement-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      }
+    ],
+    "unresolvedRefs": [
+      "change:SC-010",
+      "urn:oac:mvp:evaluation:da29746e911a78aa0b6f56b9",
+      "urn:oac:mvp:path:64ece2700823f741e4c4699e",
+      "urn:oac:mvp:path:67995aef731cc0c296257004",
+      "urn:oac:mvp:path:758f015d9e449efd4ada01a0",
+      "urn:oac:mvp:path:aa1e848639d77c9541501843",
+      "urn:oac:mvp:path:bf9d027fe47e9e262bcf6470",
+      "urn:oac:mvp:path:e3062cee487d15b54b3b9497"
+    ],
+    "minimality": {
+      "level": "inclusion_minimal",
+      "consideredRoleRefs": [
+        "role:evidence-discovery",
+        "role:procurement-owner"
+      ],
+      "consideredPrincipalRefs": [
+        "principal:evidence-agent",
+        "principal:procurement-agent"
+      ],
+      "nonRemovableRefs": [
+        "urn:oac:id:sha256:v1:role-instance:a41a18908c2479f01adc77dd7503b990aae04fc55d4aee8e918f152463d2055a",
+        "urn:oac:id:sha256:v1:role-instance:f707d693d5161a551c022f4e6b473209aeb4e5a5cb6fc3adec71ce35ab5dd5e1",
+        "urn:oac:id:sha256:v1:work-unit:3031983d44695705e504de98ddb0d77718417aa9df9c25e5f25e5b31e2701fb8",
+        "urn:oac:id:sha256:v1:work-unit:98fc212d58fd83c4ce644709af0c4eb0f6a0960ca3d9006ba803989425569908"
+      ]
+    }
+  }
+}

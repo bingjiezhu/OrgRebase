@@ -1,0 +1,128 @@
+{
+  "$id": "https://oac.dev/schemas/v0alpha1/OutcomeProfileDescriptor.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.outcome-profile/v0.1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "evidencePolicy": {
+      "const": "per-dimension-refs-with-exact-reason-and-unresolved-unions",
+      "title": "Evidencepolicy",
+      "type": "string"
+    },
+    "executionAuthority": {
+      "const": "separate-disposable-local-controller-grant",
+      "title": "Executionauthority",
+      "type": "string"
+    },
+    "executionAuthorizationKind": {
+      "const": "DisposableExecutionGrant",
+      "title": "Executionauthorizationkind",
+      "type": "string"
+    },
+    "executionReceiptKind": {
+      "const": "ExecutionReceipt",
+      "title": "Executionreceiptkind",
+      "type": "string"
+    },
+    "executionRootDomain": {
+      "const": "oac.state/disposable-execution-evidence/v0.1",
+      "title": "Executionrootdomain",
+      "type": "string"
+    },
+    "kind": {
+      "const": "OutcomeProfile",
+      "title": "Kind",
+      "type": "string"
+    },
+    "planEffectCeiling": {
+      "const": "zero_effect",
+      "title": "Planeffectceiling",
+      "type": "string"
+    },
+    "profileId": {
+      "const": "oac.outcome.disposable-local",
+      "title": "Profileid",
+      "type": "string"
+    },
+    "profileVersion": {
+      "const": "v0.1",
+      "title": "Profileversion",
+      "type": "string"
+    },
+    "requiredDimensions": {
+      "maxItems": 6,
+      "minItems": 6,
+      "prefixItems": [
+        {
+          "const": "task_goal",
+          "type": "string"
+        },
+        {
+          "const": "forbidden_effects",
+          "type": "string"
+        },
+        {
+          "const": "evidence_completion",
+          "type": "string"
+        },
+        {
+          "const": "scope",
+          "type": "string"
+        },
+        {
+          "const": "replayability",
+          "type": "string"
+        },
+        {
+          "const": "unresolved_observations",
+          "type": "string"
+        }
+      ],
+      "title": "Requireddimensions",
+      "type": "array"
+    },
+    "runtimeBindingKind": {
+      "const": "DisposableRuntimeBinding",
+      "title": "Runtimebindingkind",
+      "type": "string"
+    },
+    "runtimeBundleKind": {
+      "const": "DisposableRuntimeBundle",
+      "title": "Runtimebundlekind",
+      "type": "string"
+    },
+    "verdictPolicy": {
+      "const": "FAIL-reject-else-UNKNOWN-unknown-else-all-PASS-accept",
+      "title": "Verdictpolicy",
+      "type": "string"
+    },
+    "verificationScope": {
+      "const": "reference-root-and-verdict-consistency-only",
+      "title": "Verificationscope",
+      "type": "string"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "profileId",
+    "profileVersion",
+    "runtimeBindingKind",
+    "runtimeBundleKind",
+    "executionReceiptKind",
+    "executionAuthorizationKind",
+    "executionRootDomain",
+    "planEffectCeiling",
+    "executionAuthority",
+    "requiredDimensions",
+    "verdictPolicy",
+    "evidencePolicy",
+    "verificationScope"
+  ],
+  "title": "OutcomeProfileDescriptor",
+  "type": "object"
+}

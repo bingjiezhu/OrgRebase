@@ -1,0 +1,27 @@
+{
+  "action": "accept_task_result",
+  "key": "at-domain-legal-a3f56c48b0c5:accept",
+  "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+  "representation": "SEMANTIC_MCP_WRAPPER_PUBLIC_PATH_REDACTED",
+  "request": {
+    "action": "accept_task_result",
+    "payload": {
+      "accepted": true,
+      "projectId": "orgrebase-formation-905f9cf1a656",
+      "resultStatus": "SUCCESS",
+      "taskId": "at-domain-legal-a3f56c48b0c5"
+    },
+    "workspaceDir": "orgrebase://runtime-workspace"
+  },
+  "response": {
+    "content": [
+      {
+        "text": "{\"ok\": true, \"tool\": \"projectflow\", \"action\": \"accept_task_result\", \"project\": {\"plan_type\": \"dag\", \"project_id\": \"orgrebase-formation-905f9cf1a656\", \"requester\": \"\", \"source\": \"\", \"status\": \"active\", \"tasks\": [{\"assigned_to\": \"@legal-steward:controlled.local\", \"depends_on\": [], \"status\": \"completed\", \"task_id\": \"at-domain-legal-a3f56c48b0c5\", \"title\": \"Legal domain candidate\"}, {\"assigned_to\": \"@product-steward:controlled.local\", \"depends_on\": [], \"status\": \"planned\", \"task_id\": \"at-domain-product-f0e5afba2159\", \"title\": \"Product domain candidate\"}, {\"assigned_to\": \"@independent-reviewer:controlled.local\", \"depends_on\": [\"at-domain-legal-a3f56c48b0c5\", \"at-domain-product-f0e5afba2159\"], \"status\": \"planned\", \"task_id\": \"at-reviewer-barrier-7e3227d5ab73\", \"title\": \"Independent reviewer barrier\"}], \"team_id\": \"\", \"title\": \"Formation-compiled two-domain topology probe\", \"requester_report\": {\"pending\": true, \"reason\": \"task_result_accepted\", \"task_id\": \"at-domain-legal-a3f56c48b0c5\", \"result_status\": \"SUCCESS\", \"summary\": \"\", \"report_path\": \"shared/projects/orgrebase-formation-905f9cf1a656/result.md\"}}, \"taskId\": \"at-domain-legal-a3f56c48b0c5\", \"nodeStatus\": \"completed\", \"accepted\": true, \"publishedArtifacts\": [], \"notificationNeeded\": {\"event\": \"accept_task_result\", \"projectId\": \"orgrebase-formation-905f9cf1a656\", \"summary\": \"accept_task_result: at-domain-legal-a3f56c48b0c5 -> completed\"}}",
+        "type": "text"
+      }
+    ]
+  },
+  "schema_version": "orgrebase.teamharness-raw-mcp-action.v1",
+  "sequence": 8,
+  "tool": "projectflow"
+}

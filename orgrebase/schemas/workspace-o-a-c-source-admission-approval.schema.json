@@ -1,0 +1,208 @@
+{
+  "$defs": {
+    "OACOwnerReviewGate": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptation_run_id": {
+          "minLength": 1,
+          "title": "Adaptation Run Id",
+          "type": "string"
+        },
+        "canonical_target_writes": {
+          "const": 0,
+          "default": 0,
+          "title": "Canonical Target Writes",
+          "type": "integer"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "mapping_set_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Mapping Set Digest",
+          "type": "string"
+        },
+        "not_before": {
+          "minLength": 1,
+          "title": "Not Before",
+          "type": "string"
+        },
+        "not_before_epoch_ms": {
+          "minimum": 0,
+          "title": "Not Before Epoch Ms",
+          "type": "integer"
+        },
+        "organization_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Organization Snapshot Digest",
+          "type": "string"
+        },
+        "organizational_demand_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Organizational Demand Digest",
+          "type": "string"
+        },
+        "owner_ref": {
+          "minLength": 1,
+          "title": "Owner Ref",
+          "type": "string"
+        },
+        "owner_review_summary_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Owner Review Summary Digest",
+          "type": "string"
+        },
+        "pack_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Pack Digest",
+          "type": "string"
+        },
+        "prepared_at": {
+          "minLength": 1,
+          "title": "Prepared At",
+          "type": "string"
+        },
+        "prepared_at_epoch_ms": {
+          "minimum": 0,
+          "title": "Prepared At Epoch Ms",
+          "type": "integer"
+        },
+        "profile_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Profile Digest",
+          "type": "string"
+        },
+        "review_duration_ms": {
+          "minimum": 4000,
+          "title": "Review Duration Ms",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "orgrebase.oac-owner-review-gate.v1",
+          "default": "orgrebase.oac-owner-review-gate.v1",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "adaptation_run_id",
+        "mapping_set_digest",
+        "organization_snapshot_digest",
+        "organizational_demand_digest",
+        "owner_review_summary_digest",
+        "profile_digest",
+        "pack_digest",
+        "owner_ref",
+        "review_duration_ms",
+        "prepared_at_epoch_ms",
+        "not_before_epoch_ms",
+        "prepared_at",
+        "not_before"
+      ],
+      "title": "OACOwnerReviewGate",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-source-admission-approval.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "acknowledgements": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "title": "Acknowledgements",
+      "type": "array"
+    },
+    "actor_id": {
+      "minLength": 1,
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "approved_at": {
+      "minLength": 1,
+      "title": "Approved At",
+      "type": "string"
+    },
+    "approved_at_epoch_ms": {
+      "minimum": 0,
+      "title": "Approved At Epoch Ms",
+      "type": "integer"
+    },
+    "candidate_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Candidate Digest",
+      "type": "string"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "command_id": {
+      "minLength": 1,
+      "title": "Command Id",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "owner_review_summary_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Owner Review Summary Digest",
+      "type": "string"
+    },
+    "public_validation": {
+      "additionalProperties": true,
+      "title": "Public Validation",
+      "type": "object"
+    },
+    "review_gate": {
+      "$ref": "#/$defs/OACOwnerReviewGate"
+    },
+    "review_gate_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Review Gate Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-source-admission-approval.v1",
+      "default": "orgrebase.oac-source-admission-approval.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_admission_receipt": {
+      "additionalProperties": true,
+      "title": "Source Admission Receipt",
+      "type": "object"
+    }
+  },
+  "required": [
+    "adaptation_run_id",
+    "command_id",
+    "actor_id",
+    "candidate_digest",
+    "owner_review_summary_digest",
+    "acknowledgements",
+    "review_gate_digest",
+    "review_gate",
+    "approved_at_epoch_ms",
+    "approved_at",
+    "source_admission_receipt",
+    "public_validation"
+  ],
+  "title": "OACSourceAdmissionApproval",
+  "type": "object"
+}

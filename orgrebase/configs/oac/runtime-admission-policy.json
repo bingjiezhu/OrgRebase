@@ -1,0 +1,70 @@
+{
+  "allowed_governance_refs": [
+    "policy:oac-shadow-zero-effect"
+  ],
+  "allowed_handler_bindings": [
+    {
+      "capability_ref": "capability:assess_dependency_impact",
+      "evidence_output_refs": [
+        "impact_assessment"
+      ],
+      "handler_digest": "sha256:c5f1050d71e6bdac3eb749b18c3dfe48fa746c0516206a4a29921725537fb033",
+      "handler_ref": "urn:oac:zero-effect-handler:assess_dependency_impact",
+      "obligation_type": "assess_dependency_impact"
+    },
+    {
+      "capability_ref": "capability:commercial-switch-review",
+      "evidence_output_refs": [
+        "evidence:commercial-switch-review"
+      ],
+      "handler_digest": "sha256:7e99eef23dc1a5e294c7d50b43d6877b5d6c066f9751dd9f17bb0ae7c7b719c5",
+      "handler_ref": "urn:oac:zero-effect-handler:commercial-switch-review",
+      "obligation_type": "commercial-switch-review"
+    },
+    {
+      "capability_ref": "capability:continuity-option-selection",
+      "evidence_output_refs": [
+        "evidence:selected-continuity-option"
+      ],
+      "handler_digest": "sha256:b75ca65c633035ad592a546ee2d1eab7dc4e35f1adead1624ba62741e4973c64",
+      "handler_ref": "urn:oac:zero-effect-handler:continuity-option-selection",
+      "obligation_type": "continuity-option-selection"
+    },
+    {
+      "capability_ref": "capability:qualification-evidence-check",
+      "evidence_output_refs": [
+        "evidence:approved-qualification-record"
+      ],
+      "handler_digest": "sha256:722c37b1d332710c9dcfca5f642be6fc847f9dcb37337a0aa8c90ba44b6be409",
+      "handler_ref": "urn:oac:zero-effect-handler:qualification-evidence-check",
+      "obligation_type": "qualification-evidence-check"
+    }
+  ],
+  "allowed_lowering_profiles": [
+    "oac.runtime-lowering/zero-effect/v0.1"
+  ],
+  "allowed_namespaces": [
+    "oac.examples.supplier"
+  ],
+  "allowed_oac_source_fingerprints": {
+    "0.3.0a0": "sha256:62c29ae034dba9a3db500405b315f7c7bce502e718305cb06dbd4758530ae99b"
+  },
+  "approver_by_namespace": {
+    "oac.examples.supplier": "human:runtime-owner"
+  },
+  "max_steps": 16,
+  "plan_commitments_by_case": {
+    "BASE": {
+      "plan_digest": "sha256:cc9948ef3a869b279924ca5f1e0161145aad51b3ea470fa21659fd5ef2176dea",
+      "plan_source": "OAC_REFERENCE_COMPILER"
+    },
+    "SPLIT": {
+      "plan_digest": "sha256:e893ce3e94d2811b8b1a96011998f3be3d815c77eb9b0870e4254588f2cb7a69",
+      "plan_source": "OAC_PUBLIC_VERIFIER_ACCEPTED_FIXTURE"
+    }
+  },
+  "policy_id": "policy:orgrebase-oac-local-runtime-admission",
+  "revision": 6,
+  "runtime_subject_prefix": "runtime-subject:",
+  "schema_version": "orgrebase.oac-runtime-admission-policy.v2"
+}

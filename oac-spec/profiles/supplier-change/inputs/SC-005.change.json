@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-005",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:procurement-owner",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "sourceRefs": ["oac:counterfactual:capacity-reduced"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-005",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "replace", "before": {"state": "known", "value": "operating"}, "after": {"state": "known", "value": "capacity_constrained"}}
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "oac:counterfactual:capacity-reduced",
+    "scopeRefs": ["supplier:forges-martelliere", "production:aero", "production:energy", "alternative:acieries-savoie"],
+    "reason": "test capacity-sensitive obligation differences",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:3a2e2200790ae2f17d0ec6a39d0038b4fe369339c17e3e375bff1b4ae8bb3f54"
+}

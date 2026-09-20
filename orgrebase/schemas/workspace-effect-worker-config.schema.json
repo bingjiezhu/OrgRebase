@@ -1,0 +1,121 @@
+{
+  "$defs": {
+    "DataverseDraftTargetSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "ca_bundle": {
+          "anyOf": [
+            {
+              "maxLength": 4096,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ca Bundle"
+        },
+        "instance_url": {
+          "title": "Instance Url",
+          "type": "string"
+        },
+        "quote_id": {
+          "title": "Quote Id",
+          "type": "string"
+        },
+        "receipt_entity_set": {
+          "default": "orgrebase_effectreceipts",
+          "pattern": "^[a-z][a-z0-9_]{1,100}$",
+          "title": "Receipt Entity Set",
+          "type": "string"
+        },
+        "receipt_primary_key": {
+          "default": "orgrebase_effectreceiptid",
+          "pattern": "^[a-z][a-z0-9_]{1,100}$",
+          "title": "Receipt Primary Key",
+          "type": "string"
+        },
+        "tenant_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "instance_url",
+        "quote_id"
+      ],
+      "title": "DataverseDraftTargetSettings",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-effect-worker-config.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "access_token_variable": {
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$",
+      "title": "Access Token Variable",
+      "type": "string"
+    },
+    "approval_seconds": {
+      "default": 900,
+      "maximum": 900,
+      "minimum": 30,
+      "title": "Approval Seconds",
+      "type": "integer"
+    },
+    "observation_seconds": {
+      "default": 300,
+      "maximum": 900,
+      "minimum": 30,
+      "title": "Observation Seconds",
+      "type": "integer"
+    },
+    "organization_id": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Organization Id"
+    },
+    "owner_id": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "target": {
+      "$ref": "#/$defs/DataverseDraftTargetSettings"
+    },
+    "target_token_variable": {
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$",
+      "title": "Target Token Variable",
+      "type": "string"
+    },
+    "workspace_id": {
+      "default": "default",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "title": "Workspace Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "target",
+    "owner_id",
+    "target_token_variable",
+    "access_token_variable"
+  ],
+  "title": "EffectWorkerConfig",
+  "type": "object"
+}

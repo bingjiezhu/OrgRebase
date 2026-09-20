@@ -1,0 +1,106 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-pattern-candidate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Case Refs",
+      "type": "array"
+    },
+    "certificate_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Certificate Refs",
+      "type": "array"
+    },
+    "corpus_ref": {
+      "title": "Corpus Ref",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "feature_profile_digest": {
+      "title": "Feature Profile Digest",
+      "type": "string"
+    },
+    "feature_root": {
+      "title": "Feature Root",
+      "type": "string"
+    },
+    "feature_values": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Feature Values",
+      "type": "object"
+    },
+    "kind": {
+      "const": "pattern",
+      "default": "pattern",
+      "title": "Kind",
+      "type": "string"
+    },
+    "membership": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "propertyNames": {
+        "enum": [
+          "SUPPORT",
+          "COUNTEREXAMPLE",
+          "NULL",
+          "UNKNOWN"
+        ]
+      },
+      "title": "Membership",
+      "type": "object"
+    },
+    "proposal_ref": {
+      "title": "Proposal Ref",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.pattern-evolution.v1",
+      "default": "orgrebase.pattern-evolution.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "similarity_edges": {
+      "const": 0,
+      "default": 0,
+      "title": "Similarity Edges",
+      "type": "integer"
+    },
+    "status": {
+      "const": "CANDIDATE",
+      "default": "CANDIDATE",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "proposal_ref",
+    "corpus_ref",
+    "feature_profile_digest",
+    "feature_values",
+    "feature_root",
+    "membership",
+    "case_refs",
+    "certificate_refs"
+  ],
+  "title": "PatternCandidate",
+  "type": "object"
+}

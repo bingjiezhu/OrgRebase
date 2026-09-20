@@ -1,0 +1,200 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-003",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-003-liquidation.json"
+    ]
+  },
+  "digest": "sha256:fca96d541c53c20c197527f8e0caca6adbb93b4d3f0b67a9417a8dc08c315ecb",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01",
+      "revision": 1,
+      "digest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-003",
+      "revision": 1,
+      "digest": "sha256:d467554b9b95ab35134e694ac1df555b6e02cee54e0f266f0599302684a8578a"
+    },
+    "observationBoundary": "metadata-derived supplier graph plus declared counterfactual",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-003-liquidation.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "judicial_restructuring->liquidation",
+        "evidenceRefs": [
+          "authority:OAC_PROJECT",
+          "profiles/supplier-change/annotations/SC-003-liquidation.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-a03146b5.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-a03146b5"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-7823658d.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-7823658d"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-66804d3f.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-66804d3f"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.exposure-inventory",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-003-liquidation.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.contract-remedies",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-003-liquidation.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.claim-filing",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-003-liquidation.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.continuity-assessment",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-003-liquidation.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.alternative-qualification",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-003-liquidation.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationTypes": [
+        "exposure-inventory",
+        "contract-remedies",
+        "claim-filing",
+        "continuity-assessment",
+        "alternative-qualification"
+      ],
+      "admissibleRoleRefs": [
+        "role:procurement-owner",
+        "role:legal-reviewer",
+        "role:finance-exposure",
+        "role:operations-continuity",
+        "role:quality-qualification"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:finance-agent",
+        "principal:legal-agent",
+        "principal:operations-agent",
+        "principal:procurement-agent",
+        "principal:quality-agent"
+      ],
+      "forbiddenCombinations": [
+        [
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ]
+      ],
+      "happensBefore": [
+        {
+          "predecessorRef": "exposure-inventory",
+          "successorRef": "claim-filing",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-003"
+          ]
+        },
+        {
+          "predecessorRef": "contract-remedies",
+          "successorRef": "claim-filing",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-003"
+          ]
+        },
+        {
+          "predecessorRef": "alternative-qualification",
+          "successorRef": "continuity-assessment",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-003"
+          ]
+        }
+      ],
+      "evidenceDuties": [
+        "insolvency notice",
+        "claims ledger",
+        "approved continuity option"
+      ],
+      "acceptableUnknownRefs": [
+        "recovery amount"
+      ],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "ACCEPT"
+      ]
+    },
+    "witnessRefs": [],
+    "mutationFamily": "omit-obligation,reverse-order,missing-evidence",
+    "outcomeObservability": "none"
+  }
+}

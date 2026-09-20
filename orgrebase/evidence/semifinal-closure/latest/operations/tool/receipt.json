@@ -1,0 +1,17 @@
+{
+  "attempts": 1,
+  "connector_kind": "TOOL",
+  "digest": "sha256:bd6930602287a3f1639550b3d23d553329c16cd24d54ed9683adb5836b60d349",
+  "endpoint_class": "LOOPBACK_TCP",
+  "etag": null,
+  "evidence_class": "CONTROLLED_LOCAL_REAL_HTTP",
+  "http_status": 200,
+  "id": "http-tool:run:orgrebase:semifinal-closure:quote-001:orgrebase-native-quote-001-gtm-a1",
+  "operation": "READ_DEPENDENCY_EVIDENCE",
+  "request_digest": "sha256:59d0da0de8075eab78d115baa48dff15b6a13eb94370464d66dc1e51d682d071",
+  "response_digest": "sha256:5b520b7f7cf9ef822b33e81f486b5b85a8bce545bcdb2ea99fbe4104bf9700ab",
+  "run_id": "run:orgrebase:semifinal-closure:quote-001",
+  "schema_version": "orgrebase.controlled-http-receipt.v1",
+  "status": "SUCCEEDED",
+  "target_writes": 0
+}

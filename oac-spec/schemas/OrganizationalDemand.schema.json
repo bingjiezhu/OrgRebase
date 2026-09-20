@@ -1,0 +1,288 @@
+{
+  "$defs": {
+    "EffectCeiling": {
+      "enum": [
+        "zero_effect"
+      ],
+      "title": "EffectCeiling",
+      "type": "string"
+    },
+    "OrganizationalDemandSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "accountableRoleRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Accountableroleref",
+          "type": "string"
+        },
+        "constraintRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Constraintrefs",
+          "type": "array"
+        },
+        "desiredOutcomeRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Desiredoutcomerefs",
+          "type": "array"
+        },
+        "effectCeiling": {
+          "$ref": "#/$defs/EffectCeiling",
+          "default": "zero_effect"
+        },
+        "evidenceObligationRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Evidenceobligationrefs",
+          "type": "array"
+        },
+        "objective": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Objective",
+          "type": "string"
+        },
+        "priority": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Priority",
+          "type": "integer"
+        },
+        "requesterPrincipalRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Requesterprincipalref",
+          "type": "string"
+        },
+        "snapshotRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "subjectRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Subjectrefs",
+          "type": "array"
+        },
+        "triggerRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Triggerrefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "snapshotRef",
+        "requesterPrincipalRef",
+        "accountableRoleRef",
+        "objective",
+        "subjectRefs",
+        "triggerRefs",
+        "desiredOutcomeRefs",
+        "evidenceObligationRefs"
+      ],
+      "title": "OrganizationalDemandSpec",
+      "type": "object"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/OrganizationalDemand.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "OrganizationalDemand",
+      "default": "OrganizationalDemand",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/OrganizationalDemandSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "OrganizationalDemand",
+  "type": "object"
+}

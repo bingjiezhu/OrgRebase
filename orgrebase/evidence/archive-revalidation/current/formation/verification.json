@@ -1,0 +1,35 @@
+{
+  "actual_domain_ids": [
+    "legal",
+    "product"
+  ],
+  "actual_task_ids": [
+    "at-domain-legal-a3f56c48b0c5",
+    "at-domain-product-f0e5afba2159",
+    "at-reviewer-barrier-7e3227d5ab73"
+  ],
+  "agentteams_actions": 20,
+  "candidate_only": true,
+  "canonical_target_writes": 0,
+  "claim_boundary": "PINNED_IN_PROCESS_TEAMHARNESS_DYNAMIC_TOPOLOGY_NOT_LIVE_WORKER_OR_BUSINESS_ADMISSION",
+  "digest": "sha256:fbde5b59d07cdfbf7cffa360eaedae6d641785dfa3cdf7f3cfced24282408478",
+  "domain_task_count": 2,
+  "evidence_class": "CONTROLLED_LOCAL_FORMATION_COMPILED_AGENTTEAMS",
+  "execution_plan_digest": "sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e",
+  "planned_domain_ids": [
+    "legal",
+    "product"
+  ],
+  "project_terminal_state": "completed",
+  "reviewer_task_count": 1,
+  "run_id": "run:formation-recheck:f256f60b26e54dd7802677eecfc395cd",
+  "selected_domain_ids": [
+    "legal",
+    "product"
+  ],
+  "status": "PASS",
+  "task_binding_count": 3,
+  "topology_match": true,
+  "verification_strength": "PINNED_CHECKOUT_REPLAY",
+  "verified_receipt_digest": "sha256:610eaec366c83cf8f15e381115e9cc3138a43efa96a839e16f68806ba2935209"
+}

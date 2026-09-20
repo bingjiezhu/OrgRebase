@@ -1,0 +1,36 @@
+{
+  "digest": "sha256:c21edbc6527870eb3c4a9c48aa3a8e7a875c30bbccde89c956c07da5fa99db48",
+  "schema_version": "orgrebase.outcome-lab.oracle.v1",
+  "authority": "scripted:evaluator:public-task-db",
+  "policy_source_digest": "sha256:ff5fdff0aeddfcc34b523972e1f1235451eccc409897ed7b52922ee8d27c20dc",
+  "expected": {
+    "/orders/#W5056519/status": "cancelled",
+    "/orders/#W5056519/cancel_reason": "ordered by mistake",
+    "/orders/#W5056519/payment_history": [
+      {
+        "transaction_type": "payment",
+        "amount": 243.62,
+        "payment_method_id": "credit_card_3095586"
+      },
+      {
+        "transaction_type": "refund",
+        "amount": 243.62,
+        "payment_method_id": "credit_card_3095586"
+      }
+    ],
+    "/orders/#W5995614/status": "cancelled",
+    "/orders/#W5995614/cancel_reason": "ordered by mistake",
+    "/orders/#W5995614/payment_history": [
+      {
+        "transaction_type": "payment",
+        "amount": 1074.31,
+        "payment_method_id": "credit_card_3095586"
+      },
+      {
+        "transaction_type": "refund",
+        "amount": 1074.31,
+        "payment_method_id": "credit_card_3095586"
+      }
+    ]
+  }
+}

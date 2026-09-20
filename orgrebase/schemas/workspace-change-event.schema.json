@@ -1,0 +1,212 @@
+{
+  "$defs": {
+    "CoverageBasis": {
+      "enum": [
+        "RUNTIME_OBSERVED",
+        "OWNER_DECLARED_COMPLETE",
+        "CONTRACT_DECLARED",
+        "IMPORTED_VERIFIED",
+        "AGENT_INFERRED",
+        "UNKNOWN_COVERAGE"
+      ],
+      "title": "CoverageBasis",
+      "type": "string"
+    },
+    "ObjectState": {
+      "enum": [
+        "PROPOSED",
+        "CURRENT",
+        "SUPERSEDED",
+        "STALE",
+        "REVIEW_REQUIRED",
+        "REBASE_REQUIRED",
+        "ROLLED_BACK_PENDING_REBASE",
+        "REQUALIFICATION_REQUIRED",
+        "SHADOW",
+        "CANARY",
+        "ACTIVE",
+        "QUARANTINED"
+      ],
+      "title": "ObjectState",
+      "type": "string"
+    },
+    "VersionedObject": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_purposes": {
+          "default": [
+            "change_rebase"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Purposes",
+          "type": "array"
+        },
+        "coverage_basis": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/CoverageBasis"
+          },
+          "title": "Coverage Basis",
+          "type": "array"
+        },
+        "coverage_complete": {
+          "default": false,
+          "title": "Coverage Complete",
+          "type": "boolean"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "domain": {
+          "title": "Domain",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+        },
+        "sensitivity": {
+          "default": "INTERNAL",
+          "title": "Sensitivity",
+          "type": "string"
+        },
+        "source_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "state": {
+          "$ref": "#/$defs/ObjectState"
+        },
+        "valid_from": {
+          "default": "2026-08-14T00:00:00Z",
+          "title": "Valid From",
+          "type": "string"
+        },
+        "valid_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid To"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "kind",
+        "label",
+        "domain",
+        "state"
+      ],
+      "title": "VersionedObject",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-change-event.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One immutable source proposal, conditional on an exact current version.",
+  "properties": {
+    "base_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Base Digest",
+      "type": "string"
+    },
+    "base_version": {
+      "minLength": 1,
+      "title": "Base Version",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "event_id": {
+      "maxLength": 160,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "occurred_at": {
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "operation": {
+      "default": "UPDATE",
+      "enum": [
+        "UPDATE",
+        "READMIT"
+      ],
+      "title": "Operation",
+      "type": "string"
+    },
+    "organization_id": {
+      "minLength": 1,
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "owner_id": {
+      "minLength": 1,
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "proposal": {
+      "$ref": "#/$defs/VersionedObject"
+    },
+    "purpose": {
+      "const": "change_rebase",
+      "default": "change_rebase",
+      "title": "Purpose",
+      "type": "string"
+    },
+    "slot_id": {
+      "minLength": 1,
+      "title": "Slot Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "organization_id",
+    "slot_id",
+    "owner_id",
+    "base_version",
+    "base_digest",
+    "proposal",
+    "occurred_at"
+  ],
+  "title": "ChangeEvent",
+  "type": "object"
+}

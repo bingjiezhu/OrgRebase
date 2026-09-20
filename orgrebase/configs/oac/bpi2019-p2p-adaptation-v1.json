@@ -1,0 +1,64 @@
+{
+  "schema_version": "orgrebase.oac-public-real-process-adaptation-config.v1",
+  "profile_id": "bpi2019-p2p-oac-adaptation-v1",
+  "dataset_manifest_digest": "sha256:fc2128e3c84dcb33a9370057fd6122eafe8af2a8a10f41258048a4a3f081d1f2",
+  "projection_digest": "sha256:bb705b4e5f6d568b533ae99f1dfd33e0f536bea3c3d90d1ae0715c66a0e9518c",
+  "claim_ceiling": "PUBLIC_REAL_DATA_OAC_MAPPING_AND_TYPED_SCOPE_EXECUTION",
+  "mappings": [
+    {
+      "source_path": "projection.data_domain",
+      "target_oac_path": "OrganizationSnapshot.spec.knowledgeDomains[].domainType",
+      "semantic": "PURCHASE_TO_PAY_DOMAIN"
+    },
+    {
+      "source_path": "projection.queries[].source_system_ref",
+      "target_oac_path": "OrganizationSnapshot.spec.knowledgeDomains[].sourceSystemRefs",
+      "semantic": "OBSERVED_SOURCE_SYSTEM_REFERENCE"
+    },
+    {
+      "source_path": "projection.queries[].change_event.event_ref",
+      "target_oac_path": "OrganizationalDemand.spec.changeInputs[].sourceEventRef",
+      "semantic": "OBSERVED_CHANGE_EVENT"
+    },
+    {
+      "source_path": "projection.queries[].vendor_ref",
+      "target_oac_path": "OrganizationalDemand.spec.scopeSelectors.vendorRef",
+      "semantic": "CANDIDATE_UNIVERSE_PARTITION"
+    },
+    {
+      "source_path": "projection.queries[].purchase_document_ref",
+      "target_oac_path": "OrganizationalDemand.spec.scopeSelectors.purchaseDocumentRef",
+      "semantic": "TYPED_DOCUMENT_SCOPE"
+    },
+    {
+      "source_path": "projection.queries[].item_ref",
+      "target_oac_path": "OrganizationalDemand.spec.scopeSelectors.itemRef",
+      "semantic": "TYPED_ITEM_SCOPE"
+    },
+    {
+      "source_path": "projection.queries[].window_end",
+      "target_oac_path": "OrganizationalDemand.spec.scopeSelectors.windowEnd",
+      "semantic": "BOUNDED_TIME_SCOPE"
+    },
+    {
+      "source_path": "projection.task_contract.downstream_event_types",
+      "target_oac_path": "OrganizationalDemand.spec.evidenceObligations[].requiredEventTypes",
+      "semantic": "TASK_DEFINED_EVIDENCE_FAMILIES"
+    }
+  ],
+  "typed_scope_keys": [
+    "vendor_ref",
+    "purchase_document_ref",
+    "item_ref",
+    "window_end"
+  ],
+  "unknown_dimensions": [
+    "ORGANIZATION_VALUES",
+    "REAL_RESPONSIBLE_OWNERS",
+    "PERMISSIONS",
+    "APPROVAL_AUTHORITIES"
+  ],
+  "human_supplement_policy": "REQUIRED_BEFORE_ANY_REAL_ORGANIZATIONAL_AUTHORITY_OR_EFFECT",
+  "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+  "digest": "sha256:4ac668d453bc3e624ec05af34f8ba20df21c61839002ce17447aa621a31b51d5"
+}

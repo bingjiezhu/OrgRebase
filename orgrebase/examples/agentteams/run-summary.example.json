@@ -1,0 +1,86 @@
+{
+  "schema_version": "orgrebase.goai-agentteams-output-example.v1",
+  "classification": "ILLUSTRATIVE_PROJECTION_NOT_RUNTIME_EVIDENCE",
+  "produced_by": "./run-agentteams-demo.sh",
+  "runtime_evidence_path": "evidence/goai-agentteams/latest/run-summary.json",
+  "status": "PASS",
+  "execution_profile": "LOCAL_DETERMINISTIC_REFERENCE",
+  "run_classification": {
+    "evidence_class": "LOCAL_DETERMINISTIC_REFERENCE",
+    "semantic_acceptance": "REFERENCE_FIXTURE_ONLY",
+    "autonomous_collaboration": false,
+    "current_workspace_live": "NOT_RUN"
+  },
+  "agent_collaboration": {
+    "agent_count": 5,
+    "agents": [
+      "change-coordinator",
+      "product-steward",
+      "legal-steward",
+      "gtm-steward",
+      "skill-curator"
+    ],
+    "structured_handoffs": 5,
+    "candidate_only": true,
+    "coordination_status": "PASS"
+  },
+  "tool_call": {
+    "count": 1,
+    "tool_refs": [
+      "tool:dependency-evidence@1.0.0"
+    ],
+    "statuses": [
+      "SUCCEEDED"
+    ]
+  },
+  "output": {
+    "rebase_status": "COMPLETED",
+    "approval_actor_id": "human:change-approver",
+    "work_items_rebased": 2,
+    "unauthorized_disclosures": 0,
+    "false_invalidations": 0,
+    "skill_candidate_state": "CANARY"
+  },
+  "exception_and_recovery": {
+    "authority_conflict": "RESOLVED_CANDIDATE_ONLY",
+    "expired_preview": {
+      "status": "REJECTED_BEFORE_WRITE",
+      "error_code": "PREVIEW_EXPIRED",
+      "target_writes": 0
+    },
+    "rollback": {
+      "status": "ROLLED_BACK_PENDING_REBASE",
+      "authoritative_claims_changed": 0,
+      "work_items_compensated": 2
+    }
+  },
+  "historical_agentteams_transport": {
+    "evidence_class": "TRANSPORT_ONLY",
+    "status": "TRANSPORT_ONLY",
+    "semantic_acceptance": "NOT_ESTABLISHED",
+    "autonomous_collaboration": false,
+    "current_workspace_live": "NOT_RUN"
+  },
+  "frozen_live_agentteams_receipt": {
+    "evidence_class": "TRANSPORT_ONLY",
+    "status": "TRANSPORT_ONLY",
+    "semantic_acceptance": "NOT_ESTABLISHED",
+    "autonomous_collaboration": false,
+    "current_workspace_live": "NOT_RUN"
+  },
+  "fresh_core_agentteams_evidence": {
+    "evidence_class": "LIVE_AGENTTEAMS",
+    "scope_evidence_class": "LIVE_AGENTTEAMS_CORE_PROPOSAL_PLANE",
+    "worker_count": 5,
+    "successful_provider_executions": 4,
+    "candidate_artifacts": 4,
+    "semantic_ingestion": {
+      "evaluated": 4,
+      "advisory_accepted": 4,
+      "rejected": 0,
+      "target_writes": 0
+    },
+    "current_workspace_live": "NOT_RUN",
+    "oac_runtime_bridge": "NOT_USED_IN_THIS_RUN"
+  }
+}

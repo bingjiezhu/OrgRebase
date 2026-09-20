@@ -1,0 +1,95 @@
+{
+  "caseVersion": "1.0",
+  "caseId": "SC-001",
+  "title": "Judicial restructuring with cross-entity exposure",
+  "profile": "supplier-change/v0alpha1",
+  "annotationStatus": "exploratory",
+  "annotationProvenance": {
+    "authorClass": "project-authored-candidate",
+    "independentHumanRounds": 0,
+    "adjudicated": false,
+    "mayBeCalledGold": false
+  },
+  "sourceLabels": {
+    "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+    "recordRef": "PROC-01",
+    "labelSetRef": "../source-labels/edith-proc-01.json",
+    "answerKeyGroundTruthEmpty": true,
+    "documentRefs": [
+      "DOC-50e34f02",
+      "DOC-1ceffca1",
+      "DOC-9eff55b9",
+      "DOC-46b05445",
+      "DOC-a03146b5",
+      "DOC-fe8b3af2",
+      "DOC-7823658d",
+      "DOC-29949d76",
+      "DOC-9f36186f",
+      "DOC-66804d3f"
+    ],
+    "claimLimit": "Upstream labels establish task-relative document classes only."
+  },
+  "counterfactual": {
+    "type": "source-premise",
+    "factor": "supplier.status",
+    "before": "operating",
+    "after": "judicial_restructuring",
+    "assertedBy": "EDITH_PROC_01_QUESTION",
+    "notUpstreamOacGroundTruth": true
+  },
+  "frozenInputs": {
+    "snapshotRef": "../inputs/veracier-proc01.snapshot.json",
+    "changeRef": "../inputs/SC-001.change.json",
+    "observationBoundary": "PROC-01 metadata and admitted profile fixture; PDF bodies not retrieved"
+  },
+  "candidateConstraints": {
+    "requiredObligationTypes": [
+      "exposure-inventory",
+      "contract-remedies",
+      "financial-exposure",
+      "continuity-assessment",
+      "alternative-qualification"
+    ],
+    "admissibleRoleRefs": [
+      "role:procurement-owner",
+      "role:legal-reviewer",
+      "role:finance-exposure",
+      "role:operations-continuity",
+      "role:quality-qualification"
+    ],
+    "separation": [
+      ["role:procurement-owner", "role:quality-qualification"]
+    ],
+    "happensBefore": [
+      ["exposure-inventory", "financial-exposure"],
+      ["exposure-inventory", "continuity-assessment"],
+      ["alternative-qualification", "continuity-assessment"]
+    ],
+    "evidenceDuties": [
+      "supplier orders by entity",
+      "insolvency clause review",
+      "exposure calculation",
+      "production impact",
+      "alternative qualification status"
+    ],
+    "acceptableUnknown": ["PDF clause interpretation not observable in metadata-only mode"],
+    "candidateOnly": true
+  },
+  "witnessRefs": [
+    "../witnesses/SC-001-witness-a.plan.json",
+    "../witnesses/SC-001-witness-b.plan.json"
+  ],
+  "mutationFamilies": [
+    "omit-obligation",
+    "self-review",
+    "reverse-order",
+    "missing-evidence",
+    "redundant-role",
+    "input-root-mismatch"
+  ],
+  "outcomeObservability": {
+    "fromEdith": "not_observable",
+    "fromEnterpriseOpsGym": "not_mapped",
+    "executed": false
+  }
+}

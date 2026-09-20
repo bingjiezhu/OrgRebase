@@ -1,0 +1,21 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:veracier-supplier-shadow@r2",
+  "organization_id": "org:veracier",
+  "component_kind": "DEPENDENCY",
+  "revision": "r2",
+  "runtime_binding_mode": "INTAKE_ONLY",
+  "projection": {
+    "declared_dependencies": ["alternative:acieries-savoie.status"],
+    "demand_ref": "demand:SC-008",
+    "change_ref": "change:SC-008",
+    "status_transition": {
+      "before": "qualification_in_progress",
+      "after": "qualified"
+    },
+    "historical_outcome_baseline": "MISSING",
+    "open_gap_ref": "gap:veracier:historical-outcome-baseline",
+    "outcome_assurance": "BLOCKED"
+  },
+  "projection_digest": "sha256:4218d4cf72c1b911f9744c3011907299ccc758ffa608a0a93f6b041b1519f247"
+}

@@ -1,0 +1,76 @@
+.DS_Store
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tmp/
+.runtime/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.sqlite
+*.sqlite3
+# Exact governed-semifinal databases are content-addressed publication
+# artifacts required by the independent stdlib verifier.  All other local
+# runtime databases remain ignored.
+!evidence/semifinal-governed/latest/runtime/runtime-journal.sqlite
+!evidence/semifinal-governed/latest/runtime/workspace.sqlite
+# Exact synthetic Spec 045 publication databases are verifier-bound release
+# artifacts, not local runtime state.  No other database path is allowlisted.
+!evidence/semifinal-closure/latest/operations/observability/telemetry.sqlite
+!evidence/semifinal-closure/latest/operations/operations/canonical-state.sqlite
+!evidence/semifinal-closure/latest/operations/operations/canonical-state.backup.sqlite
+!evidence/semifinal-closure/latest/operations/operations/canonical-state.restored.sqlite
+# Exact Spec 054 Pilot publication databases are independently replayed by
+# verify_enterprise_quote_pilot.py.  Local Pilot state anywhere else remains
+# ignored.
+!evidence/enterprise-quote-pilot/latest/run/workspace.sqlite3
+!evidence/enterprise-quote-pilot/latest/run/evidence/workspace.backup.sqlite3
+!evidence/enterprise-quote-pilot/latest/run/evidence/workspace.restored.sqlite3
+*.db-shm
+*.db-wal
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite3-shm
+*.sqlite3-wal
+node_modules/
+dist/
+build/
+/artifacts/
+/tmp/
+/submission/
+/docs/specs/
+/docs/待做/
+/docs/recursive-improvement/
+/docs/deliverables/
+
+# Local env and secrets
+.env
+.env.*
+!.env.example
+
+# Editor directories
+.vscode/
+.idea/
+.orgrebase/
+
+# Runtime evidence that must never be published
+evidence/**/git-tool-repo/
+evidence/agentteams/live-receipt.json
+evidence/agentteams/candidate-ingestion-receipt.json
+evidence/agentteams/preflight.json
+evidence/agentteams/vertex-provider-probe.json
+evidence/agentteams/nonce-ledger.json
+evidence/agentteams/live-sources/
+evidence/**/archive/
+evidence/**/failed/
+evidence/ui-final-audit/
+
+# Optional documentation build environment (not runtime dependencies)
+/documentation/.venv/
+/documentation/__pycache__/
+/site/

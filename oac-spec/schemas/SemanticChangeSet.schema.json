@@ -1,0 +1,342 @@
+{
+  "$defs": {
+    "AdmissionStatus": {
+      "enum": [
+        "admitted",
+        "candidate",
+        "disputed",
+        "retracted"
+      ],
+      "title": "AdmissionStatus",
+      "type": "string"
+    },
+    "ChangeDelta": {
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "$ref": "#/$defs/ObservedValue"
+        },
+        "afterVersion": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Afterversion"
+        },
+        "before": {
+          "$ref": "#/$defs/ObservedValue"
+        },
+        "beforeVersion": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Beforeversion"
+        },
+        "operation": {
+          "enum": [
+            "add",
+            "remove",
+            "replace",
+            "invalidate",
+            "unknown_transition"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^/.*",
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "operation",
+        "before",
+        "after"
+      ],
+      "title": "ChangeDelta",
+      "type": "object"
+    },
+    "ObservedScalar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "boolean"
+        }
+      ]
+    },
+    "ObservedValue": {
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "enum": [
+            "known",
+            "unknown",
+            "not_observable",
+            "not_applicable"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ObservedScalar"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "state"
+      ],
+      "title": "ObservedValue",
+      "type": "object"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "SemanticChangeSetSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionStatus": {
+          "$ref": "#/$defs/AdmissionStatus"
+        },
+        "deltas": {
+          "items": {
+            "$ref": "#/$defs/ChangeDelta"
+          },
+          "minItems": 1,
+          "title": "Deltas",
+          "type": "array"
+        },
+        "demandRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Demandref",
+          "type": "string"
+        },
+        "effectiveAt": {
+          "format": "date-time",
+          "title": "Effectiveat",
+          "type": "string"
+        },
+        "observedAt": {
+          "format": "date-time",
+          "title": "Observedat",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "scopeRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Scoperefs",
+          "type": "array"
+        },
+        "semanticType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Semantictype",
+          "type": "string"
+        },
+        "sourceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Sourceref",
+          "type": "string"
+        },
+        "subjectRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Subjectref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "demandRef",
+        "subjectRef",
+        "semanticType",
+        "deltas",
+        "observedAt",
+        "effectiveAt",
+        "sourceRef",
+        "scopeRefs",
+        "reason",
+        "admissionStatus"
+      ],
+      "title": "SemanticChangeSetSpec",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/SemanticChangeSet.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "SemanticChangeSet",
+      "default": "SemanticChangeSet",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/SemanticChangeSetSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "SemanticChangeSet",
+  "type": "object"
+}

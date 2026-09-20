@@ -1,0 +1,41 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "entries": [
+    {
+      "legacyNormalization": {},
+      "operators": [
+        "semanticType",
+        "afterState",
+        "afterValues",
+        "subjectSelector.subjectRefs",
+        "subjectSelector.nodeTypes",
+        "subjectSelector.domainRefs",
+        "scopeSelector.refs",
+        "scopeSelector.matchMode",
+        "scopeSelector.missingBehavior",
+        "relationTypes"
+      ],
+      "predicateVersion": "oac.supplier.applicability/v0.2",
+      "status": "current",
+      "truthAlgebra": "strong_kleene",
+      "wireType": "ContextualApplicabilityPredicate"
+    },
+    {
+      "legacyNormalization": {
+        "afterState": "known",
+        "relationTypes": [],
+        "scopeSelector": "absent",
+        "subjectSelector": "absent"
+      },
+      "operators": [
+        "semanticType",
+        "afterValues"
+      ],
+      "predicateVersion": "oac.supplier.transfer/v0alpha1",
+      "status": "legacy_supported",
+      "truthAlgebra": "strong_kleene",
+      "wireType": "TransferPredicate"
+    }
+  ],
+  "registryKind": "PredicateVersionRegistry"
+}

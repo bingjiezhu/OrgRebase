@@ -1,0 +1,14 @@
+{
+  "profile": "oac.evolution.minimum/v0.1",
+  "mutations": [
+    {"id":"duplicate-execution-evidence","expectedReason":"EVOLUTION_DUPLICATE_REF"},
+    {"id":"cross-namespace-root","expectedReason":"EVOLUTION_NAMESPACE_MISMATCH"},
+    {"id":"forged-outcome-root","expectedReason":"EVOLUTION_ROOT_MISMATCH"},
+    {"id":"runtime-self-certification","expectedReason":"OUTCOME_SELF_CERTIFICATION_FORBIDDEN"},
+    {"id":"completed-but-forbidden-effect","expectedVerdict":"REJECT"},
+    {"id":"unobservable-required-outcome","expectedVerdict":"UNKNOWN"},
+    {"id":"proposer-reviewer-collision","expectedReason":"EVOLUTION_SELF_ADMISSION_FORBIDDEN"},
+    {"id":"successor-predecessor-drift","expectedReason":"SUCCESSOR_PREDECESSOR_MISMATCH"},
+    {"id":"automatic-promotion","expectedReason":"EVOLUTION_AUTO_PROMOTION_FORBIDDEN"}
+  ]
+}

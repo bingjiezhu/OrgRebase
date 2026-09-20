@@ -1,0 +1,220 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "digest": "sha256:876e777108beb6d46a842c1f47a7a633256ed77029111d738fd4f898a57aea1c",
+  "kind": "PlanCertificate",
+  "metadata": {
+    "createdAt": "2026-09-10T00:00:00Z",
+    "effectiveFrom": "2026-09-10T00:00:00Z",
+    "effectiveTo": null,
+    "governanceRef": "governance:local-lab",
+    "id": "urn:oac:mvp:plan-certificate:urn:oac:change-plan:2238581f84f2e2d2980e3e21d4143b4cad54d2216a78e0e879ac62c5856ea491:12861e2957b302302c8a5b5882901acf11b0cc7362396d5cfa70aa6249f558a7:9c6e4ea4469944992f785cbfbd35a8e94daece00cf713a6646f88b247a314129",
+    "namespace": "orgrebase.lab.retail",
+    "ownerRef": "role:review",
+    "revision": 1,
+    "sourceRefs": [
+      "urn:oac:change-plan:2238581f84f2e2d2980e3e21d4143b4cad54d2216a78e0e879ac62c5856ea491:12861e2957b302302c8a5b5882901acf11b0cc7362396d5cfa70aa6249f558a7:9c6e4ea4469944992f785cbfbd35a8e94daece00cf713a6646f88b247a314129",
+      "snapshot:retail-113",
+      "change:retail-113"
+    ]
+  },
+  "spec": {
+    "certifierBuild": "0.3.0a0",
+    "certifierId": "oac.reference.plan-verifier",
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:9c6e4ea4469944992f785cbfbd35a8e94daece00cf713a6646f88b247a314129",
+      "kind": "SemanticChangeSet",
+      "namespace": "orgrebase.lab.retail",
+      "resourceId": "change:retail-113",
+      "revision": 1
+    },
+    "dimensions": [
+      {
+        "name": "integrity",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "profile_binding",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "input_roots",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "resource_coherence",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "applicability_evaluations",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "impact_paths",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "unknown_transition_duties",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "obligations",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "unknown_transition_duty_obligations",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "unknown_preservation",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "root_applicability",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "plan_status",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "coverage",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "responsibility_binding",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "qualification",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "separation_of_duties",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "ordering",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "order_constraints",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "order_acyclic",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "evidence",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "effect_ceiling",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "minimality",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      },
+      {
+        "name": "consideration_ledger",
+        "reasonCodes": [],
+        "verdict": "PASS",
+        "witnesses": [],
+        "witnessesOmitted": 0
+      }
+    ],
+    "profileBinding": {
+      "profileDigest": "sha256:2238581f84f2e2d2980e3e21d4143b4cad54d2216a78e0e879ac62c5856ea491",
+      "profileId": "oac.retail.cancellation-review",
+      "profileVersion": "v0.1"
+    },
+    "reasonCodes": [],
+    "restrictions": [],
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:12861e2957b302302c8a5b5882901acf11b0cc7362396d5cfa70aa6249f558a7",
+      "kind": "OrganizationSnapshot",
+      "namespace": "orgrebase.lab.retail",
+      "resourceId": "snapshot:retail-113",
+      "revision": 1
+    },
+    "subjectPlanRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "digest": "sha256:d0bb58fb7231df43c7eb248494669e538998fde59dc270f390ae5c11fe4f14ce",
+      "kind": "OrganizationPlan",
+      "namespace": "orgrebase.lab.retail",
+      "resourceId": "urn:oac:change-plan:2238581f84f2e2d2980e3e21d4143b4cad54d2216a78e0e879ac62c5856ea491:12861e2957b302302c8a5b5882901acf11b0cc7362396d5cfa70aa6249f558a7:9c6e4ea4469944992f785cbfbd35a8e94daece00cf713a6646f88b247a314129",
+      "revision": 1
+    },
+    "unresolvedRefs": [],
+    "verdict": "ACCEPT"
+  }
+}

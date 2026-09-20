@@ -1,0 +1,445 @@
+{
+  "$defs": {
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "RuntimeStepHandlerBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "capabilityRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Capabilityref",
+          "type": "string"
+        },
+        "effectCeiling": {
+          "const": "zero_effect",
+          "title": "Effectceiling",
+          "type": "string"
+        },
+        "evidenceOutputRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidenceoutputrefs",
+          "type": "array"
+        },
+        "handlerDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Handlerdigest",
+          "type": "string"
+        },
+        "handlerRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Handlerref",
+          "type": "string"
+        },
+        "obligationRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationref",
+          "type": "string"
+        },
+        "obligationType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationtype",
+          "type": "string"
+        }
+      },
+      "required": [
+        "obligationRef",
+        "obligationType",
+        "handlerRef",
+        "handlerDigest",
+        "capabilityRef",
+        "evidenceOutputRefs",
+        "effectCeiling"
+      ],
+      "title": "RuntimeStepHandlerBinding",
+      "type": "object"
+    },
+    "RuntimeStepRoleBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "principalRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Principalref",
+          "type": "string"
+        },
+        "roleInstanceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Roleinstanceref",
+          "type": "string"
+        },
+        "runtimeSubject": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Runtimesubject",
+          "type": "string"
+        }
+      },
+      "required": [
+        "roleInstanceRef",
+        "principalRef",
+        "runtimeSubject"
+      ],
+      "title": "RuntimeStepRoleBinding",
+      "type": "object"
+    },
+    "ZeroEffectRuntimeBundleSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "certificateRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "changeRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "effectCeiling": {
+          "const": "zero_effect",
+          "title": "Effectceiling",
+          "type": "string"
+        },
+        "loweringProfile": {
+          "const": "oac.runtime-lowering/zero-effect/v0.1",
+          "title": "Loweringprofile",
+          "type": "string"
+        },
+        "obligationContractDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Obligationcontractdigest",
+          "type": "string"
+        },
+        "requiresRuntimeAdmission": {
+          "const": true,
+          "title": "Requiresruntimeadmission",
+          "type": "boolean"
+        },
+        "runtimeBindingRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "snapshotRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/ZeroEffectRuntimeStep"
+          },
+          "minItems": 1,
+          "title": "Steps",
+          "type": "array"
+        },
+        "subjectPlanRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "targetWrites": {
+          "const": 0,
+          "title": "Targetwrites",
+          "type": "integer"
+        },
+        "topologyDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Topologydigest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshotRef",
+        "changeRef",
+        "subjectPlanRef",
+        "certificateRef",
+        "runtimeBindingRef",
+        "loweringProfile",
+        "obligationContractDigest",
+        "topologyDigest",
+        "steps",
+        "effectCeiling",
+        "targetWrites",
+        "requiresRuntimeAdmission"
+      ],
+      "title": "ZeroEffectRuntimeBundleSpec",
+      "type": "object"
+    },
+    "ZeroEffectRuntimeStep": {
+      "additionalProperties": false,
+      "properties": {
+        "accountable": {
+          "$ref": "#/$defs/RuntimeStepRoleBinding"
+        },
+        "effectCeiling": {
+          "const": "zero_effect",
+          "title": "Effectceiling",
+          "type": "string"
+        },
+        "evidenceOutputRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidenceoutputrefs",
+          "type": "array"
+        },
+        "handlerBindings": {
+          "items": {
+            "$ref": "#/$defs/RuntimeStepHandlerBinding"
+          },
+          "minItems": 1,
+          "title": "Handlerbindings",
+          "type": "array"
+        },
+        "obligationRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Obligationrefs",
+          "type": "array"
+        },
+        "predecessorRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Predecessorrefs",
+          "type": "array"
+        },
+        "roleBindings": {
+          "items": {
+            "$ref": "#/$defs/RuntimeStepRoleBinding"
+          },
+          "minItems": 1,
+          "title": "Rolebindings",
+          "type": "array"
+        },
+        "stepIndex": {
+          "minimum": 0,
+          "title": "Stepindex",
+          "type": "integer"
+        },
+        "targetWrites": {
+          "const": 0,
+          "title": "Targetwrites",
+          "type": "integer"
+        },
+        "workUnitRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Workunitref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "stepIndex",
+        "workUnitRef",
+        "roleBindings",
+        "accountable",
+        "obligationRefs",
+        "handlerBindings",
+        "evidenceOutputRefs",
+        "predecessorRefs",
+        "effectCeiling",
+        "targetWrites"
+      ],
+      "title": "ZeroEffectRuntimeStep",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/ZeroEffectRuntimeBundle.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "ZeroEffectRuntimeBundle",
+      "default": "ZeroEffectRuntimeBundle",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/ZeroEffectRuntimeBundleSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "ZeroEffectRuntimeBundle",
+  "type": "object"
+}

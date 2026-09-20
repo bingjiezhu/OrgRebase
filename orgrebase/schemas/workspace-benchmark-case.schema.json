@@ -1,0 +1,100 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "CONTROLLED_LOCAL_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    },
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-benchmark-case.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "case_type": {
+      "enum": [
+        "FORMATION",
+        "CHANGE",
+        "SECURITY",
+        "REPEATABILITY",
+        "SKILL"
+      ],
+      "title": "Case Type",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        {
+          "enum": [
+            "DESIGN",
+            "LIVE_MODEL",
+            "LOCAL_OLLAMA_MODEL",
+            "USER_STUDY"
+          ],
+          "type": "string"
+        }
+      ],
+      "title": "Evidence Class"
+    },
+    "organization_id": {
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "organization_ref": {
+      "title": "Organization Ref",
+      "type": "string"
+    },
+    "partition": {
+      "title": "Partition",
+      "type": "string"
+    },
+    "public_input": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Public Input",
+      "type": "object"
+    },
+    "schema_version": {
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "seed": {
+      "title": "Seed",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "schema_version",
+    "case_id",
+    "case_type",
+    "evidence_class",
+    "organization_id",
+    "organization_ref",
+    "partition",
+    "public_input",
+    "seed"
+  ],
+  "title": "BenchmarkCase",
+  "type": "object"
+}

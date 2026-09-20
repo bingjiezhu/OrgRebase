@@ -1,0 +1,181 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-005",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-005-capacity-reduced.json"
+    ]
+  },
+  "digest": "sha256:03c39bec65035d605b35f45e4430884ec93138afbd93bc9622f7bfcedd3910c9",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01",
+      "revision": 1,
+      "digest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-005",
+      "revision": 1,
+      "digest": "sha256:3a2e2200790ae2f17d0ec6a39d0038b4fe369339c17e3e375bff1b4ae8bb3f54"
+    },
+    "observationBoundary": "metadata-derived orders and production-impact reference",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-005-capacity-reduced.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "operating->capacity_constrained",
+        "evidenceRefs": [
+          "authority:OAC_PROJECT",
+          "profiles/supplier-change/annotations/SC-005-capacity-reduced.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-9f36186f.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-9f36186f"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-7823658d.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-7823658d"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-50e34f02.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-50e34f02"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-1ceffca1.classification",
+        "value": "AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-1ceffca1"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.allocation-inventory",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-005-capacity-reduced.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.continuity-assessment",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-005-capacity-reduced.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.alternative-qualification",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-005-capacity-reduced.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.financial-exposure",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-005-capacity-reduced.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationTypes": [
+        "allocation-inventory",
+        "continuity-assessment",
+        "alternative-qualification",
+        "financial-exposure"
+      ],
+      "admissibleRoleRefs": [
+        "role:procurement-owner",
+        "role:operations-continuity",
+        "role:quality-qualification",
+        "role:finance-exposure"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:finance-agent",
+        "principal:operations-agent",
+        "principal:procurement-agent",
+        "principal:quality-agent"
+      ],
+      "forbiddenCombinations": [
+        [
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ]
+      ],
+      "happensBefore": [
+        {
+          "predecessorRef": "allocation-inventory",
+          "successorRef": "continuity-assessment",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-005"
+          ]
+        }
+      ],
+      "evidenceDuties": [
+        "capacity allocation",
+        "affected production lines",
+        "qualified alternatives"
+      ],
+      "acceptableUnknownRefs": [
+        "recovery date"
+      ],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "ACCEPT"
+      ]
+    },
+    "witnessRefs": [],
+    "mutationFamily": "omit-obligation,missing-evidence,spurious-impact",
+    "outcomeObservability": "none"
+  }
+}

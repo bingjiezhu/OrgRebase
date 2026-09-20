@@ -1,0 +1,400 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-bound-shadow-execution-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actual_agentteams_domain_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Actual Agentteams Domain Ids",
+      "type": "array"
+    },
+    "activation_binding_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Activation Binding Digest",
+      "type": "string"
+    },
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "adapter_capsule_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Adapter Capsule Digest",
+      "type": "string"
+    },
+    "agent_mapping_receipt_digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Agent Mapping Receipt Digest"
+    },
+    "agentteams_action_count": {
+      "exclusiveMinimum": 0,
+      "title": "Agentteams Action Count",
+      "type": "integer"
+    },
+    "agentteams_action_digests": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Agentteams Action Digests",
+      "type": "array"
+    },
+    "agentteams_execution_plan_digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Agentteams Execution Plan Digest"
+    },
+    "approval_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Approval Digest",
+      "type": "string"
+    },
+    "approval_elapsed_since_not_before_ms": {
+      "minimum": 0,
+      "title": "Approval Elapsed Since Not Before Ms",
+      "type": "integer"
+    },
+    "approval_review_gate_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Approval Review Gate Digest",
+      "type": "string"
+    },
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "claim_boundary": {
+      "const": "OAC_SOURCE_DEMAND_AND_CONTEXT_BOUND_ORGREBASE_CANDIDATE_EXECUTION_NOT_OAC_PLAN_NOT_CANONICAL_APPLY_NOT_PRODUCTION",
+      "default": "OAC_SOURCE_DEMAND_AND_CONTEXT_BOUND_ORGREBASE_CANDIDATE_EXECUTION_NOT_OAC_PLAN_NOT_CANONICAL_APPLY_NOT_PRODUCTION",
+      "title": "Claim Boundary",
+      "type": "string"
+    },
+    "competition_summary_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Competition Summary Digest",
+      "type": "string"
+    },
+    "context_envelope_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Context Envelope Digest",
+      "type": "string"
+    },
+    "context_envelope_ref": {
+      "minLength": 1,
+      "title": "Context Envelope Ref",
+      "type": "string"
+    },
+    "context_freshness_basis": {
+      "enum": [
+        "WALL_CLOCK",
+        "LOGICAL_EVENT_TIME"
+      ],
+      "title": "Context Freshness Basis",
+      "type": "string"
+    },
+    "context_freshness_checked_at": {
+      "minLength": 1,
+      "title": "Context Freshness Checked At",
+      "type": "string"
+    },
+    "context_freshness_checked_at_epoch_ms": {
+      "minimum": 0,
+      "title": "Context Freshness Checked At Epoch Ms",
+      "type": "integer"
+    },
+    "controlled_agentteams_formation_receipt_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Controlled Agentteams Formation Receipt Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "const": "CONTROLLED_LOCAL_OAC_BOUND_SHADOW",
+      "default": "CONTROLLED_LOCAL_OAC_BOUND_SHADOW",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "execution_envelope_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Execution Envelope Digest",
+      "type": "string"
+    },
+    "frozen_golden_baseline": {
+      "additionalProperties": true,
+      "title": "Frozen Golden Baseline",
+      "type": "object"
+    },
+    "frozen_golden_run_id": {
+      "minLength": 1,
+      "title": "Frozen Golden Run Id",
+      "type": "string"
+    },
+    "late_attempt_fencing_reference": {
+      "additionalProperties": true,
+      "title": "Late Attempt Fencing Reference",
+      "type": "object"
+    },
+    "oac_plan_certificate_produced": {
+      "const": false,
+      "default": false,
+      "title": "Oac Plan Certificate Produced",
+      "type": "boolean"
+    },
+    "oac_plan_produced": {
+      "const": false,
+      "default": false,
+      "title": "Oac Plan Produced",
+      "type": "boolean"
+    },
+    "oac_runtime_invoked": {
+      "const": false,
+      "default": false,
+      "title": "Oac Runtime Invoked",
+      "type": "boolean"
+    },
+    "otlp_export_receipt_digests": {
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Otlp Export Receipt Digests",
+      "type": "array"
+    },
+    "otlp_trace_layers": {
+      "items": {
+        "enum": [
+          "SOURCE",
+          "AGENTTEAMS",
+          "TOOL",
+          "SKILL",
+          "TERMINAL"
+        ],
+        "type": "string"
+      },
+      "title": "Otlp Trace Layers",
+      "type": "array"
+    },
+    "output_manifest": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Output Manifest",
+      "type": "object"
+    },
+    "pack_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "pack_file_manifest": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Pack File Manifest",
+      "type": "object"
+    },
+    "pre_execution_binding_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pre Execution Binding Digest",
+      "type": "string"
+    },
+    "prepared_formation_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Prepared Formation Digest",
+      "type": "string"
+    },
+    "production_claimed": {
+      "const": false,
+      "default": false,
+      "title": "Production Claimed",
+      "type": "boolean"
+    },
+    "planned_domain_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Planned Domain Ids",
+      "type": "array"
+    },
+    "profile_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "review_duration_ms": {
+      "minimum": 4000,
+      "title": "Review Duration Ms",
+      "type": "integer"
+    },
+    "review_gate_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Review Gate Digest",
+      "type": "string"
+    },
+    "same_run_layers": {
+      "items": {
+        "enum": [
+          "SOURCE",
+          "CONTEXT",
+          "AGENTTEAMS",
+          "TOOL",
+          "SKILL",
+          "OTLP",
+          "CANDIDATE"
+        ],
+        "type": "string"
+      },
+      "title": "Same Run Layers",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-bound-shadow-execution-receipt.v1",
+      "default": "orgrebase.oac-bound-shadow-execution-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "shadow_execution_run_id": {
+      "minLength": 1,
+      "title": "Shadow Execution Run Id",
+      "type": "string"
+    },
+    "shadow_terminal_status": {
+      "const": "CANDIDATE_PREPARED_FOR_CONTROL_ADMISSION",
+      "default": "CANDIDATE_PREPARED_FOR_CONTROL_ADMISSION",
+      "title": "Shadow Terminal Status",
+      "type": "string"
+    },
+    "skill_invocation_receipt_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Skill Invocation Receipt Digest",
+      "type": "string"
+    },
+    "skill_package_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Skill Package Digest",
+      "type": "string"
+    },
+    "status": {
+      "const": "PASS",
+      "default": "PASS",
+      "title": "Status",
+      "type": "string"
+    },
+    "telemetry_alert_receipt_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Telemetry Alert Receipt Digest",
+      "type": "string"
+    },
+    "telemetry_ingestion_count": {
+      "const": 3,
+      "default": 3,
+      "title": "Telemetry Ingestion Count",
+      "type": "integer"
+    },
+    "telemetry_query_receipt_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Telemetry Query Receipt Digest",
+      "type": "string"
+    },
+    "topology_match": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Topology Match"
+    },
+    "tool_receipt_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Tool Receipt Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adaptation_run_id",
+    "shadow_execution_run_id",
+    "frozen_golden_run_id",
+    "approval_digest",
+    "approval_review_gate_digest",
+    "review_gate_digest",
+    "review_duration_ms",
+    "approval_elapsed_since_not_before_ms",
+    "adapter_capsule_digest",
+    "activation_binding_digest",
+    "context_envelope_ref",
+    "context_envelope_digest",
+    "context_freshness_basis",
+    "context_freshness_checked_at_epoch_ms",
+    "context_freshness_checked_at",
+    "profile_digest",
+    "pack_digest",
+    "pre_execution_binding_digest",
+    "execution_envelope_digest",
+    "competition_summary_digest",
+    "agentteams_action_count",
+    "agentteams_action_digests",
+    "tool_receipt_digest",
+    "skill_package_digest",
+    "skill_invocation_receipt_digest",
+    "prepared_formation_digest",
+    "controlled_agentteams_formation_receipt_digest",
+    "otlp_export_receipt_digests",
+    "telemetry_query_receipt_digest",
+    "telemetry_alert_receipt_digest",
+    "same_run_layers",
+    "otlp_trace_layers",
+    "frozen_golden_baseline",
+    "late_attempt_fencing_reference",
+    "pack_file_manifest",
+    "output_manifest"
+  ],
+  "title": "OACBoundShadowExecutionReceipt",
+  "type": "object"
+}

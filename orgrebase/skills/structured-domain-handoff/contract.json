@@ -1,0 +1,70 @@
+{
+  "content_digest": "sha256:923deeba0683d4a2def8556e27e3ada466d8e5f1f6b7dba5b656747c6aa3036f",
+  "distribution": {
+    "license": "PolyForm-Noncommercial-1.0.0",
+    "provenance": [
+      "agentteams/workspace/skills/structured-domain-handoff/SKILL.md",
+      "workspace-transport-compiler@1.0.0"
+    ]
+  },
+  "evaluation": {
+    "functional_min_pass_rate": 1.0,
+    "partitions": [
+      "REPLAY",
+      "HELD_OUT",
+      "NEGATIVE_TRANSFER",
+      "PERMISSION",
+      "INJECTION",
+      "MALFORMED",
+      "RESOURCE_OR_DEADLINE",
+      "CANARY"
+    ],
+    "security_min_pass_rate": 1.0,
+    "target_writes_max": 0
+  },
+  "inputs": {
+    "required": [
+      "run_id",
+      "task_id",
+      "delegation_id",
+      "delegation_task_digest",
+      "context_projection_digest",
+      "candidate_bundle"
+    ],
+    "schema": "orgrebase.structured-domain-handoff-input.v1"
+  },
+  "name": "structured-domain-handoff",
+  "outputs": {
+    "actions": [
+      "HANDOFF",
+      "DENY",
+      "ABSTAIN"
+    ],
+    "schema": "orgrebase.domain-transport-candidate.v1"
+  },
+  "owner": "skill-platform-owner",
+  "permissions": {
+    "allowed_tools": [],
+    "effect_ceiling": "CANDIDATE_ONLY",
+    "sensitivity_ceiling": "INTERNAL",
+    "side_effects": []
+  },
+  "purpose": "Return a same-run, authority-scoped Domain candidate without normative write authority.",
+  "release": {
+    "authority": "authority:skill-registry",
+    "executable_predecessor_restore": "NOT_RUN",
+    "rollback_decision_target_digest": "sha256:2e4f2d2255339da3c14778fc4519d1bf2b0bd7d14da9aa87c2d00f7002b276e8",
+    "states": [
+      "DRAFT",
+      "EVALUATED",
+      "SHADOW",
+      "CANARY",
+      "ACTIVE",
+      "REQUALIFICATION_REQUIRED",
+      "QUARANTINED",
+      "ROLLBACK_DECISION_RECORDED"
+    ]
+  },
+  "schema_version": "orgrebase.skill-contract.v1",
+  "version": "1.1"
+}

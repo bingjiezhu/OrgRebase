@@ -1,0 +1,89 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "jsonSchema": {
+    "validationScope": "structural_only"
+  },
+  "profile": "oac.evolution.minimum/v0.1",
+  "registryKind": "EvolutionSemanticValidationRuleRegistry",
+  "rules": [
+    {
+      "appliesToKinds": [
+        "OrganizationalDemand"
+      ],
+      "description": "Demand binds one exact admitted Snapshot and eligible accountable requester.",
+      "failureReasonCodes": [
+        "DEMAND_ROOT_MISMATCH",
+        "DEMAND_AUTHORITY_UNRESOLVED",
+        "EVOLUTION_PROVENANCE_MISMATCH"
+      ],
+      "implementationBindings": {
+        "python": {
+          "validator": "oac.evolution.verify_organizational_demand"
+        }
+      },
+      "normativeRef": "specs/009-proof-carrying-evolution-minimum-profile/spec.md",
+      "ruleId": "OAC-EVO-001",
+      "ruleVersion": "1.0.0"
+    },
+    {
+      "appliesToKinds": [
+        "SourceAdmissionReceipt"
+      ],
+      "description": "Admission verdict, reviewed subjects, authority separation, and lineage cohere.",
+      "failureReasonCodes": [
+        "EVOLUTION_SELF_ADMISSION_FORBIDDEN",
+        "SOURCE_ADMISSION_VERDICT_INVALID",
+        "SUCCESSOR_LINEAGE_INCOMPLETE"
+      ],
+      "implementationBindings": {
+        "python": {
+          "validator": "oac.evolution.verify_source_admission_receipt"
+        }
+      },
+      "normativeRef": "specs/009-proof-carrying-evolution-minimum-profile/spec.md",
+      "ruleId": "OAC-EVO-002",
+      "ruleVersion": "1.0.0"
+    },
+    {
+      "appliesToKinds": [
+        "OutcomeCertificate"
+      ],
+      "description": "Independent Outcome recomputes exact S/D/P/X roots and preserves non-success.",
+      "failureReasonCodes": [
+        "EVOLUTION_ROOT_MISMATCH",
+        "OUTCOME_SELF_CERTIFICATION_FORBIDDEN",
+        "OUTCOME_VERDICT_INVALID"
+      ],
+      "implementationBindings": {
+        "python": {
+          "validator": "oac.evolution.verify_outcome_certificate"
+        }
+      },
+      "normativeRef": "specs/009-proof-carrying-evolution-minimum-profile/spec.md",
+      "ruleId": "OAC-EVO-003",
+      "ruleVersion": "1.0.0"
+    },
+    {
+      "appliesToKinds": [
+        "SourceAdmissionReceipt"
+      ],
+      "description": "A successor requires an exact external decision over a counterexample-retaining E root.",
+      "failureReasonCodes": [
+        "EVOLUTION_AUTO_PROMOTION_FORBIDDEN",
+        "SUCCESSOR_PREDECESSOR_MISMATCH",
+        "EVOLUTION_AUTHORITY_MISMATCH"
+      ],
+      "implementationBindings": {
+        "python": {
+          "validator": "oac.evolution.verify_successor_admission"
+        }
+      },
+      "normativeRef": "specs/009-proof-carrying-evolution-minimum-profile/spec.md",
+      "ruleId": "OAC-EVO-004",
+      "ruleVersion": "1.0.0"
+    }
+  ],
+  "semanticValidation": {
+    "requiredAfterJsonSchema": true
+  }
+}

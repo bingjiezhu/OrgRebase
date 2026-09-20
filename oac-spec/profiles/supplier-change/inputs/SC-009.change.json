@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-009",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:procurement-owner",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "sourceRefs": ["edith:MASTER_INDEX:DOC-9eff55b9", "oac:counterfactual:nuclear-scope"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-009",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "replace", "before": {"state": "known", "value": "operating"}, "after": {"state": "known", "value": "judicial_restructuring"}}
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "oac:counterfactual:nuclear-scope",
+    "scopeRefs": ["supplier:forges-martelliere", "order:energy-nuclear", "production:energy", "control:nuclear-substitution"],
+    "reason": "test candidate compliance edge and required discovery without promoting it",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:1cb4f27562a8a156cb6448bf9b65e2060905b917c16a696d1464fb5b1ffaac56"
+}

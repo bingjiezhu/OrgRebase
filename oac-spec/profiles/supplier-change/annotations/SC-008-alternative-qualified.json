@@ -1,0 +1,61 @@
+{
+  "caseVersion": "1.0",
+  "caseId": "SC-008",
+  "title": "Alternative supplier becomes qualified",
+  "profile": "supplier-change/v0.2-contextual",
+  "annotationStatus": "exploratory",
+  "annotationProvenance": {
+    "authorClass": "project-authored-candidate",
+    "independentHumanRounds": 0,
+    "adjudicated": false,
+    "mayBeCalledGold": false
+  },
+  "sourceLabels": {
+    "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+    "recordRef": "PROC-01",
+    "labelSetRef": "../source-labels/edith-proc-01.json",
+    "answerKeyGroundTruthEmpty": true,
+    "documentRefs": ["DOC-cc41d4aa", "DOC-29949d76", "DOC-7823658d"],
+    "claimLimit": "EDiTh describes qualification as in progress; the qualified after-state is project-authored."
+  },
+  "counterfactual": {
+    "type": "single-factor",
+    "factor": "supplier.status",
+    "before": "qualification_in_progress",
+    "after": "qualified",
+    "assertedBy": "OAC_PROJECT",
+    "notUpstreamOacGroundTruth": true
+  },
+  "frozenInputs": {
+    "snapshotRef": "../inputs/veracier-proc01-contextual.snapshot.json",
+    "changeRef": "../inputs/SC-008.change.json",
+    "observationBoundary": "alternative-supplier and contingency metadata"
+  },
+  "candidateConstraints": {
+    "requiredObligationTypes": [
+      "qualification-evidence-check",
+      "continuity-option-selection",
+      "commercial-switch-review"
+    ],
+    "admissibleRoleRefs": [
+      "role:quality-qualification",
+      "role:operations-continuity",
+      "role:procurement-owner"
+    ],
+    "separation": [["role:procurement-owner", "role:quality-qualification"]],
+    "happensBefore": [
+      ["qualification-evidence-check", "continuity-option-selection"],
+      ["continuity-option-selection", "commercial-switch-review"]
+    ],
+    "evidenceDuties": ["approved qualification record", "selected continuity option"],
+    "acceptableUnknown": [],
+    "candidateOnly": true
+  },
+  "witnessRefs": [],
+  "mutationFamilies": ["self-review", "reverse-order", "missing-evidence"],
+  "outcomeObservability": {
+    "fromEdith": "not_observable",
+    "fromEnterpriseOpsGym": "not_mapped",
+    "executed": false
+  }
+}

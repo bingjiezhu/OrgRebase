@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-003",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:procurement-owner",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-08T09:00:00Z",
+    "sourceRefs": ["oac:counterfactual:liquidation"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-003",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "replace", "before": {"state": "known", "value": "judicial_restructuring"}, "after": {"state": "known", "value": "liquidation"}}
+    ],
+    "observedAt": "2025-03-08T09:00:00Z",
+    "effectiveAt": "2025-03-08T09:00:00Z",
+    "sourceRef": "oac:counterfactual:liquidation",
+    "scopeRefs": ["supplier:forges-martelliere", "contract:forges-msa", "ledger:supplier-exposure", "production:aero", "alternative:acieries-savoie"],
+    "reason": "test escalation-sensitive obligations",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:d467554b9b95ab35134e694ac1df555b6e02cee54e0f266f0599302684a8578a"
+}

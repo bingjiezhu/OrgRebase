@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "digest": "sha256:4afb7a8393b573e72daa815b1019f20ff6f25c2e93715623c18cee635528e233",
+    "executable": false,
+    "program_digest": "sha256:b6fc491b4f7b7d1f851e89adbf6af9951db54aaaadd30778c8ef9ec8d2d1d494",
+    "ref": "skill-candidate:enterprise-quote-compose@1.1"
+  },
+  "content_digest": "sha256:71f41593a3c35b42efdec3e1d1f1be8fa4f7c5cb144e019af5442448d74744d0",
+  "distribution": {
+    "license": "PolyForm-Noncommercial-1.0.0",
+    "provenance": [
+      "src/orgrebase/workspace/skill_foundry.py",
+      "skill-candidate:enterprise-quote-compose@1.1"
+    ]
+  },
+  "evaluation": {
+    "functional_min_pass_rate": 1.0,
+    "partitions": [
+      "REPLAY",
+      "HELD_OUT",
+      "NEGATIVE_TRANSFER",
+      "PERMISSION",
+      "INJECTION",
+      "MALFORMED",
+      "RESOURCE_OR_DEADLINE",
+      "CANARY"
+    ],
+    "security_min_pass_rate": 1.0,
+    "target_writes_max": 0
+  },
+  "inputs": {
+    "required": [
+      "skill_partition",
+      "candidate_program_digest_required",
+      "dependency_tool_receipt_digest",
+      "dependency_result_digest",
+      "coalition_result_binding_digest",
+      "domain_result_digests"
+    ],
+    "schema": "orgrebase.quote-compose-input.v1"
+  },
+  "name": "enterprise-quote-compose",
+  "outputs": {
+    "actions": [
+      "APPLY_QUOTE",
+      "KEEP_CURRENT",
+      "DENY",
+      "SAFE_ABSTAIN",
+      "ABSTAIN",
+      "CANARY"
+    ],
+    "schema": "orgrebase.skill-eval-output.v1"
+  },
+  "owner": "skill-platform-owner",
+  "permissions": {
+    "allowed_tools": [],
+    "effect_ceiling": "CANDIDATE_ONLY",
+    "sensitivity_ceiling": "INTERNAL",
+    "side_effects": []
+  },
+  "purpose": "Expose a hardened, side-effect-free release adapter derived from the historical quote-composition candidate without rewriting that candidate.",
+  "release": {
+    "authority": "authority:skill-registry",
+    "executable_predecessor_restore": "SUPPORTED_EXACT_ARCHIVED_RELEASE",
+    "rollback_decision_target_digest": "sha256:9c3807acf5c6de8b3629bc0816cea3a7a79f8001d98d20f4eb229f48a5f3cf6e",
+    "states": [
+      "DRAFT",
+      "EVALUATED",
+      "SHADOW",
+      "CANARY",
+      "ACTIVE",
+      "REQUALIFICATION_REQUIRED",
+      "QUARANTINED",
+      "ROLLBACK_DECISION_RECORDED"
+    ]
+  },
+  "schema_version": "orgrebase.skill-contract.v1",
+  "version": "1.3"
+}

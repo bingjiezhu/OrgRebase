@@ -1,0 +1,14 @@
+{
+  "action": "check_task",
+  "digest": "sha256:e2356ab9f996176514c0ba097a01c8d6ba27aa4cfc5016ee5a1bc48bcd7ecefd",
+  "error": null,
+  "key": "at-reviewer-barrier-7e3227d5ab73:check",
+  "ok": true,
+  "payload_digest": "sha256:fe5b893a07fc946361b0eab35a54fbd2ca579c1c0ee9a59a1e96c6b0a86309b5",
+  "raw_ref": "raw-mcp/018-at-reviewer-barrier-7e3227d5ab73-check-98b6daae.json",
+  "request_digest": "sha256:f77a7b4c78b9eae22f4a7d7d0bf025e368f5ce993ab5b59f9877829abf84301e",
+  "response_digest": "sha256:4544baf80fbc29a8896ab5efaa18b10bc2a38960dedc13feb3b28dec47c5e868",
+  "sequence": 18,
+  "status": "submitted",
+  "tool": "taskflow"
+}

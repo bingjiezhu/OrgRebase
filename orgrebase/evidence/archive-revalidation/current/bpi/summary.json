@@ -1,0 +1,60 @@
+{
+  "schema_version": "orgrebase.workspace-public-real-process-summary.v1",
+  "status": "PASS",
+  "run_id": "run:bpi2019-real-process:bb705b4e5f6d568b",
+  "title_zh": "真实公开企业流程验证",
+  "title_en": "Real Public Enterprise Process Validation",
+  "data_domain": "PURCHASE_TO_PAY",
+  "source_nature_zh": "大型跨国涂料企业的匿名真实 SAP 采购到付款事件日志",
+  "source_nature_en": "anonymized real SAP purchase-to-pay event log from a large multinational coatings and paints company",
+  "query_count": 128,
+  "unique_observed_event_count": 45227,
+  "counting_unit": "QUERY_EVENT_PAIR",
+  "strategies": [
+    {
+      "strategy_id": "VENDOR_BROADCAST",
+      "action_scope_query_event_pairs": 66549,
+      "precision": 0.00302,
+      "recall": 1.0,
+      "safe_scope_reduction_vs_vendor_broadcast": 0.0,
+      "unsafe_false_unaffected_rate": 0.0,
+      "lineage_closure_rate": 1.0,
+      "abstention_rate": 0.0
+    },
+    {
+      "strategy_id": "PURCHASE_DOCUMENT_SCOPE",
+      "action_scope_query_event_pairs": 3415,
+      "precision": 0.058858,
+      "recall": 1.0,
+      "safe_scope_reduction_vs_vendor_broadcast": 0.948684,
+      "unsafe_false_unaffected_rate": 0.0,
+      "lineage_closure_rate": 1.0,
+      "abstention_rate": 0.0
+    },
+    {
+      "strategy_id": "OAC_TYPED_ITEM_SCOPE",
+      "action_scope_query_event_pairs": 201,
+      "precision": 1.0,
+      "recall": 1.0,
+      "safe_scope_reduction_vs_vendor_broadcast": 0.99698,
+      "unsafe_false_unaffected_rate": 0.0,
+      "lineage_closure_rate": 1.0,
+      "abstention_rate": 0.0
+    }
+  ],
+  "provider_rule_obligations": {
+    "mapped_queries": 127,
+    "abstained_queries": 1,
+    "evidence_class": "PROVIDER_DOCUMENTED_RULE_DERIVED"
+  },
+  "claim_boundary": "NOT_REAL_QUOTE_DATA_NOT_CAUSAL_GROUND_TRUTH_NOT_REALIZED_ROI_NOT_PRODUCTION",
+  "boundary_zh": "验证真实流程上的规则化范围选择与血缘。它不代表真实报价数据、因果发现、企业 ROI 或生产上线。",
+  "boundary_en": "Validates rule-defined scope selection and lineage on a real process; not real quote data, causal discovery, enterprise ROI, or production deployment.",
+  "not_run": {
+    "real_enterprise_quote_data": "NOT_RUN",
+    "real_enterprise_quote_roi": "NOT_RUN",
+    "production_deployment": "NOT_RUN"
+  },
+  "receipt_digest": "sha256:90ba8fdd87e3f99d7d944cea0c52948c03373d1a2e76eaaeb00c9ec7211bb720",
+  "digest": "sha256:2544c9d856f245984ce387942aa4594b6e5e12236ebb5508e478f6cb8e04240c"
+}

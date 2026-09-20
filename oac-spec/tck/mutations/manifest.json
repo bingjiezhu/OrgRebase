@@ -1,0 +1,174 @@
+{
+  "mutationManifestVersion": "1.1",
+  "claimLimit": "Structural mechanics only; no enterprise-effectiveness claim.",
+  "registeredMutationCount": 15,
+  "targetDetectionThreshold": 0.9,
+  "records": [
+    {
+      "mutationId": "omit-obligation",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/omit-obligation.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "OBLIGATION_UNSATISFIED"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "self-review",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/self-review.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "QUALIFICATION_INVALID",
+        "SEPARATION_OF_DUTIES_VIOLATION"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "reverse-order",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/reverse-order.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "ORDER_CONSTRAINT_MISSING"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "missing-evidence",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/missing-evidence.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "EVIDENCE_DUTY_MISSING"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "redundant-role",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/redundant-role.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "OBLIGATION_UNSATISFIED"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "input-root-mismatch",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-001.change.json",
+      "planRef": "tck/fixtures/negative/input-root-mismatch.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "INPUT_ROOT_MISMATCH"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "unknown-erasure",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-010.change.json",
+      "planRef": "tck/fixtures/negative/unknown-erasure.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "UNKNOWN_NOT_PRESERVED"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "false-non-impact",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-010.change.json",
+      "planRef": "tck/fixtures/negative/false-non-impact.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "IMPACT_PATH_OMITTED"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "applicability-evaluation-omission",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/negative/applicability-evaluation-omission.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "APPLICABILITY_EVALUATION_MISSING"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "applicability-result-forgery",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/negative/applicability-result-forgery.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "APPLICABILITY_EVALUATION_MISMATCH"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "applicability-witness-forgery",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/negative/applicability-witness-forgery.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "APPLICABILITY_WITNESS_MISMATCH"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "false-predicate-traversal",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-009.change.json",
+      "planRef": "tck/fixtures/negative/false-predicate-traversal.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "PREDICATE_FALSE_PATH_INCLUDED"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "unknown-duty-omission",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-009.change.json",
+      "planRef": "tck/fixtures/negative/unknown-duty-omission.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "UNKNOWN_TRANSITION_DUTY_MISSING"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "contextual-prerequisite-removal",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-008.change.json",
+      "planRef": "tck/fixtures/negative/contextual-prerequisite-removal.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "PREREQUISITE_OBLIGATION_ORDER_MISSING"
+      ],
+      "targeted": true
+    },
+    {
+      "mutationId": "root-unknown-collapse",
+      "snapshotRef": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "changeRef": "profiles/supplier-change/inputs/SC-010.change.json",
+      "planRef": "tck/fixtures/negative/root-unknown-collapse.plan.json",
+      "expectedVerdict": "REJECT",
+      "expectedReasonCodes": [
+        "APPLICABILITY_EVALUATION_MISMATCH"
+      ],
+      "targeted": true
+    }
+  ]
+}

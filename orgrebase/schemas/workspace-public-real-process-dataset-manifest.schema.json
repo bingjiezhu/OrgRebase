@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-public-real-process-dataset-manifest.schema.json",
+  "title": "BPI 2019 Real Process Dataset Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "dataset_id", "dataset_kind", "title", "organization_profile",
+    "source_description", "official_record", "doi",
+    "artifact", "official_counts", "license", "projection_path", "projection_digest",
+    "license_manifest_path", "license_manifest_digest", "reproduction", "evidence_class",
+    "claim_boundary", "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-public-real-process-dataset-manifest.v1"},
+    "dataset_id": {"const": "bpi-challenge-2019-4tu-12715853"},
+    "dataset_kind": {"const": "REAL_ANONYMIZED_ENTERPRISE_PURCHASE_TO_PAY_EVENT_LOG"},
+    "title": {"const": "BPI Challenge 2019"},
+    "organization_profile": {"const": "LARGE_MULTINATIONAL_COATINGS_AND_PAINT_COMPANY"},
+    "source_description": {"type": "string", "minLength": 1},
+    "official_record": {"type": "string", "format": "uri"},
+    "doi": {"const": "10.4121/uuid:d06aff4b-79f0-45e6-8ec8-e19730c248f1"},
+    "artifact": {
+      "type": "object",
+      "required": ["file_name", "file_id", "download_url", "size_bytes", "md5", "sha256", "raw_bytes_in_repository"],
+      "properties": {
+        "file_name": {"const": "BPI_Challenge_2019.xes"},
+        "file_id": {"const": "24072995"},
+        "download_url": {"type": "string", "format": "uri"},
+        "size_bytes": {"const": 728558522},
+        "md5": {"const": "md5:4eb909242351193a61e1c15b9c3cc814"},
+        "sha256": {"const": "sha256:af63bc687fc4152f2123b05c3af7772b37ef3fce2d3f67f812666c9e356baae7"},
+        "raw_bytes_in_repository": {"const": false}
+      }
+    },
+    "official_counts": {"type": "object", "required": ["purchase_order_items", "events", "activity_types", "anonymous_identities"]},
+    "license": {"const": "CC-BY-4.0"},
+    "projection_path": {"const": "projection/bpi2019-real-process-projection.json"},
+    "projection_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "license_manifest_path": {"const": "LICENSES.json"},
+    "license_manifest_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "reproduction": {"type": "object", "minProperties": 4, "additionalProperties": {"type": "string", "minLength": 1}},
+    "evidence_class": {"const": "PUBLIC_REAL_ANONYMIZED_ENTERPRISE_EVENT_LOG"},
+    "claim_boundary": {"const": "REAL_P2P_PROCESS_NOT_REAL_QUOTE_DATA_OR_CAUSAL_GROUND_TRUTH_OR_ROI"},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

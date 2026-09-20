@@ -1,0 +1,37 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-lab-budget.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "elapsed_seconds": {
+      "exclusiveMinimum": 0,
+      "maximum": 3600,
+      "title": "Elapsed Seconds",
+      "type": "number"
+    },
+    "tool_calls": {
+      "maximum": 1000,
+      "minimum": 1,
+      "title": "Tool Calls",
+      "type": "integer"
+    },
+    "write_calls": {
+      "maximum": 1000,
+      "minimum": 0,
+      "title": "Write Calls",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "tool_calls",
+    "write_calls",
+    "elapsed_seconds"
+  ],
+  "title": "LabBudget",
+  "type": "object"
+}

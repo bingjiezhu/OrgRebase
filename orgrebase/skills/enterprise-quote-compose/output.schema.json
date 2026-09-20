@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schema:orgrebase.skill-eval-output.v1",
+  "title": "QuoteComposeCandidateOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "NonZeroDigest": {
+      "type": "string",
+      "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"
+    }
+  },
+  "required": ["schema_version", "action", "reason", "package_digest", "candidate_only", "target_writes"],
+  "properties": {
+    "schema_version": {"const": "orgrebase.skill-result-candidate.v1"},
+    "action": {"enum": ["APPLY_QUOTE", "KEEP_CURRENT", "DENY", "SAFE_ABSTAIN", "ABSTAIN", "CANARY"]},
+    "reason": {"type": "string", "minLength": 1},
+    "dependency_tool_receipt_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "dependency_result_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "coalition_result_binding_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "domain_result_digests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["product", "legal", "finance", "gtm"],
+      "properties": {
+        "product": {"$ref": "#/$defs/NonZeroDigest"},
+        "legal": {"$ref": "#/$defs/NonZeroDigest"},
+        "finance": {"$ref": "#/$defs/NonZeroDigest"},
+        "gtm": {"$ref": "#/$defs/NonZeroDigest"}
+      }
+    },
+    "package_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "candidate_only": {"const": true},
+    "target_writes": {"const": 0}
+  }
+}

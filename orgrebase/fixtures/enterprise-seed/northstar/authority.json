@@ -1,0 +1,20 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:northstar-acme-quote@r1",
+  "organization_id": "org:northstar",
+  "component_kind": "AUTHORITY",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "governance": {
+      "admission_authority_refs": ["human:workspace-runtime-owner"],
+      "owner_refs": ["human:product-owner", "human:finance-owner", "employee:sales-owner"],
+      "rejection_path_ref": "procedure:workspace-intake-reject@r1",
+      "unknown_path_ref": "procedure:workspace-unknown-review@r1"
+    },
+    "source_authority_refs": ["authority:finance@v1", "authority:gtm@v1", "authority:legal@v1", "authority:product@v1", "authority:skill-registry@v1"],
+    "capability_authority_refs": ["authority:finance@v1", "authority:gtm@v1", "authority:legal@v1", "authority:product@v1"],
+    "admission_controller_contract": "orgrebase.workspace.admission.AdmissionController@v1"
+  },
+  "projection_digest": "sha256:4a54bd7e3b9f1b57021ed438bbedf6db4fcb9f05d1576db5e2c4e9a059ea1b2e"
+}

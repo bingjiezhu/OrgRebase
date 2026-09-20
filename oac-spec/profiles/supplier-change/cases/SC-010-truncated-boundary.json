@@ -1,0 +1,140 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-010",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-010-truncated-boundary.json"
+    ]
+  },
+  "digest": "sha256:f42588da286c64e241d8286c7e2c1af6af1f4dc9b740bda7f48f318711c09384",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01-truncated-contextual",
+      "revision": 2,
+      "digest": "sha256:0a2e623bebc8ca3eba838416c1dcd326030697efd74c20ec312c5df30ca5e301"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-010",
+      "revision": 1,
+      "digest": "sha256:be2131dc99c711e30031adb336fd9da4ee3f611e8b56d42239297951f39354d2"
+    },
+    "observationBoundary": "two source anchors; dependency coverage explicitly incomplete",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-010-truncated-boundary.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "operating->unknown",
+        "evidenceRefs": [
+          "authority:OAC_PROJECT",
+          "profiles/supplier-change/annotations/SC-010-truncated-boundary.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-fdfc1a37.classification",
+        "value": "SUMMARY",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-fdfc1a37"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-fe8b3af2.classification",
+        "value": "REFERENCE",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-fe8b3af2"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.source-discovery",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-010-truncated-boundary.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.candidateObligationType.unknown-preservation",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-010-truncated-boundary.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationTypes": [
+        "source-discovery",
+        "unknown-preservation"
+      ],
+      "admissibleRoleRefs": [
+        "role:procurement-owner",
+        "role:evidence-discovery"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:evidence-agent",
+        "principal:procurement-agent"
+      ],
+      "forbiddenCombinations": [],
+      "happensBefore": [
+        {
+          "predecessorRef": "source-discovery",
+          "successorRef": "unknown-preservation",
+          "relation": "must_complete_before",
+          "reasonRefs": [
+            "oac:candidate-order:SC-010"
+          ]
+        }
+      ],
+      "evidenceDuties": [
+        "named missing graph coverage",
+        "discovery query receipt"
+      ],
+      "acceptableUnknownRefs": [
+        "affected entities",
+        "contract remedies",
+        "financial exposure",
+        "production impact"
+      ],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "UNKNOWN"
+      ]
+    },
+    "witnessRefs": [],
+    "mutationFamily": "unknown-erasure,false-non-impact,missing-evidence",
+    "outcomeObservability": "none"
+  }
+}

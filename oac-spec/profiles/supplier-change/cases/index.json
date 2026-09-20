@@ -1,0 +1,23 @@
+{
+  "caseSetVersion": "1.1",
+  "profile": "supplier-change/mixed-v0alpha1-v0.2-contextual",
+  "annotationStatus": "exploratory",
+  "caseCount": 10,
+  "cases": [
+    "SC-001-restructuring.json",
+    "SC-002-healthy-control.json",
+    "SC-003-liquidation.json",
+    "SC-004-qualification-suspended.json",
+    "SC-005-capacity-reduced.json",
+    "SC-006-advance-at-risk.json",
+    "SC-007-partial-delivery.json",
+    "SC-008-alternative-qualified.json",
+    "SC-009-nuclear-grade.json",
+    "SC-010-truncated-boundary.json"
+  ],
+  "pluralCaseIds": ["SC-001"],
+  "annotationPacketDirectory": "../annotations",
+  "machineCaseKind": "OrgChangeCase",
+  "humanGroundTruthClaimed": false,
+  "claimLimit": "Ten development cases test annotation, contextual applicability, and verifier mechanics; they do not establish Human Gold or enterprise validity."
+}

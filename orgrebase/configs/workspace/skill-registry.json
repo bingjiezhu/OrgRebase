@@ -1,0 +1,24 @@
+{
+  "authority": "authority:skill-registry",
+  "packages": [
+    {
+      "manifest_digest": "sha256:80d3d35864f75c89d9a13bdfd3232ceb615d44ef90237a97d18a6a276f3822f3",
+      "name": "enterprise-launch-readiness",
+      "path": "enterprise-launch-readiness",
+      "version": "1.4.2"
+    },
+    {
+      "manifest_digest": "sha256:64da732b086e7b85fb4ea31aeb60b28dd8bcb22c98ceb38fca03fb4f8907ffca",
+      "name": "enterprise-quote-compose",
+      "path": "enterprise-quote-compose",
+      "version": "1.3.1"
+    },
+    {
+      "manifest_digest": "sha256:8959d41331b64941f0fa67b17d4af5780cd8792e9f8f0ede0c2c3a7f8165adff",
+      "name": "structured-domain-handoff",
+      "path": "structured-domain-handoff",
+      "version": "1.1.2"
+    }
+  ],
+  "schema_version": "orgrebase.skill-registry.v1"
+}

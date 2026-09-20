@@ -1,0 +1,23 @@
+{
+  "action_digests": {
+    "accept_task_result": "sha256:cf76ef95ee93f098464dc81b4283d0aa72459c3db0b90104a61eac9ee6d789ad",
+    "ack_task": "sha256:ee2e1807d31818fdfeb111ebf3042e03e3401894815e88d5a8c575e7fe41c14e",
+    "check_task": "sha256:cc0c0f4a157103099506864a909a15a9a4854694d2a505eb01b5652fca5e280e",
+    "delegate_task": "sha256:0918b16791d0ee7b267e8820cd362df8353b6a34e53481723fc0703d35d5387a",
+    "submit_task": "sha256:bf5670a67ba627e723a64067694de5844467c07d141f8be92d7ace21646da6cd"
+  },
+  "assignee_actor_id": "product-steward",
+  "candidate_only": true,
+  "canonical_target_writes": 0,
+  "depends_on": [],
+  "digest": "sha256:5c679a0a69b5b16b6379221c266cab7b2d9290d53d56c72e95c8c4aaeff3b916",
+  "domain_id": "product",
+  "execution_task_digest": "sha256:ddd087bbe962f28e23af3ccd9ac356d6dbbd98fa47ffde10e7fd3b96ed7fa20c",
+  "result_digest": "sha256:41bf65d6035ea6814fcc4f950d6d54a920e2fdb2a5c42fd8542e004c709046df",
+  "schema_version": "orgrebase.formation-taskflow-task-receipt.v1",
+  "task_id": "at-domain-product-f0e5afba2159",
+  "task_kind": "DOMAIN",
+  "task_spec_digest": "sha256:94efd4819741407ecb4368592797fe53c10ce04e34c431586e909d78884ae8be",
+  "terminal_status": "completed",
+  "transport_assignee": "@product-steward:controlled.local"
+}

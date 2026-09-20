@@ -1,0 +1,467 @@
+{
+  "$defs": {
+    "DimensionVerdict": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN"
+      ],
+      "title": "DimensionVerdict",
+      "type": "string"
+    },
+    "OutcomeCertificateSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "actingPrincipalRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Actingprincipalrefs",
+          "type": "array"
+        },
+        "changeRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Changerefs",
+          "type": "array"
+        },
+        "demandRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "demandRoot": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Demandroot",
+          "type": "string"
+        },
+        "dimensions": {
+          "items": {
+            "$ref": "#/$defs/OutcomeDimension"
+          },
+          "minItems": 1,
+          "title": "Dimensions",
+          "type": "array"
+        },
+        "evidenceRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Evidencerefs",
+          "type": "array"
+        },
+        "executionAuthorizationRef": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "executionEvidenceRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Executionevidencerefs",
+          "type": "array"
+        },
+        "executionReceiptRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "executionRoot": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Executionroot",
+          "type": "string"
+        },
+        "observationProfileRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "observationRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Observationrefs",
+          "type": "array"
+        },
+        "oracleBuildDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Oraclebuilddigest",
+          "type": "string"
+        },
+        "oracleRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "planCertificateRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "planRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "planRoot": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Planroot",
+          "type": "string"
+        },
+        "profileBinding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OutcomeProfileBinding"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "runtimeBindingRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "runtimeBundleRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "snapshotRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "sourceAdmissionReceiptRefs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "minItems": 1,
+          "title": "Sourceadmissionreceiptrefs",
+          "type": "array"
+        },
+        "sourceRoot": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Sourceroot",
+          "type": "string"
+        },
+        "unresolvedRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Unresolvedrefs",
+          "type": "array"
+        },
+        "verdict": {
+          "$ref": "#/$defs/OutcomeVerdict"
+        }
+      },
+      "required": [
+        "sourceRoot",
+        "demandRoot",
+        "planRoot",
+        "executionRoot",
+        "snapshotRef",
+        "sourceAdmissionReceiptRefs",
+        "demandRef",
+        "changeRefs",
+        "planRef",
+        "planCertificateRef",
+        "runtimeBindingRef",
+        "runtimeBundleRef",
+        "executionReceiptRef",
+        "executionEvidenceRefs",
+        "observationRefs",
+        "actingPrincipalRefs",
+        "oracleRef",
+        "oracleBuildDigest",
+        "observationProfileRef",
+        "verdict",
+        "dimensions",
+        "evidenceRefs"
+      ],
+      "title": "OutcomeCertificateSpec",
+      "type": "object"
+    },
+    "OutcomeDimension": {
+      "additionalProperties": false,
+      "properties": {
+        "evidenceRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Evidencerefs",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+            "type": "string"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "unresolvedRefs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Unresolvedrefs",
+          "type": "array"
+        },
+        "verdict": {
+          "$ref": "#/$defs/DimensionVerdict"
+        }
+      },
+      "required": [
+        "name",
+        "verdict"
+      ],
+      "title": "OutcomeDimension",
+      "type": "object"
+    },
+    "OutcomeProfileBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "profileDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Profiledigest",
+          "type": "string"
+        },
+        "profileId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Profileid",
+          "type": "string"
+        },
+        "profileVersion": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Profileversion",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profileId",
+        "profileVersion",
+        "profileDigest"
+      ],
+      "title": "OutcomeProfileBinding",
+      "type": "object"
+    },
+    "OutcomeVerdict": {
+      "enum": [
+        "ACCEPT",
+        "REJECT",
+        "PROVISIONAL",
+        "UNKNOWN"
+      ],
+      "title": "OutcomeVerdict",
+      "type": "string"
+    },
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/OutcomeCertificate.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "OutcomeCertificate",
+      "default": "OutcomeCertificate",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/OutcomeCertificateSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "OutcomeCertificate",
+  "type": "object"
+}

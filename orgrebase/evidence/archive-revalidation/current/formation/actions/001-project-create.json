@@ -1,0 +1,14 @@
+{
+  "action": "create_project",
+  "digest": "sha256:9b8c72a11fe89bdd55edf0208208381bd369132b9719d63caaf997290024c896",
+  "error": null,
+  "key": "project:create",
+  "ok": true,
+  "payload_digest": "sha256:f78312629063d3678270042e5ff8784242700fe17f52475bed7783b74a296f87",
+  "raw_ref": "raw-mcp/001-project-create-151c52fe.json",
+  "request_digest": "sha256:c6f801c105d797071af6417ce951250e98e556a5f9b536c97046f625f55ab939",
+  "response_digest": "sha256:d6e46d80289c46393b1df90e10f388c9e76f891863d05acdf17c48b1d34dc445",
+  "sequence": 1,
+  "status": "active",
+  "tool": "projectflow"
+}

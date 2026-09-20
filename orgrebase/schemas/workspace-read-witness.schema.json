@@ -1,0 +1,236 @@
+{
+  "$defs": {
+    "CoverageBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_id": {
+          "minLength": 1,
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "coverage_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Coverage Digest",
+          "type": "string"
+        },
+        "cursor_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Cursor Digest",
+          "type": "string"
+        },
+        "cursor_revision": {
+          "minimum": 1,
+          "title": "Cursor Revision",
+          "type": "integer"
+        },
+        "expires_at": {
+          "title": "Expires At",
+          "type": "string"
+        },
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "generation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Generation Digest",
+          "type": "string"
+        },
+        "inventory_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Inventory Digest",
+          "type": "string"
+        },
+        "observed_at": {
+          "title": "Observed At",
+          "type": "string"
+        },
+        "page_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Page Digest",
+          "type": "string"
+        },
+        "page_ref": {
+          "minLength": 1,
+          "title": "Page Ref",
+          "type": "string"
+        },
+        "record_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Record Ids",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "orgrebase.source-coverage.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_binding_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Binding Digest",
+          "type": "string"
+        },
+        "source_config_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Config Digest",
+          "type": "string"
+        },
+        "status": {
+          "const": "COMPLETE",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "status",
+        "source_config_digest",
+        "source_binding_digest",
+        "inventory_digest",
+        "generation_digest",
+        "connector_id",
+        "record_ids",
+        "fields",
+        "cursor_revision",
+        "cursor_digest",
+        "page_ref",
+        "page_digest",
+        "observed_at",
+        "expires_at",
+        "coverage_digest"
+      ],
+      "title": "CoverageBinding",
+      "type": "object"
+    },
+    "ReadQuery": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_id": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "operator": {
+          "enum": [
+            "eq",
+            "is_missing"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "record_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Record Ids",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "orgrebase.bounded-read-query.v1",
+          "default": "orgrebase.bounded-read-query.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "connector_id",
+        "record_ids",
+        "operator"
+      ],
+      "title": "ReadQuery",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-read-witness.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "$ref": "#/$defs/CoverageBinding"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "matched_record_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Matched Record Ids",
+      "type": "array"
+    },
+    "query": {
+      "$ref": "#/$defs/ReadQuery"
+    },
+    "result": {
+      "enum": [
+        "TRUE",
+        "FALSE"
+      ],
+      "title": "Result",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.read-witness.v1",
+      "default": "orgrebase.read-witness.v1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "query",
+    "coverage",
+    "result",
+    "matched_record_ids"
+  ],
+  "title": "ReadWitness",
+  "type": "object"
+}

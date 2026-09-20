@@ -1,0 +1,42 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-outcome-oracle.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Exact state predicates supplied by the evaluator, never by the acting plan.",
+  "properties": {
+    "authority": {
+      "minLength": 1,
+      "title": "Authority",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "expected": {
+      "additionalProperties": true,
+      "minProperties": 1,
+      "title": "Expected",
+      "type": "object"
+    },
+    "policy_source_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Policy Source Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.outcome-lab.oracle.v1",
+      "default": "orgrebase.outcome-lab.oracle.v1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "authority",
+    "policy_source_digest",
+    "expected"
+  ],
+  "title": "OutcomeOracle",
+  "type": "object"
+}

@@ -1,0 +1,122 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrgChangeCase",
+  "metadata": {
+    "id": "case:SC-002",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "profile:supplier-change",
+    "governanceRef": "spec:001-oac-shadow-mvp:annotation-guide",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": null,
+    "effectiveTo": null,
+    "sourceRefs": [
+      "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+      "profiles/supplier-change/annotations/SC-002-healthy-control.json"
+    ]
+  },
+  "digest": "sha256:051cf7779023c383d1c4d586fa7f897ef846376de9abcf2ba87d228945b104fe",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01",
+      "revision": 1,
+      "digest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-002",
+      "revision": 1,
+      "digest": "sha256:bb616755bc700c31127150fa73ed82fc9f942f03e40a1ab55469b222cb090d81"
+    },
+    "observationBoundary": "synthetic control over the same admitted profile fixture",
+    "annotationStatus": "exploratory",
+    "annotations": [
+      {
+        "field": "source.answerKey.PROC-01.groundTruth",
+        "value": "empty-object",
+        "evidenceRefs": [
+          "edith:ANSWER_KEY.json#PROC-01"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.annotationAuthority",
+        "value": "project-authored-exploratory-not-human-gold",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-002-healthy-control.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "oac.counterfactual.supplier.status",
+        "value": "status_unverified->operating",
+        "evidenceRefs": [
+          "authority:OAC_PROJECT",
+          "profiles/supplier-change/annotations/SC-002-healthy-control.json"
+        ],
+        "status": "oac_candidate"
+      },
+      {
+        "field": "source.masterIndex.DOC-fa6b00bb.classification",
+        "value": "NOT_AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-fa6b00bb"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-9f0ca817.classification",
+        "value": "NOT_AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-9f0ca817"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "source.masterIndex.DOC-4ec474fb.classification",
+        "value": "NOT_AT_RISK",
+        "evidenceRefs": [
+          "edith:MASTER_INDEX.csv#DOC-4ec474fb"
+        ],
+        "status": "source_gt"
+      },
+      {
+        "field": "oac.candidateObligationType.status-verification",
+        "value": "required-candidate",
+        "evidenceRefs": [
+          "profiles/supplier-change/annotations/SC-002-healthy-control.json"
+        ],
+        "status": "oac_candidate"
+      }
+    ],
+    "constraintSet": {
+      "requiredObligationTypes": [
+        "status-verification"
+      ],
+      "admissibleRoleRefs": [
+        "role:procurement-owner"
+      ],
+      "admissiblePrincipalRefs": [
+        "principal:procurement-agent"
+      ],
+      "forbiddenCombinations": [],
+      "happensBefore": [],
+      "evidenceDuties": [
+        "status source verification"
+      ],
+      "acceptableUnknownRefs": [],
+      "minimalityLevel": "inclusion_minimal",
+      "acceptableVerdicts": [
+        "ACCEPT"
+      ]
+    },
+    "witnessRefs": [],
+    "mutationFamily": "spurious-impact,redundant-role",
+    "outcomeObservability": "none"
+  }
+}

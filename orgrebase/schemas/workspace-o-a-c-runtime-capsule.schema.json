@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-runtime-capsule.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Closed wire-level input required for one local OAC Runtime admission.",
+  "properties": {
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "change": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Change",
+      "type": "object"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "oac_cli_version": {
+      "title": "Oac Cli Version",
+      "type": "string"
+    },
+    "oac_source_fingerprint": {
+      "title": "Oac Source Fingerprint",
+      "type": "string"
+    },
+    "oac_source_manifest": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Oac Source Manifest",
+      "type": "object"
+    },
+    "plan": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Plan",
+      "type": "object"
+    },
+    "plan_certificate": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Plan Certificate",
+      "type": "object"
+    },
+    "plan_source": {
+      "enum": [
+        "OAC_REFERENCE_COMPILER",
+        "OAC_PUBLIC_VERIFIER_ACCEPTED_FIXTURE"
+      ],
+      "title": "Plan Source",
+      "type": "string"
+    },
+    "runtime_binding": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Runtime Binding",
+      "type": "object"
+    },
+    "runtime_bundle": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Runtime Bundle",
+      "type": "object"
+    },
+    "runtime_lowering_receipt": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Runtime Lowering Receipt",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-runtime-capsule.v1",
+      "default": "orgrebase.oac-runtime-capsule.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "snapshot": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Snapshot",
+      "type": "object"
+    }
+  },
+  "required": [
+    "case_id",
+    "plan_source",
+    "oac_source_manifest",
+    "oac_source_fingerprint",
+    "snapshot",
+    "change",
+    "plan",
+    "plan_certificate",
+    "runtime_binding",
+    "runtime_bundle",
+    "runtime_lowering_receipt",
+    "oac_cli_version"
+  ],
+  "title": "OACRuntimeCapsule",
+  "type": "object"
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:evergreen-enterprise-quote@r1",
+  "organization_id": "org:evergreen-industries",
+  "component_kind": "CAPABILITY",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "template": {
+      "ref": "template:enterprise_quote@v1",
+      "digest": "sha256:0550a9bb3e5dbf478a1639804994a9a46c7790389a5bcae28d2f0ff3009ffe97"
+    },
+    "capability_cards": [
+      {
+        "ref": "capability-card:product@v1",
+        "digest": "sha256:0f8881b1dd9cb46892f979d2a730d08e07703ecc0362a03b189de0a4a45466ec"
+      },
+      {
+        "ref": "capability-card:legal@v1",
+        "digest": "sha256:7ab00f04c7b7dd71e28dd04f600a88aa7802877aaf14976cd88f9d9c7c38eb1f"
+      },
+      {
+        "ref": "capability-card:finance@v1",
+        "digest": "sha256:bced517ac63197f025f788dbf8b9a72c5b1f41b0e5f97033cbdcc2d9c2871f11"
+      },
+      {
+        "ref": "capability-card:gtm@v1",
+        "digest": "sha256:e233fb3c925dee98bce7e83f1b5ed3aeb7accc8b866262d21c63bbcd5c0f5343"
+      }
+    ],
+    "runtime_components": {
+      "planner": "orgrebase.workspace.planner.CoalitionPlanner@v1",
+      "context_compiler": "orgrebase.workspace.context.TaskContextCompiler@v1",
+      "renderer": "orgrebase.workspace.execution.QuoteRenderer@1.0.0",
+      "dependency_compiler": "orgrebase.workspace.execution.RuntimeDependencyCompiler@v1",
+      "pack_compiler": "orgrebase.workspace.pilot@enterprise-quote-pilot-v1"
+    }
+  },
+  "projection_digest": "sha256:3778d90effa28be70cbde2626a49bd84a6111b65c09916f895a64f9ac35c77c2"
+}

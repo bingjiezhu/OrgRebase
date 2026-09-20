@@ -1,0 +1,87 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "digest": "sha256:f3395fa05dd824ff824522fe63b497fde7ea6658f2230a011e8f47a882226d7e",
+  "registryKind": "NormativeRuntimeLoweringSemanticRuleRegistry",
+  "rules": [
+    {
+      "appliesToKinds": [
+        "RuntimeBinding",
+        "RuntimeLoweringReceipt",
+        "ZeroEffectRuntimeBundle"
+      ],
+      "description": "effectiveTo must be later than effectiveFrom when both are present.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-runtime-lowering-v0.1.md",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-RL-SEM-001",
+      "ruleVersion": "1.0.0",
+      "scope": "cross_field"
+    },
+    {
+      "appliesToKinds": [
+        "RuntimeLoweringReceipt"
+      ],
+      "description": "A lowering receipt has sorted unique reasons; PRODUCED binds exactly one bundle and no reasons, while BLOCKED binds no bundle and at least one stable reason.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-runtime-lowering-v0.1.md",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-RL-SEM-002",
+      "ruleVersion": "1.0.0",
+      "scope": "cross_field"
+    },
+    {
+      "appliesToKinds": [
+        "ZeroEffectRuntimeBundle"
+      ],
+      "description": "Runtime steps follow canonical UTF-8 Kahn order; role projections stay stable without authority collapse, handlers exactly cover sorted obligations and evidence, and predecessors resolve to prior steps.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-runtime-lowering-v0.1.md",
+      "quantifier": "for_each_runtime_step",
+      "ruleId": "OAC-RL-SEM-003",
+      "ruleVersion": "1.0.0",
+      "scope": "graph_integrity"
+    },
+    {
+      "appliesToKinds": [
+        "RuntimeBinding"
+      ],
+      "description": "A RuntimeBinding pins exact OrganizationPlan and PlanCertificate refs in one namespace with exact ordered source provenance.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-runtime-lowering-v0.1.md",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-RL-SEM-004",
+      "ruleVersion": "1.0.0",
+      "scope": "authority_envelope"
+    },
+    {
+      "appliesToKinds": [
+        "ZeroEffectRuntimeBundle"
+      ],
+      "description": "A runtime bundle carries the registered root kinds in one namespace with exact ordered source provenance, including a PlanCertificate ref.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-runtime-lowering-v0.1.md",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-RL-SEM-005",
+      "ruleVersion": "1.0.0",
+      "scope": "authority_envelope"
+    },
+    {
+      "appliesToKinds": [
+        "RuntimeLoweringReceipt"
+      ],
+      "description": "A lowering receipt carries the registered root kinds in one namespace with exact ordered source provenance; a produced bundleRef names ZeroEffectRuntimeBundle.",
+      "failureReasonCode": "CORE_SCHEMA_INVALID",
+      "jsonSchemaEnforced": false,
+      "normativeRef": "standard/oac-runtime-lowering-v0.1.md",
+      "quantifier": "for_each_resource",
+      "ruleId": "OAC-RL-SEM-006",
+      "ruleVersion": "1.0.0",
+      "scope": "authority_envelope"
+    }
+  ]
+}

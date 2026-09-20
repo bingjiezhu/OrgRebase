@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.dev/schemas/workspace-public-real-process-verification.schema.json",
+  "title": "Independent Real Process Verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "verification_mode", "implementation_independence",
+    "receipt_digest", "projection_digest", "queries_replayed", "strategies_replayed",
+    "failures", "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-public-real-process-verification.v1"},
+    "status": {"enum": ["PASS", "FAIL"]},
+    "verification_mode": {"const": "INDEPENDENT_OFFLINE_DETERMINISTIC_REPLAY"},
+    "implementation_independence": {"const": "NO_EVALUATOR_OR_PRODUCT_IMPORTS"},
+    "receipt_digest": {"type": ["string", "null"]},
+    "projection_digest": {"type": ["string", "null"]},
+    "queries_replayed": {"type": "integer", "minimum": 0},
+    "strategies_replayed": {"type": "integer", "minimum": 0},
+    "failures": {"type": "array", "items": {"type": "string"}},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

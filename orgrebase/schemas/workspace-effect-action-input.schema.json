@@ -1,0 +1,27 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-effect-action-input.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "enum": [
+        "EXECUTE",
+        "QUERY",
+        "CANCEL"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "request_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Request Digest",
+      "type": "string"
+    }
+  },
+  "required": [
+    "action",
+    "request_digest"
+  ],
+  "title": "EffectActionInput",
+  "type": "object"
+}

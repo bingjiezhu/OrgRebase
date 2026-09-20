@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-quote-action-cost-model.schema.json",
+  "title": "Quote selective-rebase normalized action cost model",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_version",
+    "evidence_class",
+    "unit",
+    "target_scope",
+    "components",
+    "disposition_components",
+    "sensitivity_scenarios",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.workspace-quote-action-cost-model.v1"},
+    "model_version": {"const": "quote-action-cost@0.1.0"},
+    "evidence_class": {"const": "MODELLED_COUNTERFACTUAL"},
+    "unit": {"const": "NORMALIZED_ACTION_COST"},
+    "target_scope": {"const": "PER_EVALUATED_TARGET_DECISION"},
+    "components": {"$ref": "#/$defs/Components"},
+    "disposition_components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "PRESERVE_WITHIN_BOUNDARY",
+        "HOLD_FOR_REVIEW",
+        "REQUALIFY",
+        "REBUILD"
+      ],
+      "properties": {
+        "PRESERVE_WITHIN_BOUNDARY": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["PRESERVE", "REVIEW", "REQUALIFY", "HOLD", "REBUILD"]}},
+        "HOLD_FOR_REVIEW": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["PRESERVE", "REVIEW", "REQUALIFY", "HOLD", "REBUILD"]}},
+        "REQUALIFY": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["PRESERVE", "REVIEW", "REQUALIFY", "HOLD", "REBUILD"]}},
+        "REBUILD": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["PRESERVE", "REVIEW", "REQUALIFY", "HOLD", "REBUILD"]}}
+      }
+    },
+    "sensitivity_scenarios": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "components"],
+        "properties": {
+          "id": {
+            "enum": [
+              "LOW_REVIEW_BURDEN",
+              "HIGH_REVIEW_BURDEN",
+              "BREAK_EVEN_REVIEW_BURDEN",
+              "ADVERSE_REVIEW_BURDEN"
+            ]
+          },
+          "components": {"$ref": "#/$defs/Components"}
+        }
+      }
+    },
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "Components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["PRESERVE", "REVIEW", "REQUALIFY", "HOLD", "REBUILD"],
+      "properties": {
+        "PRESERVE": {"type": "number", "exclusiveMinimum": 0},
+        "REVIEW": {"type": "number", "exclusiveMinimum": 0},
+        "REQUALIFY": {"type": "number", "exclusiveMinimum": 0},
+        "HOLD": {"type": "number", "exclusiveMinimum": 0},
+        "REBUILD": {"type": "number", "exclusiveMinimum": 0}
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:evergreen-enterprise-quote@r1",
+  "organization_id": "org:evergreen-industries",
+  "component_kind": "AUTHORITY",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "governance": {
+      "admission_authority_refs": [
+        "human:evergreen-workspace-owner"
+      ],
+      "owner_refs": [
+        "human:evergreen-product-owner",
+        "human:evergreen-legal-owner",
+        "human:evergreen-finance-owner",
+        "human:evergreen-gtm-owner",
+        "employee:enterprise-quote-operator"
+      ],
+      "rejection_path_ref": "procedure:evergreen-workspace-intake-reject@r1",
+      "unknown_path_ref": "procedure:evergreen-workspace-unknown-review@r1"
+    },
+    "source_authority_refs": [
+      "authority:evergreen-finance@v1",
+      "authority:evergreen-gtm@v1",
+      "authority:evergreen-legal@v1",
+      "authority:evergreen-product@v1",
+      "authority:skill-registry@v1"
+    ],
+    "capability_authority_refs": [
+      "authority:finance@v1",
+      "authority:gtm@v1",
+      "authority:legal@v1",
+      "authority:product@v1"
+    ],
+    "admission_controller_contract": "orgrebase.workspace.admission.AdmissionController@v1"
+  },
+  "projection_digest": "sha256:63ce92dcd1bf06671d0627cec4b16c6928583aa8fe02a8d2998902cdb859419c"
+}

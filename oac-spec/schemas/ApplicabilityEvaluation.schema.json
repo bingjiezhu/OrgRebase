@@ -1,0 +1,69 @@
+{
+  "$defs": {
+    "ApplicabilityResult": {
+      "description": "Strong-Kleene result emitted by a contextual predicate evaluation.",
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ],
+      "title": "ApplicabilityResult",
+      "type": "string"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/ApplicabilityEvaluation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Deterministic ledger fact for one edge, rule, or unknown-transition duty.",
+  "properties": {
+    "evaluationId": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Evaluationid",
+      "type": "string"
+    },
+    "predicateVersion": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Predicateversion",
+      "type": "string"
+    },
+    "reasonCodes": {
+      "default": [],
+      "items": {
+        "pattern": "^[A-Z][A-Z0-9_]{2,127}$",
+        "type": "string"
+      },
+      "title": "Reasoncodes",
+      "type": "array"
+    },
+    "result": {
+      "$ref": "#/$defs/ApplicabilityResult"
+    },
+    "sourceRef": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Sourceref",
+      "type": "string"
+    },
+    "witnessRefs": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Witnessrefs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "evaluationId",
+    "sourceRef",
+    "predicateVersion",
+    "result",
+    "witnessRefs"
+  ],
+  "title": "ApplicabilityEvaluation",
+  "type": "object"
+}

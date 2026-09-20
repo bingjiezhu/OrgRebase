@@ -1,0 +1,45 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-delegation-input.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "event_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Event Digest",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "subject": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Subject",
+      "type": "string"
+    },
+    "valid_seconds": {
+      "default": 900,
+      "maximum": 3600,
+      "minimum": 30,
+      "title": "Valid Seconds",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "subject",
+    "actor_id",
+    "event_digest",
+    "reason"
+  ],
+  "title": "DelegationInput",
+  "type": "object"
+}

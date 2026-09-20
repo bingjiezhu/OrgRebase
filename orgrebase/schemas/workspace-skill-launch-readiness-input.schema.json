@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/workspace-skill-launch-readiness-input.schema.json",
+  "title": "LaunchReadinessInput",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "NonZeroDigest": {
+      "type": "string",
+      "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "classification",
+    "object_id",
+    "reason_code",
+    "preview_receipt_digest",
+    "approval_receipt_digest"
+  ],
+  "properties": {
+    "classification": {
+      "enum": [
+        "AFFECTED_HARD",
+        "AFFECTED_REVIEW",
+        "AFFECTED_INFORMATIONAL",
+        "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+        "UNKNOWN"
+      ]
+    },
+    "object_id": {"type": "string", "minLength": 1},
+    "reason_code": {"type": "string", "minLength": 1},
+    "preview_receipt_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "approval_receipt_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "request_restricted_source": {"type": "boolean"},
+    "permission_expansion": {"type": "boolean"},
+    "target_write_requested": {"type": "boolean"},
+    "prompt_injection": {"type": "boolean"},
+    "malformed_input": {"type": "boolean"},
+    "deadline_expired": {"type": "boolean"},
+    "resource_exhausted": {"type": "boolean"},
+    "stale_preview": {"type": "boolean"}
+  }
+}

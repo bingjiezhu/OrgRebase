@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schema:orgrebase.skill-action.v1",
+  "title": "LaunchReadinessCandidateOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "NonZeroDigest": {"type": "string", "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"}
+  },
+  "required": ["schema_version", "action", "reason", "package_digest", "candidate_only", "target_writes"],
+  "properties": {
+    "schema_version": {"const": "orgrebase.skill-result-candidate.v1"},
+    "action": {"enum": ["REBASE", "REVIEW", "NOTIFY", "KEEP_CURRENT", "ESCALATE", "DENY", "ABSTAIN"]},
+    "reason": {"type": "string", "minLength": 1},
+    "preview_receipt_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "approval_receipt_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "object_id": {"type": "string", "minLength": 1},
+    "contract_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "package_digest": {"$ref": "#/$defs/NonZeroDigest"},
+    "candidate_only": {"const": true},
+    "target_writes": {"const": 0}
+  }
+}

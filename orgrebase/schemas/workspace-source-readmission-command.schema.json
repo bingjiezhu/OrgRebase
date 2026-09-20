@@ -1,0 +1,61 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-source-readmission-command.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actor Id"
+    },
+    "group_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Group Digest",
+      "type": "string"
+    },
+    "owner_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Owner Id"
+    },
+    "preview_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Preview Digest",
+      "type": "string"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "maxLength": 1000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    }
+  },
+  "required": [
+    "group_digest",
+    "preview_digest"
+  ],
+  "title": "SourceReadmissionCommand",
+  "type": "object"
+}

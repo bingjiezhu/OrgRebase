@@ -1,0 +1,64 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-adapter-activation-binding.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "adapter_capsule_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Adapter Capsule Digest",
+      "type": "string"
+    },
+    "binding_timing": {
+      "const": "PRE_EXECUTION_EXACT_BINDING",
+      "default": "PRE_EXECUTION_EXACT_BINDING",
+      "title": "Binding Timing",
+      "type": "string"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "execution_run_id": {
+      "minLength": 1,
+      "title": "Execution Run Id",
+      "type": "string"
+    },
+    "pack_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "profile_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-adapter-activation-binding.v1",
+      "default": "orgrebase.oac-adapter-activation-binding.v1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adaptation_run_id",
+    "adapter_capsule_digest",
+    "profile_digest",
+    "pack_digest",
+    "execution_run_id"
+  ],
+  "title": "OACAdapterActivationBinding",
+  "type": "object"
+}

@@ -1,0 +1,136 @@
+{
+  "digest": "sha256:c3c81dbc91485c7d4e940999af30547c140873c0cb6c2defdc845ef5689da37f",
+  "schema_version": "orgrebase.enterprise-seed-profile.v1",
+  "profile_id": "profile:northstar-acme-quote",
+  "revision": "r1",
+  "scenario_id": "northstar-acme-enterprise-quote",
+  "organization_id": "org:northstar",
+  "synthetic": true,
+  "source_roots": [
+    {
+      "id": "source:northstar:domain",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "packaged://northstar/domain@r1",
+      "declared_digest": "sha256:48f36b7d1c315b7012e0319dedc72ad045fd78c0610b496ae3d38ed9dd141339"
+    },
+    {
+      "id": "source:northstar:knowledge",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "packaged://northstar/knowledge@r1",
+      "declared_digest": "sha256:7a8981032e0a6564b40f92247b0855703f2e3416f7a1c4a54da687673802edff"
+    },
+    {
+      "id": "source:northstar:authority",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "packaged://northstar/authority@r1",
+      "declared_digest": "sha256:fd03a8fbb8b72242c1cca767e7daa3917f93283c41d2dd2c0f5c41b705b9ce2d"
+    },
+    {
+      "id": "source:northstar:capability",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "packaged://northstar/capability@r1",
+      "declared_digest": "sha256:ffe9233079bd1a6d06cb6fa035218803a7ad3ed49503229ac592f2439056d2f8"
+    },
+    {
+      "id": "source:northstar:dependency",
+      "revision": "r1",
+      "media_type": "application/vnd.orgrebase.enterprise-seed-component+json",
+      "locator": "packaged://northstar/dependency@r1",
+      "declared_digest": "sha256:8277aab48f2a025d1b4b2be9edf177d73ac955cfe98a90277a6cced7997ec16d"
+    }
+  ],
+  "components": [
+    {
+      "kind": "DOMAIN",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:northstar:domain"],
+      "declared_digest": "sha256:2832cbba137cfb90fc7886ad853663dab8d40c11bf9b1b2486e1ab194220262f"
+    },
+    {
+      "kind": "KNOWLEDGE",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:northstar:knowledge"],
+      "declared_digest": "sha256:d4fccb465bdedccd94d114e3aeb93d8519cc6ea75dafc162513a49a3e06deb7b"
+    },
+    {
+      "kind": "AUTHORITY",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:northstar:authority"],
+      "declared_digest": "sha256:d282cda751edb338549c8585abaf3f666d15e60eb157657bf750f0be4f459e94"
+    },
+    {
+      "kind": "CAPABILITY",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:northstar:capability"],
+      "declared_digest": "sha256:1806ee840bbe567aec6c003b3f0e2211dbaf23b0c5ab0e0c8b37f5dd982d5e4e"
+    },
+    {
+      "kind": "DEPENDENCY",
+      "completeness": "COMPLETE",
+      "source_root_refs": ["source:northstar:dependency"],
+      "declared_digest": "sha256:205135ff759d216d230d1403e8072f5356dd9b11cd71661d7330094688220c36"
+    }
+  ],
+  "governance": {
+    "admission_authority_refs": ["human:workspace-runtime-owner"],
+    "owner_refs": [
+      "human:product-owner",
+      "human:finance-owner",
+      "employee:sales-owner"
+    ],
+    "rejection_path_ref": "procedure:workspace-intake-reject@r1",
+    "unknown_path_ref": "procedure:workspace-unknown-review@r1"
+  },
+  "default_task": {
+    "id": "task:quote_acme",
+    "actor_id": "employee:sales-owner",
+    "purpose": "enterprise_quote",
+    "deliverable_kind": "QUOTE",
+    "requested_at": "2026-08-15T00:00:00Z",
+    "template_ref": "template:enterprise_quote@v1",
+    "customer_id": "customer:acme",
+    "idempotency_key": "workspace:form:quote-acme@v1",
+    "input_values": [{"key": "owner", "value": "sales-owner"}]
+  },
+  "change_family": [
+    {
+      "kind": "launch_date",
+      "owner_id": "human:product-owner",
+      "change_id": "changeset:workspace-launch-date",
+      "revision": "r1",
+      "purpose": "change_rebase",
+      "object_id": "claim:product.launch_date",
+      "base_version": "v7",
+      "proposed_version": "v8",
+      "idempotency_key": "workspace:apply:launch-date@r1"
+    },
+    {
+      "kind": "currency",
+      "owner_id": "human:finance-owner",
+      "change_id": "changeset:workspace-currency",
+      "revision": "r1",
+      "purpose": "change_rebase",
+      "object_id": "policy:finance.currency",
+      "base_version": "v1",
+      "proposed_version": "v2",
+      "idempotency_key": "workspace:apply:currency@r1"
+    }
+  ],
+  "gaps": [],
+  "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+  "data_class": "SYNTHETIC_FIXTURE",
+  "requested_growth_level": "G1_SELECT",
+  "runtime_compatibility": {
+    "mode": "REFERENCE_HANDLER",
+    "handler_profile": "northstar-acme-quote-v1"
+  },
+  "declared_limitation_codes": [
+    "SYNTHETIC_DATA_ONLY",
+    "NO_EXTERNAL_CONNECTORS",
+    "NO_OUTCOME_ASSURANCE"
+  ]
+}

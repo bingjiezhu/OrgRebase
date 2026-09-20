@@ -1,0 +1,22 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:northstar-acme-quote@r1",
+  "organization_id": "org:northstar",
+  "component_kind": "KNOWLEDGE",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "source_values": [
+      {"slot_id":"currency","object_ref":"policy:finance.currency@v1","domain_id":"finance","value":"USD","semantic_kind":"POLICY","authority_ref":"authority:finance@v1","source_id":"source:finance-currency-policy","source_version":"v1","sensitivity":"CONFIDENTIAL","raw_private_value":null},
+      {"slot_id":"data_residency","object_ref":"claim:product.residency_capability@v3","domain_id":"product","value":"US region supported","semantic_kind":"CLAIM","authority_ref":"authority:product@v1","source_id":"source:platform-capability","source_version":"v3","sensitivity":"INTERNAL","raw_private_value":null},
+      {"slot_id":"launch_date","object_ref":"claim:product.launch_date@v7","domain_id":"product","value":"2026-09-01","semantic_kind":"CLAIM","authority_ref":"authority:product@v1","source_id":"source:product-release-plan","source_version":"v12","sensitivity":"INTERNAL","raw_private_value":null},
+      {"slot_id":"notice_required","object_ref":"claim:legal.customer_notice_required@v3","domain_id":"legal","value":true,"semantic_kind":"CLAIM","authority_ref":"authority:legal@v1","source_id":"source:legal.customer-contract","source_version":"v4","sensitivity":"INTERNAL","raw_private_value":"SYNTHETIC RESTRICTED CONTRACT: notify customer before material launch-date changes"},
+      {"slot_id":"partner_terms","object_ref":"claim:gtm.partner_terms@v2","domain_id":"gtm","value":"legal-review","semantic_kind":"CLAIM","authority_ref":"authority:gtm@v1","source_id":"source:gtm-partner-policy","source_version":"v2","sensitivity":"INTERNAL","raw_private_value":null},
+      {"slot_id":"price_band","object_ref":"policy:finance.price_band@v7","domain_id":"finance","value":"strategic","semantic_kind":"POLICY","authority_ref":"authority:finance@v1","source_id":"source:finance-pricing-policy","source_version":"v7","sensitivity":"CONFIDENTIAL","raw_private_value":"SYNTHETIC INTERNAL COST FLOOR 70000"},
+      {"slot_id":"product_plan","object_ref":"claim:product.enterprise_plan@v4","domain_id":"product","value":"enterprise-plan-v4","semantic_kind":"CLAIM","authority_ref":"authority:product@v1","source_id":"source:product-catalog","source_version":"v4","sensitivity":"INTERNAL","raw_private_value":null},
+      {"slot_id":"public_message","object_ref":"claim:gtm.public_launch_message@v1","domain_id":"gtm","value":"Enterprise launch remains on the approved schedule.","semantic_kind":"CLAIM","authority_ref":"authority:gtm@v1","source_id":"source:gtm-public-message","source_version":"v1","sensitivity":"PUBLIC","raw_private_value":null},
+      {"slot_id":"quote_compose_skill","object_ref":"skill:enterprise-quote-compose@1.0","domain_id":"gtm","value":"skill:enterprise-quote-compose@1.0","semantic_kind":"SKILL","authority_ref":"authority:skill-registry@v1","source_id":"source:skill-registry","source_version":"r1","sensitivity":"INTERNAL","raw_private_value":null}
+    ]
+  },
+  "projection_digest": "sha256:9fd32c227647188e0ee4b7fb57988bbc93bbbb95b9f468659b47b7ab004998a8"
+}

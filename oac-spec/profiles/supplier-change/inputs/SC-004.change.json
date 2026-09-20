@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-004",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:quality-qualification",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "sourceRefs": ["oac:counterfactual:qualification-suspended"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-004",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "replace", "before": {"state": "known", "value": "qualified"}, "after": {"state": "known", "value": "qualification_suspended"}}
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "oac:counterfactual:qualification-suspended",
+    "scopeRefs": ["supplier:forges-martelliere", "alternative:acieries-savoie", "production:aero"],
+    "reason": "test qualification-sensitive organization",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:64fd1472ddceaf3e30311fce6f1f3b2b605eed48ef79e1cc20f238955ca4584c"
+}

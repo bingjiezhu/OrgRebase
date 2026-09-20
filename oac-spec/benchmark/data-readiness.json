@@ -1,0 +1,84 @@
+{
+  "reportVersion": "1.1",
+  "generatedAt": "2026-08-23",
+  "profile": "supplier-change/mixed-v0alpha1-v0.2-contextual",
+  "overallStatus": "NOT_READY_FOR_HUMAN_GOLD_OR_ENTERPRISE_CLAIMS",
+  "technicalMvpStatus": "READY_FOR_CONTEXTUAL_SHADOW_EXPERIMENT",
+  "claimLimit": "This report separates public source labels, project-authored candidate constraints, structural TCK evidence, and human-review gates.",
+  "sourceEvidence": {
+    "edith": {
+      "revision": "844264a930674feacf6dee1844da77b0c4d66b2a",
+      "license": "Apache-2.0",
+      "proc01AnswerKeyGroundTruth": "EMPTY_OBJECT",
+      "proc01MasterIndexRecords": 19,
+      "classificationCounts": {"AT_RISK": 8, "NOT_AT_RISK": 4, "REFERENCE": 6, "SUMMARY": 1},
+      "pdfBundleDownloaded": false
+    },
+    "enterpriseOpsGym": {
+      "revision": "c8e538eae8a6205294f0a86675fefdc1fac408f6",
+      "license": "Apache-2.0",
+      "declaredOutcomeOracle": "SQL final-state verifiers",
+      "supplierMappingStatus": "NOT_MAPPED",
+      "tasksDownloaded": false,
+      "runtimeExecuted": false
+    }
+  },
+  "annotationEvidence": {
+    "caseCount": 10,
+    "annotationStatusCounts": {"exploratory": 10},
+    "independentQualifiedHumanAnnotators": 0,
+    "adjudicators": 0,
+    "humanGoldClaimed": false,
+    "pluralCaseCount": 1,
+    "acceptedWitnessesForPluralCase": 2
+  },
+  "gates": [
+    {
+      "gateId": "G1_SOURCE_SUFFICIENCY",
+      "status": "NOT_RUN_HUMAN_GATE",
+      "evidence": "All 10 packets cite frozen metadata, but no qualified human has judged whether the metadata is sufficient for every mandatory OAC label.",
+      "requiredNext": "Two independent qualified reviewers must judge field-level source sufficiency."
+    },
+    {
+      "gateId": "G2_INDEPENDENT_AGREEMENT",
+      "status": "NOT_RUN_HUMAN_GATE",
+      "evidence": "No independent annotation rounds exist; pairwise F1 is not computable.",
+      "requiredNext": "Measure role/obligation and dependency-edge agreement without exposing prior labels."
+    },
+    {
+      "gateId": "G3_STRUCTURAL_NEGATIVE_DETECTION",
+      "status": "PASS_MECHANICS_ONLY",
+      "evidence": "15 of 15 registered plan mutations are rejected by stable structural and contextual checks; threshold is 90%.",
+      "requiredNext": "Add independently authored mutations before claiming general fault coverage."
+    },
+    {
+      "gateId": "G4_COUNTERFACTUAL_SENSITIVITY",
+      "status": "PARTIAL_PASS_ROLE_VERDICT_OPEN_OBLIGATION_TYPES",
+      "alignedCandidateRoleCaseIds": ["SC-001", "SC-002", "SC-003", "SC-004", "SC-005", "SC-006", "SC-007", "SC-008", "SC-009", "SC-010"],
+      "alignedCandidateVerdictCaseIds": ["SC-001", "SC-002", "SC-003", "SC-004", "SC-005", "SC-006", "SC-007", "SC-008", "SC-009", "SC-010"],
+      "coveredRequiredObligationTypeCaseIds": ["SC-001", "SC-002", "SC-008", "SC-009", "SC-010"],
+      "openObligationTypeCaseIds": ["SC-003", "SC-004", "SC-005", "SC-006", "SC-007"],
+      "evidence": "The v0.2 contextual contract closes the observed SC-008 subject, SC-009 scope, and SC-010 root-Unknown failures. Candidate roles and candidate verdicts agree in all ten development cases, while all required candidate obligation types are covered in only five. These are project-authored hypotheses, not Human Gold.",
+      "requiredNext": "Adjudicate the five obligation-type gaps or create immutable evidence-backed Profile successors; do not patch labels or case IDs into derivation code."
+    },
+    {
+      "gateId": "G5_PLURAL_VALIDITY",
+      "status": "PASS_MECHANICS_ONLY",
+      "evidence": "SC-001 has two sealed plans with different WorkUnit topology; the compiler-independent verifier, sharing the executable Supplier Profile oracle, returns ACCEPT for both.",
+      "requiredNext": "Have reviewers determine whether both are organizationally plausible, not merely structurally valid."
+    },
+    {
+      "gateId": "G6_BYTE_REPEATABILITY",
+      "status": "PASS_MECHANICS_ONLY",
+      "evidence": "The fixture generator is deterministic over frozen roots and tests compare regenerated digests.",
+      "requiredNext": "Re-run in an independent clean checkout and implementation."
+    },
+    {
+      "gateId": "G7_MATCHED_BASELINES",
+      "status": "PASS_MECHANICS_ONLY",
+      "evidence": "Reference, initiator-only, fixed-team, and graph-only runs bind the same ten-case input digest and publish deterministic manifests. Exact candidate-role-set matches are 10, 1, 2, and 0 respectively; these project-authored exploratory labels are not human Gold.",
+      "requiredNext": "Repeat the frozen comparison after independent human annotation; preserve null and negative findings without tuning against the labels."
+    }
+  ],
+  "nextDecision": "Treat v0.2 as a contextual technical MVP, not a validated enterprise Profile. Preserve the five obligation-type gaps, run independent semantics under Spec 003, and require qualified adjudication before changing Profile rules or making superiority claims."
+}

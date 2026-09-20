@@ -1,0 +1,12 @@
+{
+  "schema_version": "orgrebase.workspace-public-real-process-verification.v1",
+  "status": "PASS",
+  "verification_mode": "INDEPENDENT_OFFLINE_DETERMINISTIC_REPLAY",
+  "implementation_independence": "NO_EVALUATOR_OR_PRODUCT_IMPORTS",
+  "receipt_digest": "sha256:90ba8fdd87e3f99d7d944cea0c52948c03373d1a2e76eaaeb00c9ec7211bb720",
+  "projection_digest": "sha256:bb705b4e5f6d568b533ae99f1dfd33e0f536bea3c3d90d1ae0715c66a0e9518c",
+  "queries_replayed": 128,
+  "strategies_replayed": 3,
+  "failures": [],
+  "digest": "sha256:33811a43407fb5fc01aa073a9fb90b5dfbf1a384c030ca6ddf436662cfaa59ca"
+}

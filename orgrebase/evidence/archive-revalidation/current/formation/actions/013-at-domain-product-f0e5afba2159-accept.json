@@ -1,0 +1,14 @@
+{
+  "action": "accept_task_result",
+  "digest": "sha256:cf76ef95ee93f098464dc81b4283d0aa72459c3db0b90104a61eac9ee6d789ad",
+  "error": null,
+  "key": "at-domain-product-f0e5afba2159:accept",
+  "ok": true,
+  "payload_digest": "sha256:29e1213c36fde36b198f812cd95a0280dd6dd23f71aa0617b53e1fe706b61e9d",
+  "raw_ref": "raw-mcp/013-at-domain-product-f0e5afba2159-accept-e11cc56b.json",
+  "request_digest": "sha256:e119203758543c676e7bc4066c02ebfd73bbe6351e76b3fa4b8e476539c68f35",
+  "response_digest": "sha256:694cd9b11caaa183fb304b20385dd3955e7fb503d67773cfc2719d76d4735c50",
+  "sequence": 13,
+  "status": "completed",
+  "tool": "projectflow"
+}

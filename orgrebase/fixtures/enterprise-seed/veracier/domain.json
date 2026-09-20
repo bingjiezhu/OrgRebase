@@ -1,0 +1,15 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:veracier-supplier-shadow@r1",
+  "organization_id": "org:veracier",
+  "component_kind": "DOMAIN",
+  "revision": "r1",
+  "runtime_binding_mode": "INTAKE_ONLY",
+  "projection": {
+    "scenario_id": "veracier-supplier-status-shadow",
+    "business_process": "supplier_status_review",
+    "primary_entity": "supplier:atlas",
+    "domains": ["procurement", "risk"]
+  },
+  "projection_digest": "sha256:61b9cb8783697968cf5cd5a4987a3497ee886c2dc1479f980fcb4153047c9744"
+}

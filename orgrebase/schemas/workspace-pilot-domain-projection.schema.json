@@ -1,0 +1,50 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-pilot-domain-projection.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "change_family": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Change Family",
+      "type": "array"
+    },
+    "default_task": {
+      "additionalProperties": true,
+      "title": "Default Task",
+      "type": "object"
+    },
+    "domains": {
+      "items": {
+        "enum": [
+          "finance",
+          "gtm",
+          "legal",
+          "product"
+        ],
+        "type": "string"
+      },
+      "title": "Domains",
+      "type": "array"
+    },
+    "organization_id": {
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "organization_id",
+    "scenario_id",
+    "default_task",
+    "change_family",
+    "domains"
+  ],
+  "title": "PilotDomainProjection",
+  "type": "object"
+}

@@ -1,0 +1,1096 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "OrganizationPlan",
+  "metadata": {
+    "id": "plan:mutation:unknown-duty-omission",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:evidence-discovery",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2025-03-01T09:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "effectiveTo": null,
+    "sourceRefs": [
+      "snapshot:veracier-proc01-contextual",
+      "change:SC-009"
+    ]
+  },
+  "digest": "sha256:fcb92aca298671fed933d00dd7cccd95cf9fc3f0dbfb485b9ee7948df71afb77",
+  "spec": {
+    "snapshotRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "OrganizationSnapshot",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "snapshot:veracier-proc01-contextual",
+      "revision": 2,
+      "digest": "sha256:76073e824054b6a6b7de66e2b728069dea6ba83164f47d116f9f6eb0d4b1fe65"
+    },
+    "changeRef": {
+      "apiVersion": "oac.dev/v0alpha1",
+      "kind": "SemanticChangeSet",
+      "namespace": "oac.examples.supplier",
+      "resourceId": "change:SC-009",
+      "revision": 1,
+      "digest": "sha256:1cb4f27562a8a156cb6448bf9b65e2060905b917c16a696d1464fb5b1ffaac56"
+    },
+    "status": "guarded_unresolved",
+    "effectCeiling": "zero_effect",
+    "compilerId": "oac.reference.supplier-change",
+    "compilerVersion": "0.3.0a0",
+    "applicabilityEvaluations": [
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:02d606f07295c23e1d1de290",
+        "sourceRef": "rule:contextual-qualified-commercial",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_AFTER_VALUE_MISMATCH",
+          "APPLICABILITY_SUBJECT_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/2/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/2/applicability",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/11/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:19b422fc951b3c93c39ec5c1",
+        "sourceRef": "rule:contextual-nuclear-continuity",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "TRUE",
+        "reasonCodes": [],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/5/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/5/applicability",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/11/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:266cba1980ffa35d59205d99",
+        "sourceRef": "edge:contextual-nuclear-production",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "TRUE",
+        "reasonCodes": [],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/3/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/3/relationType",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/3/transferPredicate",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/11/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/3/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:4d06c46123f7e4fe0eb453e8",
+        "sourceRef": "rule:contextual-nuclear-finance-negative-control",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_SCOPE_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/7/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/7/applicability",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:5ed4c794e8bb5faa7ebea147",
+        "sourceRef": "rule:contextual-qualified-quality",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_AFTER_VALUE_MISMATCH",
+          "APPLICABILITY_SCOPE_MISMATCH",
+          "APPLICABILITY_SUBJECT_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/0/applicability",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:7d1f38129ef32cde31c77837",
+        "sourceRef": "rule:contextual-nuclear-exposure",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "TRUE",
+        "reasonCodes": [],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/3/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/3/applicability",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:8c285d2860c6dba9ee25de89",
+        "sourceRef": "edge:contextual-production-compliance",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "UNKNOWN",
+        "reasonCodes": [
+          "CANDIDATE_INPUT_NOT_AUTHORITY"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/4/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/4/relationType",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/4/transferPredicate",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/14/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:b69894ebb82ae56284a09fcd",
+        "sourceRef": "edge:contextual-alternative-aero",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_AFTER_VALUE_MISMATCH",
+          "APPLICABILITY_SCOPE_MISMATCH",
+          "APPLICABILITY_SUBJECT_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/0/relationType",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/0/transferPredicate",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:bdb715ea51ca860b609200f0",
+        "sourceRef": "edge:contextual-supplier-rush-order",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_SCOPE_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/6/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/6/relationType",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/6/transferPredicate",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:d66e2a2f224abcb426bbdc2a",
+        "sourceRef": "edge:contextual-supplier-nuclear-order",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "TRUE",
+        "reasonCodes": [],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/2/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/2/relationType",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/2/transferPredicate",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/3/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:d88ece6d35ad5fb267f31270",
+        "sourceRef": "rule:contextual-nuclear-alternative",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "TRUE",
+        "reasonCodes": [],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/4/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/4/applicability",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/3/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:dbd42339b817ec91cac65c24",
+        "sourceRef": "edge:contextual-supplier-contract",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_SCOPE_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/5/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/5/relationType",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/5/transferPredicate",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:de71b899c81a2d51a0b9882f",
+        "sourceRef": "edge:contextual-alternative-energy",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_AFTER_VALUE_MISMATCH",
+          "APPLICABILITY_SCOPE_MISMATCH",
+          "APPLICABILITY_SUBJECT_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/1/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/1/relationType",
+          "snapshot:veracier-proc01-contextual#/spec/dependencyEdges/1/transferPredicate",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/11/admissionStatus"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:e7c3f1a2ef13672598807eba",
+        "sourceRef": "rule:contextual-nuclear-contract-negative-control",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_SCOPE_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/6/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/6/applicability",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:ee0b88af97d5654886dcf008",
+        "sourceRef": "duty:contextual-nuclear-compliance-discovery",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "UNKNOWN",
+        "reasonCodes": [
+          "CANDIDATE_INPUT_NOT_AUTHORITY"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/14/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/unknownTransitionDuties/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/unknownTransitionDuties/0/applicability"
+        ]
+      },
+      {
+        "evaluationId": "urn:oac:mvp:evaluation:fa6ba466a1b0b93060e3a362",
+        "sourceRef": "rule:contextual-qualified-continuity",
+        "predicateVersion": "oac.supplier.applicability/v0.2",
+        "result": "FALSE",
+        "reasonCodes": [
+          "APPLICABILITY_AFTER_VALUE_MISMATCH",
+          "APPLICABILITY_SCOPE_MISMATCH",
+          "APPLICABILITY_SUBJECT_MISMATCH"
+        ],
+        "witnessRefs": [
+          "change:SC-009#/digest",
+          "change:SC-009#/spec/admissionStatus",
+          "change:SC-009#/spec/deltas/0/after/state",
+          "change:SC-009#/spec/deltas/0/after/value",
+          "change:SC-009#/spec/scopeRefs",
+          "change:SC-009#/spec/semanticType",
+          "change:SC-009#/spec/subjectRef",
+          "snapshot:veracier-proc01-contextual#/digest",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/1/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/impactRules/1/applicability",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/admissionStatus",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/domainRef",
+          "snapshot:veracier-proc01-contextual#/spec/nodes/0/nodeType"
+        ]
+      }
+    ],
+    "impactPaths": [
+      {
+        "pathId": "urn:oac:mvp:path:0cd6610dcf0e41dc2eff5674",
+        "targetRef": "production:energy",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [
+          "rule:contextual-nuclear-continuity"
+        ],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:19b422fc951b3c93c39ec5c1"
+        ],
+        "origin": "rule",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:102c22e38eb9c88ecf75dd6b",
+        "targetRef": "order:energy-nusafe",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:121c6c5f8898ca17316b2f1b",
+        "targetRef": "order:aero-rush",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:bdb715ea51ca860b609200f0"
+        ],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:1a4435d0c25986d0585a0add",
+        "targetRef": "control:nuclear-substitution",
+        "state": "unknown",
+        "edgeRefs": [
+          "edge:contextual-supplier-nuclear-order",
+          "edge:contextual-nuclear-production",
+          "edge:contextual-production-compliance"
+        ],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:d66e2a2f224abcb426bbdc2a",
+          "urn:oac:mvp:evaluation:266cba1980ffa35d59205d99",
+          "urn:oac:mvp:evaluation:8c285d2860c6dba9ee25de89"
+        ],
+        "origin": "gap",
+        "reasonCodes": [
+          "CANDIDATE_INPUT_NOT_AUTHORITY"
+        ],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:1b13ca80a99226a869f98a4e",
+        "targetRef": "order:maroc",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:2cbd40d31f56109b0f603d7e",
+        "targetRef": "production:energy",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:contextual-supplier-nuclear-order",
+          "edge:contextual-nuclear-production"
+        ],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:d66e2a2f224abcb426bbdc2a",
+          "urn:oac:mvp:evaluation:266cba1980ffa35d59205d99"
+        ],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:341bb68e5e4cb3b3ec916ed8",
+        "targetRef": "order:energy-nuclear",
+        "state": "affected",
+        "edgeRefs": [
+          "edge:contextual-supplier-nuclear-order"
+        ],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:d66e2a2f224abcb426bbdc2a"
+        ],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:3c5713b41b8d999d33aea236",
+        "targetRef": "alternative:acieries-savoie",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [
+          "rule:contextual-nuclear-alternative"
+        ],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:d88ece6d35ad5fb267f31270"
+        ],
+        "origin": "rule",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:5ca6c21fcc5162b7a5f79f86",
+        "targetRef": "production:aero",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:fa6ba466a1b0b93060e3a362"
+        ],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:76dc9d5b90d522be444e3bab",
+        "targetRef": "control:nuclear-substitution",
+        "state": "unknown",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:ee0b88af97d5654886dcf008"
+        ],
+        "origin": "gap",
+        "reasonCodes": [
+          "CANDIDATE_INPUT_NOT_AUTHORITY"
+        ],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:85688e40b5f000bea87acca1",
+        "targetRef": "production:defense",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:974f7cf06417d9c13a0c7331",
+        "targetRef": "supplier:forges-martelliere",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [
+          "rule:contextual-nuclear-exposure"
+        ],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:7d1f38129ef32cde31c77837"
+        ],
+        "origin": "rule",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:99aaec90cf80239a5fc5b03c",
+        "targetRef": "supplier:forges-martelliere",
+        "state": "affected",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "dependency",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:a8ff44e474cebda4f80830bf",
+        "targetRef": "ledger:supplier-exposure",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:4d06c46123f7e4fe0eb453e8"
+        ],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:aa18387a032799cd738eea39",
+        "targetRef": "order:defense",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:b83cf43ce869e7c3712aec2d",
+        "targetRef": "order:aero-av3000",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:d5f0a53f0f130ae3f0c921ba",
+        "targetRef": "boundary:source-discovery",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:dd1d0d95e7ed9ca9e0a031b5",
+        "targetRef": "order:aero-partial",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      },
+      {
+        "pathId": "urn:oac:mvp:path:f8db8a7bcfd1a7e08ff4bca0",
+        "targetRef": "contract:forges-msa",
+        "state": "unaffected_proven",
+        "edgeRefs": [],
+        "ruleRefs": [],
+        "evaluationRefs": [
+          "urn:oac:mvp:evaluation:dbd42339b817ec91cac65c24",
+          "urn:oac:mvp:evaluation:e7c3f1a2ef13672598807eba"
+        ],
+        "origin": "bounded_non_impact",
+        "reasonCodes": [],
+        "truncated": false
+      }
+    ],
+    "obligations": [
+      {
+        "obligationId": "urn:oac:mvp:obligation:39fc52582e6f600daccb27fe",
+        "origin": "dependency_path",
+        "targetRef": "production:energy",
+        "domainRef": "domain:operations",
+        "requiredRoleRef": "role:operations-continuity",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:2cbd40d31f56109b0f603d7e"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:5fdc371e3d36b0c7d4029074",
+        "origin": "dependency_path",
+        "targetRef": "order:energy-nuclear",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "assess_dependency_impact",
+        "requiredEvidence": [
+          "impact_assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:341bb68e5e4cb3b3ec916ed8"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:6c25fa76bb247274344e85ae",
+        "origin": "organizational_rule",
+        "targetRef": "supplier:forges-martelliere",
+        "domainRef": "domain:procurement",
+        "requiredRoleRef": "role:procurement-owner",
+        "obligationType": "exposure-inventory",
+        "requiredEvidence": [
+          "evidence:proc01-index"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:974f7cf06417d9c13a0c7331"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:c03aeb9df19198ce75048664",
+        "origin": "organizational_rule",
+        "targetRef": "alternative:acieries-savoie",
+        "domainRef": "domain:quality",
+        "requiredRoleRef": "role:quality-qualification",
+        "obligationType": "alternative-qualification",
+        "requiredEvidence": [
+          "evidence:nuclear-grade-qualification"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:3c5713b41b8d999d33aea236"
+        ],
+        "resolutionState": "affected"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:d676645040d853050e382839",
+        "origin": "organizational_rule",
+        "targetRef": "control:nuclear-substitution",
+        "domainRef": "domain:compliance",
+        "requiredRoleRef": "role:compliance-reviewer",
+        "obligationType": "compliance-discovery",
+        "requiredEvidence": [
+          "evidence:applicable-regulatory-basis"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:1a4435d0c25986d0585a0add",
+          "urn:oac:mvp:path:76dc9d5b90d522be444e3bab"
+        ],
+        "resolutionState": "unknown"
+      },
+      {
+        "obligationId": "urn:oac:mvp:obligation:eed423199ac59aa504c57bf4",
+        "origin": "organizational_rule",
+        "targetRef": "production:energy",
+        "domainRef": "domain:operations",
+        "requiredRoleRef": "role:operations-continuity",
+        "obligationType": "continuity-assessment",
+        "requiredEvidence": [
+          "evidence:nuclear-continuity-assessment"
+        ],
+        "pathRefs": [
+          "urn:oac:mvp:path:0cd6610dcf0e41dc2eff5674"
+        ],
+        "resolutionState": "affected"
+      }
+    ],
+    "roleInstances": [
+      {
+        "roleInstanceId": "urn:oac:id:sha256:v1:role-instance:89b4b4e77730efa684c831e0151d7701f4425ed6abec2661d6c63ac1c2f62174",
+        "roleDefinitionRef": "role:compliance-reviewer",
+        "principalRef": "principal:compliance-agent",
+        "mission": "identify applicable compliance controls and preserve uncertainty",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:d676645040d853050e382839"
+        ],
+        "qualificationRefs": [
+          "qualification:compliance-review"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "roleInstanceId": "urn:oac:id:sha256:v1:role-instance:8547797473d80e075e7dcd4fb3b65d64f860634fdfb9aabd2d312ccb76742169",
+        "roleDefinitionRef": "role:operations-continuity",
+        "principalRef": "principal:operations-agent",
+        "mission": "assess production continuity options without changing schedules",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:39fc52582e6f600daccb27fe",
+          "urn:oac:mvp:obligation:eed423199ac59aa504c57bf4"
+        ],
+        "qualificationRefs": [
+          "qualification:operations-planning"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "roleInstanceId": "urn:oac:id:sha256:v1:role-instance:0252e7dc7685a92f7f353c0c292e4bdcc804421abc2a4482fc312381a0d64be6",
+        "roleDefinitionRef": "role:procurement-owner",
+        "principalRef": "principal:procurement-agent",
+        "mission": "inventory supplier commitments and coordinate a zero-effect response",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:5fdc371e3d36b0c7d4029074",
+          "urn:oac:mvp:obligation:6c25fa76bb247274344e85ae"
+        ],
+        "qualificationRefs": [
+          "qualification:procurement-authority"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "roleInstanceId": "urn:oac:id:sha256:v1:role-instance:3729f7cbc84b0638058738e8877f522c6bb48867051bf9f6fb8a61857ff58caa",
+        "roleDefinitionRef": "role:quality-qualification",
+        "principalRef": "principal:quality-agent",
+        "mission": "independently review supplier or lot qualification evidence",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:c03aeb9df19198ce75048664"
+        ],
+        "qualificationRefs": [
+          "qualification:supplier-quality"
+        ],
+        "effectCeiling": "zero_effect"
+      }
+    ],
+    "workUnits": [
+      {
+        "workUnitId": "urn:oac:id:sha256:v1:work-unit:864fb051a4b1b51e382b25ab90d3f07983d39922652c3090f899abe25801eb10",
+        "roleInstanceRefs": [
+          "urn:oac:id:sha256:v1:role-instance:89b4b4e77730efa684c831e0151d7701f4425ed6abec2661d6c63ac1c2f62174"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:id:sha256:v1:role-instance:89b4b4e77730efa684c831e0151d7701f4425ed6abec2661d6c63ac1c2f62174",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:d676645040d853050e382839"
+        ],
+        "evidenceOutputs": [
+          "evidence:applicable-regulatory-basis"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "workUnitId": "urn:oac:id:sha256:v1:work-unit:65a8d56552817078390bec5a78105dacf8b5405aac9dae6b90cc11e72c347f98",
+        "roleInstanceRefs": [
+          "urn:oac:id:sha256:v1:role-instance:8547797473d80e075e7dcd4fb3b65d64f860634fdfb9aabd2d312ccb76742169"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:id:sha256:v1:role-instance:8547797473d80e075e7dcd4fb3b65d64f860634fdfb9aabd2d312ccb76742169",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:39fc52582e6f600daccb27fe",
+          "urn:oac:mvp:obligation:eed423199ac59aa504c57bf4"
+        ],
+        "evidenceOutputs": [
+          "evidence:nuclear-continuity-assessment",
+          "impact_assessment"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "workUnitId": "urn:oac:id:sha256:v1:work-unit:49e6e5a64e3744649038aab35820a222feb49d1766d5b83e185ed203043fc182",
+        "roleInstanceRefs": [
+          "urn:oac:id:sha256:v1:role-instance:0252e7dc7685a92f7f353c0c292e4bdcc804421abc2a4482fc312381a0d64be6"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:id:sha256:v1:role-instance:0252e7dc7685a92f7f353c0c292e4bdcc804421abc2a4482fc312381a0d64be6",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:5fdc371e3d36b0c7d4029074",
+          "urn:oac:mvp:obligation:6c25fa76bb247274344e85ae"
+        ],
+        "evidenceOutputs": [
+          "evidence:proc01-index",
+          "impact_assessment"
+        ],
+        "effectCeiling": "zero_effect"
+      },
+      {
+        "workUnitId": "urn:oac:id:sha256:v1:work-unit:98fb95a2141f3e9579cf8fb99245f98c23c6756e39267d67352eac9016889d7a",
+        "roleInstanceRefs": [
+          "urn:oac:id:sha256:v1:role-instance:3729f7cbc84b0638058738e8877f522c6bb48867051bf9f6fb8a61857ff58caa"
+        ],
+        "accountableRoleInstanceRef": "urn:oac:id:sha256:v1:role-instance:3729f7cbc84b0638058738e8877f522c6bb48867051bf9f6fb8a61857ff58caa",
+        "obligationRefs": [
+          "urn:oac:mvp:obligation:c03aeb9df19198ce75048664"
+        ],
+        "evidenceOutputs": [
+          "evidence:nuclear-grade-qualification"
+        ],
+        "effectCeiling": "zero_effect"
+      }
+    ],
+    "happensBefore": [
+      {
+        "predecessorRef": "urn:oac:id:sha256:v1:work-unit:864fb051a4b1b51e382b25ab90d3f07983d39922652c3090f899abe25801eb10",
+        "successorRef": "urn:oac:id:sha256:v1:work-unit:98fb95a2141f3e9579cf8fb99245f98c23c6756e39267d67352eac9016889d7a",
+        "relation": "must_complete_before",
+        "reasonRefs": [
+          "urn:oac:mvp:obligation:c03aeb9df19198ce75048664",
+          "urn:oac:mvp:obligation:d676645040d853050e382839",
+          "urn:oac:mvp:path:3c5713b41b8d999d33aea236"
+        ]
+      },
+      {
+        "predecessorRef": "urn:oac:id:sha256:v1:work-unit:49e6e5a64e3744649038aab35820a222feb49d1766d5b83e185ed203043fc182",
+        "successorRef": "urn:oac:id:sha256:v1:work-unit:65a8d56552817078390bec5a78105dacf8b5405aac9dae6b90cc11e72c347f98",
+        "relation": "must_complete_before",
+        "reasonRefs": [
+          "urn:oac:mvp:path:2cbd40d31f56109b0f603d7e"
+        ]
+      },
+      {
+        "predecessorRef": "urn:oac:id:sha256:v1:work-unit:98fb95a2141f3e9579cf8fb99245f98c23c6756e39267d67352eac9016889d7a",
+        "successorRef": "urn:oac:id:sha256:v1:work-unit:65a8d56552817078390bec5a78105dacf8b5405aac9dae6b90cc11e72c347f98",
+        "relation": "must_complete_before",
+        "reasonRefs": [
+          "urn:oac:mvp:obligation:c03aeb9df19198ce75048664",
+          "urn:oac:mvp:obligation:eed423199ac59aa504c57bf4",
+          "urn:oac:mvp:path:0cd6610dcf0e41dc2eff5674"
+        ]
+      }
+    ],
+    "decisions": [
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:0f232f06a876daa4810f7791b910cc5088c9f084bdd7968431c71ad8478815f5",
+        "subjectRef": "role:procurement-owner",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:10b31d3209310b253c10e824c23b7eca364fa4002aa3480a764fb3d02a97ac8d",
+        "subjectRef": "principal:operations-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:1e3906749f747f8280abdd39fcbe979f3b289dd1d2ea87910b6d84b499343f19",
+        "subjectRef": "principal:quality-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:3d7608eb16820262b340cbdaf43e715a77c32f37c822200d82cc8939fa810045",
+        "subjectRef": "role:operations-continuity",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:3db07acbbae919b80cca413354078af0987248ebe46cca3a8b05b27bd70e9ea7",
+        "subjectRef": "role:finance-exposure",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "NOT_REQUIRED_BY_CONTRACT"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:599ba96f194ad818b8f86276934171d1866a89e04b81032ce2181506ba871c41",
+        "subjectRef": "role:evidence-discovery",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "NOT_REQUIRED_BY_CONTRACT"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:66c28dfbb6eaaf4b57c810471fdc0d28528daba66c1ae549e721dad28518b14b",
+        "subjectRef": "principal:compliance-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:66df4db6548a3f2e724e16f59af2095d44d719ff302e75084622ba2ba6f74282",
+        "subjectRef": "role:legal-reviewer",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "NOT_REQUIRED_BY_CONTRACT"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:692eb2b48e740db24a5452d08f15954b7e9629709c05ec096c8401a541f2fa66",
+        "subjectRef": "role:quality-qualification",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:84ff2b4b5e1c152bd66453ec8b454e5b44b58baa20af5a25eec3709211b8ae8b",
+        "subjectRef": "principal:legal-agent",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "PRINCIPAL_NOT_SELECTED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:a03570898430d75549d48298b0f6a37fe37e1a5d450617828c620c442ea7ccc5",
+        "subjectRef": "principal:evidence-agent",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "PRINCIPAL_NOT_SELECTED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:b57b44f1ded71becfd069a366034980e050ad3939eb3bf82df773ba71684409a",
+        "subjectRef": "principal:procurement-agent",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "PRINCIPAL_SELECTED_QUALIFIED"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:ec0ee2fa3d06cd4fa2cba62090a8a41e0a3e9dd22ed0f48a1c6c62fbb3bdef6a",
+        "subjectRef": "role:compliance-reviewer",
+        "inputClass": "admitted",
+        "disposition": "included",
+        "reasonCodes": [
+          "ROLE_SELECTED_FOR_OBLIGATION"
+        ]
+      },
+      {
+        "decisionId": "urn:oac:id:sha256:v1:plan-decision:ffa6380ff7a6d9cfac8d4d9484301a33c022f1b3e9c137be64bb3b6a63ac1ccc",
+        "subjectRef": "principal:finance-agent",
+        "inputClass": "admitted",
+        "disposition": "excluded",
+        "reasonCodes": [
+          "PRINCIPAL_NOT_SELECTED"
+        ]
+      }
+    ],
+    "unresolvedRefs": [
+      "urn:oac:mvp:evaluation:8c285d2860c6dba9ee25de89",
+      "urn:oac:mvp:evaluation:ee0b88af97d5654886dcf008",
+      "urn:oac:mvp:path:1a4435d0c25986d0585a0add",
+      "urn:oac:mvp:path:76dc9d5b90d522be444e3bab"
+    ],
+    "minimality": {
+      "level": "inclusion_minimal",
+      "consideredRoleRefs": [
+        "role:compliance-reviewer",
+        "role:evidence-discovery",
+        "role:finance-exposure",
+        "role:legal-reviewer",
+        "role:operations-continuity",
+        "role:procurement-owner",
+        "role:quality-qualification"
+      ],
+      "consideredPrincipalRefs": [
+        "principal:compliance-agent",
+        "principal:evidence-agent",
+        "principal:finance-agent",
+        "principal:legal-agent",
+        "principal:operations-agent",
+        "principal:procurement-agent",
+        "principal:quality-agent"
+      ],
+      "nonRemovableRefs": [
+        "urn:oac:id:sha256:v1:role-instance:0252e7dc7685a92f7f353c0c292e4bdcc804421abc2a4482fc312381a0d64be6",
+        "urn:oac:id:sha256:v1:role-instance:3729f7cbc84b0638058738e8877f522c6bb48867051bf9f6fb8a61857ff58caa",
+        "urn:oac:id:sha256:v1:role-instance:8547797473d80e075e7dcd4fb3b65d64f860634fdfb9aabd2d312ccb76742169",
+        "urn:oac:id:sha256:v1:role-instance:89b4b4e77730efa684c831e0151d7701f4425ed6abec2661d6c63ac1c2f62174",
+        "urn:oac:id:sha256:v1:work-unit:49e6e5a64e3744649038aab35820a222feb49d1766d5b83e185ed203043fc182",
+        "urn:oac:id:sha256:v1:work-unit:65a8d56552817078390bec5a78105dacf8b5405aac9dae6b90cc11e72c347f98",
+        "urn:oac:id:sha256:v1:work-unit:864fb051a4b1b51e382b25ab90d3f07983d39922652c3090f899abe25801eb10",
+        "urn:oac:id:sha256:v1:work-unit:98fb95a2141f3e9579cf8fb99245f98c23c6756e39267d67352eac9016889d7a"
+      ]
+    }
+  }
+}

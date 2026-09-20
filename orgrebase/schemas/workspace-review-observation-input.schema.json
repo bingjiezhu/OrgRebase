@@ -1,0 +1,69 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-review-observation-input.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "enum": [
+        "PREVIEW",
+        "APPROVE",
+        "APPLY",
+        "REJECT",
+        "REVISE"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "active_ms": {
+      "maximum": 86400000,
+      "minimum": 0,
+      "title": "Active Ms",
+      "type": "integer"
+    },
+    "observation_id": {
+      "maxLength": 160,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "outcome": {
+      "enum": [
+        "SUCCESS",
+        "ERROR",
+        "CANCELLED"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "preview_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Preview Digest",
+      "type": "string"
+    },
+    "reason_code": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Z0-9_:-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason Code"
+    }
+  },
+  "required": [
+    "observation_id",
+    "preview_digest",
+    "active_ms",
+    "action",
+    "outcome"
+  ],
+  "title": "ReviewObservationInput",
+  "type": "object"
+}

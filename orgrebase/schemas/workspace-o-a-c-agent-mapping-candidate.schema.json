@@ -1,0 +1,146 @@
+{
+  "$defs": {
+    "OACAgentComponentProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_refs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Authority Refs",
+          "type": "array"
+        },
+        "component_kind": {
+          "$ref": "#/$defs/SeedComponentKind"
+        },
+        "declared_unknowns": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Declared Unknowns",
+          "type": "array"
+        },
+        "reason_codes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "source_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Digest",
+          "type": "string"
+        },
+        "source_root_ref": {
+          "minLength": 1,
+          "title": "Source Root Ref",
+          "type": "string"
+        },
+        "target_oac_paths": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Target Oac Paths",
+          "type": "array"
+        }
+      },
+      "required": [
+        "component_kind",
+        "source_root_ref",
+        "source_digest",
+        "target_oac_paths",
+        "authority_refs"
+      ],
+      "title": "OACAgentComponentProposal",
+      "type": "object"
+    },
+    "SeedComponentKind": {
+      "enum": [
+        "DOMAIN",
+        "KNOWLEDGE",
+        "AUTHORITY",
+        "CAPABILITY",
+        "DEPENDENCY"
+      ],
+      "title": "SeedComponentKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Provider output contract.  Structural validity is not admission.",
+  "properties": {
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "component_mappings": {
+      "items": {
+        "$ref": "#/$defs/OACAgentComponentProposal"
+      },
+      "maxItems": 5,
+      "minItems": 5,
+      "title": "Component Mappings",
+      "type": "array"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "pack_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "producer_ref": {
+      "const": "principal:oac-intake-mapper",
+      "default": "principal:oac-intake-mapper",
+      "title": "Producer Ref",
+      "type": "string"
+    },
+    "profile_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "requested_approval_authority_ref": {
+      "minLength": 1,
+      "title": "Requested Approval Authority Ref",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-agent-mapping-candidate.v1",
+      "default": "orgrebase.oac-agent-mapping-candidate.v1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adaptation_run_id",
+    "profile_digest",
+    "pack_digest",
+    "requested_approval_authority_ref",
+    "component_mappings"
+  ],
+  "title": "OACAgentMappingCandidate",
+  "type": "object"
+}

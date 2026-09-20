@@ -1,0 +1,14 @@
+{
+  "action": "delegate_task",
+  "digest": "sha256:0918b16791d0ee7b267e8820cd362df8353b6a34e53481723fc0703d35d5387a",
+  "error": null,
+  "key": "at-domain-product-f0e5afba2159:delegate",
+  "ok": true,
+  "payload_digest": "sha256:3d952c9ba2e04ef93ad062140cdbf2d2e0e6f958169a92e391a0ebb1872643ce",
+  "raw_ref": "raw-mcp/009-at-domain-product-f0e5afba2159-delegate-24e8326a.json",
+  "request_digest": "sha256:1742feb57a9d260fb878708cfd541575df13e0f3b4cf9959710fa575329487de",
+  "response_digest": "sha256:da425fff537b58d3bbb0d981b18d79de1c387473ad3b841b400b7896ba535775",
+  "sequence": 9,
+  "status": "assigned",
+  "tool": "taskflow"
+}

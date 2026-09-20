@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "SourceFieldMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "pattern": "^[a-z][a-z0-9_]{0,127}$",
+          "title": "Field",
+          "type": "string"
+        },
+        "record_id": {
+          "pattern": "^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$",
+          "title": "Record Id",
+          "type": "string"
+        },
+        "slot_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "transform": {
+          "default": "identity",
+          "enum": [
+            "identity",
+            "date_only"
+          ],
+          "title": "Transform",
+          "type": "string"
+        },
+        "value_map": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "maxProperties": 128,
+          "title": "Value Map",
+          "type": "object"
+        }
+      },
+      "required": [
+        "record_id",
+        "field",
+        "slot_id"
+      ],
+      "title": "SourceFieldMapping",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-source-binding-proposal.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "generation_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Generation Digest",
+      "type": "string"
+    },
+    "inventory_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Inventory Digest",
+      "type": "string"
+    },
+    "mappings": {
+      "items": {
+        "$ref": "#/$defs/SourceFieldMapping"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "title": "Mappings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "inventory_digest",
+    "generation_digest",
+    "mappings"
+  ],
+  "title": "SourceBindingProposal",
+  "type": "object"
+}

@@ -1,0 +1,30 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-skill-invocation-budget.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "max_invocations": {
+      "maximum": 100000,
+      "minimum": 1,
+      "title": "Max Invocations",
+      "type": "integer"
+    },
+    "max_seconds": {
+      "exclusiveMinimum": 0,
+      "maximum": 86400,
+      "title": "Max Seconds",
+      "type": "number"
+    }
+  },
+  "required": [
+    "max_invocations",
+    "max_seconds"
+  ],
+  "title": "SkillInvocationBudget",
+  "type": "object"
+}

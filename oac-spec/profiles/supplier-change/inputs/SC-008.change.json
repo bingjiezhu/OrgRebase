@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-008",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:quality-qualification",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "sourceRefs": ["edith:MASTER_INDEX:DOC-29949d76", "oac:counterfactual:alternative-qualified"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-008",
+    "subjectRef": "alternative:acieries-savoie",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "replace", "before": {"state": "known", "value": "qualification_in_progress"}, "after": {"state": "known", "value": "qualified"}}
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "oac:counterfactual:alternative-qualified",
+    "scopeRefs": ["alternative:acieries-savoie", "production:aero", "production:energy"],
+    "reason": "test counterfactual deactivation and ordering when an alternative becomes qualified",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:69ec666f7453286983111ec0254f8c67213156561224e05d958eea8aedc8d40c"
+}

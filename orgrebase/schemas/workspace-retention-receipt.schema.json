@@ -1,0 +1,77 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-retention-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "canonical_business_evidence_deleted": {
+      "const": false,
+      "default": false,
+      "title": "Canonical Business Evidence Deleted",
+      "type": "boolean"
+    },
+    "cutoff_epoch_seconds": {
+      "title": "Cutoff Epoch Seconds",
+      "type": "integer"
+    },
+    "deleted_ingestion_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Deleted Ingestion Ids",
+      "type": "array"
+    },
+    "deleted_rejection_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Deleted Rejection Ids",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "const": "OBSERVED_CONTROLLED_LOCAL",
+      "default": "OBSERVED_CONTROLLED_LOCAL",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "rejected_cutoff_epoch_seconds": {
+      "title": "Rejected Cutoff Epoch Seconds",
+      "type": "integer"
+    },
+    "retained_count": {
+      "minimum": 0,
+      "title": "Retained Count",
+      "type": "integer"
+    },
+    "retained_rejection_count": {
+      "minimum": 0,
+      "title": "Retained Rejection Count",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "orgrebase.telemetry-retention-receipt.v1",
+      "default": "orgrebase.telemetry-retention-receipt.v1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "cutoff_epoch_seconds",
+    "rejected_cutoff_epoch_seconds",
+    "deleted_ingestion_ids",
+    "deleted_rejection_ids",
+    "retained_count",
+    "retained_rejection_count"
+  ],
+  "title": "RetentionReceipt",
+  "type": "object"
+}

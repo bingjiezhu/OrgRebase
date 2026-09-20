@@ -1,0 +1,127 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-formation-preview.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agent_execution": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Agent Execution",
+      "type": "string"
+    },
+    "capsule_digest": {
+      "title": "Capsule Digest",
+      "type": "string"
+    },
+    "certificate_digest": {
+      "title": "Certificate Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "handler_execution": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Handler Execution",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "lowering_receipt_digest": {
+      "title": "Lowering Receipt Digest",
+      "type": "string"
+    },
+    "obligation_contract_digest": {
+      "title": "Obligation Contract Digest",
+      "type": "string"
+    },
+    "outcome_certificate": {
+      "const": "NOT_IMPLEMENTED",
+      "default": "NOT_IMPLEMENTED",
+      "title": "Outcome Certificate",
+      "type": "string"
+    },
+    "plan_digest": {
+      "title": "Plan Digest",
+      "type": "string"
+    },
+    "policy_digest": {
+      "title": "Policy Digest",
+      "type": "string"
+    },
+    "real_enterprise": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Real Enterprise",
+      "type": "string"
+    },
+    "runtime_binding_digest": {
+      "title": "Runtime Binding Digest",
+      "type": "string"
+    },
+    "runtime_bundle_digest": {
+      "title": "Runtime Bundle Digest",
+      "type": "string"
+    },
+    "runtime_owner_id": {
+      "title": "Runtime Owner Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-formation-preview.v1",
+      "default": "orgrebase.oac-formation-preview.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "const": "READY_FOR_RUNTIME_OWNER_APPROVAL",
+      "default": "READY_FOR_RUNTIME_OWNER_APPROVAL",
+      "title": "Status",
+      "type": "string"
+    },
+    "step_count": {
+      "minimum": 1,
+      "title": "Step Count",
+      "type": "integer"
+    },
+    "target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Target Writes",
+      "type": "integer"
+    },
+    "topology_digest": {
+      "title": "Topology Digest",
+      "type": "string"
+    },
+    "work_unit_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Work Unit Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "capsule_digest",
+    "policy_digest",
+    "plan_digest",
+    "certificate_digest",
+    "runtime_binding_digest",
+    "runtime_bundle_digest",
+    "lowering_receipt_digest",
+    "topology_digest",
+    "obligation_contract_digest",
+    "work_unit_refs",
+    "step_count",
+    "runtime_owner_id"
+  ],
+  "title": "OACFormationPreview",
+  "type": "object"
+}

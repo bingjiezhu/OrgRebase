@@ -1,0 +1,106 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-workspace-approval-binding.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Immutable authority/freshness envelope for one persisted Approval.",
+  "properties": {
+    "approval_digest": {
+      "title": "Approval Digest",
+      "type": "string"
+    },
+    "approval_ref": {
+      "title": "Approval Ref",
+      "type": "string"
+    },
+    "change_kind": {
+      "title": "Change Kind",
+      "type": "string"
+    },
+    "change_set_digest": {
+      "title": "Change Set Digest",
+      "type": "string"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "minimal_rebase_certificate_digest": {
+      "title": "Minimal Rebase Certificate Digest",
+      "type": "string"
+    },
+    "owner_id": {
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "pack_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Pack Digest"
+    },
+    "predecessor_digest": {
+      "title": "Predecessor Digest",
+      "type": "string"
+    },
+    "predecessor_ref": {
+      "title": "Predecessor Ref",
+      "type": "string"
+    },
+    "preview_digest": {
+      "title": "Preview Digest",
+      "type": "string"
+    },
+    "profile_digest": {
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "run_nonce": {
+      "title": "Run Nonce",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.workspace-approval-binding.v1",
+      "default": "orgrebase.workspace-approval-binding.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Target Writes",
+      "type": "integer"
+    },
+    "workflow_run_id": {
+      "title": "Workflow Run Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "approval_ref",
+    "approval_digest",
+    "change_kind",
+    "workflow_run_id",
+    "run_nonce",
+    "pack_digest",
+    "profile_digest",
+    "predecessor_ref",
+    "predecessor_digest",
+    "change_set_digest",
+    "preview_digest",
+    "minimal_rebase_certificate_digest",
+    "owner_id"
+  ],
+  "title": "WorkspaceApprovalBinding",
+  "type": "object"
+}

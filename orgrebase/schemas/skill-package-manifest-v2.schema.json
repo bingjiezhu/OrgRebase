@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orgrebase.local/schemas/skill-package-manifest-v2.schema.json",
+  "title": "SkillPackageManifestV2",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "Digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "Resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+$"},
+        "sha256": {"$ref": "#/$defs/Digest"}
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "package_id",
+    "name",
+    "version",
+    "entry_point",
+    "resources",
+    "program_content_digest",
+    "input_schema_ref",
+    "output_schema_ref",
+    "permissions",
+    "dependencies",
+    "evaluation",
+    "release_artifact",
+    "license",
+    "provenance_refs",
+    "manifest_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgrebase.skill-package-manifest.v2"},
+    "package_id": {"type": "string", "minLength": 1},
+    "name": {"enum": ["enterprise-quote-compose", "structured-domain-handoff", "enterprise-launch-readiness"]},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "entry_point": {"enum": ["QUOTE_COMPOSE_V1", "STRUCTURED_DOMAIN_HANDOFF_V1", "LAUNCH_READINESS_V1"]},
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill", "reference_zh_cn", "reference_en", "contract", "program", "input_schema", "output_schema"],
+      "properties": {
+        "skill": {"$ref": "#/$defs/Resource"},
+        "reference_zh_cn": {"$ref": "#/$defs/Resource"},
+        "reference_en": {"$ref": "#/$defs/Resource"},
+        "contract": {"$ref": "#/$defs/Resource"},
+        "program": {"$ref": "#/$defs/Resource"},
+        "input_schema": {"$ref": "#/$defs/Resource"},
+        "output_schema": {"$ref": "#/$defs/Resource"}
+      }
+    },
+    "program_content_digest": {"$ref": "#/$defs/Digest"},
+    "input_schema_ref": {"type": "string", "minLength": 1},
+    "output_schema_ref": {"type": "string", "minLength": 1},
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_tools", "side_effects", "effect_ceiling"],
+      "properties": {
+        "allowed_tools": {"type": "array", "maxItems": 0},
+        "side_effects": {"type": "array", "maxItems": 0},
+        "effect_ceiling": {"const": "CANDIDATE_ONLY"}
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/Digest"}
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["partitions", "functional_min_pass_rate", "security_min_pass_rate", "target_writes_max"],
+      "properties": {
+        "partitions": {"const": ["REPLAY", "HELD_OUT", "NEGATIVE_TRANSFER", "PERMISSION", "INJECTION", "MALFORMED", "RESOURCE_OR_DEADLINE", "CANARY"]},
+        "functional_min_pass_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "security_min_pass_rate": {"const": 1.0},
+        "target_writes_max": {"const": 0}
+      }
+    },
+    "release_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source_candidate_ref", "source_candidate_digest", "source_candidate_executable", "predecessor_package_digest"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "source_candidate_ref": {"type": ["string", "null"]},
+        "source_candidate_digest": {"type": ["string", "null"]},
+        "source_candidate_executable": {"const": false},
+        "predecessor_package_digest": {"$ref": "#/$defs/Digest"}
+      }
+    },
+    "license": {"const": "PolyForm-Noncommercial-1.0.0"},
+    "provenance_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "manifest_digest": {"$ref": "#/$defs/Digest"}
+  }
+}

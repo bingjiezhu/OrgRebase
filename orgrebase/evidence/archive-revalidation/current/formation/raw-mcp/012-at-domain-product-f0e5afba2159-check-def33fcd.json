@@ -1,0 +1,25 @@
+{
+  "action": "check_task",
+  "key": "at-domain-product-f0e5afba2159:check",
+  "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+  "representation": "SEMANTIC_MCP_WRAPPER_PUBLIC_PATH_REDACTED",
+  "request": {
+    "action": "check_task",
+    "payload": {
+      "taskId": "at-domain-product-f0e5afba2159"
+    },
+    "role": "leader",
+    "workspaceDir": "orgrebase://runtime-workspace"
+  },
+  "response": {
+    "content": [
+      {
+        "text": "{\"ok\": true, \"tool\": \"taskflow\", \"action\": \"check_task\", \"task\": {\"acknowledged_by_role\": \"worker\", \"assigned_at\": \"2026-09-19T12:35:15Z\", \"assigned_to\": \"@product-steward:controlled.local\", \"deliverables\": [], \"eventId\": \"$controlled-87d5d87086c5af6735aebb0c\", \"notification\": {\"assignee\": \"@product-steward:controlled.local\", \"eventId\": \"$controlled-87d5d87086c5af6735aebb0c\", \"roomId\": \"!orgrebase-formation:controlled.local\", \"sent\": true}, \"project_id\": \"orgrebase-formation-905f9cf1a656\", \"result_status\": \"SUCCESS\", \"room_id\": \"!orgrebase-formation:controlled.local\", \"spec_path\": \"shared/tasks/at-domain-product-f0e5afba2159/spec.md\", \"status\": \"submitted\", \"submitted_by_role\": \"worker\", \"summary\": \"{\\\"candidate_only\\\":true,\\\"candidate_status\\\":\\\"DOMAIN_CANDIDATE_PREPARED\\\",\\\"canonical_target_writes\\\":0,\\\"domain_id\\\":\\\"product\\\",\\\"execution_plan_digest\\\":\\\"sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e\\\",\\\"execution_task_digest\\\":\\\"sha256:ddd087bbe962f28e23af3ccd9ac356d6dbbd98fa47ffde10e7fd3b96ed7fa20c\\\",\\\"project_id\\\":\\\"orgrebase-formation-905f9cf1a656\\\",\\\"run_id\\\":\\\"run:formation-recheck:f256f60b26e54dd7802677eecfc395cd\\\",\\\"schema_version\\\":\\\"orgrebase.formation-taskflow-candidate.v1\\\",\\\"task_id\\\":\\\"at-domain-product-f0e5afba2159\\\",\\\"task_kind\\\":\\\"DOMAIN\\\"}\", \"task_id\": \"at-domain-product-f0e5afba2159\", \"task_title\": \"Product domain candidate\"}, \"result\": {\"status\": \"SUCCESS\", \"summary\": \"{\\\"candidate_only\\\":true,\\\"candidate_status\\\":\\\"DOMAIN_CANDIDATE_PREPARED\\\",\\\"canonical_target_writes\\\":0,\\\"domain_id\\\":\\\"product\\\",\\\"execution_plan_digest\\\":\\\"sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e\\\",\\\"execution_task_digest\\\":\\\"sha256:ddd087bbe962f28e23af3ccd9ac356d6dbbd98fa47ffde10e7fd3b96ed7fa20c\\\",\\\"project_id\\\":\\\"orgrebase-formation-905f9cf1a656\\\",\\\"run_id\\\":\\\"run:formation-recheck:f256f60b26e54dd7802677eecfc395cd\\\",\\\"schema_version\\\":\\\"orgrebase.formation-taskflow-candidate.v1\\\",\\\"task_id\\\":\\\"at-domain-product-f0e5afba2159\\\",\\\"task_kind\\\":\\\"DOMAIN\\\"}\", \"deliverables\": []}, \"validationErrors\": [], \"effective\": true, \"pulled\": true}",
+        "type": "text"
+      }
+    ]
+  },
+  "schema_version": "orgrebase.teamharness-raw-mcp-action.v1",
+  "sequence": 12,
+  "tool": "taskflow"
+}

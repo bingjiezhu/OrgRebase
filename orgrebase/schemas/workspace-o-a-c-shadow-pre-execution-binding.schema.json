@@ -1,0 +1,152 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-o-a-c-shadow-pre-execution-binding.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activation_binding_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Activation Binding Digest",
+      "type": "string"
+    },
+    "adaptation_run_id": {
+      "minLength": 1,
+      "title": "Adaptation Run Id",
+      "type": "string"
+    },
+    "adapter_capsule_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Adapter Capsule Digest",
+      "type": "string"
+    },
+    "agent_mapping_receipt_digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Agent Mapping Receipt Digest"
+    },
+    "approval_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Approval Digest",
+      "type": "string"
+    },
+    "binding_timing": {
+      "const": "PRE_EXECUTION_EXACT_BINDING",
+      "default": "PRE_EXECUTION_EXACT_BINDING",
+      "title": "Binding Timing",
+      "type": "string"
+    },
+    "candidate_only": {
+      "const": true,
+      "default": true,
+      "title": "Candidate Only",
+      "type": "boolean"
+    },
+    "canonical_target_writes": {
+      "const": 0,
+      "default": 0,
+      "title": "Canonical Target Writes",
+      "type": "integer"
+    },
+    "context_envelope_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Context Envelope Digest",
+      "type": "string"
+    },
+    "context_envelope_ref": {
+      "minLength": 1,
+      "title": "Context Envelope Ref",
+      "type": "string"
+    },
+    "context_freshness_basis": {
+      "enum": [
+        "WALL_CLOCK",
+        "LOGICAL_EVENT_TIME"
+      ],
+      "title": "Context Freshness Basis",
+      "type": "string"
+    },
+    "context_freshness_checked_at": {
+      "minLength": 1,
+      "title": "Context Freshness Checked At",
+      "type": "string"
+    },
+    "context_freshness_checked_at_epoch_ms": {
+      "minimum": 0,
+      "title": "Context Freshness Checked At Epoch Ms",
+      "type": "integer"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "effect_ceiling": {
+      "const": "ZERO_EXTERNAL_EFFECTS",
+      "default": "ZERO_EXTERNAL_EFFECTS",
+      "title": "Effect Ceiling",
+      "type": "string"
+    },
+    "frozen_golden_run_id": {
+      "minLength": 1,
+      "title": "Frozen Golden Run Id",
+      "type": "string"
+    },
+    "pack_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack Digest",
+      "type": "string"
+    },
+    "pack_file_manifest_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Pack File Manifest Digest",
+      "type": "string"
+    },
+    "profile_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "review_gate_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Review Gate Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orgrebase.oac-shadow-pre-execution-binding.v1",
+      "default": "orgrebase.oac-shadow-pre-execution-binding.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "shadow_execution_run_id": {
+      "minLength": 1,
+      "title": "Shadow Execution Run Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adaptation_run_id",
+    "shadow_execution_run_id",
+    "frozen_golden_run_id",
+    "approval_digest",
+    "review_gate_digest",
+    "adapter_capsule_digest",
+    "activation_binding_digest",
+    "profile_digest",
+    "pack_digest",
+    "pack_file_manifest_digest",
+    "context_envelope_ref",
+    "context_envelope_digest",
+    "context_freshness_basis",
+    "context_freshness_checked_at_epoch_ms",
+    "context_freshness_checked_at"
+  ],
+  "title": "OACShadowPreExecutionBinding",
+  "type": "object"
+}

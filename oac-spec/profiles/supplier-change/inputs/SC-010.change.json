@@ -1,0 +1,29 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "kind": "SemanticChangeSet",
+  "metadata": {
+    "id": "change:SC-010",
+    "namespace": "oac.examples.supplier",
+    "revision": 1,
+    "ownerRef": "role:evidence-discovery",
+    "governanceRef": "policy:oac-shadow-zero-effect",
+    "createdAt": "2026-08-23T00:00:00Z",
+    "effectiveFrom": "2025-03-01T09:00:00Z",
+    "sourceRefs": ["edith:PROC-01:truncated-two-anchor-view", "oac:counterfactual:unknown-transition"]
+  },
+  "spec": {
+    "demandRef": "demand:SC-010",
+    "subjectRef": "supplier:forges-martelliere",
+    "semanticType": "supplier.status",
+    "deltas": [
+      {"path": "/status", "operation": "unknown_transition", "before": {"state": "known", "value": "operating"}, "after": {"state": "unknown"}}
+    ],
+    "observedAt": "2025-03-01T09:00:00Z",
+    "effectiveAt": "2025-03-01T09:00:00Z",
+    "sourceRef": "oac:counterfactual:unknown-transition",
+    "scopeRefs": ["supplier:forges-martelliere", "boundary:source-discovery"],
+    "reason": "test Unknown preservation under truncated observation coverage",
+    "admissionStatus": "admitted"
+  },
+  "digest": "sha256:be2131dc99c711e30031adb336fd9da4ee3f611e8b56d42239297951f39354d2"
+}

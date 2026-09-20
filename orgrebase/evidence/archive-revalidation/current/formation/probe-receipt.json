@@ -1,0 +1,160 @@
+{
+  "actual_terminal_task_ids": [
+    "at-domain-legal-a3f56c48b0c5",
+    "at-domain-product-f0e5afba2159",
+    "at-reviewer-barrier-7e3227d5ab73"
+  ],
+  "agentteams_action_count": 20,
+  "agentteams_action_digests": [
+    "sha256:9b8c72a11fe89bdd55edf0208208381bd369132b9719d63caaf997290024c896",
+    "sha256:b0f261608d90317e87b33333f0957c06048f5b9cd4c551b38ac6d2edd7f09d81",
+    "sha256:23fa096e21c48db8f44ec046c7c7fb84499672ef4e918359561e50401e0b0a38",
+    "sha256:a1763b14a91adb0f64f1ecf00d277e23bf4913500eff43891339382cf903e728",
+    "sha256:e5bcf1eca828451304a14c69a8983a804afbb43fe93c3c225198986c4d6af5ed",
+    "sha256:7f3e771be904b883e394ddc7f0a3e34cd62f8bbddf5490ca169cca4d81fa5008",
+    "sha256:602fe17a88d20034c25bdfb9e6ea8f8d5be6439a5f61f53974b85b6b007493ab",
+    "sha256:bd2fd04211c82154d84bd61d696392bccb3868437d814810523d82ae124e4ad9",
+    "sha256:0918b16791d0ee7b267e8820cd362df8353b6a34e53481723fc0703d35d5387a",
+    "sha256:ee2e1807d31818fdfeb111ebf3042e03e3401894815e88d5a8c575e7fe41c14e",
+    "sha256:bf5670a67ba627e723a64067694de5844467c07d141f8be92d7ace21646da6cd",
+    "sha256:cc0c0f4a157103099506864a909a15a9a4854694d2a505eb01b5652fca5e280e",
+    "sha256:cf76ef95ee93f098464dc81b4283d0aa72459c3db0b90104a61eac9ee6d789ad",
+    "sha256:426d6ba54d398862c5c5d4b4e8c0eb70e1d6343a444e4dd21eb6169cb2cfe18f",
+    "sha256:2a92cbc75c2ac40cc167df7e4de8d911d172b5c38b055af1c29bfa187a73627f",
+    "sha256:1e038d75ec729a791d8e6cc8cb4e850ad882c8ad8929b7f2439c9eed0e463be7",
+    "sha256:ef456702df73b2883c3139bb06e5820bf07fb3e6cfbad94ce8a61efdc437f3b4",
+    "sha256:e2356ab9f996176514c0ba097a01c8d6ba27aa4cfc5016ee5a1bc48bcd7ecefd",
+    "sha256:f150b44ed7c5ec88c617d40f98f54119119080ff3d1eb7c5c08d567905fddbdd",
+    "sha256:1a26d755a64c341f4dff3a5b8a5214f8b96ae0c924f31c991b7e9ef746378edb"
+  ],
+  "candidate_only": true,
+  "candidate_status": "CANDIDATE_PREPARED_FOR_CONTROL_ADMISSION",
+  "canonical_target_writes": 0,
+  "claim_boundary": "PINNED_IN_PROCESS_TEAMHARNESS_DYNAMIC_TOPOLOGY_NOT_LIVE_WORKER_OR_BUSINESS_ADMISSION",
+  "coalition_plan_digest": "sha256:4749feb64739c4b93447820f8086fc98f34aab281abec62a4f426b4db56835e4",
+  "context_envelope_digest": "sha256:96dc2b1c0c0ecadf8f9ae015abc62d8dc7a33a75f2c29c5a79eb3ca8f9e5fdc0",
+  "digest": "sha256:610eaec366c83cf8f15e381115e9cc3138a43efa96a839e16f68806ba2935209",
+  "evidence_class": "CONTROLLED_LOCAL_FORMATION_COMPILED_AGENTTEAMS",
+  "execution_plan_digest": "sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e",
+  "execution_plan_id": "agentteams-execution-plan:evergreen-residency-faq-two-domain",
+  "expected_task_ids": [
+    "at-domain-legal-a3f56c48b0c5",
+    "at-domain-product-f0e5afba2159",
+    "at-reviewer-barrier-7e3227d5ab73"
+  ],
+  "formation_receipt_digest": "sha256:5dee3e2cea0a17182775d43cb6f7c9dec7e1c284f749f09b98b3c1f45f5d7ab2",
+  "matrix_transport": {
+    "mode": "CONTROLLED_LOCAL_HTTP_STUB",
+    "request_count": 6,
+    "unique_assignment_events": 3
+  },
+  "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+  "planned_task_ids": [
+    "at-domain-legal-a3f56c48b0c5",
+    "at-domain-product-f0e5afba2159",
+    "at-reviewer-barrier-7e3227d5ab73"
+  ],
+  "process_storage_adapter": {
+    "invocation_log_ref": "runtime/mc-process-invocations.jsonl",
+    "mode": "CONTROLLED_LOCAL_MC_PROCESS_ADAPTER",
+    "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+    "process_invocations": 53
+  },
+  "project_id": "orgrebase-formation-905f9cf1a656",
+  "project_terminal_state": "completed",
+  "raw_mcp_representation": "SEMANTIC_MCP_WRAPPER_PUBLIC_PATH_REDACTED",
+  "reviewer_task_id": "at-reviewer-barrier-7e3227d5ab73",
+  "run_id": "run:formation-recheck:f256f60b26e54dd7802677eecfc395cd",
+  "schema_version": "orgrebase.formation-taskflow-probe-receipt.v1",
+  "selected_domain_ids": [
+    "legal",
+    "product"
+  ],
+  "source_verification": {
+    "checkout": "agentteams://pinned-checkout",
+    "commit": "223ddc2b8073e4c8b93bcbb15e1d717f196c04d9",
+    "files": {
+      "plugins/teamharness/mcp/message_tool.py": "sha256:03e8fcfcaf002c5d9dd0c023b85bd4d2f4641b83cb59c6d89be08a9c1689c47c",
+      "plugins/teamharness/mcp/roomflow_tool.py": "sha256:db127d550cf9155c133657ab7c89fee48292c07587a061954bd60b4c14991680",
+      "plugins/teamharness/mcp/server.py": "sha256:a4d0ea071a6d74411881081a71d29ff69f9b29159728e604386f2395834061df"
+    },
+    "origin": "https://github.com/agentscope-ai/AgentTeams",
+    "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+    "source_lock_digest": "sha256:76acd87b2307e3711de8ecba6cc17073a498e212ba170b36554dd916bab85f9d",
+    "status": "PASS"
+  },
+  "task_receipts": [
+    {
+      "action_digests": {
+        "accept_task_result": "sha256:bd2fd04211c82154d84bd61d696392bccb3868437d814810523d82ae124e4ad9",
+        "ack_task": "sha256:e5bcf1eca828451304a14c69a8983a804afbb43fe93c3c225198986c4d6af5ed",
+        "check_task": "sha256:602fe17a88d20034c25bdfb9e6ea8f8d5be6439a5f61f53974b85b6b007493ab",
+        "delegate_task": "sha256:a1763b14a91adb0f64f1ecf00d277e23bf4913500eff43891339382cf903e728",
+        "submit_task": "sha256:7f3e771be904b883e394ddc7f0a3e34cd62f8bbddf5490ca169cca4d81fa5008"
+      },
+      "assignee_actor_id": "legal-steward",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "depends_on": [],
+      "digest": "sha256:9a797374823260dac6d32ee69d554f9847b042556b51e087302a46dee6a0a8c3",
+      "domain_id": "legal",
+      "execution_task_digest": "sha256:24cc97661c351f1e69f5f975c1c0a1a4e43588c89e6221226dd1181f31d5d45a",
+      "result_digest": "sha256:db63d0df8c2beb74a360236c93f1801fb8fe5b1ad3619ae216ba5927d7232da9",
+      "schema_version": "orgrebase.formation-taskflow-task-receipt.v1",
+      "task_id": "at-domain-legal-a3f56c48b0c5",
+      "task_kind": "DOMAIN",
+      "task_spec_digest": "sha256:3323acdcf7bc80fe82cf567706a649c94f1f0db6d4f4bfdff58bc57ca66694d6",
+      "terminal_status": "completed",
+      "transport_assignee": "@legal-steward:controlled.local"
+    },
+    {
+      "action_digests": {
+        "accept_task_result": "sha256:cf76ef95ee93f098464dc81b4283d0aa72459c3db0b90104a61eac9ee6d789ad",
+        "ack_task": "sha256:ee2e1807d31818fdfeb111ebf3042e03e3401894815e88d5a8c575e7fe41c14e",
+        "check_task": "sha256:cc0c0f4a157103099506864a909a15a9a4854694d2a505eb01b5652fca5e280e",
+        "delegate_task": "sha256:0918b16791d0ee7b267e8820cd362df8353b6a34e53481723fc0703d35d5387a",
+        "submit_task": "sha256:bf5670a67ba627e723a64067694de5844467c07d141f8be92d7ace21646da6cd"
+      },
+      "assignee_actor_id": "product-steward",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "depends_on": [],
+      "digest": "sha256:5c679a0a69b5b16b6379221c266cab7b2d9290d53d56c72e95c8c4aaeff3b916",
+      "domain_id": "product",
+      "execution_task_digest": "sha256:ddd087bbe962f28e23af3ccd9ac356d6dbbd98fa47ffde10e7fd3b96ed7fa20c",
+      "result_digest": "sha256:41bf65d6035ea6814fcc4f950d6d54a920e2fdb2a5c42fd8542e004c709046df",
+      "schema_version": "orgrebase.formation-taskflow-task-receipt.v1",
+      "task_id": "at-domain-product-f0e5afba2159",
+      "task_kind": "DOMAIN",
+      "task_spec_digest": "sha256:94efd4819741407ecb4368592797fe53c10ce04e34c431586e909d78884ae8be",
+      "terminal_status": "completed",
+      "transport_assignee": "@product-steward:controlled.local"
+    },
+    {
+      "action_digests": {
+        "accept_task_result": "sha256:f150b44ed7c5ec88c617d40f98f54119119080ff3d1eb7c5c08d567905fddbdd",
+        "ack_task": "sha256:1e038d75ec729a791d8e6cc8cb4e850ad882c8ad8929b7f2439c9eed0e463be7",
+        "check_task": "sha256:e2356ab9f996176514c0ba097a01c8d6ba27aa4cfc5016ee5a1bc48bcd7ecefd",
+        "delegate_task": "sha256:2a92cbc75c2ac40cc167df7e4de8d911d172b5c38b055af1c29bfa187a73627f",
+        "submit_task": "sha256:ef456702df73b2883c3139bb06e5820bf07fb3e6cfbad94ce8a61efdc437f3b4"
+      },
+      "assignee_actor_id": "independent-reviewer",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "depends_on": [
+        "at-domain-legal-a3f56c48b0c5",
+        "at-domain-product-f0e5afba2159"
+      ],
+      "digest": "sha256:358f4d4c70e0571c365e64a43c0c392e85773ed9d9bfd9814b9a3ce74da13a7c",
+      "domain_id": "reviewer",
+      "execution_task_digest": "sha256:251a014d568254aa52ec9e0f12be1e2e98ad9b94d1d47cd3251d9cb901d211f3",
+      "result_digest": "sha256:0bcdf7aa98326d85cdca094d2a377f14529fc6eef534b3f23e5044fb6a385386",
+      "schema_version": "orgrebase.formation-taskflow-task-receipt.v1",
+      "task_id": "at-reviewer-barrier-7e3227d5ab73",
+      "task_kind": "REVIEWER_BARRIER",
+      "task_spec_digest": "sha256:2b70451f1f319595b2f3001f87b44b299f583b7f4459d5cbd06e20b0573932b9",
+      "terminal_status": "completed",
+      "transport_assignee": "@independent-reviewer:controlled.local"
+    }
+  ]
+}

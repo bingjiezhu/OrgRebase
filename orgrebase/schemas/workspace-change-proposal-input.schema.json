@@ -1,0 +1,170 @@
+{
+  "$defs": {
+    "ReadDependencies": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "orgrebase.read-dependencies.v1",
+          "default": "orgrebase.read-dependencies.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "witnesses": {
+          "items": {
+            "$ref": "#/$defs/WitnessReference"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Witnesses",
+          "type": "array"
+        }
+      },
+      "required": [
+        "witnesses"
+      ],
+      "title": "ReadDependencies",
+      "type": "object"
+    },
+    "WitnessReference": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^read-witness:[0-9a-f]{64}$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "expected_result": {
+          "enum": [
+            "TRUE",
+            "FALSE"
+          ],
+          "title": "Expected Result",
+          "type": "string"
+        },
+        "query_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Query Digest",
+          "type": "string"
+        },
+        "witness_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Witness Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "witness_digest",
+        "query_digest",
+        "expected_result"
+      ],
+      "title": "WitnessReference",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-change-proposal-input.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "base_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Base Digest",
+      "type": "string"
+    },
+    "base_version": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Base Version",
+      "type": "string"
+    },
+    "event_id": {
+      "maxLength": 160,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "operation": {
+      "default": "UPDATE",
+      "enum": [
+        "UPDATE",
+        "READMIT"
+      ],
+      "title": "Operation",
+      "type": "string"
+    },
+    "read_dependencies": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ReadDependencies"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "maxLength": 1000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    },
+    "revises_event_id": {
+      "anyOf": [
+        {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revises Event Id"
+    },
+    "slot_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Slot Id",
+      "type": "string"
+    },
+    "source_ref": {
+      "maxLength": 1024,
+      "minLength": 1,
+      "title": "Source Ref",
+      "type": "string"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      ],
+      "title": "Value"
+    }
+  },
+  "required": [
+    "event_id",
+    "slot_id",
+    "base_version",
+    "base_digest",
+    "value",
+    "source_ref"
+  ],
+  "title": "ChangeProposalInput",
+  "type": "object"
+}

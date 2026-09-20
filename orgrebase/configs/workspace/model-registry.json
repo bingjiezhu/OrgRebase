@@ -1,0 +1,1079 @@
+{
+  "base_rules": {
+    "canonical": "ContentAddressedModel",
+    "extra": "forbid",
+    "frozen": true,
+    "json_value": "pydantic.JsonValue",
+    "nested": "FrozenModel"
+  },
+  "discriminated_unions": {
+    "ExecutionEvent": "event_type"
+  },
+  "forbidden_duplicate_digest_fields": [
+    "manifest_digest",
+    "decision_digest",
+    "event_digest"
+  ],
+  "models": [
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TaskRequest",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "RequirementSlotSpec",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TaskTemplateVersion",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TaskRequirementCandidate",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TaskInterpretationReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DomainCapabilityCardVersion",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "CoalitionPlan",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "EvidenceSourceRef",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ClaimCandidate",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DomainCandidateBundle",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "AdmissionDecision",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "AdmittedReference",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ActorContextProjection",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TaskContextManifest",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ReferenceResolvedEvent",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "OutputProducedEvent",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ToolCalledEvent",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkTrace",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TraceCoverageReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "RuntimeDependencyManifest",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "QuotePayload",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TaskReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkspaceGraphEdge",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkspaceUniverse",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkspaceGraphSnapshot",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "GraphPointerPayload",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkspaceChangeSpec",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkspaceRebaseReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DeclarativeSkillProgram",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "SkillCandidateArtifact",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "SkillEvaluationCase",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "SkillEvaluationReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DomainDelegationTask",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DomainTransportCandidate",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DomainTransportReceipt",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "CoalitionCoverage",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "OutputFieldLineage",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "RuntimeDependencyEntry",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "QuoteTaskLiterals",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "ResolvedQuoteInputs",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "ObjectDigestBinding",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "StoredArtifact",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "ArtifactWrite",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "PreparedFormationBundle",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "PreparedSuccessorEvidence",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkflowIdentity",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "VerifiedAdvisoryBundle",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkspacePreviewBundle",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "SkillOperation",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "SkillCaseResult",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "SkillGateResult",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ModelRequest",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ModelResponseReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ModelInputProjection",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ModelRequestV2",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "ModelResponseReceiptV2",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DatasetLicenseRecord",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "BenchmarkCase",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "EVALUATOR_ONLY",
+      "module": "orgrebase.workspace.models",
+      "name": "BenchmarkGold",
+      "required": true
+    },
+    {
+      "export_schema": false,
+      "kind": "NESTED_OR_TRANSIENT",
+      "module": "orgrebase.workspace.models",
+      "name": "EvaluationMetric",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "EvaluationReport",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "HumanReviewRecord",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "CaseRunReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "EvidenceIndexEntry",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "EvidenceIndex",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "OWBCoreScore",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "LiveAgentCandidateScore",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "UserWalkthroughRecord",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "UserValidationSummary",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TemplateCandidate",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "TaskTemplateCatalogSummary",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DomainReadRequest",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DomainReadProjection",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "OACRuntimeCapsule",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "OACFormationPreview",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "OACRuntimeApproval",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "OACFormationControlRecord",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "RuntimeAdmissionReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.profile",
+      "name": "EnterpriseSeedGap",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.profile",
+      "name": "EnterpriseSeedProfile",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.profile",
+      "name": "EnterpriseSeedAdmissionReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_admission",
+      "name": "EnterpriseSeedComponentRoot",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_admission",
+      "name": "EnterpriseSeedSourceAdmissionReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_admission",
+      "name": "EnterpriseSeedRuntimeProjectionReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.controlled_local",
+      "name": "ControlledHTTPReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.controlled_local",
+      "name": "TelemetryQueryReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.controlled_local",
+      "name": "AlertEvaluationReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.controlled_local",
+      "name": "RetentionReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.controlled_local",
+      "name": "BackupRestoreReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.controlled_local",
+      "name": "CapacitySmokeReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.candidate_promotion",
+      "name": "CandidatePromotionBundle",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.candidate_promotion",
+      "name": "PromotionPreviewBinding",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.candidate_promotion",
+      "name": "PromotionApproval",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.candidate_promotion",
+      "name": "PromotionApplyReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pilot",
+      "name": "EnterpriseQuotePilotPack",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "ENTERPRISE_INPUT",
+      "module": "orgrebase.workspace.pilot",
+      "name": "PilotDomainProjection",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "ENTERPRISE_INPUT",
+      "module": "orgrebase.workspace.pilot",
+      "name": "PilotKnowledgeProjection",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "ENTERPRISE_INPUT",
+      "module": "orgrebase.workspace.pilot",
+      "name": "PilotAuthorityProjection",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "ENTERPRISE_INPUT",
+      "module": "orgrebase.workspace.pilot",
+      "name": "PilotCapabilityProjection",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "ENTERPRISE_INPUT",
+      "module": "orgrebase.workspace.pilot",
+      "name": "PilotDependencyProjection",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.controlled_agentteams_formation",
+      "name": "ControlledAgentTeamsFormationReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "WorkspaceApprovalBinding",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.oac_quote_adaptation",
+      "name": "OACAdaptationDraft",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.oac_quote_adaptation",
+      "name": "OACDependencyProjectionReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.oac_quote_adaptation",
+      "name": "OACOwnerReviewSummary",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.oac_quote_adaptation",
+      "name": "OACSourceAdmissionApproval",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.oac_quote_adaptation",
+      "name": "OACAdapterCapsule",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.oac_quote_adaptation",
+      "name": "OACAdapterActivationBinding",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.oac_quote_parity",
+      "name": "QuoteFormationParityReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.demand_formation",
+      "name": "TaskFormationDecisionReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.context_residency",
+      "name": "TaskAgentContextEnvelope",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "DomainPack",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "EnterpriseResourceBinding",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.models",
+      "name": "EnterpriseBinding",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.change_events",
+      "name": "ChangeEvent",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.domain",
+      "name": "SourceApproval",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.domain",
+      "name": "RebaseApprovalSet",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.domain",
+      "name": "RebaseReceipt",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_readmission",
+      "name": "SourceEventRef",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_readmission",
+      "name": "SourceReadmissionInput",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_readmission",
+      "name": "SourceReadmissionCommand",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_readmission",
+      "name": "SourceReadmissionGroup",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.read_dependencies",
+      "name": "ReadQuery",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.read_dependencies",
+      "name": "ReadWitness",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.read_dependencies",
+      "name": "ReadDependencies",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_bindings",
+      "name": "SourceFieldMapping",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_bindings",
+      "name": "SourceBindingProposal",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_bindings",
+      "name": "SourceBindingConfirmation",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.source_bindings",
+      "name": "SourceBindingConfig",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.change_proposals",
+      "name": "ChangeProposalInput",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.change_proposals",
+      "name": "ReviewObservationInput",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.approval_authority",
+      "name": "DelegationInput",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.approval_authority",
+      "name": "CoordinationInput",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.effects",
+      "name": "EffectProposalInput",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.effects",
+      "name": "EffectApprovalInput",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.effects",
+      "name": "EffectActionInput",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.effects",
+      "name": "EffectWorkerConfig",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pattern_evolution",
+      "name": "FeatureProfile",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pattern_evolution",
+      "name": "CaseObservation",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pattern_evolution",
+      "name": "ReplayCase",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pattern_evolution",
+      "name": "SkillBoundary",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pattern_evolution",
+      "name": "PatternCandidate",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pattern_evolution",
+      "name": "PatternSkillCandidate",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pattern_evolution",
+      "name": "ProposalBudget",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.pattern_evolution",
+      "name": "SkillInvocationBudget",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.outcome_contracts",
+      "name": "LabBudget",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.outcome_contracts",
+      "name": "LabToolRequest",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.outcome_contracts",
+      "name": "LabToolGrant",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.outcome_contracts",
+      "name": "OutcomeTaskMapping",
+      "required": true
+    },
+    {
+      "export_schema": true,
+      "kind": "TRUST_BOUNDARY",
+      "module": "orgrebase.workspace.outcome_contracts",
+      "name": "OutcomeOracle",
+      "required": true
+    }
+  ],
+  "module": "orgrebase.workspace.models",
+  "required_enum_reuse": [
+    "DependencyStrength",
+    "CoverageBasis",
+    "ManifestCompleteness",
+    "EvidenceClass",
+    "ObjectState"
+  ],
+  "schema_version": "orgrebase.codegen-model-registry.v5.1",
+  "source": "CONTRACTS-PYDANTIC.md"
+}

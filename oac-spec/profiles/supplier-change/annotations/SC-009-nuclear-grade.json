@@ -1,0 +1,64 @@
+{
+  "caseVersion": "1.0",
+  "caseId": "SC-009",
+  "title": "Nuclear-grade purchase order affected",
+  "profile": "supplier-change/v0.2-contextual",
+  "annotationStatus": "exploratory",
+  "annotationProvenance": {
+    "authorClass": "project-authored-candidate",
+    "independentHumanRounds": 0,
+    "adjudicated": false,
+    "mayBeCalledGold": false
+  },
+  "sourceLabels": {
+    "datasetRef": "hf:lightonai/veracier-industries@844264a930674feacf6dee1844da77b0c4d66b2a",
+    "recordRef": "PROC-01",
+    "labelSetRef": "../source-labels/edith-proc-01.json",
+    "answerKeyGroundTruthEmpty": true,
+    "documentRefs": ["DOC-9eff55b9", "DOC-1ceffca1", "DOC-a03146b5", "DOC-29949d76"],
+    "claimLimit": "Nuclear-grade is an upstream description; specific compliance obligations require human review."
+  },
+  "counterfactual": {
+    "type": "scope-focus",
+    "factor": "supplier.status",
+    "before": "operating",
+    "after": "judicial_restructuring",
+    "assertedBy": "OAC_PROJECT",
+    "notUpstreamOacGroundTruth": true
+  },
+  "frozenInputs": {
+    "snapshotRef": "../inputs/veracier-proc01-contextual.snapshot.json",
+    "changeRef": "../inputs/SC-009.change.json",
+    "observationBoundary": "nuclear-grade order metadata; regulatory rule corpus absent"
+  },
+  "candidateConstraints": {
+    "requiredObligationTypes": [
+      "exposure-inventory",
+      "continuity-assessment",
+      "alternative-qualification",
+      "compliance-discovery"
+    ],
+    "admissibleRoleRefs": [
+      "role:procurement-owner",
+      "role:operations-continuity",
+      "role:quality-qualification",
+      "role:compliance-reviewer"
+    ],
+    "separation": [["role:procurement-owner", "role:quality-qualification"]],
+    "happensBefore": [
+      ["compliance-discovery", "alternative-qualification"],
+      ["alternative-qualification", "continuity-assessment"]
+    ],
+    "evidenceDuties": ["applicable regulatory basis", "nuclear-grade qualification evidence"],
+    "acceptableUnknown": ["applicable nuclear substitution rule"],
+    "requiredVerdictUntilDiscovery": "PROVISIONAL",
+    "candidateOnly": true
+  },
+  "witnessRefs": [],
+  "mutationFamilies": ["unknown-erasure", "missing-evidence", "reverse-order"],
+  "outcomeObservability": {
+    "fromEdith": "not_observable",
+    "fromEnterpriseOpsGym": "not_mapped",
+    "executed": false
+  }
+}

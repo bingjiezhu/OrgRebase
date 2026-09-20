@@ -1,0 +1,43 @@
+{
+  "digest": "sha256:40fd495fa87eec1f5005607b576ef1afcd05438ba3aea10f34d652ccf7fc4027",
+  "entries": [
+    {
+      "bytes": 845,
+      "path": "idempotency-proof.json",
+      "sha256": "sha256:15b957348b9d75dfab14c7897a54a57f1b1c5fca1e77629c128a5ba43ea2bf0b"
+    },
+    {
+      "bytes": 3709,
+      "path": "ledger.json",
+      "sha256": "sha256:aa4121c0e4768f588ab84bc5b715e9c7fa982137de44a6efa33a7a24e108e095"
+    },
+    {
+      "bytes": 1041,
+      "path": "negative-probes.json",
+      "sha256": "sha256:46fe5d6b4a9a1cc179269b8b201e44a62155a93776e25a10737b9c9cb9be6fe3"
+    },
+    {
+      "bytes": 863,
+      "path": "predecessor-input.json",
+      "sha256": "sha256:3682b5768b1091cd6f193864930e3923c75e3e41dca90a66a4423a93414176c1"
+    },
+    {
+      "bytes": 988,
+      "path": "predecessor-result.json",
+      "sha256": "sha256:e4dbdb64bf006586129840c621eb901868130e074fc889812c9321e7877c2230"
+    },
+    {
+      "bytes": 3597,
+      "path": "rollback-execution-receipt.json",
+      "sha256": "sha256:61dd0664fad52ff946279ba1ee0582ed8fec98f651c25be5cc56bfc1de195ffb"
+    },
+    {
+      "bytes": 1296,
+      "path": "summary.json",
+      "sha256": "sha256:c8998d8a2793212366f00979ab8407acca458f6812bdbce3586c211858066fdc"
+    }
+  ],
+  "entry_count": 7,
+  "pack_digest": "sha256:a35422d0bbd350b4fdd6f6c6d82ea612f4d63cd5ff7e46112df92f9f71250017",
+  "schema_version": "orgrebase.skill-predecessor-rollback-evidence-index.v1"
+}

@@ -1,0 +1,76 @@
+{
+  "apiVersion": "oac.runtime-lowering.summary/v0.1",
+  "cases": [
+    {
+      "bundleDigest": "sha256:0d6eb22557ee9da85d8f42cb1c76d339d5bb7f1fbcea6566e29a66f22f389c70",
+      "certificateDigest": "sha256:3f0be0947d7cef81ba58df012f8ada2a017aa913186357bb75656c6a6ada90a5",
+      "id": "BASE",
+      "obligationContractDigest": "sha256:64a745aff57858be6973b605e973c54bb7be27b9e6405ff244e0a059c2240d97",
+      "planDigest": "sha256:cc9948ef3a869b279924ca5f1e0161145aad51b3ea470fa21659fd5ef2176dea",
+      "reasonCodes": [],
+      "receiptDigest": "sha256:fe79e62e3f4ba823cdeb7249049a3fb6df331f69e3f101c1ff6ffa9d6c7f13fb",
+      "runtimeBindingDigest": "sha256:6565411b8b08197597ee22b40e92bcfe91496c3158a9809d65536c135f4143a6",
+      "status": "PRODUCED",
+      "stepCount": 3,
+      "topologyDigest": "sha256:38a12bd4b2ea7237ac5cae1e61308da3360c42647cffc09849f5f2e75551a7bd"
+    },
+    {
+      "bundleDigest": "sha256:6d396522a77f042e287bd3c4e3d44d405d501da325c05dbd107265800c93d34b",
+      "certificateDigest": "sha256:8a203828b11e125428f72deafc8451ca9b16534005ec6eba9031ba3cc081a2a5",
+      "id": "SPLIT",
+      "obligationContractDigest": "sha256:64a745aff57858be6973b605e973c54bb7be27b9e6405ff244e0a059c2240d97",
+      "planDigest": "sha256:e893ce3e94d2811b8b1a96011998f3be3d815c77eb9b0870e4254588f2cb7a69",
+      "reasonCodes": [],
+      "receiptDigest": "sha256:0b68ac31d38e7a2f8ce7902c3f7b5a469c33b46a8e5ceede074d2ac75e6d4b0a",
+      "runtimeBindingDigest": "sha256:aac4679ab57b0d093ae85e0d15b618d89982a28983fac640dfc1eaace78e03e9",
+      "status": "PRODUCED",
+      "stepCount": 4,
+      "topologyDigest": "sha256:33bb0ad8755fc01c9dc285969c15df7d3246f7777bddd7afa19eb8bd71427690"
+    },
+    {
+      "certificateDigest": "sha256:8bbc8097883641f644d683ffcf7fa6199003fda1e4cd0aa180c4600fcda47c0a",
+      "id": "PROVISIONAL",
+      "planDigest": "sha256:293c5719a17e37db856bf1398530b156e9645426622e7d13ed23d5ff7c05d69b",
+      "reasonCodes": [
+        "LOWERING_RESTRICTIONS_PRESENT",
+        "LOWERING_UNRESOLVED_REFS_PRESENT",
+        "LOWERING_VERDICT_NOT_ACCEPT"
+      ],
+      "receiptDigest": "sha256:584398e1709cc4d0e2528715bd878663c226bbb27ae61f007c7e42bd6b10365d",
+      "runtimeBindingDigest": "sha256:4cdb50d5c360540c94e6d52ae11a405bf3aeaefdd202043c8973c3d6fd59ff54",
+      "status": "BLOCKED",
+      "stepCount": 0
+    },
+    {
+      "certificateDigest": "sha256:b3b542854280de5ecb749ae1df82c3fe7d8f4f5f705af1cef8d3d06ca1a5a57e",
+      "id": "UNKNOWN",
+      "planDigest": "sha256:235c3444dda59201e220a5730e2988d15e33705288eee78cbb037008325e1d97",
+      "reasonCodes": [
+        "LOWERING_DIMENSION_NOT_PASS",
+        "LOWERING_RESTRICTIONS_PRESENT",
+        "LOWERING_UNRESOLVED_REFS_PRESENT",
+        "LOWERING_VERDICT_NOT_ACCEPT"
+      ],
+      "receiptDigest": "sha256:ed0f428b2cfe97837a0069acae83b7f8899c1c9f2f2d4491e70e95424e257b09",
+      "runtimeBindingDigest": "sha256:708152052150c638d3a7435c39e77d2772f67ea64961ff518778f9af9b348bca",
+      "status": "BLOCKED",
+      "stepCount": 0
+    },
+    {
+      "certificateDigest": "sha256:cdefdbfbfaf99da1958de2645c3c88b4fe86317829043a433398b7b3a02abe20",
+      "id": "REJECT",
+      "planDigest": "sha256:ba809f01fbdf4c6ad75b6fff8f39a37f997588898bdb68cb6d89c0642d0b29c7",
+      "reasonCodes": [
+        "LOWERING_DIMENSION_NOT_PASS",
+        "LOWERING_PLAN_PROJECTION_UNSUPPORTED",
+        "LOWERING_RESTRICTIONS_PRESENT",
+        "LOWERING_VERDICT_NOT_ACCEPT"
+      ],
+      "receiptDigest": "sha256:0911ad6470bf674cceaa1c83d241d3872f4f4a5fbecbf98a4df2b2ec0bfebb4f",
+      "runtimeBindingDigest": "sha256:98f67e103fa8918d496dfb5213adb0ee1a49527fdeeb78e6d0ba6f43515210d3",
+      "status": "BLOCKED",
+      "stepCount": 0
+    }
+  ],
+  "scope": "G1a-local-zero-effect-lowering-only"
+}

@@ -1,0 +1,250 @@
+{
+  "$defs": {
+    "PricedQuote": {
+      "additionalProperties": false,
+      "properties": {
+        "basket_digest": {
+          "title": "Basket Digest",
+          "type": "string"
+        },
+        "basket_source_ref": {
+          "title": "Basket Source Ref",
+          "type": "string"
+        },
+        "currency": {
+          "enum": [
+            "GBP",
+            "USD",
+            "EUR",
+            "CNY",
+            "JPY",
+            "KWD"
+          ],
+          "title": "Currency",
+          "type": "string"
+        },
+        "discount_amount": {
+          "title": "Discount Amount",
+          "type": "string"
+        },
+        "discount_rate_bps": {
+          "title": "Discount Rate Bps",
+          "type": "integer"
+        },
+        "lines": {
+          "items": {
+            "$ref": "#/$defs/PricedQuoteLine"
+          },
+          "title": "Lines",
+          "type": "array"
+        },
+        "minor_units": {
+          "title": "Minor Units",
+          "type": "integer"
+        },
+        "net_amount": {
+          "title": "Net Amount",
+          "type": "string"
+        },
+        "policy_digest": {
+          "title": "Policy Digest",
+          "type": "string"
+        },
+        "policy_source_ref": {
+          "title": "Policy Source Ref",
+          "type": "string"
+        },
+        "rounding_description": {
+          "title": "Rounding Description",
+          "type": "string"
+        },
+        "subtotal": {
+          "title": "Subtotal",
+          "type": "string"
+        },
+        "tax_amount": {
+          "title": "Tax Amount",
+          "type": "string"
+        },
+        "tax_label": {
+          "title": "Tax Label",
+          "type": "string"
+        },
+        "tax_rate_bps": {
+          "title": "Tax Rate Bps",
+          "type": "integer"
+        },
+        "total": {
+          "title": "Total",
+          "type": "string"
+        }
+      },
+      "required": [
+        "currency",
+        "minor_units",
+        "lines",
+        "subtotal",
+        "discount_rate_bps",
+        "discount_amount",
+        "net_amount",
+        "tax_rate_bps",
+        "tax_label",
+        "tax_amount",
+        "total",
+        "rounding_description",
+        "basket_source_ref",
+        "policy_source_ref",
+        "basket_digest",
+        "policy_digest"
+      ],
+      "title": "PricedQuote",
+      "type": "object"
+    },
+    "PricedQuoteLine": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "line_id": {
+          "title": "Line Id",
+          "type": "string"
+        },
+        "line_total": {
+          "title": "Line Total",
+          "type": "string"
+        },
+        "quantity": {
+          "title": "Quantity",
+          "type": "integer"
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string"
+        },
+        "unit_price": {
+          "title": "Unit Price",
+          "type": "string"
+        }
+      },
+      "required": [
+        "line_id",
+        "sku",
+        "description",
+        "quantity",
+        "unit_price",
+        "line_total"
+      ],
+      "title": "PricedQuoteLine",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-quote-payload.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "context_manifest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Context Manifest"
+    },
+    "currency": {
+      "title": "Currency",
+      "type": "string"
+    },
+    "customer_id": {
+      "title": "Customer Id",
+      "type": "string"
+    },
+    "data_residency": {
+      "title": "Data Residency",
+      "type": "string"
+    },
+    "deliverable_kind": {
+      "const": "QUOTE",
+      "default": "QUOTE",
+      "title": "Deliverable Kind",
+      "type": "string"
+    },
+    "launch_date": {
+      "title": "Launch Date",
+      "type": "string"
+    },
+    "notice_required": {
+      "title": "Notice Required",
+      "type": "boolean"
+    },
+    "owner": {
+      "title": "Owner",
+      "type": "string"
+    },
+    "partner_terms_code": {
+      "title": "Partner Terms Code",
+      "type": "string"
+    },
+    "price_band": {
+      "title": "Price Band",
+      "type": "string"
+    },
+    "pricing": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PricedQuote"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "product_plan": {
+      "title": "Product Plan",
+      "type": "string"
+    },
+    "rebase_change_set": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rebase Change Set"
+    },
+    "rebased_from": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rebased From"
+    }
+  },
+  "required": [
+    "owner",
+    "customer_id",
+    "product_plan",
+    "launch_date",
+    "data_residency",
+    "notice_required",
+    "price_band",
+    "currency",
+    "partner_terms_code"
+  ],
+  "title": "QuotePayload",
+  "type": "object"
+}

@@ -1,0 +1,112 @@
+{
+  "candidate_only": true,
+  "canonical_target_writes": 0,
+  "coalition_plan_digest": "sha256:4749feb64739c4b93447820f8086fc98f34aab281abec62a4f426b4db56835e4",
+  "coalition_plan_ref": "coalition:evergreen-residency-faq-two-domain@v1",
+  "compiler_version": "agentteams-execution-plan-compiler@1.0.0",
+  "context_envelope_digest": "sha256:96dc2b1c0c0ecadf8f9ae015abc62d8dc7a33a75f2c29c5a79eb3ca8f9e5fdc0",
+  "context_envelope_ref": "task-agent-context:evergreen-residency-faq-two-domain@v1",
+  "digest": "sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e",
+  "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+  "formation_receipt_digest": "sha256:5dee3e2cea0a17182775d43cb6f7c9dec7e1c284f749f09b98b3c1f45f5d7ab2",
+  "formation_receipt_id": "task-formation-decision:evergreen-residency-faq-two-domain",
+  "id": "agentteams-execution-plan:evergreen-residency-faq-two-domain",
+  "revision_lock": {
+    "capability_catalog": "workspace-default-capability-cards@v1",
+    "template": "template:residency_faq@v1"
+  },
+  "schema_version": "orgrebase.agentteams-execution-plan.v1",
+  "selected_domain_ids": [
+    "legal",
+    "product"
+  ],
+  "task_digest": "sha256:a09d745d999caeed9796ba7c8f24f94dd7586ac00c9402fb8f1907508ecc7784",
+  "task_ref": "task:evergreen-residency-faq-two-domain",
+  "tasks": [
+    {
+      "actor_projection_digest": "sha256:6cd084a5431122b248995ea3f1aced064c392a297c6c665bb6d78fac4a39305d",
+      "actor_projection_ref": "projection:evergreen-residency-faq-legal@v1",
+      "assignee_actor_id": "legal-steward",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "capability_card_digest": "sha256:7ab00f04c7b7dd71e28dd04f600a88aa7802877aaf14976cd88f9d9c7c38eb1f",
+      "capability_card_ref": "capability-card:legal@v1",
+      "context_envelope_digest": "sha256:96dc2b1c0c0ecadf8f9ae015abc62d8dc7a33a75f2c29c5a79eb3ca8f9e5fdc0",
+      "context_envelope_ref": "task-agent-context:evergreen-residency-faq-two-domain@v1",
+      "depends_on": [],
+      "digest": "sha256:24cc97661c351f1e69f5f975c1c0a1a4e43588c89e6221226dd1181f31d5d45a",
+      "domain_id": "legal",
+      "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+      "formation_receipt_digest": "sha256:5dee3e2cea0a17182775d43cb6f7c9dec7e1c284f749f09b98b3c1f45f5d7ab2",
+      "formation_receipt_id": "task-formation-decision:evergreen-residency-faq-two-domain",
+      "input_schema_digest": "sha256:8d0ebcd9f35d3cdb6493e61caeabd30633a7be01c9f0cdba2aeced925a642d57",
+      "input_schema_refs": [
+        "schema:workspace.domain-delegation@v1"
+      ],
+      "output_schema_digest": "sha256:997c6f8e05ea5da383cf7cb3dfe09ae5e2cb448e550b6e4e2da43ff830d6c34d",
+      "output_schema_refs": [
+        "schema:workspace.domain-candidate-bundle@v1"
+      ],
+      "task_id": "at-domain-legal-a3f56c48b0c5",
+      "task_kind": "DOMAIN"
+    },
+    {
+      "actor_projection_digest": "sha256:3228b88d6376da93aa99c6740b234a075ab0e3c230cbd7013300b0af420e9dcf",
+      "actor_projection_ref": "projection:evergreen-residency-faq-product@v1",
+      "assignee_actor_id": "product-steward",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "capability_card_digest": "sha256:0f8881b1dd9cb46892f979d2a730d08e07703ecc0362a03b189de0a4a45466ec",
+      "capability_card_ref": "capability-card:product@v1",
+      "context_envelope_digest": "sha256:96dc2b1c0c0ecadf8f9ae015abc62d8dc7a33a75f2c29c5a79eb3ca8f9e5fdc0",
+      "context_envelope_ref": "task-agent-context:evergreen-residency-faq-two-domain@v1",
+      "depends_on": [],
+      "digest": "sha256:ddd087bbe962f28e23af3ccd9ac356d6dbbd98fa47ffde10e7fd3b96ed7fa20c",
+      "domain_id": "product",
+      "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+      "formation_receipt_digest": "sha256:5dee3e2cea0a17182775d43cb6f7c9dec7e1c284f749f09b98b3c1f45f5d7ab2",
+      "formation_receipt_id": "task-formation-decision:evergreen-residency-faq-two-domain",
+      "input_schema_digest": "sha256:8d0ebcd9f35d3cdb6493e61caeabd30633a7be01c9f0cdba2aeced925a642d57",
+      "input_schema_refs": [
+        "schema:workspace.domain-delegation@v1"
+      ],
+      "output_schema_digest": "sha256:997c6f8e05ea5da383cf7cb3dfe09ae5e2cb448e550b6e4e2da43ff830d6c34d",
+      "output_schema_refs": [
+        "schema:workspace.domain-candidate-bundle@v1"
+      ],
+      "task_id": "at-domain-product-f0e5afba2159",
+      "task_kind": "DOMAIN"
+    },
+    {
+      "actor_projection_digest": null,
+      "actor_projection_ref": null,
+      "assignee_actor_id": "independent-reviewer",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "capability_card_digest": null,
+      "capability_card_ref": null,
+      "context_envelope_digest": "sha256:96dc2b1c0c0ecadf8f9ae015abc62d8dc7a33a75f2c29c5a79eb3ca8f9e5fdc0",
+      "context_envelope_ref": "task-agent-context:evergreen-residency-faq-two-domain@v1",
+      "depends_on": [
+        "at-domain-legal-a3f56c48b0c5",
+        "at-domain-product-f0e5afba2159"
+      ],
+      "digest": "sha256:251a014d568254aa52ec9e0f12be1e2e98ad9b94d1d47cd3251d9cb901d211f3",
+      "domain_id": "reviewer",
+      "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+      "formation_receipt_digest": "sha256:5dee3e2cea0a17182775d43cb6f7c9dec7e1c284f749f09b98b3c1f45f5d7ab2",
+      "formation_receipt_id": "task-formation-decision:evergreen-residency-faq-two-domain",
+      "input_schema_digest": "sha256:f63476daf2123032bca987305d60edf9e6cdc3c99c5f5433c55101b3fec0b7f6",
+      "input_schema_refs": [
+        "agentteams-output:at-domain-legal-a3f56c48b0c5",
+        "agentteams-output:at-domain-product-f0e5afba2159"
+      ],
+      "output_schema_digest": "sha256:ccd1124cd53a230f576c21c26fd6dbfa90f6fe97ef6301ad16b9bdc83050fdd1",
+      "output_schema_refs": [
+        "schema:orgrebase.agentteams-review-candidate@v1"
+      ],
+      "task_id": "at-reviewer-barrier-7e3227d5ab73",
+      "task_kind": "REVIEWER_BARRIER"
+    }
+  ]
+}

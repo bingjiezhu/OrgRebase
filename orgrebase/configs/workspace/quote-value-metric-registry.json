@@ -1,0 +1,96 @@
+{
+  "schema_version": "orgrebase.quote-value-metric-registry.v1",
+  "benchmark_version": "QuoteValue-v0.1",
+  "primary_user": "Enterprise Quote Operator",
+  "primary_deliverable": "Enterprise Quote",
+  "evidence_classes": {
+    "SYNTHETIC_GOLD": "Deterministic synthetic cases with evaluator-private expected answers.",
+    "OBSERVED_LOCAL_PRODUCT": "Behavior observed from the retained local product path; not an enterprise field observation.",
+    "MODELLED_COUNTERFACTUAL": "A deterministic calculation over observed dispositions and an explicit normalized cost model.",
+    "NOT_RUN": "No admissible observation exists for the claimed enterprise quantity."
+  },
+  "metric_definitions": [
+    {
+      "id": "quote_cycle_elapsed_minutes",
+      "formula": "delivery_accepted_at - request_admitted_at",
+      "unit": "MINUTE",
+      "allowed_evidence_classes": ["OBSERVED_LOCAL_PRODUCT", "NOT_RUN"],
+      "enterprise_shadow_required": true
+    },
+    {
+      "id": "policy_confirmation_active_minutes",
+      "formula": "sum(owner_active_interval_minutes)",
+      "unit": "MINUTE",
+      "allowed_evidence_classes": ["NOT_RUN"],
+      "enterprise_shadow_required": true
+    },
+    {
+      "id": "impact_exact_mismatch_case_rate",
+      "formula": "synthetic_change_cases_with_any_impact_mismatch / evaluated_synthetic_change_cases",
+      "unit": "RATIO",
+      "allowed_evidence_classes": ["SYNTHETIC_GOLD", "NOT_RUN"],
+      "enterprise_shadow_required": false
+    },
+    {
+      "id": "first_pass_rework_rate",
+      "formula": "delivered_quotes_requiring_correction / delivered_quotes",
+      "unit": "RATIO",
+      "allowed_evidence_classes": ["NOT_RUN"],
+      "enterprise_shadow_required": true
+    },
+    {
+      "id": "unauthorized_access_success_rate",
+      "formula": "unauthorized_reads_succeeded / unauthorized_read_attempts",
+      "unit": "RATIO",
+      "allowed_evidence_classes": ["SYNTHETIC_GOLD", "NOT_RUN"],
+      "enterprise_shadow_required": false
+    },
+    {
+      "id": "hold_for_review_decision_rate",
+      "formula": "case_target_decisions_with_HOLD_FOR_REVIEW / evaluated_case_target_decisions",
+      "unit": "RATIO",
+      "allowed_evidence_classes": ["OBSERVED_LOCAL_PRODUCT", "NOT_RUN"],
+      "enterprise_shadow_required": false
+    },
+    {
+      "id": "full_rebuild_normalized_cost",
+      "formula": "sum(cost(target, REBUILD)) over the frozen target universe and retained change cases",
+      "unit": "NORMALIZED_ACTION_COST",
+      "allowed_evidence_classes": ["MODELLED_COUNTERFACTUAL"],
+      "enterprise_shadow_required": false
+    },
+    {
+      "id": "selective_rebase_normalized_cost",
+      "formula": "sum(cost(target, observed_disposition)) over the same target universe and retained change cases",
+      "unit": "NORMALIZED_ACTION_COST",
+      "allowed_evidence_classes": ["MODELLED_COUNTERFACTUAL"],
+      "enterprise_shadow_required": false
+    },
+    {
+      "id": "selective_rebase_cost_saving_rate",
+      "formula": "(full_rebuild_normalized_cost - selective_rebase_normalized_cost) / full_rebuild_normalized_cost",
+      "unit": "RATIO",
+      "allowed_evidence_classes": ["MODELLED_COUNTERFACTUAL"],
+      "enterprise_shadow_required": false
+    }
+  ],
+  "hard_gates": [
+    "EXACTLY_ONE_ACCOUNTABLE_PER_PROCESS_STEP",
+    "NO_ZERO_DENOMINATOR",
+    "SAME_TARGET_UNIVERSE_FOR_FULL_AND_SELECTIVE_COST",
+    "SAME_COST_MODEL_FOR_FULL_AND_SELECTIVE_COST",
+    "POSITIVE_REVIEW_REQUALIFY_AND_HOLD_COSTS",
+    "DECLARED_SCENARIO_ENVELOPES_REQUIRED",
+    "BREAK_EVEN_AND_ADVERSE_SCENARIOS_REQUIRED",
+    "REAL_ENTERPRISE_METRICS_REMAIN_NOT_RUN"
+  ],
+  "claim_policy": {
+    "maximum_claim": "SYNTHETIC_CONTROLLED_VALUE_PROOF",
+    "forbidden_claims": [
+      "ENTERPRISE_ROI",
+      "PRODUCTION_SLA",
+      "REAL_CUSTOMER_CYCLE_TIME",
+      "REAL_CUSTOMER_REWORK_REDUCTION"
+    ]
+  }
+}

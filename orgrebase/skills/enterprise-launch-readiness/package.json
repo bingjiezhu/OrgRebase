@@ -1,0 +1,78 @@
+{
+  "dependencies": {
+    "policy:agent-boundaries@r1": "sha256:c5d037328560e9feb84c8cc97e9f2028ef9ce277a09924bf4ef56d74a478ce4d",
+    "schema:orgrebase.launch-readiness-input.v1": "sha256:f33219dc0d0a9928bacce2857e2e261bd34d4fb96306d4a077bafb2a4124e7a1",
+    "schema:orgrebase.skill-action.v1": "sha256:f32022ec8cb1d6100959c2c165cdfe1d80dee811f6a2272153815d935735f01d"
+  },
+  "entry_point": "LAUNCH_READINESS_V1",
+  "evaluation": {
+    "functional_min_pass_rate": 1.0,
+    "partitions": [
+      "REPLAY",
+      "HELD_OUT",
+      "NEGATIVE_TRANSFER",
+      "PERMISSION",
+      "INJECTION",
+      "MALFORMED",
+      "RESOURCE_OR_DEADLINE",
+      "CANARY"
+    ],
+    "security_min_pass_rate": 1.0,
+    "target_writes_max": 0
+  },
+  "input_schema_ref": "schema:orgrebase.launch-readiness-input.v1",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "manifest_digest": "sha256:80d3d35864f75c89d9a13bdfd3232ceb615d44ef90237a97d18a6a276f3822f3",
+  "name": "enterprise-launch-readiness",
+  "output_schema_ref": "schema:orgrebase.skill-action.v1",
+  "package_id": "skill-package:enterprise-launch-readiness@1.4.2",
+  "permissions": {
+    "allowed_tools": [],
+    "effect_ceiling": "CANDIDATE_ONLY",
+    "side_effects": []
+  },
+  "program_content_digest": "sha256:40a4b5159268a7f34cb1972f62d06e50b5499ac45d7aedc9dfc1ef7ca4d46aa7",
+  "provenance_refs": [
+    "skills/enterprise-launch-readiness/contract.json",
+    "qualification:enterprise-launch-readiness@1"
+  ],
+  "release_artifact": {
+    "id": "skill-release:enterprise-launch-readiness@1.4.2",
+    "predecessor_package_digest": "sha256:184b84da6c99ace9a649929ed6aacbfe6e801dea4034891c7f72056ce3172c47",
+    "source_candidate_digest": null,
+    "source_candidate_executable": false,
+    "source_candidate_ref": null
+  },
+  "resources": {
+    "contract": {
+      "path": "contract.json",
+      "sha256": "sha256:83e452b2cd4669bbab4ac479d65f646b81abd117083d86793f62c3fa7ec20965"
+    },
+    "input_schema": {
+      "path": "input.schema.json",
+      "sha256": "sha256:f33219dc0d0a9928bacce2857e2e261bd34d4fb96306d4a077bafb2a4124e7a1"
+    },
+    "output_schema": {
+      "path": "output.schema.json",
+      "sha256": "sha256:f32022ec8cb1d6100959c2c165cdfe1d80dee811f6a2272153815d935735f01d"
+    },
+    "program": {
+      "path": "program.json",
+      "sha256": "sha256:1f8530b416c28691ccbc9ea6b55c99d6d51163e787bf6ad619f251cebf726510"
+    },
+    "reference_en": {
+      "path": "references/en.md",
+      "sha256": "sha256:70d2c9ba0fa4334a9af4527493db0972369757ff6f49af3fd0f5624d4504ad7d"
+    },
+    "reference_zh_cn": {
+      "path": "references/zh-CN.md",
+      "sha256": "sha256:3bb2c2b0e573a238716db24ac37e314241c00b7be469bf8f90c9d774b2b5ffec"
+    },
+    "skill": {
+      "path": "SKILL.md",
+      "sha256": "sha256:cf6d82f471893c8c45a9741fa07210717208f3e009477eaf0760d56cd1557c90"
+    }
+  },
+  "schema_version": "orgrebase.skill-package-manifest.v2",
+  "version": "1.4.2"
+}

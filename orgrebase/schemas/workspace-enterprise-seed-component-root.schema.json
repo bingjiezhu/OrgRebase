@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "RuntimeBindingMode": {
+      "enum": [
+        "EXACT_REFERENCE_PROJECTION",
+        "INTAKE_ONLY"
+      ],
+      "title": "RuntimeBindingMode",
+      "type": "string"
+    },
+    "SeedComponentKind": {
+      "enum": [
+        "DOMAIN",
+        "KNOWLEDGE",
+        "AUTHORITY",
+        "CAPABILITY",
+        "DEPENDENCY"
+      ],
+      "title": "SeedComponentKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-enterprise-seed-component-root.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "component_kind": {
+      "$ref": "#/$defs/SeedComponentKind"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "organization_id": {
+      "minLength": 1,
+      "title": "Organization Id",
+      "type": "string"
+    },
+    "profile_ref": {
+      "minLength": 1,
+      "title": "Profile Ref",
+      "type": "string"
+    },
+    "projection": {
+      "additionalProperties": true,
+      "title": "Projection",
+      "type": "object"
+    },
+    "projection_digest": {
+      "title": "Projection Digest",
+      "type": "string"
+    },
+    "revision": {
+      "minLength": 1,
+      "title": "Revision",
+      "type": "string"
+    },
+    "runtime_binding_mode": {
+      "$ref": "#/$defs/RuntimeBindingMode"
+    },
+    "schema_version": {
+      "const": "orgrebase.enterprise-seed-component-root.v1",
+      "default": "orgrebase.enterprise-seed-component-root.v1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_ref",
+    "organization_id",
+    "component_kind",
+    "revision",
+    "runtime_binding_mode",
+    "projection",
+    "projection_digest"
+  ],
+  "title": "EnterpriseSeedComponentRoot",
+  "type": "object"
+}

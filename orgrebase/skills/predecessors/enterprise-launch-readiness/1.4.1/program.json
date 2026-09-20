@@ -1,0 +1,17 @@
+{
+  "schema_version": "orgrebase.restricted-skill-program.v1",
+  "adapter": "LAUNCH_READINESS_V1",
+  "required_fields": ["classification", "object_id", "reason_code", "preview_receipt_digest", "approval_receipt_digest"],
+  "mapping": {
+    "AFFECTED_HARD": "REBASE",
+    "AFFECTED_REVIEW": "REVIEW",
+    "AFFECTED_INFORMATIONAL": "NOTIFY",
+    "UNAFFECTED_WITHIN_DECLARED_BOUNDARY": "KEEP_CURRENT",
+    "UNKNOWN": "ESCALATE"
+  },
+  "deny_flags": ["request_restricted_source", "permission_expansion", "target_write_requested"],
+  "abstain_flags": ["prompt_injection", "malformed_input", "deadline_expired", "resource_exhausted", "stale_preview"],
+  "allowed_tool_ids": [],
+  "side_effects": [],
+  "digest": "sha256:40a4b5159268a7f34cb1972f62d06e50b5499ac45d7aedc9dfc1ef7ca4d46aa7"
+}

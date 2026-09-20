@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "profiles": 13,
+  "cases_per_profile": 192,
+  "reference_score": 100.0,
+  "failures": [],
+  "failed_strategy_profiles": [
+    "broadcast-invalidate-all",
+    "no-manifest-bijection",
+    "no-successor-promotion",
+    "no-unknown",
+    "no-skill-requalification",
+    "non-exact-skill-digest-negative-control"
+  ]
+}

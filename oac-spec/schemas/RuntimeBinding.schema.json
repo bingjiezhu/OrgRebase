@@ -1,0 +1,334 @@
+{
+  "$defs": {
+    "ResourceMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "title": "Createdat",
+          "type": "string"
+        },
+        "effectiveFrom": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectivefrom"
+        },
+        "effectiveTo": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effectiveto"
+        },
+        "governanceRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Governanceref"
+        },
+        "id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "ownerRef": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ownerref"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "sourceRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Sourcerefs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "namespace",
+        "revision",
+        "createdAt"
+      ],
+      "title": "ResourceMetadata",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "const": "oac.dev/v0alpha1",
+          "default": "oac.dev/v0alpha1",
+          "title": "Apiversion",
+          "type": "string"
+        },
+        "digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "resourceId": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Resourceid",
+          "type": "string"
+        },
+        "revision": {
+          "exclusiveMinimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "namespace",
+        "resourceId",
+        "revision",
+        "digest"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "RuntimeBindingSpec": {
+      "additionalProperties": false,
+      "description": "Closed mapping supplied by a runtime owner; it grants no runtime admission.",
+      "properties": {
+        "effectCeiling": {
+          "const": "zero_effect",
+          "title": "Effectceiling",
+          "type": "string"
+        },
+        "handlerBindings": {
+          "items": {
+            "$ref": "#/$defs/RuntimeHandlerBinding"
+          },
+          "title": "Handlerbindings",
+          "type": "array"
+        },
+        "roleBindings": {
+          "items": {
+            "$ref": "#/$defs/RuntimeRoleBinding"
+          },
+          "title": "Rolebindings",
+          "type": "array"
+        },
+        "subjectCertificateRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "subjectPlanRef": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "targetWrites": {
+          "const": 0,
+          "title": "Targetwrites",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "subjectPlanRef",
+        "subjectCertificateRef",
+        "roleBindings",
+        "handlerBindings",
+        "effectCeiling",
+        "targetWrites"
+      ],
+      "title": "RuntimeBindingSpec",
+      "type": "object"
+    },
+    "RuntimeHandlerBinding": {
+      "additionalProperties": false,
+      "description": "Content-bound, non-executable handler identity for one obligation type.",
+      "properties": {
+        "capabilityRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Capabilityref",
+          "type": "string"
+        },
+        "effectCeiling": {
+          "const": "zero_effect",
+          "title": "Effectceiling",
+          "type": "string"
+        },
+        "evidenceOutputRefs": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidenceoutputrefs",
+          "type": "array"
+        },
+        "handlerDigest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Handlerdigest",
+          "type": "string"
+        },
+        "handlerRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Handlerref",
+          "type": "string"
+        },
+        "obligationType": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Obligationtype",
+          "type": "string"
+        }
+      },
+      "required": [
+        "obligationType",
+        "handlerRef",
+        "handlerDigest",
+        "capabilityRef",
+        "evidenceOutputRefs",
+        "effectCeiling"
+      ],
+      "title": "RuntimeHandlerBinding",
+      "type": "object"
+    },
+    "RuntimeRoleBinding": {
+      "additionalProperties": false,
+      "description": "Runner-owned identity and capability mapping for one exact RoleInstance.",
+      "properties": {
+        "capabilityRefs": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Capabilityrefs",
+          "type": "array"
+        },
+        "principalRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Principalref",
+          "type": "string"
+        },
+        "roleInstanceRef": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Roleinstanceref",
+          "type": "string"
+        },
+        "runtimeSubject": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Runtimesubject",
+          "type": "string"
+        }
+      },
+      "required": [
+        "roleInstanceRef",
+        "principalRef",
+        "runtimeSubject"
+      ],
+      "title": "RuntimeRoleBinding",
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/v0alpha1/RuntimeBinding.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1",
+      "default": "oac.dev/v0alpha1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Digest"
+    },
+    "kind": {
+      "const": "RuntimeBinding",
+      "default": "RuntimeBinding",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ResourceMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/RuntimeBindingSpec"
+    }
+  },
+  "required": [
+    "metadata",
+    "spec"
+  ],
+  "title": "RuntimeBinding",
+  "type": "object"
+}

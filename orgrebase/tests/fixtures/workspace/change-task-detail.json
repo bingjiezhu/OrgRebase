@@ -1,0 +1,2150 @@
+{
+  "origin": {
+    "source": "recording/final-002/snapshots/change-preview.json",
+    "source_sha256": "b07594e7411c29063cad9a4c38df3c11510bad0f6906b749e546cd65097c1cb7",
+    "scope": "Allowlisted UI projection of a real controlled run; not a standalone cryptographic replay fixture"
+  },
+  "detail": {
+    "execution_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+    "event": {
+      "digest": "sha256:824dee85ed08d63b5d08d9817b0536ea6b3fbd6eda2e8627761fa052f8978847",
+      "event_id": "ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30",
+      "organization_id": "org:evergreen-industries",
+      "slot_id": "pricing_policy",
+      "owner_id": "human:evergreen-finance-owner",
+      "base_version": "v1",
+      "base_digest": "sha256:c51463a31794901b31d30675847bc2fc01e5b3e41f5d0e149d4f887613bc7ed8",
+      "proposal": {
+        "digest": "sha256:14f75f39dd28b9920e9ba0275ee6d50433f3cece2944b1f70d12ca2abe224e2d",
+        "id": "policy:finance.pricing",
+        "version": "proposal-ab5c084555fb07f72a473167",
+        "kind": "PolicyVersion",
+        "label": "Pricing Policy",
+        "domain": "finance",
+        "state": "PROPOSED",
+        "payload": {
+          "authority": "finance",
+          "canonical_value": {
+            "discount_bps": 1000,
+            "rounding": "HALF_UP",
+            "source_ref": "policy:controlled-volume-discount-10pct@v1",
+            "tax_bps": 2000,
+            "tax_label": "受控演示税率（非历史实际税费）",
+            "tax_mode": "EXCLUSIVE"
+          }
+        },
+        "source_refs": [
+          "policy:controlled-volume-discount-10pct@v1"
+        ],
+        "valid_from": "2026-08-15T00:00:00Z",
+        "valid_to": null,
+        "sensitivity": "INTERNAL",
+        "allowed_purposes": [
+          "enterprise_quote",
+          "change_rebase"
+        ],
+        "coverage_complete": true,
+        "coverage_basis": [
+          "OWNER_DECLARED_COMPLETE"
+        ]
+      },
+      "occurred_at": "2026-08-15T00:00:00Z",
+      "purpose": "change_rebase",
+      "operation": "UPDATE"
+    },
+    "status": "PREVIEWED",
+    "status_reason": null,
+    "allowed_actions": [
+      "PREVIEW",
+      "REJECT",
+      "APPROVE"
+    ],
+    "preview": {
+      "kind": "ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30",
+      "artifact_id": "workspace-preview:ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+      "artifact_digest": "sha256:dc94cc7b5ced374f1d38b79c1b8227b7751cd0c9b60728841ccbf30e9250a211",
+      "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+      "bundle": {
+        "change_spec": {
+          "digest": "sha256:8f0f346afe1eae9e1d0e562f0780712497bcd0891362359223efad5486876a8c",
+          "id": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30",
+          "revision": "r1",
+          "owner_id": "human:evergreen-finance-owner",
+          "purpose": "change_rebase",
+          "object_id": "policy:finance.pricing",
+          "base_version": "v1",
+          "proposed_version": "proposal-ab5c084555fb07f72a473167",
+          "expected_snapshot_ref": "workspace-graph:evergreen@v1",
+          "expected_snapshot_digest": "sha256:eae11f667bd26410e362418cedb152433fae6330d95a0b4840965467bc98d06e",
+          "idempotency_key": "workspace:apply:ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1"
+        },
+        "change_set": {
+          "digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+          "id": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30",
+          "revision": "r1",
+          "state": "READY_FOR_PREVIEW",
+          "owner_id": "human:evergreen-finance-owner",
+          "purpose": "change_rebase",
+          "scope": [
+            "work:finance-approval",
+            "work:launch-readiness-review",
+            "work:partner-brief",
+            "work:quote-blue-harbor"
+          ],
+          "deltas": [
+            {
+              "digest": "sha256:29c78fe05f90cc44e28ba56ad2923c77d9a4f3533acd0b77713a9110555a1ae6",
+              "object_id": "policy:finance.pricing",
+              "base_version": "v1",
+              "proposed_version": "proposal-ab5c084555fb07f72a473167",
+              "base_value": {
+                "discount_bps": 0,
+                "rounding": "HALF_UP",
+                "source_ref": "source:controlled-replay-policy#sha256:d0dbd39caad8747f55fa4cd78dcc57ffb6246c0fa88086110de1810bdb86288b",
+                "tax_bps": 2000,
+                "tax_label": "受控演示税率（非历史实际税费）",
+                "tax_mode": "EXCLUSIVE"
+              },
+              "proposed_value": {
+                "discount_bps": 1000,
+                "rounding": "HALF_UP",
+                "source_ref": "policy:controlled-volume-discount-10pct@v1",
+                "tax_bps": 2000,
+                "tax_label": "受控演示税率（非历史实际税费）",
+                "tax_mode": "EXCLUSIVE"
+              },
+              "changed_fields": [
+                "canonical_value"
+              ],
+              "semantic_classification": "SEMANTIC_DELTA",
+              "admitted_by": "human:evergreen-finance-owner"
+            }
+          ]
+        },
+        "preview": {
+          "digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+          "id": "preview:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+          "change_set_ref": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+          "state": "READY",
+          "algorithm_version": "impact-max-severity@1.1.0",
+          "revision_lock": {
+            "digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+            "change_set_revision": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+            "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+            "graph_revision": "graph:workspace@v1",
+            "policy_revision": "policy:context@r1",
+            "skill_registry_revision": "skills:registry@r1",
+            "runtime_registry_revision": "runtime:workspace@v1",
+            "evaluation_scope_digest": "sha256:fe95f9f20f6ebfb0e140b6f836d7d75cf68c7aaf1754290b5f90589c810610b4"
+          },
+          "results": [
+            {
+              "digest": "sha256:43e492d81de1000745ec7ed16a8462c10ba70b284a30c05aa3901095c6eaea8c",
+              "object_id": "work:finance-approval",
+              "label": "Enterprise Quote Finance Approval",
+              "classification": "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+              "reason_code": "COMPLETE_COVERAGE_NO_ADMITTED_PATH",
+              "proof_path": [],
+              "boundary": {
+                "dependency_manifest": "dependency-manifest:finance-approval@v1",
+                "dependency_manifest_digest": "sha256:86e7bb451495341308dc75b7e7e2aad0b8f71c02525bbfabd109d15723f69b20",
+                "evaluated_change": "sha256:29c78fe05f90cc44e28ba56ad2923c77d9a4f3533acd0b77713a9110555a1ae6",
+                "graph_revision": "graph:workspace@v1",
+                "requirement_slots": [
+                  "price-band"
+                ],
+                "scope": [
+                  "work:finance-approval"
+                ]
+              },
+              "missing_evidence": []
+            },
+            {
+              "digest": "sha256:60fb641edec59c31dbedd6ab0a72c8c289f8bc559a719882c575efc59a1f27a6",
+              "object_id": "work:launch-readiness-review",
+              "label": "Enterprise Launch Readiness Review",
+              "classification": "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+              "reason_code": "COMPLETE_COVERAGE_NO_ADMITTED_PATH",
+              "proof_path": [],
+              "boundary": {
+                "dependency_manifest": "dependency-manifest:launch-readiness-review@v1",
+                "dependency_manifest_digest": "sha256:d4a4d57faf88065f6365f555b528d5191ae9d72f1ba51d87c44c017ad90ef574",
+                "evaluated_change": "sha256:29c78fe05f90cc44e28ba56ad2923c77d9a4f3533acd0b77713a9110555a1ae6",
+                "graph_revision": "graph:workspace@v1",
+                "requirement_slots": [
+                  "public-message"
+                ],
+                "scope": [
+                  "work:launch-readiness-review"
+                ]
+              },
+              "missing_evidence": []
+            },
+            {
+              "digest": "sha256:6c75f44e894c10e00c49110057a1372c4fb88e60fc384c3cab9082e77c24515c",
+              "object_id": "work:partner-brief",
+              "label": "Enterprise Partner Brief",
+              "classification": "UNKNOWN",
+              "reason_code": "DEPENDENCY_COVERAGE_INSUFFICIENT",
+              "proof_path": [],
+              "boundary": null,
+              "missing_evidence": [
+                "historical ContextManifest",
+                "complete authoritative DependencyManifest",
+                "MANIFEST_REQUIREMENT_SET_MISMATCH"
+              ]
+            },
+            {
+              "digest": "sha256:ae430a8038769369add526aeff3f0f56e925da18019e2e18d5017a6ffd030c4e",
+              "object_id": "work:quote-blue-harbor",
+              "label": "商品报价 · 557670",
+              "classification": "AFFECTED_HARD",
+              "reason_code": "ADMITTED_TYPED_PATH",
+              "proof_path": [
+                {
+                  "edge_id": "edge:runtime:e3bf94081ec6acf3",
+                  "source_id": "policy:finance.pricing",
+                  "target_id": "work:quote-blue-harbor",
+                  "relation": "REQUIRES_POLICY",
+                  "strength": "HARD",
+                  "coverage_basis": "RUNTIME_OBSERVED",
+                  "provenance_refs": [
+                    "runtime-dependency:quote-blue-harbor@v1",
+                    "event:quote-blue-harbor:reference-resolved:10",
+                    "source-version:policy:finance.pricing@v1",
+                    "consumer-version:work:quote-blue-harbor@v1"
+                  ]
+                }
+              ],
+              "boundary": null,
+              "missing_evidence": []
+            }
+          ],
+          "certificates": [
+            {
+              "digest": "sha256:f2163a82ac10d0f492780af29e19cb38b3a176245cef4bf88c27874b7e388258",
+              "id": "impact-certificate:work:finance-approval@r1",
+              "schema_version": "orgrebase.impact-certificate.v1",
+              "certificate_type": "BOUNDED_NON_IMPACT",
+              "subject_id": "work:finance-approval",
+              "classification": "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+              "reason_code": "COMPLETE_COVERAGE_NO_ADMITTED_PATH",
+              "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+              "result_digest": "sha256:43e492d81de1000745ec7ed16a8462c10ba70b284a30c05aa3901095c6eaea8c",
+              "revision_lock_digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+              "traversal_commitment": {
+                "budget_exhausted": false,
+                "dependency_snapshot_digest": "sha256:6550d428c66cb52ae01d6ba26cebcb06730bfcbc57e1cfd8b89ac16974e37f76",
+                "eligible_edge_ids": [
+                  "edge:pilot:finance-approval:price-band",
+                  "edge:pilot:launch-readiness-review:public-message",
+                  "edge:runtime:16f1c75d71409d23",
+                  "edge:runtime:48dc0676308d4bf0",
+                  "edge:runtime:82b2dfe946d0dd86",
+                  "edge:runtime:847dc34aeabbfbc9",
+                  "edge:runtime:8f4b48ebfed7d397",
+                  "edge:runtime:9d7ecd369df2d987",
+                  "edge:runtime:bf01d33099bf7429",
+                  "edge:runtime:c857f233d868f283",
+                  "edge:runtime:cddec8119a5be5d5",
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "excluded_edges": [
+                  {
+                    "edge_id": "edge:pilot:partner-brief:launch-date",
+                    "reason": "STATUS_PROPOSED_EDGE"
+                  }
+                ],
+                "max_depth": 8,
+                "reachable_edge_ids": [
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "reachable_node_ids": [
+                  "policy:finance.pricing",
+                  "work:quote-blue-harbor"
+                ],
+                "reachable_slice_digest": "sha256:5928864b1135fe1d47687aadf46de642d61328b269988f933d3705a2115f8adc",
+                "selected_path_classification": null,
+                "selected_path_edge_ids": [],
+                "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+                "source_id": "policy:finance.pricing",
+                "target_coverage": {
+                  "assessment_failures": [],
+                  "manifest_completeness": "COMPLETE",
+                  "manifest_digest": "sha256:86e7bb451495341308dc75b7e7e2aad0b8f71c02525bbfabd109d15723f69b20",
+                  "manifest_ref": "dependency-manifest:finance-approval@v1",
+                  "requirement_slot_ids": [
+                    "price-band"
+                  ],
+                  "target_ref": "work:finance-approval@v1"
+                },
+                "target_coverage_digest": "sha256:500b32f396f8239cd2db2bc51eab598537287a67f1db2c9ab5a668e422262c5f",
+                "target_id": "work:finance-approval",
+                "truncated_frontier_edge_ids": []
+              },
+              "claim_boundary": "No admitted trusted path exists in the committed dependency snapshot and the target declares complete coverage; this is not a global non-impact claim.",
+              "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0",
+              "evidence_class": "LOCAL_DETERMINISTIC"
+            },
+            {
+              "digest": "sha256:b331e142451f0592bfafacb04fd6f1b296b17b6b9cadad00642cea20885ca3c4",
+              "id": "impact-certificate:work:launch-readiness-review@r1",
+              "schema_version": "orgrebase.impact-certificate.v1",
+              "certificate_type": "BOUNDED_NON_IMPACT",
+              "subject_id": "work:launch-readiness-review",
+              "classification": "UNAFFECTED_WITHIN_DECLARED_BOUNDARY",
+              "reason_code": "COMPLETE_COVERAGE_NO_ADMITTED_PATH",
+              "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+              "result_digest": "sha256:60fb641edec59c31dbedd6ab0a72c8c289f8bc559a719882c575efc59a1f27a6",
+              "revision_lock_digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+              "traversal_commitment": {
+                "budget_exhausted": false,
+                "dependency_snapshot_digest": "sha256:6550d428c66cb52ae01d6ba26cebcb06730bfcbc57e1cfd8b89ac16974e37f76",
+                "eligible_edge_ids": [
+                  "edge:pilot:finance-approval:price-band",
+                  "edge:pilot:launch-readiness-review:public-message",
+                  "edge:runtime:16f1c75d71409d23",
+                  "edge:runtime:48dc0676308d4bf0",
+                  "edge:runtime:82b2dfe946d0dd86",
+                  "edge:runtime:847dc34aeabbfbc9",
+                  "edge:runtime:8f4b48ebfed7d397",
+                  "edge:runtime:9d7ecd369df2d987",
+                  "edge:runtime:bf01d33099bf7429",
+                  "edge:runtime:c857f233d868f283",
+                  "edge:runtime:cddec8119a5be5d5",
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "excluded_edges": [
+                  {
+                    "edge_id": "edge:pilot:partner-brief:launch-date",
+                    "reason": "STATUS_PROPOSED_EDGE"
+                  }
+                ],
+                "max_depth": 8,
+                "reachable_edge_ids": [
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "reachable_node_ids": [
+                  "policy:finance.pricing",
+                  "work:quote-blue-harbor"
+                ],
+                "reachable_slice_digest": "sha256:5928864b1135fe1d47687aadf46de642d61328b269988f933d3705a2115f8adc",
+                "selected_path_classification": null,
+                "selected_path_edge_ids": [],
+                "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+                "source_id": "policy:finance.pricing",
+                "target_coverage": {
+                  "assessment_failures": [],
+                  "manifest_completeness": "COMPLETE",
+                  "manifest_digest": "sha256:d4a4d57faf88065f6365f555b528d5191ae9d72f1ba51d87c44c017ad90ef574",
+                  "manifest_ref": "dependency-manifest:launch-readiness-review@v1",
+                  "requirement_slot_ids": [
+                    "public-message"
+                  ],
+                  "target_ref": "work:launch-readiness-review@v1"
+                },
+                "target_coverage_digest": "sha256:43a647b6cfb600699057565862148f111222090e2716a7ecd15fa1fc8177e2c0",
+                "target_id": "work:launch-readiness-review",
+                "truncated_frontier_edge_ids": []
+              },
+              "claim_boundary": "No admitted trusted path exists in the committed dependency snapshot and the target declares complete coverage; this is not a global non-impact claim.",
+              "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0",
+              "evidence_class": "LOCAL_DETERMINISTIC"
+            },
+            {
+              "digest": "sha256:f1c2be46e68bcd757bffc286f09b5a710db6ca9ad2edaa99eeb7de5bdd6dfeef",
+              "id": "impact-certificate:work:partner-brief@r1",
+              "schema_version": "orgrebase.impact-certificate.v1",
+              "certificate_type": "UNCERTAINTY_WITNESS",
+              "subject_id": "work:partner-brief",
+              "classification": "UNKNOWN",
+              "reason_code": "DEPENDENCY_COVERAGE_INSUFFICIENT",
+              "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+              "result_digest": "sha256:6c75f44e894c10e00c49110057a1372c4fb88e60fc384c3cab9082e77c24515c",
+              "revision_lock_digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+              "traversal_commitment": {
+                "budget_exhausted": false,
+                "dependency_snapshot_digest": "sha256:6550d428c66cb52ae01d6ba26cebcb06730bfcbc57e1cfd8b89ac16974e37f76",
+                "eligible_edge_ids": [
+                  "edge:pilot:finance-approval:price-band",
+                  "edge:pilot:launch-readiness-review:public-message",
+                  "edge:runtime:16f1c75d71409d23",
+                  "edge:runtime:48dc0676308d4bf0",
+                  "edge:runtime:82b2dfe946d0dd86",
+                  "edge:runtime:847dc34aeabbfbc9",
+                  "edge:runtime:8f4b48ebfed7d397",
+                  "edge:runtime:9d7ecd369df2d987",
+                  "edge:runtime:bf01d33099bf7429",
+                  "edge:runtime:c857f233d868f283",
+                  "edge:runtime:cddec8119a5be5d5",
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "excluded_edges": [
+                  {
+                    "edge_id": "edge:pilot:partner-brief:launch-date",
+                    "reason": "STATUS_PROPOSED_EDGE"
+                  }
+                ],
+                "max_depth": 8,
+                "reachable_edge_ids": [
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "reachable_node_ids": [
+                  "policy:finance.pricing",
+                  "work:quote-blue-harbor"
+                ],
+                "reachable_slice_digest": "sha256:5928864b1135fe1d47687aadf46de642d61328b269988f933d3705a2115f8adc",
+                "selected_path_classification": null,
+                "selected_path_edge_ids": [],
+                "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+                "source_id": "policy:finance.pricing",
+                "target_coverage": {
+                  "assessment_failures": [
+                    "MANIFEST_REQUIREMENT_SET_MISMATCH"
+                  ],
+                  "manifest_completeness": "COMPLETE",
+                  "manifest_digest": "sha256:e2e8f6ed63859d643ff95afcf47d56f4424244a7ba211551c8504b922d52e091",
+                  "manifest_ref": "dependency-manifest:partner-brief@v1",
+                  "requirement_slot_ids": [
+                    "launch-date"
+                  ],
+                  "target_ref": "work:partner-brief@v1"
+                },
+                "target_coverage_digest": "sha256:aa5c66065dc4b069c5c9949738c10474d3d735ff3f67641e522d370154d7ca70",
+                "target_id": "work:partner-brief",
+                "truncated_frontier_edge_ids": []
+              },
+              "claim_boundary": "Coverage is insufficient, so this certificate proves uncertainty only and must never authorize KEEP_CURRENT.",
+              "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0",
+              "evidence_class": "LOCAL_DETERMINISTIC"
+            },
+            {
+              "digest": "sha256:ca63a43b772b0804fe81de301d25a277e367018b2744b379f769e29653789100",
+              "id": "impact-certificate:work:quote-blue-harbor@r1",
+              "schema_version": "orgrebase.impact-certificate.v1",
+              "certificate_type": "POSITIVE_WITNESS",
+              "subject_id": "work:quote-blue-harbor",
+              "classification": "AFFECTED_HARD",
+              "reason_code": "ADMITTED_TYPED_PATH",
+              "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+              "result_digest": "sha256:ae430a8038769369add526aeff3f0f56e925da18019e2e18d5017a6ffd030c4e",
+              "revision_lock_digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+              "traversal_commitment": {
+                "budget_exhausted": false,
+                "dependency_snapshot_digest": "sha256:6550d428c66cb52ae01d6ba26cebcb06730bfcbc57e1cfd8b89ac16974e37f76",
+                "eligible_edge_ids": [
+                  "edge:pilot:finance-approval:price-band",
+                  "edge:pilot:launch-readiness-review:public-message",
+                  "edge:runtime:16f1c75d71409d23",
+                  "edge:runtime:48dc0676308d4bf0",
+                  "edge:runtime:82b2dfe946d0dd86",
+                  "edge:runtime:847dc34aeabbfbc9",
+                  "edge:runtime:8f4b48ebfed7d397",
+                  "edge:runtime:9d7ecd369df2d987",
+                  "edge:runtime:bf01d33099bf7429",
+                  "edge:runtime:c857f233d868f283",
+                  "edge:runtime:cddec8119a5be5d5",
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "excluded_edges": [
+                  {
+                    "edge_id": "edge:pilot:partner-brief:launch-date",
+                    "reason": "STATUS_PROPOSED_EDGE"
+                  }
+                ],
+                "max_depth": 8,
+                "reachable_edge_ids": [
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "reachable_node_ids": [
+                  "policy:finance.pricing",
+                  "work:quote-blue-harbor"
+                ],
+                "reachable_slice_digest": "sha256:5928864b1135fe1d47687aadf46de642d61328b269988f933d3705a2115f8adc",
+                "selected_path_classification": "AFFECTED_HARD",
+                "selected_path_edge_ids": [
+                  "edge:runtime:e3bf94081ec6acf3"
+                ],
+                "selection_rule": "strongest_conservative_transfer_then_shortest_then_lexical",
+                "source_id": "policy:finance.pricing",
+                "target_coverage": {
+                  "assessment_failures": [],
+                  "manifest_completeness": "COMPLETE",
+                  "manifest_digest": "sha256:b29aea7063d3f19c13cfb2b9608b8c06a361bd58f3a3605125808490951d357d",
+                  "manifest_ref": "dependency-manifest:quote-blue-harbor@v1",
+                  "requirement_slot_ids": [
+                    "slot:work:quote-blue-harbor:product_plan",
+                    "slot:work:quote-blue-harbor:launch_date",
+                    "slot:work:quote-blue-harbor:data_residency",
+                    "slot:work:quote-blue-harbor:notice_required",
+                    "slot:work:quote-blue-harbor:price_band",
+                    "slot:work:quote-blue-harbor:currency",
+                    "slot:work:quote-blue-harbor:partner_terms",
+                    "slot:work:quote-blue-harbor:quote_compose_skill",
+                    "slot:work:quote-blue-harbor:quote_basket",
+                    "slot:work:quote-blue-harbor:pricing_policy"
+                  ],
+                  "target_ref": "work:quote-blue-harbor@v1"
+                },
+                "target_coverage_digest": "sha256:982cb84ac03352e78257180e59ebb98727a1fad0cc4e545b65b87ad3e21f8c2a",
+                "target_id": "work:quote-blue-harbor",
+                "truncated_frontier_edge_ids": []
+              },
+              "claim_boundary": "An admitted typed witness path exists in the committed dependency snapshot; causality outside that snapshot is not claimed.",
+              "verifier_version": "orgrebase.impact-certificate-verifier@1.0.0",
+              "evidence_class": "LOCAL_DETERMINISTIC"
+            }
+          ],
+          "counts": {
+            "affected_hard": 1,
+            "bounded_unaffected": 2,
+            "skill_requalification": 0,
+            "unknown": 1
+          },
+          "evidence_class": "LOCAL_DETERMINISTIC"
+        },
+        "run_envelope": {
+          "digest": "sha256:9fcef2704bc3a1853195a07a59cf2f21f0ec1a825eb9ad3190ef45dc5b3a0308",
+          "run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+          "nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+          "issued_at": "2026-08-15T00:00:00Z",
+          "expires_at": "2026-08-15T00:15:00Z",
+          "mode": "LOCAL_DETERMINISTIC",
+          "evidence_class": "LOCAL_DETERMINISTIC"
+        },
+        "advisory": {
+          "orchestration_plan": {
+            "digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+            "id": "workspace-orchestration:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+            "schema_version": "orgrebase.orchestration-plan.v1",
+            "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+            "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+            "revision_lock_digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+            "tasks": [
+              {
+                "digest": "sha256:3dc15ec11ef6c0faa188c99bff5fb0be3bcf89fba04224ccf5e4a1a7827448c4",
+                "id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:01",
+                "agent_name": "change-coordinator",
+                "authority_domain": "coordination",
+                "purpose": "bind the admitted workspace change to advisory tasks",
+                "depends_on": [],
+                "input_refs": [
+                  "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                  "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                  "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+                ],
+                "required_capabilities": [
+                  "decompose ChangeSet"
+                ],
+                "allowed_output_kinds": [
+                  "TaskGraph"
+                ],
+                "context_scope": [
+                  "ChangeSetRevision",
+                  "ImpactPreview"
+                ],
+                "failure_disposition": "ABSTAIN",
+                "candidate_only": true
+              },
+              {
+                "digest": "sha256:34ad2cb918ef2b5cd8c58e7185af1215f403b644fb252ccf103246b848a17ed7",
+                "id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:02",
+                "agent_name": "finance-steward",
+                "authority_domain": "finance",
+                "purpose": "explain the changed authority-domain premise without admitting effects",
+                "depends_on": [
+                  "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:01"
+                ],
+                "input_refs": [
+                  "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                  "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                  "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+                ],
+                "required_capabilities": [
+                  "propose semantic explanation"
+                ],
+                "allowed_output_kinds": [
+                  "SemanticExplanation"
+                ],
+                "context_scope": [
+                  "policy:finance.pricing"
+                ],
+                "failure_disposition": "ABSTAIN",
+                "candidate_only": true
+              },
+              {
+                "digest": "sha256:b6033d525ef65fd0ccc89e2e57256f2c1510ff794be64757ab71f47e542958db",
+                "id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:03",
+                "agent_name": "gtm-steward",
+                "authority_domain": "gtm",
+                "purpose": "explain quote impact candidates without changing canonical state",
+                "depends_on": [
+                  "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:02"
+                ],
+                "input_refs": [
+                  "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                  "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                  "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+                ],
+                "required_capabilities": [
+                  "propose impact candidates"
+                ],
+                "allowed_output_kinds": [
+                  "ImpactCandidate"
+                ],
+                "context_scope": [
+                  "work:quote-blue-harbor"
+                ],
+                "failure_disposition": "UNKNOWN",
+                "candidate_only": true
+              }
+            ],
+            "invariants": [
+              "candidate_only_no_normative_state_writer",
+              "exact_change_preview_revision_binding",
+              "target_writes_zero"
+            ],
+            "evidence_class": "LOCAL_DETERMINISTIC"
+          },
+          "coordination_receipt": {
+            "digest": "sha256:03107a062607a270eba47f3052e9fcacf8ccf1b90cddcb3f93daade4e9f03c07",
+            "id": "workspace-coordination:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+            "schema_version": "orgrebase.coordination-receipt.v1",
+            "orchestration_plan_digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+            "workflow_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+            "run_nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+            "handoff_digests": [
+              "sha256:8712c3cd88b66d18a9a1bb8818146c396223ddfbb4411c3831d21fb254926cac",
+              "sha256:401d344e042b67c4533172f10a82763c7d398e43a7b101757614e5cc423fe434",
+              "sha256:432e1e459230bc8e4b16f41eb052b9d644ab14d0f693e751142d66380f1dda41"
+            ],
+            "agent_run_digests": [
+              "sha256:ee280f7293444b6c23183982013e763ac72e53e965d05ec69d2d70ed304025e9",
+              "sha256:92847ac96e70cfd86c275ae6e1ef9c8d8b308f1e2e3d9765ffef80ced5304c77",
+              "sha256:405985e2e176d6677fa6c2b686bc099a67c17a78b0777d761ea3c10b893296f9"
+            ],
+            "checked_invariants": [
+              "candidate_only_no_normative_state_writer",
+              "exact_change_preview_revision_binding",
+              "target_writes_zero"
+            ],
+            "status": "PASS",
+            "evidence_class": "LOCAL_DETERMINISTIC"
+          },
+          "ingestion_receipt": {
+            "digest": "sha256:e67c4f5b1df5e0551b1692d2270a71eeacaa7c12eb5700cf74d8bead41e6e4b1",
+            "id": "workspace-ingestion:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+            "schema_version": "orgrebase.agent-candidate-ingestion.v1",
+            "live_receipt_digest": "sha256:03107a062607a270eba47f3052e9fcacf8ccf1b90cddcb3f93daade4e9f03c07",
+            "run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+            "nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+            "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+            "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+            "orchestration_plan_digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+            "decisions": [
+              {
+                "artifact_ref": "workspace-handoff:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:1",
+                "artifact_digest": "sha256:8712c3cd88b66d18a9a1bb8818146c396223ddfbb4411c3831d21fb254926cac",
+                "producer_worker": "change-coordinator",
+                "decision": "ADVISORY_ACCEPTED",
+                "reason_codes": [
+                  "EXACT_TASK_BINDING",
+                  "ZERO_WRITE_CANDIDATE"
+                ],
+                "admitted_effects": []
+              },
+              {
+                "artifact_ref": "workspace-handoff:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:2",
+                "artifact_digest": "sha256:401d344e042b67c4533172f10a82763c7d398e43a7b101757614e5cc423fe434",
+                "producer_worker": "finance-steward",
+                "decision": "ADVISORY_ACCEPTED",
+                "reason_codes": [
+                  "EXACT_TASK_BINDING",
+                  "ZERO_WRITE_CANDIDATE"
+                ],
+                "admitted_effects": []
+              },
+              {
+                "artifact_ref": "workspace-handoff:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:3",
+                "artifact_digest": "sha256:432e1e459230bc8e4b16f41eb052b9d644ab14d0f693e751142d66380f1dda41",
+                "producer_worker": "gtm-steward",
+                "decision": "ADVISORY_ACCEPTED",
+                "reason_codes": [
+                  "EXACT_TASK_BINDING",
+                  "ZERO_WRITE_CANDIDATE"
+                ],
+                "admitted_effects": []
+              }
+            ],
+            "admitted_candidate_digests": [
+              "sha256:8712c3cd88b66d18a9a1bb8818146c396223ddfbb4411c3831d21fb254926cac",
+              "sha256:401d344e042b67c4533172f10a82763c7d398e43a7b101757614e5cc423fe434",
+              "sha256:432e1e459230bc8e4b16f41eb052b9d644ab14d0f693e751142d66380f1dda41"
+            ],
+            "rejected_candidate_digests": [],
+            "target_writes": 0,
+            "source_evidence_class": "LOCAL_DETERMINISTIC",
+            "verifier_evidence_class": "LOCAL_DETERMINISTIC",
+            "claim_boundary": "Workspace advisory candidates are accepted for explanation only and cannot write effects."
+          },
+          "handoffs": [
+            {
+              "digest": "sha256:8712c3cd88b66d18a9a1bb8818146c396223ddfbb4411c3831d21fb254926cac",
+              "id": "workspace-handoff:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:1",
+              "schema_version": "orgrebase.handoff.v1",
+              "task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:01",
+              "change_set_id": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+              "graph_revision": "graph:workspace@v1",
+              "workflow_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+              "run_nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+              "orchestration_plan_digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+              "delegation_task_digest": "sha256:3dc15ec11ef6c0faa188c99bff5fb0be3bcf89fba04224ccf5e4a1a7827448c4",
+              "input_refs": [
+                "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+              ],
+              "from_agent": "change-coordinator",
+              "to_agent": "orgrebase-control-plane",
+              "payload": {
+                "candidate_only": true,
+                "change_object_ids": [
+                  "policy:finance.pricing"
+                ],
+                "input_refs": [
+                  "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                  "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                  "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+                ],
+                "kind": "TaskGraph",
+                "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+                "target_writes": 0
+              },
+              "candidate_only": true
+            },
+            {
+              "digest": "sha256:401d344e042b67c4533172f10a82763c7d398e43a7b101757614e5cc423fe434",
+              "id": "workspace-handoff:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:2",
+              "schema_version": "orgrebase.handoff.v1",
+              "task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:02",
+              "change_set_id": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+              "graph_revision": "graph:workspace@v1",
+              "workflow_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+              "run_nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+              "orchestration_plan_digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+              "delegation_task_digest": "sha256:34ad2cb918ef2b5cd8c58e7185af1215f403b644fb252ccf103246b848a17ed7",
+              "input_refs": [
+                "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+              ],
+              "from_agent": "finance-steward",
+              "to_agent": "orgrebase-control-plane",
+              "payload": {
+                "candidate_only": true,
+                "change_object_ids": [
+                  "policy:finance.pricing"
+                ],
+                "input_refs": [
+                  "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                  "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                  "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+                ],
+                "kind": "SemanticExplanation",
+                "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+                "target_writes": 0
+              },
+              "candidate_only": true
+            },
+            {
+              "digest": "sha256:432e1e459230bc8e4b16f41eb052b9d644ab14d0f693e751142d66380f1dda41",
+              "id": "workspace-handoff:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:3",
+              "schema_version": "orgrebase.handoff.v1",
+              "task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:03",
+              "change_set_id": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+              "graph_revision": "graph:workspace@v1",
+              "workflow_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+              "run_nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+              "orchestration_plan_digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+              "delegation_task_digest": "sha256:b6033d525ef65fd0ccc89e2e57256f2c1510ff794be64757ab71f47e542958db",
+              "input_refs": [
+                "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+              ],
+              "from_agent": "gtm-steward",
+              "to_agent": "orgrebase-control-plane",
+              "payload": {
+                "candidate_only": true,
+                "change_object_ids": [
+                  "policy:finance.pricing"
+                ],
+                "input_refs": [
+                  "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+                  "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+                  "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06"
+                ],
+                "kind": "ImpactCandidate",
+                "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+                "target_writes": 0
+              },
+              "candidate_only": true
+            }
+          ],
+          "agent_runs": [
+            {
+              "digest": "sha256:ee280f7293444b6c23183982013e763ac72e53e965d05ec69d2d70ed304025e9",
+              "id": "workspace-run:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:1",
+              "agent_name": "change-coordinator",
+              "task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:01",
+              "workflow_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+              "run_nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+              "status": "TRUSTED_COMPLETE",
+              "model_version": "model:deterministic-reference@v1",
+              "runtime_profile_version": "runtime:workspace-advisory@v2",
+              "context_manifest_version": "context:change-coordinator@v1",
+              "skill_versions": [
+                "skill:structured-domain-handoff@1.0"
+              ],
+              "policy_versions": [
+                "policy:workspace-agent-boundaries@r1"
+              ],
+              "tool_versions": [
+                "tool:none-proposal-only@v1"
+              ],
+              "input_digest": "sha256:39f04cbd3a19ca0551b4217e6de8440b9782850c38b8cb9a212f4c03dec11e62",
+              "output_digest": "sha256:5fd2759f97d1b2e27cb46a70b65f1e7a066cef641ac290cf9f71c6caf5d1db5f",
+              "parent_run_id": null,
+              "predecessor_run_ids": [],
+              "trace_id": "trace-8c159d25a7620424",
+              "evidence_class": "LOCAL_DETERMINISTIC"
+            },
+            {
+              "digest": "sha256:92847ac96e70cfd86c275ae6e1ef9c8d8b308f1e2e3d9765ffef80ced5304c77",
+              "id": "workspace-run:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:2",
+              "agent_name": "finance-steward",
+              "task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:02",
+              "workflow_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+              "run_nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+              "status": "TRUSTED_COMPLETE",
+              "model_version": "model:deterministic-reference@v1",
+              "runtime_profile_version": "runtime:workspace-advisory@v2",
+              "context_manifest_version": "context:finance-steward@v1",
+              "skill_versions": [
+                "skill:structured-domain-handoff@1.0"
+              ],
+              "policy_versions": [
+                "policy:workspace-agent-boundaries@r1"
+              ],
+              "tool_versions": [
+                "tool:none-proposal-only@v1"
+              ],
+              "input_digest": "sha256:39f04cbd3a19ca0551b4217e6de8440b9782850c38b8cb9a212f4c03dec11e62",
+              "output_digest": "sha256:dc89a1e559f6e600754a070b557956d14535a907a14c16fd62e442bef419300e",
+              "parent_run_id": "workspace-run:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:1",
+              "predecessor_run_ids": [
+                "workspace-run:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:1"
+              ],
+              "trace_id": "trace-8188068c46792163",
+              "evidence_class": "LOCAL_DETERMINISTIC"
+            },
+            {
+              "digest": "sha256:405985e2e176d6677fa6c2b686bc099a67c17a78b0777d761ea3c10b893296f9",
+              "id": "workspace-run:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:3",
+              "agent_name": "gtm-steward",
+              "task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:03",
+              "workflow_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+              "run_nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+              "status": "TRUSTED_COMPLETE",
+              "model_version": "model:deterministic-reference@v1",
+              "runtime_profile_version": "runtime:workspace-advisory@v2",
+              "context_manifest_version": "context:gtm-steward@v1",
+              "skill_versions": [
+                "skill:structured-domain-handoff@1.0"
+              ],
+              "policy_versions": [
+                "policy:workspace-agent-boundaries@r1"
+              ],
+              "tool_versions": [
+                "tool:none-proposal-only@v1"
+              ],
+              "input_digest": "sha256:39f04cbd3a19ca0551b4217e6de8440b9782850c38b8cb9a212f4c03dec11e62",
+              "output_digest": "sha256:f29700397cd8c317e843425bf3d8ce56f8d7027410706bac8a6bef4881527c3f",
+              "parent_run_id": "workspace-run:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:2",
+              "predecessor_run_ids": [
+                "workspace-run:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:2"
+              ],
+              "trace_id": "trace-e7cec316d98c11ce",
+              "evidence_class": "LOCAL_DETERMINISTIC"
+            }
+          ],
+          "native_execution": {
+            "actions": [
+              {
+                "action": "create_project",
+                "digest": "sha256:6e3f59a2839db963c2d68eedfcf92437f00273e40f543cb588c5a66d987d97e9",
+                "error": null,
+                "key": "project:create",
+                "ok": true,
+                "payload_digest": "sha256:a616d630bd96d7823cfc2c790b2417672e2d387606abb4c1e60484136bb82c8b",
+                "raw_ref": "raw-mcp/001-project-create-151c52fe.json",
+                "request_digest": "sha256:a8fddc5a3b69fbfd5c7a4bef88eef124f0a9ceaf3db350233327edccad39aa3b",
+                "response_digest": "sha256:55b15e38a3b848fc0d14ac6203e511ba5f4f1c49d47104ae2ea36f18d1644eda",
+                "sequence": 1,
+                "status": "active",
+                "tool": "projectflow"
+              },
+              {
+                "action": "plan_dag",
+                "digest": "sha256:7660d61b6aa093d906c4f9ac417d92e33d956ff54504475ed9e61d2c0102e048",
+                "error": null,
+                "key": "project:plan",
+                "ok": true,
+                "payload_digest": "sha256:9fa95f57d979feadbc979636227b446c5feaefec87534cc4fbd3c8a541d772b8",
+                "raw_ref": "raw-mcp/002-project-plan-1c351f5d.json",
+                "request_digest": "sha256:56bc857131f4a07106c94e997d5df7d5c144c9d1fc5dce6d90d59e52ec0660bb",
+                "response_digest": "sha256:1af9d0624d72fa0238f75b313a7dccd6be283d4dbcc915557921e5e84de57053",
+                "sequence": 2,
+                "status": "active",
+                "tool": "projectflow"
+              },
+              {
+                "action": "delegate_task",
+                "digest": "sha256:204083eb59c10c91cc9257b384a39082ff066cd8ca8e1788fdf5960b43c6e2b0",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:delegate",
+                "ok": true,
+                "payload_digest": "sha256:b2f97757423be2348fe034eab8e2417aa821e1fd6c225126130a99f81780b05c",
+                "raw_ref": "raw-mcp/003-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001-delegate-9438077c.json",
+                "request_digest": "sha256:40d621a95e43445f10c42876793b9149117843c3ff9ccd6b641b164dfbc2e34d",
+                "response_digest": "sha256:ed14a6e2c7350bf082348c9e579236a8165e9461716b6d4f0e927aca8e3e4b8e",
+                "sequence": 3,
+                "status": "assigned",
+                "tool": "taskflow"
+              },
+              {
+                "action": "ack_task",
+                "digest": "sha256:a714b955f7e49cc54763625f02c575b0d849b7f419151a26f0257ea2167cbc59",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:ack",
+                "ok": true,
+                "payload_digest": "sha256:f56f92922435bf689712f2508fc3b7f3a004ed763150f4ffaa133a4643f7410a",
+                "raw_ref": "raw-mcp/004-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001-ack-7fd984fb.json",
+                "request_digest": "sha256:3aae61b1996986f290b5f06bb94554d3b729b1f2d88a69ba62b185f9a80c4d6d",
+                "response_digest": "sha256:4a9b13af5e8f293a9a4767ad3456c50112ec6d6cabd1bf1ba2828e75cdaf0970",
+                "sequence": 4,
+                "status": "in_progress",
+                "tool": "taskflow"
+              },
+              {
+                "action": "submit_task",
+                "digest": "sha256:554b957ed802519f71c83144538e33c8843dbbd7066ee0cbec57a94a447e4a9f",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:submit",
+                "ok": true,
+                "payload_digest": "sha256:02cb7edc72d1b44c8d26293fc89ef2fe87373b36d2c250ed5bfee6d07ff64a51",
+                "raw_ref": "raw-mcp/005-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001-submit-3a02fa46.json",
+                "request_digest": "sha256:f411340875a4a9409375a634427c6540cde4af71339778967affd29934a943ed",
+                "response_digest": "sha256:97b1433cead5fea7193fe6eab143cb5b72e814f66151bc46ed256b83728bc5af",
+                "sequence": 5,
+                "status": "submitted",
+                "tool": "taskflow"
+              },
+              {
+                "action": "check_task",
+                "digest": "sha256:97b31794cf8ca1f7ee67e38f364d04e155c5a2e751c1bd8932f1a2b3cbd53a9c",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:check",
+                "ok": true,
+                "payload_digest": "sha256:cc1fd8d9d696269ef0ba7232fbddb981952dedc4ce234d6e6de20a0e2b2652b3",
+                "raw_ref": "raw-mcp/006-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001-check-414c05e0.json",
+                "request_digest": "sha256:9f46d539a741b40fb66e14cc388be028c7aee00b2dd296f8ea5306d24c10cee7",
+                "response_digest": "sha256:40468bc055b3c65e450b02d6df327cddc957ad7a30c6c80eb14df03bb897b8f0",
+                "sequence": 6,
+                "status": "submitted",
+                "tool": "taskflow"
+              },
+              {
+                "action": "accept_task_result",
+                "digest": "sha256:46fd69b2f3c1d1fde1457f71c05b5d5c465a6036818c71d44d1ae222a68099f2",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:accept",
+                "ok": true,
+                "payload_digest": "sha256:79db246ac5248a69390133fc461b86b74294eee8186be577fde89d00b29df71e",
+                "raw_ref": "raw-mcp/007-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001-accept-e0487fe9.json",
+                "request_digest": "sha256:f4fcd40cf6952f5ca2c873909c2302cae3efd139deb98568503992c5f7fb4be0",
+                "response_digest": "sha256:6079f270f26bbe5554318feba1054b31ac9b37088a82ce2cbdf59771e9e8484f",
+                "sequence": 7,
+                "status": "completed",
+                "tool": "projectflow"
+              },
+              {
+                "action": "delegate_task",
+                "digest": "sha256:616d3ac3f1bafc99ac223584bdd24246db73274e4fc82126218e529543e2e1f7",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:delegate",
+                "ok": true,
+                "payload_digest": "sha256:07ccc8088e7bcb7ea40c3052af1c9adec5c9c80d04cf14814e585fca940b5a81",
+                "raw_ref": "raw-mcp/008-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002-delegate-b1febbdd.json",
+                "request_digest": "sha256:f5af6d168fc80f0c575b13b00be351fe9b5deac38302c138425ad2c214be831f",
+                "response_digest": "sha256:75329b97f46407a69b26527fcbef35f3c10291bfc3ba34c3feb32873df31252b",
+                "sequence": 8,
+                "status": "assigned",
+                "tool": "taskflow"
+              },
+              {
+                "action": "ack_task",
+                "digest": "sha256:b38c78a81edfb1671d69b6464fa8b6a90f70933f68850a9061ea021e713fbfc9",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:ack",
+                "ok": true,
+                "payload_digest": "sha256:d9df2f7373e3d9d1461077593101ed26f51d3a89bdd27ecde0685d01b87a0c5f",
+                "raw_ref": "raw-mcp/009-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002-ack-da40e943.json",
+                "request_digest": "sha256:300c202143be3e8e48d8c8386ba3c16904bde132530e8310692142e4bdb99103",
+                "response_digest": "sha256:0845a799e16e5cc1e02cf5824ac6556694d561b12e446864ea413f77e859a134",
+                "sequence": 9,
+                "status": "in_progress",
+                "tool": "taskflow"
+              },
+              {
+                "action": "submit_task",
+                "digest": "sha256:a06b926874b86ac56dc8dcc97427ed896923cf683df4e56b5312665e1270e4f1",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:submit",
+                "ok": true,
+                "payload_digest": "sha256:3c83ec230c3405366904a29e922f0c0e6cf8f5c2089249fb4577fe992f0d8d28",
+                "raw_ref": "raw-mcp/010-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002-submit-2095e06d.json",
+                "request_digest": "sha256:01654f6095bd4b6858157b174487c05616bec930e1131be3734a660d1f140585",
+                "response_digest": "sha256:8587084ead80baa46f398b13d7c65f5b44f5232e3e290b14ff50fbedbb23e671",
+                "sequence": 10,
+                "status": "submitted",
+                "tool": "taskflow"
+              },
+              {
+                "action": "check_task",
+                "digest": "sha256:89260257e4cdd1c1b6ca14cf1f8d2eaf8e490d335476eb0bc91ba99eaa1ffbcf",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:check",
+                "ok": true,
+                "payload_digest": "sha256:0b4e0050284502380e1fb19114d08b5c04b12e9e2e93c7287ba919f455ce8f08",
+                "raw_ref": "raw-mcp/011-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002-check-1f664e99.json",
+                "request_digest": "sha256:879cc87232b8d06140aae5a0f73c261ae3eef34a4eb32ecc405fed76bb46348e",
+                "response_digest": "sha256:ad40e0cf9c0c96643d598fc038c40ef2fafeb75a2ea0f162f7bf38cf20582fe9",
+                "sequence": 11,
+                "status": "submitted",
+                "tool": "taskflow"
+              },
+              {
+                "action": "accept_task_result",
+                "digest": "sha256:1df153b2355f1e4198cc6eefbbb1321d3f9ba47ef71920b7ab37ec2db1b2ea67",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:accept",
+                "ok": true,
+                "payload_digest": "sha256:b3bb6167439d7b36541c12a0e08f8eb25effdb5176d4aca6afb60d0e3eff1889",
+                "raw_ref": "raw-mcp/012-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002-accept-bd82d236.json",
+                "request_digest": "sha256:527a7c6729d7c9d20cf537db8da658f575df2bd3eed54f6c6fbab8b146d06cd7",
+                "response_digest": "sha256:1b94481fb207f5b7db699f08c96e902aac59b85572dc510c8819e0e0cc9e3429",
+                "sequence": 12,
+                "status": "completed",
+                "tool": "projectflow"
+              },
+              {
+                "action": "delegate_task",
+                "digest": "sha256:9133c123bbedaabf2a9d2612ec72913f2bca04cb050197f8ded1df240be47d79",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:delegate",
+                "ok": true,
+                "payload_digest": "sha256:b5360858d0bf7f9ce0db5cca218db6296aad48bebabdb88c70cae962c5a51aa3",
+                "raw_ref": "raw-mcp/013-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003-delegate-a878af24.json",
+                "request_digest": "sha256:c5412713a9c6eb941d2285b9ee4854e09df409471ca138ac751f1d209f0d21b1",
+                "response_digest": "sha256:20b558eb730548f29d396a1ce30a6fed54e63b3498ae5d5bcf54fd1cd4f29e25",
+                "sequence": 13,
+                "status": "assigned",
+                "tool": "taskflow"
+              },
+              {
+                "action": "ack_task",
+                "digest": "sha256:ace76fd7c4412f9f182b3b02ff8567dec5266c12cd3d1e4832da884de6058992",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:ack",
+                "ok": true,
+                "payload_digest": "sha256:b08afe09ec3e8f80ffae5355ea0c0456cd197f0dbe9f5c3b5cfa190185aaeb54",
+                "raw_ref": "raw-mcp/014-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003-ack-cb18630e.json",
+                "request_digest": "sha256:5680f441d411a28f7a95a3a3bc325a935c1e1c2ce22224a6c45b25ef9467d982",
+                "response_digest": "sha256:2b915a120f31b846870dcdb55d0d47a7bcb450262c3df12c7311a51e6dfd1d8c",
+                "sequence": 14,
+                "status": "in_progress",
+                "tool": "taskflow"
+              },
+              {
+                "action": "submit_task",
+                "digest": "sha256:afe951e590889f55afa4107188a848b1b4c963e0176293cc2ce9bb935082e026",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:submit",
+                "ok": true,
+                "payload_digest": "sha256:06aab1d7682e80d4ddca08fd2e081c8ee26309e5468e04840634c5f32ad48cb5",
+                "raw_ref": "raw-mcp/015-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003-submit-4b67b676.json",
+                "request_digest": "sha256:6fe440d6e8e0a8487a28c942ff21397a0c24dec8d568a909b33af164f566dcac",
+                "response_digest": "sha256:096c2694d1730073e630ddbe47d98329393ab31ff6c703d4765baffb7769e743",
+                "sequence": 15,
+                "status": "submitted",
+                "tool": "taskflow"
+              },
+              {
+                "action": "check_task",
+                "digest": "sha256:f07182e0aef90fdad8af3ea3fef192c0e9a535af61cacdabcdfc23c8f53cfa64",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:check",
+                "ok": true,
+                "payload_digest": "sha256:6ccb8b3193531c97ddc0bfbd751eec5add099d976e250f33a028a48fa7704603",
+                "raw_ref": "raw-mcp/016-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003-check-497e74fb.json",
+                "request_digest": "sha256:b350bd079939c861be68a8c183f94b12b440bd95b871a07ab4b0a08ded62d50b",
+                "response_digest": "sha256:dd9899de5bbe40c406789ad34bd61e3fdd177280f95493476af921a164d0979f",
+                "sequence": 16,
+                "status": "submitted",
+                "tool": "taskflow"
+              },
+              {
+                "action": "accept_task_result",
+                "digest": "sha256:cb35251a0f7ae30b48bdbb45e584576d8ae5c3d825f0df15841b5b26c4f9ada5",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:accept",
+                "ok": true,
+                "payload_digest": "sha256:0fee0e80dbdcd4f5d040898d5d8d62133b22a0288b281863dab99e69689158cf",
+                "raw_ref": "raw-mcp/017-orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003-accept-79c786be.json",
+                "request_digest": "sha256:632e3f63ccc0bf3e7cb22b1203ba6d1d1c591690559b1c6a650709b693c13fce",
+                "response_digest": "sha256:811eff321362d9c6906ef5ffb20abc239d1caa739dc47b96f347953f94829212",
+                "sequence": 17,
+                "status": "completed",
+                "tool": "projectflow"
+              },
+              {
+                "action": "delegate_task",
+                "digest": "sha256:743c035f606908cbfe2b73dc6a0374f57c28fb261ebb02d0429dc4d4b64e2041",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:delegate",
+                "ok": true,
+                "payload_digest": "sha256:4b04abbc397965e830a12830f68f04b419d21095fcc569d2554fef0255f3260f",
+                "raw_ref": "raw-mcp/018-orgrebase-change-ec36a07c14d84ecd95b5fd2e-review-delegate-06d9f6b0.json",
+                "request_digest": "sha256:f8553783837883ecc24061dcebe7cc2a07826afb0e02fe3293579b78ee15327e",
+                "response_digest": "sha256:8a48d9328a8ccbae681df48c2fca24a26768c1020351b422e3efceb859abcfd2",
+                "sequence": 18,
+                "status": "assigned",
+                "tool": "taskflow"
+              },
+              {
+                "action": "ack_task",
+                "digest": "sha256:ac85b25aec05985fff2c2babe9b65532636d57965534e207ca2a432386fb44ca",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:ack",
+                "ok": true,
+                "payload_digest": "sha256:3a1c5b6b99c3a8d507b1389849ad2a162ef8380319f4d123f578bcd3a554e044",
+                "raw_ref": "raw-mcp/019-orgrebase-change-ec36a07c14d84ecd95b5fd2e-review-ack-5bf82f3e.json",
+                "request_digest": "sha256:cf1e538235cd84c53bad50ccf5427a6147e66bd71d722be48125ae9564ce0023",
+                "response_digest": "sha256:6548ab07e9681fffbe34eab9e984fe14ad24e384a13f1a75d8304441d710c7aa",
+                "sequence": 19,
+                "status": "in_progress",
+                "tool": "taskflow"
+              },
+              {
+                "action": "submit_task",
+                "digest": "sha256:914f96a2099e2fa0e6e37faa11452ee5dc2cacd6c7cc7a1b8b552d36c2118247",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:submit",
+                "ok": true,
+                "payload_digest": "sha256:9efeb65b9c3b5a05b5f48a3cd15d39f5d1a9543e7f0a7ecf381e56947e93868c",
+                "raw_ref": "raw-mcp/020-orgrebase-change-ec36a07c14d84ecd95b5fd2e-review-submit-bb08c9df.json",
+                "request_digest": "sha256:b18393d566b7bdcb59124712d0a5ff5b8d964e6d0b40fa13cf819f25c9a83d0e",
+                "response_digest": "sha256:7b86112c60240bf47ab482e0492c037a033c3bb04cd7ffe7be4b2715783524d2",
+                "sequence": 20,
+                "status": "submitted",
+                "tool": "taskflow"
+              },
+              {
+                "action": "check_task",
+                "digest": "sha256:a1471d5702bde1b97e5d36efe9dcf836fce018241caf607868b2e7cfaebb6c56",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:check",
+                "ok": true,
+                "payload_digest": "sha256:6c1e40eccab0e5877b49eff09c4a7bc7dc6a3765adac977e62d73f023ecdb053",
+                "raw_ref": "raw-mcp/021-orgrebase-change-ec36a07c14d84ecd95b5fd2e-review-check-033cc76c.json",
+                "request_digest": "sha256:2545380d8e9753a8088aef49fd3cf58af25d6524775d3821146d0b0b58bee0c4",
+                "response_digest": "sha256:a53b8871210ce5fc9832d59e03b974a33ee4e6ae93c611d995040b182f2fe086",
+                "sequence": 21,
+                "status": "submitted",
+                "tool": "taskflow"
+              },
+              {
+                "action": "accept_task_result",
+                "digest": "sha256:942a7fcc4feaf6396065b6e09cad269664f039bcff885bb0a124d254f461e96b",
+                "error": null,
+                "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:accept",
+                "ok": true,
+                "payload_digest": "sha256:d11e1c7f59ac1d96473fac0c4c10c7db8e2eb512b0df1d36059f0fc8b56e2d09",
+                "raw_ref": "raw-mcp/022-orgrebase-change-ec36a07c14d84ecd95b5fd2e-review-accept-f6d830ec.json",
+                "request_digest": "sha256:197de31f390d2c412e9443af7078c307874ec06e66b256d01740e8a207917946",
+                "response_digest": "sha256:a8e415738e193954beed42a4786aca3876b7f24638f81a2f12e29f0b4c9743e1",
+                "sequence": 22,
+                "status": "completed",
+                "tool": "projectflow"
+              },
+              {
+                "action": "complete_project",
+                "digest": "sha256:3f2949eeebf6e000c3f7d18dafcadc5947701be16d84b8d5db4e0c6478992e4e",
+                "error": null,
+                "key": "project:complete",
+                "ok": true,
+                "payload_digest": "sha256:2ea4c06ff90a26f8c78dffa0f6fcfeb737dca8beffe2998f20cd71e8c553de58",
+                "raw_ref": "raw-mcp/023-project-complete-1a1cf51b.json",
+                "request_digest": "sha256:3d0cf48869c8b6dd2f27218323727b386079ff5e21fea6780c21cbb84831a580",
+                "response_digest": "sha256:2dab02b0aec48807ced244482f0e1f0bb1df1ee0c47af249a179b1f753f4aac4",
+                "sequence": 23,
+                "status": "completed",
+                "tool": "projectflow"
+              }
+            ],
+            "binding": {
+              "attempt_key": "workspace-preview-attempt:eff0dd13a79ccc81493cca55a02336ad0459843370035f346ab24c21be38b03b",
+              "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+              "change_set_ref": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+              "nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+              "plan_digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+              "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+              "request_digest": "sha256:a1f56379c72c2f930b5c5d94a398bd1daacf3e3266e1ffdab2106bc57e4b682a",
+              "revision_lock_digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+              "run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+              "tenant_id": "org:evergreen-industries",
+              "workspace_id": "default"
+            },
+            "candidate_only": true,
+            "digest": "sha256:7ef1fc964d8349f94ddda4b46ebb000c5944904113b02dc454ef3ca0b1b73465",
+            "distributed_execution": false,
+            "evidence_class": "CONTROLLED_LOCAL_NATIVE_TASKFLOW",
+            "mode": "PINNED_MCP_SUBPROCESS_CONTROLLED_LOCAL_TRANSPORT",
+            "native_agentteams_observed": true,
+            "project_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e",
+            "results": [
+              {
+                "agent_run_digest": "sha256:ee280f7293444b6c23183982013e763ac72e53e965d05ec69d2d70ed304025e9",
+                "candidate_only": true,
+                "delegation_digest": "sha256:3dc15ec11ef6c0faa188c99bff5fb0be3bcf89fba04224ccf5e4a1a7827448c4",
+                "handoff_digest": "sha256:8712c3cd88b66d18a9a1bb8818146c396223ddfbb4411c3831d21fb254926cac",
+                "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:01",
+                "target_writes": 0
+              },
+              {
+                "agent_run_digest": "sha256:92847ac96e70cfd86c275ae6e1ef9c8d8b308f1e2e3d9765ffef80ced5304c77",
+                "candidate_only": true,
+                "delegation_digest": "sha256:34ad2cb918ef2b5cd8c58e7185af1215f403b644fb252ccf103246b848a17ed7",
+                "handoff_digest": "sha256:401d344e042b67c4533172f10a82763c7d398e43a7b101757614e5cc423fe434",
+                "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:02",
+                "target_writes": 0
+              },
+              {
+                "agent_run_digest": "sha256:405985e2e176d6677fa6c2b686bc099a67c17a78b0777d761ea3c10b893296f9",
+                "candidate_only": true,
+                "delegation_digest": "sha256:b6033d525ef65fd0ccc89e2e57256f2c1510ff794be64757ab71f47e542958db",
+                "handoff_digest": "sha256:432e1e459230bc8e4b16f41eb052b9d644ab14d0f693e751142d66380f1dda41",
+                "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:03",
+                "target_writes": 0
+              },
+              {
+                "candidate_only": true,
+                "review_kind": "DETERMINISTIC_CONTRACT_REVIEW",
+                "reviewed_bundle_digest": "sha256:832b5f9c17d92996ddb6cf24f1da8c063decfbac5579d746d4b7a781b49fc777",
+                "reviewed_handoff_digests": [
+                  "sha256:8712c3cd88b66d18a9a1bb8818146c396223ddfbb4411c3831d21fb254926cac",
+                  "sha256:401d344e042b67c4533172f10a82763c7d398e43a7b101757614e5cc423fe434",
+                  "sha256:432e1e459230bc8e4b16f41eb052b9d644ab14d0f693e751142d66380f1dda41"
+                ],
+                "target_writes": 0,
+                "verdict": "PASS"
+              }
+            ],
+            "schema_version": "orgrebase.change-agentteams-execution.v1",
+            "source_verification": {
+              "checkout": "agentteams://pinned-checkout",
+              "commit": "223ddc2b8073e4c8b93bcbb15e1d717f196c04d9",
+              "files": {
+                "plugins/teamharness/mcp/message_tool.py": "sha256:03e8fcfcaf002c5d9dd0c023b85bd4d2f4641b83cb59c6d89be08a9c1689c47c",
+                "plugins/teamharness/mcp/roomflow_tool.py": "sha256:db127d550cf9155c133657ab7c89fee48292c07587a061954bd60b4c14991680",
+                "plugins/teamharness/mcp/server.py": "sha256:a4d0ea071a6d74411881081a71d29ff69f9b29159728e604386f2395834061df"
+              },
+              "origin": "https://github.com/agentscope-ai/AgentTeams",
+              "path_disclosure_status": "PUBLIC_PATH_REDACTED",
+              "source_lock_digest": "sha256:76acd87b2307e3711de8ecba6cc17073a498e212ba170b36554dd916bab85f9d",
+              "status": "PASS"
+            },
+            "status": "COMPLETED",
+            "target_writes": 0,
+            "tasks": [
+              {
+                "actor_id": "change-coordinator",
+                "delegation_digest": "sha256:3dc15ec11ef6c0faa188c99bff5fb0be3bcf89fba04224ccf5e4a1a7827448c4",
+                "depends_on": [],
+                "kind": "CANDIDATE",
+                "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:01",
+                "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001"
+              },
+              {
+                "actor_id": "finance-steward",
+                "delegation_digest": "sha256:34ad2cb918ef2b5cd8c58e7185af1215f403b644fb252ccf103246b848a17ed7",
+                "depends_on": [
+                  "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001"
+                ],
+                "kind": "CANDIDATE",
+                "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:02",
+                "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002"
+              },
+              {
+                "actor_id": "gtm-steward",
+                "delegation_digest": "sha256:b6033d525ef65fd0ccc89e2e57256f2c1510ff794be64757ab71f47e542958db",
+                "depends_on": [
+                  "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002"
+                ],
+                "kind": "CANDIDATE",
+                "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:03",
+                "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003"
+              },
+              {
+                "actor_id": "independent-contract-reviewer",
+                "delegation_digest": "sha256:daf3897896410fe6a2fad9d8701d88ba91d9d062a1d4291180112e4afc8e5f51",
+                "depends_on": [
+                  "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001",
+                  "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002",
+                  "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003"
+                ],
+                "kind": "DETERMINISTIC_CONTRACT_REVIEW",
+                "logical_task_id": "workspace-orchestration:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1:contract-review",
+                "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review"
+              }
+            ]
+          }
+        }
+      },
+      "review_gate": {
+        "artifact_id": "review-gate:workspace:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+        "artifact_digest": "sha256:4f5b4651c0246abf7b114695f120f8bc140e7051254991227e73dd0adfd446f1",
+        "gate": {
+          "approval_identity_mode": "CONTROLLED_LOCAL_HEADER_IDENTITY",
+          "canonical_target_writes": 0,
+          "digest": "sha256:93b2f3cf1750324b101264c00717520a0a549537d5efb9a87d98d9214b7ef28d",
+          "identity_claim_boundary": "CONTROLLED_LOCAL_HEADER_IDENTITY_NOT_EXTERNAL_IAM",
+          "kind": "ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30",
+          "not_before": "2026-09-18T04:50:01.631Z",
+          "not_before_epoch_ms": 1789707001631,
+          "owner_id": "human:evergreen-finance-owner",
+          "pack_digest": "sha256:43fe5e75dda3a74eedf7eff156bed898f27cac6d29593ac6e83d7ea545ab3e92",
+          "preview_artifact_digest": "sha256:dc94cc7b5ced374f1d38b79c1b8227b7751cd0c9b60728841ccbf30e9250a211",
+          "preview_artifact_ref": "workspace-preview:ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+          "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+          "previewed_at": "2026-09-18T04:49:57.631Z",
+          "previewed_at_epoch_ms": 1789706997631,
+          "profile_digest": "sha256:d9f6a332dc9560ed3e1157a51c7c14483e6945240deee0b9a4c5426681b01639",
+          "review_duration_ms": 4000,
+          "run_nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+          "schema_version": "orgrebase.workspace-review-gate.v1",
+          "workflow_run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2"
+        }
+      },
+      "pricing_comparison": {
+        "predecessor_ref": "work:quote-blue-harbor@v1",
+        "predecessor_digest": "sha256:bdb31840ae20dcb467566379b6c32b6c5ce0aac0baaad5eb4d15a57d777d6310",
+        "proposal_digest": "sha256:14f75f39dd28b9920e9ba0275ee6d50433f3cece2944b1f70d12ca2abe224e2d",
+        "snapshot_digest": "sha256:eae11f667bd26410e362418cedb152433fae6330d95a0b4840965467bc98d06e",
+        "before": {
+          "currency": "GBP",
+          "minor_units": 2,
+          "lines": [
+            {
+              "line_id": "row235992",
+              "sku": "23084",
+              "description": "RABBIT NIGHT LIGHT",
+              "quantity": 288,
+              "unit_price": "1.79",
+              "line_total": "515.52"
+            },
+            {
+              "line_id": "row235993",
+              "sku": "22491",
+              "description": "PACK OF 12 COLOURED PENCILS",
+              "quantity": 576,
+              "unit_price": "0.72",
+              "line_total": "414.72"
+            },
+            {
+              "line_id": "row235994",
+              "sku": "22489",
+              "description": "PACK OF 12 TRADITIONAL CRAYONS",
+              "quantity": 432,
+              "unit_price": "0.36",
+              "line_total": "155.52"
+            },
+            {
+              "line_id": "row235995",
+              "sku": "21918",
+              "description": "SET 12 KIDS COLOUR  CHALK STICKS",
+              "quantity": 576,
+              "unit_price": "0.36",
+              "line_total": "207.36"
+            },
+            {
+              "line_id": "row235996",
+              "sku": "22181",
+              "description": "SNOWSTORM PHOTO FRAME FRIDGE MAGNET",
+              "quantity": 96,
+              "unit_price": "0.72",
+              "line_total": "69.12"
+            },
+            {
+              "line_id": "row235997",
+              "sku": "85178",
+              "description": "VICTORIAN SEWING KIT",
+              "quantity": 288,
+              "unit_price": "0.85",
+              "line_total": "244.80"
+            }
+          ],
+          "subtotal": "1607.04",
+          "discount_rate_bps": 0,
+          "discount_amount": "0.00",
+          "net_amount": "1607.04",
+          "tax_rate_bps": 2000,
+          "tax_label": "受控演示税率（非历史实际税费）",
+          "tax_amount": "321.41",
+          "total": "1928.45",
+          "rounding_description": "HALF_UP to currency minor units: each quantity times unit price first; sum rounded lines; round subtotal times discount_bps / 10000 once; subtract discount; round net times tax_bps / 10000 once; add net and tax.",
+          "basket_source_ref": "source:uci-online-retail:invoice:557670#sha256:9121e80cae82bae80c1ca34169c25f68e82a397dce5df4620e1fbc3298868a0e",
+          "policy_source_ref": "source:controlled-replay-policy#sha256:d0dbd39caad8747f55fa4cd78dcc57ffb6246c0fa88086110de1810bdb86288b",
+          "basket_digest": "sha256:8817d59d731234bdecc12261ec908c2396075f58f3ae0784e8c4f7d10313a050",
+          "policy_digest": "sha256:f97583b3c1bf2e89122aae93f0c82630333733f5c2fe84ca48ea7e5a48b7d84e"
+        },
+        "after": {
+          "currency": "GBP",
+          "minor_units": 2,
+          "lines": [
+            {
+              "line_id": "row235992",
+              "sku": "23084",
+              "description": "RABBIT NIGHT LIGHT",
+              "quantity": 288,
+              "unit_price": "1.79",
+              "line_total": "515.52"
+            },
+            {
+              "line_id": "row235993",
+              "sku": "22491",
+              "description": "PACK OF 12 COLOURED PENCILS",
+              "quantity": 576,
+              "unit_price": "0.72",
+              "line_total": "414.72"
+            },
+            {
+              "line_id": "row235994",
+              "sku": "22489",
+              "description": "PACK OF 12 TRADITIONAL CRAYONS",
+              "quantity": 432,
+              "unit_price": "0.36",
+              "line_total": "155.52"
+            },
+            {
+              "line_id": "row235995",
+              "sku": "21918",
+              "description": "SET 12 KIDS COLOUR  CHALK STICKS",
+              "quantity": 576,
+              "unit_price": "0.36",
+              "line_total": "207.36"
+            },
+            {
+              "line_id": "row235996",
+              "sku": "22181",
+              "description": "SNOWSTORM PHOTO FRAME FRIDGE MAGNET",
+              "quantity": 96,
+              "unit_price": "0.72",
+              "line_total": "69.12"
+            },
+            {
+              "line_id": "row235997",
+              "sku": "85178",
+              "description": "VICTORIAN SEWING KIT",
+              "quantity": 288,
+              "unit_price": "0.85",
+              "line_total": "244.80"
+            }
+          ],
+          "subtotal": "1607.04",
+          "discount_rate_bps": 1000,
+          "discount_amount": "160.70",
+          "net_amount": "1446.34",
+          "tax_rate_bps": 2000,
+          "tax_label": "受控演示税率（非历史实际税费）",
+          "tax_amount": "289.27",
+          "total": "1735.61",
+          "rounding_description": "HALF_UP to currency minor units: each quantity times unit price first; sum rounded lines; round subtotal times discount_bps / 10000 once; subtract discount; round net times tax_bps / 10000 once; add net and tax.",
+          "basket_source_ref": "source:uci-online-retail:invoice:557670#sha256:9121e80cae82bae80c1ca34169c25f68e82a397dce5df4620e1fbc3298868a0e",
+          "policy_source_ref": "policy:controlled-volume-discount-10pct@v1",
+          "basket_digest": "sha256:8817d59d731234bdecc12261ec908c2396075f58f3ae0784e8c4f7d10313a050",
+          "policy_digest": "sha256:a80e0cffad70f2aaaf19641ea648279fa38fd2bb5aaab7d1c8c42fc288a31bde"
+        }
+      },
+      "native_execution": {
+        "schema_version": "orgrebase.change-agentteams-execution.v1",
+        "view": "PROGRESS_SUMMARY",
+        "status": "COMPLETED",
+        "receipt_digest": "sha256:7ef1fc964d8349f94ddda4b46ebb000c5944904113b02dc454ef3ca0b1b73465",
+        "binding": {
+          "attempt_key": "workspace-preview-attempt:eff0dd13a79ccc81493cca55a02336ad0459843370035f346ab24c21be38b03b",
+          "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+          "change_set_ref": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+          "nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+          "plan_digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+          "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+          "request_digest": "sha256:a1f56379c72c2f930b5c5d94a398bd1daacf3e3266e1ffdab2106bc57e4b682a",
+          "revision_lock_digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+          "run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+          "tenant_id": "org:evergreen-industries",
+          "workspace_id": "default"
+        },
+        "project_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e",
+        "native_agentteams_observed": true,
+        "evidence_class": "CONTROLLED_LOCAL_NATIVE_TASKFLOW",
+        "distributed_execution": false,
+        "candidate_only": true,
+        "target_writes": 0,
+        "tasks": [
+          {
+            "actor_id": "change-coordinator",
+            "delegation_digest": "sha256:3dc15ec11ef6c0faa188c99bff5fb0be3bcf89fba04224ccf5e4a1a7827448c4",
+            "depends_on": [],
+            "kind": "CANDIDATE",
+            "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:01",
+            "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001",
+            "status": "completed",
+            "last_action": "accept_task_result",
+            "action_receipt_digests": [
+              "sha256:204083eb59c10c91cc9257b384a39082ff066cd8ca8e1788fdf5960b43c6e2b0",
+              "sha256:a714b955f7e49cc54763625f02c575b0d849b7f419151a26f0257ea2167cbc59",
+              "sha256:554b957ed802519f71c83144538e33c8843dbbd7066ee0cbec57a94a447e4a9f",
+              "sha256:97b31794cf8ca1f7ee67e38f364d04e155c5a2e751c1bd8932f1a2b3cbd53a9c",
+              "sha256:46fd69b2f3c1d1fde1457f71c05b5d5c465a6036818c71d44d1ae222a68099f2"
+            ]
+          },
+          {
+            "actor_id": "finance-steward",
+            "delegation_digest": "sha256:34ad2cb918ef2b5cd8c58e7185af1215f403b644fb252ccf103246b848a17ed7",
+            "depends_on": [
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001"
+            ],
+            "kind": "CANDIDATE",
+            "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:02",
+            "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002",
+            "status": "completed",
+            "last_action": "accept_task_result",
+            "action_receipt_digests": [
+              "sha256:616d3ac3f1bafc99ac223584bdd24246db73274e4fc82126218e529543e2e1f7",
+              "sha256:b38c78a81edfb1671d69b6464fa8b6a90f70933f68850a9061ea021e713fbfc9",
+              "sha256:a06b926874b86ac56dc8dcc97427ed896923cf683df4e56b5312665e1270e4f1",
+              "sha256:89260257e4cdd1c1b6ca14cf1f8d2eaf8e490d335476eb0bc91ba99eaa1ffbcf",
+              "sha256:1df153b2355f1e4198cc6eefbbb1321d3f9ba47ef71920b7ab37ec2db1b2ea67"
+            ]
+          },
+          {
+            "actor_id": "gtm-steward",
+            "delegation_digest": "sha256:b6033d525ef65fd0ccc89e2e57256f2c1510ff794be64757ab71f47e542958db",
+            "depends_on": [
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002"
+            ],
+            "kind": "CANDIDATE",
+            "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:03",
+            "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003",
+            "status": "completed",
+            "last_action": "accept_task_result",
+            "action_receipt_digests": [
+              "sha256:9133c123bbedaabf2a9d2612ec72913f2bca04cb050197f8ded1df240be47d79",
+              "sha256:ace76fd7c4412f9f182b3b02ff8567dec5266c12cd3d1e4832da884de6058992",
+              "sha256:afe951e590889f55afa4107188a848b1b4c963e0176293cc2ce9bb935082e026",
+              "sha256:f07182e0aef90fdad8af3ea3fef192c0e9a535af61cacdabcdfc23c8f53cfa64",
+              "sha256:cb35251a0f7ae30b48bdbb45e584576d8ae5c3d825f0df15841b5b26c4f9ada5"
+            ]
+          },
+          {
+            "actor_id": "independent-contract-reviewer",
+            "delegation_digest": "sha256:daf3897896410fe6a2fad9d8701d88ba91d9d062a1d4291180112e4afc8e5f51",
+            "depends_on": [
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001",
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002",
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003"
+            ],
+            "kind": "DETERMINISTIC_CONTRACT_REVIEW",
+            "logical_task_id": "workspace-orchestration:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1:contract-review",
+            "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review",
+            "status": "completed",
+            "last_action": "accept_task_result",
+            "action_receipt_digests": [
+              "sha256:743c035f606908cbfe2b73dc6a0374f57c28fb261ebb02d0429dc4d4b64e2041",
+              "sha256:ac85b25aec05985fff2c2babe9b65532636d57965534e207ca2a432386fb44ca",
+              "sha256:914f96a2099e2fa0e6e37faa11452ee5dc2cacd6c7cc7a1b8b552d36c2118247",
+              "sha256:a1471d5702bde1b97e5d36efe9dcf836fce018241caf607868b2e7cfaebb6c56",
+              "sha256:942a7fcc4feaf6396065b6e09cad269664f039bcff885bb0a124d254f461e96b"
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "sequence": 1,
+            "key": "project:create",
+            "tool": "projectflow",
+            "action": "create_project",
+            "status": "active",
+            "ok": true,
+            "digest": "sha256:6e3f59a2839db963c2d68eedfcf92437f00273e40f543cb588c5a66d987d97e9"
+          },
+          {
+            "sequence": 2,
+            "key": "project:plan",
+            "tool": "projectflow",
+            "action": "plan_dag",
+            "status": "active",
+            "ok": true,
+            "digest": "sha256:7660d61b6aa093d906c4f9ac417d92e33d956ff54504475ed9e61d2c0102e048"
+          },
+          {
+            "sequence": 3,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:delegate",
+            "tool": "taskflow",
+            "action": "delegate_task",
+            "status": "assigned",
+            "ok": true,
+            "digest": "sha256:204083eb59c10c91cc9257b384a39082ff066cd8ca8e1788fdf5960b43c6e2b0"
+          },
+          {
+            "sequence": 4,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:ack",
+            "tool": "taskflow",
+            "action": "ack_task",
+            "status": "in_progress",
+            "ok": true,
+            "digest": "sha256:a714b955f7e49cc54763625f02c575b0d849b7f419151a26f0257ea2167cbc59"
+          },
+          {
+            "sequence": 5,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:submit",
+            "tool": "taskflow",
+            "action": "submit_task",
+            "status": "submitted",
+            "ok": true,
+            "digest": "sha256:554b957ed802519f71c83144538e33c8843dbbd7066ee0cbec57a94a447e4a9f"
+          },
+          {
+            "sequence": 6,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:check",
+            "tool": "taskflow",
+            "action": "check_task",
+            "status": "submitted",
+            "ok": true,
+            "digest": "sha256:97b31794cf8ca1f7ee67e38f364d04e155c5a2e751c1bd8932f1a2b3cbd53a9c"
+          },
+          {
+            "sequence": 7,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:accept",
+            "tool": "projectflow",
+            "action": "accept_task_result",
+            "status": "completed",
+            "ok": true,
+            "digest": "sha256:46fd69b2f3c1d1fde1457f71c05b5d5c465a6036818c71d44d1ae222a68099f2"
+          },
+          {
+            "sequence": 8,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:delegate",
+            "tool": "taskflow",
+            "action": "delegate_task",
+            "status": "assigned",
+            "ok": true,
+            "digest": "sha256:616d3ac3f1bafc99ac223584bdd24246db73274e4fc82126218e529543e2e1f7"
+          },
+          {
+            "sequence": 9,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:ack",
+            "tool": "taskflow",
+            "action": "ack_task",
+            "status": "in_progress",
+            "ok": true,
+            "digest": "sha256:b38c78a81edfb1671d69b6464fa8b6a90f70933f68850a9061ea021e713fbfc9"
+          },
+          {
+            "sequence": 10,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:submit",
+            "tool": "taskflow",
+            "action": "submit_task",
+            "status": "submitted",
+            "ok": true,
+            "digest": "sha256:a06b926874b86ac56dc8dcc97427ed896923cf683df4e56b5312665e1270e4f1"
+          },
+          {
+            "sequence": 11,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:check",
+            "tool": "taskflow",
+            "action": "check_task",
+            "status": "submitted",
+            "ok": true,
+            "digest": "sha256:89260257e4cdd1c1b6ca14cf1f8d2eaf8e490d335476eb0bc91ba99eaa1ffbcf"
+          },
+          {
+            "sequence": 12,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:accept",
+            "tool": "projectflow",
+            "action": "accept_task_result",
+            "status": "completed",
+            "ok": true,
+            "digest": "sha256:1df153b2355f1e4198cc6eefbbb1321d3f9ba47ef71920b7ab37ec2db1b2ea67"
+          },
+          {
+            "sequence": 13,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:delegate",
+            "tool": "taskflow",
+            "action": "delegate_task",
+            "status": "assigned",
+            "ok": true,
+            "digest": "sha256:9133c123bbedaabf2a9d2612ec72913f2bca04cb050197f8ded1df240be47d79"
+          },
+          {
+            "sequence": 14,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:ack",
+            "tool": "taskflow",
+            "action": "ack_task",
+            "status": "in_progress",
+            "ok": true,
+            "digest": "sha256:ace76fd7c4412f9f182b3b02ff8567dec5266c12cd3d1e4832da884de6058992"
+          },
+          {
+            "sequence": 15,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:submit",
+            "tool": "taskflow",
+            "action": "submit_task",
+            "status": "submitted",
+            "ok": true,
+            "digest": "sha256:afe951e590889f55afa4107188a848b1b4c963e0176293cc2ce9bb935082e026"
+          },
+          {
+            "sequence": 16,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:check",
+            "tool": "taskflow",
+            "action": "check_task",
+            "status": "submitted",
+            "ok": true,
+            "digest": "sha256:f07182e0aef90fdad8af3ea3fef192c0e9a535af61cacdabcdfc23c8f53cfa64"
+          },
+          {
+            "sequence": 17,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:accept",
+            "tool": "projectflow",
+            "action": "accept_task_result",
+            "status": "completed",
+            "ok": true,
+            "digest": "sha256:cb35251a0f7ae30b48bdbb45e584576d8ae5c3d825f0df15841b5b26c4f9ada5"
+          },
+          {
+            "sequence": 18,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:delegate",
+            "tool": "taskflow",
+            "action": "delegate_task",
+            "status": "assigned",
+            "ok": true,
+            "digest": "sha256:743c035f606908cbfe2b73dc6a0374f57c28fb261ebb02d0429dc4d4b64e2041"
+          },
+          {
+            "sequence": 19,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:ack",
+            "tool": "taskflow",
+            "action": "ack_task",
+            "status": "in_progress",
+            "ok": true,
+            "digest": "sha256:ac85b25aec05985fff2c2babe9b65532636d57965534e207ca2a432386fb44ca"
+          },
+          {
+            "sequence": 20,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:submit",
+            "tool": "taskflow",
+            "action": "submit_task",
+            "status": "submitted",
+            "ok": true,
+            "digest": "sha256:914f96a2099e2fa0e6e37faa11452ee5dc2cacd6c7cc7a1b8b552d36c2118247"
+          },
+          {
+            "sequence": 21,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:check",
+            "tool": "taskflow",
+            "action": "check_task",
+            "status": "submitted",
+            "ok": true,
+            "digest": "sha256:a1471d5702bde1b97e5d36efe9dcf836fce018241caf607868b2e7cfaebb6c56"
+          },
+          {
+            "sequence": 22,
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:accept",
+            "tool": "projectflow",
+            "action": "accept_task_result",
+            "status": "completed",
+            "ok": true,
+            "digest": "sha256:942a7fcc4feaf6396065b6e09cad269664f039bcff885bb0a124d254f461e96b"
+          },
+          {
+            "sequence": 23,
+            "key": "project:complete",
+            "tool": "projectflow",
+            "action": "complete_project",
+            "status": "completed",
+            "ok": true,
+            "digest": "sha256:3f2949eeebf6e000c3f7d18dafcadc5947701be16d84b8d5db4e0c6478992e4e"
+          }
+        ],
+        "review_kind": "DETERMINISTIC_CONTRACT_REVIEW",
+        "review": {
+          "candidate_only": true,
+          "review_kind": "DETERMINISTIC_CONTRACT_REVIEW",
+          "reviewed_bundle_digest": "sha256:832b5f9c17d92996ddb6cf24f1da8c063decfbac5579d746d4b7a781b49fc777",
+          "reviewed_handoff_digests": [
+            "sha256:8712c3cd88b66d18a9a1bb8818146c396223ddfbb4411c3831d21fb254926cac",
+            "sha256:401d344e042b67c4533172f10a82763c7d398e43a7b101757614e5cc423fe434",
+            "sha256:432e1e459230bc8e4b16f41eb052b9d644ab14d0f693e751142d66380f1dda41"
+          ],
+          "target_writes": 0,
+          "verdict": "PASS"
+        }
+      }
+    },
+    "advisory_attempt": {
+      "state": "COMPLETE",
+      "deadline_epoch_ms": 1789707112859,
+      "cost_reservation": null,
+      "usage_status": "UNKNOWN",
+      "receipt_summaries": [],
+      "public_error_code": null,
+      "native_execution": {
+        "actions": [
+          {
+            "action": "create_project",
+            "digest": "sha256:6e3f59a2839db963c2d68eedfcf92437f00273e40f543cb588c5a66d987d97e9",
+            "key": "project:create",
+            "ok": true,
+            "sequence": 1,
+            "status": "active",
+            "tool": "projectflow"
+          },
+          {
+            "action": "plan_dag",
+            "digest": "sha256:7660d61b6aa093d906c4f9ac417d92e33d956ff54504475ed9e61d2c0102e048",
+            "key": "project:plan",
+            "ok": true,
+            "sequence": 2,
+            "status": "active",
+            "tool": "projectflow"
+          },
+          {
+            "action": "delegate_task",
+            "digest": "sha256:204083eb59c10c91cc9257b384a39082ff066cd8ca8e1788fdf5960b43c6e2b0",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:delegate",
+            "ok": true,
+            "sequence": 3,
+            "status": "assigned",
+            "tool": "taskflow"
+          },
+          {
+            "action": "ack_task",
+            "digest": "sha256:a714b955f7e49cc54763625f02c575b0d849b7f419151a26f0257ea2167cbc59",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:ack",
+            "ok": true,
+            "sequence": 4,
+            "status": "in_progress",
+            "tool": "taskflow"
+          },
+          {
+            "action": "submit_task",
+            "digest": "sha256:554b957ed802519f71c83144538e33c8843dbbd7066ee0cbec57a94a447e4a9f",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:submit",
+            "ok": true,
+            "sequence": 5,
+            "status": "submitted",
+            "tool": "taskflow"
+          },
+          {
+            "action": "check_task",
+            "digest": "sha256:97b31794cf8ca1f7ee67e38f364d04e155c5a2e751c1bd8932f1a2b3cbd53a9c",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:check",
+            "ok": true,
+            "sequence": 6,
+            "status": "submitted",
+            "tool": "taskflow"
+          },
+          {
+            "action": "accept_task_result",
+            "digest": "sha256:46fd69b2f3c1d1fde1457f71c05b5d5c465a6036818c71d44d1ae222a68099f2",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001:accept",
+            "ok": true,
+            "sequence": 7,
+            "status": "completed",
+            "tool": "projectflow"
+          },
+          {
+            "action": "delegate_task",
+            "digest": "sha256:616d3ac3f1bafc99ac223584bdd24246db73274e4fc82126218e529543e2e1f7",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:delegate",
+            "ok": true,
+            "sequence": 8,
+            "status": "assigned",
+            "tool": "taskflow"
+          },
+          {
+            "action": "ack_task",
+            "digest": "sha256:b38c78a81edfb1671d69b6464fa8b6a90f70933f68850a9061ea021e713fbfc9",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:ack",
+            "ok": true,
+            "sequence": 9,
+            "status": "in_progress",
+            "tool": "taskflow"
+          },
+          {
+            "action": "submit_task",
+            "digest": "sha256:a06b926874b86ac56dc8dcc97427ed896923cf683df4e56b5312665e1270e4f1",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:submit",
+            "ok": true,
+            "sequence": 10,
+            "status": "submitted",
+            "tool": "taskflow"
+          },
+          {
+            "action": "check_task",
+            "digest": "sha256:89260257e4cdd1c1b6ca14cf1f8d2eaf8e490d335476eb0bc91ba99eaa1ffbcf",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:check",
+            "ok": true,
+            "sequence": 11,
+            "status": "submitted",
+            "tool": "taskflow"
+          },
+          {
+            "action": "accept_task_result",
+            "digest": "sha256:1df153b2355f1e4198cc6eefbbb1321d3f9ba47ef71920b7ab37ec2db1b2ea67",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002:accept",
+            "ok": true,
+            "sequence": 12,
+            "status": "completed",
+            "tool": "projectflow"
+          },
+          {
+            "action": "delegate_task",
+            "digest": "sha256:9133c123bbedaabf2a9d2612ec72913f2bca04cb050197f8ded1df240be47d79",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:delegate",
+            "ok": true,
+            "sequence": 13,
+            "status": "assigned",
+            "tool": "taskflow"
+          },
+          {
+            "action": "ack_task",
+            "digest": "sha256:ace76fd7c4412f9f182b3b02ff8567dec5266c12cd3d1e4832da884de6058992",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:ack",
+            "ok": true,
+            "sequence": 14,
+            "status": "in_progress",
+            "tool": "taskflow"
+          },
+          {
+            "action": "submit_task",
+            "digest": "sha256:afe951e590889f55afa4107188a848b1b4c963e0176293cc2ce9bb935082e026",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:submit",
+            "ok": true,
+            "sequence": 15,
+            "status": "submitted",
+            "tool": "taskflow"
+          },
+          {
+            "action": "check_task",
+            "digest": "sha256:f07182e0aef90fdad8af3ea3fef192c0e9a535af61cacdabcdfc23c8f53cfa64",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:check",
+            "ok": true,
+            "sequence": 16,
+            "status": "submitted",
+            "tool": "taskflow"
+          },
+          {
+            "action": "accept_task_result",
+            "digest": "sha256:cb35251a0f7ae30b48bdbb45e584576d8ae5c3d825f0df15841b5b26c4f9ada5",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003:accept",
+            "ok": true,
+            "sequence": 17,
+            "status": "completed",
+            "tool": "projectflow"
+          },
+          {
+            "action": "delegate_task",
+            "digest": "sha256:743c035f606908cbfe2b73dc6a0374f57c28fb261ebb02d0429dc4d4b64e2041",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:delegate",
+            "ok": true,
+            "sequence": 18,
+            "status": "assigned",
+            "tool": "taskflow"
+          },
+          {
+            "action": "ack_task",
+            "digest": "sha256:ac85b25aec05985fff2c2babe9b65532636d57965534e207ca2a432386fb44ca",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:ack",
+            "ok": true,
+            "sequence": 19,
+            "status": "in_progress",
+            "tool": "taskflow"
+          },
+          {
+            "action": "submit_task",
+            "digest": "sha256:914f96a2099e2fa0e6e37faa11452ee5dc2cacd6c7cc7a1b8b552d36c2118247",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:submit",
+            "ok": true,
+            "sequence": 20,
+            "status": "submitted",
+            "tool": "taskflow"
+          },
+          {
+            "action": "check_task",
+            "digest": "sha256:a1471d5702bde1b97e5d36efe9dcf836fce018241caf607868b2e7cfaebb6c56",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:check",
+            "ok": true,
+            "sequence": 21,
+            "status": "submitted",
+            "tool": "taskflow"
+          },
+          {
+            "action": "accept_task_result",
+            "digest": "sha256:942a7fcc4feaf6396065b6e09cad269664f039bcff885bb0a124d254f461e96b",
+            "key": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review:accept",
+            "ok": true,
+            "sequence": 22,
+            "status": "completed",
+            "tool": "projectflow"
+          },
+          {
+            "action": "complete_project",
+            "digest": "sha256:3f2949eeebf6e000c3f7d18dafcadc5947701be16d84b8d5db4e0c6478992e4e",
+            "key": "project:complete",
+            "ok": true,
+            "sequence": 23,
+            "status": "completed",
+            "tool": "projectflow"
+          }
+        ],
+        "binding": {
+          "attempt_key": "workspace-preview-attempt:eff0dd13a79ccc81493cca55a02336ad0459843370035f346ab24c21be38b03b",
+          "change_set_digest": "sha256:8fd0963552495806c88a1a55fc79508d682f17f71ce35497fb5a844e91e20dbd",
+          "change_set_ref": "changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1",
+          "nonce": "cc372bce29c13836790e7fa5017eec9d4f6dd0daaf5e98e71eaa8f3edddd2cf4",
+          "plan_digest": "sha256:37c86a2c230de5e50b1b1e2edea3b4a440993310740c64cca1776f5394f8cd91",
+          "preview_digest": "sha256:da355a4cd5b6675021b6a971d9eb5635d25894d841dbd5d264186366ec322a06",
+          "request_digest": "sha256:a1f56379c72c2f930b5c5d94a398bd1daacf3e3266e1ffdab2106bc57e4b682a",
+          "revision_lock_digest": "sha256:c29b33c01112edfd9f529658b316fc73fa49a3600c7941e339b96f4c99a9122f",
+          "run_id": "run:golden-competition:b121c594-2757-4a4c-b86e-a1f2d9e0f0c2",
+          "tenant_id": "org:evergreen-industries",
+          "workspace_id": "default"
+        },
+        "candidate_only": true,
+        "distributed_execution": false,
+        "evidence_class": "CONTROLLED_LOCAL_NATIVE_TASKFLOW",
+        "native_agentteams_observed": true,
+        "project_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e",
+        "receipt_digest": "sha256:7ef1fc964d8349f94ddda4b46ebb000c5944904113b02dc454ef3ca0b1b73465",
+        "review": {
+          "candidate_only": true,
+          "review_kind": "DETERMINISTIC_CONTRACT_REVIEW",
+          "reviewed_bundle_digest": "sha256:832b5f9c17d92996ddb6cf24f1da8c063decfbac5579d746d4b7a781b49fc777",
+          "reviewed_handoff_digests": [
+            "sha256:8712c3cd88b66d18a9a1bb8818146c396223ddfbb4411c3831d21fb254926cac",
+            "sha256:401d344e042b67c4533172f10a82763c7d398e43a7b101757614e5cc423fe434",
+            "sha256:432e1e459230bc8e4b16f41eb052b9d644ab14d0f693e751142d66380f1dda41"
+          ],
+          "target_writes": 0,
+          "verdict": "PASS"
+        },
+        "review_kind": "DETERMINISTIC_CONTRACT_REVIEW",
+        "schema_version": "orgrebase.change-agentteams-execution.v1",
+        "status": "COMPLETED",
+        "target_writes": 0,
+        "tasks": [
+          {
+            "action_receipt_digests": [
+              "sha256:204083eb59c10c91cc9257b384a39082ff066cd8ca8e1788fdf5960b43c6e2b0",
+              "sha256:a714b955f7e49cc54763625f02c575b0d849b7f419151a26f0257ea2167cbc59",
+              "sha256:554b957ed802519f71c83144538e33c8843dbbd7066ee0cbec57a94a447e4a9f",
+              "sha256:97b31794cf8ca1f7ee67e38f364d04e155c5a2e751c1bd8932f1a2b3cbd53a9c",
+              "sha256:46fd69b2f3c1d1fde1457f71c05b5d5c465a6036818c71d44d1ae222a68099f2"
+            ],
+            "actor_id": "change-coordinator",
+            "delegation_digest": "sha256:3dc15ec11ef6c0faa188c99bff5fb0be3bcf89fba04224ccf5e4a1a7827448c4",
+            "depends_on": [],
+            "kind": "CANDIDATE",
+            "last_action": "accept_task_result",
+            "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:01",
+            "status": "completed",
+            "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001"
+          },
+          {
+            "action_receipt_digests": [
+              "sha256:616d3ac3f1bafc99ac223584bdd24246db73274e4fc82126218e529543e2e1f7",
+              "sha256:b38c78a81edfb1671d69b6464fa8b6a90f70933f68850a9061ea021e713fbfc9",
+              "sha256:a06b926874b86ac56dc8dcc97427ed896923cf683df4e56b5312665e1270e4f1",
+              "sha256:89260257e4cdd1c1b6ca14cf1f8d2eaf8e490d335476eb0bc91ba99eaa1ffbcf",
+              "sha256:1df153b2355f1e4198cc6eefbbb1321d3f9ba47ef71920b7ab37ec2db1b2ea67"
+            ],
+            "actor_id": "finance-steward",
+            "delegation_digest": "sha256:34ad2cb918ef2b5cd8c58e7185af1215f403b644fb252ccf103246b848a17ed7",
+            "depends_on": [
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001"
+            ],
+            "kind": "CANDIDATE",
+            "last_action": "accept_task_result",
+            "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:02",
+            "status": "completed",
+            "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002"
+          },
+          {
+            "action_receipt_digests": [
+              "sha256:9133c123bbedaabf2a9d2612ec72913f2bca04cb050197f8ded1df240be47d79",
+              "sha256:ace76fd7c4412f9f182b3b02ff8567dec5266c12cd3d1e4832da884de6058992",
+              "sha256:afe951e590889f55afa4107188a848b1b4c963e0176293cc2ce9bb935082e026",
+              "sha256:f07182e0aef90fdad8af3ea3fef192c0e9a535af61cacdabcdfc23c8f53cfa64",
+              "sha256:cb35251a0f7ae30b48bdbb45e584576d8ae5c3d825f0df15841b5b26c4f9ada5"
+            ],
+            "actor_id": "gtm-steward",
+            "delegation_digest": "sha256:b6033d525ef65fd0ccc89e2e57256f2c1510ff794be64757ab71f47e542958db",
+            "depends_on": [
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002"
+            ],
+            "kind": "CANDIDATE",
+            "last_action": "accept_task_result",
+            "logical_task_id": "workspace-advisory:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30:03",
+            "status": "completed",
+            "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003"
+          },
+          {
+            "action_receipt_digests": [
+              "sha256:743c035f606908cbfe2b73dc6a0374f57c28fb261ebb02d0429dc4d4b64e2041",
+              "sha256:ac85b25aec05985fff2c2babe9b65532636d57965534e207ca2a432386fb44ca",
+              "sha256:914f96a2099e2fa0e6e37faa11452ee5dc2cacd6c7cc7a1b8b552d36c2118247",
+              "sha256:a1471d5702bde1b97e5d36efe9dcf836fce018241caf607868b2e7cfaebb6c56",
+              "sha256:942a7fcc4feaf6396065b6e09cad269664f039bcff885bb0a124d254f461e96b"
+            ],
+            "actor_id": "independent-contract-reviewer",
+            "delegation_digest": "sha256:daf3897896410fe6a2fad9d8701d88ba91d9d062a1d4291180112e4afc8e5f51",
+            "depends_on": [
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t001",
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t002",
+              "orgrebase-change-ec36a07c14d84ecd95b5fd2e-t003"
+            ],
+            "kind": "DETERMINISTIC_CONTRACT_REVIEW",
+            "last_action": "accept_task_result",
+            "logical_task_id": "workspace-orchestration:changeset:workspace-ui:600f1aad-7a3f-4b9c-be69-ba87c008fa30@r1:contract-review",
+            "status": "completed",
+            "task_id": "orgrebase-change-ec36a07c14d84ecd95b5fd2e-review"
+          }
+        ],
+        "view": "PROGRESS_SUMMARY"
+      }
+    }
+  }
+}

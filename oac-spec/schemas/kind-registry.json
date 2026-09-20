@@ -1,0 +1,115 @@
+{
+  "apiVersion": "oac.dev/v0alpha1",
+  "entries": [
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "benchmark",
+      "kind": "OrgChangeCase",
+      "owner": "OAC-030/MVP-001",
+      "placement": "top_level_fixture",
+      "schemaFile": "OrgChangeCase.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "plan",
+      "kind": "OrganizationPlan",
+      "owner": "OAC-027/MVP-001",
+      "placement": "top_level",
+      "schemaFile": "OrganizationPlan.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "source",
+      "kind": "OrganizationSnapshot",
+      "owner": "OAC-023/MVP-001",
+      "placement": "top_level",
+      "schemaFile": "OrganizationSnapshot.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "source",
+      "kind": "OrganizationalDemand",
+      "owner": "OAC-009/E0b",
+      "placement": "top_level",
+      "schemaFile": "OrganizationalDemand.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "evidence",
+      "kind": "OutcomeCertificate",
+      "owner": "OAC-009/E0b",
+      "placement": "top_level",
+      "schemaFile": "OutcomeCertificate.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "evidence",
+      "kind": "PlanCertificate",
+      "owner": "OAC-028/MVP-001",
+      "placement": "top_level",
+      "schemaFile": "PlanCertificate.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "source",
+      "kind": "RuntimeBinding",
+      "owner": "OAC-007/G1a",
+      "placement": "top_level",
+      "schemaFile": "RuntimeBinding.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "evidence",
+      "kind": "RuntimeLoweringReceipt",
+      "owner": "OAC-007/G1a",
+      "placement": "top_level",
+      "schemaFile": "RuntimeLoweringReceipt.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "source",
+      "kind": "SemanticChangeSet",
+      "owner": "OAC-025/MVP-001",
+      "placement": "top_level",
+      "schemaFile": "SemanticChangeSet.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "evidence",
+      "kind": "SourceAdmissionReceipt",
+      "owner": "OAC-009/E0b",
+      "placement": "top_level",
+      "schemaFile": "SourceAdmissionReceipt.schema.json"
+    },
+    {
+      "detachedFields": [
+        "digest"
+      ],
+      "documentClass": "plan",
+      "kind": "ZeroEffectRuntimeBundle",
+      "owner": "OAC-007/G1a",
+      "placement": "top_level",
+      "schemaFile": "ZeroEffectRuntimeBundle.schema.json"
+    }
+  ]
+}

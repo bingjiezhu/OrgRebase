@@ -1,0 +1,14 @@
+{
+  "action": "ready_nodes",
+  "digest": "sha256:23fa096e21c48db8f44ec046c7c7fb84499672ef4e918359561e50401e0b0a38",
+  "error": null,
+  "key": "project:ready-domains",
+  "ok": true,
+  "payload_digest": "sha256:b86f1adac8c39e72a1b449a39dc178de50f2adc62d1874431b34075d4c2e34da",
+  "raw_ref": "raw-mcp/003-project-ready-domains-f0f93c91.json",
+  "request_digest": "sha256:566553c0474c513a9c894aa2c617f743982c6cb6c2faf9ded67cbce0ed749c1d",
+  "response_digest": "sha256:d8bf4d0f66859de39683e2433c774bd3329823ffb4046f976e1b8d02d8dfde8c",
+  "sequence": 3,
+  "status": "active",
+  "tool": "projectflow"
+}

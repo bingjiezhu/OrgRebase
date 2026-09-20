@@ -1,0 +1,803 @@
+{
+  "$defs": {
+    "AgentRun": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_name": {
+          "title": "Agent Name",
+          "type": "string"
+        },
+        "context_manifest_version": {
+          "title": "Context Manifest Version",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "evidence_class": {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "input_digest": {
+          "title": "Input Digest",
+          "type": "string"
+        },
+        "model_version": {
+          "title": "Model Version",
+          "type": "string"
+        },
+        "output_digest": {
+          "title": "Output Digest",
+          "type": "string"
+        },
+        "parent_run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Run Id"
+        },
+        "policy_versions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Policy Versions",
+          "type": "array"
+        },
+        "predecessor_run_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Predecessor Run Ids",
+          "type": "array"
+        },
+        "run_nonce": {
+          "title": "Run Nonce",
+          "type": "string"
+        },
+        "runtime_profile_version": {
+          "title": "Runtime Profile Version",
+          "type": "string"
+        },
+        "skill_versions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Skill Versions",
+          "type": "array"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "task_id": {
+          "title": "Task Id",
+          "type": "string"
+        },
+        "tool_versions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tool Versions",
+          "type": "array"
+        },
+        "trace_id": {
+          "title": "Trace Id",
+          "type": "string"
+        },
+        "workflow_run_id": {
+          "title": "Workflow Run Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "agent_name",
+        "task_id",
+        "workflow_run_id",
+        "run_nonce",
+        "status",
+        "model_version",
+        "runtime_profile_version",
+        "context_manifest_version",
+        "skill_versions",
+        "policy_versions",
+        "tool_versions",
+        "input_digest",
+        "output_digest",
+        "trace_id",
+        "evidence_class"
+      ],
+      "title": "AgentRun",
+      "type": "object"
+    },
+    "Approval": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "approved_at": {
+          "title": "Approved At",
+          "type": "string"
+        },
+        "authority_scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Authority Scope",
+          "type": "array"
+        },
+        "authorization_revision": {
+          "title": "Authorization Revision",
+          "type": "string"
+        },
+        "change_set_digest": {
+          "title": "Change Set Digest",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "expires_at": {
+          "title": "Expires At",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "minimal_rebase_certificate_digest": {
+          "title": "Minimal Rebase Certificate Digest",
+          "type": "string"
+        },
+        "preview_digest": {
+          "title": "Preview Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "actor_id",
+        "change_set_digest",
+        "preview_digest",
+        "minimal_rebase_certificate_digest",
+        "authorization_revision",
+        "authority_scope",
+        "approved_at",
+        "expires_at",
+        "method"
+      ],
+      "title": "Approval",
+      "type": "object"
+    },
+    "ContextItem": {
+      "additionalProperties": false,
+      "properties": {
+        "disposition": {
+          "title": "Disposition",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "object_ref": {
+          "title": "Object Ref",
+          "type": "string"
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Payload"
+        },
+        "reason_code": {
+          "title": "Reason Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_ref",
+        "label",
+        "disposition",
+        "reason_code"
+      ],
+      "title": "ContextItem",
+      "type": "object"
+    },
+    "ContextManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "authorization_revision": {
+          "title": "Authorization Revision",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "evidence_class": {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        "excluded": {
+          "items": {
+            "$ref": "#/$defs/ContextItem"
+          },
+          "title": "Excluded",
+          "type": "array"
+        },
+        "expires_at": {
+          "title": "Expires At",
+          "type": "string"
+        },
+        "graph_revision": {
+          "title": "Graph Revision",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "included": {
+          "items": {
+            "$ref": "#/$defs/ContextItem"
+          },
+          "title": "Included",
+          "type": "array"
+        },
+        "policy_revision": {
+          "title": "Policy Revision",
+          "type": "string"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "target_object_id": {
+          "title": "Target Object Id",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "actor_id",
+        "target_object_id",
+        "purpose",
+        "graph_revision",
+        "policy_revision",
+        "authorization_revision",
+        "expires_at",
+        "included",
+        "excluded",
+        "evidence_class"
+      ],
+      "title": "ContextManifest",
+      "type": "object"
+    },
+    "EvidenceClass": {
+      "enum": [
+        "LIVE_AGENTTEAMS",
+        "CONTROLLED_LOCAL_AGENTTEAMS",
+        "LOCAL_REAL_TOOL",
+        "LOCAL_DETERMINISTIC",
+        "SYNTHETIC_FIXTURE",
+        "PASS_STATIC",
+        "NOT_RUN"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    },
+    "ObjectState": {
+      "enum": [
+        "PROPOSED",
+        "CURRENT",
+        "SUPERSEDED",
+        "STALE",
+        "REVIEW_REQUIRED",
+        "REBASE_REQUIRED",
+        "ROLLED_BACK_PENDING_REBASE",
+        "REQUALIFICATION_REQUIRED",
+        "SHADOW",
+        "CANARY",
+        "ACTIVE",
+        "QUARANTINED"
+      ],
+      "title": "ObjectState",
+      "type": "string"
+    },
+    "QualificationReport": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_adapter_version": {
+          "title": "Candidate Adapter Version",
+          "type": "string"
+        },
+        "candidate_state": {
+          "$ref": "#/$defs/ObjectState"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "evaluation_set_digest": {
+          "title": "Evaluation Set Digest",
+          "type": "string"
+        },
+        "evidence_class": {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "premise_lock": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Premise Lock",
+          "type": "object"
+        },
+        "previous_state": {
+          "$ref": "#/$defs/ObjectState"
+        },
+        "release_scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Release Scope",
+          "type": "array"
+        },
+        "scores": {
+          "items": {
+            "$ref": "#/$defs/SkillVersionScore"
+          },
+          "title": "Scores",
+          "type": "array"
+        },
+        "skill_contract_digest": {
+          "title": "Skill Contract Digest",
+          "type": "string"
+        },
+        "suite_version": {
+          "title": "Suite Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "suite_version",
+        "skill_contract_digest",
+        "evaluation_set_digest",
+        "candidate_adapter_version",
+        "premise_lock",
+        "scores",
+        "previous_state",
+        "candidate_state",
+        "release_scope",
+        "evidence_class"
+      ],
+      "title": "QualificationReport",
+      "type": "object"
+    },
+    "RebaseApprovalSet": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "members": {
+          "items": {
+            "$ref": "#/$defs/SourceApproval"
+          },
+          "title": "Members",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "orgrebase.rebase-approval-set.v1",
+          "default": "orgrebase.rebase-approval-set.v1",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "members"
+      ],
+      "title": "RebaseApprovalSet",
+      "type": "object"
+    },
+    "RevisionLock": {
+      "additionalProperties": false,
+      "properties": {
+        "change_set_digest": {
+          "title": "Change Set Digest",
+          "type": "string"
+        },
+        "change_set_revision": {
+          "title": "Change Set Revision",
+          "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "evaluation_scope_digest": {
+          "title": "Evaluation Scope Digest",
+          "type": "string"
+        },
+        "graph_revision": {
+          "title": "Graph Revision",
+          "type": "string"
+        },
+        "policy_revision": {
+          "title": "Policy Revision",
+          "type": "string"
+        },
+        "runtime_registry_revision": {
+          "title": "Runtime Registry Revision",
+          "type": "string"
+        },
+        "skill_registry_revision": {
+          "title": "Skill Registry Revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "change_set_revision",
+        "change_set_digest",
+        "graph_revision",
+        "policy_revision",
+        "skill_registry_revision",
+        "runtime_registry_revision",
+        "evaluation_scope_digest"
+      ],
+      "title": "RevisionLock",
+      "type": "object"
+    },
+    "SkillVersionScore": {
+      "additionalProperties": false,
+      "properties": {
+        "accuracy": {
+          "title": "Accuracy",
+          "type": "number"
+        },
+        "case_results": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Case Results",
+          "type": "array"
+        },
+        "false_invalidations": {
+          "title": "False Invalidations",
+          "type": "integer"
+        },
+        "missed_hard_dependencies": {
+          "title": "Missed Hard Dependencies",
+          "type": "integer"
+        },
+        "negative_transfer_failures": {
+          "title": "Negative Transfer Failures",
+          "type": "integer"
+        },
+        "outcome": {
+          "title": "Outcome",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "integer"
+        },
+        "total": {
+          "title": "Total",
+          "type": "integer"
+        },
+        "unauthorized_disclosures": {
+          "title": "Unauthorized Disclosures",
+          "type": "integer"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "total",
+        "passed",
+        "accuracy",
+        "missed_hard_dependencies",
+        "false_invalidations",
+        "unauthorized_disclosures",
+        "negative_transfer_failures",
+        "outcome",
+        "case_results"
+      ],
+      "title": "SkillVersionScore",
+      "type": "object"
+    },
+    "SourceApproval": {
+      "additionalProperties": false,
+      "properties": {
+        "approval": {
+          "$ref": "#/$defs/Approval"
+        },
+        "digest": {
+          "default": "",
+          "title": "Digest",
+          "type": "string"
+        },
+        "owner_id": {
+          "title": "Owner Id",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "owner_id",
+        "source_ids",
+        "approval"
+      ],
+      "title": "SourceApproval",
+      "type": "object"
+    }
+  },
+  "$id": "https://orgrebase.local/schemas/workspace-rebase-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "acknowledgements": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Acknowledgements",
+      "type": "array"
+    },
+    "agent_runs": {
+      "items": {
+        "$ref": "#/$defs/AgentRun"
+      },
+      "title": "Agent Runs",
+      "type": "array"
+    },
+    "applied_claims": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Applied Claims",
+      "type": "array"
+    },
+    "approval_actor_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Approval Actor Id"
+    },
+    "approval_digest": {
+      "title": "Approval Digest",
+      "type": "string"
+    },
+    "approval_ref": {
+      "title": "Approval Ref",
+      "type": "string"
+    },
+    "approval_set": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RebaseApprovalSet"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "bounded_unaffected": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Bounded Unaffected",
+      "type": "array"
+    },
+    "candidate_ingestion_digest": {
+      "title": "Candidate Ingestion Digest",
+      "type": "string"
+    },
+    "change_set_ref": {
+      "title": "Change Set Ref",
+      "type": "string"
+    },
+    "compilation_receipt_digest": {
+      "title": "Compilation Receipt Digest",
+      "type": "string"
+    },
+    "context_manifests": {
+      "items": {
+        "$ref": "#/$defs/ContextManifest"
+      },
+      "title": "Context Manifests",
+      "type": "array"
+    },
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "evidence_class": {
+      "$ref": "#/$defs/EvidenceClass"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "live_ingestion_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Live Ingestion Digest"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Metrics",
+      "type": "object"
+    },
+    "minimal_rebase_certificate_digest": {
+      "title": "Minimal Rebase Certificate Digest",
+      "type": "string"
+    },
+    "preview_ref": {
+      "title": "Preview Ref",
+      "type": "string"
+    },
+    "qualification_report": {
+      "$ref": "#/$defs/QualificationReport"
+    },
+    "revision_lock": {
+      "$ref": "#/$defs/RevisionLock"
+    },
+    "run_nonce": {
+      "title": "Run Nonce",
+      "type": "string"
+    },
+    "runtime_dependencies": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Runtime Dependencies",
+      "type": "array"
+    },
+    "schema_version": {
+      "anyOf": [
+        {
+          "const": "orgrebase.rebase-receipt.v2",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Schema Version"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "transitions": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Transitions",
+      "type": "array"
+    },
+    "unknown": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Unknown",
+      "type": "array"
+    },
+    "workflow_run_id": {
+      "title": "Workflow Run Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "status",
+    "workflow_run_id",
+    "run_nonce",
+    "change_set_ref",
+    "preview_ref",
+    "minimal_rebase_certificate_digest",
+    "approval_ref",
+    "approval_digest",
+    "approval_actor_id",
+    "applied_claims",
+    "transitions",
+    "bounded_unaffected",
+    "unknown",
+    "context_manifests",
+    "runtime_dependencies",
+    "agent_runs",
+    "acknowledgements",
+    "qualification_report",
+    "metrics",
+    "revision_lock",
+    "evidence_class",
+    "candidate_ingestion_digest",
+    "compilation_receipt_digest"
+  ],
+  "title": "RebaseReceipt",
+  "type": "object"
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:veracier-supplier-shadow@r2",
+  "organization_id": "org:veracier",
+  "component_kind": "KNOWLEDGE",
+  "revision": "r2",
+  "runtime_binding_mode": "INTAKE_ONLY",
+  "projection": {
+    "supplier_records": [
+      {
+        "supplier_id": "alternative:acieries-savoie",
+        "declared_status": "qualification_in_progress",
+        "proposed_status": "qualified",
+        "source_version": "SC-008"
+      }
+    ],
+    "demand_ref": "demand:SC-008",
+    "change_ref": "change:SC-008",
+    "data_scope": "SYNTHETIC_PUBLIC_DEMONSTRATION"
+  },
+  "projection_digest": "sha256:c3d172b82e1bb90afa696f3c62131873eb6236448d0df2a4cae7f8a7512c29af"
+}

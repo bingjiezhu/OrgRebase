@@ -1,0 +1,23 @@
+{
+  "action_digests": {
+    "accept_task_result": "sha256:bd2fd04211c82154d84bd61d696392bccb3868437d814810523d82ae124e4ad9",
+    "ack_task": "sha256:e5bcf1eca828451304a14c69a8983a804afbb43fe93c3c225198986c4d6af5ed",
+    "check_task": "sha256:602fe17a88d20034c25bdfb9e6ea8f8d5be6439a5f61f53974b85b6b007493ab",
+    "delegate_task": "sha256:a1763b14a91adb0f64f1ecf00d277e23bf4913500eff43891339382cf903e728",
+    "submit_task": "sha256:7f3e771be904b883e394ddc7f0a3e34cd62f8bbddf5490ca169cca4d81fa5008"
+  },
+  "assignee_actor_id": "legal-steward",
+  "candidate_only": true,
+  "canonical_target_writes": 0,
+  "depends_on": [],
+  "digest": "sha256:9a797374823260dac6d32ee69d554f9847b042556b51e087302a46dee6a0a8c3",
+  "domain_id": "legal",
+  "execution_task_digest": "sha256:24cc97661c351f1e69f5f975c1c0a1a4e43588c89e6221226dd1181f31d5d45a",
+  "result_digest": "sha256:db63d0df8c2beb74a360236c93f1801fb8fe5b1ad3619ae216ba5927d7232da9",
+  "schema_version": "orgrebase.formation-taskflow-task-receipt.v1",
+  "task_id": "at-domain-legal-a3f56c48b0c5",
+  "task_kind": "DOMAIN",
+  "task_spec_digest": "sha256:3323acdcf7bc80fe82cf567706a649c94f1f0db6d4f4bfdff58bc57ca66694d6",
+  "terminal_status": "completed",
+  "transport_assignee": "@legal-steward:controlled.local"
+}

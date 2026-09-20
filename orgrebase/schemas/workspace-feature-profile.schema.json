@@ -1,0 +1,43 @@
+{
+  "$id": "https://orgrebase.local/schemas/workspace-feature-profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "default": "",
+      "title": "Digest",
+      "type": "string"
+    },
+    "paths": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Paths",
+      "type": "array"
+    },
+    "profile_id": {
+      "minLength": 1,
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "revision": {
+      "minLength": 1,
+      "title": "Revision",
+      "type": "string"
+    },
+    "transfer_scope": {
+      "minLength": 1,
+      "title": "Transfer Scope",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_id",
+    "revision",
+    "paths",
+    "transfer_scope"
+  ],
+  "title": "FeatureProfile",
+  "type": "object"
+}

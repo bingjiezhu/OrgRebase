@@ -59,7 +59,7 @@ pydantic-core==2.46.4
     # via pydantic
 pyjwt==2.13.0
     # via orgrebase
-python-dotenv==1.2.2
+python-dotenv==1.2.3
     # via uvicorn
 pyyaml==6.0.3
     # via uvicorn

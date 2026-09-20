@@ -1,24 +1,26 @@
-# Dependabot PRs are not merge-ready until uv.lock matches a pip pin, and until
-# both .github/workflows and orgrebase/.github/workflows stay identical.
+# Dependabot stays configured. Version-update PRs are not opened on this
+# snapshot (limit 0) until a maintainer reviews lockfiles. Never merge a pip
+# pin without uv.lock, or an Actions bump that leaves orgrebase/.github/workflows
+# different from the workspace-root copy.
 version: 2
 updates:
   - package-ecosystem: pip
     directory: /orgrebase
     schedule:
       interval: weekly
-    open-pull-requests-limit: 2
+    open-pull-requests-limit: 0
   - package-ecosystem: pip
     directory: /oac-spec
     schedule:
       interval: weekly
-    open-pull-requests-limit: 2
+    open-pull-requests-limit: 0
   - package-ecosystem: pip
     directory: /orgrebase/documentation
     schedule:
       interval: weekly
-    open-pull-requests-limit: 2
+    open-pull-requests-limit: 0
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
-    open-pull-requests-limit: 2
+    open-pull-requests-limit: 0

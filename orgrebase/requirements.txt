@@ -13,7 +13,7 @@ authlib==1.8.0
     # via orgrebase
 cffi==2.1.1 ; platform_python_implementation != 'PyPy'
     # via cryptography
-click==8.4.2
+click==8.5.0
     # via uvicorn
 colorama==0.4.6 ; sys_platform == 'win32'
     # via click

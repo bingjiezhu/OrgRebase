@@ -6,7 +6,7 @@
 
 OrgRebase forms the smallest contract-valid Agent team for an employee task, keeps Agents, Tools and Skills on the candidate side of the authority boundary, and selectively updates only the business objects proven to be affected.
 
-One clone contains both trees. OrgRebase is PolyForm Noncommercial 1.0.0; it is **not** OSI Open Source. OAC keeps Apache-2.0 and CC BY 4.0 on its own paths.
+One clone contains both trees. OrgRebase is PolyForm Noncommercial 1.0.0; it is **not** OSI Open Source. OAC keeps Apache-2.0 and CC BY 4.0 on its own paths. The current public revision is `main`. Tag `v0.4.0` is the workspace snapshot of the same 0.4.0 product.
 
 [![CI](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml/badge.svg)](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0A66C2)](https://bingjiezhu.github.io/OrgRebase/en/)

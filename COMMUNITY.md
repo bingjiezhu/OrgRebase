@@ -13,7 +13,7 @@ here. 本说明记录可核对的复用入口；未列出的第三方生产采�
 | Security response | Private advisory: [SECURITY.md](SECURITY.md) |
 | Conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
 | Version tags | [Releases](https://github.com/bingjiezhu/OrgRebase/releases); product `orgrebase` is 0.4.0 |
-| Dependency updates | Dependabot watches `/orgrebase`, `/oac-spec`, `/orgrebase/documentation`, and GitHub Actions. Merge only lockfile-complete updates; keep root `.github/workflows` identical to `orgrebase/.github/workflows` |
+| Dependency updates | Dependabot is configured for `/orgrebase`, `/oac-spec`, `/orgrebase/documentation`, and GitHub Actions. Version-update PRs are paused on this snapshot until a lockfile-complete review. Root `.github/workflows` must stay identical to `orgrebase/.github/workflows` |
 | CI | `.github/workflows/ci.yml`: `make check-core` on every push; full OAC + PostgreSQL on `workflow_dispatch` |
 
 GitHub Actions, issue templates, and Dependabot live in the repository-root

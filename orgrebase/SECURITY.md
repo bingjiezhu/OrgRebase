@@ -1,5 +1,9 @@
 # Security policy
 
+The GitHub community Security tab reads the workspace-root
+[`SECURITY.md`](../SECURITY.md) (supported revision and reporting channel). This file
+remains the product trust boundary, local-demo limits, and deployment requirements.
+
 ## Supported version
 
 The latest `main` revision is supported while OrgRebase is pre-1.0.

@@ -6,7 +6,7 @@
 
 OrgRebase 为员工任务形成最小且符合契约的 Agent 团队，让 Agent、Tool 和 Skill 始终位于候选一侧，并只更新被证明受影响的业务对象。
 
-一次 clone 包含两棵树。OrgRebase 使用 PolyForm Noncommercial 1.0.0，**不是** OSI 开源。OAC 在自己的路径上保持 Apache-2.0 与 CC BY 4.0。
+一次 clone 包含两棵树。OrgRebase 使用 PolyForm Noncommercial 1.0.0，**不是** OSI 开源。OAC 在自己的路径上保持 Apache-2.0 与 CC BY 4.0。当前公开修订是 `main`。标签 `v0.4.0` 是同一产品版本 0.4.0 的工作区快照。
 
 [![CI](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml/badge.svg)](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml)
 [![文档](https://img.shields.io/badge/docs-GitHub%20Pages-0A66C2)](https://bingjiezhu.github.io/OrgRebase/)

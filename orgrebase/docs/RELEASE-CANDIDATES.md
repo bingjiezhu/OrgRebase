@@ -6,7 +6,8 @@ CI 的 `core` 面向普通 fork，无需 OAC 或服务凭据，执行明确范�
 
 在 `main` 手动运行工作流时，`release-candidate` 只有在同一提交的 `core` 和完整 `check` 都成功后才构建 wheel/source archive，为确切制品生成可重验 SBOM，并使用 GitHub Actions 身份签署来源和 SBOM attestations。完整检查被跳过时不会生成合格候选。结果保留为候选下载件；工作流没有包仓库发布或部署步骤。普通 push/PR 不运行签署步骤。
 
-此工作流配置尚未在远端执行。本地构建的摘要、SBOM 或测试日志不等于 GitHub 签署结果，也不等于客户部署准入。组织需确认仓库计划支持 attestations，保护 main 和工作流变更，限制人工触发与部署权限。按 [GitHub 官方说明](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations)，公开仓库与企业私有仓库有不同的可用条件。
+原先：此工作流配置尚未在远端执行。
+现状（2026-09-20）：公开仓库每次 push 已跑 `core`（`make check-core`）。完整 `check` 与 `release-candidate` 仍只在 `workflow_dispatch` 时运行。本地构建的摘要、SBOM 或测试日志不等于 GitHub 签署结果，也不等于客户部署准入。组织需确认仓库计划支持 attestations，保护 main 和工作流变更，限制人工触发与部署权限。按 [GitHub 官方说明](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations)，公开仓库与企业私有仓库有不同的可用条件。
 
 ## 源码交付与公开发布
 

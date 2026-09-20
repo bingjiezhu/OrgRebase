@@ -8,6 +8,7 @@ OrgRebase面向企业报价变更负责人：规则、日期或职责变化后�
 
 | 目标 | 入口 |
 |---|---|
+| 打开文档站 | [中文站点](https://bingjiezhu.github.io/OrgRebase/) · [English site](https://bingjiezhu.github.io/OrgRebase/en/) |
 | 先确认安装和计价闭环 | [快速开始](quickstart.zh.md)，不需要模型或客户凭据 |
 | 运行真实云模型的原生协作 | [Vertex接入](models-vertex.zh.md)或[DeepSeek接入](models-deepseek.zh.md) |
 | 观察批准前后的业务结果 | [Demo与验证](demo.zh.md) |

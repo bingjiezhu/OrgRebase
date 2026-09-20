@@ -28,7 +28,8 @@ python3 -m http.server 8018 --bind 127.0.0.1 --directory /tmp/orgrebase-docs-new
 
 加入经过审核的源码下载时，同时提供`--source-archive`与`--source-sha256`。构建器验证摘要及文档、引用源码和工具源字节；下载仅进入静态产物。分发包与站内下载使用同一源码ZIP和摘要。
 
-GitHub Pages工作流默认只构建预览。有权维护者配置Pages环境并选择部署后，才会发布站点。详细命令及维护范围见[建站说明](../DOCUMENTATION-SITE.md)。
+原先：GitHub Pages 工作流默认只构建预览，有权维护者配置 Pages 并选择部署后才会发布站点。
+现状：`main` 上的文档变更会构建并发布到 [bingjiezhu.github.io/OrgRebase](https://bingjiezhu.github.io/OrgRebase/)。工作流仍可用 `workflow_dispatch` 指定 `site_url`。详细命令及维护范围见[建站说明](../DOCUMENTATION-SITE.md)。
 
 ## 版本与验收记录
 

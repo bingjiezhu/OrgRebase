@@ -28,7 +28,8 @@ The output directory must be empty and outside the product source tree. MkDocs, 
 
 To add a reviewed source download, supply both `--source-archive` and `--source-sha256`. The builder verifies the checksum and the bytes of documents, referenced source and site tooling. The download enters only generated site output. The distribution and site use the same source ZIP and checksum.
 
-The GitHub Pages workflow builds a preview by default. An authorized maintainer must configure Pages and select deployment to publish the site. See the [site-maintenance guide](../DOCUMENTATION-SITE.md) for commands and scope.
+Previously the GitHub Pages workflow built a preview by default; an authorized maintainer had to configure Pages and select deployment to publish the site.
+Now, documentation changes on `main` build and publish [bingjiezhu.github.io/OrgRebase](https://bingjiezhu.github.io/OrgRebase/en/). `workflow_dispatch` can still set `site_url`. See the [site-maintenance guide](../DOCUMENTATION-SITE.md) for commands and scope.
 
 ## Versions and acceptance records
 

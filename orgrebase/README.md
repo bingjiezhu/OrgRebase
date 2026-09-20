@@ -8,6 +8,7 @@ OrgRebase forms the smallest contract-valid Agent team for an employee task, kee
 candidate side of the authority boundary, and selectively updates only the business objects proven to be affected.
 
 [![CI](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml/badge.svg)](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0A66C2)](https://bingjiezhu.github.io/OrgRebase/en/)
 
 The current native cloud Demo uses **Vertex Gemini 3.8 Flash** through the explicit
 [`live` launch mode](#run-the-reference-journey). The Quick Start below verifies the
@@ -18,7 +19,7 @@ pricing and governance loop without a model.
 | Goal | Entry point |
 |---|---|
 | Install and run without a model | [Quick Start](#first-run-verify-one-public-transaction) |
-| Read the documentation | [English guides](docs/guide/index.en.md) · [中文指南](docs/guide/index.zh.md) |
+| Read the documentation | [English guides](docs/guide/index.en.md) · [中文指南](docs/guide/index.zh.md) · [Docs site](https://bingjiezhu.github.io/OrgRebase/en/) |
 | Understand the architecture | [System overview](#architecture-at-a-glance) · [Architecture guide](docs/guide/architecture.en.md) |
 | Integrate through the API | [API, model and tool interfaces](docs/MODEL-AGENT-TOOL-INTERFACES.md#public-api-surface) |
 | Reproduce the Demo | [Browser walkthrough](docs/guide/demo.en.md) · [Release artifacts](https://github.com/bingjiezhu/OrgRebase/releases) |
@@ -181,7 +182,9 @@ candidates; its results are separate from the native AgentTeams journey below.
 
 Run the native cloud reference with **`./run-semifinal-demo.sh live`**. This mode defaults to **Vertex Gemini 3.8 Flash**. It requires a matching OAC source tree, an authorized cloud project and credentials supplied outside the repository. Obtain the OAC revision identified by the source distribution or maintainer, place it at `../oac-spec`, or set `ORGREBASE_OAC_ROOT` to that checkout.
 
-原先：单独 clone 产品仓库不包含 OAC，完整旅程要另取匹配版本放到旁边。现状：若 GitHub 按工作区发布，仓库根并列 `orgrebase/` 与 `oac-spec/`，一次 clone 后默认的 `../oac-spec` 即可用；OAC 仍是旁边的树，不是本 Python 包的一部分。为什么：两者配套交付，但许可和发布身份仍然分开。
+Previously: cloning the product tree alone did not include OAC, so the full journey needed a matching checkout next door.
+Now: a workspace GitHub clone already has `orgrebase/` beside `oac-spec/`, so the default `../oac-spec` works. OAC remains the neighboring tree, not part of this Python package.
+Why: they ship together while licenses and publication identity stay separate.
 
 ```bash
 export ORGREBASE_VERTEX_PROJECT="YOUR_GCP_PROJECT"

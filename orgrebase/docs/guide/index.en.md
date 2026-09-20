@@ -8,6 +8,7 @@ OrgRebase helps quote operations owners keep existing work aligned with changing
 
 | Goal | Guide |
 |---|---|
+| Open the documentation site | [English site](https://bingjiezhu.github.io/OrgRebase/en/) · [中文站点](https://bingjiezhu.github.io/OrgRebase/) |
 | Verify installation and a pricing workflow | [Quickstart](quickstart.en.md), without a model or customer credentials |
 | Run native collaboration with a cloud model | [Vertex](models-vertex.en.md) or [DeepSeek](models-deepseek.en.md) |
 | Inspect business results before and after approval | [Demo and verification](demo.en.md) |

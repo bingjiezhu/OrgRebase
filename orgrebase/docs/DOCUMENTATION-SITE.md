@@ -9,7 +9,11 @@
 
 ## 现状（追加）
 
-GitHub 产品仓库以 README 与 `docs/` Markdown 为阅读入口。提交包和即将推送的仓库都不预置 `site/`，也不附带源码 ZIP。需要静态站时，用下面的命令从同一份 Markdown 构建。
+原先：GitHub 产品仓库以 README 与 `docs/` Markdown 为阅读入口。提交包和仓库都不预置 `site/`，需要静态站时再本地构建。
+
+现状（2026-09-20）：Markdown 仍是真源。公开阅读入口增加 GitHub Pages，由同一套 `documentation/build.py` 从 `docs/guide/` 的中英配对指南生成：[中文](https://bingjiezhu.github.io/OrgRebase/) · [English](https://bingjiezhu.github.io/OrgRebase/en/)。源码仓库和决赛包仍然不预置 `site/`。
+
+为什么：`git clone` 之后应能直接读 Markdown；站点只是同一批正文的托管渲染，避免再带一份会过期的 HTML 进 Git。
 
 ## 为什么这样更新
 
@@ -58,13 +62,11 @@ uv run --project documentation --frozen python documentation/build.py \
 
 ## 部署到GitHub Pages
 
-本仓库提供 `.github/workflows/docs.yml`：手动运行默认只构建和上传预览制品，
-选择明确的部署输入才会走Pages部署。它不会由普通代码push自动发布。
+本仓库提供 `.github/workflows/docs.yml`：`main` 上的文档变更会构建并发布到
+[GitHub Pages](https://bingjiezhu.github.io/OrgRebase/)。也可 `workflow_dispatch` 指定 `site_url`。
 
-由有权维护者在GitHub仓库的Settings → Pages中选择GitHub Actions，确认计划公开的分支/commit
-与许可、隐私及版本口径，然后手动执行workflow。发布任务需要Pages写权限与OIDC token，
-使用`github-pages`环境控制。GitHub生成的实际URL才是已部署地址；本地构建没有发布公网。
-如果对外声称可下载当前候选，需要把审核后的源码包另行加入站点构建，不用远端旧Release替代。
+由有权维护者在GitHub仓库的Settings → Pages中选择GitHub Actions。GitHub生成的实际URL才是已部署地址；
+本地构建没有发布公网。如果对外声称可下载当前候选，需要把审核后的源码包另行加入站点构建，不用远端旧Release替代。
 
 也可把生成目录作为普通静态网站托管。实际部署地址确定后，使用`--site-url https://HOST/BASE/`
 生成相应canonical地址；不要把MkDocs开发服务器当作生产服务。

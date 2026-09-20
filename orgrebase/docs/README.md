@@ -8,7 +8,7 @@ OrgRebase 处理规则变化后的工作更新：生成候选、核对影响、�
 
 | 你想做什么 | 从这里开始 |
 |---|---|
-| 安装并运行一单公开交易报价 | [中文快速开始](../README.zh-CN.md#第一次运行先核对一笔真实商品数据) / [English quickstart](../README.md#first-run-verify-one-public-transaction)；无需模型或 OAC |
+| 安装并运行一单公开交易报价 | [中文快速开始](../README.zh-CN.md#第一次运行先核对一笔真实商品数据) / [English quickstart](../README.md#first-run-verify-one-public-transaction)；无需模型或 OAC。托管阅读：[文档站](https://bingjiezhu.github.io/OrgRebase/) |
 | 在浏览器中修改折扣、批准并看到金额变化 | [公开数据计价演示](PRICED-QUOTE-DEMO.md) |
 | 核对日期、币种和产品变化的多领域链路与数据验证范围 | [上游变化与数据验证复核](UPSTREAM-CHANGE-REVIEW.md) |
 | 运行包含 OAC 准入、AgentTeams 和人工批准的完整旅程 | [Enterprise Pilot Runbook](ENTERPRISE-PILOT-RUNBOOK.md)；先核对 OAC 与模型依赖 |

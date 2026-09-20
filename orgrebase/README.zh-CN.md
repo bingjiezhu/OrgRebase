@@ -8,6 +8,7 @@ OrgRebase 为员工任务形成最小且符合契约的 Agent 团队，让 Agent
 候选一侧，并只更新被证明受影响的业务对象。
 
 [![CI](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml/badge.svg)](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml)
+[![文档](https://img.shields.io/badge/docs-GitHub%20Pages-0A66C2)](https://bingjiezhu.github.io/OrgRebase/)
 
 当前原生云模型 Demo 明确使用 **Vertex Gemini 3.8 Flash**，通过
 [`live` 启动模式](#运行参考主线)运行。下方快速开始无需模型，先验证计价与治理闭环。
@@ -17,7 +18,7 @@ OrgRebase 为员工任务形成最小且符合契约的 Agent 团队，让 Agent
 | 目标 | 入口 |
 |---|---|
 | 无需模型，先安装并运行一单 | [快速开始](#第一次运行先核对一笔真实商品数据) |
-| 阅读使用文档 | [中文指南](docs/guide/index.zh.md) · [English guides](docs/guide/index.en.md) |
+| 阅读使用文档 | [中文指南](docs/guide/index.zh.md) · [English guides](docs/guide/index.en.md) · [文档站](https://bingjiezhu.github.io/OrgRebase/) |
 | 理解架构 | [系统概览](#架构概览) · [架构指南](docs/guide/architecture.zh.md) |
 | 通过 API 集成 | [API、模型与工具接口](docs/MODEL-AGENT-TOOL-INTERFACES.md#public-api-surface) |
 | 复现 Demo | [浏览器操作指南](docs/guide/demo.zh.md) · [发行附件](https://github.com/bingjiezhu/OrgRebase/releases) |

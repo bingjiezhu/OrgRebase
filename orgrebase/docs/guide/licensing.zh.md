@@ -1,18 +1,17 @@
 # 许可与证据范围
 
-OrgRebase 的项目自有材料与 OAC 使用同一套路径许可。
+OrgRebase 与 OAC 的项目自有材料适用 Apache License 2.0，包括文档。
 
 | 内容 | 适用范围 |
 |---|---|
-| 可执行和机器可读资产，包括代码与 Skill | [Apache License 2.0](../../LICENSE) |
-| 规范文字 | [CC BY 4.0](../../LICENSES/CC-BY-4.0.txt) |
-| 路径索引与此前的商业使用说明 | [LICENSE.md](../../LICENSE.md)、[COMMERCIAL-LICENSE.md](../../COMMERCIAL-LICENSE.md) |
-| OAC | 代码/Schema 等与规范文字按其路径分别适用 Apache-2.0、CC BY 4.0；查看 OAC LICENSE.md |
+| OrgRebase 自有代码、Skill、夹具与文档 | [Apache License 2.0](../../LICENSE) |
+| 许可范围与此前的商业使用说明 | [LICENSE.md](../../LICENSE.md)、[COMMERCIAL-LICENSE.md](../../COMMERCIAL-LICENSE.md) |
+| OAC 自有材料 | Apache-2.0；查看 OAC LICENSE.md |
 | AgentTeams 及 Python 依赖 | 各自上游许可 |
 | UCI 商品样本 | CC BY 4.0，保留来源和转换说明；不代表 UCI 认可产品 |
 | 云模型与备用本地模型 | 各自服务或模型条款；软件客户端许可不替代模型许可 |
 
-原先公开修订，包括标签 `v0.4.0`，使用 PolyForm Noncommercial 1.0.0，商业使用需另行书面授权。当前树把项目自有材料的商业使用纳入 Apache-2.0 与 CC BY 4.0。文档站和分发包不另设一套许可。
+原先公开修订，包括标签 `v0.4.0`，使用 PolyForm Noncommercial 1.0.0，商业使用需另行书面授权。其后一次提交曾把规范文字标为 CC BY 4.0。当前树的项目自有材料，包括文字，适用 Apache-2.0。文档站和分发包不另设一套许可。
 
 Vertex 和 DeepSeek 配置成功不自动授予客户数据外发权限。部署方应核对使用条款、数据流向与组织授权。备用 qwen2.5:3b 受 Qwen Research License 限制，商业使用需上游许可；OrgRebase 不分发其权重。
 

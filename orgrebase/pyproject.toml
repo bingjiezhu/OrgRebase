@@ -9,7 +9,7 @@ description = "Enterprise Work Build & Recovery System with certified selective 
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
 license = { text = "Apache-2.0" }
-license-files = ["LICENSE", "LICENSE.md", "LICENSES/Apache-2.0.txt", "LICENSES/CC-BY-4.0.txt", "NOTICE.md"]
+license-files = ["LICENSE", "LICENSE.md", "LICENSES/Apache-2.0.txt", "NOTICE.md"]
 authors = [{ name = "Bingjie Zhu" }]
 keywords = [
   "agents",

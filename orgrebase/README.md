@@ -272,6 +272,4 @@ vendor/agentteams/             pinned offline-reconstructable AgentTeams source 
 ```
 
 For contribution rules, see [CONTRIBUTING.md](CONTRIBUTING.md). Project-owned material uses the
-same path licenses as OAC: [Apache License 2.0](LICENSE) for executable and machine-readable
-assets, and [CC BY 4.0](LICENSES/CC-BY-4.0.txt) for normative prose. The path index is
-[LICENSE.md](LICENSE.md). Tag `v0.4.0` remains the earlier PolyForm Noncommercial snapshot.
+Apache License 2.0, including documentation. See [LICENSE](LICENSE) and [LICENSE.md](LICENSE.md). Tag `v0.4.0` remains the earlier PolyForm Noncommercial snapshot.

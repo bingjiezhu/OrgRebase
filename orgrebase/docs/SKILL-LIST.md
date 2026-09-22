@@ -125,4 +125,4 @@ Specs 059–060 的正式 run
 `APPROVED_CANARY` 只说明 exact 候选经过当前受控发布账本获得后续 dry-call 权限；它不把一次经验
 升级为通用知识，也不让 Skill 绕过下一次运行的任务、权限、准入、Reviewer 或人工审批。
 
-许可：项目自有 Skill 跟随仓库路径许可（可执行资产 Apache-2.0，规范文字 CC BY 4.0）。封存清单里的 `PolyForm-Noncommercial-1.0.0` 是内容寻址标识，不缩小当前授权。
+许可：项目自有 Skill 适用 Apache-2.0。封存清单里的 `PolyForm-Noncommercial-1.0.0` 是内容寻址标识，不缩小当前授权。

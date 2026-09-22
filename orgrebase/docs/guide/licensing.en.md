@@ -1,18 +1,17 @@
 # Licensing and evidence scope
 
-OrgRebase project-owned material uses the same path licenses as OAC.
+OrgRebase and OAC project-owned material is Apache License 2.0, including documentation.
 
 | Material | Applicable terms |
 |---|---|
-| Executable and machine-readable OrgRebase assets, including code and Skills | [Apache License 2.0](../../LICENSE) |
-| Normative prose | [CC BY 4.0](../../LICENSES/CC-BY-4.0.txt) |
-| Path index and the earlier commercial notice | [LICENSE.md](../../LICENSE.md), [COMMERCIAL-LICENSE.md](../../COMMERCIAL-LICENSE.md) |
-| OAC | Apache-2.0 and CC BY 4.0 by path; consult OAC LICENSE.md |
+| Project-owned OrgRebase code, Skills, fixtures and documentation | [Apache License 2.0](../../LICENSE) |
+| Scope and the earlier commercial notice | [LICENSE.md](../../LICENSE.md), [COMMERCIAL-LICENSE.md](../../COMMERCIAL-LICENSE.md) |
+| Project-owned OAC material | Apache-2.0; consult OAC LICENSE.md |
 | AgentTeams and Python dependencies | Their own upstream licenses |
 | UCI product sample | CC BY 4.0 with attribution and transformation notes; no UCI endorsement |
 | Cloud services and optional local models | Their service/model terms; client software licensing does not grant model rights |
 
-Earlier public revisions, including tag `v0.4.0`, used PolyForm Noncommercial 1.0.0 and reserved commercial use to a separate written grant. This tree includes commercial use of project-owned material in the Apache-2.0 and CC BY 4.0 grants. The documentation site and a distribution archive do not create a different license.
+Earlier public revisions, including tag `v0.4.0`, used PolyForm Noncommercial 1.0.0 and reserved commercial use to a separate written grant. One later commit licensed prose as CC BY 4.0. This tree licenses project-owned material, including prose, as Apache-2.0. The documentation site and a distribution archive do not create a different license.
 
 Configuring Vertex or DeepSeek does not authorize sending customer data to a provider. Deployment owners must review service terms, data flows and organizational permission. The optional qwen2.5:3b model has a Qwen Research License with a separate commercial-permission requirement; its weights are not redistributed with OrgRebase.
 

@@ -178,6 +178,6 @@ OAC 的准确状态仍是 experimental proposed draft。它不主张正式认证
 
 ## 许可证
 
-规范文本使用 [CC BY 4.0](LICENSES/CC-BY-4.0.txt)。Schema、TCK/CTK、示例和参考代码使用
+OAC 自有材料，包括规范文本、Schema、TCK/CTK、示例和参考代码，使用
 [Apache-2.0](LICENSES/Apache-2.0.txt)。详见 [LICENSE.md](LICENSE.md)、[NOTICE](NOTICE.md)、
 [CONTRIBUTING](CONTRIBUTING.md) 与[专利不主张](PATENT-NON-ASSERTION.md)。

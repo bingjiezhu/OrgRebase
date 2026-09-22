@@ -155,9 +155,9 @@ service. Verification never approves or applies a change. See the
 
 | Material | Current terms | Adoption boundary |
 |---|---|---|
-| OrgRebase engine, project-authored adapters, documentation and synthetic fixtures | [Apache-2.0](../LICENSE) and [CC BY 4.0](../LICENSES/CC-BY-4.0.txt), allocated by [LICENSE.md](../LICENSE.md) | Same path licenses as OAC. Earlier public revisions used PolyForm Noncommercial 1.0.0; see [COMMERCIAL-LICENSE.md](../COMMERCIAL-LICENSE.md). |
+| OrgRebase engine, project-authored adapters, documentation and synthetic fixtures | [Apache-2.0](../LICENSE) | Includes documentation. Earlier revisions used PolyForm Noncommercial 1.0.0, then a CC BY 4.0 prose split; see [LICENSE.md](../LICENSE.md). |
 | Project-owned domain rules and Skill packages | Apache-2.0 for the current tree. Sealed package `license` and contract `distribution.license` may still read `PolyForm-Noncommercial-1.0.0` | That sealed identifier keeps historical content addresses stable. Check the exact package and resource digests. |
-| OAC, in this workspace or beside it | Apache-2.0 for executable assets; CC BY 4.0 for normative prose, as allocated by its `LICENSE.md` | Same path model as OrgRebase. Its proposed-standard status does not establish external certification. |
+| OAC, in this workspace or beside it | Apache-2.0 for project-owned material, as allocated by its `LICENSE.md` | Its proposed-standard status does not establish external certification. |
 | Upstream AgentTeams | Apache-2.0 | The [vendor notice](../vendor/agentteams/README.md) identifies the exact reconstructable source bundle. Project-authored integration code retains the product terms. |
 | Python and database dependencies | Each distribution's own terms; see [third-party inventory](THIRD-PARTY-INVENTORY.md) and [NOTICE.md](../NOTICE.md) | Psycopg and psycopg-binary are LGPL-3.0-only in the current lock. Preserve their notices and review the exact distributions supplied to customers. |
 | Enterprise data, hosted services and optional datasets | Customer contracts, provider terms or the stated dataset license | Product permission does not grant rights to third-party data or services. See [data and privacy](WORKSPACE-DATA-AND-PRIVACY.md). |

@@ -168,4 +168,4 @@ the [code of conduct](CODE_OF_CONDUCT.md), and private vulnerability reporting i
 [SECURITY](SECURITY.md). See the [changelog](CHANGELOG.md) for source history;
 unreleased source versions are not published-release or conformance claims.
 
-Normative standard text is available under [CC BY 4.0](LICENSES/CC-BY-4.0.txt). Schemas, TCK/CTK, examples, and reference code are available under [Apache-2.0](LICENSES/Apache-2.0.txt). See [LICENSE.md](LICENSE.md), [NOTICE](NOTICE.md), [CONTRIBUTING](CONTRIBUTING.md), and the [patent non-assertion](PATENT-NON-ASSERTION.md).
+Project-owned OAC material, including normative text, schemas, TCK/CTK, examples and reference code, is available under [Apache-2.0](LICENSES/Apache-2.0.txt). See [LICENSE.md](LICENSE.md), [NOTICE](NOTICE.md), [CONTRIBUTING](CONTRIBUTING.md), and the [patent non-assertion](PATENT-NON-ASSERTION.md).

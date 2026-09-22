@@ -1,24 +1,21 @@
 # Licensing
 
-OrgRebase uses the same path licenses as OAC.
+Project-owned OrgRebase material in this tree is Apache License 2.0, including code, tests, schemas, Skills, fixtures, documentation and other project prose. The grant text is [LICENSE](LICENSE). Copyright 2026 Bingjie Zhu.
 
-| Paths | License |
-|---|---|
-| `docs/`, and root project prose (`README*`, `CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `COMMUNITY.md`, `CONTRIBUTING.md`, `NOTICE.md`, `RELEASE-VERIFICATION.md`, `SECURITY.md`, `COMMERCIAL-LICENSE.md`, `LICENSE.md`) | CC BY 4.0 |
-| `src/`, `tests/`, `scripts/`, `schemas/`, `demo/`, `configs/`, `skills/`, `fixtures/`, `examples/`, `contracts/`, `orchestration/`, project files under `agentteams/`, machine-readable project benchmark assets, build and CI metadata, `pyproject.toml` | Apache License 2.0 |
+## 原先
 
-`LICENSE` is the Apache License 2.0 grant for executable and machine-readable project assets. The verbatim texts are in `LICENSES/`. Copyright 2026 Bingjie Zhu.
+Public revisions through tag `v0.4.0` used PolyForm Noncommercial 1.0.0. Commercial use of those revisions needed a separate written grant.
 
-## Earlier public terms
+A later `main` commit used the OAC path split: Apache-2.0 for executable and machine-readable assets, CC BY 4.0 for normative prose.
 
-Public revisions through the 2026-09-20 workspace snapshot, including tag `v0.4.0`, used PolyForm Noncommercial 1.0.0. Commercial use of those revisions needed a separate written grant. Recipients of those revisions keep that grant.
+## 现状
 
-## Current grant
+This tree offers all project-owned OrgRebase files under Apache-2.0. Commercial use is included. [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md) records that change.
 
-This tree offers project-owned OrgRebase material under the path licenses above. Commercial use of that material is included. Normative prose is CC BY 4.0, so attribution is required when it is shared.
+## 为什么会有这样的更新
 
-## Why the texts still mention the older identifier
+The copyright holder chose one OSI license for the repository's own material. `LICENSES/CC-BY-4.0.txt` remains so upstream CC BY datasets can be read with their own terms. It is not a grant for OrgRebase project-owned files.
 
-`vendor/agentteams/` keeps the upstream Apache-2.0 terms in `vendor/agentteams/README.md`. `benchmark/public-retail-quote/` keeps its own CC BY 4.0 notice. Dependencies, PostgreSQL, and optional models keep their own terms. Model weights are not included.
+`vendor/agentteams/` keeps the upstream Apache-2.0 terms in `vendor/agentteams/README.md`. `benchmark/public-retail-quote/` keeps its upstream CC BY 4.0 notice. Dependencies, PostgreSQL and optional models keep their own terms. Model weights are not included.
 
-Skill manifests and the OrgWorkBench dataset manifest still contain the sealed identifier `PolyForm-Noncommercial-1.0.0`. That string is part of the content address used by retained evidence. It does not narrow the grant in this file for project-owned files in the current tree.
+Skill manifests and the OrgWorkBench dataset manifest still contain the sealed identifier `PolyForm-Noncommercial-1.0.0`. That string is part of the content address used by retained evidence. It does not narrow the Apache-2.0 grant for project-owned files in the current tree.

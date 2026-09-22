@@ -465,8 +465,8 @@ and documentation virtual environments are excluded from this source archive.
 ## Licensing
 
 Keep the original LICENSE, LICENSE.md, NOTICE, THIRD_PARTY and dataset attribution files.
-OrgRebase and OAC use Apache-2.0 for executable and machine-readable assets and CC BY 4.0
-for normative prose. Third-party licenses remain their own terms. Original license texts
+OrgRebase and OAC project-owned material is Apache-2.0, including prose. Third-party
+licenses remain their own terms. Original license texts
 control; this guide and its translation do not create new rights. Customer deployment
 requires its own identity, connector, business-value and capacity acceptance.
 """
@@ -576,9 +576,9 @@ to their respective paths. 本索引不新增授权，各路径以原始许可�
 | Public retail sample | [Attribution and license](orgrebase/benchmark/public-retail-quote/v1/LICENSE.md) |
 | Product dependencies and reuse | [Third-party inventory](orgrebase/docs/THIRD-PARTY-INVENTORY.md), [reuse guide](orgrebase/docs/REUSE-AND-LICENSING.md) |
 
-OrgRebase and OAC use the same path licenses: Apache-2.0 for executable and
-machine-readable assets, CC BY 4.0 for normative prose. Tag `v0.4.0` remains the
-earlier PolyForm Noncommercial grant. Upstream components keep their own terms.
+Project-owned OrgRebase and OAC material is Apache-2.0, including prose. Tag
+`v0.4.0` remains the earlier PolyForm Noncommercial grant. Upstream components
+keep their own terms.
 """
 
 

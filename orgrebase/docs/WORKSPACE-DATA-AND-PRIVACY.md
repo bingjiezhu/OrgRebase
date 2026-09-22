@@ -4,7 +4,7 @@
 
 The executable reference profile is self-contained and uses fictional organizations, users, customers, policies, clauses, and changes. No real customer, employee, contract, credential, production telemetry, or user-research record is bundled.
 
-Project-owned rows below are redistributable under the current path licenses in [LICENSE.md](../LICENSE.md) (Apache-2.0 for machine-readable assets, CC BY 4.0 for normative prose). Cells that still name `PolyForm-Noncommercial-1.0.0` are the sealed identifier stored in those content-addressed files. Tag `v0.4.0` used that identifier as the repository grant.
+Project-owned rows below are redistributable under Apache-2.0. See [LICENSE.md](../LICENSE.md). Cells that still name `PolyForm-Noncommercial-1.0.0` are the sealed identifier stored in those content-addressed files. Tag `v0.4.0` used that identifier as the repository grant. Upstream rows keep their own dataset licenses.
 
 | Asset | Location | Origin | License / redistribution | Data class | Use in score |
 |---|---|---|---|---|---|

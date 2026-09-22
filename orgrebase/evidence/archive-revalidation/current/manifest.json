@@ -184,7 +184,7 @@
     "scripts/workspace_evaluate.py": "afb4b778d1127b8fc72a44c8dbfecd75cf6441e2bdaf8cb186f8bb1dff01126b",
     "scripts/revalidate_archives.py": "2f18ccf11e580497aee6ca59d794f7ec11e64e321a324b69757ed7b05957aa38",
     "uv.lock": "6cfdfc444016d1b318313447964456d2ecad57e4aacf868e8c3610c8629c6a3d",
-    "pyproject.toml": "21d854ab93865c752ac4d6365445bd19b7655f8ceff7811b2a7f2f5c37e2ff17"
+    "pyproject.toml": "4cae2bd38fd4f474a7950119cede87e5e0482793949c5df4a806904084dc2b93"
   },
   "lanes": {
     "bpi": {
@@ -314,5 +314,5 @@
       }
     }
   },
-  "digest": "sha256:b752b2c913073b42618af847004fe71d058feee5e1d13a23a2d4462119f73e16"
+  "digest": "sha256:b610390c6b8f65a7a26524c1642ea040d15284e1a7bb0a47642387889c1f98cf"
 }

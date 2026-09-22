@@ -8,9 +8,9 @@
 
 现状：公开仓库是工作区根。上述产品文件在`orgrebase/`下，旁边是独立的`oac-spec/`。`git clone`之后进入`orgrebase/`再执行`uv sync`、`make check-core`和文档站构建。部署文件、客户凭据与运行数据库仍分别管理。
 
-为什么：一次 clone 带上配套 OAC，同时不把 OAC 嵌进产品包，也不改写其 Apache-2.0 / CC BY 4.0。
+为什么：一次 clone 带上配套 OAC，同时不把 OAC 嵌进产品包，也不改写其 Apache-2.0。
 
-OAC是独立依赖。原先：GitHub 产品根不含 OAC，完整源码分发才并列 `orgrebase/` 与 `oac-spec/`；单独产品仓库需另取版本放到`../oac-spec`或配置`ORGREBASE_OAC_ROOT`。现状：若按工作区发布，一次 clone 的仓库根即含两棵树，默认`../oac-spec`可用。为什么：配套交付，同时避免把 OAC 嵌进产品包内部或改写其 Apache-2.0 / CC BY 4.0 许可。完整CI在产品根布局下通过`OAC_REPOSITORY`与40位`OAC_REVISION`绑定；改为工作区后应在`orgrebase/`子目录跑检查，并直接使用仓库内的`oac-spec/`。core CI不需要 OAC。
+OAC是独立依赖。原先：GitHub 产品根不含 OAC，完整源码分发才并列 `orgrebase/` 与 `oac-spec/`；单独产品仓库需另取版本放到`../oac-spec`或配置`ORGREBASE_OAC_ROOT`。现状：若按工作区发布，一次 clone 的仓库根即含两棵树，默认`../oac-spec`可用。为什么：配套交付，同时避免把 OAC 嵌进产品包内部或改写其 Apache-2.0 许可。完整CI在产品根布局下通过`OAC_REPOSITORY`与40位`OAC_REVISION`绑定；改为工作区后应在`orgrebase/`子目录跑检查，并直接使用仓库内的`oac-spec/`。core CI不需要 OAC。
 
 ## 发布前检查
 

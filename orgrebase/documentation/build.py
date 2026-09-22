@@ -351,7 +351,7 @@ def main() -> int:
             "未分发的历史或大文件会明确提示，不替换成远端旧版本。\n\n"
             "仓库 main、已发布版本与本站快照可能不同。复现时使用对应源码ZIP和SHA清单，"
             "或取得相同的精确源码版本。分发包与本站源码下载应使用同一ZIP与摘要。\n\n"
-            "OrgRebase 项目自有材料与 OAC 使用同一套路径许可（Apache-2.0 与 CC BY 4.0）；建站不改变第三方许可。"
+            "OrgRebase 与 OAC 的项目自有材料适用 Apache-2.0；建站不改变第三方许可。"
             "只有经过实际发布的站点才可称为公网文档；本地构建不会上传或推送。\n",
             encoding="utf-8",
         )
@@ -370,7 +370,7 @@ def main() -> int:
             f"Content identity for documents, referenced source and site tooling: `{digest}`. This is not a whole-product source digest or release qualification.\n\n"
             "[Per-file source manifest](source-manifest.json) records the bytes used. Local source-reference pages never substitute a different remote main revision. Directories, large files and missing historical assets are explicitly distinguished.\n\n"
             "Repository main, published releases and this site snapshot may differ. Reproduce with the matching source ZIP and checksum, or the same exact source revision. The distribution and site source download should use the same ZIP and digest.\n\n"
-            "OrgRebase project-owned material uses the same Apache-2.0 and CC BY 4.0 path licenses as OAC. A local site build does not change third-party licenses and does not push or publish a public website.\n",
+            "Project-owned OrgRebase and OAC material is Apache-2.0. A local site build does not change third-party licenses and does not push or publish a public website.\n",
             encoding="utf-8",
         )
         config = yaml.safe_load((ROOT / "documentation/mkdocs.yml").read_text())

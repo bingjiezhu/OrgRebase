@@ -24,11 +24,11 @@ can verify the same workflow files.
 
 | Asset | Path | Reuse contract |
 |---|---|---|
-| Control plane, WebUI, CLI | `orgrebase/src/orgrebase/` | Apache-2.0, same path split as OAC; normative prose is CC BY 4.0 |
+| Control plane, WebUI, CLI | `orgrebase/src/orgrebase/` | Apache-2.0 |
 | Skills | `orgrebase/skills/` | Same product terms; packages are versioned and fail-closed |
 | Schemas and tests | `orgrebase/schemas/`, `orgrebase/tests/` | Same product terms |
 | Quote replay (no model) | `orgrebase/scripts/run_public_quote_replay.py` | Public historical baskets; controlled discount/tax/authority |
-| OAC contract, compiler, verifier, TCK | `oac-spec/` | Apache-2.0 (executable) and CC BY 4.0 (normative prose) |
+| OAC contract, compiler, verifier, TCK | `oac-spec/` | Apache-2.0 for project-owned material |
 | AgentTeams source pin | `orgrebase/vendor/agentteams/`, `orgrebase/agentteams/` | Apache-2.0 upstream, consumed here; see below |
 
 Step-by-step adaptation is in [`orgrebase/docs/REUSE-AND-LICENSING.md`](orgrebase/docs/REUSE-AND-LICENSING.md).
@@ -41,8 +41,8 @@ offline reconstruction and keeps OrgRebase adapters, locks, and candidate-only
 authority in project code. Presence of the pin does not relicense AgentTeams, does
 not make a live cluster `LIVE`, and is **not** an upstream contribution to AgentTeams.
 
-OAC is published in this same workspace so the contract can be reused under its own
-Apache-2.0 / CC BY 4.0 terms without being nested inside the OrgRebase Python package.
+OAC is published in this same workspace so the contract can be reused under Apache-2.0
+without being nested inside the OrgRebase Python package.
 
 No unaffiliated third-party production adoption is claimed. External reuse, Skill or
 Pack adaptation, and integration attempts should be filed with the

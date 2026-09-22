@@ -324,7 +324,6 @@ def test_offline_release_preserves_license_and_package_boundary(tmp_path) -> Non
         f"{dist_info}/licenses/LICENSE.md",
         f"{dist_info}/licenses/NOTICE.md",
         f"{dist_info}/licenses/LICENSES/Apache-2.0.txt",
-        f"{dist_info}/licenses/LICENSES/CC-BY-4.0.txt",
     }
     with zipfile.ZipFile(wheel) as archive:
         names = set(archive.namelist())
@@ -335,7 +334,6 @@ def test_offline_release_preserves_license_and_package_boundary(tmp_path) -> Non
     assert "License-File: LICENSE.md" in metadata
     assert "License-File: NOTICE.md" in metadata
     assert "License-File: LICENSES/Apache-2.0.txt" in metadata
-    assert "License-File: LICENSES/CC-BY-4.0.txt" in metadata
     assert "Provides-Extra: dev" in metadata
     assert "orgrebase/_assets/evidence/release-facts.json" in names
     assert "orgrebase/_assets/configs/oac/runtime-admission-policy.json" in names

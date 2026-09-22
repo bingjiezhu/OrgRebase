@@ -6,12 +6,12 @@
 
 OrgRebase 为员工任务形成最小且符合契约的 Agent 团队，让 Agent、Tool 和 Skill 始终位于候选一侧，并只更新被证明受影响的业务对象。
 
-一次 clone 包含两棵树。OrgRebase 使用 PolyForm Noncommercial 1.0.0，**不是** OSI 开源。OAC 在自己的路径上保持 Apache-2.0 与 CC BY 4.0。当前公开修订是 `main`。标签 `v0.4.0` 是同一产品版本 0.4.0 的工作区快照。
+一次 clone 包含两棵树。OrgRebase 与 OAC 使用同一套路径许可：可执行和机器可读资产适用 Apache-2.0，规范文字适用 CC BY 4.0。当前公开修订是 `main`。标签 `v0.4.0` 是产品 0.4.0 在 PolyForm Noncommercial 时期的快照。
 
 [![CI](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml/badge.svg)](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml)
 [![文档](https://img.shields.io/badge/docs-GitHub%20Pages-0A66C2)](https://bingjiezhu.github.io/OrgRebase/)
 [![Release](https://img.shields.io/github/v/release/bingjiezhu/OrgRebase)](https://github.com/bingjiezhu/OrgRebase/releases)
-[![License](https://img.shields.io/badge/license-PolyForm%20NC%20%2B%20Apache--2.0%2FCC--BY-lightgrey)](LICENSES.md)
+[![License](https://img.shields.io/badge/license-Apache--2.0%20%2B%20CC--BY--4.0-blue)](LICENSES.md)
 
 | 路径 | 内容 | 版本 |
 |---|---|---|
@@ -96,4 +96,4 @@ Core CI 在每次 push 运行。完整 OAC + PostgreSQL 仅 `workflow_dispatch`�
 
 本仓库不宣称无关第三方的生产采用。复用尝试请用 Reuse Issue 模板登记。
 
-许可索引：[LICENSES.md](LICENSES.md)。OrgRebase 商业使用需要单独书面授权。
+许可索引：[LICENSES.md](LICENSES.md)。可执行和机器可读的项目资产适用 Apache-2.0，规范文字适用 CC BY 4.0。

@@ -2,11 +2,14 @@
 
 Copyright 2026 Bingjie Zhu
 
-Project-owned source, documentation, fixtures, and the bundled synthetic benchmark
-are licensed under the PolyForm Noncommercial License 1.0.0. Commercial use requires
-a separate written license. See [LICENSE](LICENSE) and
-[COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md). This is source-available. It is not
-OSI Open Source.
+Earlier public revisions, including tag `v0.4.0`, licensed project-owned source under
+PolyForm Noncommercial 1.0.0, with commercial use reserved. This tree licenses
+project-owned source, documentation, fixtures, and the bundled synthetic benchmark
+under the same path licenses as OAC: Apache License 2.0 for executable and
+machine-readable assets, and CC BY 4.0 for normative prose. See [LICENSE](LICENSE),
+[LICENSE.md](LICENSE.md), and [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md).
+Content-addressed Skill and benchmark records may still contain the older SPDX
+identifier so retained evidence stays verifiable.
 
 Runtime dependencies are Authlib (BSD-3-Clause), HTTPX2 (BSD-3-Clause),
 FastAPI (MIT), Pydantic (MIT), rfc8785.py (Apache-2.0),

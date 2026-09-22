@@ -245,6 +245,7 @@ docs/README.md                 渐进披露索引
 vendor/agentteams/             可离线重建的锁定 AgentTeams 源 bundle
 ```
 
-贡献规则见 [CONTRIBUTING.md](CONTRIBUTING.md)。非商业使用适用
-[PolyForm Noncommercial 1.0.0](LICENSE)；商业使用需要[单独授权](COMMERCIAL-LICENSE.md)。
-本仓库不宣称为 OSI Open Source。
+贡献规则见 [CONTRIBUTING.md](CONTRIBUTING.md)。项目自有材料与 OAC 使用同一套路径许可：
+可执行和机器可读资产适用 [Apache License 2.0](LICENSE)，规范文字适用
+[CC BY 4.0](LICENSES/CC-BY-4.0.txt)。路径索引见 [LICENSE.md](LICENSE.md)。
+标签 `v0.4.0` 仍是此前的 PolyForm Noncommercial 快照。

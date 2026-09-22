@@ -175,6 +175,7 @@ ORGREBASE_RELEASE_ROOT_FILES = frozenset(
         "COMMERCIAL-LICENSE.md",
         "CONTRIBUTING.md",
         "LICENSE",
+        "LICENSE.md",
         "Makefile",
         "NOTICE.md",
         "README.md",
@@ -188,6 +189,7 @@ ORGREBASE_RELEASE_ROOT_FILES = frozenset(
     }
 )
 ORGREBASE_RELEASE_TREE_PREFIXES = (
+    "LICENSES",
     "agentteams",
     "configs",
     "contracts",
@@ -462,11 +464,11 @@ and documentation virtual environments are excluded from this source archive.
 
 ## Licensing
 
-Keep the original LICENSE, NOTICE, THIRD_PARTY and dataset attribution files.
-OrgRebase's source-available and commercial terms, OAC's path-specific terms and
-third-party licenses remain unchanged. Original license texts control; this guide
-and its translation do not create new rights. Customer deployment requires its own
-identity, connector, business-value and capacity acceptance.
+Keep the original LICENSE, LICENSE.md, NOTICE, THIRD_PARTY and dataset attribution files.
+OrgRebase and OAC use Apache-2.0 for executable and machine-readable assets and CC BY 4.0
+for normative prose. Third-party licenses remain their own terms. Original license texts
+control; this guide and its translation do not create new rights. Customer deployment
+requires its own identity, connector, business-value and capacity acceptance.
 """
 ENTRY_ZH = """# OrgRebase 可执行源码使用说明
 
@@ -568,16 +570,15 @@ to their respective paths. 本索引不新增授权，各路径以原始许可�
 
 | Component / 组件 | Terms and attribution / 条款与归属 |
 |---|---|
-| OrgRebase | [LICENSE](orgrebase/LICENSE), [commercial terms](orgrebase/COMMERCIAL-LICENSE.md), [NOTICE](orgrebase/NOTICE.md) |
+| OrgRebase | [Apache-2.0](orgrebase/LICENSE), [path index](orgrebase/LICENSE.md), [texts](orgrebase/LICENSES/), [NOTICE](orgrebase/NOTICE.md) |
 | OAC | [License scope](oac-spec/LICENSE.md), [license texts](oac-spec/LICENSES/), [NOTICE](oac-spec/NOTICE.md), [third parties](oac-spec/THIRD_PARTY.yml) |
 | AgentTeams source | [Source and upstream license](orgrebase/vendor/agentteams/README.md), [pinned source lock](orgrebase/agentteams/teamharness-lock.json) |
 | Public retail sample | [Attribution and license](orgrebase/benchmark/public-retail-quote/v1/LICENSE.md) |
 | Product dependencies and reuse | [Third-party inventory](orgrebase/docs/THIRD-PARTY-INVENTORY.md), [reuse guide](orgrebase/docs/REUSE-AND-LICENSING.md) |
 
-OrgRebase uses PolyForm Noncommercial 1.0.0 with separate commercial licensing.
-Publishing its source does not make it an unrestricted commercial-use license.
-OAC and upstream components retain their own terms; this archive does not relicense
-them. OrgRebase 商业用途需要独立授权；公开源代码不改变原有许可。
+OrgRebase and OAC use the same path licenses: Apache-2.0 for executable and
+machine-readable assets, CC BY 4.0 for normative prose. Tag `v0.4.0` remains the
+earlier PolyForm Noncommercial grant. Upstream components keep their own terms.
 """
 
 
@@ -1559,7 +1560,7 @@ def _verify_runtime_profile_closure(snapshot_root: Path) -> dict[str, Any]:
         required.extend(f"{component}/{name}" for name in ("README.md", "uv.lock"))
         if component == "orgrebase":
             required.extend(f"orgrebase/{name}" for name in (
-                "LICENSE", "NOTICE.md", "COMMERCIAL-LICENSE.md", "CONTRIBUTING.md",
+                "LICENSE", "LICENSE.md", "NOTICE.md", "COMMERCIAL-LICENSE.md", "CONTRIBUTING.md",
                 "run-semifinal-demo.sh", "run-enterprise-pilot.sh", "scripts/fetch_pinned_agentteams.py",
                 "agentteams/teamharness-lock.json", "scripts/run_public_quote_replay.py",
                 "benchmark/public-retail-quote/v1/sample.json", "benchmark/public-retail-quote/v1/LICENSE.md",

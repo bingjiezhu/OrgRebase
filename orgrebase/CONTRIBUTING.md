@@ -93,14 +93,12 @@ Security reports follow [SECURITY.md](SECURITY.md).
 
 ## License and copyright
 
-OrgRebase is source-available under a dual-license model. See [LICENSE](LICENSE) and
+Project-owned OrgRebase material uses the same path licenses as OAC. See
+[LICENSE.md](LICENSE.md): Apache License 2.0 for executable and machine-readable
+assets, and CC BY 4.0 for normative prose. Earlier public revisions used PolyForm
+Noncommercial 1.0.0 plus a separate commercial grant; that history is in
 [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md).
 
 By submitting a contribution, you confirm that you have the right to submit it, and you
-license it to **Bingjie Zhu** under the same dual-license terms: PolyForm Noncommercial
-License 1.0.0 for non-commercial use, plus the right to sublicense the contribution as
-part of OrgRebase under a separate commercial license. You keep copyright in your
-contribution unless a later CLA says otherwise.
-
-This inbound grant is what keeps future commercial licensing possible as the project
-takes outside patches.
+license it to **Bingjie Zhu** under those same path licenses so it can be distributed
+with OrgRebase. You keep copyright in your contribution unless a later CLA says otherwise.

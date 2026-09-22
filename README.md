@@ -6,12 +6,12 @@
 
 OrgRebase forms the smallest contract-valid Agent team for an employee task, keeps Agents, Tools and Skills on the candidate side of the authority boundary, and selectively updates only the business objects proven to be affected.
 
-One clone contains both trees. OrgRebase is PolyForm Noncommercial 1.0.0; it is **not** OSI Open Source. OAC keeps Apache-2.0 and CC BY 4.0 on its own paths. The current public revision is `main`. Tag `v0.4.0` is the workspace snapshot of the same 0.4.0 product.
+One clone contains both trees. OrgRebase and OAC use the same path licenses: Apache-2.0 for executable and machine-readable assets, CC BY 4.0 for normative prose. The current public revision is `main`. Tag `v0.4.0` is the earlier PolyForm Noncommercial snapshot of product 0.4.0.
 
 [![CI](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml/badge.svg)](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0A66C2)](https://bingjiezhu.github.io/OrgRebase/en/)
 [![Release](https://img.shields.io/github/v/release/bingjiezhu/OrgRebase)](https://github.com/bingjiezhu/OrgRebase/releases)
-[![License](https://img.shields.io/badge/license-PolyForm%20NC%20%2B%20Apache--2.0%2FCC--BY-lightgrey)](LICENSES.md)
+[![License](https://img.shields.io/badge/license-Apache--2.0%20%2B%20CC--BY--4.0-blue)](LICENSES.md)
 
 | Path | What it is | Version |
 |---|---|---|
@@ -116,4 +116,4 @@ This repository does not claim unaffiliated production deployments. Record a reu
 
 ## License
 
-See [LICENSES.md](LICENSES.md). Commercial use of OrgRebase needs a separate written grant.
+See [LICENSES.md](LICENSES.md). Executable and machine-readable project assets are Apache-2.0. Normative prose is CC BY 4.0.

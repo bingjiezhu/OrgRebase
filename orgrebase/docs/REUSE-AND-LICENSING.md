@@ -155,9 +155,9 @@ service. Verification never approves or applies a change. See the
 
 | Material | Current terms | Adoption boundary |
 |---|---|---|
-| OrgRebase engine, project-authored adapters, documentation and synthetic fixtures | [PolyForm Noncommercial 1.0.0](../LICENSE) | Source-available, not OSI Open Source. Commercial use requires the separate written grant described in [COMMERCIAL-LICENSE.md](../COMMERCIAL-LICENSE.md). |
-| Project-owned domain rules and Skill packages | Same product terms; package `license` and contract `distribution.license` record the identifier | A reusable interface does not grant unrestricted commercial reuse. Check the exact package and resource digests. |
-| Separate OAC reference repository | Apache-2.0 for executable assets; CC BY 4.0 for normative prose, as allocated by its `LICENSE.md` | OAC's licenses do not relicense OrgRebase. Its proposed-standard status does not establish external certification. |
+| OrgRebase engine, project-authored adapters, documentation and synthetic fixtures | [Apache-2.0](../LICENSE) and [CC BY 4.0](../LICENSES/CC-BY-4.0.txt), allocated by [LICENSE.md](../LICENSE.md) | Same path licenses as OAC. Earlier public revisions used PolyForm Noncommercial 1.0.0; see [COMMERCIAL-LICENSE.md](../COMMERCIAL-LICENSE.md). |
+| Project-owned domain rules and Skill packages | Apache-2.0 for the current tree. Sealed package `license` and contract `distribution.license` may still read `PolyForm-Noncommercial-1.0.0` | That sealed identifier keeps historical content addresses stable. Check the exact package and resource digests. |
+| OAC, in this workspace or beside it | Apache-2.0 for executable assets; CC BY 4.0 for normative prose, as allocated by its `LICENSE.md` | Same path model as OrgRebase. Its proposed-standard status does not establish external certification. |
 | Upstream AgentTeams | Apache-2.0 | The [vendor notice](../vendor/agentteams/README.md) identifies the exact reconstructable source bundle. Project-authored integration code retains the product terms. |
 | Python and database dependencies | Each distribution's own terms; see [third-party inventory](THIRD-PARTY-INVENTORY.md) and [NOTICE.md](../NOTICE.md) | Psycopg and psycopg-binary are LGPL-3.0-only in the current lock. Preserve their notices and review the exact distributions supplied to customers. |
 | Enterprise data, hosted services and optional datasets | Customer contracts, provider terms or the stated dataset license | Product permission does not grant rights to third-party data or services. See [data and privacy](WORKSPACE-DATA-AND-PRIVACY.md). |
@@ -169,9 +169,10 @@ tree has only one license. The generated SBOM records versions, relationships an
 artifact bindings; its components currently have no license fields, so use the
 distribution license files as well when reviewing a delivery.
 
-The product [LICENSE](../LICENSE) already contains a Patent License and Patent Defense
-section. This guide adds no patent grant, commercial agreement, contribution agreement
-or service commitment.
+Apache-2.0 section 3 is the patent license for executable project assets. The earlier
+PolyForm text also contained a patent defense termination; that text remains the grant
+for revisions that still carry it, including tag `v0.4.0`. This guide adds no further
+patent grant, contribution agreement, or service commitment.
 
 ## What an evaluator can reproduce
 

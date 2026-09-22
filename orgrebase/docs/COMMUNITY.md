@@ -27,7 +27,7 @@ can verify the same workflow files.
 
 | Asset | Path | Reuse contract |
 |---|---|---|
-| Control plane, WebUI, CLI | `src/orgrebase/` | PolyForm Noncommercial 1.0.0; commercial use needs a written grant |
+| Control plane, WebUI, CLI | `src/orgrebase/` | Apache-2.0, same path split as OAC; normative prose is CC BY 4.0 |
 | Skills | `skills/` | Same product terms; packages are versioned and fail-closed |
 | Schemas and tests | `schemas/`, `tests/` | Same product terms |
 | Quote replay (no model) | `scripts/run_public_quote_replay.py` | Public historical baskets; controlled discount/tax/authority |

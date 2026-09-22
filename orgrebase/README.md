@@ -271,6 +271,7 @@ docs/README.md                 progressive context index
 vendor/agentteams/             pinned offline-reconstructable AgentTeams source bundle
 ```
 
-For contribution rules, see [CONTRIBUTING.md](CONTRIBUTING.md). Non-commercial use is governed by
-[PolyForm Noncommercial 1.0.0](LICENSE); commercial use requires [a separate grant](COMMERCIAL-LICENSE.md).
-This repository does not claim to be OSI Open Source.
+For contribution rules, see [CONTRIBUTING.md](CONTRIBUTING.md). Project-owned material uses the
+same path licenses as OAC: [Apache License 2.0](LICENSE) for executable and machine-readable
+assets, and [CC BY 4.0](LICENSES/CC-BY-4.0.txt) for normative prose. The path index is
+[LICENSE.md](LICENSE.md). Tag `v0.4.0` remains the earlier PolyForm Noncommercial snapshot.

@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-None. The public tree is version 0.4.0.
+- Project-owned OrgRebase material is offered under the same path licenses as OAC: Apache-2.0 for executable and machine-readable assets, CC BY 4.0 for normative prose. Tag `v0.4.0` and earlier public revisions remain PolyForm Noncommercial 1.0.0.
+
+The public tree is version 0.4.0.
 
 ## 0.4.0 — 2026-09-20 (public workspace)
 

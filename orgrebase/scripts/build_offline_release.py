@@ -285,6 +285,8 @@ SDIST_TOP_LEVEL = (
     "CONTRIBUTING.md",
     "COMMERCIAL-LICENSE.md",
     "LICENSE",
+    "LICENSE.md",
+    "LICENSES",
     "Makefile",
     "NOTICE.md",
     "README.md",

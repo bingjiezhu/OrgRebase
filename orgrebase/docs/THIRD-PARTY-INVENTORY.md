@@ -23,7 +23,7 @@
 
 The development extra directly requests `pytest==9.1.1` (MIT), `pytest-cov==7.1.0` (MIT), `PyYAML==6.0.3` (MIT), and `ruff==0.16.3` (MIT). PyYAML also belongs to the resolved runtime through Uvicorn's standard extra. Complete transitive versions are in `uv.lock`; `requirements.txt` is the frozen runtime export and `requirements-dev.txt` is its frozen additive development delta. `NOTICE.md` records the release-level license boundary.
 
-Project-owned code, documentation, Skills, fixtures, and synthetic benchmark use `PolyForm-Noncommercial-1.0.0`. Commercial use requires a separate license. This does not relicense AgentTeams or any Python dependency.
+Project-owned code, documentation, Skills, fixtures, and the synthetic benchmark are offered under the path licenses in [LICENSE.md](../LICENSE.md): Apache-2.0 and CC BY 4.0, the same split as OAC. Earlier revisions used `PolyForm-Noncommercial-1.0.0`. This grant does not relicense AgentTeams, Python dependencies, or optional models. Sealed Skill and dataset manifests may still record the older SPDX identifier.
 
 ## Local reference model
 

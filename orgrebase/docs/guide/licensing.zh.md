@@ -1,22 +1,26 @@
 # 许可与证据范围
 
-OrgRebase是**source-available（源码可用）**项目，不是OSI开源。研究、学习和其他非商业使用按PolyForm Noncommercial 1.0.0原文执行；商业用途需权利人另行书面许可。文档站和分发包不改变这些条款。
+OrgRebase 的项目自有材料与 OAC 使用同一套路径许可。
 
 | 内容 | 适用范围 |
 |---|---|
-| OrgRebase自有代码、文档与Skill | [LICENSE](../../LICENSE)、[商业许可说明](../../COMMERCIAL-LICENSE.md) |
-| OAC | 代码/Schema等与规范文字按其路径分别适用Apache-2.0、CC BY 4.0；查看OAC LICENSE.md |
-| AgentTeams及Python依赖 | 各自上游许可；产品许可不替代第三方许可 |
-| UCI商品样本 | CC BY 4.0，保留来源和转换说明；不代表UCI认可产品 |
+| 可执行和机器可读资产，包括代码与 Skill | [Apache License 2.0](../../LICENSE) |
+| 规范文字 | [CC BY 4.0](../../LICENSES/CC-BY-4.0.txt) |
+| 路径索引与此前的商业使用说明 | [LICENSE.md](../../LICENSE.md)、[COMMERCIAL-LICENSE.md](../../COMMERCIAL-LICENSE.md) |
+| OAC | 代码/Schema 等与规范文字按其路径分别适用 Apache-2.0、CC BY 4.0；查看 OAC LICENSE.md |
+| AgentTeams 及 Python 依赖 | 各自上游许可 |
+| UCI 商品样本 | CC BY 4.0，保留来源和转换说明；不代表 UCI 认可产品 |
 | 云模型与备用本地模型 | 各自服务或模型条款；软件客户端许可不替代模型许可 |
 
-Vertex和DeepSeek配置成功不自动授予客户数据外发权限。部署方应核对使用条款、数据流向与组织授权。备用qwen2.5:3b受Qwen Research License限制，商业使用需上游许可；OrgRebase不分发其权重。
+原先公开修订，包括标签 `v0.4.0`，使用 PolyForm Noncommercial 1.0.0，商业使用需另行书面授权。当前树把项目自有材料的商业使用纳入 Apache-2.0 与 CC BY 4.0。文档站和分发包不另设一套许可。
+
+Vertex 和 DeepSeek 配置成功不自动授予客户数据外发权限。部署方应核对使用条款、数据流向与组织授权。备用 qwen2.5:3b 受 Qwen Research License 限制，商业使用需上游许可；OrgRebase 不分发其权重。
 
 ## 不混用验证等级
 
 - 同运行回执证明所记录的任务、批准与结果，不证明客户付费。
 - 历史公开交易可用于计价核验，受控税率和折扣不是真实历史政策。
-- OWB是平行参考SUT的构造机制对照，不是真实LLM单/多Agent优越性试验。
-- 静态源码、安装测试与本地运行不能替代生产容量、客户IAM与连接器资格。
+- OWB 是平行参考 SUT 的构造机制对照，不是真实 LLM 单/多 Agent 优越性试验。
+- 静态源码、安装测试与本地运行不能替代生产容量、客户 IAM 与连接器资格。
 
 [完整第三方清单](../THIRD-PARTY-INVENTORY.md)和[历史/当前构建边界](../HISTORICAL-BUILD-VERIFICATION.md)保留更细说明。报告需保留实际运行身份、失败和未完成数量，并使用各材料对应的许可。

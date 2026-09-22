@@ -4,6 +4,8 @@
 
 The executable reference profile is self-contained and uses fictional organizations, users, customers, policies, clauses, and changes. No real customer, employee, contract, credential, production telemetry, or user-research record is bundled.
 
+Project-owned rows below are redistributable under the current path licenses in [LICENSE.md](../LICENSE.md) (Apache-2.0 for machine-readable assets, CC BY 4.0 for normative prose). Cells that still name `PolyForm-Noncommercial-1.0.0` are the sealed identifier stored in those content-addressed files. Tag `v0.4.0` used that identifier as the repository grant.
+
 | Asset | Location | Origin | License / redistribution | Data class | Use in score |
 |---|---|---|---|---|---|
 | OWB v1.1 open-core organizations and cases | `benchmark/orgworkbench/sources`, `public` | project-generated | PolyForm-Noncommercial-1.0.0; bundled | synthetic, no PII | canonical |
@@ -25,7 +27,7 @@ The machine-readable canonical inventory is `benchmark/orgworkbench/license-mani
 
 ### License boundary
 
-Project-owned source, documentation, fixtures, synthetic benchmark assets, and Skill contracts use `PolyForm-Noncommercial-1.0.0`; commercial use requires a separate written license. The current Skill registry heads are `enterprise-launch-readiness@1.4.2`, `enterprise-quote-compose@1.3.1`, and `structured-domain-handoff@1.1.2`; each manifest-v2 package records the same distribution license and binds its exact contract, program, single canonical `SKILL.md`, and input/output Schema bytes. Bilingual discovery terms and Chinese/English references do not create a second executable Skill copy. The controlled lifecycle loads those resources from an isolated installed wheel, uses local-only Schema resolution, and retains fresh-requalification receipts. This remains process-local packaging evidence, not persistent external trust or cross-enterprise qualification. `enterprise-launch-readiness@1.3` is retained as an exact legacy contract for older runtime/GOAI evidence and is not the current registry head. FastAPI, Pydantic, Uvicorn, AgentTeams, and optional datasets retain their upstream licenses. See `LICENSE`, `COMMERCIAL-LICENSE.md`, `NOTICE.md`, and `THIRD-PARTY-INVENTORY.md`.
+Project-owned source, documentation, fixtures, synthetic benchmark assets, and Skill contracts in this tree are covered by the path licenses in [LICENSE.md](../LICENSE.md). The current Skill registry heads are `enterprise-launch-readiness@1.4.2`, `enterprise-quote-compose@1.3.1`, and `structured-domain-handoff@1.1.2`; each manifest-v2 package records the same distribution license and binds its exact contract, program, single canonical `SKILL.md`, and input/output Schema bytes. Bilingual discovery terms and Chinese/English references do not create a second executable Skill copy. The controlled lifecycle loads those resources from an isolated installed wheel, uses local-only Schema resolution, and retains fresh-requalification receipts. This remains process-local packaging evidence, not persistent external trust or cross-enterprise qualification. `enterprise-launch-readiness@1.3` is retained as an exact legacy contract for older runtime/GOAI evidence and is not the current registry head. FastAPI, Pydantic, Uvicorn, AgentTeams, and optional datasets retain their upstream licenses. See `LICENSE`, `COMMERCIAL-LICENSE.md`, `NOTICE.md`, and `THIRD-PARTY-INVENTORY.md`.
 
 Publisher pages identify Microsoft `sql-server-samples` as MIT, and CUAD / ContractNLI as CC-BY-4.0. These external assets remain disabled, unbundled, non-scoring, and unusable until an exact version/commit and checksum are recorded.
 
@@ -54,7 +56,7 @@ from a customer system and contains no real person, company, contract or quote. 
 the Pack's exact content digests; the Golden run then derives task envelopes, the intentional Finance-A1 missing-
 evidence fault, HTTP Source/Tool results and receipts from those project-owned bytes. The injected fault is labelled
 `SYNTHETIC_FAULT_INJECTION`; the resulting ABSTAIN/REPLAN/Tool/PASS control flow is executed at runtime. Project
-ownership and redistribution follow `PolyForm-Noncommercial-1.0.0`; commercial use requires the separate grant in
+ownership and redistribution of these project-owned bytes follow [LICENSE.md](../LICENSE.md). The earlier separate commercial grant is described in
 `COMMERCIAL-LICENSE.md`.
 
 ## Data flow and minimization
@@ -170,7 +172,7 @@ collector configuration.
 
 | Data | Reference retention rule |
 |---|---|
-| Synthetic benchmark and generated evidence | may be retained with the release; PolyForm Noncommercial and no real PII |
+| Synthetic benchmark and generated evidence | may be retained with the release; Apache-2.0 for these project-owned bytes, and no real PII |
 | Local Workspace SQLite scratch database | delete after evidence export in the demo; production policy is deployment-specific |
 | Live model prompts/outputs | disabled in public evidence; provider-side retention is outside this project and must be reviewed |
 | Experience candidate and governance receipts | may be retained with the synthetic Golden pack; `SINGLE_RUN_SEED`, zero canonical writes, and exact source-run binding must remain attached |

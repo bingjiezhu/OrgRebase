@@ -1,13 +1,13 @@
 {
   "action": "submit_task",
-  "digest": "sha256:0ec55e799208887be0f8fea0d0d9a72a892186d8caac34ffa03457a873d9c99d",
+  "digest": "sha256:eb4cb6e97376c558e1097a59b90783235f54470313931d554a02f1297815d87d",
   "error": null,
   "key": "at-domain-product-f0e5afba2159:submit",
   "ok": true,
-  "payload_digest": "sha256:8059ab51977deefff90b41a84d6a0bd970e1af0da9f2d028e2e8649706692f81",
+  "payload_digest": "sha256:a2b64f821662804be51afa8710a3e41431803f128df0c2f227da054c22e27dd6",
   "raw_ref": "raw-mcp/011-at-domain-product-f0e5afba2159-submit-44f7f60e.json",
-  "request_digest": "sha256:14ace990eff53347ef4cfdf969957946460cbd015e502c045fb037c2d16549a8",
-  "response_digest": "sha256:c137a09ca9500ba0d106a87ed2c8bc47682ec1dc3219f72bdab9127edb4152eb",
+  "request_digest": "sha256:038aefad99e2293c42578e5086f68b0997bd5a24eb2a48ae49ac69a63fb96b6e",
+  "response_digest": "sha256:3a7f70d6d2b16d55c90fb3e465b7837de657a166311d292a185ac38077a7e48c",
   "sequence": 11,
   "status": "submitted",
   "tool": "taskflow"

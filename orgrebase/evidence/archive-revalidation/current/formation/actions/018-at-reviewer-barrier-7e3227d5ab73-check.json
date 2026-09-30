@@ -1,13 +1,13 @@
 {
   "action": "check_task",
-  "digest": "sha256:931d1fde34ff60e61995f5c91033a269e15a9dd2e8fa695791ee6009ab62e789",
+  "digest": "sha256:7343928577ded746295b1a89084166c7644fe86844f9c8b06aa6c308a9ec95a1",
   "error": null,
   "key": "at-reviewer-barrier-7e3227d5ab73:check",
   "ok": true,
-  "payload_digest": "sha256:8a484fe4509e7c240da9942eecd0b4d89b0ee92f27443c668385b0441a97a473",
+  "payload_digest": "sha256:390bc666b1da6eec3412a4ddff34893c0615ec313b301e09e753e466e363e972",
   "raw_ref": "raw-mcp/018-at-reviewer-barrier-7e3227d5ab73-check-98b6daae.json",
   "request_digest": "sha256:f77a7b4c78b9eae22f4a7d7d0bf025e368f5ce993ab5b59f9877829abf84301e",
-  "response_digest": "sha256:8aee6c11bbef9037775860ffde3bd77f90f81e2c3be970d75a45b3bf7f70247c",
+  "response_digest": "sha256:7228f7716d3d0308579e34b1d6178375a043eee7459ae38916cfae8bdb267115",
   "sequence": 18,
   "status": "submitted",
   "tool": "taskflow"

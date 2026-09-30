@@ -1,13 +1,13 @@
 {
   "action": "submit_task",
-  "digest": "sha256:af4f27f4e556a1acfaa89edad6b9764e391d344756b96f71bcc1b6cb885ce55e",
+  "digest": "sha256:fc922c5fcfd2284e6c411e1a50c7d928eabe04c7882df7d87c0a2f56029fb2c5",
   "error": null,
   "key": "at-domain-legal-a3f56c48b0c5:submit",
   "ok": true,
-  "payload_digest": "sha256:629156fd528344334b0bd6a3ee3db92174ec835357557095d7c94c4808feb927",
+  "payload_digest": "sha256:1290996ee9e2791efcb25390e0c58ca51aad5d3f50c7a44b242d41f4b1408d7b",
   "raw_ref": "raw-mcp/006-at-domain-legal-a3f56c48b0c5-submit-ffb3adc1.json",
-  "request_digest": "sha256:c5bc75052297c19f2dea2b4c1e816ae41e57c8f288a1256fcd882606657581eb",
-  "response_digest": "sha256:613f5ec8ef66953c1bb2816794a85342872262191bac8d551a8da6f2b91eedb6",
+  "request_digest": "sha256:fe96b0c2a299263e27db1010dd9a63ed71cdba58c29cff177461712c4ea5e300",
+  "response_digest": "sha256:f53c619b1d37e574715618aaf28b42bbbb4110fdae98f742b49c755e1463751c",
   "sequence": 6,
   "status": "submitted",
   "tool": "taskflow"

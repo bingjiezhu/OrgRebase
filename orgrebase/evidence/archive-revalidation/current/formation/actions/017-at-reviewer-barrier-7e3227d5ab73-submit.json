@@ -1,13 +1,13 @@
 {
   "action": "submit_task",
-  "digest": "sha256:b642f12b1056d52ad56d6183b320274825d1c0f87a8a6026e4d2dd9ee6d411ef",
+  "digest": "sha256:13824c0763be9c6a281ad9127fa2f432d3354a94c34c5b431799c88097f9adcf",
   "error": null,
   "key": "at-reviewer-barrier-7e3227d5ab73:submit",
   "ok": true,
-  "payload_digest": "sha256:7cc8264fb24fd8f54f950f86c65c1ac402944577c5e3055bbfa92a593d785755",
+  "payload_digest": "sha256:307aa8567b5c60ad4a1212437d16469591f91ad9c7cb22d8e90334a6c1981bed",
   "raw_ref": "raw-mcp/017-at-reviewer-barrier-7e3227d5ab73-submit-789987ca.json",
-  "request_digest": "sha256:0048e040954abe62e0068cb696e9dd289eab41670fbd0a6bf1d41fb016cdb1cd",
-  "response_digest": "sha256:f1c7c3ad45e10fc4177d80b51efd90dff4a18b77e68ed2fb6cf27c7babe730c9",
+  "request_digest": "sha256:fd20938d0fff96517a62ef6d88fb457ec864732518e1e946a3a1b4124ba36011",
+  "response_digest": "sha256:c182107f6aef07de77647ce11210702c05f24d1a61b6b85e14bca5e032f3e131",
   "sequence": 17,
   "status": "submitted",
   "tool": "taskflow"

@@ -1,13 +1,13 @@
 {
   "action": "delegate_task",
-  "digest": "sha256:a1763b14a91adb0f64f1ecf00d277e23bf4913500eff43891339382cf903e728",
+  "digest": "sha256:7c1ead6f2e195a8c1a4c402bdfa7213695d7a81a8e5263244e48a547397f1a4d",
   "error": null,
   "key": "at-domain-legal-a3f56c48b0c5:delegate",
   "ok": true,
-  "payload_digest": "sha256:bff1b5b969769595ff0049e45b22e038477c519a1b29a08e3ede070763943230",
+  "payload_digest": "sha256:9ca38168c18b9e130d26224f3f9956785b19fe19991a5cbf78e41474c4185c90",
   "raw_ref": "raw-mcp/004-at-domain-legal-a3f56c48b0c5-delegate-227a85b8.json",
-  "request_digest": "sha256:1c3eea4d20029ddc9ef66a997f9897605ceee76ffd4849dbff0866c064b8035a",
-  "response_digest": "sha256:e3e8bd6424e752fb1b7e7ac12637ad7e992513b86873139d24ddd1036b2e8639",
+  "request_digest": "sha256:b5839debaf25725beb00dbfca67d8645a5495cdcbdac53cfb6e0e077d4c71a7c",
+  "response_digest": "sha256:fe57a9fc000e86d8bf6dd3c99d71e371e5f1f0a305c29433b7a0d066224805cc",
   "sequence": 4,
   "status": "assigned",
   "tool": "taskflow"

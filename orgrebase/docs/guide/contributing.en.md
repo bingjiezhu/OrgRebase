@@ -5,11 +5,11 @@ Prefer small changes with a clear problem and a verifiable boundary. Preserve th
 ## Development and checks
 
 ```bash
-uv sync --locked --all-extras
+uv sync --locked --extra dev
 make check-core
 ```
 
-`check-core` is a bounded contributor check. It needs no sibling OAC checkout, PostgreSQL or service credentials, and does not replace full integration qualification. Full `make check` also needs the admitted OAC source, PostgreSQL tools and the corresponding historical archives. A lightweight distribution may omit those archives; skips or earlier results cannot qualify a complete release.
+Initial dependency installation needs network access or a complete cache. `check-core` reconstructs the pinned AgentTeams checkout from the included Git bundle. It is a bounded contributor check without a sibling OAC checkout, PostgreSQL or external service credentials; it does not replace integration qualification. The public workspace has separate OAC conformance and PostgreSQL enterprise boundary gates. Internal full `make check` also needs historical archives excluded from the public allowlist; skips or earlier results cannot qualify new source.
 
 Behavior changes should include failure cases and verification appropriate to their risk. For authorization or consistency fixes, preserve tests for wrong owners, stale digests, retries and unknown outcomes, and check that they still detect the corresponding errors.
 

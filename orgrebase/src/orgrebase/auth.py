@@ -5,10 +5,12 @@ from __future__ import annotations
 import json
 import ssl
 import time
+from collections import OrderedDict
 from collections.abc import Callable
 from contextvars import ContextVar
 from dataclasses import dataclass
 from pathlib import Path
+from threading import Condition
 from typing import Any
 from urllib.parse import urlparse
 
@@ -97,9 +99,156 @@ class IdentitySettings:
 
 
 class VerifiedJWKClient(PyJWKClient):
-    """Retain PyJWT verification and caching with a fixed, bounded TLS fetch."""
+    """Bound JWKS I/O, unknown-key refreshes and negative caching per process.
+
+    Resolve rotated keys through one in-flight fetch, a refresh cooldown and
+    a bounded cache of missing key IDs. Accept raw or parsed cached JWK Sets
+    while retaining the library's key validation and signature-key filtering.
+    """
+
+    def __init__(
+        self,
+        *args: Any,
+        refresh_cooldown: float = 5.0,
+        negative_cache_ttl: float = 5.0,
+        max_negative_kids: int = 256,
+        monotonic: Callable[[], float] = time.monotonic,
+        **kwargs: Any,
+    ) -> None:
+        if (
+            not 0 < refresh_cooldown <= 60
+            or not 0 < negative_cache_ttl <= 300
+            or not 1 <= max_negative_kids <= 4096
+        ):
+            raise ValueError("AUTH_JWKS_REFRESH_POLICY_INVALID")
+        self._refresh_cooldown = refresh_cooldown
+        self._negative_cache_ttl = negative_cache_ttl
+        self._max_negative_kids = max_negative_kids
+        self._monotonic = monotonic
+        self._refresh_condition = Condition()
+        self._refreshing = False
+        self._last_refresh: float | None = None
+        self._negative_kids: OrderedDict[str, float] = OrderedDict()
+        super().__init__(*args, **kwargs)
+
+    @staticmethod
+    def _signing_keys(data: Any) -> list[Any]:
+        if isinstance(data, jwt.PyJWKSet):
+            key_set = data
+        elif isinstance(data, dict):
+            key_set = jwt.PyJWKSet.from_dict(data)
+        else:
+            raise jwt.PyJWKClientError("The JWKS endpoint did not return a JSON object")
+        keys = [
+            key
+            for key in key_set.keys
+            if key.public_key_use in {"sig", None} and key.key_id
+        ]
+        if not keys:
+            raise jwt.PyJWKClientError("The JWKS endpoint did not contain any signing keys")
+        return keys
+
+    def _cached_key(self, kid: str) -> Any | None:
+        if self.jwk_set_cache is None:
+            return None
+        data = self.jwk_set_cache.get()
+        if data is None:
+            return None
+        return self.match_kid(self._signing_keys(data), kid)
+
+    def _negative_hit(self, kid: str, now: float) -> bool:
+        expired = [cached for cached, deadline in self._negative_kids.items() if deadline <= now]
+        for cached in expired:
+            self._negative_kids.pop(cached, None)
+        deadline = self._negative_kids.get(kid)
+        if deadline is None:
+            return False
+        self._negative_kids.move_to_end(kid)
+        return True
+
+    def _remember_negative(self, kid: str, now: float) -> None:
+        deadline = now + self._negative_cache_ttl
+        if self._last_refresh is not None:
+            deadline = min(deadline, self._last_refresh + self._refresh_cooldown)
+        self._negative_kids[kid] = deadline
+        self._negative_kids.move_to_end(kid)
+        while len(self._negative_kids) > self._max_negative_kids:
+            self._negative_kids.popitem(last=False)
+
+    @staticmethod
+    def _missing_key(kid: str) -> jwt.PyJWKClientError:
+        return jwt.PyJWKClientError(f'Unable to find a signing key that matches: "{kid}"')
+
+    def get_signing_key(self, kid: str) -> Any:
+        if (
+            not isinstance(kid, str)
+            or not 1 <= len(kid) <= 256
+            or any(ord(character) < 0x20 or ord(character) == 0x7F for character in kid)
+        ):
+            raise jwt.PyJWKClientError("AUTH_JWKS_KID_INVALID")
+
+        cached = self._cached_key(kid)
+        if cached is not None:
+            with self._refresh_condition:
+                self._negative_kids.pop(kid, None)
+            return cached
+
+        with self._refresh_condition:
+            while True:
+                cached = self._cached_key(kid)
+                if cached is not None:
+                    self._negative_kids.pop(kid, None)
+                    return cached
+                now = self._monotonic()
+                if self._negative_hit(kid, now):
+                    raise self._missing_key(kid)
+                if self._refreshing:
+                    # The network fetch itself is bounded by ``self.timeout``.
+                    # A stuck custom transport therefore fails closed rather
+                    # than allowing unbounded waiter accumulation.
+                    self._refresh_condition.wait(timeout=self.timeout + 1)
+                    if self._refreshing:
+                        raise jwt.PyJWKClientConnectionError("AUTH_JWKS_UNAVAILABLE")
+                    continue
+                if (
+                    self._last_refresh is not None
+                    and now - self._last_refresh < self._refresh_cooldown
+                ):
+                    self._remember_negative(kid, now)
+                    raise self._missing_key(kid)
+                self._refreshing = True
+                break
+
+        try:
+            data = self.fetch_data()
+            keys = self._signing_keys(data)
+            # Test transports and future PyJWT implementations need not cache
+            # inside fetch_data; make the single-flight result explicit.
+            if self.jwk_set_cache is not None:
+                self.jwk_set_cache.put(data)
+            matched = self.match_kid(keys, kid)
+        except BaseException:
+            with self._refresh_condition:
+                self._last_refresh = self._monotonic()
+                self._refreshing = False
+                self._refresh_condition.notify_all()
+            raise
+
+        with self._refresh_condition:
+            now = self._monotonic()
+            self._last_refresh = now
+            self._refreshing = False
+            if matched is None:
+                self._remember_negative(kid, now)
+            else:
+                self._negative_kids.pop(kid, None)
+            self._refresh_condition.notify_all()
+        if matched is None:
+            raise self._missing_key(kid)
+        return matched
 
     def fetch_data(self) -> Any:
+        deadline = self._monotonic() + self.timeout
         try:
             with (httpx.Client(verify=self.ssl_context or True, follow_redirects=False, trust_env=False,
                                timeout=self.timeout) as client,
@@ -107,14 +256,14 @@ class VerifiedJWKClient(PyJWKClient):
                 response.raise_for_status()
                 raw = bytearray()
                 for chunk in response.iter_bytes():
+                    if self._monotonic() >= deadline:
+                        raise ValueError("deadline")
                     raw.extend(chunk)
                     if len(raw) > 65_536:
                         raise ValueError("size")
             data = json.loads(raw, object_pairs_hook=_unique_object)
         except (httpx.HTTPError, ValueError, UnicodeError) as exc:
             raise jwt.PyJWKClientConnectionError("AUTH_JWKS_UNAVAILABLE") from exc
-        if self.jwk_set_cache is not None:
-            self.jwk_set_cache.put(data)
         return data
 
 
@@ -161,7 +310,9 @@ class JWTAuthenticator:
         try:
             header = jwt.get_unverified_header(token)
             if (header.get("alg") not in {"RS256", "ES256"}
-                    or not isinstance(header.get("kid"), str) or not header["kid"].strip()):
+                    or not isinstance(header.get("kid"), str) or not header["kid"].strip()
+                    or len(header["kid"]) > 256
+                    or any(ord(character) < 0x20 or ord(character) == 0x7F for character in header["kid"])):
                 raise AuthenticationError("AUTH_TOKEN_INVALID")
             key = self.keys.get_signing_key_from_jwt(token)
             claims = jwt.decode(
@@ -205,6 +356,22 @@ class JWTAuthenticator:
 
 
 def request_action(method: str, path: str) -> str:
+    if method == "POST" and path in {
+        "/api/workspace/experience-assessments",
+        "/api/workspace/experience-lessons/decisions",
+        "/api/workspace/experience-lessons/deltas/decisions",
+        "/api/workspace/governed-learning/quote-recovery-evaluations",
+    }:
+        return "govern"
+    if method == "POST" and path in {
+        "/api/workspace/experience-collector/collect",
+        "/api/workspace/experience-collector/revisit",
+    }:
+        # The deployment-bound reader service can record observations only;
+        # assess/release/publish remain separate governed commands.
+        return "read"
+    if path.startswith("/api/workspace/onboarding-draft"):
+        return "govern"
     if (method == "POST" and path.startswith("/api/workspace/organization/owner-changes/")
             and path.endswith(("/confirm", "/activate"))):
         return "approve"

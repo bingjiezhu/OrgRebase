@@ -1,0 +1,973 @@
+{
+  "$defs": {
+    "capabilityObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "errorCode": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "sutStatus": {
+          "$ref": "#/$defs/sutStatus"
+        }
+      },
+      "required": [
+        "sutStatus",
+        "errorCode"
+      ],
+      "type": "object"
+    },
+    "capabilityStatement": {
+      "additionalProperties": false,
+      "properties": {
+        "adapterProtocolVersion": {
+          "const": "oac.ctk.stdio/v1"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "implementationId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "implementationVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "observation": {
+          "$ref": "#/$defs/capabilityObservation"
+        },
+        "tracks": {
+          "items": {
+            "$ref": "#/$defs/track"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "implementationId",
+        "implementationVersion",
+        "adapterProtocolVersion",
+        "tracks"
+      ],
+      "type": "object"
+    },
+    "caseId": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string"
+    },
+    "caseResult": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "sutStatus": {
+                "enum": [
+                  "UNSUPPORTED",
+                  "RESOURCE_EXHAUSTED",
+                  "ERROR",
+                  "TIMEOUT",
+                  "CRASH"
+                ]
+              }
+            },
+            "required": [
+              "sutStatus"
+            ]
+          },
+          "then": {
+            "properties": {
+              "domainVerdict": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "domainVerdict": {
+                "enum": [
+                  "ACCEPT",
+                  "REJECT",
+                  "PROVISIONAL",
+                  "UNKNOWN"
+                ]
+              }
+            },
+            "required": [
+              "domainVerdict"
+            ]
+          },
+          "then": {
+            "properties": {
+              "caseOutcome": {
+                "enum": [
+                  "PASS",
+                  "FAIL"
+                ]
+              },
+              "stage": {
+                "const": "VERDICT"
+              },
+              "sutStatus": {
+                "const": "COMPLETED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "caseOutcome": {
+                "enum": [
+                  "NOT_SCORED",
+                  "NOT_RUN",
+                  "INDETERMINATE"
+                ]
+              }
+            },
+            "required": [
+              "caseOutcome"
+            ]
+          },
+          "then": {
+            "properties": {
+              "domainVerdict": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "caseOutcome": {
+                "const": "HARNESS_ERROR"
+              }
+            },
+            "required": [
+              "caseOutcome"
+            ]
+          },
+          "then": {
+            "properties": {
+              "domainVerdict": {
+                "type": "null"
+              },
+              "stage": {
+                "const": "HARNESS"
+              },
+              "sutStatus": {
+                "const": "ERROR"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "caseId": {
+          "$ref": "#/$defs/caseId"
+        },
+        "caseOutcome": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "NOT_SCORED",
+            "NOT_RUN",
+            "INDETERMINATE",
+            "HARNESS_ERROR"
+          ]
+        },
+        "domainVerdict": {
+          "enum": [
+            "ACCEPT",
+            "REJECT",
+            "PROVISIONAL",
+            "UNKNOWN",
+            null
+          ]
+        },
+        "elapsedMs": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "reasonCodes": {
+          "items": {
+            "$ref": "#/$defs/reasonCode"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "stage": {
+          "enum": [
+            "CAPABILITY",
+            "ADAPTER",
+            "HARNESS",
+            "PARSE",
+            "SCHEMA",
+            "CANONICAL_BYTES",
+            "DERIVATION",
+            "VERDICT",
+            "REASON_SET",
+            "WITNESS_BINDING",
+            "RESOURCE_EXHAUSTION"
+          ]
+        },
+        "sutStatus": {
+          "$ref": "#/$defs/sutStatus"
+        },
+        "testTarget": {
+          "enum": [
+            "SUT",
+            "HARNESS"
+          ]
+        }
+      },
+      "required": [
+        "caseId",
+        "caseOutcome",
+        "sutStatus",
+        "stage",
+        "reasonCodes",
+        "domainVerdict",
+        "elapsedMs",
+        "testTarget"
+      ],
+      "type": "object"
+    },
+    "disagreement": {
+      "$defs": {
+        "caseId": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string"
+        },
+        "digestMap": {
+          "additionalProperties": {
+            "$ref": "#/$defs/sha256Digest"
+          },
+          "minProperties": 1,
+          "propertyNames": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "extensions": {
+          "additionalProperties": true,
+          "propertyNames": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "generatedCase": {
+          "additionalProperties": false,
+          "properties": {
+            "extensions": {
+              "$ref": "#/$defs/extensions"
+            },
+            "generatorDigest": {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            "generatorId": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "generatorVersion": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "minimizedReproducerDigest": {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            "minimizerVersion": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "originalInputDigest": {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            "seed": {
+              "oneOf": [
+                {
+                  "maximum": 9007199254740991,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/$defs/nonEmptyString"
+                }
+              ]
+            }
+          },
+          "required": [
+            "generatorId",
+            "generatorVersion",
+            "generatorDigest",
+            "seed",
+            "originalInputDigest",
+            "minimizedReproducerDigest",
+            "minimizerVersion"
+          ],
+          "type": "object"
+        },
+        "nonEmptyString": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+          "type": "string"
+        },
+        "observation": {
+          "additionalProperties": false,
+          "properties": {
+            "artifactDigests": {
+              "$ref": "#/$defs/digestMap"
+            },
+            "extensions": {
+              "$ref": "#/$defs/extensions"
+            },
+            "implementationBuildDigest": {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            "implementationId": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "observationDigest": {
+              "$ref": "#/$defs/sha256Digest"
+            }
+          },
+          "required": [
+            "implementationId",
+            "implementationBuildDigest",
+            "artifactDigests",
+            "observationDigest"
+          ],
+          "type": "object"
+        },
+        "sha256Digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "$id": "https://oac.dev/schemas/ctk/v0alpha2/DisagreementRecord.schema.json",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "OPEN"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "regressionCaseRef": {
+                "type": "null"
+              },
+              "resolutionRef": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "RESOLVED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "regressionCaseRef": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "resolutionRef": {
+                "$ref": "#/$defs/nonEmptyString"
+              }
+            }
+          }
+        }
+      ],
+      "description": "Closed governance record for preserving a conformance disagreement without majority or reference-wins semantics.",
+      "properties": {
+        "affectedVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "apiVersion": {
+          "const": "oac.ctk.disagreement/v0.2"
+        },
+        "bundleDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "caseId": {
+          "$ref": "#/$defs/caseId"
+        },
+        "classification": {
+          "enum": [
+            "IMPLEMENTATION_DEFECT",
+            "SPECIFICATION_DEFECT",
+            "FIXTURE_DEFECT",
+            "HARNESS_DEFECT",
+            "CONTESTED_SEMANTICS",
+            "UNCLASSIFIED"
+          ]
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "disagreementId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "generatedCase": {
+          "$ref": "#/$defs/generatedCase"
+        },
+        "observations": {
+          "items": {
+            "$ref": "#/$defs/observation"
+          },
+          "minItems": 2,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "owner": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "regressionCaseRef": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resolutionRef": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stage": {
+          "enum": [
+            "ADAPTER",
+            "HARNESS",
+            "PARSE",
+            "SCHEMA",
+            "CANONICAL_BYTES",
+            "DERIVATION",
+            "VERDICT",
+            "REASON_SET",
+            "WITNESS_BINDING",
+            "RESOURCE_EXHAUSTION"
+          ]
+        },
+        "status": {
+          "enum": [
+            "OPEN",
+            "RESOLVED"
+          ]
+        }
+      },
+      "required": [
+        "apiVersion",
+        "disagreementId",
+        "caseId",
+        "bundleDigest",
+        "stage",
+        "observations",
+        "classification",
+        "status",
+        "owner",
+        "affectedVersion",
+        "resolutionRef",
+        "regressionCaseRef",
+        "digest"
+      ],
+      "title": "DisagreementRecord",
+      "type": "object"
+    },
+    "environment": {
+      "additionalProperties": false,
+      "properties": {
+        "machine": {
+          "maxLength": 512,
+          "type": "string"
+        },
+        "pythonImplementation": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "pythonVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "system": {
+          "maxLength": 512,
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "machine",
+        "pythonImplementation",
+        "pythonVersion"
+      ],
+      "type": "object"
+    },
+    "extensions": {
+      "additionalProperties": true,
+      "propertyNames": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "nonEmptyString": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "type": "string"
+    },
+    "operation": {
+      "enum": [
+        "canonicalize",
+        "deriveIdentifier",
+        "witness",
+        "strongKleene",
+        "closureMicro",
+        "resourceCheck"
+      ]
+    },
+    "reasonCode": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^[A-Z][A-Z0-9_]*(?::[A-Za-z][A-Za-z0-9_]*)?$",
+      "type": "string"
+    },
+    "sha256Digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "summary": {
+      "additionalProperties": false,
+      "properties": {
+        "failed": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notScored": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "passed": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "required": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "required",
+        "passed",
+        "failed",
+        "notScored"
+      ],
+      "type": "object"
+    },
+    "sutStatus": {
+      "enum": [
+        "COMPLETED",
+        "UNSUPPORTED",
+        "RESOURCE_EXHAUSTED",
+        "ERROR",
+        "TIMEOUT",
+        "CRASH"
+      ]
+    },
+    "track": {
+      "additionalProperties": false,
+      "properties": {
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "operation": {
+          "$ref": "#/$defs/operation"
+        },
+        "profileId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "profileVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "role": {
+          "const": "semantic-kernel"
+        },
+        "wireVersion": {
+          "const": "oac.ctk.stdio/v1"
+        }
+      },
+      "required": [
+        "role",
+        "operation",
+        "profileId",
+        "profileVersion",
+        "wireVersion"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/ctk/v0alpha2/RunResult.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural schema for the current Phase A runner result with distinct case, SUT, and domain outcome layers.",
+  "properties": {
+    "bundleDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "capabilityStatement": {
+      "$ref": "#/$defs/capabilityStatement"
+    },
+    "capabilityStatementDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "caseResults": {
+      "items": {
+        "$ref": "#/$defs/caseResult"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "claimBoundary": {
+      "const": "BOUNDED_CTK_NOT_ORGANIZATIONAL_INDEPENDENCE_OR_EXECUTION_ATTESTATION"
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "caseId": {
+            "type": "string"
+          },
+          "decodedResponse": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "elapsedMs": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "errorCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "requestDigest": {
+            "$ref": "#/$defs/sha256Digest"
+          },
+          "requestKind": {
+            "enum": [
+              "STDIO_REQUEST",
+              "HARNESS_RECIPE"
+            ]
+          },
+          "responseDigest": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/sha256Digest"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stage": {
+            "type": "string"
+          },
+          "stderrText": {
+            "maxLength": 8388608,
+            "type": "string"
+          },
+          "stderrTextDigest": {
+            "$ref": "#/$defs/sha256Digest"
+          },
+          "sutStatus": {
+            "type": "string"
+          },
+          "testTarget": {
+            "enum": [
+              "SUT",
+              "HARNESS"
+            ]
+          }
+        },
+        "required": [
+          "caseId",
+          "testTarget",
+          "requestKind",
+          "decodedResponse",
+          "stderrText",
+          "requestDigest",
+          "responseDigest",
+          "stderrTextDigest",
+          "sutStatus",
+          "stage",
+          "errorCode",
+          "elapsedMs"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "diagnosticsDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "disagreements": {
+      "items": {
+        "$ref": "#/$defs/disagreement"
+      },
+      "type": "array"
+    },
+    "disagreementsDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
+    },
+    "environmentDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    },
+    "implementationBuild": {
+      "additionalProperties": false,
+      "properties": {
+        "commandDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "evidenceClass": {
+          "const": "SELF_ATTESTED_LOCAL_MATERIAL_OBSERVATION"
+        },
+        "executable": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            "name": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "size": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "name",
+            "size",
+            "digest"
+          ],
+          "type": "object"
+        },
+        "runnerInputs": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "digest": {
+                "$ref": "#/$defs/sha256Digest"
+              },
+              "name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "size": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "name",
+              "size",
+              "digest"
+            ],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "sutInputs": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "digest": {
+                "$ref": "#/$defs/sha256Digest"
+              },
+              "name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "size": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "name",
+              "size",
+              "digest"
+            ],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidenceClass",
+        "commandDigest",
+        "executable",
+        "sutInputs",
+        "runnerInputs"
+      ],
+      "type": "object"
+    },
+    "implementationBuildDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "requiredPassed": {
+      "type": "boolean"
+    },
+    "requirementSetDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "resourceProfileDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "resultDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "runResultVersion": {
+      "const": "oac.ctk.run-result/v0alpha2"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "targetSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "HARNESS": {
+          "additionalProperties": false,
+          "properties": {
+            "failed": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "passed": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "required": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "required",
+            "passed",
+            "failed"
+          ],
+          "type": "object"
+        },
+        "SUT": {
+          "additionalProperties": false,
+          "properties": {
+            "failed": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "passed": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "required": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "required",
+            "passed",
+            "failed"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "SUT",
+        "HARNESS"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "runResultVersion",
+    "bundleDigest",
+    "requirementSetDigest",
+    "capabilityStatement",
+    "capabilityStatementDigest",
+    "environment",
+    "environmentDigest",
+    "requiredPassed",
+    "summary",
+    "caseResults",
+    "resourceProfileDigest",
+    "implementationBuild",
+    "implementationBuildDigest",
+    "diagnostics",
+    "diagnosticsDigest",
+    "disagreements",
+    "disagreementsDigest",
+    "resultDigest",
+    "claimBoundary",
+    "targetSummary"
+  ],
+  "title": "RunResult",
+  "type": "object"
+}

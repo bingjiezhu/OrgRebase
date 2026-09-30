@@ -410,6 +410,7 @@ def test_pilot_cli_honors_local_role_session_opt_in(tmp_path, monkeypatch):
 
     pack = make_enterprise_pack(tmp_path)
     monkeypatch.setenv("ORGREBASE_LOCAL_ROLE_SESSION_ORIGIN", ORIGIN)
+    monkeypatch.setenv("ORGREBASE_LOCAL_ROLE_SESSION_SECONDS", "86400")
     monkeypatch.setattr(sys, "argv", ["orgrebase", "enterprise-pilot-start", "--pack", str(pack),
                                      "--store", str(tmp_path / "cli.sqlite"), "--host", "127.0.0.1",
                                      "--port", "8782", "--competition-mode", "off"])
@@ -420,6 +421,7 @@ def test_pilot_cli_honors_local_role_session_opt_in(tmp_path, monkeypatch):
     app = applications[0]
     try:
         assert app.state.local_role_sessions.settings.public_origin == ORIGIN
+        assert app.state.local_role_sessions.settings.session_seconds == 86400
         with TestClient(app, base_url=ORIGIN, client=("127.0.0.1", 42000)) as client:
             session = client.get("/api/session").json()
             assert session["authentication_required"] and not session["authenticated"]
@@ -442,3 +444,63 @@ def test_pilot_cli_rejects_role_session_misconfiguration_before_loading_pack(mon
                                      "--store", "/not-created", "--port", "8782", "--competition-mode", "off"])
     with pytest.raises(ValueError, match=code):
         main()
+
+
+def test_local_demo_lifetime_is_explicit_bounded_and_still_expires(local_application, monkeypatch):
+    import time
+
+    client, app, _ = local_application
+    monkeypatch.setenv("ORGREBASE_DEPLOYMENT_MODE", "local")
+    monkeypatch.setenv("ORGREBASE_LOCAL_ROLE_SESSION_ORIGIN", ORIGIN)
+    monkeypatch.delenv("ORGREBASE_LOCAL_ROLE_SESSION_SECONDS", raising=False)
+    assert DeploymentSettings.from_environment().local_role_session.session_seconds == 3600
+    monkeypatch.setenv("ORGREBASE_LOCAL_ROLE_SESSION_SECONDS", "86400")
+    settings = DeploymentSettings.from_environment().local_role_session
+    assert settings.session_seconds == 86400
+    app.state.local_role_sessions.settings = settings
+    now = int(time.time())
+    monkeypatch.setattr("orgrebase.local_role_session.time.time", lambda: now)
+    view = choose(client, actor(client.get("/api/session").json(), "operator"))
+    cookie = client.cookies.get(LOCAL_SESSION_COOKIE)
+    assert view["expires_at"] == now + 86400
+    monkeypatch.setattr("orgrebase.local_role_session.time.time", lambda: now + 86399)
+    assert app.state.local_role_sessions.authenticate(cookie)[0].actor_id == view["principal"]["actor_id"]
+    monkeypatch.setattr("orgrebase.local_role_session.time.time", lambda: now + 86400)
+    with pytest.raises(AuthenticationError, match="AUTH_LOCAL_SESSION_REQUIRED"):
+        app.state.local_role_sessions.authenticate(cookie)
+    monkeypatch.setenv("ORGREBASE_DEPLOYMENT_MODE", "production")
+    with pytest.raises(ValueError, match="AUTH_LOCAL_SESSION_DEPLOYMENT_FORBIDDEN"):
+        DeploymentSettings.from_environment()
+
+
+@pytest.mark.parametrize("seconds", [-1, 59, 86401, True, 86400.0])
+def test_local_demo_lifetime_rejects_unbounded_or_invalid_values(seconds):
+    with pytest.raises(ValueError, match="AUTH_LOCAL_SESSION_LIFETIME_INVALID"):
+        LocalRoleSessionSettings(ORIGIN, session_seconds=seconds)
+
+
+def test_explicit_local_no_timeout_still_requires_identity_and_allows_logout(local_application, monkeypatch):
+    import time
+
+    client, app, _ = local_application
+    sessions = app.state.local_role_sessions
+    sessions.settings = LocalRoleSessionSettings(ORIGIN, session_seconds=0)
+    now = int(time.time())
+    monkeypatch.setattr("orgrebase.local_role_session.time.time", lambda: now)
+    initial = client.get("/api/session").json()
+    result = client.post("/api/session/local-actor", json={"actor_id": actor(initial, "operator")}, headers=csrf(initial))
+    assert result.status_code == 200
+    assert "Max-Age=34560000" in result.headers["set-cookie"]
+    assert result.json()["expires_at"] is None
+    cookie = client.cookies.get(LOCAL_SESSION_COOKIE)
+    monkeypatch.setattr("orgrebase.local_role_session.time.time", lambda: now + 30 * 86400)
+    principal, _, expiry = sessions.authenticate(cookie)
+    assert expiry is None
+    sessions.verify_membership(principal.subject, principal.actor_id, "propose")
+    sessions.create()  # Cleanup must retain authenticated sessions with no timeout.
+    assert sessions.authenticate(cookie)[0].actor_id == principal.actor_id
+    with pytest.raises(AuthenticationError):
+        sessions.verify_membership(principal.subject, principal.actor_id, "approve")
+    sessions.logout(cookie)
+    with pytest.raises(AuthenticationError, match="AUTH_LOCAL_SESSION_REQUIRED"):
+        sessions.authenticate(cookie)

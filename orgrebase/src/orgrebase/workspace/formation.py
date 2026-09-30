@@ -16,12 +16,15 @@ from orgrebase.workspace.admission import AdmissionController
 from orgrebase.workspace.context import TaskContextCompiler
 from orgrebase.workspace.domain_agents import LocalDomainCandidateRegistry
 from orgrebase.workspace.execution import (
+    DiscountMemoInputAssembler,
+    DiscountMemoRenderer,
     ExecutionReferenceMonitor,
     QuoteInputAssembler,
     QuoteRenderer,
     RuntimeDependencyCompiler,
     StaticClock,
     TraceCoverageVerifier,
+    discount_memo_output_lineage,
     quote_output_lineage,
 )
 from orgrebase.workspace.graph import (
@@ -37,7 +40,13 @@ from orgrebase.workspace.models import (
     ActorContextProjection,
     ClaimCandidate,
     CoalitionPlan,
+    DeliverableMemberBinding,
+    DeliverableSetBinding,
+    DeliverableSetFormationReceipt,
+    DeliverableSetProfile,
+    DiscountMemoTaskLiterals,
     DomainCandidateBundle,
+    PreparedDeliverableSetFormation,
     PreparedFormationBundle,
     QuoteTaskLiterals,
     TaskInterpretationReceipt,
@@ -86,6 +95,13 @@ MEDIA = {
 
 PROFILE_BINDING_ARTIFACT_ID = "enterprise-seed-runtime-binding:workspace@r1"
 PROFILE_BINDING_MEDIA_TYPE = MEDIA["profile_binding"]
+DELIVERABLE_SET_PROFILE_ARTIFACT_ID = "deliverable-set-profile:workspace@v1"
+DELIVERABLE_SET_PROFILE_MEDIA_TYPE = "application/vnd.orgrebase.deliverable-set-profile+json"
+DELIVERABLE_SET_BINDING_ARTIFACT_ID = "deliverable-set-binding:workspace@v1"
+DELIVERABLE_SET_BINDING_MEDIA_TYPE = "application/vnd.orgrebase.deliverable-set-binding+json"
+DELIVERABLE_SET_FORMATION_MEDIA_TYPE = (
+    "application/vnd.orgrebase.deliverable-set-formation-receipt+json"
+)
 SNAPSHOT_TARGET_IDS = (
     "work:quote_acme",
     "work:finance_analysis_d",
@@ -754,3 +770,617 @@ class WorkspaceFormationService:
         run_id: str | None = None,
     ) -> TaskReceipt:
         return self.commit_quote(self.prepare_quote(request, run_id=run_id))
+
+
+def quote_discount_memo_profile(runtime_configuration: object) -> DeliverableSetProfile:
+    """Build the only admitted v1 multi-deliverable profile.
+
+    The enterprise Seed/Profile remains the source and authority contract.  This
+    content-addressed overlay selects a bounded pair of server-side adapters for
+    a new workspace; it never mutates an existing Quote workspace binding.
+    """
+
+    profile = parse_enterprise_seed_profile(runtime_configuration.profile)
+    pack_digest = str(runtime_configuration.pack_digest)
+    quote_object_id = str(runtime_configuration.quote_object_id)
+    if profile.default_task.template_ref != "template:enterprise_quote@v2":
+        raise ValueError("DELIVERABLE_SET_REQUIRES_PRICED_QUOTE_PROFILE")
+    enterprise_binding = getattr(runtime_configuration, "enterprise_binding", None)
+    if enterprise_binding is None:
+        raise ValueError("DELIVERABLE_SET_ENTERPRISE_BINDING_REQUIRED")
+    pricing_bindings = [
+        item for item in enterprise_binding.resources if item.slot_id == "pricing_policy"
+    ]
+    if len(pricing_bindings) != 1:
+        raise ValueError("DELIVERABLE_SET_PRICING_OWNER_REQUIRED")
+    quote_template = TemplateRegistry().get("template:enterprise_quote@v2")
+    memo_template = TemplateRegistry().get("template:discount_exception_memo@v2")
+    quote_slug = quote_object_id.split(":")[-1]
+    quote_adapter = "orgrebase.workspace.execution.QuoteRenderer@2.0.0"
+    memo_adapter = "orgrebase.workspace.execution.DiscountMemoRenderer@2.0.0"
+    members = (
+        DeliverableMemberBinding(
+            object_id=f"work:discount-memo-{quote_slug}",
+            deliverable_kind="DISCOUNT_MEMO",
+            template_ref=memo_template.ref,
+            template_digest=memo_template.digest,
+            output_schema_ref=memo_template.output_schema_ref,
+            adapter_ref=memo_adapter,
+            adapter_digest=sha256_digest(
+                {
+                    "adapter_ref": memo_adapter,
+                    "template_digest": memo_template.digest,
+                    "output_schema_ref": memo_template.output_schema_ref,
+                }
+            ),
+            owner_id=pricing_bindings[0].owner_id,
+            approval_scopes=("discount_memo.pricing",),
+        ),
+        DeliverableMemberBinding(
+            object_id=quote_object_id,
+            deliverable_kind="QUOTE",
+            template_ref=quote_template.ref,
+            template_digest=quote_template.digest,
+            output_schema_ref=quote_template.output_schema_ref,
+            adapter_ref=quote_adapter,
+            adapter_digest=sha256_digest(
+                {
+                    "adapter_ref": quote_adapter,
+                    "template_digest": quote_template.digest,
+                    "output_schema_ref": quote_template.output_schema_ref,
+                }
+            ),
+            owner_id=profile.default_task.actor_id,
+            approval_scopes=(
+                "quote.launch_date",
+                "quote.pricing",
+                "quote.product_plan",
+            ),
+        ),
+    )
+    return DeliverableSetProfile(
+        id="profile:quote-discount-memo",
+        revision="r1",
+        organization_id=profile.organization_id,
+        base_profile_digest=profile.digest,
+        pack_digest=pack_digest,
+        runtime_revision="runtime:quote-discount-memo@v1",
+        members=members,
+    )
+
+
+class QuoteDiscountMemoFormationService:
+    """Atomically form one priced Quote and one independently traced Memo."""
+
+    def __init__(
+        self,
+        base: WorkspaceFormationService,
+        profile: DeliverableSetProfile,
+        *,
+        fail_after: str | None = None,
+    ) -> None:
+        self.base = base
+        self.store = base.store
+        self.profile = DeliverableSetProfile.model_validate(profile.model_dump(mode="json"))
+        self.fail_after = fail_after
+        if self.profile.base_profile_digest != base.profile_digest:
+            raise ValueError("DELIVERABLE_SET_BASE_PROFILE_MISMATCH")
+        self.quote_member = next(
+            item for item in self.profile.members if item.deliverable_kind == "QUOTE"
+        )
+        self.memo_member = next(
+            item for item in self.profile.members if item.deliverable_kind == "DISCOUNT_MEMO"
+        )
+        if self.quote_member.object_id != base.quote_object_id:
+            raise ValueError("DELIVERABLE_SET_QUOTE_OBJECT_MISMATCH")
+
+    @staticmethod
+    def _maybe_fail(point: str, configured: str | None) -> None:
+        if configured == point:
+            raise RuntimeError(f"INJECTED_DELIVERABLE_FORMATION_FAILURE:{point}")
+
+    def _memo_request(self, quote_request: TaskRequest) -> TaskRequest:
+        slug = self.memo_member.object_id.split(":")[-1]
+        return TaskRequest(
+            id=f"task:{slug}",
+            organization_id=quote_request.organization_id,
+            actor_id=self.memo_member.owner_id,
+            purpose="discount_exception_memo",
+            deliverable_kind="DISCOUNT_MEMO",
+            requested_at=quote_request.requested_at,
+            template_ref=self.memo_member.template_ref,
+            input_values={
+                "owner": self.memo_member.owner_id,
+                "quote_object_id": self.quote_member.object_id,
+            },
+            customer_id=quote_request.customer_id,
+            idempotency_key=f"workspace:form:{slug}@v1",
+        )
+
+    def _prepare_memo(
+        self,
+        *,
+        quote_request: TaskRequest,
+        now: str,
+        quote: VersionedObject,
+    ) -> dict[str, object]:
+        request = self._memo_request(quote_request)
+        template = self.base.registry.get(request.template_ref)
+        if template.digest != self.memo_member.template_digest:
+            raise IntegrityError("DELIVERABLE_SET_MEMO_TEMPLATE_DRIFT")
+        candidates, interpretation = self.base.interpreter.propose(
+            task=request,
+            template=template,
+        )
+        revision_lock = self.base._revision_lock()
+        coalition = self.base.planner.plan(
+            task=request,
+            template=template,
+            candidates=candidates,
+            cards=default_capability_cards(template.ref),
+            revision_lock=revision_lock,
+        )
+        source_projections = self.base.domain_registry.source_projections(
+            task=request,
+            template=template,
+            plan=coalition,
+            now=now,
+        )
+        claim_candidates, bundles = self.base.domain_registry.execute_selected(
+            task=request,
+            template=template,
+            plan=coalition,
+            projections=source_projections,
+            now=now,
+        )
+        decisions = self.base.admission.admit(
+            task=request,
+            template=template,
+            coalition=coalition,
+            candidates=claim_candidates,
+            now=now,
+            policy_revision=revision_lock["policy"],
+        )
+        context, final_projections = self.base.context_compiler.compile(
+            task=request,
+            template=template,
+            coalition=coalition,
+            decisions=decisions,
+            candidates=claim_candidates,
+            now=now,
+            revisions=revision_lock,
+        )
+        monitor = ExecutionReferenceMonitor(
+            task=request,
+            template=template,
+            manifest=context,
+            artifact_reader=None,
+            actor_id="workspace-renderer",
+            run_id=f"{self.base.workflow_run_id or self.base.default_run_id}:discount-memo",
+            clock=StaticClock(now),
+            id_factory=self.base._id_factory(request),
+        )
+        inputs = DiscountMemoInputAssembler().assemble(monitor)
+        payload = DiscountMemoRenderer().render(
+            task_literals=DiscountMemoTaskLiterals(
+                owner=self.memo_member.owner_id,
+                customer_id=request.customer_id or "customer:unknown",
+                quote_object_id=quote.id,
+            ),
+            inputs=inputs,
+        )
+        memo = VersionedObject(
+            id=self.memo_member.object_id,
+            version="v1",
+            kind="WorkItemVersion",
+            label=f"{quote.label} Discount Review Memo",
+            domain="finance",
+            state=ObjectState.CURRENT,
+            payload=payload.model_dump(mode="json"),
+            source_refs=(context.ref,),
+            sensitivity="CONFIDENTIAL",
+            allowed_purposes=("discount_exception_memo", "change_rebase"),
+            coverage_complete=True,
+            coverage_basis=(CoverageBasis.RUNTIME_OBSERVED,),
+        )
+        trace = monitor.finish(
+            output_ref=memo.ref,
+            output_payload=memo.payload,
+            output_field_lineage=discount_memo_output_lineage(),
+        )
+        coverage = self.base.coverage_verifier.verify(
+            template=template,
+            trace=trace,
+            output_payload=memo.payload,
+            observed_channels=("REFERENCE_MONITOR",),
+        )
+        manifest = self.base.dependency_compiler.compile(
+            task=request,
+            template=template,
+            trace=trace,
+            coverage=coverage,
+            consumer_ref=memo.ref,
+            consumer_domain=memo.domain,
+            revision_lock=revision_lock,
+            now=now,
+        )
+        return {
+            "request": request,
+            "template": template,
+            "interpretation": interpretation,
+            "coalition": coalition,
+            "source_projections": source_projections,
+            "claim_candidates": claim_candidates,
+            "bundles": bundles,
+            "decisions": decisions,
+            "context": context,
+            "final_projections": final_projections,
+            "memo": memo,
+            "trace": trace,
+            "coverage": coverage,
+            "manifest": manifest,
+        }
+
+    @staticmethod
+    def _write(artifact_id: str, media_type: str, model: object) -> ArtifactWrite:
+        payload = model.model_dump(mode="json")  # type: ignore[attr-defined]
+        return prepare_artifact_write(artifact_id, media_type, payload)
+
+    def prepare(
+        self,
+        request: TaskRequest,
+        *,
+        run_id: str | None = None,
+    ) -> PreparedDeliverableSetFormation:
+        if self.base.registry.get(request.template_ref).ref != self.quote_member.template_ref:
+            raise ValueError("DELIVERABLE_SET_QUOTE_TEMPLATE_MISMATCH")
+        operation_clock = FrozenClock(self.base.clock.now())
+        quote_prepared = self.base.prepare_quote(request, run_id=run_id)
+        memo_values = self._prepare_memo(
+            quote_request=request,
+            now=operation_clock.now(),
+            quote=quote_prepared.deliverable,
+        )
+        memo = memo_values["memo"]
+        quote_manifest = next(
+            write
+            for write in quote_prepared.artifact_writes
+            if write.media_type == RUNTIME_MANIFEST_MEDIA_TYPE
+        )
+        quote_runtime_manifest = __import__(
+            "orgrebase.workspace.models", fromlist=["RuntimeDependencyManifest"]
+        ).RuntimeDependencyManifest.model_validate(quote_manifest.payload)
+        memo_manifest = memo_values["manifest"]
+        universe = WorkspaceUniverse.model_validate(
+            self.store.load_artifact(self.base.universe.id, UNIVERSE_MEDIA_TYPE).payload
+        )
+        snapshot = self.base.snapshot_builder.build(
+            universe=universe,
+            replacement_objects=(quote_prepared.deliverable, memo),
+            replacement_manifests=(quote_runtime_manifest, memo_manifest),
+            targets=tuple(sorted(set(self.base.snapshot_target_ids) | {self.memo_member.object_id})),
+            scope_roots=self.base.snapshot_scope_roots,
+            now=operation_clock.now(),
+            version="v1",
+            snapshot_id=self.base.graph_snapshot_id,
+            graph_namespace=self.base.graph_pointer_id,
+        )
+        pointer = graph_pointer_object(
+            version="v1",
+            snapshot=snapshot,
+            promoted_at=operation_clock.now(),
+            object_id=self.base.graph_pointer_id,
+        )
+        memo_receipt = TaskReceipt(
+            id=f"task-receipt:{self.memo_member.object_id.split(':')[-1]}@v1",
+            task_ref=memo_values["request"].id,
+            template_ref=memo_values["template"].ref,
+            coalition_plan_ref=memo_values["coalition"].id,
+            admission_decision_refs=tuple(item.id for item in memo_values["decisions"]),
+            context_manifest_ref=memo_values["context"].ref,
+            trace_ref=memo_values["trace"].ref,
+            coverage_receipt_ref=memo_values["coverage"].id,
+            dependency_manifest_ref=memo_manifest.ref,
+            deliverable_ref=memo.ref,
+            graph_snapshot_ref=snapshot.ref,
+            revision_lock=snapshot.revisions,
+            committed_at=operation_clock.now(),
+        )
+        binding = DeliverableSetBinding(
+            id="deliverable-set-binding:workspace",
+            version="v1",
+            workspace_id=self.store.workspace_id,
+            profile_ref=self.profile.ref,
+            profile_digest=self.profile.digest,
+            base_profile_digest=self.profile.base_profile_digest,
+            pack_digest=self.profile.pack_digest,
+            runtime_revision=self.profile.runtime_revision,
+            members=self.profile.members,
+            formed_at=operation_clock.now(),
+        )
+        deliverables = tuple(sorted((quote_prepared.deliverable, memo), key=lambda item: item.id))
+        receipts = (quote_prepared.task_receipt, memo_receipt)
+        formation_receipt = DeliverableSetFormationReceipt(
+            id="deliverable-set-formation:workspace@v1",
+            binding_ref=binding.ref,
+            binding_digest=binding.digest,
+            task_receipt_refs=tuple(item.id for item in receipts),
+            task_receipt_digests=tuple(item.digest for item in receipts),
+            deliverable_refs=tuple(item.ref for item in deliverables),
+            deliverable_digests=tuple(item.digest for item in deliverables),
+            graph_snapshot_ref=snapshot.ref,
+            graph_snapshot_digest=snapshot.digest,
+            graph_pointer_ref=pointer.ref,
+            committed_at=operation_clock.now(),
+        )
+        writes = [
+            write
+            for write in quote_prepared.artifact_writes
+            if not (
+                write.media_type == SNAPSHOT_MEDIA_TYPE
+                and write.artifact_id == snapshot.ref
+            )
+        ]
+        for item in (memo_values["request"], memo_values["template"], memo_values["interpretation"], memo_values["coalition"]):
+            media = {
+                TaskRequest: MEDIA["task"],
+                TaskTemplateVersion: MEDIA["template"],
+                TaskInterpretationReceipt: MEDIA["interpretation"],
+                CoalitionPlan: MEDIA["coalition"],
+            }[type(item)]
+            writes.append(self._write(item.id if not hasattr(item, "ref") else item.ref, media, item))
+        for item in (*memo_values["source_projections"], *memo_values["final_projections"]):
+            writes.append(self._write(item.ref, MEDIA["projection"], item))
+        for item in memo_values["claim_candidates"]:
+            writes.append(self._write(item.digest, MEDIA["candidate"], item))
+        for item in memo_values["bundles"]:
+            writes.append(self._write(item.id, MEDIA["bundle"], item))
+        for item in memo_values["decisions"]:
+            writes.append(self._write(item.id, MEDIA["admission"], item))
+        for item, artifact_id, media in (
+            (memo_values["context"], memo_values["context"].ref, MEDIA["context"]),
+            (memo_values["trace"], memo_values["trace"].ref, MEDIA["trace"]),
+            (memo_values["coverage"], memo_values["coverage"].id, MEDIA["coverage"]),
+            (memo_manifest, memo_manifest.ref, RUNTIME_MANIFEST_MEDIA_TYPE),
+            (memo_receipt, memo_receipt.id, MEDIA["receipt"]),
+            (snapshot, snapshot.ref, SNAPSHOT_MEDIA_TYPE),
+            (self.profile, DELIVERABLE_SET_PROFILE_ARTIFACT_ID, DELIVERABLE_SET_PROFILE_MEDIA_TYPE),
+            (binding, DELIVERABLE_SET_BINDING_ARTIFACT_ID, DELIVERABLE_SET_BINDING_MEDIA_TYPE),
+            (
+                formation_receipt,
+                formation_receipt.id,
+                DELIVERABLE_SET_FORMATION_MEDIA_TYPE,
+            ),
+        ):
+            writes.append(self._write(artifact_id, media, item))
+        request_set_digest = sha256_digest(
+            {
+                "quote_request": request.digest,
+                "memo_request": memo_values["request"].digest,
+                "profile": self.profile.digest,
+            }
+        )
+        event_payload = {
+            "profile_ref": self.profile.ref,
+            "profile_digest": self.profile.digest,
+            "binding_ref": binding.ref,
+            "binding_digest": binding.digest,
+            "deliverable_refs": [item.ref for item in deliverables],
+            "task_receipt_digests": [item.digest for item in receipts],
+            "snapshot_ref": snapshot.ref,
+            "snapshot_digest": snapshot.digest,
+            "formation_receipt_digest": formation_receipt.digest,
+            "external_effects": "DISABLED",
+        }
+        return PreparedDeliverableSetFormation(
+            request_set_digest=request_set_digest,
+            idempotency_key=f"workspace:form:quote-discount-memo:{request.id.split(':')[-1]}@v1",
+            profile=self.profile,
+            binding=binding,
+            quote_prepared=quote_prepared,
+            deliverables=deliverables,
+            graph_pointer=pointer,
+            artifact_writes=tuple(writes),
+            task_receipts=receipts,
+            formation_receipt=formation_receipt,
+            event_payload=event_payload,
+        )
+
+    @staticmethod
+    def _indexed_writes(prepared: PreparedDeliverableSetFormation) -> dict[str, ArtifactWrite]:
+        indexed = {item.artifact_id: item for item in prepared.artifact_writes}
+        if len(indexed) != len(prepared.artifact_writes):
+            raise IntegrityError("DELIVERABLE_FORMATION_ARTIFACT_ID_DUPLICATE")
+        return indexed
+
+    def _verify_memo(self, prepared: PreparedDeliverableSetFormation) -> None:
+        indexed = self._indexed_writes(prepared)
+        quote = next(
+            item for item in prepared.deliverables if item.payload.get("deliverable_kind") == "QUOTE"
+        )
+        memo = next(
+            item
+            for item in prepared.deliverables
+            if item.payload.get("deliverable_kind") == "DISCOUNT_MEMO"
+        )
+        quote_request = self.base.default_request(self.base.profile)
+        expected = self._prepare_memo(
+            quote_request=quote_request,
+            now=prepared.formation_receipt.committed_at,
+            quote=quote,
+        )
+        expected_receipt = prepared.task_receipts[1]
+        checks = (
+            (memo.digest, expected["memo"].digest),
+            (expected_receipt.task_ref, expected["request"].id),
+            (expected_receipt.template_ref, expected["template"].ref),
+            (expected_receipt.coalition_plan_ref, expected["coalition"].id),
+            (expected_receipt.context_manifest_ref, expected["context"].ref),
+            (expected_receipt.trace_ref, expected["trace"].ref),
+            (expected_receipt.coverage_receipt_ref, expected["coverage"].id),
+            (expected_receipt.dependency_manifest_ref, expected["manifest"].ref),
+            (expected_receipt.deliverable_ref, memo.ref),
+        )
+        if any(actual != wanted for actual, wanted in checks):
+            raise IntegrityError("DELIVERABLE_MEMO_REPLAY_MISMATCH")
+        expected_models = (
+            (expected["request"].id, expected["request"]),
+            (expected["template"].ref, expected["template"]),
+            (expected["interpretation"].id, expected["interpretation"]),
+            (expected["coalition"].id, expected["coalition"]),
+            (expected["context"].ref, expected["context"]),
+            (expected["trace"].ref, expected["trace"]),
+            (expected["coverage"].id, expected["coverage"]),
+            (expected["manifest"].ref, expected["manifest"]),
+        )
+        for artifact_id, model in expected_models:
+            write = indexed.get(artifact_id)
+            if write is None or write.payload != model.model_dump(mode="json"):
+                raise IntegrityError(f"DELIVERABLE_MEMO_EVIDENCE_MISMATCH:{artifact_id}")
+
+    def commit(
+        self,
+        prepared: PreparedDeliverableSetFormation,
+        *,
+        connection: Connection | None = None,
+    ) -> DeliverableSetFormationReceipt:
+        selected = PreparedDeliverableSetFormation.model_validate(prepared.model_dump(mode="json"))
+        if selected.profile.digest != self.profile.digest:
+            raise IntegrityError("DELIVERABLE_SET_PROFILE_MISMATCH")
+        if connection is None:
+            with self.store.transaction() as owned:
+                return self._commit_in_transaction(selected, owned)
+        return self._commit_in_transaction(selected, connection)
+
+    def _commit_in_transaction(
+        self,
+        prepared: PreparedDeliverableSetFormation,
+        connection: Connection,
+    ) -> DeliverableSetFormationReceipt:
+        from orgrebase.workspace.formation_integrity import verify_prepared_formation
+
+        authorization = current_authorization()
+        completed = False
+
+        def require_completion() -> None:
+            if not completed:
+                raise IntegrityError("DELIVERABLE_FORMATION_COMMIT_INCOMPLETE")
+            if authorization is not None:
+                authorization()
+
+        self.store.require_before_commit(connection, require_completion)
+        if authorization is not None:
+            authorization()
+        expected = self.prepare(
+            self.base.default_request(self.base.profile),
+            run_id=self.base.workflow_run_id,
+        )
+        scalar_bindings = (
+            (prepared.request_set_digest, expected.request_set_digest, "REQUEST_SET_DIGEST"),
+            (prepared.idempotency_key, expected.idempotency_key, "IDEMPOTENCY_KEY"),
+            (prepared.event_type, expected.event_type, "EVENT_TYPE"),
+        )
+        for actual, wanted, field in scalar_bindings:
+            if actual != wanted:
+                raise IntegrityError(f"DELIVERABLE_FORMATION_{field}_MISMATCH")
+        model_bindings = (
+            (prepared.profile, expected.profile, "PROFILE"),
+            (prepared.binding, expected.binding, "BINDING"),
+            (prepared.quote_prepared, expected.quote_prepared, "QUOTE_PREPARED"),
+            (prepared.graph_pointer, expected.graph_pointer, "GRAPH_POINTER"),
+            (prepared.formation_receipt, expected.formation_receipt, "FORMATION_RECEIPT"),
+        )
+        for actual, wanted, field in model_bindings:
+            if actual.digest != wanted.digest:
+                raise IntegrityError(f"DELIVERABLE_FORMATION_{field}_MISMATCH")
+        if (
+            tuple(item.digest for item in prepared.deliverables)
+            != tuple(item.digest for item in expected.deliverables)
+            or tuple(item.digest for item in prepared.task_receipts)
+            != tuple(item.digest for item in expected.task_receipts)
+        ):
+            raise IntegrityError("DELIVERABLE_FORMATION_MEMBER_SET_MISMATCH")
+        if prepared.event_payload != expected.event_payload:
+            raise IntegrityError("DELIVERABLE_FORMATION_EVENT_MISMATCH")
+        actual_writes = self._indexed_writes(prepared)
+        expected_writes = self._indexed_writes(expected)
+        if set(actual_writes) != set(expected_writes):
+            raise IntegrityError("DELIVERABLE_FORMATION_ARTIFACT_SET_MISMATCH")
+        for artifact_id, wanted in expected_writes.items():
+            actual = actual_writes[artifact_id]
+            if (
+                actual.media_type != wanted.media_type
+                or actual.payload_digest != wanted.payload_digest
+                or actual.payload != wanted.payload
+            ):
+                raise IntegrityError(
+                    f"DELIVERABLE_FORMATION_ARTIFACT_MISMATCH:{artifact_id}"
+                )
+        if prepared.digest != expected.digest:
+            raise IntegrityError("DELIVERABLE_FORMATION_BUNDLE_MISMATCH")
+        verify_prepared_formation(
+            self.base,
+            prepared.quote_prepared,
+            media=MEDIA,
+            profile_binding_artifact_id=PROFILE_BINDING_ARTIFACT_ID,
+            profile_binding_media_type=PROFILE_BINDING_MEDIA_TYPE,
+            snapshot_target_ids=self.base.snapshot_target_ids,
+            snapshot_scope_roots=self.base.snapshot_scope_roots,
+        )
+        self._verify_memo(prepared)
+        indexed = actual_writes
+        snapshot = __import__(
+            "orgrebase.workspace.models", fromlist=["WorkspaceGraphSnapshot"]
+        ).WorkspaceGraphSnapshot.model_validate(
+            indexed[prepared.formation_receipt.graph_snapshot_ref].payload
+        )
+        if (
+            snapshot.digest != prepared.formation_receipt.graph_snapshot_digest
+            or prepared.graph_pointer.payload.get("snapshot_digest") != snapshot.digest
+            or prepared.binding.digest != prepared.formation_receipt.binding_digest
+        ):
+            raise IntegrityError("DELIVERABLE_FORMATION_GRAPH_BINDING_INVALID")
+        for write in prepared.artifact_writes:
+            if sha256_digest(write.payload) != write.payload_digest:
+                raise IntegrityError(f"DELIVERABLE_FORMATION_ARTIFACT_DIGEST_MISMATCH:{write.artifact_id}")
+        existing = self.store.get_idempotent(
+            prepared.idempotency_key,
+            prepared.request_set_digest,
+            connection=connection,
+        )
+        if existing is not None:
+            completed = True
+            return DeliverableSetFormationReceipt.model_validate(existing)
+        for index, deliverable in enumerate(prepared.deliverables):
+            self.store.insert_version(connection, deliverable, make_current=True)
+            self._maybe_fail(f"deliverable:{deliverable.id}", self.fail_after)
+            if index == 0:
+                self._maybe_fail("first-deliverable", self.fail_after)
+        self.store.insert_version(connection, prepared.graph_pointer, make_current=True)
+        for write in prepared.artifact_writes:
+            self.store.save_artifact(connection, write.artifact_id, write.media_type, write.payload)
+            self._maybe_fail(f"artifact:{write.artifact_id}", self.fail_after)
+        self._maybe_fail("graph-pointer", self.fail_after)
+        self.store.append_event(connection, prepared.event_type, prepared.event_payload)
+        self.store.save_idempotent(
+            connection,
+            prepared.idempotency_key,
+            prepared.request_set_digest,
+            prepared.formation_receipt.model_dump(mode="json"),
+        )
+        self.store.save_idempotent(
+            connection,
+            prepared.quote_prepared.idempotency_key,
+            prepared.quote_prepared.request_digest,
+            prepared.quote_prepared.task_receipt.model_dump(mode="json"),
+        )
+        completed = True
+        return prepared.formation_receipt
+
+    def form(
+        self,
+        request: TaskRequest,
+        *,
+        run_id: str | None = None,
+    ) -> DeliverableSetFormationReceipt:
+        return self.commit(self.prepare(request, run_id=run_id))

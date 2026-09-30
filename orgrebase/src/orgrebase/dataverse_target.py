@@ -5,9 +5,14 @@ from __future__ import annotations
 import json
 import re
 import ssl
+import time
 from collections.abc import Callable
+from contextlib import contextmanager
+from contextvars import ContextVar
+from dataclasses import dataclass
 from email import policy
 from email.parser import BytesParser
+from functools import wraps
 from types import TracebackType
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit
@@ -23,6 +28,62 @@ from orgrebase.effect_identity import DATAVERSE_DRAFT_ACTION, dataverse_target_i
 
 _FIELDS = {"name": 300, "description": 2000}
 _ETAG = re.compile(r'W/"[^"\r\n]{1,200}"')
+
+
+@dataclass
+class TargetExecutionBudget:
+    """A total deadline and resource budget across one target command."""
+
+    max_elapsed: float
+    max_requests: int
+    max_bytes: int
+    monotonic: Callable[[], float]
+    requests: int = 0
+    bytes_read: int = 0
+
+    def __post_init__(self) -> None:
+        if (
+            not 0 < self.max_elapsed <= 600
+            or not 1 <= self.max_requests <= 64
+            or not 1 <= self.max_bytes <= 32 * 1024 * 1024
+        ):
+            raise ValueError("TARGET_EXECUTION_BUDGET_INVALID")
+        self.deadline = self.monotonic() + self.max_elapsed
+
+    def remaining(self) -> float:
+        remaining = self.deadline - self.monotonic()
+        if remaining <= 0:
+            raise EffectError("TARGET_OPERATION_DEADLINE_EXCEEDED")
+        return remaining
+
+    def begin_request(self) -> float:
+        if self.requests >= self.max_requests:
+            raise EffectError("TARGET_OPERATION_REQUEST_BUDGET_EXCEEDED")
+        self.requests += 1
+        return self.remaining()
+
+    def consume(self, size: int) -> None:
+        self.bytes_read += size
+        if self.bytes_read > self.max_bytes:
+            raise EffectError("TARGET_OPERATION_BYTE_BUDGET_EXCEEDED")
+        self.remaining()
+
+    def expired(self) -> bool:
+        return self.monotonic() >= self.deadline
+
+
+_TARGET_BUDGET: ContextVar[tuple[int, TargetExecutionBudget] | None] = ContextVar(
+    "target_execution_budget", default=None
+)
+
+
+def _bounded_operation(method: Callable[..., Any]) -> Callable[..., Any]:
+    @wraps(method)
+    def invoke(self: DataverseDraftTarget, *args: Any, **kwargs: Any) -> Any:
+        with self.execution_budget():
+            return method(self, *args, **kwargs)
+
+    return invoke
 
 
 class DataverseDraftTargetSettings(BaseModel):
@@ -67,12 +128,52 @@ class DataverseDraftTarget:
     action = DATAVERSE_DRAFT_ACTION
 
     def __init__(self, settings: DataverseDraftTargetSettings, token: Callable[[], str],
-                 *, transport: httpx.BaseTransport | None = None) -> None:
+                 *, transport: httpx.BaseTransport | None = None,
+                 async_transport: httpx.AsyncBaseTransport | None = None,
+                 operation_timeout: float = 60, max_requests: int = 16,
+                 max_operation_bytes: int = 8 * 1024 * 1024,
+                 monotonic: Callable[[], float] = time.monotonic) -> None:
+        if (
+            not 0 < operation_timeout <= 600
+            or not 1 <= max_requests <= 64
+            or not 1 <= max_operation_bytes <= 32 * 1024 * 1024
+        ):
+            raise ValueError("TARGET_EXECUTION_BUDGET_INVALID")
+        if transport is not None and async_transport is not None:
+            raise ValueError("TARGET_TRANSPORT_AMBIGUOUS")
         self.settings = settings
         self.token = token
         self.transport = transport
+        self.async_transport = async_transport
+        self.operation_timeout = operation_timeout
+        self.max_requests = max_requests
+        self.max_operation_bytes = max_operation_bytes
+        self.monotonic = monotonic
         self._client: httpx.Client | None = None
         self._closed = False
+
+    @contextmanager
+    def execution_budget(self):
+        current = _TARGET_BUDGET.get()
+        if current is not None and current[0] == id(self):
+            yield current[1]
+            return
+        budget = TargetExecutionBudget(
+            self.operation_timeout, self.max_requests, self.max_operation_bytes, self.monotonic
+        )
+        token = _TARGET_BUDGET.set((id(self), budget))
+        try:
+            yield budget
+        finally:
+            _TARGET_BUDGET.reset(token)
+
+    def _active_budget(self) -> TargetExecutionBudget:
+        current = _TARGET_BUDGET.get()
+        if current is not None and current[0] == id(self):
+            return current[1]
+        return TargetExecutionBudget(
+            self.operation_timeout, self.max_requests, self.max_operation_bytes, self.monotonic
+        )
 
     def __enter__(self) -> DataverseDraftTarget:
         if self._closed:
@@ -104,38 +205,100 @@ class DataverseDraftTarget:
             raise EffectError("TARGET_PATH_INVALID")
         if self._closed:
             raise EffectError("TARGET_CLIENT_CLOSED")
+        budget = self._active_budget()
+        budget.begin_request()
         token = self.token()
         if not token or any(character in token for character in "\r\n"):
             raise EffectError("TARGET_CREDENTIAL_UNAVAILABLE")
+        budget.remaining()
         headers = {"Authorization": f"Bearer {token}", "Accept": "application/json",
                    "OData-Version": "4.0", "OData-MaxVersion": "4.0", "Content-Type": content_type}
         if prefer is not None:
             if prefer != "odata.maxpagesize=100":
                 raise EffectError("TARGET_PREFERENCE_UNSUPPORTED")
             headers["Prefer"] = prefer
+        if self.transport is None or self.async_transport is not None:
+            return self._request_async(
+                method, path, headers=headers, body=body, budget=budget,
+            )
         try:
             client = self._http_client()
             client.cookies.clear()
-            with client.stream(method, self.settings.api_url + path, headers=headers, content=body) as response:
+            with client.stream(
+                method, self.settings.api_url + path, headers=headers, content=body,
+                timeout=min(20, budget.remaining()),
+            ) as response:
                 content = bytearray()
-                for part in response.iter_bytes():
+                iterator = iter(response.iter_bytes())
+                while True:
+                    budget.remaining()
+                    try:
+                        part = next(iterator)
+                    except StopIteration:
+                        break
                     content.extend(part)
+                    budget.consume(len(part))
                     if len(content) > 2 * 1024 * 1024:
                         raise EffectError("TARGET_RESPONSE_TOO_LARGE")
+                budget.remaining()
                 if 300 <= response.status_code < 400:
                     raise EffectError("TARGET_REDIRECT_REFUSED")
                 return response.status_code, dict(response.headers), bytes(content)
         except (httpx.HTTPError, OSError):
+            if budget.expired():
+                raise EffectError("TARGET_OPERATION_DEADLINE_EXCEEDED") from None
             raise EffectError("TARGET_RESPONSE_UNAVAILABLE") from None
 
+    def _request_async(
+        self, method: str, path: str, *, headers: dict[str, str], body: bytes | None,
+        budget: TargetExecutionBudget,
+    ) -> tuple[int, dict[str, str], bytes]:
+        import anyio
+
+        async def send_request() -> tuple[int, dict[str, str], bytes]:
+            try:
+                with anyio.fail_after(budget.remaining()):
+                    async with httpx.AsyncClient(
+                        transport=self.async_transport,
+                        timeout=min(20, budget.remaining()), follow_redirects=False,
+                        verify=ssl.create_default_context(cafile=self.settings.ca_bundle),
+                        trust_env=False,
+                    ) as client:
+                        async with client.stream(
+                            method, self.settings.api_url + path, headers=headers, content=body,
+                            timeout=min(20, budget.remaining()),
+                        ) as response:
+                            content = bytearray()
+                            async for part in response.aiter_bytes():
+                                content.extend(part)
+                                budget.consume(len(part))
+                                if len(content) > 2 * 1024 * 1024:
+                                    raise EffectError("TARGET_RESPONSE_TOO_LARGE")
+                            budget.remaining()
+                            if 300 <= response.status_code < 400:
+                                raise EffectError("TARGET_REDIRECT_REFUSED")
+                            return response.status_code, dict(response.headers), bytes(content)
+            except TimeoutError:
+                raise EffectError("TARGET_OPERATION_DEADLINE_EXCEEDED") from None
+            except (httpx.HTTPError, OSError):
+                if budget.expired():
+                    raise EffectError("TARGET_OPERATION_DEADLINE_EXCEEDED") from None
+                raise EffectError("TARGET_RESPONSE_UNAVAILABLE") from None
+
+        return anyio.run(send_request)
+
+    @_bounded_operation
     def read_metadata(self, path: str) -> dict[str, Any]:
         if len(path) > 8192 or not re.match(r"^/(?:WhoAmI$|EntityDefinitions(?:[(/?]|$))", path):
             raise EffectError("TARGET_METADATA_PATH_FORBIDDEN")
         status, _, raw = self._request("GET", path)
         if status != 200:
             raise EffectError("TARGET_METADATA_UNAVAILABLE")
-        return self._json(raw)
+        document = self._json(raw)
+        self._active_budget().remaining()
+        return document
 
+    @_bounded_operation
     def effect_inventory_page(self, *, since: str, until: str, cursor: str | None = None) -> dict[str, Any]:
         """Enumerate target receipts so recovery can discover lost local intents."""
         start, end = utc_datetime(since), utc_datetime(until)
@@ -206,6 +369,7 @@ class DataverseDraftTarget:
         next_link = document.get("@odata.nextLink")
         if next_link is not None:
             continuation(next_link)
+        self._active_budget().remaining()
         return {"items": results, "next_cursor": next_link,
                 "interval": {"since": timestamp(start), "until": timestamp(end)}}
 
@@ -252,6 +416,7 @@ class DataverseDraftTarget:
             "orgrebase_outcome": outcome,
         }
 
+    @_bounded_operation
     def query_effect(self, effect: EffectRequest) -> TargetResolution:
         self.validate_request(effect)
         path = f"/{self.settings.receipt_entity_set}({self.receipt_id(effect)})"
@@ -270,9 +435,11 @@ class DataverseDraftTarget:
         evidence = {"receipt_id": self.receipt_id(effect), "request_digest": effect.digest,
                     "target_key": effect.target_key, "outcome": outcome,
                     "receipt_digest": sha256_digest(expected)}
+        self._active_budget().remaining()
         return self._resolution(effect, ResolutionState(outcome), evidence=evidence,
                                 reason="TARGET_EFFECT_CANCELLED" if outcome == "REJECTED" else None)
 
+    @_bounded_operation
     def draft(self) -> dict[str, Any]:
         status, _, raw = self._request("GET", f"/quotes({self.settings.quote_id})?$select=quoteid,statecode,name,description")
         if status != 200:
@@ -287,9 +454,11 @@ class DataverseDraftTarget:
         # data or coerce it into text. Existing tenant text can exceed our write limits.
         if any(field is not None and not isinstance(field, str) for field in fields.values()):
             raise EffectError("TARGET_QUOTE_FIELDS_INVALID")
+        self._active_budget().remaining()
         return {"target_key": self.settings.target_key, "version": value["@odata.etag"],
                 "fields": fields}
 
+    @_bounded_operation
     def execute(self, effect: EffectRequest) -> TargetResolution:
         changes = self.validate_request(effect)
         prior = self.query_effect(effect)
@@ -309,11 +478,16 @@ class DataverseDraftTarget:
         observed = self.query_effect(effect)
         if observed.state != ResolutionState.UNKNOWN:
             return observed
-        if status == 200 and self._conditional_rejection(headers.get("content-type", ""), raw):
+        conditional_rejection = status == 200 and self._conditional_rejection(
+            headers.get("content-type", ""), raw
+        )
+        self._active_budget().remaining()
+        if conditional_rejection:
             return self._resolution(effect, ResolutionState.REJECTED, reason="TARGET_VERSION_CONFLICT",
                                     evidence={"atomic_changeset_rejected": True, "http_status": 412})
         return observed
 
+    @_bounded_operation
     def cancel_effect(self, effect: EffectRequest) -> TargetResolution:
         """Fence a missing/in-flight effect by claiming the same target receipt key.
 

@@ -4,6 +4,8 @@
 
 ## 客户部署前置项
 
+首次接入、五类企业输入、Pack 草稿预检、密封/准入/激活分离、干净安装及升级回退见[企业接入指南](../ENTERPRISE-ONBOARDING.md)。
+
 | 项目 | 要求 |
 |---|---|
 | 数据库 | PostgreSQL；先迁移和预置工作区，runtime不使用superuser/BYPASSRLS |
@@ -35,3 +37,7 @@ uv run --frozen orgrebase serve --host 127.0.0.1 --port 8081
 私有原文过期后不可读取，但真正清除需管理员purge或外部调度。没有内建自动保留期调度器，备份/WAL有自己的边界。见[维护命令（英文原文）](../PRIVATE-DATA-LIFECYCLE.md#run-the-expiry-sweep)。
 
 容量按实际工作负载测量，保留超时、拒绝和丢弃分母。健康端点通过不等于报价容量，单次本地运行不等于SLA。详见[容量说明（英文原文）](../HTTP-CAPACITY.md)。
+
+## 升级边界
+
+生产 runtime 不自动迁移 schema。升级前进入维护窗口，保留待审/UNKNOWN 意图与当前删除台账，在新库或恢复副本上执行[数据库迁移](../STATE-STORE-MIGRATIONS.md)。新制品与 Pack 需重新预检；旧 Preview、批准和来源确认不会随软件升级自动迁移。回退应用不能撤销已发生的外部效果。

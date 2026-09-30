@@ -1,0 +1,17 @@
+{
+  "apiVersion": "oac.ctk.capability-set/v0alpha2",
+  "kind": "ProtocolCapabilitySet",
+  "capabilitySetId": "oac.supplier.plan-verification.plural-capsule/v0.1-seed-1",
+  "protocolVersion": "oac.ctk.stdio/v3",
+  "tracks": [
+    {
+      "role": "plan-verifier",
+      "operation": "verifyPlan",
+      "profileId": "oac.supplier.plan-verification.plural-capsule",
+      "profileVersion": "v0.1-seed-1",
+      "wireVersion": "oac.ctk.stdio/v3"
+    }
+  ],
+  "digestAlgorithm": "sha256-jcs-detached/v1",
+  "capabilitySetDigest": "sha256:213eca08115c2773588a91e88b4ff92d89c1bf0ce587ec08f89624c2850b65f9"
+}

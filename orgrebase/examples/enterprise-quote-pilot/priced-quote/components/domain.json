@@ -1,0 +1,36 @@
+{
+  "schema_version": "orgrebase.enterprise-seed-component-root.v1",
+  "profile_ref": "profile:evergreen-priced-quote@r1",
+  "organization_id": "org:evergreen-industries",
+  "component_kind": "DOMAIN",
+  "revision": "r1",
+  "runtime_binding_mode": "EXACT_REFERENCE_PROJECTION",
+  "projection": {
+    "organization_id": "org:evergreen-industries",
+    "scenario_id": "evergreen-blue-harbor-enterprise-quote",
+    "default_task": {
+      "id": "task:quote-blue-harbor",
+      "actor_id": "employee:enterprise-quote-operator",
+      "purpose": "enterprise_quote",
+      "deliverable_kind": "QUOTE",
+      "requested_at": "2026-08-27T00:00:00Z",
+      "template_ref": "template:enterprise_quote@v2",
+      "customer_id": "customer:blue-harbor",
+      "idempotency_key": "workspace:form:quote-blue-harbor@v1",
+      "input_values": [
+        {
+          "key": "owner",
+          "value": "enterprise-quote-operator"
+        }
+      ]
+    },
+    "change_family": [],
+    "domains": [
+      "finance",
+      "gtm",
+      "legal",
+      "product"
+    ]
+  },
+  "projection_digest": "sha256:ea3b090022dce4479a68b4d0f93932777f2c92ca06f395f9de4cee341e659789"
+}

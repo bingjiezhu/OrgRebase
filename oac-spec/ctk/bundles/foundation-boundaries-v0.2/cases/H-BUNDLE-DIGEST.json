@@ -1,0 +1,14 @@
+{
+  "caseId": "H-BUNDLE-DIGEST",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "bundle-digest"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-BUNDLE"
+  ],
+  "testTarget": "HARNESS"
+}

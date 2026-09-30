@@ -12,9 +12,9 @@ here. 本说明记录可核对的复用入口；未列出的第三方生产采�
 | Pull requests | [CONTRIBUTING.md](CONTRIBUTING.md) and the pull-request template |
 | Security response | Private advisory: [SECURITY.md](SECURITY.md) |
 | Conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
-| Version tags | [Releases](https://github.com/bingjiezhu/OrgRebase/releases); product `orgrebase` is 0.4.0 |
+| Version tags | [Releases](https://github.com/bingjiezhu/OrgRebase/releases); Python `0.5.0b4` maps to SemVer prerelease tag `v0.5.0-beta.4` |
 | Dependency updates | Dependabot is configured for `/orgrebase`, `/oac-spec`, `/orgrebase/documentation`, and GitHub Actions. Version-update PRs are paused on this snapshot until a lockfile-complete review. Root `.github/workflows` must stay identical to `orgrebase/.github/workflows` |
-| CI | `.github/workflows/ci.yml`: `make check-core` on every push; full OAC + PostgreSQL on `workflow_dispatch` |
+| CI | `.github/workflows/ci.yml`: automatic Core, enterprise-boundary and public OAC conformance/build checks on every pull request and main push; maintainer-initiated release qualification and isolated distribution smoke |
 
 GitHub Actions, issue templates, and Dependabot live in the repository-root
 `.github/` directory. A copy is kept under `orgrebase/.github/` so the product tree

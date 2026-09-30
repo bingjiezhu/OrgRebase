@@ -1,0 +1,74 @@
+{
+  "inputSetVersion": "1.0",
+  "inputSetId": "supplier-change-exploratory-10",
+  "evaluationClass": "mechanics-only",
+  "caseCount": 10,
+  "cases": [
+    {
+      "caseId": "SC-001",
+      "caseRef": "profiles/supplier-change/cases/SC-001-restructuring.json",
+      "caseDigest": "sha256:1e5290d2b1472c2a3a52300d1405c473b6927fc91920fec579ac11cafd7333db"
+    },
+    {
+      "caseId": "SC-002",
+      "caseRef": "profiles/supplier-change/cases/SC-002-healthy-control.json",
+      "caseDigest": "sha256:051cf7779023c383d1c4d586fa7f897ef846376de9abcf2ba87d228945b104fe"
+    },
+    {
+      "caseId": "SC-003",
+      "caseRef": "profiles/supplier-change/cases/SC-003-liquidation.json",
+      "caseDigest": "sha256:fca96d541c53c20c197527f8e0caca6adbb93b4d3f0b67a9417a8dc08c315ecb"
+    },
+    {
+      "caseId": "SC-004",
+      "caseRef": "profiles/supplier-change/cases/SC-004-qualification-suspended.json",
+      "caseDigest": "sha256:4b7f7c86e95bcbaf397b182ba1c6fc198e83eb3840913a7aec0655d865178a16"
+    },
+    {
+      "caseId": "SC-005",
+      "caseRef": "profiles/supplier-change/cases/SC-005-capacity-reduced.json",
+      "caseDigest": "sha256:03c39bec65035d605b35f45e4430884ec93138afbd93bc9622f7bfcedd3910c9"
+    },
+    {
+      "caseId": "SC-006",
+      "caseRef": "profiles/supplier-change/cases/SC-006-advance-at-risk.json",
+      "caseDigest": "sha256:f6f09084c29b4c00944a6a59655bf3153a4c488d66aa0d7557d052fb9070ce9f"
+    },
+    {
+      "caseId": "SC-007",
+      "caseRef": "profiles/supplier-change/cases/SC-007-partial-delivery.json",
+      "caseDigest": "sha256:87f8b02669680997c92a6b9d2f6a690e83591a979d9a6f57c92780d5c6df19cb"
+    },
+    {
+      "caseId": "SC-008",
+      "caseRef": "profiles/supplier-change/cases/SC-008-alternative-qualified.json",
+      "caseDigest": "sha256:22be5bcd811500f87ed40946bf67c16fdece9a0819fe554040d0b69395b78a06"
+    },
+    {
+      "caseId": "SC-009",
+      "caseRef": "profiles/supplier-change/cases/SC-009-nuclear-grade.json",
+      "caseDigest": "sha256:354409e6c41a135ffa926a78a94cbbb918e97b2d07984e6b7b40df2974e5bbe3"
+    },
+    {
+      "caseId": "SC-010",
+      "caseRef": "profiles/supplier-change/cases/SC-010-truncated-boundary.json",
+      "caseDigest": "sha256:f42588da286c64e241d8286c7e2c1af6af1f4dc9b740bda7f48f318711c09384"
+    }
+  ],
+  "scoringInputs": [
+    "selected role definitions",
+    "covered candidate obligations",
+    "preserved Unknown references",
+    "required role-level partial orders",
+    "forbidden role/principal combinations",
+    "evidence duties"
+  ],
+  "excludedMeasures": [
+    "business outcome",
+    "enterprise ROI",
+    "human annotation correctness",
+    "runtime task success",
+    "model quality"
+  ],
+  "digest": "sha256:67ba894d95b23181cb850c318a6923e34e7d1f3611ac3b1b9360796fcb831799"
+}

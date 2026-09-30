@@ -39,7 +39,8 @@ def approve_discount(service):
     current = next(field for field in change_options(service)["fields"]
                    if field["slot_id"] == "pricing_policy")["current"]
     submit_change(service, ChangeProposalInput(event_id="discount", slot_id="pricing_policy",
-        base_version=current["version"], base_digest=current["digest"], value={**POLICY, "discount_bps": 1000},
+        base_version=current["version"], base_digest=current["digest"],
+        value={**POLICY, "discount_bps": 1000, "source_ref": "source:reviewed-policy@v2"},
         source_ref="source:reviewed-policy@v2"))
     preview = service.preview_change("discount")
     return service.approve_change("discount", actor_id=service.change_owner["discount"],

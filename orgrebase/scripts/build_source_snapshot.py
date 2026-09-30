@@ -163,6 +163,27 @@ ORGREBASE_PRIVATE_EXACT_PATHS = frozenset(
     }
 )
 
+# Internal planning and review prose is not a public product document. Keep
+# these exclusions specific to the GitHub profile; full internal archives
+# retain their historical material and its original identities.
+GITHUB_INTERNAL_PRODUCT_DOCUMENTS = frozenset({
+    "RELEASE-VERIFICATION.md",
+    "docs/REVIEW-READINESS.md",
+    "docs/UPSTREAM-CHANGE-REVIEW.md",
+    "docs/PRELIMINARY-TO-OAC-EVOLUTION-ARCHITECTURE.md",
+    "docs/VERIFICATION-EVIDENCE-MAP.md",
+})
+GITHUB_OAC_FORMAL_VALIDATION_DOCUMENTS = frozenset({
+    "docs/validation/README.md",
+    "docs/validation/CLI-ADMISSION.md",
+    "docs/validation/HISTORICAL-EVIDENCE-VERSIONING.md",
+    "docs/validation/PLAN-REPRODUCTION-RAW-ADMISSION.md",
+})
+GITHUB_OAC_FORMAL_DECISIONS = frozenset({
+    "docs/decisions/0001-mvp-boundary.md",
+    "docs/decisions/0003-contextual-applicability-boundary.md",
+})
+
 # The submission is a deliberately small release closure, not a mirror of the
 # two development repositories.  A directory is traversed only when it is an
 # ancestor of one of these prefixes or is itself an admitted prefix.
@@ -426,11 +447,86 @@ RUNTIME_OAC_SUPPORT_FILES = (
     "experiments/plan-verification-portability/v0.1-seed-1/evidence-manifest.json",
     "experiments/evolution-minimum/v0.1-seed-1/evidence-manifest.json",
 )
+
+# A public development checkout needs the independent OAC implementation and
+# conformance sources that the small runtime distribution intentionally omits.
+# Its retained experiments remain exact support files, never an experiment
+# directory mirror. The full archival profile has different replay claims.
+GITHUB_OAC_REQUIRED_FILES = (
+    "benchmark/data-readiness.json",
+    "ctk/build_bundle.py",
+    "ctk/build_successor.py",
+    "ctk/runner/pyproject.toml",
+    "implementations/go-phase-a/go.mod",
+    "implementations/go-supplier-v02-internal/go.mod",
+    "implementations/go-plan-verifier-v01-internal/go.mod",
+    "Makefile",
+    "scripts/run_benchmark.py",
+    "src/oac/ctk_adapter.py",
+    "tests/test_core.py",
+    "tests/test_security_semantics.py",
+    "tests/test_compiler_verifier.py",
+    "tests/test_ctk_successor.py",
+    "tests/test_tck.py",
+    "tests/test_package_schema.py",
+    "tests/test_cli_compile_admission.py",
+    "tests/test_cli_raw_acceptance.py",
+)
+# The Go semantic matrices and runtime-lowering tests load these fixed public
+# cases by original path. Keep precise inputs/expectations, not the historical
+# replay directories. Every file still passes the ordinary content audit.
+GITHUB_OAC_CHECK_INPUT_FILES = (
+    "experiments/supplier-v02-portability/capsule.json",
+    "experiments/supplier-v02-portability/README.md",
+    "experiments/supplier-v02-portability/artifacts/SC-008.change.json",
+    "experiments/supplier-v02-portability/artifacts/SC-009.change.json",
+    "experiments/supplier-v02-portability/artifacts/SC-010.change.json",
+    "experiments/supplier-v02-portability/artifacts/veracier-proc01-contextual.snapshot.json",
+    "experiments/supplier-v02-portability/artifacts/veracier-proc01-truncated-contextual.snapshot.json",
+    "experiments/supplier-v02-portability/expected/SC-008.report.json",
+    "experiments/supplier-v02-portability/expected/SC-009.report.json",
+    "experiments/supplier-v02-portability/expected/SC-010.report.json",
+    "experiments/plan-verification-portability/v0.1-seed-1/artifacts/plans/PV-NEG-MISSING-EVIDENCE.plan.json",
+    "experiments/plan-verification-portability/v0.1-seed-1/artifacts/plans/PV-POS-SC008-BASE.plan.json",
+    "experiments/plan-verification-portability/v0.1-seed-1/artifacts/plans/PV-POS-SC008-SPLIT.plan.json",
+    "experiments/plan-verification-portability/v0.1-seed-1/artifacts/plans/PV-POS-SC009-PROVISIONAL.plan.json",
+    "experiments/plan-verification-portability/v0.1-seed-1/artifacts/plans/PV-POS-SC010-UNKNOWN.plan.json",
+)
+GITHUB_ORGREBASE_TEST_SUPPORT_FILES = (
+    # Two regression cases parse this frozen candidate-only mapping without
+    # consulting current AgentTeams source. It is an exact historical JSON
+    # receipt, not a runtime database or the surrounding evidence directory.
+    "evidence/oac-agentic-adaptation/latest/mapping-receipt.json",
+)
+PUBLIC_OAC_CHECK_TARGETS = (
+    "lint",
+    "schemas-check",
+    "benchmark-check",
+    "ctk-successor-check",
+    "type-check",
+    "ctk-bundle-check",
+    "independent-ctk",
+    "go-phase-a-check",
+    "go-supplier-v02-check",
+    "go-plan-verifier-check",
+    "runtime-lowering-check",
+    "tck",
+)
+PUBLIC_OAC_TEST_MODULES = (
+    "tests/test_core.py",
+    "tests/test_security_semantics.py",
+    "tests/test_compiler_verifier.py",
+    "tests/test_ctk_successor.py",
+    "tests/test_tck.py",
+    "tests/test_package_schema.py",
+    "tests/test_cli_compile_admission.py",
+    "tests/test_cli_raw_acceptance.py",
+)
 ENTRY_EN = """# OrgRebase executable source
 
 [中文使用说明](README-FIRST.zh-CN.md)
 
-OrgRebase carries enterprise rule changes through scoped candidates, independent
+OrgRebase carries enterprise change through scoped candidates, independent
 review, exact owner approval and canonical application. The archive contains both
 `orgrebase/` and its required sibling `oac-spec/`, plus locked AgentTeams source.
 
@@ -474,7 +570,7 @@ ENTRY_ZH = """# OrgRebase 可执行源码使用说明
 
 [English](README-FIRST.md)
 
-OrgRebase 将企业规则变化落实为有范围的候选、独立复核、精确负责人批准和规范写入。
+OrgRebase 将企业变更落实为有范围的候选、独立复核、精确负责人批准和规范写入。
 本包同时提供 `orgrebase/`、所需的并列 `oac-spec/` 及锁定的 AgentTeams 源码。
 
 ## 安装
@@ -534,11 +630,52 @@ RUNTIME_SCOPE_ZH = """
 RUNTIME_README = ENTRY_EN + RUNTIME_SCOPE_EN
 RUNTIME_README_ZH = ENTRY_ZH + RUNTIME_SCOPE_ZH
 
+GITHUB_SCOPE_EN = """
+## GitHub source profile
+
+This profile combines the small OrgRebase runtime closure with the independent
+OAC source, benchmark, CTK and reference implementations. It excludes the
+historical experiment tree except for exact files needed by the public checks
+and packaged runtime references. It is suitable for public source review and fresh local
+development; the full historical archive replay is a separate profile.
+
+From the extracted `source-snapshot/` directory, run the bounded public OAC
+gate after `uv sync --locked --all-extras` in `oac-spec/`:
+
+```sh
+python orgrebase/scripts/build_source_snapshot.py public-check --snapshot-root .
+```
+
+The gate checks OAC lint, schemas, benchmark, CTK bundles and an independent
+adapter, Go references, runtime lowering, TCK and core tests. It is not OAC `make check`,
+which also requires historical experiment replay material. The packager does
+not execute this gate or attest an external CI run.
+"""
+GITHUB_SCOPE_ZH = """
+## GitHub 源码范围
+
+本 profile 合并 OrgRebase 精简运行闭包与独立 OAC 源码、benchmark、CTK 和参考实现。
+历史实验目录只保留公开检查和运行所需的显式文件，不作整目录镜像；
+完整历史档案回放属于另一 profile。
+解压进入 `source-snapshot/` 后，先在 `oac-spec/` 执行 `uv sync --locked --all-extras`，
+再运行以下有界公开门：
+
+```sh
+python orgrebase/scripts/build_source_snapshot.py public-check --snapshot-root .
+```
+
+该门检查 OAC lint、schema、benchmark、CTK bundle 与独立适配器、Go 参考实现、
+runtime lowering、TCK 和核心测试。它不等于还依赖历史实验材料的 OAC `make check`。
+打包器本身不运行该门，也不证明外部 CI 已通过。
+"""
+GITHUB_README = ENTRY_EN + RUNTIME_SCOPE_EN + GITHUB_SCOPE_EN
+GITHUB_README_ZH = ENTRY_ZH + RUNTIME_SCOPE_ZH + GITHUB_SCOPE_ZH
+
 DISTRIBUTION_README = """# OrgRebase source distribution
 
 [English installation guide](README-FIRST.md) · [中文安装说明](README-FIRST.zh-CN.md)
 
-OrgRebase carries changes in enterprise rules through scoped Agent tasks,
+OrgRebase carries enterprise change through scoped Agent tasks,
 independent review, exact owner approval and verifiable application.
 
 | Start here | Contents |
@@ -559,7 +696,9 @@ the [publishing guide](orgrebase/docs/guide/publishing.en.md).
 The profile and exact file inventory are recorded in `source-snapshot-metadata.json`
 beside the ZIP. Runtime-profile distributions support installation, a fresh
 public-transaction run and `make check-core`; full archive-dependent checks need
-the matching full-profile evidence. CI configuration is not a record of a CI run.
+the matching full-profile evidence. GitHub-profile distributions add the
+bounded `public-check` OAC gate described in `README-FIRST.md`. CI configuration
+is not a record of a CI run.
 No Git history, credentials, model weights or customer databases are included.
 """
 
@@ -584,7 +723,7 @@ keep their own terms.
 
 
 def _require_profile(profile: str) -> None:
-    if profile not in {"full", "runtime"}:
+    if profile not in {"full", "runtime", "github"}:
         raise SnapshotError("SOURCE_PROFILE_INVALID")
 
 
@@ -875,23 +1014,35 @@ def _release_allowlist_reason(
     del is_dir  # Files and directories use the same path-prefix closure.
     key = relative.as_posix()
     _require_profile(profile)
-    if profile == "runtime":
+    if profile == "github":
+        if component == "orgrebase" and key in GITHUB_INTERNAL_PRODUCT_DOCUMENTS:
+            return "internal_planning_or_review_document"
+        if component == "oac-spec":
+            if key == "docs/research" or key.startswith("docs/research/"):
+                return "internal_research_document"
+            if key.startswith("docs/validation/") and key not in GITHUB_OAC_FORMAL_VALIDATION_DOCUMENTS:
+                return "internal_validation_worklog"
+            if key.startswith("docs/decisions/") and key not in GITHUB_OAC_FORMAL_DECISIONS:
+                return "internal_decision_worklog"
+    if profile in {"runtime", "github"}:
         if component == "oac-spec" and any(
             _same_child_or_parent(key, path)
-            for path in (*OAC_RELEASE_SUPPORT_FILES, *RUNTIME_OAC_SUPPORT_FILES)
+            for path in (*OAC_RELEASE_SUPPORT_FILES, *RUNTIME_OAC_SUPPORT_FILES,
+                         *(GITHUB_OAC_CHECK_INPUT_FILES if profile == "github" else ()))
         ):
             return None
         if component == "orgrebase" and relative.parts[0] in {"benchmark", "evidence"}:
             prefixes = (*RUNTIME_BENCHMARK_PREFIXES, *RUNTIME_PARITY_SUPPORT_FILES, *RUNTIME_REVALIDATION_SUPPORT_FILES,
-                        ARCHIVE_REVALIDATION_PREFIX, *CORE_EVIDENCE_FILES, "evidence/release-facts.json")
+                        ARCHIVE_REVALIDATION_PREFIX, *CORE_EVIDENCE_FILES, "evidence/release-facts.json",
+                        *(GITHUB_ORGREBASE_TEST_SUPPORT_FILES if profile == "github" else ()))
             return None if any(_same_child_or_parent(key, item) for item in prefixes) else "historical_archive_not_in_runtime_profile"
-        if component == "oac-spec" and any(
+        if profile == "runtime" and component == "oac-spec" and any(
             _same_child_or_parent(key, item) for item in RUNTIME_OAC_TREE_PREFIXES
         ):
             return None
-        if component == "oac-spec" and len(relative.parts) > 1:
+        if profile == "runtime" and component == "oac-spec" and len(relative.parts) > 1:
             return "not_in_runtime_profile"
-        if component == "oac-spec" and key in {"ctk", "benchmark", "implementations", "experiments"}:
+        if profile == "runtime" and component == "oac-spec" and key in {"ctk", "benchmark", "implementations", "experiments"}:
             return "not_in_runtime_profile"
     if component == "orgrebase":
         if any(
@@ -1482,8 +1633,10 @@ def _prepare_snapshot(
     snapshot_root.mkdir(parents=True, mode=0o755)
     org_result = _copy_component(orgrebase_root, snapshot_root / "orgrebase", "orgrebase", profile=profile)
     oac_result = _copy_component(oac_root, snapshot_root / "oac-spec", "oac-spec", profile=profile)
-    _write_regular_file(snapshot_root / "README-FIRST.md", (README_FIRST if profile == "full" else RUNTIME_README).encode(), executable=False)
-    _write_regular_file(snapshot_root / "README-FIRST.zh-CN.md", (README_FIRST_ZH if profile == "full" else RUNTIME_README_ZH).encode(), executable=False)
+    readme_en = {"full": README_FIRST, "runtime": RUNTIME_README, "github": GITHUB_README}[profile]
+    readme_zh = {"full": README_FIRST_ZH, "runtime": RUNTIME_README_ZH, "github": GITHUB_README_ZH}[profile]
+    _write_regular_file(snapshot_root / "README-FIRST.md", readme_en.encode(), executable=False)
+    _write_regular_file(snapshot_root / "README-FIRST.zh-CN.md", readme_zh.encode(), executable=False)
     _write_regular_file(snapshot_root / "README.md", DISTRIBUTION_README.encode(), executable=False)
     _write_regular_file(snapshot_root / "LICENSES.md", DISTRIBUTION_LICENSES.encode(), executable=False)
     return org_result, oac_result
@@ -1542,8 +1695,10 @@ def _console_asset_paths(index: Path) -> tuple[str, ...]:
     return tuple(sorted(paths, key=_sort_key))
 
 
-def _verify_runtime_profile_closure(snapshot_root: Path) -> dict[str, Any]:
-    required = ["README.md", "LICENSES.md", "README-FIRST.md", "README-FIRST.zh-CN.md"]
+def _verify_runtime_profile_closure(snapshot_root: Path, *, require_archive_guides: bool = True) -> dict[str, Any]:
+    required = ["README.md", "LICENSES.md"]
+    if require_archive_guides:
+        required.extend(("README-FIRST.md", "README-FIRST.zh-CN.md"))
     for component in ("orgrebase", "oac-spec"):
         root = snapshot_root / component
         pyproject = root / "pyproject.toml"
@@ -1593,6 +1748,28 @@ def _verify_runtime_profile_closure(snapshot_root: Path) -> dict[str, Any]:
     return {"status": "PASS", "mode": "SOURCE_RUNTIME_INSTALL_CLOSURE", "requiredFileCount": len(required),
             "historicalArchiveReplay": "NOT_INCLUDED", "freshNativeExecution": "NOT_RUN_BY_PACKAGER",
             "modelWeightsPackaged": False, "sourceContentPolicy": "COPY_ORIGINAL_BYTES_ONLY"}
+
+
+def _verify_github_profile_closure(snapshot_root: Path, *, require_archive_guides: bool = True) -> dict[str, Any]:
+    runtime = _verify_runtime_profile_closure(snapshot_root, require_archive_guides=require_archive_guides)
+    org = snapshot_root / "orgrebase"
+    if (org / "pyproject.toml").is_file():
+        missing = [name for name in GITHUB_ORGREBASE_TEST_SUPPORT_FILES if not (org / name).is_file()]
+        if missing:
+            raise SnapshotError(f"GITHUB_ORGREBASE_TEST_SUPPORT_INCOMPLETE:{missing!r}")
+    oac = snapshot_root / "oac-spec"
+    if (oac / "pyproject.toml").is_file():
+        missing = [name for name in (*GITHUB_OAC_REQUIRED_FILES, *GITHUB_OAC_CHECK_INPUT_FILES)
+                   if not (oac / name).is_file()]
+        if missing:
+            raise SnapshotError(f"GITHUB_OAC_SOURCE_CLOSURE_INCOMPLETE:{missing!r}")
+    return {
+        **runtime,
+        "mode": "PUBLIC_SOURCE_WITH_OAC_CONFORMANCE_CLOSURE",
+        "oacRequiredFiles": list(GITHUB_OAC_REQUIRED_FILES),
+        "oacPublicCheck": "NOT_RUN_BY_PACKAGER",
+        "fullHistoricalExperimentReplay": "NOT_INCLUDED",
+    }
 
 
 def _verify_archive_revalidation_closure(snapshot_root: Path) -> dict[str, Any]:
@@ -1671,8 +1848,10 @@ def _verify_release_runtime_closure(snapshot_root: Path, *, profile: str = "full
 
     documentation = _verify_documentation_source_closure(snapshot_root)
     revalidation = _verify_archive_revalidation_closure(snapshot_root)
-    if profile == "runtime":
-        return {**_verify_runtime_profile_closure(snapshot_root), "documentation": documentation,
+    if profile in {"runtime", "github"}:
+        closure = (_verify_runtime_profile_closure(snapshot_root) if profile == "runtime"
+                   else _verify_github_profile_closure(snapshot_root))
+        return {**closure, "documentation": documentation,
                 "archiveRevalidation": revalidation}
     required: list[str] = ["README-FIRST.md", "README-FIRST.zh-CN.md"]
     org = snapshot_root / "orgrebase"
@@ -3117,11 +3296,14 @@ def _release_allowlist_payload(profile: str = "full") -> dict[str, Any]:
         "status": "PASS",
         "policy": "EXPLICIT_RELEASE_CLOSURE",
         "profile": profile,
-        "runtimeBenchmarkPrefixes": list(RUNTIME_BENCHMARK_PREFIXES) if profile == "runtime" else None,
+        "runtimeBenchmarkPrefixes": list(RUNTIME_BENCHMARK_PREFIXES) if profile in {"runtime", "github"} else None,
         "runtimeOacTreePrefixes": list(RUNTIME_OAC_TREE_PREFIXES) if profile == "runtime" else None,
-        "runtimeOacSupportFiles": list(RUNTIME_OAC_SUPPORT_FILES) if profile == "runtime" else None,
-        "runtimeParitySupportFiles": list(RUNTIME_PARITY_SUPPORT_FILES) if profile == "runtime" else None,
-        "runtimeRevalidationSupportFiles": list(RUNTIME_REVALIDATION_SUPPORT_FILES) if profile == "runtime" else None,
+        "runtimeOacSupportFiles": list(RUNTIME_OAC_SUPPORT_FILES) if profile in {"runtime", "github"} else None,
+        "runtimeParitySupportFiles": list(RUNTIME_PARITY_SUPPORT_FILES) if profile in {"runtime", "github"} else None,
+        "runtimeRevalidationSupportFiles": list(RUNTIME_REVALIDATION_SUPPORT_FILES) if profile in {"runtime", "github"} else None,
+        "githubOacRequiredFiles": list(GITHUB_OAC_REQUIRED_FILES) if profile == "github" else None,
+        "githubOacCheckInputFiles": list(GITHUB_OAC_CHECK_INPUT_FILES) if profile == "github" else None,
+        "githubOrgRebaseTestSupportFiles": list(GITHUB_ORGREBASE_TEST_SUPPORT_FILES) if profile == "github" else None,
         "currentRevalidationPrefix": ARCHIVE_REVALIDATION_PREFIX,
         "orgrebaseTreePrefixes": list(ORGREBASE_RELEASE_TREE_PREFIXES),
         "benchmarkPrefixes": list(ORGREBASE_RELEASE_BENCHMARK_PREFIXES),
@@ -3451,13 +3633,59 @@ def _parser() -> argparse.ArgumentParser:
             help="Required independent oac-spec source root",
         )
         subparser.add_argument("--output-dir", type=Path, required=True)
-        subparser.add_argument("--profile", choices=("full", "runtime"), default="full")
+        subparser.add_argument("--profile", choices=("full", "runtime", "github"), default="full")
+    public_check = subparsers.add_parser(
+        "public-check", help="Run the bounded OAC conformance gate from a GitHub-profile source tree"
+    )
+    public_check.add_argument(
+        "--snapshot-root", type=Path, default=Path(__file__).resolve().parents[2]
+    )
     return parser
+
+
+def run_public_check(snapshot_root: Path) -> int:
+    root = snapshot_root.resolve()
+    if not root.is_dir():
+        raise SnapshotError("PUBLIC_CHECK_SOURCE_ROOT_MISSING")
+    for name in ("spec", ".codex", ".claude", "RELEASE-REPORT.md"):
+        if (root / name).exists():
+            raise SnapshotError(f"PUBLIC_INTERNAL_WORK_MATERIAL:{name}")
+    for component in ("orgrebase", "oac-spec"):
+        source = root / component
+        paths = list((source / "docs").rglob("*")) if (source / "docs").is_dir() else []
+        paths.append(source / "RELEASE-VERIFICATION.md")
+        for path in paths:
+            if not path.is_file():
+                continue
+            relative = PurePosixPath(path.relative_to(source).as_posix())
+            reason = _release_allowlist_reason(relative, component, is_dir=False, profile="github")
+            if reason and reason.startswith("internal_"):
+                raise SnapshotError(f"PUBLIC_INTERNAL_WORK_MATERIAL:{component}/{relative}")
+    # These two guides are generated for source ZIPs, not GitHub checkouts.
+    # The runtime/install closure remains identical for both layouts.
+    _verify_github_profile_closure(root, require_archive_guides=False)
+    command = ["make", *PUBLIC_OAC_CHECK_TARGETS]
+    print("PUBLIC_OAC_CHECK:" + " ".join(command), flush=True)
+    try:
+        result = subprocess.run(command, cwd=root / "oac-spec", check=False)
+    except OSError as exc:
+        raise SnapshotError("PUBLIC_CHECK_TOOL_UNAVAILABLE") from exc
+    if result.returncode:
+        return result.returncode
+    tests = ["uv", "run", "pytest", "-q", *PUBLIC_OAC_TEST_MODULES]
+    print("PUBLIC_OAC_TESTS:" + " ".join(tests), flush=True)
+    try:
+        result = subprocess.run(tests, cwd=root / "oac-spec", check=False)
+    except OSError as exc:
+        raise SnapshotError("PUBLIC_CHECK_TOOL_UNAVAILABLE") from exc
+    return result.returncode
 
 
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     try:
+        if args.command == "public-check":
+            return run_public_check(args.snapshot_root)
         if args.command == "build":
             result = build_source_snapshot(args.orgrebase_root, args.oac_root, args.output_dir, profile=args.profile)
         else:

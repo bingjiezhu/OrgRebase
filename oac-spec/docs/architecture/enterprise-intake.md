@@ -1,6 +1,6 @@
 # 企业材料准入：有界 Supplier profile
 
-本模块完成 Spec 008 的本地 E0a 材料入口：对一个精确材料包进行解析、规则和权限范围验证，生成既有 Spec 009 `SourceAdmissionReceipt`；只有完整准入后才调用现有 Supplier 派生器。它不执行工具、不联网、不修改企业事实，也不把材料中自称的人类身份当作企业 IAM 证明。
+本模块提供有界企业材料入口：对精确材料包进行解析、规则和权限范围验证，生成 `SourceAdmissionReceipt`；只有完整准入后才调用现有 Supplier 派生器。它不执行工具、不联网、不修改企业事实，也不把材料中自称的人类身份当作企业 IAM 证明。
 
 入口为 `oac.enterprise_intake.admit_intake`，输入包括原始 manifest、按 sourceRef 索引的原始 JSON bytes、规则和权限文档、由调用方独立提供的规则/权限 ResourceRef，以及显式 evaluated_at。候选材料不能自行选定可信公钥、权限记录或当前时间。`parse_intake_manifest` 只做封闭结构解析，不产生准入权限。
 
@@ -49,4 +49,4 @@ SourceAdmissionReceipt 只准入资源 envelope。它不能把 nested candidate 
 
 `profiles/enterprise-intake/supplier-review-v0.1` 是带实际 bytes、独立 caller pins 和明确本地时间的 Supplier 样例。五项义务、角色和目标的期望来自明确业务断言；源数据沿用已有 Supplier 示例，不把新观察复制为 Gold。`tests/test_enterprise_intake.py` 覆盖整个材料入口、真实派生、八轴同根、摘要/权限/角色/范围/资源上限以及未知语义；`tests/test_intake_state.py` 覆盖证据重绑定和零效果边界。
 
-最终 `make archive-replay-check` 会执行这些测试、类型检查与 schema drift 门；独立安装验收使用同一公开函数和已打包样例。实际运行日志和字节清单位于本轮 `运行记录/20260909-product-completion/oac-successor`，阶段通过不替代最终干净归档与安装结果。
+材料入口的聚焦检查使用 `uv run --frozen pytest tests/test_enterprise_intake.py tests/test_intake_state.py`；独立安装检查使用相同公开函数与打包样例。公开综合门及历史归档范围见[验证说明](../validation/README.md)。检查结果只适用于实际输入、源码和安装制品，不替代客户环境准入。

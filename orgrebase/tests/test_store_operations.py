@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
+from uuid import uuid4
 
 import psycopg
 import pytest
@@ -9,7 +11,7 @@ from psycopg import sql
 from test_postgres_store import postgres_cluster as postgres_cluster
 from test_postgres_store import postgres_dsn as postgres_dsn
 
-from orgrebase.clock import FrozenClock
+from orgrebase.clock import FrozenClock, SystemClock
 from orgrebase.domain import IntegrityError
 from orgrebase.private_records import PrivateRecordStore
 from orgrebase.store import StateStore
@@ -396,3 +398,172 @@ def test_backup_cli_reports_existing_output_without_disclosing_path(
     assert not captured.out
     assert str(tmp_path) not in captured.err
     assert "password" not in captured.err
+
+
+@pytest.mark.parametrize("action", ["qualify", "backup", "deletion-ledger"])
+def test_historical_v5_read_only_cli_preserves_the_database(
+    postgres_dsn: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    action: str,
+) -> None:
+    with StateStore(postgres_dsn, tenant_id="org:test") as store:
+        with store.transaction() as connection:
+            store.save_artifact(connection, "historical:business", "application/json", {"amount": "17.00"})
+            store.append_event(connection, "HISTORICAL_BUSINESS", {"artifact": "historical:business"})
+        original_head = store.audit_head()
+    # This fixture owns a new database. Removing only the empty v6 table
+    # reconstructs the released v5 schema without changing business bytes.
+    with psycopg.connect(postgres_dsn, autocommit=True) as operator:
+        operator.execute("DROP TABLE deployment_budget_reservations")
+        operator.execute("UPDATE store_metadata SET schema_version=5 WHERE singleton=1")
+
+    monkeypatch.setenv("HISTORICAL_OPERATOR_DATABASE", postgres_dsn)
+    arguments = [action, "--database-env", "HISTORICAL_OPERATOR_DATABASE", "--tenant", "org:test",
+                 "--read-schema-version", "5"]
+    output = tmp_path / ("backup-v5" if action == "backup" else "deletions-v5.json")
+    if action != "qualify":
+        arguments.extend(["--output", str(output)])
+    assert main(arguments) == 0
+    captured = capsys.readouterr()
+    result = json.loads(captured.out)
+    assert not captured.err and postgres_dsn not in captured.out
+    if action == "qualify":
+        assert result["database"]["schema_version"] == 5
+        assert result["writes_released"] is False
+    elif action == "backup":
+        assert result["state_store_schema_version"] == 5
+        assert json.loads((output / "manifest.json").read_text()) == result
+        assert (output / "database.dump").stat().st_size > 0
+    else:
+        assert result["status"] == "CURRENT_DELETION_LEDGER_EXPORTED"
+        assert json.loads(output.read_text()) == {
+            "schema_version": "orgrebase.private-deletions.v2",
+            "tenant_id": "org:test",
+            "workspaces": [{"workspace_id": "default", "records": []}],
+        }
+    with StateStore(
+        postgres_dsn, tenant_id="org:test", maintenance=True, read_only=True, read_schema_version=5,
+    ) as historical:
+        assert historical.check_health()["schema_version"] == 5
+        assert historical.audit_head() == original_head
+        assert historical.load_artifact("historical:business").payload == {"amount": "17.00"}
+        assert historical.verify_event_chain()["events"] == 1
+
+
+@pytest.mark.parametrize("action", ["migrate", "restore"])
+def test_historical_selector_cannot_dispatch_a_writing_cli_action(
+    action: str, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
+) -> None:
+    def forbidden(*args, **kwargs):
+        pytest.fail("a writing database action must not receive a historical selector")
+
+    monkeypatch.setenv("HISTORICAL_OPERATOR_DATABASE", "postgresql://unused/db")
+    monkeypatch.setattr("orgrebase.store_operations.migrate_postgres", forbidden)
+    monkeypatch.setattr("orgrebase.store_operations.restore_postgres", forbidden)
+    with pytest.raises(SystemExit) as rejected:
+        main([action, "--database-env", "HISTORICAL_OPERATOR_DATABASE", "--tenant", "org:test",
+              "--read-schema-version", "5"])
+    assert rejected.value.code == 2
+    captured = capsys.readouterr()
+    assert "only available for read-only database operations" in captured.err
+    assert not captured.out
+
+
+def test_real_historical_v5_cli_backup_restore_retains_scopes_and_recovery_isolation(
+    postgres_dsn: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    clock = SystemClock()
+    profile = "sha256:" + "8" * 64
+    with StateStore(postgres_dsn, tenant_id="org:test") as catalog:
+        catalog.bind_workspace(profile_digest=profile, pack_digest=None, quote_object_id="quote:default")
+        catalog.register_workspace("quote-b", profile_digest=profile, pack_digest=None,
+                                   quote_object_id="quote:b", created_at=clock.now())
+        with catalog.transaction() as connection:
+            connection.execute(
+                "INSERT INTO browser_sessions(session_id,issuer,subject,payload_ciphertext,created_at,expires_at) "
+                "VALUES('old-v5-session','https://id.example','person','encrypted',1,9999999999)"
+            )
+            connection.execute("INSERT INTO oidc_login_transactions VALUES('old-v5-login','browser','encrypted',1,9999999999)")
+            connection.execute("INSERT INTO browser_session_revocations VALUES('old-v5-fence','SUBJECT',1,9999999999)")
+    original_heads = {}
+    for workspace in ("default", "quote-b"):
+        with StateStore(postgres_dsn, tenant_id="org:test", workspace_id=workspace, migrate=False) as store:
+            with store.transaction() as connection:
+                store.save_artifact(connection, "same-business", "application/json", {"scope": workspace})
+                store.append_event(connection, "V5_BUSINESS_CREATED", {"scope": workspace})
+                PrivateRecordStore(store, clock).write(connection, record_id="same-private", scope_ref="run:v5",
+                                                       owner_id="person", payload={"scope": workspace})
+                if workspace == "default":
+                    store.put_effect(connection, effect_id="v5:unknown", target_key="v5:target",
+                                     request_digest="exact-v5-request", request={}, created_at=clock.now())
+                    store.acquire_target_barrier(connection, target_key="v5:target", effect_id="v5:unknown")
+                    store.update_effect(connection, effect_id="v5:unknown", expected_state="READY",
+                                        state="COMMIT_UNKNOWN", updated_at=clock.now())
+            original_heads[workspace] = store.audit_head()["head_digest"]
+    with psycopg.connect(postgres_dsn, autocommit=True) as operator:
+        operator.execute("DROP TABLE deployment_budget_reservations")
+        operator.execute("UPDATE store_metadata SET schema_version=5 WHERE singleton=1")
+    monkeypatch.setenv("HISTORICAL_V5_DATABASE", postgres_dsn)
+
+    def invoke(action, *extra):
+        assert main([action, "--database-env", "HISTORICAL_V5_DATABASE", "--tenant", "org:test", *map(str, extra)]) == 0
+        captured = capsys.readouterr()
+        assert not captured.err and postgres_dsn not in captured.out
+        return json.loads(captured.out)
+
+    backup = tmp_path / "v5-backup"
+    manifest = invoke("backup", "--read-schema-version", "5", "--output", backup)
+    assert manifest["schema_version"] == "orgrebase.postgres-backup.v2"
+    assert manifest["state_store_schema_version"] == 5
+    with StateStore(postgres_dsn, tenant_id="org:test", maintenance=True,
+                    read_only=True, read_schema_version=5) as historical:
+        assert historical.check_health()["schema_version"] == 5
+    # The writing source remains at v5 solely for this owned fixture. Delete
+    # with SQL using the immutable ledger facts, rather than migrating it.
+    with psycopg.connect(postgres_dsn, autocommit=True) as operator, operator.transaction():
+        operator.execute("UPDATE private_records SET content_json=NULL, deleted_at=%s, deletion_reason='USER_REQUESTED' "
+                         "WHERE workspace_id='default' AND record_id='same-private'", (clock.now(),))
+    ledger_path = tmp_path / "v5-current-deletions.json"
+    invoke("deletion-ledger", "--read-schema-version", "5", "--output", ledger_path)
+    unsupported = tmp_path / "unsupported-v1-v5"
+    shutil.copytree(backup, unsupported)
+    (unsupported / "manifest.json").write_text(json.dumps({**manifest, "schema_version": "orgrebase.postgres-backup.v1"}))
+    rejected_name = "unsupported_v5_" + uuid4().hex[:16]
+    with pytest.raises(StoreOperationError, match="BACKUP_MANIFEST_BINDING_MISMATCH"):
+        invoke("restore", "--backup", unsupported, "--deletion-ledger", ledger_path, "--new-database", rejected_name)
+    with psycopg.connect(postgres_dsn, autocommit=True) as operator:
+        assert not operator.execute("SELECT EXISTS(SELECT 1 FROM pg_database WHERE datname=%s)", (rejected_name,)).fetchone()[0]
+    name = "supported_v5_" + uuid4().hex[:16]
+    restored_dsn = database_dsn(postgres_dsn, name)
+    try:
+        restored = invoke("restore", "--backup", backup, "--deletion-ledger", ledger_path, "--new-database", name)
+        assert restored["restored_schema_version"] == 5
+        assert restored["database"]["schema_version"] == 6
+        assert restored["backup_workspace_heads"] == original_heads
+        assert restored["writes_released"] is False and restored["database"]["recovery_required"] is True
+        assert restored["invalidated_browser_sessions"] == restored["invalidated_login_transactions"] == 1
+        assert restored["reapplied_deletions"] == 1
+        for workspace in ("default", "quote-b"):
+            with StateStore(restored_dsn, tenant_id="org:test", workspace_id=workspace,
+                            maintenance=True, migrate=False) as store:
+                assert store.load_artifact("same-business").payload == {"scope": workspace}
+                assert (PrivateRecordStore(store, clock).read("same-private") is None) == (workspace == "default")
+                assert store.verify_event_chain()["status"] == "PASS"
+                assert store.event_by_digest(original_heads[workspace])["payload"] == {"scope": workspace}
+                assert store.connection.execute("SELECT count(*) FROM browser_sessions").fetchone()[0] == 0
+                assert store.connection.execute("SELECT count(*) FROM oidc_login_transactions").fetchone()[0] == 0
+                assert store.connection.execute("SELECT count(*) FROM browser_session_revocations").fetchone()[0] == 1
+                if workspace == "default":
+                    assert store.get_effect("v5:unknown")["state"] == "COMMIT_UNKNOWN"
+                    assert store.get_target_barrier("v5:target") == "v5:unknown"
+        monkeypatch.setenv("HISTORICAL_V5_DATABASE", restored_dsn)
+        qualification = invoke("qualify")
+        assert qualification["writes_released"] is False
+        with pytest.raises(IntegrityError, match="STATE_STORE_RECOVERY_QUALIFICATION_REQUIRED"):
+            StateStore(restored_dsn, tenant_id="org:test", migrate=False)
+    finally:
+        with psycopg.connect(postgres_dsn, autocommit=True) as operator:
+            operator.execute(sql.SQL("DROP DATABASE IF EXISTS {} WITH (FORCE)").format(sql.Identifier(name)))

@@ -20,6 +20,13 @@
 .change-form-grid label.wide { grid-column:1/-1; }
 .change-workbench input, .change-workbench select, .change-workbench textarea { width:100%; min-width:0; border:1px solid #aaa69d; border-radius:6px; background:white; padding:10px 12px; color:inherit; font:inherit; }
 .change-workbench textarea { resize:vertical; }
+.change-basket-editor { min-width:0; }
+.change-basket-editor > p { margin:0 0 12px; font-size:12px; color:#625f58; }
+.change-basket-line { min-width:0; margin:0 0 12px; padding:12px; border:1px solid var(--line,#d8d4cc); border-radius:8px; }
+.change-basket-line legend { font-size:13px; font-weight:600; }
+.change-basket-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.change-basket-fields label { display:grid; min-width:0; gap:6px; font-size:12px; }
+.change-basket-line > small { display:block; margin:10px 0 6px; font-size:11px; color:#625f58; overflow-wrap:anywhere; }
 .change-workbench input:focus-visible, .change-workbench select:focus-visible, .change-workbench textarea:focus-visible,
 .change-workbench button:focus-visible, .workspace-session a:focus-visible, .workspace-session button:focus-visible { outline:3px solid #335f83; outline-offset:3px; }
 .change-form-context { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; padding:12px; background:#f2f0e9; border-radius:6px; }
@@ -84,6 +91,7 @@
 .change-workbench [hidden], .workspace-session [hidden] { display:none !important; }
 @media (max-width:760px) { .change-workbench-layout { grid-template-columns:1fr; } .change-form-context { grid-template-columns:1fr; } .workspace-session { align-items:start; flex-wrap:wrap; } }
 @media (max-width:480px) { .change-form-grid, .change-detail dl { grid-template-columns:1fr; } .change-workbench-header { flex-wrap:wrap; } .change-workbench { padding:16px; } .change-workbench .button { white-space:normal; } }
+@media (max-width:480px) { .change-basket-fields { grid-template-columns:1fr; } }
 
 .workspace-session > div { min-width:0; }
 #session-workspace-picker { flex-shrink:1; }

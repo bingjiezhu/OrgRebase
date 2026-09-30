@@ -135,6 +135,7 @@ def test_external_outcome_retraction_reaches_admitted_source_plan_claim_and_late
             actor_id="scripted:skill-governance",
             verdict="ADMIT",
             expected_candidate_digest=record["digest"],
+            expected_head_package_digest=record["base_package_digest"],
         )
         (admission,) = controller._family("admission")
         plan = controller.register_successor(
@@ -166,16 +167,18 @@ def test_external_outcome_retraction_reaches_admitted_source_plan_claim_and_late
             claim,
         } <= set(withdrawal["affected_refs"])
         assert controller.evidence_status(candidate) == "REQUALIFICATION_REQUIRED"
-        second = controller.open_proposal(
-            proposal_id="proposal:after-withdrawal",
-            corpus_ref=corpus_ref,
-            replay_ref=suite_ref,
-            skill_name="structured-domain-handoff",
-            author_id="learner:bounded",
-            budget=ProposalBudget(max_cases=10, max_skill_invocations=100, max_seconds=100),
-        )
-        with pytest.raises(IntegrityError, match="PATTERN_DEPENDENCY_PROVIDER_RETRACTED"):
-            controller.propose(second, actor_id="learner:bounded", boundary=boundary)
+        # The unique head now points to a requalification-required source.
+        # A new proposal must stop at head capture rather than falling back
+        # to an installed package and silently reviving the withdrawn source.
+        with pytest.raises(IntegrityError, match="PATTERN_STABLE_HEAD_SOURCE_MISMATCH"):
+            controller.open_proposal(
+                proposal_id="proposal:after-withdrawal",
+                corpus_ref=corpus_ref,
+                replay_ref=suite_ref,
+                skill_name="structured-domain-handoff",
+                author_id="learner:bounded",
+                budget=ProposalBudget(max_cases=10, max_skill_invocations=100, max_seconds=100),
+            )
         assert len(controller._family("skill-candidate")) == 1
 
 
@@ -296,6 +299,7 @@ def test_withdrawal_during_admission_replay_stops_before_new_source(tmp_path, mo
                 actor_id="scripted:skill-governance",
                 verdict="ADMIT",
                 expected_candidate_digest=controller._load(candidate)["digest"],
+                expected_head_package_digest=controller._load(candidate)["base_package_digest"],
             )
         assert len(calls) == 1
         assert controller._family("admission") == ()

@@ -2,10 +2,15 @@ from __future__ import annotations
 
 import io
 import json
-from datetime import timedelta
+import socket
+import time
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from types import SimpleNamespace
 from urllib.error import HTTPError
 
+import anyio
+import httpx2 as httpx
 import pytest
 
 from orgrebase.clock import FrozenClock, timestamp, utc_datetime
@@ -122,6 +127,218 @@ def test_rate_limit_exposes_bounded_retry_deadline_without_sleeping() -> None:
     with pytest.raises(SourceRateLimited) as error:
         reader.fetch(None)
     assert error.value.retry_after == 120
+
+
+class _BudgetClock:
+    def __init__(self) -> None:
+        self.elapsed = 0.0
+        self.started = datetime(2026, 9, 9, tzinfo=UTC)
+
+    def monotonic(self) -> float:
+        return self.elapsed
+
+    def now(self) -> str:
+        return timestamp(self.started + timedelta(seconds=self.elapsed))
+
+    def advance(self, seconds: float) -> None:
+        self.elapsed += seconds
+
+
+class _AdvancingResponse:
+    status = 200
+
+    def __init__(self, payload: dict, clock: _BudgetClock, delay: float) -> None:
+        self.payload = json.dumps(payload).encode()
+        self.clock = clock
+        self.delay = delay
+        self.sent = False
+        self.closed = False
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args):
+        self.close()
+
+    def read(self, _size: int) -> bytes:
+        if self.sent:
+            return b""
+        self.sent = True
+        self.clock.advance(self.delay)
+        return self.payload
+
+    def close(self) -> None:
+        self.closed = True
+
+
+def test_normal_eight_slow_readbacks_renew_one_fence_and_commit_cursor_once() -> None:
+    identities = tuple(f"00000000-0000-0000-0000-{index:012d}" for index in range(1, 9))
+    source_settings = settings(record_ids=identities)
+    clock = _BudgetClock()
+    reader = DataverseReader(
+        source_settings, lambda: "token", operation_timeout=140, max_reads=16,
+        monotonic=clock.monotonic,
+    )
+    requests = []
+
+    class Opener:
+        def open(self, request, timeout):
+            requests.append((request.full_url, timeout))
+            if "/quotes(" not in request.full_url:
+                return _AdvancingResponse({
+                    "@odata.deltaLink": source_settings.endpoint + "?$deltatoken=complete",
+                    "value": [],
+                }, clock, 0)
+            identity = request.full_url.split("quotes(", 1)[1].split(")", 1)[0]
+            return _AdvancingResponse({
+                "quoteid": identity, "@odata.etag": 'W/"slow"',
+                "new_currency": "EUR", "modifiedon": "2026-09-09T00:00:00Z",
+            }, clock, 16)
+
+    reader.opener = Opener()
+
+    def verify(page: SourcePage) -> SourcePage:
+        records = tuple(reader.read_record(identity) for identity in identities)
+        return SourcePage(records, page.cursor, False, {"complete": True})
+
+    admitted = []
+    with StateStore(tenant_id="tenant:one") as store:
+        sync = SourceSynchronizer(
+            store, reader, worker_id="slow-reader", admit=lambda _c, row, *_: admitted.append(row),
+            admission_digest=ADMISSION_DIGEST, clock=clock, verify_page=verify,
+            lease_seconds=20, max_lease_renewals=20,
+        )
+        result = sync.sync_page()
+        checkpoint = store.get_source_checkpoint(source_settings.connector_id)
+    assert result["records_admitted"] == 8 and not result["more"]
+    assert len(admitted) == 8 and len(requests) == 9
+    assert clock.elapsed == 128
+    assert checkpoint["revision"] == 1
+    assert checkpoint["cursor"].endswith("?$deltatoken=complete")
+    assert checkpoint["lease_owner"] is None and checkpoint["lease_until"] is None
+
+
+def test_source_socket_read_is_interrupted_at_total_deadline_and_cursor_stays_put() -> None:
+    client_socket, server_socket = socket.socketpair()
+
+    class BlockingResponse:
+        status = 200
+
+        def __init__(self):
+            self.closed = False
+            self.fp = SimpleNamespace(raw=SimpleNamespace(_sock=client_socket))
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            self.close()
+
+        def isclosed(self):
+            return self.closed
+
+        def read1(self, size):
+            return client_socket.recv(size)
+
+        def close(self):
+            if not self.closed:
+                self.closed = True
+                client_socket.close()
+                server_socket.close()
+
+    response = BlockingResponse()
+    reader = DataverseReader(
+        settings(), lambda: "token", timeout=1, operation_timeout=0.03,
+    )
+    reader.opener = SimpleNamespace(open=lambda *_args, **_kwargs: response)
+    with StateStore(tenant_id="tenant:one") as store:
+        sync = SourceSynchronizer(
+            store, reader, worker_id="reader", admit=lambda *_: pytest.fail("must not admit"),
+            admission_digest=ADMISSION_DIGEST, lease_seconds=1,
+        )
+        started = time.monotonic()
+        with pytest.raises(SourceError, match="SOURCE_OPERATION_DEADLINE_EXCEEDED"):
+            sync.sync_page()
+        elapsed = time.monotonic() - started
+        checkpoint = store.get_source_checkpoint(reader.settings.connector_id)
+    assert elapsed < 0.5 and response.closed
+    assert checkpoint["cursor"] is None and checkpoint["revision"] == 0
+    assert checkpoint["lease_owner"] is None
+
+
+@pytest.mark.parametrize("phase", ["headers", "body"])
+def test_source_async_transport_cancels_headers_and_body_at_total_deadline(phase) -> None:
+    class BlockingStream(httpx.AsyncByteStream):
+        closed = False
+
+        async def __aiter__(self):
+            yield b"{"
+            await anyio.sleep(0.2)
+            yield b"}"
+
+        async def aclose(self):
+            self.closed = True
+
+    stream = BlockingStream()
+
+    async def respond(_request):
+        if phase == "headers":
+            await anyio.sleep(0.2)
+            return httpx.Response(200, json={"value": []})
+        return httpx.Response(200, stream=stream)
+
+    reader = DataverseReader(
+        settings(), lambda: "token", timeout=1, operation_timeout=0.03,
+        async_transport=httpx.MockTransport(respond),
+    )
+    started = time.monotonic()
+    with pytest.raises(SourceError, match="SOURCE_OPERATION_DEADLINE_EXCEEDED"):
+        reader.fetch(None)
+    assert time.monotonic() - started < 0.12
+    if phase == "body":
+        assert stream.closed
+
+
+@pytest.mark.parametrize("limit", ["reads", "bytes"])
+def test_source_operation_budgets_stop_before_cursor_commit(limit) -> None:
+    page = {
+        "@odata.deltaLink": settings().endpoint + "?$deltatoken=budget",
+        "value": [],
+    }
+    record = {
+        "quoteid": RECORD, "@odata.etag": 'W/"budget"', "new_currency": "EUR",
+    }
+    page_bytes = json.dumps(page).encode()
+    record_bytes = json.dumps(record).encode()
+    requests = []
+
+    async def respond(request):
+        requests.append(str(request.url))
+        return httpx.Response(200, content=record_bytes if "/quotes(" in request.url.path else page_bytes)
+
+    reader = DataverseReader(
+        settings(), lambda: "token", max_reads=1 if limit == "reads" else 2,
+        max_operation_bytes=(len(page_bytes) + len(record_bytes) - 1 if limit == "bytes" else 1024),
+        async_transport=httpx.MockTransport(respond),
+    )
+
+    def verify(page_result: SourcePage) -> SourcePage:
+        return SourcePage((reader.read_record(RECORD),), page_result.cursor, False)
+
+    expected = (
+        "SOURCE_OPERATION_READ_BUDGET_EXCEEDED"
+        if limit == "reads" else "SOURCE_OPERATION_BYTE_BUDGET_EXCEEDED"
+    )
+    with StateStore(tenant_id="tenant:one") as store:
+        sync = SourceSynchronizer(
+            store, reader, worker_id="budget-reader", admit=lambda *_: pytest.fail("must not admit"),
+            admission_digest=ADMISSION_DIGEST, verify_page=verify,
+        )
+        with pytest.raises(SourceError, match=expected):
+            sync.sync_page()
+        checkpoint = store.get_source_checkpoint(reader.settings.connector_id)
+    assert len(requests) == (1 if limit == "reads" else 2)
+    assert checkpoint["cursor"] is None and checkpoint["revision"] == 0
 
 
 def test_page_admission_failure_rolls_back_cursor_and_replays_durable_inbox() -> None:

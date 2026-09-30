@@ -1,0 +1,30 @@
+{
+  "baselineInputVersion": "1.0",
+  "baselineId": "fixed-team",
+  "evaluationClass": "mechanics-only",
+  "inputSetRef": "benchmark/matched-inputs.json",
+  "inputSetDigest": "sha256:67ba894d95b23181cb850c318a6923e34e7d1f3611ac3b1b9360796fcb831799",
+  "policy": {
+    "machinePolicy": "fixed-role-set",
+    "selectedRoleRefs": [
+      "role:procurement-owner",
+      "role:legal-reviewer",
+      "role:finance-exposure",
+      "role:operations-continuity",
+      "role:quality-qualification"
+    ],
+    "selection": "always select procurement, legal, finance, operations, and quality",
+    "dependencyTraversal": "none",
+    "organizationalRules": "used only as task text, never for team membership",
+    "unknownHandling": "no adaptive discovery role",
+    "ordering": "fixed procurement-before-all fan-out"
+  },
+  "expectedFailureModes": [
+    "redundant activation on healthy control",
+    "missing compliance or discovery specialization",
+    "false minimality"
+  ],
+  "executionStatus": "mechanics-run-available",
+  "runManifestRef": "benchmark/runs/fixed-team.run.json",
+  "claimLimit": "The run measures agreement with project-authored exploratory candidate roles, not Ground Truth or enterprise quality."
+}

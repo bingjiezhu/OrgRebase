@@ -1,0 +1,18 @@
+{
+  "caseId": "S-ENFORCE-JSON-DEPTH-64",
+  "expect": {
+    "result": {
+      "canonicalBase64": "W1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbMF1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXQ==",
+      "digest": "sha256:fde0eda17a8361657f8813c2055b2c9a53a6bc4b7e686c7156a03899281a7833"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "rawBase64": "W1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbMF1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXQ=="
+  },
+  "operation": "canonicalize",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

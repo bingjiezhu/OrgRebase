@@ -1,0 +1,328 @@
+{
+  "apiVersion": "oac.ctk.plan-mutations/v0alpha1",
+  "kind": "PlanVerificationRecipeSet",
+  "recipeSetId": "oac.supplier.plan-verification/v0.1-seed-1",
+  "generatorVersion": "0.1.0",
+  "seed": 20260824,
+  "rootSets": {
+    "SC-008": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-008.change.json"
+    },
+    "SC-008-SNAPSHOT-DIGEST-TAMPER": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-008.change.json",
+      "snapshotTransform": "tamper-claimed-digest"
+    },
+    "SC-008-CHANGE-DIGEST-TAMPER": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-008.change.json",
+      "changeTransform": "tamper-claimed-digest"
+    },
+    "SC-009": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-009.change.json"
+    },
+    "SC-010": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-010.change.json"
+    },
+    "SC-008-INACTIVE-PRINCIPAL": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-008.change.json",
+      "snapshotTransform": "principal-inactive-with-active-alternative"
+    },
+    "SC-008-CANDIDATE-PRINCIPAL": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-008.change.json",
+      "snapshotTransform": "principal-candidate-with-active-alternative"
+    },
+    "SC-008-CANDIDATE-DECISION": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-008.change.json",
+      "snapshotTransform": "add-candidate-decision-edge"
+    },
+    "SC-008-RETRACTED-DECISION": {
+      "snapshot": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+      "change": "profiles/supplier-change/inputs/SC-008.change.json",
+      "snapshotTransform": "add-retracted-decision-edge"
+    }
+  },
+  "cases": [
+    {
+      "caseId": "PV-POS-SC008-BASE",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "positive-base",
+      "transform": "exact-copy"
+    },
+    {
+      "caseId": "PV-POS-SC008-SPLIT",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "positive-legal-split",
+      "transform": "split-operations-work"
+    },
+    {
+      "caseId": "PV-POS-SC009-PROVISIONAL",
+      "rootSet": "SC-009",
+      "sourcePlan": "tck/fixtures/positive/SC-009-contextual.plan.json",
+      "mutationClass": "positive-provisional-candidate-authority",
+      "transform": "reseal-plan"
+    },
+    {
+      "caseId": "PV-POS-SC010-UNKNOWN",
+      "rootSet": "SC-010",
+      "sourcePlan": "tck/fixtures/positive/SC-010-unknown.plan.json",
+      "mutationClass": "positive-root-unknown",
+      "transform": "reseal-plan"
+    },
+    {
+      "caseId": "PV-NEG-SNAPSHOT-DIGEST-TAMPER",
+      "rootSet": "SC-008-SNAPSHOT-DIGEST-TAMPER",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "snapshot-digest-admission",
+      "transform": "exact-copy"
+    },
+    {
+      "caseId": "PV-NEG-CHANGE-DIGEST-TAMPER",
+      "rootSet": "SC-008-CHANGE-DIGEST-TAMPER",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "change-digest-admission",
+      "transform": "exact-copy"
+    },
+    {
+      "caseId": "PV-NEG-PLAN-DIGEST-TAMPER",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "plan-digest-admission",
+      "transform": "tamper-plan-digest"
+    },
+    {
+      "caseId": "PV-NEG-INPUT-ROOT-MISMATCH",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "input-root-binding",
+      "transform": "mismatch-input-root"
+    },
+    {
+      "caseId": "PV-NEG-RESOURCE-COHERENCE",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "resource-coherence",
+      "transform": "mismatch-owner"
+    },
+    {
+      "caseId": "PV-NEG-OBLIGATION-PROJECTION-FORGERY",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "obligation-projection-forgery",
+      "transform": "forge-obligation-projection"
+    },
+    {
+      "caseId": "PV-NEG-OBLIGATION-DISCHARGE-OMISSION",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "obligation-omission",
+      "transform": "omit-work-and-role-obligation"
+    },
+    {
+      "caseId": "PV-NEG-EVALUATION-FORGERY",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "evaluation-forgery",
+      "transform": "flip-first-evaluation-result"
+    },
+    {
+      "caseId": "PV-NEG-PATH-OMISSION",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "impact-path-omission",
+      "transform": "omit-first-impact-path"
+    },
+    {
+      "caseId": "PV-NEG-UNKNOWN-ERASURE",
+      "rootSet": "SC-010",
+      "sourcePlan": "tck/fixtures/positive/SC-010-unknown.plan.json",
+      "mutationClass": "unknown-erasure",
+      "transform": "erase-unresolved-refs"
+    },
+    {
+      "caseId": "PV-NEG-PLAN-STATUS-MISMATCH",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "plan-status",
+      "transform": "mismatch-plan-status"
+    },
+    {
+      "caseId": "PV-NEG-AUTHORITY-COLLAPSE",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "authority-qualification-separation",
+      "transform": "bind-quality-to-procurement-principal"
+    },
+    {
+      "caseId": "PV-NEG-MISSION-MISMATCH",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "role-mission-qualification",
+      "transform": "mismatch-role-mission"
+    },
+    {
+      "caseId": "PV-NEG-RESPONSIBILITY-FORGERY",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "responsibility-binding",
+      "transform": "add-noncontributing-role-to-work"
+    },
+    {
+      "caseId": "PV-NEG-MISSING-EVIDENCE",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "evidence-omission",
+      "transform": "omit-required-evidence"
+    },
+    {
+      "caseId": "PV-NEG-REVERSE-ORDER",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "order-reversal",
+      "transform": "reverse-first-order"
+    },
+    {
+      "caseId": "PV-NEG-ORDER-REMOVAL",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "prerequisite-order-omission",
+      "transform": "remove-quality-operations-order"
+    },
+    {
+      "caseId": "PV-NEG-ORDER-CYCLE",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "order-cycle",
+      "transform": "add-order-cycle"
+    },
+    {
+      "caseId": "PV-NEG-DECISION-LEDGER-FORGERY",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "decision-ledger",
+      "transform": "forge-decision-ledger"
+    },
+    {
+      "caseId": "PV-NEG-REDUNDANT-WORK",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "contract-relative-nonminimality",
+      "transform": "add-unsupported-work-unit"
+    },
+    {
+      "caseId": "PV-NEG-EFFECT-ENUM",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "effect-admission",
+      "transform": "set-nonzero-effect-raw"
+    },
+    {
+      "caseId": "PV-NEG-DUPLICATE-ROLE-COVERAGE",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "coverage-at-most-once",
+      "transform": "duplicate-required-role-coverage"
+    },
+    {
+      "caseId": "PV-NEG-ACCOUNTABLE-BINDING",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "accountable-role-binding",
+      "transform": "forge-accountable-binding"
+    },
+    {
+      "caseId": "PV-NEG-INACTIVE-PRINCIPAL-BINDING",
+      "rootSet": "SC-008-INACTIVE-PRINCIPAL",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "principal-active-authority",
+      "transform": "compile-root-and-bind-inactive-principal"
+    },
+    {
+      "caseId": "PV-NEG-NONADMITTED-PRINCIPAL-BINDING",
+      "rootSet": "SC-008-CANDIDATE-PRINCIPAL",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "principal-admission-authority",
+      "transform": "compile-root-and-bind-candidate-principal"
+    },
+    {
+      "caseId": "PV-NEG-ROLE-QUALIFICATION-REFS",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "role-instance-qualification-refs",
+      "transform": "forge-role-qualification-refs"
+    },
+    {
+      "caseId": "PV-NEG-ORDER-REASON-REFS",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "order-reason-binding",
+      "transform": "forge-order-reason-refs"
+    },
+    {
+      "caseId": "PV-NEG-ORDER-DANGLING-ENDPOINT",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "order-endpoint-resolution",
+      "transform": "add-dangling-order-endpoint"
+    },
+    {
+      "caseId": "PV-NEG-ORDER-DUPLICATE-EDGE",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "order-edge-uniqueness",
+      "transform": "duplicate-order-edge"
+    },
+    {
+      "caseId": "PV-NEG-MINIMALITY-CONSIDERED-SETS",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "minimality-consideration-ledger",
+      "transform": "omit-minimality-considered-sets"
+    },
+    {
+      "caseId": "PV-NEG-MINIMALITY-NONREMOVABLE-REFS",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "minimality-nonremovable-ledger",
+      "transform": "omit-minimality-nonremovable-ref"
+    },
+    {
+      "caseId": "PV-NEG-ROLE-EFFECT-ENUM",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "role-effect-admission",
+      "transform": "set-role-effect-raw"
+    },
+    {
+      "caseId": "PV-NEG-WORK-EFFECT-ENUM",
+      "rootSet": "SC-008",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "work-effect-admission",
+      "transform": "set-work-effect-raw"
+    },
+    {
+      "caseId": "PV-NEG-CANDIDATE-DECISION-CONTENT",
+      "rootSet": "SC-008-CANDIDATE-DECISION",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "candidate-decision-content",
+      "transform": "compile-root-and-forge-candidate-decision"
+    },
+    {
+      "caseId": "PV-NEG-RETRACTED-DECISION-CONTENT",
+      "rootSet": "SC-008-RETRACTED-DECISION",
+      "sourcePlan": "tck/fixtures/positive/SC-008-contextual.plan.json",
+      "mutationClass": "retracted-decision-content",
+      "transform": "compile-root-and-forge-retracted-decision"
+    }
+  ],
+  "digestAlgorithm": "sha256-jcs-detached/v1",
+  "recipeSetDigest": "sha256:22171936d7c9a7975a5cff98c6d19cb122285700f2c6f7b1a76a6e2f08df436d"
+}

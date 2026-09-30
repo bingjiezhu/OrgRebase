@@ -1,0 +1,28 @@
+{
+  "caseId": "C0-ID-004",
+  "expect": {
+    "result": {
+      "identifier": "urn:oac:id:sha256:v1:role-instance:3032a9b81c1fb0704fb0079f1fd4a0bc6d4b21b10e52de746d5145bae490b33e"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "fields": {
+      "body": {
+        "obligationRefs": [
+          "urn:o:1"
+        ],
+        "principalRef": "urn:p:one",
+        "roleDefinitionRef": "urn:a:reviewer"
+      },
+      "changeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "snapshotDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "identifierKind": "role-instance"
+  },
+  "operation": "deriveIdentifier",
+  "requirementRefs": [
+    "REQ-INSTANCE-ID-V1"
+  ],
+  "testTarget": "SUT"
+}

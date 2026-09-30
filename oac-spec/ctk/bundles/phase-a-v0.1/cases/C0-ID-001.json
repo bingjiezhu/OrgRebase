@@ -1,0 +1,22 @@
+{
+  "caseId": "C0-ID-001",
+  "expect": {
+    "result": {"identifier": "urn:oac:mvp:evaluation:d524b0634a87729776af5d48"},
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "fields": {
+      "changeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "changeSubjectRef": "urn:node:s",
+      "predicateVersion": "oac.supplier.applicability/v0.2",
+      "reasonCodes": [],
+      "result": "TRUE",
+      "snapshotDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "sourceRef": "urn:edge:e",
+      "witnessRefs": ["urn:snapshot:a#/digest"]
+    },
+    "identifierKind": "evaluation"
+  },
+  "operation": "deriveIdentifier",
+  "requirementRefs": ["REQ-DERIVED-ID-LEGACY"]
+}

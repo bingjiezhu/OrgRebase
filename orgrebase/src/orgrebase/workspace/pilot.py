@@ -52,6 +52,8 @@ from orgrebase.workspace.source_admission import (
     EnterpriseSeedComponentRoot,
     EnterpriseSeedRuntimeProjectionReceipt,
     EnterpriseSeedSourceAdmissionReceipt,
+    ResolvedSeedSource,
+    SeedSourceResolver,
     admit_enterprise_seed_sources,
     verify_runtime_projections,
 )
@@ -349,6 +351,47 @@ class _CompiledPack:
     universe: WorkspaceUniverse
     support_fixture: EnterpriseFixture
     context_profiles: dict[str, dict[str, object]]
+
+
+@dataclass(frozen=True, slots=True)
+class EnterpriseQuotePilotPayloadValidation:
+    """Strict in-memory Pack admission result with no filesystem locator."""
+
+    manifest: EnterpriseQuotePilotPack
+    profile: EnterpriseSeedProfile
+    source_admission: EnterpriseSeedSourceAdmissionReceipt
+    runtime_projection: EnterpriseSeedRuntimeProjectionReceipt
+    universe: WorkspaceUniverse
+    pack_digest: str
+
+
+@dataclass(frozen=True, slots=True)
+class _AdmittedPack:
+    source_admission: EnterpriseSeedSourceAdmissionReceipt
+    runtime_projection: EnterpriseSeedRuntimeProjectionReceipt
+    compiled: _CompiledPack
+    source_values: dict[str, LocalSourceValue]
+    proposed_values: dict[str, PilotProposedValue]
+    pack_digest: str
+
+
+class _PayloadSeedSourceResolver:
+    """Resolve exact admitted locators from caller-owned in-memory bytes."""
+
+    def __init__(self, locator_assets: Mapping[str, str], payloads: Mapping[str, bytes]) -> None:
+        self._locator_assets = MappingProxyType(dict(locator_assets))
+        self._payloads = MappingProxyType(dict(payloads))
+
+    def resolve(self, locator: str) -> ResolvedSeedSource:
+        try:
+            relative = self._locator_assets[locator]
+            raw = self._payloads[relative]
+        except KeyError as exc:
+            raise EnterpriseQuotePilotPackError("PILOT_MEMORY_LOCATOR_NOT_FOUND", locator) from exc
+        # This is the existing Pack-relative logical namespace, not evidence of
+        # filesystem I/O. Keep it identical to DirectorySeedSourceResolver so
+        # exporting exact bytes cannot change an admitted Pack's identity.
+        return ResolvedSeedSource(raw=raw, logical_asset_ref=f"directory://{relative}")
 
 
 def enterprise_quote_pilot_run_id(runtime: EnterpriseQuotePilotRuntime) -> str:
@@ -824,57 +867,27 @@ def _expected_runtime_projections(
     }
 
 
-def load_enterprise_quote_pilot_pack(
-    pack_root: str | Path,
-) -> EnterpriseQuotePilotRuntime:
-    """Load, admit, compile, and bind one exact Enterprise Quote Pack directory."""
-
-    selected_root = Path(pack_root)
-    if selected_root.is_symlink():
-        raise EnterpriseQuotePilotPackError("PILOT_PACK_ROOT_SYMLINK_FORBIDDEN")
-    try:
-        root = selected_root.resolve(strict=True)
-    except OSError as exc:
-        raise EnterpriseQuotePilotPackError("PILOT_PACK_ROOT_INVALID", str(selected_root)) from exc
-    if not root.is_dir():
-        raise EnterpriseQuotePilotPackError("PILOT_PACK_ROOT_NOT_DIRECTORY", str(root))
-
-    manifest_value = _strict_json(
-        _read_pack_file(root, PILOT_PACK_FILENAME, code="PILOT_PACK_MANIFEST"),
-        logical_ref=PILOT_PACK_FILENAME,
-    )
-    manifest = _parse_model(
-        EnterpriseQuotePilotPack,
-        manifest_value,
-        code="PILOT_PACK_SCHEMA_INVALID",
-    )
-    profile_value = _strict_json(
-        _read_pack_file(root, manifest.profile_path, code="PILOT_PROFILE"),
-        logical_ref=manifest.profile_path,
-    )
-    profile = _parse_model(
-        EnterpriseSeedProfile,
-        profile_value,
-        code="PILOT_PROFILE_SCHEMA_INVALID",
-    )
-
+def _admit_pack(
+    *,
+    manifest: EnterpriseQuotePilotPack,
+    profile: EnterpriseSeedProfile,
+    resolver: SeedSourceResolver,
+) -> _AdmittedPack:
     locator_assets = {item.locator: item.path for item in manifest.components}
     declared_locators = tuple(item.locator for item in profile.source_roots)
     if declared_locators != tuple(locator_assets):
         raise EnterpriseQuotePilotPackError("PILOT_PROFILE_LOCATOR_MAP_MISMATCH")
-    resolver = DirectorySeedSourceResolver(root, locator_assets)
     source_admission = admit_enterprise_seed_sources(profile, resolver=resolver)
 
     roots: dict[SeedComponentKind, EnterpriseSeedComponentRoot] = {}
     for binding in manifest.components:
         resolved = resolver.resolve(binding.locator)
         value = _strict_json(resolved.raw, logical_ref=resolved.logical_asset_ref)
-        root_model = _parse_model(
+        roots[binding.component_kind] = _parse_model(
             EnterpriseSeedComponentRoot,
             value,
             code="PILOT_COMPONENT_SCHEMA_INVALID",
         )
-        roots[binding.component_kind] = root_model
 
     domain = _parse_model(
         PilotDomainProjection,
@@ -930,6 +943,104 @@ def load_enterprise_quote_pilot_pack(
             "universe_digest": compiled.universe.digest,
         }
     )
+    return _AdmittedPack(
+        source_admission=source_admission,
+        runtime_projection=runtime_projection,
+        compiled=compiled,
+        source_values=source_values,
+        proposed_values=proposed_values,
+        pack_digest=pack_digest,
+    )
+
+
+def validate_enterprise_quote_pilot_payloads(
+    payloads: Mapping[str, bytes],
+) -> EnterpriseQuotePilotPayloadValidation:
+    """Admit exact Pack bytes entirely in memory.
+
+    This is the validation boundary for retention-managed private drafts.  It
+    deliberately has no path fallback and never materializes caller content on
+    the operating-system filesystem.
+    """
+
+    copied = dict(payloads)
+    if any(not isinstance(path, str) or not isinstance(raw, bytes) for path, raw in copied.items()):
+        raise EnterpriseQuotePilotPackError("PILOT_MEMORY_PAYLOAD_INVALID")
+    try:
+        manifest_raw = copied[PILOT_PACK_FILENAME]
+    except KeyError as exc:
+        raise EnterpriseQuotePilotPackError("PILOT_PACK_MANIFEST_NOT_FOUND") from exc
+    manifest = _parse_model(
+        EnterpriseQuotePilotPack,
+        _strict_json(manifest_raw, logical_ref=PILOT_PACK_FILENAME),
+        code="PILOT_PACK_SCHEMA_INVALID",
+    )
+    declared = {PILOT_PACK_FILENAME, manifest.profile_path, *(item.path for item in manifest.components)}
+    if set(copied) != declared:
+        raise EnterpriseQuotePilotPackError("PILOT_MEMORY_FILE_SET_MISMATCH")
+    profile = _parse_model(
+        EnterpriseSeedProfile,
+        _strict_json(copied[manifest.profile_path], logical_ref=manifest.profile_path),
+        code="PILOT_PROFILE_SCHEMA_INVALID",
+    )
+    resolver = _PayloadSeedSourceResolver(
+        {item.locator: item.path for item in manifest.components},
+        copied,
+    )
+    admitted = _admit_pack(manifest=manifest, profile=profile, resolver=resolver)
+    return EnterpriseQuotePilotPayloadValidation(
+        manifest=manifest,
+        profile=profile,
+        source_admission=admitted.source_admission,
+        runtime_projection=admitted.runtime_projection,
+        universe=admitted.compiled.universe,
+        pack_digest=admitted.pack_digest,
+    )
+
+
+def load_enterprise_quote_pilot_pack(
+    pack_root: str | Path,
+) -> EnterpriseQuotePilotRuntime:
+    """Load, admit, compile, and bind one exact Enterprise Quote Pack directory."""
+
+    selected_root = Path(pack_root)
+    if selected_root.is_symlink():
+        raise EnterpriseQuotePilotPackError("PILOT_PACK_ROOT_SYMLINK_FORBIDDEN")
+    try:
+        root = selected_root.resolve(strict=True)
+    except OSError as exc:
+        raise EnterpriseQuotePilotPackError("PILOT_PACK_ROOT_INVALID", str(selected_root)) from exc
+    if not root.is_dir():
+        raise EnterpriseQuotePilotPackError("PILOT_PACK_ROOT_NOT_DIRECTORY", str(root))
+
+    manifest_value = _strict_json(
+        _read_pack_file(root, PILOT_PACK_FILENAME, code="PILOT_PACK_MANIFEST"),
+        logical_ref=PILOT_PACK_FILENAME,
+    )
+    manifest = _parse_model(
+        EnterpriseQuotePilotPack,
+        manifest_value,
+        code="PILOT_PACK_SCHEMA_INVALID",
+    )
+    profile_value = _strict_json(
+        _read_pack_file(root, manifest.profile_path, code="PILOT_PROFILE"),
+        logical_ref=manifest.profile_path,
+    )
+    profile = _parse_model(
+        EnterpriseSeedProfile,
+        profile_value,
+        code="PILOT_PROFILE_SCHEMA_INVALID",
+    )
+
+    locator_assets = {item.locator: item.path for item in manifest.components}
+    resolver = DirectorySeedSourceResolver(root, locator_assets)
+    admitted = _admit_pack(manifest=manifest, profile=profile, resolver=resolver)
+    source_admission = admitted.source_admission
+    runtime_projection = admitted.runtime_projection
+    compiled = admitted.compiled
+    source_values = admitted.source_values
+    proposed_values = admitted.proposed_values
+    pack_digest = admitted.pack_digest
     scenario = {
         **profile.scenario_view(),
         **manifest.scenario.model_dump(mode="json"),
@@ -992,7 +1103,9 @@ __all__ = (
     "PILOT_PACK_SCHEMA_VERSION",
     "EnterpriseQuotePilotPack",
     "EnterpriseQuotePilotPackError",
+    "EnterpriseQuotePilotPayloadValidation",
     "EnterpriseQuotePilotRuntime",
     "enterprise_quote_pilot_run_id",
     "load_enterprise_quote_pilot_pack",
+    "validate_enterprise_quote_pilot_payloads",
 )

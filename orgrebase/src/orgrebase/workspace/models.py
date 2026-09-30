@@ -15,7 +15,7 @@ from typing import Annotated, Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, JsonValue, model_serializer, model_validator
 
 from orgrebase.change_events import ChangeEvent as ChangeEvent
-from orgrebase.digest import sha256_digest
+from orgrebase.digest import canonical_json, sha256_digest
 from orgrebase.domain import (
     AgentCandidateIngestionReceipt,
     AgentRun,
@@ -557,6 +557,18 @@ class QuoteTaskLiterals(FrozenModel):
     customer_id: str
 
 
+class DiscountMemoTaskLiterals(FrozenModel):
+    owner: str
+    customer_id: str
+    quote_object_id: str
+
+
+class ResolvedDiscountMemoInputs(FrozenModel):
+    currency: str
+    quote_basket: QuoteBasket
+    pricing_policy: PricingPolicy
+
+
 class ResolvedQuoteInputs(FrozenModel):
     product_plan: str
     launch_date: str
@@ -598,6 +610,355 @@ class QuotePayload(FrozenModel):
         if self.pricing is None:
             data.pop("pricing", None)
         return data
+
+
+class DiscountMemoComparison(FrozenModel):
+    before_discount_bps: int
+    after_discount_bps: int
+    before_discount_amount: str
+    after_discount_amount: str
+    discount_amount_delta: str
+    before_net_amount: str
+    after_net_amount: str
+    net_amount_delta: str
+    before_total: str
+    after_total: str
+    total_delta: str
+
+
+class DiscountMemoPayload(FrozenModel):
+    owner: str
+    deliverable_kind: Literal["DISCOUNT_MEMO"] = "DISCOUNT_MEMO"
+    customer_id: str
+    quote_object_id: str
+    pricing: PricedQuote
+    pricing_basis_digest: str
+    previous_pricing: PricedQuote | None = None
+    comparison: DiscountMemoComparison | None = None
+    reason_refs: tuple[str, ...] = ()
+    limitations: tuple[str, ...] = (
+        "NOT_A_POLICY_APPROVAL",
+        "NO_FX_CONVERSION",
+        "NO_EXTERNAL_EFFECT",
+    )
+    last_price_change_set_ref: str | None = None
+    last_price_change_set_digest: str | None = None
+    rebased_from: str | None = None
+    context_manifest: str | None = None
+
+    @model_validator(mode="after")
+    def exact_change_pair(self):
+        if (self.last_price_change_set_ref is None) != (self.last_price_change_set_digest is None):
+            raise ValueError("DISCOUNT_MEMO_CHANGE_BINDING_INCOMPLETE")
+        changed = self.last_price_change_set_ref is not None
+        if changed != (self.previous_pricing is not None) or changed != (self.comparison is not None):
+            raise ValueError("DISCOUNT_MEMO_COMPARISON_BINDING_INCOMPLETE")
+        if changed:
+            if self.reason_refs != (self.last_price_change_set_ref,):
+                raise ValueError("DISCOUNT_MEMO_REASON_BINDING_INVALID")
+            comparison = self.comparison
+            previous = self.previous_pricing
+            if comparison is None or previous is None:  # pragma: no cover - guarded above
+                raise ValueError("DISCOUNT_MEMO_COMPARISON_BINDING_INCOMPLETE")
+            if (
+                comparison.before_discount_bps != previous.discount_rate_bps
+                or comparison.after_discount_bps != self.pricing.discount_rate_bps
+                or comparison.before_discount_amount != previous.discount_amount
+                or comparison.after_discount_amount != self.pricing.discount_amount
+                or comparison.before_net_amount != previous.net_amount
+                or comparison.after_net_amount != self.pricing.net_amount
+                or comparison.before_total != previous.total
+                or comparison.after_total != self.pricing.total
+            ):
+                raise ValueError("DISCOUNT_MEMO_COMPARISON_MISMATCH")
+        elif self.reason_refs:
+            raise ValueError("DISCOUNT_MEMO_REASON_WITHOUT_CHANGE")
+        expected = sha256_digest(
+            {
+                "quote_object_id": self.quote_object_id,
+                "currency": self.pricing.currency,
+                "basket_digest": self.pricing.basket_digest,
+                "policy_digest": self.pricing.policy_digest,
+            }
+        )
+        if self.pricing_basis_digest != expected:
+            raise ValueError("DISCOUNT_MEMO_PRICING_BASIS_MISMATCH")
+        return self
+
+
+class DeliverableMemberBinding(ContentAddressedModel):
+    object_id: str
+    deliverable_kind: Literal["QUOTE", "DISCOUNT_MEMO"]
+    template_ref: str
+    template_digest: str
+    output_schema_ref: str
+    adapter_ref: str
+    adapter_digest: str
+    owner_id: str
+    approval_scopes: tuple[str, ...]
+
+    @model_validator(mode="after")
+    def exact_scopes(self):
+        if not self.approval_scopes or self.approval_scopes != tuple(sorted(set(self.approval_scopes))):
+            raise ValueError("DELIVERABLE_MEMBER_APPROVAL_SCOPES_INVALID")
+        expected_adapter = sha256_digest(
+            {
+                "adapter_ref": self.adapter_ref,
+                "template_digest": self.template_digest,
+                "output_schema_ref": self.output_schema_ref,
+            }
+        )
+        if self.adapter_digest != expected_adapter:
+            raise ValueError("DELIVERABLE_MEMBER_ADAPTER_DIGEST_INVALID")
+        return self
+
+
+class DeliverableSetProfile(ContentAddressedModel):
+    schema_version: Literal["orgrebase.deliverable-set-profile.v1"] = "orgrebase.deliverable-set-profile.v1"
+    id: str
+    revision: str
+    organization_id: str
+    base_profile_digest: str
+    pack_digest: str
+    runtime_revision: str
+    members: tuple[DeliverableMemberBinding, ...]
+    external_effects: Literal["DISABLED"] = "DISABLED"
+
+    @property
+    def ref(self) -> str:
+        return f"{self.id}@{self.revision}"
+
+    @model_validator(mode="after")
+    def bounded_quote_memo_profile(self):
+        if self.members != tuple(sorted(self.members, key=lambda item: item.object_id)):
+            raise ValueError("DELIVERABLE_SET_MEMBER_ORDER_INVALID")
+        if len(self.members) != 2 or {item.deliverable_kind for item in self.members} != {
+            "QUOTE",
+            "DISCOUNT_MEMO",
+        }:
+            raise ValueError("DELIVERABLE_SET_PROFILE_REQUIRES_QUOTE_AND_MEMO")
+        if len({item.object_id for item in self.members}) != 2:
+            raise ValueError("DELIVERABLE_SET_MEMBER_ID_DUPLICATE")
+        expected_templates = {
+            "QUOTE": "template:enterprise_quote@v2",
+            "DISCOUNT_MEMO": "template:discount_exception_memo@v2",
+        }
+        if any(item.template_ref != expected_templates[item.deliverable_kind] for item in self.members):
+            raise ValueError("DELIVERABLE_SET_TEMPLATE_UNSUPPORTED")
+        return self
+
+
+class DeliverableSetBinding(ContentAddressedModel):
+    schema_version: Literal["orgrebase.deliverable-set-binding.v1"] = "orgrebase.deliverable-set-binding.v1"
+    id: str
+    version: str
+    workspace_id: str
+    profile_ref: str
+    profile_digest: str
+    base_profile_digest: str
+    pack_digest: str
+    runtime_revision: str
+    members: tuple[DeliverableMemberBinding, ...]
+    formed_at: str
+
+    @property
+    def ref(self) -> str:
+        return f"{self.id}@{self.version}"
+
+
+class DeliverableCandidateMember(ContentAddressedModel):
+    object_id: str
+    deliverable_kind: Literal["QUOTE", "DISCOUNT_MEMO"]
+    disposition: Literal["REBUILD", "PRESERVE_WITHIN_BOUNDARY", "HOLD_FOR_REVIEW"]
+    predecessor_ref: str
+    predecessor_digest: str
+    candidate_ref: str
+    candidate_payload_digest: str
+    evidence_mode: Literal[
+        "CANDIDATE", "PREDECESSOR_PRESERVED", "PREDECESSOR_UNRESOLVED"
+    ]
+    review_projection_ref: str
+    review_projection_digest: str
+    context_ref: str
+    context_digest: str
+    trace_ref: str
+    trace_digest: str
+    coverage_ref: str
+    coverage_digest: str
+    manifest_ref: str
+    manifest_digest: str
+    owner_id: str
+    required_scopes: tuple[str, ...]
+    reason_code: str
+
+    @model_validator(mode="after")
+    def evidence_semantics(self):
+        expected = {
+            "REBUILD": "CANDIDATE",
+            "PRESERVE_WITHIN_BOUNDARY": "PREDECESSOR_PRESERVED",
+            "HOLD_FOR_REVIEW": "PREDECESSOR_UNRESOLVED",
+        }[self.disposition]
+        if self.evidence_mode != expected:
+            raise ValueError("DELIVERABLE_CANDIDATE_EVIDENCE_MODE_INVALID")
+        if self.disposition == "REBUILD" and not self.required_scopes:
+            raise ValueError("DELIVERABLE_CANDIDATE_APPROVAL_SCOPE_MISSING")
+        if self.disposition != "REBUILD" and self.required_scopes:
+            raise ValueError("DELIVERABLE_PRESERVE_APPROVAL_SCOPE_FORBIDDEN")
+        return self
+
+
+class DeliverableReviewProjection(ContentAddressedModel):
+    schema_version: Literal["orgrebase.deliverable-review-projection.v1"] = (
+        "orgrebase.deliverable-review-projection.v1"
+    )
+    id: str
+    candidate_ref: str
+    candidate_payload_digest: str
+    deliverable_kind: Literal["QUOTE", "DISCOUNT_MEMO"]
+    owner_id: str
+    change_set_digest: str
+    binding_digest: str
+    safe_payload: dict[str, JsonValue]
+    forbidden_fields_checked: tuple[str, ...]
+    external_effects: Literal["DISABLED"] = "DISABLED"
+
+
+class DeliverableCandidateSet(ContentAddressedModel):
+    schema_version: Literal["orgrebase.deliverable-candidate-set.v1"] = (
+        "orgrebase.deliverable-candidate-set.v1"
+    )
+    id: str
+    change_set_ref: str
+    change_set_digest: str
+    preview_digest: str
+    binding_ref: str
+    binding_digest: str
+    runtime_revision: str
+    snapshot_ref: str
+    snapshot_digest: str
+    members: tuple[DeliverableCandidateMember, ...]
+    state: Literal["READY", "UNKNOWN"]
+
+    @model_validator(mode="after")
+    def exact_candidate_members(self):
+        if self.members != tuple(sorted(self.members, key=lambda item: item.object_id)):
+            raise ValueError("DELIVERABLE_CANDIDATE_MEMBER_ORDER_INVALID")
+        if len(self.members) != 2 or {item.deliverable_kind for item in self.members} != {
+            "QUOTE",
+            "DISCOUNT_MEMO",
+        }:
+            raise ValueError("DELIVERABLE_CANDIDATE_SET_INCOMPLETE")
+        expected_state = (
+            "UNKNOWN" if any(item.disposition == "HOLD_FOR_REVIEW" for item in self.members) else "READY"
+        )
+        if self.state != expected_state:
+            raise ValueError("DELIVERABLE_CANDIDATE_STATE_INVALID")
+        return self
+
+
+class PreparedDeliverableCandidateSet(ContentAddressedModel):
+    candidate_set: DeliverableCandidateSet
+    artifact_writes: tuple[ArtifactWrite, ...]
+
+    @model_validator(mode="after")
+    def unique_artifacts(self):
+        ids = tuple(item.artifact_id for item in self.artifact_writes)
+        if len(ids) != len(set(ids)):
+            raise ValueError("DELIVERABLE_CANDIDATE_ARTIFACT_DUPLICATE")
+        return self
+
+
+class DeliverableApprovalDecision(ContentAddressedModel):
+    operation_id: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=160,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+    )
+    command_digest: str | None = Field(
+        default=None, pattern=r"^sha256:[0-9a-f]{64}$"
+    )
+    owner_id: str
+    actor_id: str
+    identity_issuer: str
+    identity_subject: str
+    identity_mode: str
+    candidate_set_digest: str
+    authority_revision: str
+    scopes: tuple[str, ...]
+    decision: Literal["APPROVED", "REJECTED"]
+    approved_at: str
+    expires_at: str
+    method: str
+
+    @model_serializer(mode="wrap")
+    def serialize_operation_binding(self, handler):
+        data = handler(self)
+        if self.operation_id is None:
+            data.pop("operation_id", None)
+            data.pop("command_digest", None)
+        return data
+
+    @model_validator(mode="after")
+    def exact_scope_order(self):
+        if not self.scopes or self.scopes != tuple(sorted(set(self.scopes))):
+            raise ValueError("DELIVERABLE_APPROVAL_SCOPE_INVALID")
+        if (self.operation_id is None) != (self.command_digest is None):
+            raise ValueError("DELIVERABLE_APPROVAL_OPERATION_BINDING_INCOMPLETE")
+        return self
+
+
+class DeliverableApprovalSet(ContentAddressedModel):
+    schema_version: Literal["orgrebase.deliverable-approval-set.v1"] = "orgrebase.deliverable-approval-set.v1"
+    id: str
+    candidate_set_digest: str
+    decisions: tuple[DeliverableApprovalDecision, ...]
+    status: Literal["COMPLETE", "INCOMPLETE", "REJECTED"]
+
+    @model_validator(mode="after")
+    def unique_decision_owners(self):
+        owners = tuple(item.owner_id for item in self.decisions)
+        if owners != tuple(sorted(set(owners))):
+            raise ValueError("DELIVERABLE_APPROVAL_OWNER_SET_INVALID")
+        if any(item.candidate_set_digest != self.candidate_set_digest for item in self.decisions):
+            raise ValueError("DELIVERABLE_APPROVAL_CANDIDATE_MISMATCH")
+        if any(item.decision == "REJECTED" for item in self.decisions):
+            expected = "REJECTED"
+        else:
+            expected = "COMPLETE" if self.decisions else "INCOMPLETE"
+        if self.status == "REJECTED" and expected != "REJECTED":
+            raise ValueError("DELIVERABLE_APPROVAL_STATUS_INVALID")
+        return self
+
+
+class DeliverableApplyMember(FrozenModel):
+    object_id: str
+    deliverable_kind: Literal["QUOTE", "DISCOUNT_MEMO"]
+    disposition: Literal["REBUILD", "PRESERVE_WITHIN_BOUNDARY"]
+    predecessor_ref: str
+    result_ref: str
+    result_digest: str
+    reason_code: str
+
+
+class DeliverableSetApplyReceipt(ContentAddressedModel):
+    schema_version: Literal["orgrebase.deliverable-set-apply-receipt.v1"] = (
+        "orgrebase.deliverable-set-apply-receipt.v1"
+    )
+    id: str
+    base_rebase_receipt_ref: str
+    base_rebase_receipt_digest: str
+    binding_ref: str
+    binding_digest: str
+    candidate_set_digest: str
+    approval_set_digest: str
+    members: tuple[DeliverableApplyMember, ...]
+    graph_pointer_ref: str
+    snapshot_ref: str
+    snapshot_digest: str
+    status: Literal["COMPLETED"] = "COMPLETED"
+    external_effects: Literal["DISABLED"] = "DISABLED"
+    committed_at: str
 
 
 class TaskReceipt(ContentAddressedModel):
@@ -753,6 +1114,52 @@ class PreparedFormationBundle(ContentAddressedModel):
     event_payload: dict[str, JsonValue]
 
 
+class DeliverableSetFormationReceipt(ContentAddressedModel):
+    schema_version: Literal["orgrebase.deliverable-set-formation-receipt.v1"] = (
+        "orgrebase.deliverable-set-formation-receipt.v1"
+    )
+    id: str
+    binding_ref: str
+    binding_digest: str
+    task_receipt_refs: tuple[str, ...]
+    task_receipt_digests: tuple[str, ...]
+    deliverable_refs: tuple[str, ...]
+    deliverable_digests: tuple[str, ...]
+    graph_snapshot_ref: str
+    graph_snapshot_digest: str
+    graph_pointer_ref: str
+    committed_at: str
+    status: Literal["COMPLETED"] = "COMPLETED"
+    external_effects: Literal["DISABLED"] = "DISABLED"
+
+
+class PreparedDeliverableSetFormation(ContentAddressedModel):
+    request_set_digest: str
+    idempotency_key: str
+    profile: DeliverableSetProfile
+    binding: DeliverableSetBinding
+    quote_prepared: PreparedFormationBundle
+    deliverables: tuple[VersionedObject, ...]
+    graph_pointer: VersionedObject
+    artifact_writes: tuple[ArtifactWrite, ...]
+    task_receipts: tuple[TaskReceipt, ...]
+    formation_receipt: DeliverableSetFormationReceipt
+    event_type: Literal["WORKSPACE_DELIVERABLE_SET_COMMITTED"] = "WORKSPACE_DELIVERABLE_SET_COMMITTED"
+    event_payload: dict[str, JsonValue]
+
+    @model_validator(mode="after")
+    def exact_formation_members(self):
+        if self.deliverables != tuple(sorted(self.deliverables, key=lambda item: item.id)):
+            raise ValueError("DELIVERABLE_FORMATION_MEMBER_ORDER_INVALID")
+        if len(self.deliverables) != 2 or {
+            item.payload.get("deliverable_kind") for item in self.deliverables
+        } != {"QUOTE", "DISCOUNT_MEMO"}:
+            raise ValueError("DELIVERABLE_FORMATION_SET_INCOMPLETE")
+        if len(self.task_receipts) != 2:
+            raise ValueError("DELIVERABLE_FORMATION_RECEIPT_SET_INCOMPLETE")
+        return self
+
+
 class PreparedSuccessorEvidence(ContentAddressedModel):
     successor_objects: tuple[VersionedObject, ...]
     successor_artifact_writes: tuple[ArtifactWrite, ...]
@@ -890,6 +1297,7 @@ class WorkspaceApprovalBinding(ContentAddressedModel):
 
 
 class WorkspaceRebaseReceipt(ContentAddressedModel):
+    schema_version: Literal["orgrebase.workspace-rebase-receipt.v2"] | None = None
     id: str
     base_rebase_receipt_ref: str
     base_rebase_receipt_digest: str
@@ -899,8 +1307,28 @@ class WorkspaceRebaseReceipt(ContentAddressedModel):
     successor_snapshot_ref: str
     successor_snapshot_digest: str
     graph_pointer_ref: str
+    deliverable_set_receipt_ref: str | None = None
+    deliverable_set_receipt_digest: str | None = None
     status: Literal["COMPLETED"] = "COMPLETED"
     committed_at: str
+
+    @model_serializer(mode="wrap")
+    def serialize_deliverable_set(self, handler):
+        data = handler(self)
+        if self.schema_version is None:
+            data.pop("schema_version", None)
+        if self.deliverable_set_receipt_ref is None:
+            data.pop("deliverable_set_receipt_ref", None)
+            data.pop("deliverable_set_receipt_digest", None)
+        return data
+
+    @model_validator(mode="after")
+    def deliverable_set_pair(self):
+        if (self.deliverable_set_receipt_ref is None) != (self.deliverable_set_receipt_digest is None):
+            raise ValueError("WORKSPACE_DELIVERABLE_SET_RECEIPT_BINDING_INCOMPLETE")
+        if (self.schema_version is None) != (self.deliverable_set_receipt_ref is None):
+            raise ValueError("WORKSPACE_REBASE_RECEIPT_SCHEMA_INVALID")
+        return self
 
 
 class SkillOperation(FrozenModel):
@@ -1191,6 +1619,311 @@ class ModelResponseReceiptV2(ContentAddressedModel):
         elif self.schema_valid or self.value is not None or self.output_digest is not None:
             raise ValueError("MODEL_FAILED_RESPONSE_CONTAINS_CANDIDATE")
         return self
+
+
+class ModelRequestV3(ContentAddressedModel):
+    """Vertex-native candidate request; V1/V2 records retain their original contracts."""
+
+    contract_version: Literal["3"] = "3"
+    provider: Literal["vertex-ai"] = "vertex-ai"
+    request_id: str = Field(min_length=1)
+    tenant_id: str = Field(min_length=1)
+    workspace_id: str = Field(min_length=1)
+    run_id: str = Field(min_length=1)
+    nonce: str = Field(min_length=1)
+    task_ref: str = Field(min_length=1)
+    actor_id: str = Field(min_length=1)
+    purpose: str = Field(min_length=1)
+    domain_id: str = Field(min_length=1)
+    object_ids: tuple[str, ...] = Field(min_length=1)
+    input_projections: tuple[ModelInputProjection, ...] = Field(min_length=1)
+    projection_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    schema_name: str = Field(pattern=r"^[A-Za-z0-9_-]{1,64}$")
+    schema_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    prompt_template_ref: str = Field(min_length=1)
+    prompt_template: str = Field(min_length=1)
+    prompt_template_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    model_id: Literal["gemini-3.8-flash"] = "gemini-3.8-flash"
+    max_output_tokens: int = Field(gt=0, le=32768)
+    thinking_level: Literal["LOW"] = "LOW"
+    attempt: int = Field(default=0, ge=0, le=2)
+
+    @model_validator(mode="after")
+    def validate_inputs(self) -> ModelRequestV3:
+        if self.prompt_template_digest != sha256_digest(self.prompt_template):
+            raise ValueError("MODEL_PROMPT_TEMPLATE_DIGEST_MISMATCH")
+        if len(set(self.object_ids)) != len(self.object_ids):
+            raise ValueError("MODEL_REQUEST_OBJECTS_DUPLICATED")
+        refs = [item.ref for item in self.input_projections]
+        if len(refs) != len(set(refs)):
+            raise ValueError("MODEL_INPUT_REFS_DUPLICATED")
+        if any(item.domain_id != self.domain_id for item in self.input_projections):
+            raise ValueError("MODEL_INPUT_DOMAIN_MISMATCH")
+        if {oid for item in self.input_projections for oid in item.object_ids} != set(self.object_ids):
+            raise ValueError("MODEL_INPUT_SCOPE_MISMATCH")
+        projections = [item.model_dump(mode="json") for item in self.input_projections]
+        if self.projection_digest != sha256_digest(projections):
+            raise ValueError("MODEL_INPUT_PROJECTION_DIGEST_MISMATCH")
+        return self
+
+
+class ModelResponseReceiptV3(ContentAddressedModel):
+    """Vertex-native outcome. Absent provider usage remains unknown, never zero."""
+
+    contract_version: Literal["3"] = "3"
+    id: str = Field(min_length=1)
+    request_ref: str = Field(min_length=1)
+    request_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    status: Literal[
+        "VALID",
+        "ABSTAIN",
+        "SCHEMA_ERROR",
+        "PROVIDER_ERROR",
+        "NOT_RUN",
+        "INCOMPLETE",
+        "CANCELLED",
+    ]
+    dispatch_state: Literal["NOT_SENT", "SENT_UNKNOWN", "RESPONSE_RECEIVED"]
+    value: JsonValue | None = None
+    output_digest: str | None = Field(default=None, pattern=r"^sha256:[0-9a-f]{64}$")
+    provider_request_id: str | None = Field(
+        default=None,
+        pattern=r"^[A-Za-z0-9_-][A-Za-z0-9_.:/-]{0,255}$",
+    )
+    provider: Literal["vertex-ai"] = "vertex-ai"
+    requested_model_id: Literal["gemini-3.8-flash"] = "gemini-3.8-flash"
+    observed_model_id: str | None = Field(
+        default=None,
+        pattern=r"^[A-Za-z0-9_-][A-Za-z0-9_.:/-]{0,255}$",
+    )
+    projection_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    schema_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    wire_schema_digest: str | None = Field(default=None, pattern=r"^sha256:[0-9a-f]{64}$")
+    prompt_digest: str | None = Field(default=None, pattern=r"^sha256:[0-9a-f]{64}$")
+    body_digest: str | None = Field(default=None, pattern=r"^sha256:[0-9a-f]{64}$")
+    schema_valid: bool = False
+    input_tokens: int | None = Field(default=None, ge=0)
+    output_tokens: int | None = Field(default=None, ge=0)
+    thinking_tokens: int | None = Field(default=None, ge=0)
+    total_tokens: int | None = Field(default=None, ge=0)
+    cached_tokens: int | None = Field(default=None, ge=0)
+    latency_ms: int = Field(default=0, ge=0)
+    finish_reason: str | None = None
+    error_code: str | None = None
+    observed_at: str
+    evidence_class: Literal["LIVE_MODEL", "MODEL_ATTEMPT", "NOT_RUN"]
+
+    @model_validator(mode="after")
+    def validate_outcome(self) -> ModelResponseReceiptV3:
+        observed = datetime.fromisoformat(self.observed_at.replace("Z", "+00:00"))
+        if observed.tzinfo is None:
+            raise ValueError("MODEL_OBSERVATION_TIMEZONE_MISSING")
+        usage = (
+            self.input_tokens,
+            self.output_tokens,
+            self.thinking_tokens,
+            self.total_tokens,
+            self.cached_tokens,
+        )
+        if self.dispatch_state == "NOT_SENT":
+            if self.evidence_class != "NOT_RUN" or self.provider_request_id or self.observed_model_id:
+                raise ValueError("MODEL_NOT_SENT_OBSERVATION_MISMATCH")
+            if self.status != "NOT_RUN" or any(value is not None for value in usage):
+                raise ValueError("MODEL_NOT_SENT_STATUS_MISMATCH")
+        elif self.evidence_class == "NOT_RUN" or self.status == "NOT_RUN":
+            raise ValueError("MODEL_DISPATCHED_ATTEMPT_CANNOT_BE_NOT_RUN")
+        if self.dispatch_state == "SENT_UNKNOWN" and (
+            self.evidence_class != "MODEL_ATTEMPT"
+            or self.provider_request_id
+            or self.observed_model_id
+            or any(value is not None for value in usage)
+        ):
+            raise ValueError("MODEL_UNKNOWN_DISPATCH_OBSERVATION_MISMATCH")
+        if self.status == "VALID":
+            if not self.schema_valid or self.value is None or self.output_digest != sha256_digest(self.value):
+                raise ValueError("MODEL_VALID_RESPONSE_CONTENT_MISMATCH")
+            if not self.provider_request_id or self.observed_model_id != self.requested_model_id:
+                raise ValueError("MODEL_VALID_RESPONSE_OBSERVATION_MISSING")
+            if not all((self.wire_schema_digest, self.prompt_digest, self.body_digest)):
+                raise ValueError("MODEL_VALID_RESPONSE_WIRE_BINDING_MISSING")
+            if (
+                self.error_code
+                or self.evidence_class != "LIVE_MODEL"
+                or self.dispatch_state != "RESPONSE_RECEIVED"
+            ):
+                raise ValueError("MODEL_VALID_RESPONSE_STATUS_MISMATCH")
+        elif self.schema_valid or self.value is not None or self.output_digest is not None:
+            raise ValueError("MODEL_FAILED_RESPONSE_CONTAINS_CANDIDATE")
+        return self
+
+
+class ModelAdviceLessonV4(FrozenModel):
+    """Identity of a selected lesson; full authorized text is in advice_text."""
+
+    ref: str = Field(min_length=1)
+    revision: int = Field(ge=1)
+    content_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+
+
+class ModelAdviceContextV4(ContentAddressedModel):
+    """Frozen content selected by another authority, never a release grant."""
+
+    profile: Literal["workspace-change-explanation-v1"] = "workspace-change-explanation-v1"
+    tenant_id: str = Field(min_length=1)
+    workspace_id: str = Field(min_length=1)
+    operation_id: str = Field(min_length=1)
+    run_id: str = Field(min_length=1)
+    run_nonce: str = Field(min_length=1)
+    case_id: str = Field(min_length=1)
+    case_revision: str = Field(min_length=1)
+    query_ref: str = Field(min_length=1)
+    query_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    execution_mode: Literal["EVALUATION_ONLY", "SHADOW_ONLY", "ADOPTED"]
+    head_ref: str = Field(min_length=1)
+    head_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    head_generation: int = Field(ge=0)
+    package_ref: str = Field(min_length=1)
+    package_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    policy_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    protected_kernel_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    compiler_version: str = Field(min_length=1)
+    instruction_ref: Literal["instructions/change-explanation.md"] = "instructions/change-explanation.md"
+    instruction_text: str = Field(min_length=1)
+    instruction_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    reference_ref: Literal["references/change-explanation.md"] = "references/change-explanation.md"
+    reference_text: str = Field(min_length=1)
+    reference_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    memory_snapshot_ref: str = Field(min_length=1)
+    memory_snapshot_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    recall_manifest_ref: str = Field(min_length=1)
+    recall_manifest_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    selection_mode: Literal["NO_MEMORY", "RECALL_EMPTY", "RECALLED"]
+    recall_coverage: Literal["EMPTY", "COMPLETE", "PARTIAL_COVERAGE"]
+    lessons: tuple[ModelAdviceLessonV4, ...] = Field(max_length=3)
+    advice_text: str
+    advice_bytes_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    advice_byte_count: int = Field(ge=0, le=4096)
+    memory_reserved_bytes: int = Field(default=4096, ge=0, le=8192)
+    guidance_budget_bytes: int = Field(default=4096, ge=0, le=8192)
+
+    @model_validator(mode="after")
+    def validate_advice(self) -> ModelAdviceContextV4:
+        from orgrebase.workspace.experience_contracts import exact_bytes_digest
+
+        if (
+            self.instruction_digest != exact_bytes_digest(self.instruction_text.encode("utf-8"))
+            or self.reference_digest != exact_bytes_digest(self.reference_text.encode("utf-8"))
+        ):
+            raise ValueError("MODEL_ADVICE_RESOURCE_DIGEST_MISMATCH")
+        if self.memory_reserved_bytes + self.guidance_budget_bytes > 8192:
+            raise ValueError("MODEL_ADVICE_TOTAL_BUDGET_EXCEEDED")
+        if (self.selection_mode == "RECALLED") != bool(self.lessons):
+            raise ValueError("MODEL_ADVICE_SELECTION_MISMATCH")
+        if self.selection_mode == "NO_MEMORY" and self.recall_coverage != "EMPTY":
+            raise ValueError("MODEL_ADVICE_EMPTY_SELECTION_COVERAGE_INVALID")
+        if len({item.ref for item in self.lessons}) != len(self.lessons):
+            raise ValueError("MODEL_ADVICE_LESSON_DUPLICATED")
+        memory = self.advice_text.encode("utf-8")
+        if self.advice_byte_count != len(memory) or self.advice_bytes_digest != exact_bytes_digest(memory):
+            raise ValueError("MODEL_ADVICE_BYTES_DIGEST_MISMATCH")
+        if self.selection_mode != "RECALLED" and memory:
+            raise ValueError("MODEL_ADVICE_EMPTY_SELECTION_HAS_TEXT")
+        guidance = {
+            "instruction_ref": self.instruction_ref,
+            "instruction_text": self.instruction_text,
+            "reference_ref": self.reference_ref,
+            "reference_text": self.reference_text,
+        }
+        memory_wire = (
+            canonical_json({
+                "lessons": [item.model_dump(mode="json") for item in self.lessons],
+                "advice_text": self.advice_text,
+            }).encode("utf-8")
+            if self.lessons else b""
+        )
+        if len(memory_wire) > self.memory_reserved_bytes:
+            raise ValueError("MODEL_ADVICE_MEMORY_BUDGET_EXCEEDED")
+        if len(canonical_json(guidance).encode("utf-8")) > self.guidance_budget_bytes:
+            raise ValueError("MODEL_ADVICE_GUIDANCE_BUDGET_EXCEEDED")
+        return self
+
+
+class ModelRequestV4(ContentAddressedModel):
+    """Finance candidate request with separate enterprise facts and advice."""
+
+    contract_version: Literal["4"] = "4"
+    provider: Literal["vertex-ai"]
+    request_id: str = Field(min_length=1)
+    tenant_id: str = Field(min_length=1)
+    workspace_id: str = Field(min_length=1)
+    run_id: str = Field(min_length=1)
+    nonce: str = Field(min_length=1)
+    task_ref: str = Field(min_length=1)
+    actor_id: str = Field(min_length=1)
+    purpose: str = Field(min_length=1)
+    domain_id: Literal["finance"] = "finance"
+    object_ids: tuple[str, ...] = Field(min_length=1)
+    business_input_projections: tuple[ModelInputProjection, ...] = Field(min_length=1)
+    business_projection_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    advice_context: ModelAdviceContextV4
+    advice_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    schema_name: str = Field(pattern=r"^[A-Za-z0-9_-]{1,64}$")
+    schema_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    prompt_template_ref: str = Field(min_length=1)
+    prompt_template: str = Field(min_length=1)
+    prompt_template_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    model_id: Literal["gemini-3.8-flash"] = "gemini-3.8-flash"
+    max_output_tokens: int = Field(gt=0, le=32768)
+    thinking_level: Literal["LOW"] = "LOW"
+    attempt: int = Field(default=0, ge=0, le=2)
+
+    @model_validator(mode="after")
+    def validate_inputs(self) -> ModelRequestV4:
+        if self.prompt_template_digest != sha256_digest(self.prompt_template):
+            raise ValueError("MODEL_PROMPT_TEMPLATE_DIGEST_MISMATCH")
+        if self.advice_context.tenant_id != self.tenant_id or self.advice_context.workspace_id != self.workspace_id:
+            raise ValueError("MODEL_ADVICE_SCOPE_MISMATCH")
+        if self.advice_digest != self.advice_context.digest:
+            raise ValueError("MODEL_ADVICE_DIGEST_MISMATCH")
+        if len(set(self.object_ids)) != len(self.object_ids):
+            raise ValueError("MODEL_REQUEST_OBJECTS_DUPLICATED")
+        refs = [item.ref for item in self.business_input_projections]
+        if len(refs) != len(set(refs)):
+            raise ValueError("MODEL_INPUT_REFS_DUPLICATED")
+        if any(item.domain_id != self.domain_id for item in self.business_input_projections):
+            raise ValueError("MODEL_INPUT_DOMAIN_MISMATCH")
+        if {oid for item in self.business_input_projections for oid in item.object_ids} != set(self.object_ids):
+            raise ValueError("MODEL_INPUT_SCOPE_MISMATCH")
+        projections = [item.model_dump(mode="json") for item in self.business_input_projections]
+        if self.business_projection_digest != sha256_digest(projections):
+            raise ValueError("MODEL_BUSINESS_PROJECTION_DIGEST_MISMATCH")
+        return self
+
+
+class ModelResponseReceiptV4(ModelResponseReceiptV3):
+    """Observed V4 wire bindings; old V3 receipts keep their old bytes."""
+
+    contract_version: Literal["4"] = "4"
+    provider: Literal["vertex-ai"]
+    business_projection_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    advice_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    business_wire_digest: str | None = Field(default=None, pattern=r"^sha256:[0-9a-f]{64}$")
+    advice_wire_digest: str | None = Field(default=None, pattern=r"^sha256:[0-9a-f]{64}$")
+
+    @model_validator(mode="after")
+    def validate_v4(self) -> ModelResponseReceiptV4:
+        if self.projection_digest != self.business_projection_digest:
+            raise ValueError("MODEL_V4_BUSINESS_PROJECTION_DIGEST_MISMATCH")
+        if self.status == "VALID" and not all((self.business_wire_digest, self.advice_wire_digest)):
+            raise ValueError("MODEL_VALID_RESPONSE_V4_WIRE_BINDING_MISSING")
+        return self
+
+
+CandidateModelRequest = Annotated[ModelRequestV2 | ModelRequestV3 | ModelRequestV4, Field(discriminator="contract_version")]
+CandidateModelResponseReceipt = Annotated[
+    ModelResponseReceiptV2 | ModelResponseReceiptV3 | ModelResponseReceiptV4,
+    Field(discriminator="contract_version"),
+]
 
 
 class DatasetLicenseRecord(ContentAddressedModel):

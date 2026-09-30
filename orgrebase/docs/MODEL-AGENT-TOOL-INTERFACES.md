@@ -153,7 +153,9 @@ scenario and are not the complete change API.
 | `POST /api/workspace/task-intake/admit` | Confirm the exact prepared task and execution scope | no |
 | `POST /api/workspace/task-intake/run` | Execute the admitted task and form its baseline deliverable | yes, on successful formation |
 | `GET /api/workspace/state` | Current deliverable, execution and graph state | no |
+| `GET /api/workspace/onboarding-status` | Five enterprise-input classes, exact profile/template support stages, source binding and customer-qualification boundary | no |
 | `GET /api/workspace/change-options` | Admitted fields, versions, sources and action availability | no |
+| `GET /api/workspace/change-work-items` | Bounded current-owner/status/action inbox without source values or notification claims | no |
 | `POST /api/workspace/change-proposals` | Register a typed proposal with source and base-version bindings | no |
 | `GET /api/workspace/changes` | Paginated change history | no |
 | `GET /api/workspace/changes/{event_id}` | Candidate, impact, owner, permitted actions, lineage and recovery detail | no |
@@ -172,6 +174,12 @@ pending until an authorized executor applies it. Follow the returned
 `allowed_actions`, review gate and current digests; stale or cross-round approval
 must not be retried as a fresh authorization.
 
+The optional `orgrebase change-worker` process scans the same pending change projection
+and calls the existing Preview command. It does not expose another approval endpoint or
+write canonical state. Its current automatic mode is deliberately local deterministic.
+The deployment-period budget ledger is implemented; cloud-model automation still needs
+a separately qualified Vertex provider, actual account authorization and observed receipts.
+
 The proposal body is [ChangeProposalInput](../src/orgrebase/workspace/change_proposals.py):
 `event_id`, `slot_id`, `value`, `source_ref`, `base_version` and `base_digest`, with the
 optional reason, operation, predecessor and read-dependency fields defined there.
@@ -184,6 +192,8 @@ tax label, tax mode, rounding and source reference. For example, 10% discount is
 whole policy. Keep the admitted tax fields unless the proposal intentionally changes
 them. A priced basket's currency and monetary inputs must agree; changing a currency
 label alone is blocked rather than treated as an exchange-rate conversion.
+
+For `quote_basket` and `pricing_policy`, the structured `value.source_ref` must exactly match the request-level `source_ref`. A mismatch returns `CHANGE_PROPOSAL_PRICING_SOURCE_MISMATCH` before proposal registration or business writes.
 
 ### Return for evidence and resume the same change
 

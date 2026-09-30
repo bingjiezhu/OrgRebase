@@ -14,8 +14,8 @@
 
 OrgRebase 不是报价生成器，也不是通用 Agent 的另一个实现。它解决的是：上游产品事实、
 法务义务、财务政策或 GTM 约束发生变化后，企业如何找到仍依赖旧事实的成果，自动形成
-最小跨域 Agent 团队，先完成候选修正与证据验收，再只在精确权威点通知人并选择性更新。
-Enterprise Quote 是当前可运行验证切片；OAC 是底层标准，用来定义 Agent、知识、工具、
+最小跨域 Agent 团队，先完成候选修正与证据验收，再在工作台呈现精确负责人的决策点并选择性更新。
+Enterprise Quote 是当前可运行验证切片；OAC 是底层契约草案，用来定义 Agent、知识、工具、
 权限、交接、产出和证据如何构成一个可接受的动态组织。
 
 这两层各自有明确验收对象：
@@ -68,8 +68,8 @@ ChangeSet → frozen universe → Preview/VMRC → exact approval → selective 
 
 核心不是让 Agent 任意自动化，而是把动态组队、最小上下文、权限和变化恢复放进一组可验证
 契约。Domain Agent 自动完成候选层任务；Reviewer 验收候选证据；确定性控制面计算影响、冻结
-Preview/VMRC 并在需要规范写入时通知精确 Human Owner。人工不逐步设计或执行 Agent 任务，
-只在 canonical authority gate 决策；批准后由唯一写入器自动完成选择性 Rebase。
+Preview/VMRC，并在工作台投影精确 Human Owner 的待办。接入、补证与授权仍可能需要人工输入；真实通知通道需另行配置和验收。
+批准后仍需具有执行权限的主体提交 Apply；界面仅在同一账号同时有执行权限、且回读仍允许 `APPLY` 时自动衔接。唯一写入器在提交时重验当前条件。
 
 三类时间必须分开报告：
 

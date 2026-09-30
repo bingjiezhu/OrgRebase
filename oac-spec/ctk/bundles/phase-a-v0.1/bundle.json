@@ -1,0 +1,233 @@
+{
+  "artifacts": [
+    {
+      "digest": "sha256:1ee909d2207c7aa80d6b63d3309cc65f8115d9ea55bee0919b12bc51186b2ac7",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-CANON-001.json",
+      "size": 368
+    },
+    {
+      "digest": "sha256:3c03746c8e9dce89188583da4986e06fe87b4b2f39f954a6cd1e24ffca3d909d",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-CANON-002.json",
+      "size": 235
+    },
+    {
+      "digest": "sha256:cdb9b4fbc528a6c676cdf57c2e9f7f320ac3ae33f75d367eead82ace8e11c3ad",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-CANON-003.json",
+      "size": 392
+    },
+    {
+      "digest": "sha256:faad648e92fb38f39661dcc344dfc8612094a3b4c9c796d51fddd2d34d8be010",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-CANON-004.json",
+      "size": 392
+    },
+    {
+      "digest": "sha256:bf7bd5034bab98371e2f6c6e3a6fc9b1a39114471e6458d0acad4b7bf89fd019",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-CANON-005.json",
+      "size": 356
+    },
+    {
+      "digest": "sha256:238aac77ea5598f9ac288e524b0163e7e45f73f1bfc85c335055e01361134586",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-CANON-006.json",
+      "size": 380
+    },
+    {
+      "digest": "sha256:5bdff049b3b5e2c0f7d497be148ba2e12d35df314c9bb4fb12238f0a0a37e2a6",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-CANON-007.json",
+      "size": 221
+    },
+    {
+      "digest": "sha256:0c37d8a15cf61e59c2f173808d11b026627ddca010ad390e95d4f09eb3725bde",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-ID-001.json",
+      "size": 743
+    },
+    {
+      "digest": "sha256:6c09c77241d59c50d886d44d892601ab56d300e8584350b461f070bc7ada4c2c",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-ID-002.json",
+      "size": 749
+    },
+    {
+      "digest": "sha256:23bf8f391fd0e8650a3a9967d79f4b18c152486c3f87fd41e7f4dbdb44cf1489",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-ID-003.json",
+      "size": 733
+    },
+    {
+      "digest": "sha256:e9e46526a99f223697aadd12443359e1a931aaeadd380ae9b7e485812035ab13",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-ID-004.json",
+      "size": 710
+    },
+    {
+      "digest": "sha256:4bde9cb8f7cd4345b3fd6070daaddd1dae8b5d077f74ba15ebcdc2281d689e80",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-RESOURCE-001.json",
+      "size": 303
+    },
+    {
+      "digest": "sha256:e51555fa076a53c1320e077d3e569a63971d8787e988cb7baeda30a3bda4a910",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-RESOURCE-002.json",
+      "size": 249
+    },
+    {
+      "digest": "sha256:dc0ddde0f177f210b286e052c395ba211fa4d07be5c3cee86084403d7803b610",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-WITNESS-001.json",
+      "size": 426
+    },
+    {
+      "digest": "sha256:975ce421b72766f0e67c2ff20bcb28d577031454c446d67d9a739193ec320ddb",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C0-WITNESS-002.json",
+      "size": 252
+    },
+    {
+      "digest": "sha256:7f7aff3f550d43e5b06bb17981d7295d50a4fb7508dc1a9edbe86fa9fe0d253f",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-CLOSURE-001.json",
+      "size": 1117
+    },
+    {
+      "digest": "sha256:414b634d6c7df524dc8c9fe187b563c9181a3bd1cfe734ccf795e49a8fa9b9de",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-CLOSURE-002.json",
+      "size": 853
+    },
+    {
+      "digest": "sha256:3969f6dced2f172c1f46b4ead6d12324a47b366127a85b54a7956e06ae4c123c",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-CLOSURE-003.json",
+      "size": 1340
+    },
+    {
+      "digest": "sha256:7aff0dbd0ec6990748374fbeca7f8c420db6f48c1f80c0599c5c026e823a7453",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-CLOSURE-004.json",
+      "size": 1029
+    },
+    {
+      "digest": "sha256:dad12b40825ae5f53644a9b572db8049098e44f96bfa737ba4c046d8ef3990f9",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-CLOSURE-005.json",
+      "size": 530
+    },
+    {
+      "digest": "sha256:4e67fa153a1cc259df1a46db39c47f85d2ec99520b21917001e494fbfa01fc33",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-KLEENE-001.json",
+      "size": 243
+    },
+    {
+      "digest": "sha256:9ce8af99ffa343d4f242ecc32aa9a2b8e57df7aba1633d9b6296c76231f65f10",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-KLEENE-002.json",
+      "size": 242
+    },
+    {
+      "digest": "sha256:20c3b40bd2c640cbb3b37c3de9da997ceca384760f5c43f6eaeacbaf0f7a24bd",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-KLEENE-003.json",
+      "size": 244
+    },
+    {
+      "digest": "sha256:40d7b9c03b302e26bde4fdd11444e53b558080238f7a9131de03553ec1c6772b",
+      "mediaType": "application/vnd.oac.ctk.case+json",
+      "path": "cases/C1-KLEENE-004.json",
+      "size": 240
+    },
+    {
+      "digest": "sha256:57dd36acc2271c156cc1f737c144a4d51edfc7716e59964a115c82d598722818",
+      "mediaType": "text/markdown",
+      "path": "contracts/protocol/stdio-v1.md",
+      "size": 10395
+    },
+    {
+      "digest": "sha256:d3d982d60047b205d76491a8f4b7c5e6483554bc5759906bf84181aa8a590aba",
+      "mediaType": "application/schema+json",
+      "path": "contracts/schemas/CTKBundle.schema.json",
+      "size": 3136
+    },
+    {
+      "digest": "sha256:c8b731e6e1a994061f1d54b16d665de3a3d965b4d9985f93a695a113c0fafe40",
+      "mediaType": "application/schema+json",
+      "path": "contracts/schemas/CapabilityStatement.schema.json",
+      "size": 3131
+    },
+    {
+      "digest": "sha256:b763aaa790b159cdb4d69ed67367db0887ba71ca57822eec7e1955242157000e",
+      "mediaType": "application/schema+json",
+      "path": "contracts/schemas/ConformanceCase.schema.json",
+      "size": 27301
+    },
+    {
+      "digest": "sha256:b4f5a59948bde62b51a4e663f272574ec3d04b2783c0ce3d7b2852969891345f",
+      "mediaType": "application/schema+json",
+      "path": "contracts/schemas/ConformanceResourceProfile.schema.json",
+      "size": 4077
+    },
+    {
+      "digest": "sha256:89550e8197ad627d7983caed67a2380448b666786c022e35208d60ff51fe73b2",
+      "mediaType": "application/schema+json",
+      "path": "contracts/schemas/DisagreementRecord.schema.json",
+      "size": 6028
+    },
+    {
+      "digest": "sha256:eec21037e98fc673c564e734ff408e03013a957d925165eb0dae72720133ee2a",
+      "mediaType": "application/schema+json",
+      "path": "contracts/schemas/RequirementSet.schema.json",
+      "size": 2137
+    },
+    {
+      "digest": "sha256:aae0bc9d230964363dcc2acf2a4ca278af5ba050ccba90a4cffe6e34a5cd1ea2",
+      "mediaType": "application/schema+json",
+      "path": "contracts/schemas/RunResult.schema.json",
+      "size": 9994
+    },
+    {
+      "digest": "sha256:5a05e69e1d21acc5770ad2bdebf8068aa5d21ba35ccdd60cc298da5a0d596920",
+      "mediaType": "text/markdown",
+      "path": "contracts/standard/oac-conformance-v0.1.md",
+      "size": 29530
+    },
+    {
+      "digest": "sha256:ab724e225a1e86677947acef1c1ed807736f15070b997940a02e922c5c5fd3b8",
+      "mediaType": "text/markdown",
+      "path": "contracts/standard/oac-derived-identifiers-v0.1.md",
+      "size": 15539
+    },
+    {
+      "digest": "sha256:c012a80e3528e1ac9fe8cfb2810f0753c406c15825ea1307e7e2f50f2680d17f",
+      "mediaType": "application/vnd.oac.ctk.requirement-set+json",
+      "path": "requirements.json",
+      "size": 666
+    },
+    {
+      "digest": "sha256:828c0e3753880d17d6847d613d59209b51eeb4e600f3861167bfd5cfac612dda",
+      "mediaType": "application/vnd.oac.ctk.resource-profile+json",
+      "path": "resource-profile.json",
+      "size": 774
+    }
+  ],
+  "bundleDigest": "sha256:5a8f498a1b1be52a1c61eaf5f1f2f073970b7a20f89f65f6aca3158bace3f526",
+  "bundleFormatVersion": "oac.ctk.bundle/v0alpha1",
+  "extensions": {
+    "dev.oac.claimCeiling": "not-full-conformance",
+    "dev.oac.independenceClass": "code-independent-phase-a"
+  },
+  "profileId": "oac.phase-a",
+  "profileVersion": "v0.1",
+  "requirementSetRef": "requirements.json",
+  "resourceProfileRef": "resource-profile.json",
+  "standardVersion": "oac-conformance/v0.1-draft.1",
+  "suiteId": "oac-phase-a",
+  "suiteVersion": "0.1.0"
+}

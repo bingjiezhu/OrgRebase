@@ -86,7 +86,9 @@
         : locked ? text("请登录企业账号", "Sign in with your enterprise account")
           : actorName(session.principal);
     node("session-description").textContent = notice || (localRoles(session)
-      ? text("角色模拟", "Role simulation") + (session.principal ? " · " + roleNames(session.principal.roles) : "")
+      ? session.principal
+        ? text("角色模拟", "Role simulation") + " · " + roleNames(session.principal.roles)
+        : text("本地服务已连接，请选择角色继续。会话到期或服务重启后需重新选择；已保存工作不会丢失。", "Local service connected. Choose a role to continue. Select it again after session expiry or a service restart; saved work is retained.")
       : locked
       ? text("登录后才能读取工作内容或签署变更。", "Sign in to read work or approve changes.")
       : session && session.principal ? roleNames(session.principal.roles) : "");

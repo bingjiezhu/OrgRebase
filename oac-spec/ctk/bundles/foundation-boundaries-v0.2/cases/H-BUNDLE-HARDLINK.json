@@ -1,0 +1,14 @@
+{
+  "caseId": "H-BUNDLE-HARDLINK",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "bundle-hardlink"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-BUNDLE"
+  ],
+  "testTarget": "HARNESS"
+}

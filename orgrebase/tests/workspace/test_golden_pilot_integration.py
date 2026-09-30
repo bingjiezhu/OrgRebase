@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import sys
 import urllib.error
@@ -52,6 +53,8 @@ class _ReviewClock:
 
 
 def _exact_local_runtime_available() -> bool:
+    if os.environ.get("ORGREBASE_TEST_LIVE_OLLAMA") != "1":
+        return False
     if not CHECKOUT.is_dir():
         return False
     try:
@@ -69,6 +72,20 @@ def _exact_local_runtime_available() -> bool:
         for item in payload.get("models", [])
         if isinstance(item, dict)
     )
+
+
+@pytest.mark.parametrize("opt_in", [None, "0"])
+def test_local_inference_is_not_probed_without_explicit_opt_in(monkeypatch, opt_in):
+    if opt_in is None:
+        monkeypatch.delenv("ORGREBASE_TEST_LIVE_OLLAMA", raising=False)
+    else:
+        monkeypatch.setenv("ORGREBASE_TEST_LIVE_OLLAMA", opt_in)
+
+    def forbidden_probe(*_args, **_kwargs):
+        pytest.fail("Ollama must not be contacted without explicit live-test opt-in")
+
+    monkeypatch.setattr(urllib.request, "urlopen", forbidden_probe)
+    assert _exact_local_runtime_available() is False
 
 
 def _service(
@@ -493,7 +510,7 @@ def test_execution_ledger_projects_observed_reviewer_provider_without_stale_mode
 
 @pytest.mark.skipif(
     not _exact_local_runtime_available(),
-    reason="exact pinned AgentTeams checkout and qwen2.5:3b are required",
+    reason="live local inference requires explicit ORGREBASE_TEST_LIVE_OLLAMA=1, pinned AgentTeams and exact qwen2.5:3b",
 )
 def test_golden_pilot_commits_exact_candidate_run_and_recovers_from_sqlite(
     tmp_path: Path,

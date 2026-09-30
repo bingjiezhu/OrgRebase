@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-RESERVED-ENCODE",
+  "expect": {
+    "result": {
+      "witnessRef": "urn:a:/?@!$&'()*+,;=%5B%5D#/%3A%3F%40%21%24%26%27%28%29%2A%2B%2C%3B%3D%5B%5D"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "encode",
+    "pointer": "/:?@!$&'()*+,;=[]",
+    "resourceId": "urn:a:/?@!$&'()*+,;=[]"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

@@ -1,0 +1,18 @@
+{
+  "caseId": "S-RESOURCE-maxJsonDepth-EXACT",
+  "expect": {
+    "result": {
+      "profileId": "oac.supplier.transfer/conformance-resource-profile/v1",
+      "withinProfile": true
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "maxJsonDepth": 64
+  },
+  "operation": "resourceCheck",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

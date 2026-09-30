@@ -1,0 +1,32 @@
+{
+  "notScored": [],
+  "profileVersion": "v0.1",
+  "required": [
+    "C0-CANON-001",
+    "C0-CANON-002",
+    "C0-CANON-003",
+    "C0-CANON-004",
+    "C0-CANON-005",
+    "C0-CANON-006",
+    "C0-CANON-007",
+    "C0-ID-001",
+    "C0-ID-002",
+    "C0-ID-003",
+    "C0-ID-004",
+    "C0-WITNESS-001",
+    "C0-WITNESS-002",
+    "C0-RESOURCE-001",
+    "C0-RESOURCE-002",
+    "C1-KLEENE-001",
+    "C1-KLEENE-002",
+    "C1-KLEENE-003",
+    "C1-KLEENE-004",
+    "C1-CLOSURE-001",
+    "C1-CLOSURE-002",
+    "C1-CLOSURE-003",
+    "C1-CLOSURE-004",
+    "C1-CLOSURE-005"
+  ],
+  "requirementSetId": "oac-phase-a-v0.1-required",
+  "standardVersion": "oac-conformance/v0.1-draft.1"
+}

@@ -1,58 +1,21 @@
-# ADR 0001: OAC MVP Boundary
+# ADR 0001: OAC scope and implementation boundary
 
-**Status**: Accepted  
-**Date**: 2026-08-23  
-**Method**: Hard Grill self-review using prior user decisions, repository evidence, and current
-primary-source research.
+**Status:** Accepted
+
+**Date:** 2026-08-23
+
+## Context
+
+A portable organizational contract must remain usable by different Agent and human runtimes. Coupling its semantics to one product, workflow engine or generated topology would make independent verification and reuse depend on that implementation.
 
 ## Decision
 
-Build OAC in an independent `oac-spec` repository. Keep OrgRebase as a product/reference baseline.
-Implement a zero-effect supplier-change plan slice before runtime integration or governed learning.
+Maintain OAC as an adjacent contract project, with OrgRebase as a reference consumer. OAC owns admitted organizational resources, obligation derivation and bounded Plan/Outcome acceptance. Runtime scheduling, enterprise IAM, source collection and canonical business writes remain application responsibilities.
 
-## Hard Grill self-questioning
+The reference implementation begins with a zero-effect Supplier Profile. A frozen Snapshot and semantic change derive obligations; a compiler proposes a Plan and a separate verifier checks the declared relation. Multiple valid topologies may satisfy the same contract. Schemas, registries, detached digests, TCK and registered negative controls define the inspectable boundary.
 
-### Is the goal another enterprise Agent?
+## Consequences
 
-**Recommended answer: No.** Codex, Claude, Agent Spec, and enterprise runtimes already own agent
-execution. OAC owns portable organizational obligations and verification.
+Public enterprise documents can support exploratory inputs but do not supply organizational Ground Truth. Independent human annotation, externally maintained implementations, real enterprise outcomes and production authorization require separate evidence. Bounded technical results cannot establish those qualifications.
 
-### Should the existing Quote Workspace be renamed and extended?
-
-**Recommended answer: No.** It selects a subset of four fixed capability cards and is valuable as an
-OAC-L1 baseline, but its product license, hard-coded scenario, and mixed concerns would define the
-standard accidentally.
-
-### What is the smallest falsifiable product?
-
-**Recommended answer:** a frozen snapshot and semantic change compile into a task-specific plan;
-a separate verifier accepts any valid witness and rejects targeted structural corruptions.
-
-### Does public supplier data already contain OAC Ground Truth?
-
-**Recommended answer: No.** EDiTh contains enterprise documents, per-use-case retrieval labels, and a
-supplier-bankruptcy case. It does not label impacted domains, obligations, authority, or partial order.
-Initial OAC annotations therefore remain exploratory until independent human review.
-
-### Can a technical compiler exist before a 100-case research benchmark?
-
-**Recommended answer: Yes, with a claim firewall.** A 10-case development slice may validate schemas,
-algorithms, mutations, and annotation feasibility. It cannot support C2 conformance, enterprise value,
-or performance-superiority claims.
-
-### What is innovative enough to test?
-
-**Recommended answer:** the combination of organizational-source bindings, change-derived obligation
-closure, plural-valid dynamic plans, explicit Unknown, and independent plan assurance. Dynamic teams,
-graph orchestration, workflow portability, and TCKs alone are prior art.
-
-### What is deferred?
-
-Outcome execution, runtime lowering, automatic admission, Case-to-Skill learning, UI, enterprise ROI,
-second-enterprise portability, and production effects.
-
-## Reversibility
-
-No OrgRebase product directory is deleted or renamed. Confirmed metadata debris may be moved to the
-system Trash. The new repository can be abandoned without corrupting the existing product history.
-
+New Profiles may extend the supported contract while preserving versioned inputs, explicit Unknown and compiler-independent acceptance. OAC does not add a runtime, general workflow DSL or automatic promotion authority.

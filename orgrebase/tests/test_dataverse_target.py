@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+import time
 from email import policy
 from email.parser import BytesParser
 from pathlib import Path
 
+import anyio
 import httpx2 as httpx
 import pytest
 
@@ -379,3 +381,100 @@ def test_failed_response_closes_stream_and_command_transport(setup_target, failu
     assert stream.closed and transport.close_count == 1
     target.close()
     assert transport.close_count == 1
+
+
+def test_normal_slow_multi_request_command_shares_one_total_budget(setup_target):
+    server, target, effect = setup_target
+    clock = [0.0]
+    original = server.__call__
+
+    def slow(request):
+        clock[0] += 2
+        return original(request)
+
+    target.transport = httpx.MockTransport(slow)
+    target.operation_timeout = 10
+    target.monotonic = lambda: clock[0]
+    with StateStore(tenant_id="tenant:one") as store:
+        result = gateway(store).run(effect, target)
+    assert result["outcome"] == "CONFIRMED"
+    assert clock[0] == 8 and server.writes == 1
+
+
+def test_post_deadline_preserves_unknown_barrier_and_reconciles_without_resend(setup_target):
+    server, target, effect = setup_target
+    clock = [0.0]
+    original = server.__call__
+
+    class SlowBatchStream(httpx.SyncByteStream):
+        closed = False
+
+        def __iter__(self):
+            clock[0] += 6
+            yield b"late response after committed batch"
+
+        def close(self):
+            self.closed = True
+
+    stream = SlowBatchStream()
+
+    def expire_after_commit(request):
+        if request.url.path.endswith("/$batch"):
+            server.requests.append(request)
+            committed = server.batch(request)
+            assert committed.status_code == 200 and server.writes == 1
+            return httpx.Response(200, stream=stream)
+        return original(request)
+
+    target.transport = httpx.MockTransport(expire_after_commit)
+    target.operation_timeout = 5
+    target.monotonic = lambda: clock[0]
+    with StateStore(tenant_id="tenant:one") as store:
+        with pytest.raises(EffectError, match="TARGET_OPERATION_DEADLINE_EXCEEDED"):
+            gateway(store).run(effect, target)
+        assert store.get_effect(effect.effect_id)["state"] == "COMMIT_UNKNOWN"
+        assert store.get_target_barrier(effect.barrier_key) == effect.effect_id
+        with DataverseDraftTarget(
+            target.settings, lambda: "test-target-access",
+            transport=httpx.MockTransport(server),
+        ) as recovery:
+            assert gateway(store).run(effect, recovery, query_only=True)["outcome"] == "CONFIRMED"
+    assert stream.closed
+    assert sum(request.method == "POST" and request.url.path.endswith("/$batch")
+               for request in server.requests) == 1
+
+
+@pytest.mark.parametrize("phase", ["headers", "body"])
+def test_target_async_transport_is_cancelled_at_total_deadline(phase):
+    class BlockingStream(httpx.AsyncByteStream):
+        closed = False
+
+        async def __aiter__(self):
+            yield b"{"
+            await anyio.sleep(0.2)
+            yield b"}"
+
+        async def aclose(self):
+            self.closed = True
+
+    stream = BlockingStream()
+
+    async def respond(_request):
+        if phase == "headers":
+            await anyio.sleep(0.2)
+            return httpx.Response(200, json={"ok": True})
+        return httpx.Response(200, stream=stream)
+
+    target = DataverseDraftTarget(
+        DataverseDraftTargetSettings(
+            tenant_id="tenant:one", instance_url="https://sales.example", quote_id=QUOTE_ID,
+        ),
+        lambda: "test-target-access", async_transport=httpx.MockTransport(respond),
+        operation_timeout=0.03,
+    )
+    started = time.monotonic()
+    with target, pytest.raises(EffectError, match="TARGET_OPERATION_DEADLINE_EXCEEDED"):
+        target.read_metadata("/WhoAmI")
+    assert time.monotonic() - started < 0.12
+    if phase == "body":
+        assert stream.closed

@@ -28,10 +28,14 @@ def priced_service(tmp_path):
 
 def propose(service, slot="pricing_policy", value=None, event="discount-10"):
     current = next(item for item in change_options(service)["fields"] if item["slot_id"] == slot)["current"]
+    source_ref = "source:controlled-finance-decision@v2"
+    selected_value = value if value is not None else {**POLICY, "discount_bps": 1000}
+    if slot in {"pricing_policy", "quote_basket"}:
+        selected_value = {**selected_value, "source_ref": source_ref}
     submit_change(service, ChangeProposalInput(
         event_id=event, slot_id=slot, base_version=current["version"], base_digest=current["digest"],
-        value=value if value is not None else {**POLICY, "discount_bps": 1000},
-        source_ref="source:controlled-finance-decision@v2",
+        value=selected_value,
+        source_ref=source_ref,
     ))
     return service.preview_change(event)
 

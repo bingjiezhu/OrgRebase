@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0alpha1/ConformanceResourceProfile.schema.json",
+  "title": "ConformanceResourceProfile",
+  "description": "Structural schema for the bounded Phase A conformance resource profile used by the current runner and adapter.",
+  "$comment": "The frozen A0 runner validates this complete shape and additionally applies runner-owned absolute ceilings that an embedded profile cannot relax.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profileId",
+    "limits",
+    "exhaustion"
+  ],
+  "properties": {
+    "profileId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "limits": {
+      "$ref": "#/$defs/limits"
+    },
+    "exhaustion": {
+      "$ref": "#/$defs/exhaustion"
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    }
+  },
+  "$defs": {
+    "positiveSafeInteger": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "additionalProperties": true
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapterTimeoutMs",
+        "maxAdapterOutputBytes",
+        "maxBundleBytes",
+        "maxBundleFiles",
+        "maxCaseBytes",
+        "maxRequestBytes",
+        "maxDuties",
+        "maxEdges",
+        "maxEvaluations",
+        "maxJsonDepth",
+        "maxNodes",
+        "maxPathPrefixes",
+        "maxPlanBytes",
+        "maxResourceBytes",
+        "maxRules",
+        "maxSemanticDepth",
+        "maxTotalWitnessRefs",
+        "maxWitnessRefsPerEvaluation"
+      ],
+      "properties": {
+        "adapterTimeoutMs": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxAdapterOutputBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxBundleBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxBundleFiles": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxCaseBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxRequestBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxDuties": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxEdges": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxEvaluations": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxJsonDepth": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxNodes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxPathPrefixes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxPlanBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxResourceBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxRules": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxSemanticDepth": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxTotalWitnessRefs": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxWitnessRefsPerEvaluation": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        }
+      }
+    },
+    "exhaustion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sutStatus",
+        "errorCode",
+        "partialDomainResultPermitted"
+      ],
+      "properties": {
+        "sutStatus": {
+          "const": "RESOURCE_EXHAUSTED"
+        },
+        "errorCode": {
+          "const": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED"
+        },
+        "partialDomainResultPermitted": {
+          "const": false
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    }
+  }
+}

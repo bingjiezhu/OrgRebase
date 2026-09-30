@@ -47,6 +47,7 @@ def seed_v4(database):
             store.request_effect_action(connection, effect_id="effect:pending", action="EXECUTE",
                                       request_digest=sha256_digest({"target": "one"}), expected_state="READY")
     with raw(database) as connection:
+        connection.execute("DROP TABLE deployment_budget_reservations")
         for name in INDEXES:
             connection.execute(f"DROP INDEX {name}")
         connection.execute("UPDATE store_metadata SET schema_version=4")
@@ -60,7 +61,7 @@ def contents(database):
                 for name in ("effect_intents", "target_barriers", "artifacts", "domain_events", "current_pointers")}
 
 
-def test_v4_read_only_and_v5_upgrade_preserve_all_business_rows(database):
+def test_v4_read_only_and_current_upgrade_preserve_all_business_rows(database):
     seed_v4(database)
     before = contents(database)
     with StateStore(database, tenant_id=TENANT, maintenance=True, read_only=True, read_schema_version=4) as store:
@@ -68,12 +69,15 @@ def test_v4_read_only_and_v5_upgrade_preserve_all_business_rows(database):
         assert len(store.pending_effects()) == 1
     assert contents(database) == before
     with StateStore(database, tenant_id=TENANT, maintenance=True) as store:
-        assert store.check_health()["schema_version"] == 5
+        assert store.check_health()["schema_version"] == 6
         assert store.pending_effects()[0]["effect_id"] == "effect:pending"
         assert store.verify_event_chain()["events"] == 1
+        assert store.connection.execute(
+            "SELECT COUNT(*) FROM deployment_budget_reservations"
+        ).fetchone()[0] == 0
     assert contents(database) == before
     with StateStore(database, tenant_id=TENANT, migrate=False) as store:
-        assert store.check_health()["schema_version"] == 5
+        assert store.check_health()["schema_version"] == 6
 
 
 def test_index_name_collision_rolls_back_without_stamping_v5(database):
@@ -126,7 +130,7 @@ def test_pending_query_uses_index_without_scanning_completed_history(database):
         assert [item["effect_id"] for item in store.pending_effects()] == ["effect:03000", "effect:03001"]
 
 
-def test_v4_backup_restores_to_v5_without_relabeling_target_identity(postgres_dsn, tmp_path):
+def test_v4_backup_restores_to_current_without_relabeling_target_identity(postgres_dsn, tmp_path):
     seed_v4(postgres_dsn)
     backup = tmp_path / "backup"
     manifest = backup_postgres(postgres_dsn, tenant_id=TENANT, output=backup, read_schema_version=4)
@@ -134,7 +138,7 @@ def test_v4_backup_restores_to_v5_without_relabeling_target_identity(postgres_ds
     result = restore_postgres(postgres_dsn, tenant_id=TENANT, backup=backup, latest_deletion_ledger=[])
     try:
         assert result["restored_schema_version"] == 4
-        assert result["database"]["schema_version"] == 5
+        assert result["database"]["schema_version"] == 6
         assert result["derived_target_identity_migrated"] is False
         assert result["writes_released"] is False
         with StateStore(database_dsn(postgres_dsn, result["database_name"]), tenant_id=TENANT,

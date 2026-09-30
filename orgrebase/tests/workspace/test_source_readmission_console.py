@@ -200,3 +200,33 @@ globalThis.check=async function(archive,observed,state){
            .replace('__STATE__', json.dumps(state)))
     finally:
         service.close()
+
+
+def test_source_recovery_waits_for_login_and_clears_recovered_errors():
+    source = json.dumps((ROOT / "demo/console/source-readmission.js").read_text())
+    harness = json.dumps(str(ROOT / "tests/workspace/console_dom_harness.js"))
+    run_node(r'''
+const assert=require('node:assert/strict'),vm=require('node:vm');
+const {document,window,CustomEvent,nodes,tick}=require(HARNESS);
+let session={authentication_required:true,authenticated:false},fail=false,calls=0;
+window.OrgRebaseClient={session:()=>session,async json(path){
+ calls++;
+ if(fail)throw Object.assign(new Error('temporary'),{code:'TEMPORARY_FAILURE'});
+ if(path.endsWith('/source-readmission-options'))return {schema_version:'orgrebase.source-readmission-options.v1',candidates:[],allowed_actions:[]};
+ return {items:[],next_cursor:null};
+}};
+vm.runInNewContext(SOURCE,{window,document,CustomEvent,crypto});
+(async()=>{
+ await tick();assert.equal(calls,0,'signed-out startup must not request protected data');
+ session={...session,authenticated:true};
+ window.dispatchEvent(new CustomEvent('orgrebase:sessionchange',{detail:session}));
+ await tick();assert.equal(calls,2,'login loads recovery options and records');
+ fail=true;await window.OrgRebaseSourceReadmission.refresh();
+ assert.equal(nodes.get('source-group-notice').hidden,false);
+ fail=false;await window.OrgRebaseSourceReadmission.refresh();
+ assert.equal(nodes.get('source-group-notice').hidden,true,'successful retry clears obsolete error');
+ fail=true;await window.OrgRebaseSourceReadmission.refresh();
+ window.dispatchEvent(new CustomEvent('orgrebase:sessionended',{detail:{reason:'role-switch'}}));
+ assert.equal(nodes.get('source-group-notice').hidden,true,'old identity error must not survive role switch');
+})().catch(error=>{console.error(error);process.exitCode=1});
+'''.replace('SOURCE', source).replace('HARNESS', harness))

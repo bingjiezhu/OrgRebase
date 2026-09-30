@@ -9,6 +9,7 @@ from datetime import timedelta
 from orgrebase.clock import timestamp, utc_datetime
 from orgrebase.digest import sha256_digest
 from orgrebase.domain import EvidenceClass, ObjectState, VersionedObject
+from orgrebase.workspace.bounded_execution import execute_ready_tasks
 from orgrebase.workspace.models import (
     ActorContextProjection,
     ClaimCandidate,
@@ -287,8 +288,21 @@ class DeterministicDomainProvider:
 
 
 class LocalDomainCandidateRegistry:
-    def __init__(self, source_values: Mapping[str, LocalSourceValue] | None = None) -> None:
+    def __init__(
+        self,
+        source_values: Mapping[str, LocalSourceValue] | None = None,
+        *,
+        max_parallel_tasks: int = 1,
+    ) -> None:
+        if (
+            isinstance(max_parallel_tasks, bool)
+            or not isinstance(max_parallel_tasks, int)
+            or not 1 <= max_parallel_tasks <= 4
+        ):
+            raise ValueError("FORMATION_PARALLELISM_INVALID")
         self.source_values = dict(source_values or default_source_values())
+        self.max_parallel_tasks = max_parallel_tasks
+        self._source_store = None
         workers = {
             "product": "product-steward",
             "legal": "legal-steward",
@@ -301,6 +315,7 @@ class LocalDomainCandidateRegistry:
         }
 
     def bind_source_reader(self, reader: Callable[[str, str | None], VersionedObject]) -> None:
+        self._source_store = getattr(reader, "__self__", None)
         for provider in self._providers.values():
             provider.object_reader = reader
 
@@ -345,21 +360,42 @@ class LocalDomainCandidateRegistry:
         slots_by_domain: dict[str, list[str]] = {}
         for item in plan.coverage:
             slots_by_domain.setdefault(item.domain_id, []).append(item.slot_id)
-        candidates: list[ClaimCandidate] = []
-        bundles: list[DomainCandidateBundle] = []
-        for domain, slots in sorted(slots_by_domain.items()):
+        work = tuple((domain, tuple(sorted(slots))) for domain, slots in sorted(slots_by_domain.items()))
+
+        def produce(selected: tuple[str, tuple[str, ...]]):
+            domain, slots = selected
             provider = self.provider_for(domain)
             projection = projection_by_actor.get(provider.worker_id)
             if projection is None:
                 raise ValueError(f"MISSING_ACTOR_PROJECTION:{provider.worker_id}")
-            produced, bundle = provider.produce(
+            return provider.produce(
                 task=task,
                 template=template,
                 plan=plan,
-                slot_ids=tuple(sorted(slots)),
+                slot_ids=slots,
                 actor_projection=projection,
                 now=now,
             )
+        parallelism = self.max_parallel_tasks
+        source_store = self._source_store
+        if source_store is not None:
+            from orgrebase.database import in_transaction
+
+            if in_transaction(source_store.connection):
+                # Formation integrity replays inside the commit transaction.
+                # Run that verifier inline so it re-enters the owning store
+                # lock rather than handing the connection to worker threads.
+                parallelism = 1
+        produced_by_domain = execute_ready_tasks(
+            work,
+            task_id=lambda selected: selected[0],
+            dependencies=lambda _selected: (),
+            execute=produce,
+            max_parallel=parallelism,
+        )
+        candidates: list[ClaimCandidate] = []
+        bundles: list[DomainCandidateBundle] = []
+        for produced, bundle in produced_by_domain:
             candidates.extend(produced)
             bundles.append(bundle)
         return tuple(candidates), tuple(bundles)

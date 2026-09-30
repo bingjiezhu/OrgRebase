@@ -2,118 +2,87 @@
 
 # OrgRebase
 
-**An enterprise work evolution engine governed by OAC, the proposed Organizational Agent Contract.**
+**Governed enterprise change, from source facts to approved results.**
 
-OrgRebase forms the smallest contract-valid Agent team for an employee task, keeps Agents, Tools and Skills on the candidate side of the authority boundary, and selectively updates only the business objects proven to be affected.
+OrgRebase coordinates changes to enterprise facts, policies, responsibilities and product plans across existing work. It binds a change to its sources and owners, identifies affected results, prepares a reviewable successor, and applies the exact result an authorized owner approves. Agents, Tools and Skills produce candidates and evidence. A deterministic control plane enforces scope, approval and canonical writes.
 
-One clone contains both trees. Project-owned OrgRebase and OAC material is Apache-2.0, including documentation. The current public revision is `main`. Tag `v0.4.0` is the earlier PolyForm Noncommercial snapshot of product 0.4.0.
+The runnable reference is **Enterprise Quote**, with Product, Legal, Finance and GTM domain roles. A discount adjustment is one example of enterprise change: the system identifies quotes that depend on the earlier value, preserves unaffected work and verifies the approved successor. The model-free first run uses public historical baskets. The priced-template walkthrough uses synthetic initial facts, and the native model-assisted journey uses a controlled synthetic enterprise Pack. Policies and identities in both paths are controlled inputs.
+
+This tree contains OrgRebase **`0.5.0b4` Beta** and OAC **`0.3.0a0`**. Validation covers bounded local reference paths; customer integration and production qualification require separate acceptance.
 
 [![CI](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml/badge.svg)](https://github.com/bingjiezhu/OrgRebase/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0A66C2)](https://bingjiezhu.github.io/OrgRebase/en/)
-[![Release](https://img.shields.io/github/v/release/bingjiezhu/OrgRebase)](https://github.com/bingjiezhu/OrgRebase/releases)
+[![Documentation](https://img.shields.io/badge/docs-source%20guides-0A66C2)](orgrebase/docs/guide/index.en.md)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
-| Path | What it is | Version |
-|---|---|---|
-| [`orgrebase/`](orgrebase/README.md) | Control plane, WebUI, Skills, schemas, tests, quote replay | 0.4.0 |
-| [`oac-spec/`](oac-spec/README.md) | Contract, schemas, compiler, verifier, TCK | 0.3.0a0 |
+## Get started
 
-```mermaid
-flowchart TD
-    A[Enterprise facts and upstream changes] --> B[OAC contracts: scope, authority and context]
-    B --> C[AgentTeams: domain tasks and evidence handoffs]
-    C --> D[Agents, Tools and Skills produce candidates]
-    D --> E[OrgRebase validates impact and exact Preview]
-    E --> F{Human Owner decision}
-    F -->|Approve exact candidate| G[Authorized executor applies selective Rebase]
-    F -->|Reject| H[Keep the current business version]
-    G --> I[Successor deliverable, dependencies and audit receipts]
-```
+From the repository root, use CPython 3.12–3.14 and [uv](https://docs.astral.sh/uv/). Installing locked dependencies needs network access or a populated cache; this replay needs no model, cloud credentials, PostgreSQL, or OAC CLI.
 
-## Start here
-
-| Goal | Entry point |
-|---|---|
-| Install and run without a model | [Quick Start](#first-run-verify-one-public-transaction) |
-| Read the documentation site | [English](https://bingjiezhu.github.io/OrgRebase/en/) · [中文](https://bingjiezhu.github.io/OrgRebase/) |
-| Understand the product in this repository | [Product README](orgrebase/README.md) · [中文](orgrebase/README.zh-CN.md) |
-| Reuse Skills, Packs or the control plane | [Skills](orgrebase/docs/guide/skills.en.md) · [Reuse contract](orgrebase/docs/REUSE-AND-LICENSING.md) |
-| Deploy with identity and PostgreSQL | [Deployment](orgrebase/docs/guide/deployment.en.md) |
-| Contribute | [Contributing](orgrebase/CONTRIBUTING.md) · [Community](COMMUNITY.md) |
-
-The documentation site is built from the same Markdown as `orgrebase/docs/guide/`. Core guides are paired Chinese/English pages. Deeper technical notes keep their original language and are labeled.
-
-## First run: verify one public transaction
-
-CPython 3.12–3.14 and [uv](https://docs.astral.sh/uv/). Network is required to install locked dependencies. The replay itself needs no cloud credentials, PostgreSQL or OAC.
+The replay writes a local SQLite database. Python must link SQLite 3.51.3 or later, or an official patched 3.44.x/3.50.x release; see the [linked-library check and upgrade guidance](orgrebase/docs/guide/quickstart.en.md#sqlite-runtime).
 
 ```bash
-git clone https://github.com/bingjiezhu/OrgRebase.git
-cd OrgRebase/orgrebase
-uv sync --locked --all-extras
+cd orgrebase
+uv sync --locked
 uv run --frozen python scripts/run_public_quote_replay.py \
   --output ../quote-first-run --limit 1
 ```
 
-The output directory must not already exist. Open `../quote-first-run/index.html`. Invoice `560602` should report `status=PASS` with before/after quotes for the same basket. In `report.json`, expect `status=PASS`, `planned_cases=1` and `outcomes.PASS=1`. Omit `--limit 1` and pick a new output directory to replay the pinned sample.
+The output directory must not exist before the run. Open `../quote-first-run/index.html`; invoice `560602` should show `PASS`. In `report.json`, expect `status=PASS` and, under `measurement_summary`, `planned_cases=1`, `outcomes.PASS=1`, `outcomes.FAILED=0` and `outcomes.INCOMPLETE=0`. The replay performs quote formation, Preview, scripted-owner approval, Apply and an independent amount check. See the [full quickstart](orgrebase/docs/guide/quickstart.en.md).
 
-Contributor check from `orgrebase/`:
+## Create a priced workspace
 
-```bash
-make check-core
-```
-
-This validates the pricing and governance loop, not native AgentTeams or a customer deployment. Next, try the [rule-Pack reuse exercise](orgrebase/docs/REUSE-AND-LICENSING.md#try-a-rule-pack-without-changing-the-engine) without modifying the engine.
-
-## Reuse without rewriting the engine
-
-| Keep | Adapt | Prove it |
-|---|---|---|
-| Source-version binding, impact, exact-owner approval, selective Apply, receipts | Organization facts, owners, source and target connectors | [Reuse and licensing](orgrebase/docs/REUSE-AND-LICENSING.md) |
-| Skill discovery, evaluation and fail-closed release | Candidate programs and domain cases | [Skills guide](orgrebase/docs/guide/skills.en.md) |
-| OAC schemas, compiler, verifier, TCK | Organization profile and admitted contract | [`oac-spec/`](oac-spec/README.md) |
-
-AgentTeams v1.2.3 is an Apache-2.0 upstream, pinned as a Git bundle. Adapters in this repository do not relicense it, do not claim an upstream contribution, and do not make a live cluster `LIVE` by being present.
-
-## Native reference journey
-
-After this workspace clone, OAC is already at `../oac-spec`:
+From the `orgrebase/` directory, initialize a supported template with typed pricing inputs:
 
 ```bash
-export ORGREBASE_VERTEX_PROJECT="YOUR_GCP_PROJECT"
-export ORGREBASE_VERTEX_MODEL_ID="gemini-3.8-flash"
-export ORGREBASE_OAC_ROOT="$(pwd)/../oac-spec"
-./run-semifinal-demo.sh live
+uv run --frozen orgrebase enterprise-pilot-init \
+  --template priced-quote --output ../priced-draft
+uv run --frozen orgrebase enterprise-pilot-draft-preflight --draft ../priced-draft
+uv run --frozen orgrebase enterprise-pilot-seal \
+  --draft ../priced-draft --output ../priced-pack
 ```
 
-Keep credentials in the environment, not in the repository. A configured provider is not proof of a successful call. Details: [Vertex guide](orgrebase/docs/guide/models-vertex.en.md).
+The template contains synthetic initial facts and owner mappings for the v2 Quote adapter. Creating or sealing it does not authorize a task or approve a business change. The [model-free browser walkthrough](orgrebase/docs/guide/demo.en.md#model-free-priced-workspace) runs a new Quote + Discount Memo workspace through contract admission, task confirmation, source review, both deliverable owners and the authorized executor. The reference starts at USD 95.00; the approved 10% discount produces USD 90.00. Use fresh output directories and a new database.
 
-## What is published
+## How it works
 
-| Area | Where to look |
+| Boundary | Responsibility |
 |---|---|
-| Core engine | `orgrebase/src/orgrebase/` |
-| Agent identities and AgentTeams lock | `orgrebase/docs/AGENT-IDENTITIES.md`, `orgrebase/agentteams/` |
-| Skills | `orgrebase/skills/`, `orgrebase/docs/guide/skills.en.md` |
-| Schemas | `orgrebase/schemas/`, `oac-spec/schemas/` |
-| HTTP / model / tool interfaces | `orgrebase/docs/MODEL-AGENT-TOOL-INTERFACES.md` |
-| Tests and evaluation | `orgrebase/tests/`, `make check-core`; OAC TCK under `oac-spec/` |
-| Documentation site | [bingjiezhu.github.io/OrgRebase](https://bingjiezhu.github.io/OrgRebase/en/) |
-| Deploy | `orgrebase/docs/guide/deployment.en.md` |
-| Dependencies | `orgrebase/uv.lock`, `oac-spec/uv.lock` |
-| Changelog | `orgrebase/CHANGELOG.md` |
+| [OAC](oac-spec/README.md) | Proposed organizational contract for facts, owners, capabilities, and admitted scope |
+| AgentTeams, Agents, Tools, Skills | Bounded tasks, handoffs, candidates, and evidence |
+| OrgRebase control plane | Source and dependency checks, impact, exact Preview, admission, and recovery |
+| Human Owner and authorized executor | Approve the precise change, then apply it through the canonical write path |
 
-## Contributing and security
+The control plane can reuse unaffected results because it tracks dependencies and actual reads. Missing coverage remains `UNKNOWN`; task completion and model output never grant permission to update business state. Each approved successor retains its change, owner, version, and receipt. The [core approach](orgrebase/docs/guide/approach.en.md) explains the design and its limits.
 
-- Issues: bug, feature, and reuse/feedback templates
-- [`COMMUNITY.md`](COMMUNITY.md) · [`orgrebase/CONTRIBUTING.md`](orgrebase/CONTRIBUTING.md)
-- [`orgrebase/SECURITY.md`](orgrebase/SECURITY.md) (private advisory)
-- Version tags on [Releases](https://github.com/bingjiezhu/OrgRebase/releases)
+## Supported reference scope
 
-Core CI runs on every push. Full OAC + PostgreSQL validation is `workflow_dispatch` only. The documentation site deploys from the same Markdown on `main`.
+| Enterprise change | Current reference behavior |
+|---|---|
+| Launch date, currency, product plan | Source-bound changes to the Enterprise Quote reference, with affected work and owner review |
+| Quote basket and pricing policy | Explicit v2 pricing profile; controlled local amount verification, not customer tax or exchange-rate advice |
+| Responsibility handover | Opt-in policy requiring consent from both owners |
+| Quote + Discount Memo | Explicit two-deliverable profile in an isolated workspace; new deliverable families still require admitted handlers |
+| Experience and Skill evolution | Governed candidate and qualification slices; cross-task quality, full publication and adoption remain open |
 
-This repository does not claim unaffiliated production deployments. Record a reuse attempt with the Reuse issue template.
+These paths have bounded local validation. New deliverable types and real enterprise integrations need their own admission and acceptance. The [Enterprise Pack exercise](orgrebase/docs/REUSE-AND-LICENSING.md#try-an-enterprise-pack-without-changing-the-engine) shows how to adapt `product_plan` and `currency` facts without changing the engine.
 
-## License
+## Documentation and participation
 
-See [LICENSES.md](LICENSES.md). Project-owned OrgRebase and OAC material is Apache-2.0.
+| Goal | Entry point |
+|---|---|
+| Understand the product and authority model | [Core approach](orgrebase/docs/guide/approach.en.md) · [Architecture](orgrebase/docs/guide/architecture.en.md) |
+| Run the quote workflow or inspect the WebUI | [Quickstart](orgrebase/docs/guide/quickstart.en.md) · [Demo guide](orgrebase/docs/guide/demo.en.md) |
+| Reuse the control plane, Skills, or an enterprise Pack | [Reuse guide](orgrebase/docs/REUSE-AND-LICENSING.md) · [Skills](orgrebase/docs/guide/skills.en.md) |
+| Configure a model or authenticated deployment | [Vertex](orgrebase/docs/guide/models-vertex.en.md) · [Deployment](orgrebase/docs/guide/deployment.en.md) |
+| Browse this revision's documentation | [English](orgrebase/docs/guide/index.en.md) · [中文](orgrebase/docs/guide/index.zh.md) · [deployed site](https://bingjiezhu.github.io/OrgRebase/en/) (may lag source) |
+| Contribute or report a vulnerability | [Contributing](CONTRIBUTING.md) · [Community](COMMUNITY.md) · [Security](SECURITY.md) |
+
+The repository contains `orgrebase/` (runtime, WebUI, Skills, tests, and documentation) and `oac-spec/` (contracts, compiler, verifier, and conformance tests). The Python package lives in `orgrebase/`; OAC remains an adjacent project. The [product README](orgrebase/README.md) covers the native AgentTeams journey and development checks.
+
+## Status and license
+
+The Beta has **controlled local validation** for its named reference paths. Public replay, local PostgreSQL and protocol-fixture checks establish the behavior exercised in those environments. Customer identity integration, employee UAT, production capacity, SLA and ROI remain separate acceptance work. The [release qualification guide](orgrebase/docs/RELEASE-CANDIDATES.md) describes validation scope and release checks.
+
+Protected changes trigger product, OAC and enterprise-boundary CI; release qualification uses a separate maintainer-initiated gate. Check the workflow result for the revision you use. The deployed [Pages site](https://bingjiezhu.github.io/OrgRebase/en/) may reflect an earlier commit.
+
+Project-owned material is [Apache-2.0](LICENSE), including documentation; third-party components and optional models retain their own terms. The historical `v0.4.0` tag retains its original PolyForm terms. See [LICENSES.md](LICENSES.md) before reuse.

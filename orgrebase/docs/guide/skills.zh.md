@@ -24,10 +24,10 @@
 
 八分区检查是构造性资格，不是独立样本泛化率。HELD_OUT与CANARY在当前案例集中的标签不等于统计留出或生产流量灰度。跨企业或新成果类型需要另外的handler、领域测试与业务验收。
 
-## 修改规则，不改引擎
+## 配置企业事实，不改引擎
 
-按照[企业包练习](../REUSE-AND-LICENSING.md#try-a-rule-pack-without-changing-the-engine)初始化草稿、修改支持的知识字段、重新seal到新目录并运行check。不要手改摘要，不把不完整来源标成COMPLETE。
+按照[企业包练习](../REUSE-AND-LICENSING.md#try-an-enterprise-pack-without-changing-the-engine)初始化草稿、修改受支持的产品方案与币种事实、重新 seal 到新目录并运行检查。这不是把自由文本政策自动转成可执行规则；不要手改摘要，也不要把不完整来源标成 `COMPLETE`。
 
-保留治理流程、权威检查和回执；替换企业事实、负责人、来源映射与目标适配器。当前每个工作区管理一个Quote。四个Worker共享handoff是已实现复用；不能由此推出任意业务已支持。
+保留治理流程、权威检查和回执；替换企业事实、负责人、来源映射与目标适配器。默认 `single-quote` 工作区管理一个 Quote；显式启用的 [Quote＋Discount Memo 双成果配置](../QUOTE-DISCOUNT-MEMO.md)在新建隔离工作区中管理恰好两种规范成果，当前仅有受控本地验证且不写外部系统。四个领域 Worker 共享 handoff 是已实现复用；任意新成果仍需独立 handler、来源绑定和验收。
 
 完整包接口与资格说明见[Skill清单](../SKILL-LIST.md)。

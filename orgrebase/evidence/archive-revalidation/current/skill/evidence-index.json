@@ -1,15 +1,15 @@
 {
-  "digest": "sha256:40fd495fa87eec1f5005607b576ef1afcd05438ba3aea10f34d652ccf7fc4027",
+  "digest": "sha256:d3f1d85beeed4b9a0ae0c7894265bf57291eb86a1674ff7ded0bd39652ffbe78",
   "entries": [
     {
       "bytes": 845,
       "path": "idempotency-proof.json",
-      "sha256": "sha256:15b957348b9d75dfab14c7897a54a57f1b1c5fca1e77629c128a5ba43ea2bf0b"
+      "sha256": "sha256:8a4e9870aa3d8bc7c24fae32bf2af3c577177ff927f407809b948476c7e6ecca"
     },
     {
       "bytes": 3709,
       "path": "ledger.json",
-      "sha256": "sha256:aa4121c0e4768f588ab84bc5b715e9c7fa982137de44a6efa33a7a24e108e095"
+      "sha256": "sha256:739505d5c32ec5f0f41ace49ad0ef690042cf36acc6e06c3dabc2a22742222f0"
     },
     {
       "bytes": 1041,
@@ -29,15 +29,15 @@
     {
       "bytes": 3597,
       "path": "rollback-execution-receipt.json",
-      "sha256": "sha256:61dd0664fad52ff946279ba1ee0582ed8fec98f651c25be5cc56bfc1de195ffb"
+      "sha256": "sha256:afaad3bafc05e1acfcfe131bbf056f25c6b257342548d99155ecbde703acf538"
     },
     {
       "bytes": 1296,
       "path": "summary.json",
-      "sha256": "sha256:c8998d8a2793212366f00979ab8407acca458f6812bdbce3586c211858066fdc"
+      "sha256": "sha256:685ee663efc3b20d44e442c835500f1ad169ec68980f3ae59ee484b00e2a3551"
     }
   ],
   "entry_count": 7,
-  "pack_digest": "sha256:a35422d0bbd350b4fdd6f6c6d82ea612f4d63cd5ff7e46112df92f9f71250017",
+  "pack_digest": "sha256:e9339e8414cf932e89fb6f11dba9d64f8a9953f2c4073c99d74d7b77c7ba1322",
   "schema_version": "orgrebase.skill-predecessor-rollback-evidence-index.v1"
 }

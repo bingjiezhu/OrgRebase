@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import logging
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
@@ -63,6 +65,162 @@ def test_valid_signed_token_uses_server_membership(identity, key, monkeypatch):
     assert principal.actor_id == "human:owner"
     assert principal.roles == frozenset({"administrator"})
     assert principal.tenant_id == "org:test"
+
+
+def test_valid_signed_token_authenticates_again_from_parsed_jwks_cache(identity, key, monkeypatch):
+    jwk = json.loads(jwt.algorithms.RSAAlgorithm.to_jwk(key.public_key()))
+    jwk.update(kid="key-1", use="sig", alg="RS256")
+    fetches = []
+
+    def document(_client):
+        fetches.append(True)
+        return {"keys": [jwk]}
+
+    monkeypatch.setattr(VerifiedJWKClient, "fetch_data", document)
+    authenticator = JWTAuthenticator(identity)
+    token = "Bearer " + signed_token(key)
+    first = authenticator.authenticate(token)
+    assert isinstance(authenticator.keys.jwk_set_cache.get(), jwt.PyJWKSet)
+    assert authenticator.authenticate(token) == first
+    assert len(fetches) == 1
+
+
+@pytest.mark.parametrize("representation", ["raw", "parsed"])
+def test_signing_key_cache_accepts_raw_and_parsed_sets_without_fetch(
+    identity, key, monkeypatch, representation,
+):
+    jwk = json.loads(jwt.algorithms.RSAAlgorithm.to_jwk(key.public_key()))
+    document = {"keys": [
+        {**jwk, "kid": "key-1", "use": "sig", "alg": "RS256"},
+        {**jwk, "kid": "encrypt-only", "use": "enc", "alg": "RS256"},
+        {**jwk, "use": "sig", "alg": "RS256"},
+    ]}
+    cached = document if representation == "raw" else jwt.PyJWKSet.from_dict(document)
+    client = VerifiedJWKClient(identity.jwks_url)
+    monkeypatch.setattr(client.jwk_set_cache, "get", lambda: cached)
+    monkeypatch.setattr(client, "fetch_data", lambda: pytest.fail("cache hit must not fetch JWKS"))
+    assert [item.key_id for item in client._signing_keys(cached)] == ["key-1"]
+    assert client.get_signing_key("key-1").key_id == "key-1"
+
+
+def test_unknown_kid_refresh_is_single_flight_cooled_and_bounded(identity, key):
+    clock = [0.0]
+    active = {"key-1": key}
+    fetches = []
+
+    def document():
+        keys = []
+        for kid, private_key in active.items():
+            jwk = json.loads(jwt.algorithms.RSAAlgorithm.to_jwk(private_key.public_key()))
+            jwk.update(kid=kid, use="sig", alg="RS256")
+            keys.append(jwk)
+        fetches.append(tuple(active))
+        return {"keys": keys}
+
+    client = VerifiedJWKClient(
+        identity.jwks_url, timeout=1, ssl_context=identity.ssl_context(),
+        refresh_cooldown=5, negative_cache_ttl=5, max_negative_kids=8,
+        monotonic=lambda: clock[0],
+    )
+    client.fetch_data = document
+    assert client.get_signing_key("key-1").key_id == "key-1"
+    assert len(fetches) == 1
+
+    clock[0] = 6
+
+    def missing(index):
+        with pytest.raises(jwt.PyJWKClientError):
+            client.get_signing_key(f"missing-{index}")
+
+    with ThreadPoolExecutor(max_workers=16) as pool:
+        list(pool.map(missing, range(32)))
+    assert len(fetches) == 2
+    assert len(client._negative_kids) <= 8
+
+    rotated = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    active["key-2"] = rotated
+    clock[0] = 12
+    assert client.get_signing_key("key-2").key_id == "key-2"
+    assert len(fetches) == 3
+
+    authenticator = JWTAuthenticator(identity)
+    authenticator.keys = client
+    wrong = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    with pytest.raises(AuthenticationError, match="AUTH_TOKEN_INVALID"):
+        authenticator.authenticate("Bearer " + signed_token(wrong))
+    assert len(fetches) == 3
+
+
+def test_invalid_jwks_is_not_published_and_recovers_after_cooldown(identity, key):
+    clock = [0.0]
+    fetches = []
+    jwk = json.loads(jwt.algorithms.RSAAlgorithm.to_jwk(key.public_key()))
+    jwk.update(kid="key-1", use="sig", alg="RS256")
+
+    def fetch():
+        fetches.append(clock[0])
+        return {"keys": []} if len(fetches) == 1 else {"keys": [jwk]}
+
+    client = VerifiedJWKClient(
+        identity.jwks_url, timeout=1, ssl_context=identity.ssl_context(),
+        refresh_cooldown=5, monotonic=lambda: clock[0],
+    )
+    client.fetch_data = fetch
+    with pytest.raises(jwt.PyJWTError):
+        client.get_signing_key("key-1")
+    assert client.jwk_set_cache.get() is None
+    clock[0] = 6
+    assert client.get_signing_key("key-1").key_id == "key-1"
+    assert fetches == [0.0, 6]
+
+
+def test_trusted_host_rejects_before_any_token_or_jwks_work(identity, monkeypatch):
+    fetches = []
+    monkeypatch.setattr(VerifiedJWKClient, "fetch_data", lambda self: fetches.append(True) or {"keys": []})
+    app = create_app(
+        workspace_service=WorkspaceBoundary(), deployment_settings=production_settings(identity)
+    )
+    with TestClient(app, base_url="http://localhost") as client:
+        response = client.get(
+            "/api/workspace/state", headers={"Host": "attacker.example", "Authorization": "Bearer bad"}
+        )
+    assert response.status_code == 400
+    assert fetches == []
+
+
+def test_security_event_redacts_unknown_subject_and_collector_failure_is_non_authoritative(
+    identity, key, monkeypatch, caplog,
+):
+    configure_keys(monkeypatch, key)
+    app = create_app(
+        workspace_service=WorkspaceBoundary(), deployment_settings=production_settings(identity)
+    )
+    token = signed_token(key, sub="unknown-secret-subject")
+    with caplog.at_level(logging.INFO, logger="orgrebase.security"), TestClient(
+        app, base_url="http://localhost"
+    ) as client:
+        response = client.get(
+            "/api/workspace/state?private=secret-query",
+            headers={"Authorization": "Bearer " + token},
+        )
+    assert response.status_code == 403
+    assert "reason=AUTH_MEMBERSHIP_DENIED" in caplog.text
+    assert "subject_ref=none" in caplog.text
+    assert "unknown-secret-subject" not in caplog.text + response.text
+    assert "secret-query" not in caplog.text
+
+    def unavailable(_event):
+        raise RuntimeError("collector secret must not escape")
+
+    app.state.security_events._sink = unavailable
+    with TestClient(app, base_url="http://localhost") as client:
+        response = client.get(
+            "/api/workspace/state",
+            headers={"Authorization": "Bearer " + "malformed" + "-secret"},
+        )
+    assert response.status_code == 401
+    assert response.json()["detail"]["code"] == "AUTH_TOKEN_INVALID"
+    assert app.state.security_events.dropped_total == 1
 
 
 @pytest.mark.parametrize("mutation", [

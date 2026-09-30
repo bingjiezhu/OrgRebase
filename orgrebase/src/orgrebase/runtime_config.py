@@ -17,6 +17,10 @@ from orgrebase.browser_auth import BrowserSessionSettings
 from orgrebase.local_role_session import LocalRoleSessionSettings
 from orgrebase.workspace_catalog import load_catalog
 
+SINGLE_QUOTE_PROFILE = "single-quote"
+QUOTE_DISCOUNT_MEMO_PROFILE = "quote-discount-memo-v1"
+_DELIVERABLE_PROFILES = {SINGLE_QUOTE_PROFILE, QUOTE_DISCOUNT_MEMO_PROFILE}
+
 
 def _validate_production_postgres_transport(database_url: str | None) -> None:
     try:
@@ -62,6 +66,7 @@ class DeploymentSettings:
     identity: IdentitySettings | None = None
     database_url: str | None = None
     enterprise_pack: str | None = None
+    deliverable_profile: str = SINGLE_QUOTE_PROFILE
     private_retention_seconds: int = 86_400
     allowed_hosts: tuple[str, ...] = ("127.0.0.1", "localhost", "[::1]", "testserver")
     browser_session: BrowserSessionSettings | None = None
@@ -73,6 +78,8 @@ class DeploymentSettings:
     local_role_session: LocalRoleSessionSettings | None = None
 
     def __post_init__(self) -> None:
+        if self.deliverable_profile not in _DELIVERABLE_PROFILES:
+            raise ValueError("DELIVERABLE_PROFILE_INVALID")
         if self.owner_change_policy not in {"disabled", "mutual-consent-v1"}:
             raise ValueError("OWNER_CHANGE_POLICY_INVALID")
         if not isinstance(self.workspace_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}", self.workspace_id):
@@ -136,7 +143,16 @@ class DeploymentSettings:
             raise ValueError("AUTH_LOCAL_SESSION_DEPLOYMENT_FORBIDDEN")
         if mode != "production":
             return cls(mode=mode, private_retention_seconds=retention, owner_change_policy=owner_policy,
-                       local_role_session=LocalRoleSessionSettings(local_origin) if local_origin else None)
+                       database_url=os.environ.get("ORGREBASE_WORKSPACE_DB") or None,
+                       enterprise_pack=os.environ.get("ORGREBASE_ENTERPRISE_PACK") or None,
+                       workspace_id=os.environ.get("ORGREBASE_WORKSPACE_ID", "default"),
+                       deliverable_profile=os.environ.get(
+                           "ORGREBASE_DELIVERABLE_PROFILE", SINGLE_QUOTE_PROFILE
+                       ).strip(),
+                       local_role_session=LocalRoleSessionSettings(
+                           local_origin,
+                           session_seconds=int(os.environ.get("ORGREBASE_LOCAL_ROLE_SESSION_SECONDS", "3600")),
+                       ) if local_origin else None)
         identity = IdentitySettings(
             issuer=os.environ.get("ORGREBASE_AUTH_ISSUER", ""),
             audience=os.environ.get("ORGREBASE_AUTH_AUDIENCE", ""),
@@ -161,6 +177,9 @@ class DeploymentSettings:
             mode=mode, identity=identity, private_retention_seconds=retention, owner_change_policy=owner_policy,
             database_url=os.environ.get("ORGREBASE_WORKSPACE_DB", ""),
             enterprise_pack=os.environ.get("ORGREBASE_ENTERPRISE_PACK", ""),
+            deliverable_profile=os.environ.get(
+                "ORGREBASE_DELIVERABLE_PROFILE", SINGLE_QUOTE_PROFILE
+            ).strip(),
             allowed_hosts=tuple(host.strip() for host in os.environ.get("ORGREBASE_ALLOWED_HOSTS", "").split(",") if host.strip()),
             browser_session=browser_session,
             workspace_id=os.environ.get("ORGREBASE_WORKSPACE_ID", "default"),
@@ -215,6 +234,16 @@ def validate_workspace(workspace, settings: DeploymentSettings) -> None:
         raise ValueError("PRODUCTION_RESTRICTED_DATABASE_ROLE_REQUIRED")
     if health.get("workspace_id", "default") != settings.workspace_id:
         raise ValueError("PRODUCTION_WORKSPACE_DATABASE_MISMATCH")
+    configured_deliverables = getattr(workspace, "deliverable_set_profile", None)
+    if settings.deliverable_profile == QUOTE_DISCOUNT_MEMO_PROFILE:
+        if (
+            configured_deliverables is None
+            or configured_deliverables.id != "profile:quote-discount-memo"
+            or configured_deliverables.revision != "r1"
+        ):
+            raise ValueError("PRODUCTION_DELIVERABLE_PROFILE_MISMATCH")
+    elif configured_deliverables is not None:
+        raise ValueError("PRODUCTION_DELIVERABLE_PROFILE_MISMATCH")
 
 
 def configure_workspace_identity(workspace, settings: DeploymentSettings, authenticator) -> None:
@@ -235,7 +264,11 @@ def open_workspace(settings: DeploymentSettings):
     from orgrebase.auth import CONTROLLED_LOCAL_SESSION_IDENTITY, JWTAuthenticator
     from orgrebase.clock import SystemClock
     from orgrebase.workspace.pilot import load_enterprise_quote_pilot_pack
-    from orgrebase.workspace.service import CONTROLLED_LOCAL_HEADER_IDENTITY, WorkspaceService
+    from orgrebase.workspace.service import (
+        CONTROLLED_LOCAL_HEADER_IDENTITY,
+        WorkspaceService,
+        quote_discount_memo_profile,
+    )
 
     settings = settings.for_workspace(settings.workspace_id)
     production = settings.mode == "production"
@@ -257,10 +290,18 @@ def open_workspace(settings: DeploymentSettings):
         raise ValueError("PRODUCTION_ADMITTED_PACK_REQUIRED")
     if production and runtime.profile.organization_id != settings.identity.tenant_id:
         raise ValueError("PRODUCTION_TENANT_PROFILE_MISMATCH")
+    if settings.deliverable_profile == QUOTE_DISCOUNT_MEMO_PROFILE and runtime is None:
+        raise ValueError("DELIVERABLE_PROFILE_PACK_REQUIRED")
+    deliverable_set_profile = (
+        quote_discount_memo_profile(runtime)
+        if settings.deliverable_profile == QUOTE_DISCOUNT_MEMO_PROFILE
+        else None
+    )
     options = {"clock": SystemClock(), "store_tenant_id": settings.identity.tenant_id, "store_migrate": False} if production else {}
     workspace = WorkspaceService(
         store_path=workspace_database_path(settings),
         runtime_configuration=runtime,
+        deliverable_set_profile=deliverable_set_profile,
         approval_identity_mode=("VERIFIED_PRINCIPAL_IDENTITY" if production else
                                CONTROLLED_LOCAL_SESSION_IDENTITY if settings.local_role_session else os.environ.get(
             "ORGREBASE_WORKSPACE_IDENTITY_MODE", CONTROLLED_LOCAL_HEADER_IDENTITY,

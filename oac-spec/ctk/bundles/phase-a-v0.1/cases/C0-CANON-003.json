@@ -1,0 +1,13 @@
+{
+  "caseId": "C0-CANON-003",
+  "expect": {
+    "result": {
+      "canonicalBase64": "eyJuIjo5MDA3MTk5MjU0NzQwOTkxfQ==",
+      "digest": "sha256:e1da48c6a6089f06ecb4e0a2259e658e3786b2420f52baccdf929ec6460d7b41"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {"rawBase64": "eyJuIjo5MDA3MTk5MjU0NzQwOTkxfQ=="},
+  "operation": "canonicalize",
+  "requirementRefs": ["REQ-CANONICAL-IJSON"]
+}

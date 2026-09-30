@@ -1,0 +1,15 @@
+{
+  "caseId": "S-ENFORCE-JSON-DEPTH-65",
+  "expect": {
+    "errorCode": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED",
+    "sutStatus": "RESOURCE_EXHAUSTED"
+  },
+  "input": {
+    "rawBase64": "W1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbWzBdXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1d"
+  },
+  "operation": "canonicalize",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

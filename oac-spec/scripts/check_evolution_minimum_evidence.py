@@ -29,10 +29,10 @@ from oac.evolution import (
 from oac.models import ResourceRef
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE_ROOT = ROOT / "experiments/evolution-minimum/v0.1-seed-7"
-PREDECESSOR_PATH = "experiments/evolution-minimum/v0.1-seed-6/evidence-manifest.json"
-PREDECESSOR_DIGEST = "sha256:bfcc0e1d7c55dd1f7045950c8c3861c184c5b643c613cac4346e69def0d4ab80"
-PREDECESSOR_RAW_DIGEST = "sha256:95fc8b1faeedd259e861d6f19fba5e6ca9ea31064f490ced24aac787eb79f8ee"
+EVIDENCE_ROOT = ROOT / "experiments/evolution-minimum/v0.1-seed-8"
+PREDECESSOR_PATH = "experiments/evolution-minimum/v0.1-seed-7/evidence-manifest.json"
+PREDECESSOR_DIGEST = "sha256:d1498bafed90ca3e6d1b009649ff78818222e09cf96f4a7b541c1232f741dfe6"
+PREDECESSOR_RAW_DIGEST = "sha256:54eac0dddf79651d41ea3a64beaceca3564f72c796389badd09967a4c019daf9"
 MANIFEST_PATH = EVIDENCE_ROOT / "evidence-manifest.json"
 
 
@@ -269,10 +269,10 @@ def build_manifest() -> dict[str, Any]:
     manifest: dict[str, Any] = {
         "apiVersion": "oac.evolution.evidence/v0alpha3",
         "kind": "EvolutionMinimumEvidenceManifest",
-        "coordinate": "oac.evolution.minimum/v0.1-seed-7",
+        "coordinate": "oac.evolution.minimum/v0.1-seed-8",
         "serialization": "rfc8785+jcs+lf/v1",
         "sourceState": {
-            "baseRevision": "e301952ae08986e6398a636f04f883036bc88c8d",
+            "baseRevision": "5a92c75ce77070cb791df7958e4c94252d799c01",
             "workingTree": "uncommitted",
             "cleanArchiveReplayed": False,
         },

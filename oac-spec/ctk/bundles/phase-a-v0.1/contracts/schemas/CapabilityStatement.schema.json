@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0alpha1/CapabilityStatement.schema.json",
+  "title": "CapabilityStatement",
+  "description": "Structural schema for a Phase A stdio-v1 adapter capability statement.",
+  "$comment": "The current runner performs an equivalent closed structural admission before any track can be eligible; offline tests also validate real statements against this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "implementationId",
+    "implementationVersion",
+    "adapterProtocolVersion",
+    "tracks"
+  ],
+  "properties": {
+    "implementationId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "implementationVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "adapterProtocolVersion": {
+      "const": "oac.ctk.stdio/v1"
+    },
+    "tracks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/track"
+      }
+    },
+    "observation": {
+      "$ref": "#/$defs/capabilityObservation"
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "additionalProperties": true
+    },
+    "operation": {
+      "enum": [
+        "canonicalize",
+        "deriveIdentifier",
+        "witness",
+        "strongKleene",
+        "closureMicro",
+        "resourceCheck"
+      ]
+    },
+    "sutStatus": {
+      "enum": [
+        "COMPLETED",
+        "UNSUPPORTED",
+        "RESOURCE_EXHAUSTED",
+        "ERROR",
+        "TIMEOUT",
+        "CRASH"
+      ]
+    },
+    "track": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "operation",
+        "profileId",
+        "profileVersion",
+        "wireVersion"
+      ],
+      "properties": {
+        "role": {
+          "const": "semantic-kernel"
+        },
+        "operation": {
+          "$ref": "#/$defs/operation"
+        },
+        "profileId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "profileVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "wireVersion": {
+          "const": "oac.ctk.stdio/v1"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    },
+    "capabilityObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sutStatus",
+        "errorCode"
+      ],
+      "properties": {
+        "sutStatus": {
+          "$ref": "#/$defs/sutStatus"
+        },
+        "errorCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    }
+  }
+}

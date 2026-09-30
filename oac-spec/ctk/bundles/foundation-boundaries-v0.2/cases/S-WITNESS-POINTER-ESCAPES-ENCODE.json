@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-POINTER-ESCAPES-ENCODE",
+  "expect": {
+    "result": {
+      "witnessRef": "urn:source:a#/~01/~1/~0"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "encode",
+    "pointer": "/~01/~1/~0",
+    "resourceId": "urn:source:a"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

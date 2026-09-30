@@ -1,13 +1,13 @@
 {
   "action": "check_task",
-  "digest": "sha256:cc0c0f4a157103099506864a909a15a9a4854694d2a505eb01b5652fca5e280e",
+  "digest": "sha256:6bbc1b32a7d6239c4130e9fa039e8a8f03d9d856904844de8ac9c0a3fee24f89",
   "error": null,
   "key": "at-domain-product-f0e5afba2159:check",
   "ok": true,
-  "payload_digest": "sha256:125bcbc00b250cdf5a05b142d0e706a4e986f5987d329e877302ed0610159979",
+  "payload_digest": "sha256:b25aefde91a672ba7c2379fd1975e6056c007815c5235c22e23ef759765a88dd",
   "raw_ref": "raw-mcp/012-at-domain-product-f0e5afba2159-check-def33fcd.json",
   "request_digest": "sha256:559e689213ee2893d08f400ff92e3b0dda68b8d58f47d24ff094da42ca1a7938",
-  "response_digest": "sha256:5747b29150a19d8c2ff03f8897e2bd26d70c309ac8d34f2129f5eb9225b04486",
+  "response_digest": "sha256:73f34d3aca8ad4da94efefef7407f020861681063810061c9355c1460fa64369",
   "sequence": 12,
   "status": "submitted",
   "tool": "taskflow"

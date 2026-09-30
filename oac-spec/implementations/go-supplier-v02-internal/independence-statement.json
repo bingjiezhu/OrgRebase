@@ -1,0 +1,90 @@
+{
+  "apiVersion": "oac.ctk.independence/v0.1",
+  "kind": "IndependenceStatement",
+  "statementId": "oac.supplier.go.internal/internal-differential/v0.2",
+  "implementation": {
+    "implementationId": "oac.supplier.go.internal",
+    "implementationVersion": "0.2.0-seed2",
+    "artifactDigest": "sha256:cd24a7d582ea9e31af20e2b266549a0f9d92fec4a1d549d5dac75a734c5cb238"
+  },
+  "maintainer": {
+    "maintainerId": "same-repository-internal-author",
+    "organizationRef": null,
+    "evidenceRefs": [
+      "PROVENANCE.md",
+      "README.md"
+    ]
+  },
+  "source": {
+    "repositoryRef": "oac-spec/shared-worktree",
+    "revision": "internal-differential-uncommitted-base-e301952ae08986e6398a636f04f883036bc88c8d-2026-08-24",
+    "sourceDigest": "sha256:db73a67c4133d39c74ce10d8fa99ceaa489487f94603d4359c2bddd8af81b364"
+  },
+  "build": {
+    "buildSystem": "Go 1.25.6 standard toolchain; go build -trimpath",
+    "recipeDigest": "sha256:238c5cb23995bdae603d448ec4aa607d37bdd9835324b1dcc0d5e24bc3f0b14e",
+    "environmentDigest": "sha256:06c2a7e7aa87d3885b89645fbc1a53d34332a0a6ab86ab66de64adb34a232d48",
+    "artifactDigest": "sha256:cd24a7d582ea9e31af20e2b266549a0f9d92fec4a1d549d5dac75a734c5cb238"
+  },
+  "sbom": {
+    "format": "other",
+    "documentRef": "go.mod (stdlib-only dependency declaration)",
+    "documentDigest": "sha256:b0833d88642546c3a64ea45cf07ad53117fb21d452a2ebb3b7e633392882d38f"
+  },
+  "referenceAccess": {
+    "level": "reference_source_observed",
+    "artifactRefs": [
+      "PROVENANCE.md#explicit-read-whitelist",
+      "experiments/supplier-v02-portability/expected",
+      "implementations/go-phase-a",
+      "scripts/supplier_v02_casegen.py",
+      "src/oac/applicability.py",
+      "src/oac/supplier.py",
+      "tests/test_supplier_semantic_matrix.py"
+    ],
+    "attestation": "Same-repository internal work observed public expected reports and, during the seed-2 red-team resolution, relevant Python evaluator, Supplier derivation, regression-test, and public generator source. The built Go SUT does not call Python at runtime, but this is reference-source-exposed, non-clean-room, and non-independent differential evidence."
+  },
+  "generatedCode": {
+    "used": true,
+    "generatorRefs": [
+      "codex-agent:go_semantic_matrix",
+      "codex-agent:go_supplier_v02",
+      "codex-root:adr0006-integration"
+    ],
+    "generatedSourceDigest": "sha256:db73a67c4133d39c74ce10d8fa99ceaa489487f94603d4359c2bddd8af81b364"
+  },
+  "dependencies": {
+    "language": [
+      {
+        "name": "Go toolchain",
+        "version": "go1.25.6 darwin/arm64",
+        "artifactDigest": "sha256:cd864b57eef970002eadd9d4f35ce4026265d3fe7f4c030a8b5d69373f9a4bc2",
+        "sharedWithReference": false,
+        "semanticRole": "build"
+      }
+    ],
+    "runtime": [
+      {
+        "name": "Go statically linked runtime in adapter artifact",
+        "version": "go1.25.6",
+        "artifactDigest": "sha256:cd24a7d582ea9e31af20e2b266549a0f9d92fec4a1d549d5dac75a734c5cb238",
+        "sharedWithReference": false,
+        "semanticRole": "none"
+      }
+    ],
+    "library": [
+      {
+        "name": "Go standard library linked in adapter artifact",
+        "version": "go1.25.6",
+        "artifactDigest": "sha256:cd24a7d582ea9e31af20e2b266549a0f9d92fec4a1d549d5dac75a734c5cb238",
+        "sharedWithReference": false,
+        "semanticRole": "semantic_kernel"
+      }
+    ],
+    "ffi": [],
+    "process": [],
+    "service": []
+  },
+  "claimLimit": "provenance_and_dependency_disclosure_only",
+  "digest": "sha256:5474d934fea1ab7491e9bf7157dd41fe01d5699e11a02379e727618fbf5a552b"
+}

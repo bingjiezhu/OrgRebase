@@ -1,0 +1,19 @@
+{
+  "caseId": "C0-WITNESS-001",
+  "expect": {
+    "result": {
+      "witnessRef": "urn:oac:knowledge%23quality/%25/%E4%BE%9B%E5%BA%94%E5%95%86#/spec/a~1b/~0token/%23/%25/%E5%80%BC"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "encode",
+    "pointer": "/spec/a~1b/~0token/#/%/值",
+    "resourceId": "urn:oac:knowledge#quality/%/供应商"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

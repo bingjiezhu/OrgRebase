@@ -32,7 +32,7 @@ qualifications, authority, dependencies, or evidence. The verifier sees only fro
 public Profile rules. It checks the constraint set, not whether the plan resembles a preferred graph.
 In v0.2 both tools share the executable Supplier Profile oracle in `src/oac/supplier.py`; therefore
 the verifier is independent of compiler strategy and topology, but not an independent semantic
-implementation of the Profile. Spec 003 owns that stronger gate.
+implementation of the Profile. Independently maintained semantics require a separate conformance gate.
 
 The Snapshot root is an admitted input, not a self-authenticating document. Envelope digests protect
 wire integrity, while identity proof, signature validation, and the decision to admit an owner,

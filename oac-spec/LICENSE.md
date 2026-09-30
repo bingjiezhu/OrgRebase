@@ -1,20 +1,32 @@
 # Licensing
 
-Project-owned OAC material in this tree is Apache License 2.0, including normative prose, schemas, code, tests and root project files. The text is in `LICENSES/Apache-2.0.txt`.
+Project-owned OAC material is licensed under the **Apache License, Version 2.0**.
+This includes normative text, documentation, schemas, examples, reference code,
+TCK/CTK resources, tests and project metadata. The authoritative license text is
+[LICENSES/Apache-2.0.txt](LICENSES/Apache-2.0.txt). Commercial use is permitted under
+that license.
 
-## 原先
+## Third-party material and historical releases
 
-OAC separated normative prose from executable interoperability assets.
+Third-party software and datasets retain their own terms and attribution. Their
+licenses are recorded in [THIRD_PARTY.yml](THIRD_PARTY.yml), regardless of where the
+material appears in this tree. `LICENSES/CC-BY-4.0.txt` supplies the license text for
+upstream data; it does not license project-owned OAC prose in the current tree.
 
-| Paths | License |
-|---|---|
-| `standard/`, `docs/`, `specs/`, `ctk/protocol/`, Markdown prose under `profiles/`, root project prose (`README*`, `AGENTS.md`, `CONTRIBUTING.md`, `GOVERNANCE.md`, `NOTICE.md`, `PATENT-NON-ASSERTION.md`) | CC BY 4.0 |
-| `src/`, `schemas/`, `tck/` except `ctk/protocol/`, `implementations/`, `tests/`, `scripts/`, machine-readable examples and fixtures, build/CI/editor metadata, `CITATION.cff`, `THIRD_PARTY.yml` | Apache License 2.0 |
+Earlier OAC revisions used CC BY 4.0 for project prose and Apache-2.0 for executable
+and machine-readable assets. Those revisions retain the licenses supplied with
+their releases. The current grant applies to project-owned material in this tree.
 
-## 现状
+## Contributions, patents and project status
 
-Those project-owned paths are Apache License 2.0. This repository is an experimental proposed draft, not a claim of recognition by a standards body.
+Contributors retain copyright and submit contributions under Apache-2.0. See
+[CONTRIBUTING.md](CONTRIBUTING.md) and [NOTICE.md](NOTICE.md).
 
-## 为什么会有这样的更新
+Apache-2.0 Section 3 defines the contributor patent grant. The separate
+[patent non-assertion draft](PATENT-NON-ASSERTION.md) is a proposal requiring
+independent legal review, not an adopted standards patent policy or an additional
+license condition.
 
-The workspace uses one OSI license, Apache-2.0, for project-owned OrgRebase and OAC files. `LICENSES/CC-BY-4.0.txt` remains the verbatim text for upstream dataset terms. Dataset material keeps its upstream license regardless of its local path and must be declared in `THIRD_PARTY.yml`.
+OAC remains an experimental proposed draft. The license does not establish
+standards-body recognition, certification, or permission to use project names
+beyond the uses allowed by Apache-2.0.

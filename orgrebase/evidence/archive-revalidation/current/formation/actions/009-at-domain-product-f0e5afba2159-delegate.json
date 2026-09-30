@@ -1,13 +1,13 @@
 {
   "action": "delegate_task",
-  "digest": "sha256:0918b16791d0ee7b267e8820cd362df8353b6a34e53481723fc0703d35d5387a",
+  "digest": "sha256:fc7aa2f1cd803f5d3035ec1e36c6847c8d89593832c5ab8b9eddc3ef67d37ff4",
   "error": null,
   "key": "at-domain-product-f0e5afba2159:delegate",
   "ok": true,
-  "payload_digest": "sha256:3d952c9ba2e04ef93ad062140cdbf2d2e0e6f958169a92e391a0ebb1872643ce",
+  "payload_digest": "sha256:b8f7d12f461d4e67957ccba6ce01c42e6f6cdec57f8dce0b187bba9bbb0af677",
   "raw_ref": "raw-mcp/009-at-domain-product-f0e5afba2159-delegate-24e8326a.json",
-  "request_digest": "sha256:1742feb57a9d260fb878708cfd541575df13e0f3b4cf9959710fa575329487de",
-  "response_digest": "sha256:da425fff537b58d3bbb0d981b18d79de1c387473ad3b841b400b7896ba535775",
+  "request_digest": "sha256:daa97d05bea983bb412a7faca43b796c51e2a0018ecbc7d236ee0d755cdb2d31",
+  "response_digest": "sha256:0c3177da39f1fe437e604f1c8ddec9967d0a3993d471096361fbff81f2995d75",
   "sequence": 9,
   "status": "assigned",
   "tool": "taskflow"

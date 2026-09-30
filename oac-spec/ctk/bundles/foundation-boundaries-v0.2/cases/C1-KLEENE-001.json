@@ -1,0 +1,21 @@
+{
+  "caseId": "C1-KLEENE-001",
+  "expect": {
+    "result": {
+      "result": "UNKNOWN"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "operator": "all",
+    "values": [
+      "TRUE",
+      "UNKNOWN"
+    ]
+  },
+  "operation": "strongKleene",
+  "requirementRefs": [
+    "REQ-STRONG-KLEENE"
+  ],
+  "testTarget": "SUT"
+}

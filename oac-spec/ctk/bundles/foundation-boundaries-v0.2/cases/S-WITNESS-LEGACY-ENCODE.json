@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-LEGACY-ENCODE",
+  "expect": {
+    "result": {
+      "witnessRef": "change:SC-008#/spec/subjectRef"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "encode",
+    "pointer": "/spec/subjectRef",
+    "resourceId": "change:SC-008"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

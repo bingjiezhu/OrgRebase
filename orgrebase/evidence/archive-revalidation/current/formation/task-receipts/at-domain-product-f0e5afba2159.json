@@ -1,23 +1,23 @@
 {
   "action_digests": {
     "accept_task_result": "sha256:cf76ef95ee93f098464dc81b4283d0aa72459c3db0b90104a61eac9ee6d789ad",
-    "ack_task": "sha256:ee2e1807d31818fdfeb111ebf3042e03e3401894815e88d5a8c575e7fe41c14e",
-    "check_task": "sha256:cc0c0f4a157103099506864a909a15a9a4854694d2a505eb01b5652fca5e280e",
-    "delegate_task": "sha256:0918b16791d0ee7b267e8820cd362df8353b6a34e53481723fc0703d35d5387a",
-    "submit_task": "sha256:bf5670a67ba627e723a64067694de5844467c07d141f8be92d7ace21646da6cd"
+    "ack_task": "sha256:1ff86d5883ec39d8ee9385e5e297fbdb2e9f896a96e20f0b04d243d84e3c4ffb",
+    "check_task": "sha256:6bbc1b32a7d6239c4130e9fa039e8a8f03d9d856904844de8ac9c0a3fee24f89",
+    "delegate_task": "sha256:fc7aa2f1cd803f5d3035ec1e36c6847c8d89593832c5ab8b9eddc3ef67d37ff4",
+    "submit_task": "sha256:eb4cb6e97376c558e1097a59b90783235f54470313931d554a02f1297815d87d"
   },
   "assignee_actor_id": "product-steward",
   "candidate_only": true,
   "canonical_target_writes": 0,
   "depends_on": [],
-  "digest": "sha256:5c679a0a69b5b16b6379221c266cab7b2d9290d53d56c72e95c8c4aaeff3b916",
+  "digest": "sha256:48a606a3c144aee0864c080c1d1311083eed42362808bd6a851541cb64fe788b",
   "domain_id": "product",
   "execution_task_digest": "sha256:ddd087bbe962f28e23af3ccd9ac356d6dbbd98fa47ffde10e7fd3b96ed7fa20c",
-  "result_digest": "sha256:41bf65d6035ea6814fcc4f950d6d54a920e2fdb2a5c42fd8542e004c709046df",
+  "result_digest": "sha256:3e5aaab846e80384bd5596dde72f1b5a9a79992c7ea9d7412b5626e4c5f2f055",
   "schema_version": "orgrebase.formation-taskflow-task-receipt.v1",
   "task_id": "at-domain-product-f0e5afba2159",
   "task_kind": "DOMAIN",
-  "task_spec_digest": "sha256:94efd4819741407ecb4368592797fe53c10ce04e34c431586e909d78884ae8be",
+  "task_spec_digest": "sha256:75543165c1e535342f69ef088a3ad6cca0b7299b78c6766b5960b9f529042528",
   "terminal_status": "completed",
   "transport_assignee": "@product-steward:controlled.local"
 }

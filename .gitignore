@@ -13,3 +13,23 @@ htmlcov/
 quote-first-run/
 site/
 *.egg-info/
+# Local development state and credentials
+*.py[cod]
+node_modules/
+.mypy_cache/
+.env
+.env.*
+!.env.example
+.runtime/
+
+# Workspace build outputs and local service captures
+/.tmp/
+/.codex-finalizer/
+/.codex-ppt-build/
+/.finals-build/
+/release-builds/
+/ev.json
+/msgs.json
+
+# Local immutable iterations and release artifacts are not repository source.
+/可执行代码版本迭代/

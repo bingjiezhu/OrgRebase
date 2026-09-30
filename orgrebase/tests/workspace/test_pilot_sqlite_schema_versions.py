@@ -15,7 +15,7 @@ def database(tmp_path, fixture, schema_version):
         store.load_fixture(fixture)
         quote = store.get_object("work:sales_quote_a").model_dump(mode="json")
         chain = store.verify_event_chain()
-    # Versions 3/4/5 share the evidence table shapes; this changes only the fixture's
+    # Supported versions share the evidence tables inspected here; this changes only the fixture's
     # declared version, with no historical production database being rewritten.
     with closing(sqlite3.connect(path)) as connection, connection:
         connection.execute("UPDATE store_metadata SET schema_version=?", (schema_version,))
@@ -23,7 +23,7 @@ def database(tmp_path, fixture, schema_version):
     return path, {"expected_quote": quote, "expected_event_chain": chain, "expected_changes": {}}
 
 
-@pytest.mark.parametrize("version", [3, 4, 5])
+@pytest.mark.parametrize("version", [3, 4, 5, 6])
 def test_independent_verifier_reads_known_scoped_versions_without_modifying_bytes(tmp_path, fixture, version):
     path, expected = database(tmp_path, fixture, version)
     before = path.read_bytes()
@@ -32,7 +32,10 @@ def test_independent_verifier_reads_known_scoped_versions_without_modifying_byte
     assert path.read_bytes() == before
 
 
-@pytest.mark.parametrize("metadata_version,pragma_version", [(3, 4), (4, 3), (4, 5), (5, 4), (6, 6), (2, 2)])
+@pytest.mark.parametrize(
+    "metadata_version,pragma_version",
+    [(3, 4), (4, 3), (4, 5), (5, 4), (6, 5), (7, 7), (2, 2)],
+)
 def test_independent_verifier_rejects_unknown_or_inconsistent_version(tmp_path, fixture, metadata_version, pragma_version):
     path, expected = database(tmp_path, fixture, metadata_version)
     with closing(sqlite3.connect(path)) as connection, connection:
@@ -43,7 +46,7 @@ def test_independent_verifier_rejects_unknown_or_inconsistent_version(tmp_path, 
     assert path.read_bytes() == before
 
 
-@pytest.mark.parametrize("version", [3, 4, 5])
+@pytest.mark.parametrize("version", [3, 4, 5, 6])
 def test_independent_verifier_keeps_event_digest_checks_in_every_supported_version(tmp_path, fixture, version):
     path, expected = database(tmp_path, fixture, version)
     with closing(sqlite3.connect(path)) as connection, connection:

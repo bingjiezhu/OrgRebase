@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-SINGLE-DECODE-ENCODE",
+  "expect": {
+    "result": {
+      "witnessRef": "urn:source%252Fsegment#/%2523/%25252F"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "encode",
+    "pointer": "/%23/%252F",
+    "resourceId": "urn:source%2Fsegment"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

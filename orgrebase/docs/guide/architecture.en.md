@@ -1,5 +1,7 @@
 # Architecture and authority
 
+Enterprise change can affect facts, rules, responsibilities or deliverable dependencies. The boundaries below identify who may propose, determine impact, approve and commit a successor. Quotes are the current reference path; other business types require their own admission and acceptance.
+
 ## One business flow, four decision boundaries
 
 | Layer | Responsibility | Does not own |

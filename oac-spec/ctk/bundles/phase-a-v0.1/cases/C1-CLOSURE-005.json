@@ -1,0 +1,18 @@
+{
+  "caseId": "C1-CLOSURE-005",
+  "expect": {"errorCode": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED", "sutStatus": "RESOURCE_EXHAUSTED"},
+  "input": {
+    "edges": [
+      {"admission": "admitted", "covered": true, "id": "e1", "result": "TRUE", "source": "A", "target": "B"}
+    ],
+    "maxDepth": 4,
+    "maxPathPrefixes": 1,
+    "nodes": [
+      {"admission": "admitted", "id": "A"},
+      {"admission": "admitted", "id": "B"}
+    ],
+    "root": "A"
+  },
+  "operation": "closureMicro",
+  "requirementRefs": ["REQ-CLOSURE-MICRO"]
+}

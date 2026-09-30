@@ -58,11 +58,15 @@ def test_source_options_expose_binding_domains_without_changing_state_or_authori
             }
             if reader:
                 assert item["allowed_operations"] == []
+                source_ref = "source:reader-inspection"
+                value = item["current"]["value"]
+                if slot in {"pricing_policy", "quote_basket"}:
+                    value = {**value, "source_ref": source_ref}
                 with pytest.raises(AuthenticationError, match="AUTH_ACTION_DENIED"):
                     submit_change(service, ChangeProposalInput(
                         event_id=f"reader-{slot}", slot_id=slot,
                         base_version=item["current"]["version"], base_digest=item["current"]["digest"],
-                        value=item["current"]["value"], source_ref="source:reader-inspection",
+                        value=value, source_ref=source_ref,
                     ))
             else:
                 assert item["allowed_operations"] == ([] if priced and slot == "currency" else ["UPDATE"])

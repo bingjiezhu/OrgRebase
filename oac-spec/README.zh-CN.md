@@ -38,7 +38,7 @@ WorkUnit 和边，只要都满足同一组冻结的义务、资格、职责分�
 
 ## 已实现的最小生命周期 Profile
 
-Spec 009 在既有 Source、Plan 和 lowering 资源之上增加了三种严格、可移植的 Kind：
+最小生命周期 Profile 在既有 Source、Plan 和 lowering 资源之上定义了三种严格、可移植的 Kind：
 
 | Kind | 它记录什么 | 它不会自动授予什么 |
 |---|---|---|
@@ -53,7 +53,7 @@ TCK/证据门。Profile 还定义了确定性、域分离的 `S/D/P/X/O/E` 根�
 `ExecutionReceipt`、`OutcomeObservation`、Procedure candidate、治理事务和活动 Source
 指针仍是实现侧扩展，通过精确 ResourceRef 接入。**本仓库不拥有 Runtime。**
 
-正式契约见 [Spec 009](specs/009-proof-carrying-evolution-minimum-profile/spec.md)。它的
+公开的 [Core 草案](standard/oac-core-v0.1.md)与[生成 Schema](schemas/)说明当前实现的契约面。内部 Spec Kit 设计记录不在这份源码包内。它的
 Source/root-vector 证据仍是单参考实现的有界证明；历史 Spec 状态和外部独立性门继续显式保留。
 
 ## 既有 Supplier Profile 与多种 Plan
@@ -103,16 +103,8 @@ Source/Demand 准入
 当前证据仅为合成、零外部效果和 scripted governance。真人审批、真实企业使用、经过企业 IAM
 认证的 Source 与生产部署仍为 `NOT_RUN`。
 
-在双目录源码包中运行：
-
-```bash
-cd orgrebase
-uv sync --all-extras
-make workspace-oac-evolution-check
-```
-
-可辩护的组合结论属于 OrgRebase Reference：一个完整 OAC 合成受控闭环，加一个初赛 Quote
-字节级非回归闭环。它不等于 OAC 标准自己执行了企业工作，也不证明跨企业泛化。
+历史组合验证属于 OrgRebase Reference：一个合成受控 OAC 闭环，加一个早期 Quote
+字节级非回归闭环。其冻结证据不在这份公开源码范围内。全新 clone 请先运行[产品首单](../orgrebase/README.zh-CN.md#第一次运行先核对一笔真实商品数据)及下方的 OAC 公开门。历史结果不等于 OAC 标准自己执行了企业工作，也不证明跨企业泛化。
 
 ## 快速开始
 
@@ -121,19 +113,17 @@ make workspace-oac-evolution-check
 复现这些记录时，请显式选择 CPython 3.12.13。
 
 ```bash
-uv sync --all-extras
+uv sync --locked --all-extras
 uv run oac demo
 uv run oac tck
-make evolution-evidence-check
-make runtime-lowering-check
-make check
+python3 -B ../orgrebase/scripts/build_source_snapshot.py public-check --snapshot-root ..
 ```
 
 公共命令：
 
 ```text
 oac validate             严格校验注册资源
-oac validate-evolution   Spec 009 语义校验
+oac validate-evolution   生命周期语义校验
 oac digest               RFC 8785 + SHA-256 detached digest
 oac compile              Supplier Profile 参考编译器
 oac verify               与编译器分离的 Plan 验证
@@ -142,8 +132,7 @@ oac registry             机器可读 Registry
 oac tck                  manifest-driven 开发 TCK
 ```
 
-`make check` 会对检入路径和 installed-material commitment fail closed。解压或搬迁后的副本
-使用 `make archive-replay-check`：它重算当前 Plan-verification 结果，只把声明的跨主机可移植语义投影与不可变 seed-1 坐标比较，然后运行同一复合门。它不会重写冻结的 parity summary、installed ledger 或 evidence manifest。
+`public-check` 执行这份 GitHub 源码范围内可复验的 OAC 契约检查，包括 CTK、Go 参考实现和选定核心测试。历史 `make check` 与 `make archive-replay-check` 还依赖未纳入公开源码的封存输入；旧结果不能充作新 clone 的通过记录。公开检查也不授予客户或生产环境资格。
 
 ## 证据边界
 
@@ -151,7 +140,7 @@ oac tck                  manifest-driven 开发 TCK
 |---|---|
 | 严格 wire Kind、detached digest、Registry、Schema 和安装包 | 已实现并检查 |
 | Contextual Supplier Profile 与有界 plural-valid Plan relation | 在冻结公开坐标上已实现并检查 |
-| Spec 009 最小 Demand/Admission/Outcome Kind 与生命周期根负例清单 | 已实现并检查 |
+| 最小生命周期 Demand/Admission/Outcome Kind 与生命周期根负例清单 | 已实现并检查 |
 | 零效果参考 lowering | 已实现；仍需外部 Runtime 二次准入 |
 | 外部 OrgRebase 合成受控参考闭环 | 在 OrgRebase 中为 `PASS`；不是 OAC 生产证据 |
 | 合格真人 Ground Truth | `NOT_RUN` |
@@ -173,11 +162,10 @@ OAC 的准确状态仍是 experimental proposed draft。它不主张正式认证
 | `ctk/` | 自包含 bundle、协议、Schema 与 code-independent runner |
 | `implementations/` | 已披露的同仓库跨语言反证种子 |
 | `experiments/` | 绑定修订的可移植性与 disagreement 证据 |
-| `specs/` | Spec Kit 需求与 evidence-gated proposals |
 | `docs/` | 决策、研究、架构、验证报告与[路线图](docs/ROADMAP.md) |
 
 ## 许可证
 
 OAC 自有材料，包括规范文本、Schema、TCK/CTK、示例和参考代码，使用
 [Apache-2.0](LICENSES/Apache-2.0.txt)。详见 [LICENSE.md](LICENSE.md)、[NOTICE](NOTICE.md)、
-[CONTRIBUTING](CONTRIBUTING.md) 与[专利不主张](PATENT-NON-ASSERTION.md)。
+[CONTRIBUTING](CONTRIBUTING.md) 与[专利不主张草案](PATENT-NON-ASSERTION.md)。

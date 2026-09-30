@@ -1,0 +1,22 @@
+{
+  "caseId": "C0-ID-003",
+  "expect": {
+    "result": {"identifier": "urn:oac:mvp:obligation:8ac3bf19985c4df2e3d05429"},
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "fields": {
+      "changeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "obligationType": "assess",
+      "origin": "dependency_path",
+      "pathRefs": ["urn:oac:mvp:path:abc"],
+      "requiredRoleRef": "urn:role:r",
+      "resolutionState": "affected",
+      "snapshotDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "targetRef": "urn:node:t"
+    },
+    "identifierKind": "obligation"
+  },
+  "operation": "deriveIdentifier",
+  "requirementRefs": ["REQ-DERIVED-ID-LEGACY"]
+}

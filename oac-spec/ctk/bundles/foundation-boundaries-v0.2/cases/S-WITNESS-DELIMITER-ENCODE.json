@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-DELIMITER-ENCODE",
+  "expect": {
+    "result": {
+      "witnessRef": "urn:a%23b#/a%23b"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "encode",
+    "pointer": "/a#b",
+    "resourceId": "urn:a#b"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

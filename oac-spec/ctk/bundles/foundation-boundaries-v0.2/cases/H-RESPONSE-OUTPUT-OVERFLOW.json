@@ -1,0 +1,14 @@
+{
+  "caseId": "H-RESPONSE-OUTPUT-OVERFLOW",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "response-output-overflow"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-ADAPTER"
+  ],
+  "testTarget": "HARNESS"
+}

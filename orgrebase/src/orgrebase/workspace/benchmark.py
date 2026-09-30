@@ -119,7 +119,9 @@ class OWBBenchmarkRepository:
         )
         if (
             canonical is None
-            or canonical.get("license_spdx") not in {"PolyForm-Noncommercial-1.0.0", "CC0-1.0"}
+            or canonical.get("license_spdx") not in {
+                "PolyForm-Noncommercial-1.0.0", "Apache-2.0", "CC0-1.0",
+            }
             or canonical.get("redistribution") != "ALLOWED"
             or canonical.get("pii_class") != "SYNTHETIC"
         ):

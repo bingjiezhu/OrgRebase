@@ -16,11 +16,13 @@ import fnmatch
 import gzip
 import hashlib
 import io
+import os
+import stat
 import tarfile
 import tempfile
 import tomllib
 import zipfile
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
@@ -51,6 +53,36 @@ def _release_relative(path: Path) -> Path:
         raise ReleaseInputError(f"RELEASE_INPUT_OUTSIDE_ROOT:{path}") from exc
 
 
+def _validated_input_stat(path: Path, *, allow_directory: bool = False) -> os.stat_result:
+    """Reject links at every source component, including the package root."""
+
+    relative = _release_relative(path)
+    try:
+        source_snapshot._validate_relative_path(PurePosixPath(relative.as_posix()))
+    except source_snapshot.SnapshotError as exc:
+        raise ReleaseInputError(str(exc)) from exc
+    if ROOT.is_symlink():
+        raise ReleaseInputError("SYMLINK_RELEASE_ROOT_REJECTED")
+    current = ROOT
+    for index, part in enumerate(relative.parts):
+        current /= part
+        info = current.lstat()
+        if stat.S_ISLNK(info.st_mode):
+            raise ReleaseInputError(f"SYMLINK_RELEASE_INPUT_REJECTED:{relative.as_posix()}")
+        last = index == len(relative.parts) - 1
+        if not last and not stat.S_ISDIR(info.st_mode):
+            raise ReleaseInputError(f"NON_DIRECTORY_RELEASE_ANCESTOR:{relative.as_posix()}")
+        if last and not (stat.S_ISREG(info.st_mode) or (allow_directory and stat.S_ISDIR(info.st_mode))):
+            raise ReleaseInputError(f"NON_REGULAR_RELEASE_INPUT_REJECTED:{relative.as_posix()}")
+    if not path.resolve().is_relative_to(ROOT.resolve()):
+        raise ReleaseInputError(f"RELEASE_INPUT_OUTSIDE_ROOT:{relative.as_posix()}")
+    return info
+
+
+def _input_identity(info: os.stat_result) -> tuple[int, ...]:
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns, info.st_mode)
+
+
 def _validate_release_filename(relative: Path) -> None:
     name = relative.name.lower()
     environment_file = name == ".env" or name.startswith(".env.") or name.endswith(".env")
@@ -65,10 +97,7 @@ def _read_release_input(path: Path) -> bytes:
     """Read one publishable file and fail closed before its bytes reach an archive."""
 
     relative = _release_relative(path)
-    if path.is_symlink():
-        raise ReleaseInputError(f"SYMLINK_RELEASE_INPUT_REJECTED:{relative.as_posix()}")
-    if not path.is_file():
-        raise ReleaseInputError(f"NON_REGULAR_RELEASE_INPUT_REJECTED:{relative.as_posix()}")
+    before = _validated_input_stat(path)
 
     pure_relative = PurePosixPath(relative.as_posix())
     try:
@@ -78,7 +107,19 @@ def _read_release_input(path: Path) -> bytes:
         raise ReleaseInputError(str(exc)) from exc
     _validate_release_filename(relative)
 
-    raw = path.read_bytes()
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
+    try:
+        with os.fdopen(os.open(path, flags), "rb") as handle:
+            opened = os.fstat(handle.fileno())
+            if not stat.S_ISREG(opened.st_mode) or _input_identity(opened) != _input_identity(before):
+                raise ReleaseInputError(f"RELEASE_INPUT_CHANGED_DURING_READ:{relative.as_posix()}")
+            raw = handle.read()
+            after = os.fstat(handle.fileno())
+        retained = _validated_input_stat(path)
+    except OSError as exc:
+        raise ReleaseInputError(f"RELEASE_INPUT_UNSAFE_DURING_READ:{relative.as_posix()}") from exc
+    if _input_identity(before) != _input_identity(after) or _input_identity(after) != _input_identity(retained):
+        raise ReleaseInputError(f"RELEASE_INPUT_CHANGED_DURING_READ:{relative.as_posix()}")
     archive_relative = f"orgrebase/{relative.as_posix()}"
     credential_violations, _ = source_snapshot._credential_scan(archive_relative, raw)
     machine_path_violations, _, _ = source_snapshot._machine_local_path_scan(
@@ -102,6 +143,7 @@ class BuildConfig:
     license_text: str
     license_files: tuple[str, ...]
     authors: tuple[str, ...]
+    license_expression: str | None = None
 
     @property
     def normalized_name(self) -> str:
@@ -118,8 +160,10 @@ def load_config() -> BuildConfig:
     license_value = project.get("license", "")
     if isinstance(license_value, dict):
         license_text = str(license_value.get("text", ""))
+        license_expression = None
     else:
         license_text = str(license_value)
+        license_expression = license_text or None
     return BuildConfig(
         name=str(project["name"]),
         version=str(project["version"]),
@@ -133,16 +177,20 @@ def load_config() -> BuildConfig:
         license_text=license_text,
         license_files=tuple(str(item) for item in project.get("license-files", ())),
         authors=tuple(str(item["name"]) for item in project.get("authors", ()) if item.get("name")),
+        license_expression=license_expression,
     )
 
 
-def _iter_files(root: Path) -> Iterable[Path]:
-    for path in sorted(root.rglob("*")):
-        if not path.is_file():
+def _iter_files(root: Path, *, excluded: Callable[[Path], bool] | None = None) -> Iterable[Path]:
+    _validated_input_stat(root, allow_directory=True)
+    for path in sorted(root.iterdir()):
+        if path.name == "__pycache__" or path.suffix in {".pyc", ".pyo"} or (excluded and excluded(path)):
             continue
-        if "__pycache__" in path.parts or path.suffix in {".pyc", ".pyo"}:
-            continue
-        yield path
+        info = _validated_input_stat(path, allow_directory=True)
+        if stat.S_ISDIR(info.st_mode):
+            yield from _iter_files(path, excluded=excluded)
+        else:
+            yield path
 
 
 def wheel_asset_mappings() -> dict[Path, Path]:
@@ -196,8 +244,14 @@ def _metadata(config: BuildConfig) -> bytes:
         f"Version: {config.version}",
         f"Summary: {config.description}",
         f"Requires-Python: {config.requires_python}",
-        f"License: {config.license_text}",
     ]
+    if config.license_expression is not None:
+        if any(character in config.license_expression for character in "\r\n"):
+            raise ReleaseInputError("INVALID_LICENSE_EXPRESSION_HEADER")
+        lines.append(f"License-Expression: {config.license_expression}")
+    elif config.license_text:
+        # Retain compatibility with older callers supplying the legacy text field.
+        lines.append(f"License: {config.license_text}")
     lines.extend(f"Author: {author}" for author in config.authors)
     lines.extend(f"License-File: {path}" for path in config.license_files)
     lines.extend(f"Requires-Dist: {dependency}" for dependency in config.dependencies)
@@ -291,7 +345,6 @@ SDIST_TOP_LEVEL = (
     "NOTICE.md",
     "README.md",
     "README.zh-CN.md",
-    "RELEASE-VERIFICATION.md",
     "run-agentteams-demo.sh",
     "run-enterprise-pilot.sh",
     "run-semifinal-demo.sh",
@@ -321,7 +374,7 @@ PUBLISHED_SDIST_DATABASES = frozenset(
 def _sdist_exclude_patterns() -> tuple[str, ...]:
     """Use the canonical Hatch sdist denylist for the offline fallback too."""
 
-    payload = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    payload = tomllib.loads(_read_release_input(ROOT / "pyproject.toml").decode("utf-8"))
     configured = payload["tool"]["hatch"]["build"]["targets"]["sdist"]["exclude"]
     if not isinstance(configured, list) or not all(
         isinstance(pattern, str) and pattern for pattern in configured
@@ -343,8 +396,19 @@ def _is_sdist_excluded(path: Path, patterns: tuple[str, ...]) -> bool:
 def _sdist_files() -> list[Path]:
     files: list[Path] = []
     exclude_patterns = _sdist_exclude_patterns()
+    ignored_directories = {".pytest_cache", ".ruff_cache", ".mypy_cache", ".venv", ".tmp"}
+
+    def excluded(path: Path) -> bool:
+        return _is_sdist_excluded(path, exclude_patterns) or any(
+            part in ignored_directories for part in path.relative_to(ROOT).parts
+        )
+
     for relative in SDIST_TOP_LEVEL:
         source = ROOT / relative
+        if excluded(source):
+            continue
+        if source.is_symlink():
+            raise ReleaseInputError(f"SYMLINK_RELEASE_INPUT_REJECTED:{relative}")
         if not source.exists():
             continue
         if source.is_file():
@@ -352,12 +416,7 @@ def _sdist_files() -> list[Path]:
                 continue
             files.append(source)
             continue
-        for path in _iter_files(source):
-            if _is_sdist_excluded(path, exclude_patterns):
-                continue
-            ignored_directories = {".pytest_cache", ".ruff_cache", ".mypy_cache", ".venv", ".tmp"}
-            if any(part in ignored_directories for part in path.parts):
-                continue
+        for path in _iter_files(source, excluded=excluded):
             relative_path = path.relative_to(ROOT).as_posix()
             lower_name = path.name.lower()
             if (

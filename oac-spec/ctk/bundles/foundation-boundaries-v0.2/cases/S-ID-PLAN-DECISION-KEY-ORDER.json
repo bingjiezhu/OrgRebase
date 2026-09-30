@@ -1,0 +1,30 @@
+{
+  "caseId": "S-ID-PLAN-DECISION-KEY-ORDER",
+  "expect": {
+    "result": {
+      "identifier": "urn:oac:id:sha256:v1:plan-decision:c2879d8ec8a0298d2451645f8caf91c40b1639e34e2f4aa87072c6785320513c"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "fields": {
+      "body": {
+        "disposition": "included",
+        "inputClass": "admitted",
+        "reasonCodes": [
+          "INPUT_ADMITTED",
+          "SCOPE_INCLUDED"
+        ],
+        "subjectRef": "urn:node:one"
+      },
+      "changeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "snapshotDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "identifierKind": "plan-decision"
+  },
+  "operation": "deriveIdentifier",
+  "requirementRefs": [
+    "REQ-INSTANCE-ID-V1"
+  ],
+  "testTarget": "SUT"
+}

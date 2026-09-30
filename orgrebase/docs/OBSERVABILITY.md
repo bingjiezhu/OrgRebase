@@ -9,7 +9,7 @@ OrgRebase records two complementary telemetry channels. Both use stable IDs, can
 |---|---|---|---|
 | Core change-recovery exporter | OTLP/JSON Trace, Log, and Metrics; five Agent runs; audited tool call; Apply and receipt links | `evidence/latest/{traces,logs,metrics}.otlp.json` and `observability.json`; lookup by `workflow_run_id`, span, task, tool, receipt, or digest | Local deterministic Core demo; one separately frozen Core AgentTeams receipt |
 | Workspace evidence channel | `WorkTrace`, `ReferenceResolvedEvent`, `ToolCalledEvent`, transport/rebase receipts, SQLite event chain, evidence index | `evidence/workspace/latest/`; lookup by run/task/object/artifact ID, graph revision, event head, or file digest | Quote formation, two changes, restart, Skill evaluation, and local transport |
-| Specs 045/047 controlled-local OTLP backend | OTLP/HTTP JSON traces, logs and metrics for `SOURCE → AGENTTEAMS → TOOL → SKILL → TERMINAL`, with strict `parentSpanId`, aligned logs, coalition/attempt/Skill correlation facts, query, alert, retention and privacy receipts | `evidence/semifinal-closure/latest/operations/observability/`; local SQLite lookup by root run plus the identifiers present on each layer | Real loopback protocol and retained local backend evidence with synthetic deterministic timing; no external collector, dashboard, HA or production SLA |
+| Controlled-local OTLP backend | OTLP/HTTP JSON traces, logs and metrics for `SOURCE → AGENTTEAMS → TOOL → SKILL → TERMINAL`, with strict `parentSpanId`, aligned logs, coalition/attempt/Skill correlation facts, query, alert, retention and privacy receipts | `evidence/semifinal-closure/latest/operations/observability/`; local SQLite lookup by root run plus the identifiers present on each layer | Real loopback protocol and retained local backend evidence with synthetic deterministic timing; no external collector, dashboard, HA or production SLA |
 
 ## Collection and semantics
 
@@ -27,7 +27,7 @@ The Workspace loop writes execution evidence at the control boundaries:
 
 Core OTLP and Workspace evidence remain separate files because their evidence classes differ. A production collector can ingest both channels without changing the underlying contracts.
 
-The Specs 045/047 controlled-local path is a third evidence class. It exports all
+The controlled-local operations path is a third evidence class. It exports all
 three OTLP signal types over a real loopback HTTP boundary and reads them back
 from SQLite under the same root `run_id`. All three payloads carry the service,
 environment, organization, root-run and evidence-class correlation; trace/log

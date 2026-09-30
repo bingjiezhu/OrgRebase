@@ -1,5 +1,43 @@
 # Demo and verification
 
+<a id="model-free-priced-workspace"></a>
+
+## Model-free priced workspace
+
+Start with the supported `priced-quote` template to review a structured pricing change in the browser. This path uses the matching sibling `oac-spec/` source, deterministic components and selectable local roles; it needs no model service or cloud credentials. Use the [linked SQLite requirement](quickstart.en.md#sqlite-runtime) and new draft, Pack and database paths. Run from `orgrebase/`:
+
+```bash
+uv sync --locked --all-extras
+uv run --frozen orgrebase enterprise-pilot-init \
+  --template priced-quote --output ../priced-draft
+uv run --frozen orgrebase enterprise-pilot-draft-preflight --draft ../priced-draft
+uv run --frozen orgrebase enterprise-pilot-seal \
+  --draft ../priced-draft --output ../priced-pack
+
+ORGREBASE_OAC_ROOT="$(pwd)/../oac-spec" \
+ORGREBASE_OAC_ADAPTATION_MODE=required \
+ORGREBASE_OAC_EXECUTION_MODE=OFFLINE_LOCAL \
+ORGREBASE_WORKSPACE_TASK_INTAKE_REQUIRED=1 \
+ORGREBASE_LOCAL_ROLE_SESSION_ORIGIN=http://127.0.0.1:8883 \
+ORGREBASE_DELIVERABLE_PROFILE=quote-discount-memo-v1 \
+uv run --frozen orgrebase enterprise-pilot-start \
+  --pack ../priced-pack --store ../priced-state/workspace.sqlite3 \
+  --host 127.0.0.1 --port 8883 --review-seconds 4 --competition-mode off
+```
+
+Open `http://127.0.0.1:8883` and keep that exact origin when switching roles:
+
+1. As **Organization onboarding owner**, review the configured materials, generate the organizational contract, complete the required review and admit the exact candidate.
+2. As **Business requester**, write the quote request, confirm its scope and start the task. Check that the initial Quote and Discount Memo both belong to the current workspace; the template's controlled total is USD 95.00.
+3. Create a **Pricing policy** change from 5% to 10% discount. Keep the basket and 0% tax unchanged, provide the new source reference and preview the impact. Preview leaves the official results unchanged.
+4. As the matching **Finance owner**, review and approve the source change. Then each required deliverable owner reviews and signs their own candidate. An incomplete approval set cannot apply.
+5. As **Change executor**, apply the approved set. Verify USD 90.00, both successor results and the Apply receipt.
+6. Switch back to **Business requester**, which has export permission. Inspect the current Quote and Discount Memo, download the work results and audit records, then refresh to confirm the completed state.
+
+The 7-file template is a synthetic initial-facts v2 Pack with a USD 100.00 basket, 5% discount and 0% example tax. It contains no pre-approved future changes, employee credentials or customer qualification. Creating and sealing materials is a CLI or authenticated-API operation; the browser provides contract review, task intake, change handling and exports. Source approval, per-deliverable approval and Apply retain separate receipts.
+
+`--competition-mode off` uses fixed business time `2026-08-15T00:00:00Z`. Approval expiry dates belong to that deterministic simulation. The authenticated production factory uses `SystemClock`; use [enterprise authentication and deployment](../AUTHENTICATED-DEPLOYMENT.md) for employees. Local role cookies are demonstration identities, not SSO. See the [dual-deliverable contract](../QUOTE-DISCOUNT-MEMO.md) for supported inputs and recovery boundaries.
+
 ## Native collaboration journey
 
 Configure the explicit model path in [Vertex](models-vertex.en.md) or [DeepSeek](models-deepseek.en.md). In WebUI, check the execution mode, review the organizational contract, confirm the task, observe native collaboration, inspect candidates and impact, obtain the named owner's approval, and apply the change.

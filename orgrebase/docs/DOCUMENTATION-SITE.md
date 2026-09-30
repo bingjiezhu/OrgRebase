@@ -1,27 +1,17 @@
 # 构建与部署文档站
 
-文档站使用README、`docs/`、贡献和许可Markdown作为正文来源；核心指南在`docs/guide/`以`.zh.md`/`.en.md`逐页配对，每种语言只有一份维护源。构建时临时整理链接，
+文档站使用README、`docs/`、贡献和许可Markdown作为正文来源；核心指南在`docs/guide/`以`.zh.md`/`.en.md`逐页配对，每种语言只有一份维护源。当前源码对应 OrgRebase `0.5.0b4` Beta；版本来自产品 `pyproject.toml`，站点页脚和“本站源码与下载”页同时展示版本及内容摘要。构建时临时整理链接，
 生成静态HTML、中文/英文搜索及精确来源清单；不维护第二套文章，不读取私有运行目录，不运行产品服务或模型。
 
-## 原先怎么写（保留）
+## 当前结构
 
-构建器可以把已经审核的源码 ZIP 挂到站点的“源码与版本”下载页，并核对 SHA-256。当时把生成好的 HTML 当作独立阅读入口。
+公开仓库以工作区为根，产品源码在 `orgrebase/`，配套 OAC 在同级 `oac-spec/`。Markdown 是阅读真源；GitHub Pages 是同一批正文的托管渲染：[中文](https://bingjiezhu.github.io/OrgRebase/) · [English](https://bingjiezhu.github.io/OrgRebase/en/)。仓库不预置生成的 `site/`。本地候选不会自动更新线上站，线上许可和版本以部署后实际页面为准。
 
-## 现状（追加）
-
-原先：GitHub 产品仓库以 README 与 `docs/` Markdown 为阅读入口。提交包和仓库都不预置 `site/`，需要静态站时再本地构建。
-
-现状（2026-09-20）：Markdown 仍是真源。公开阅读入口增加 GitHub Pages，由同一套 `documentation/build.py` 从 `docs/guide/` 的中英配对指南生成：[中文](https://bingjiezhu.github.io/OrgRebase/) · [English](https://bingjiezhu.github.io/OrgRebase/en/)。源码仓库和决赛包仍然不预置 `site/`。
-
-为什么：`git clone` 之后应能直接读 Markdown；站点只是同一批正文的托管渲染，避免再带一份会过期的 HTML 进 Git。
-
-## 为什么这样更新
-
-`git clone` 之后应能直接阅读；站点只是可选渲染。ZIP 下载仍是构建器能力，只在确实提供发行附件时使用，避免把未随仓库发布的下载地址写进站点。
+只有经过审核的源码 ZIP 才能加入站点下载页；构建器核对 ZIP SHA-256 和实际引用的文档、源码、工具字节。没有附件时不显示虚假下载地址。
 
 ## 本地构建与预览
 
-原先：在产品仓库根（含`pyproject.toml`的目录）执行。现状：工作区 clone 后进入`orgrebase/`执行。文档工具链独立锁定在`documentation/`，不属于产品`uv sync --all-extras`，
+在工作区的 `orgrebase/` 目录执行。文档工具链独立锁定在`documentation/`，不属于产品`uv sync --all-extras`，
 也不会进入产品运行依赖。
 
 ```bash
@@ -40,7 +30,7 @@ python3 -m http.server 8018 --bind 127.0.0.1 --directory /tmp/orgrebase-docs-v1
 
 ## 中英文与深层原文
 
-一个配置、一次构建生成中文和英文路径，页首语言菜单保持当前页面。导航和搜索界面随语言切换，共用包含中英文内容的搜索索引。13组核心指南包含安装、Vertex/DeepSeek、Demo、AT、部署、架构、Skill、许可、贡献和GitHub发布。深层文档保留原文并标明语言，不属于完整英译范围。
+一个配置、一次构建生成中文和英文路径，页首语言菜单保持当前页面。导航和搜索界面随语言切换，共用包含中英文内容的搜索索引。核心指南包含项目方法、安装、Vertex/DeepSeek、Demo、AT、部署、架构、Skill、许可、贡献和GitHub发布。深层文档保留原文并标明语言，不属于完整英译范围。
 
 ## 绑定可下载源码
 
@@ -53,7 +43,7 @@ uv run --project documentation --frozen python documentation/build.py \
   --source-sha256 REPLACE_WITH_REVIEWED_SHA256
 ```
 
-构建器核对ZIP摘要，并逐项比对包内文档、引用源码和建站工具字节。站点的“源码与版本”页展示实际下载、
+构建器核对ZIP摘要，并逐项比对包内文档、引用源码和建站工具字节。站点的“本站源码与下载”页展示实际下载、
 摘要和范围；不把远端旧main或旧Release说成本地新版本。源码ZIP只复制到生成目录，不写回源码，
 避免源码包包含自身。省略这两个参数仍可构建文档，但不会出现虚假的下载地址。
 
@@ -62,11 +52,11 @@ uv run --project documentation --frozen python documentation/build.py \
 
 ## 部署到GitHub Pages
 
-本仓库提供 `.github/workflows/docs.yml`：`main` 上的文档变更会构建并发布到
-[GitHub Pages](https://bingjiezhu.github.io/OrgRebase/)。也可 `workflow_dispatch` 指定 `site_url`。
+本仓库提供 `.github/workflows/docs.yml`：PR 严格构建并保存预览；只有 `main` push 或在 `main` 手动触发才具备 Pages 部署权限。OrgRebase、OAC 与根正式文件的适用变化触发构建；工作流从同一检出构建并复验 `github` profile 源码 ZIP，将确切 SHA-256 和 ZIP 传入独立锁定的文档构建器，再发布到
+[GitHub Pages](https://bingjiezhu.github.io/OrgRebase/)。维护者也可在 `main` 手动触发。
 
 由有权维护者在GitHub仓库的Settings → Pages中选择GitHub Actions。GitHub生成的实际URL才是已部署地址；
-本地构建没有发布公网。如果对外声称可下载当前候选，需要把审核后的源码包另行加入站点构建，不用远端旧Release替代。
+本地构建没有发布公网。合并后核对线上许可页、语言切换和“本站源码与下载”页的版本及摘要；在此之前不能把旧站说成新候选。自动构建的下载件来自该次检出，并通过 ZIP 与文档内容匹配检查；它仍与人工门通过后签署的 GitHub Release 资产有独立身份，页面不借用旧 Release 的资格。Actions 使用官方完整 commit SHA；PR 构建保持只读仓库权限。
 
 也可把生成目录作为普通静态网站托管。实际部署地址确定后，使用`--site-url https://HOST/BASE/`
 生成相应canonical地址；不要把MkDocs开发服务器当作生产服务。

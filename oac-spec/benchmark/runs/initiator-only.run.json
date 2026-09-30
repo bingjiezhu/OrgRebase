@@ -1,0 +1,448 @@
+{
+  "claimLimit": "Scores describe agreement with exploratory project-authored candidate role sets; they are not Ground Truth, enterprise effectiveness, or superiority evidence.",
+  "configurationRef": "benchmark/baselines/initiator-only.input.json",
+  "digest": "sha256:acb99aad16dfa24c2938ed4d21af4b8da7e00444fcfc3d6537c616f1f9bd3d23",
+  "evaluationClass": "mechanics-only-project-authored-candidate-labels",
+  "fixtureSetDigest": "sha256:a6a6fccd55aa76034c87436b0e3f97966adce0ae1a89520afd221f1d8b588406",
+  "implementationClosure": {
+    "algorithm": "sha256",
+    "canonicalization": "RFC8785(entries[path,sha256])",
+    "digest": "sha256:23fc3a700f26939e63925167b30cc82863c9a656657a2db62413fa39605f6fc5",
+    "entries": [
+      {
+        "path": "benchmark/baselines/initiator-only.input.json",
+        "sha256": "sha256:30825ce69909f118b2c150bb4953fa8f267fa3dd6b880c22f6ce3b0a93e90f52"
+      },
+      {
+        "path": "pyproject.toml",
+        "sha256": "sha256:d6db89d2b19466a77bf5aa9a7996dfa3b659a6db235b7aebc36ab42e8f7d7f7f"
+      },
+      {
+        "path": "scripts/run_benchmark.py",
+        "sha256": "sha256:5e47dc1c99b4d03bf35b151944b8d59fa33506923e02b29cda9ef5c3b300ab9a"
+      },
+      {
+        "path": "src/oac/__init__.py",
+        "sha256": "sha256:897a7344ca5e4f46eb74c1f34ae263575a69a88c3f835fdddfc51563e0fe8298"
+      },
+      {
+        "path": "src/oac/applicability.py",
+        "sha256": "sha256:926b95d8c71dc3883eead7e19b02156cfd2fb80bf8a148dd5ef3340a7f151362"
+      },
+      {
+        "path": "src/oac/benchmark.py",
+        "sha256": "sha256:d3982be365b1648fa4ded3d1e2d7db1dac3c79fb311ab8b77519818ac00d0bd0"
+      },
+      {
+        "path": "src/oac/canonical.py",
+        "sha256": "sha256:255b0468bc5e7568f48af72f182bd0b39f51138e432c3dfcb1d9908f8c32a804"
+      },
+      {
+        "path": "src/oac/compiler.py",
+        "sha256": "sha256:aec13bfe47d320542440cac122326455b22b12e400b239c534af2b893668c50d"
+      },
+      {
+        "path": "src/oac/models.py",
+        "sha256": "sha256:5647e1c054acdde8d89887e5b172e7ba75f9fd2c6afafd431940138288aa97a7"
+      },
+      {
+        "path": "src/oac/registry.py",
+        "sha256": "sha256:b9a49d9fd5b73647ac8a29245aacd8fa99559b82403cb82bdf55f1ae01e56d58"
+      },
+      {
+        "path": "src/oac/supplier.py",
+        "sha256": "sha256:64e9386bf1f63a8139fb5bb7810a64739bbcd56329d29cdd12b011cd2c5fbffc"
+      },
+      {
+        "path": "src/oac/verifier.py",
+        "sha256": "sha256:fe57bade25afb70978f57ec448ec4184f49467e8ae2de54430303d489cf9a94b"
+      },
+      {
+        "path": "uv.lock",
+        "sha256": "sha256:f9ecde27439ff3791d78fe82a87ec2162d22d329afb56d6d7cfbfbbb43f97d68"
+      }
+    ]
+  },
+  "implementationDigest": "sha256:23fc3a700f26939e63925167b30cc82863c9a656657a2db62413fa39605f6fc5",
+  "inputClosure": {
+    "algorithm": "sha256",
+    "canonicalization": "RFC8785(entries[path,sha256])",
+    "digest": "sha256:6af686f553dab6f011bad1d13d8a36c560954c8ecf95cae6199acb57200456b8",
+    "entries": [
+      {
+        "path": "benchmark/matched-inputs.json",
+        "sha256": "sha256:a25a9837d6e57d7638994891a871efca31adb8a4155ffdee15bf787647e851c4"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-001-restructuring.json",
+        "sha256": "sha256:ebb6ab089cdc2964fe85ed82fe866542b9c2054e4675f298659ce9aad9266069"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-002-healthy-control.json",
+        "sha256": "sha256:68a654c298a246462fad9a7aa2398e677efe638a330e8daefd3d3593bb3f5f24"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-003-liquidation.json",
+        "sha256": "sha256:089a618aeee1f45a747b76a2a6ce981845b7131a35a980f71884ba00ff749848"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-004-qualification-suspended.json",
+        "sha256": "sha256:8954443a709b06fe34ca23d8c3de4a28e2ab59d30b7e8e43904b4ee7ac189453"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-005-capacity-reduced.json",
+        "sha256": "sha256:0e848ffc5377ae5720d81eb9a4cd1f48a6d5d7b954b5d5ce61055afe881de1cb"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-006-advance-at-risk.json",
+        "sha256": "sha256:72f40eb702a453a5d213aa60dad0effe56953523310bb83e1209b704f19945b1"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-007-partial-delivery.json",
+        "sha256": "sha256:a0b31b3ff9c8bd69dab1300425f6674870d04d1d1d425635e1312ebd3279f542"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-008-alternative-qualified.json",
+        "sha256": "sha256:cde740bc3f1acbe51936aaff1b944edc3a9b31bfb199d42364ee5ae0cc80c373"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-009-nuclear-grade.json",
+        "sha256": "sha256:14c48fcbb6f0c075c44b602fd2a99d0969d253036c3e58d35635c76f025a0665"
+      },
+      {
+        "path": "profiles/supplier-change/annotations/SC-010-truncated-boundary.json",
+        "sha256": "sha256:7f246e3106d1660a79939c5ddbcbfe114cbf14066f26c3add3d74b56d8e5d3ff"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-001-restructuring.json",
+        "sha256": "sha256:7d1ba7fbec6ef08d9f28d395a03d711329c9f2db120d1c0c1bf964df1519ede9"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-002-healthy-control.json",
+        "sha256": "sha256:2b88f29ff8ee8a78d127f384cd0b50e18b1564579faf7c8ebec67f6710274c35"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-003-liquidation.json",
+        "sha256": "sha256:01b0a66ed55ba2b217cc502840257e754479c665fb84a9846ac363f6d0457050"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-004-qualification-suspended.json",
+        "sha256": "sha256:cf9a05edd7165a29ea0c35e5c5b4e951d3bf64e58dc590e52d651993c0475253"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-005-capacity-reduced.json",
+        "sha256": "sha256:19b348eb3f15da7d7b5a77e85cb9a97c0d2053d2b13f9b2b64a22179c1b25e9b"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-006-advance-at-risk.json",
+        "sha256": "sha256:7456e5e731ce884cc6565ec7db41ff1575e363d280b4c7e542bc8e9d206bd514"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-007-partial-delivery.json",
+        "sha256": "sha256:a3b7b49b786c10a3b0443122d22d81f7fbd98b8b93346e60de62bdecefc67938"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-008-alternative-qualified.json",
+        "sha256": "sha256:beebff51ebd1c8dd7259c85d1cd1bf63e0000119c25d5cbc1d2f3be3c652290e"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-009-nuclear-grade.json",
+        "sha256": "sha256:e628c32a93b7d01e03cdb90e9307f9c3b8db60ae9ed3244bc20606847f055b3f"
+      },
+      {
+        "path": "profiles/supplier-change/cases/SC-010-truncated-boundary.json",
+        "sha256": "sha256:e9b413fe7536d19ba7029cad4975cb2cac2e4ea01857ed8f9a10e97f564dd819"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-001.change.json",
+        "sha256": "sha256:0af87da1209aa61e806251a1d5b15f59fb2dd0f30151326a4097a2a5dd386e92"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-002.change.json",
+        "sha256": "sha256:66c0d18862706b137e434eb35742a3448a54cff97ee5e865f9efbcd6d5b944f0"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-003.change.json",
+        "sha256": "sha256:9954f6eef0be44473135c90dbb5269363b58a04309450017480c6bb710956f00"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-004.change.json",
+        "sha256": "sha256:8406f0d1e7cc37197856f68da6cfff4adc858441916a58ae78a923487822a035"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-005.change.json",
+        "sha256": "sha256:ff3834b6f2c63b5a189e13814e79802e549ad6a60c6e0aba8ceee7f6bf303d18"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-006.change.json",
+        "sha256": "sha256:c94dec71e95e1b09eea626c3abd5a8e326c0f1c753da5e85c93743f6979d4db4"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-007.change.json",
+        "sha256": "sha256:92a23cf2b54b2ce785c1546ea51fd87dc57804331a135b12dba213d37b614086"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-008.change.json",
+        "sha256": "sha256:a2dcdbe239c1bc6947347bbe7b75e9efa571bcb6a6a568fe9a4f345cedc264ce"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-009.change.json",
+        "sha256": "sha256:5acd77f4fe0f24f164f37fbdf80953c88f855a40860b52479d9d7db8d42125c2"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/SC-010.change.json",
+        "sha256": "sha256:69b076288a7f121637b6d57cf3eef04117f9198f117f91cc59049f083ff81dba"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/veracier-proc01-contextual.snapshot.json",
+        "sha256": "sha256:b5b5f34ec17850d856247c57c82a7b0b0d002f54775ae4458e7d1ed203c3bfa9"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/veracier-proc01-truncated-contextual.snapshot.json",
+        "sha256": "sha256:9c995f218f1a1a149eeff8c84d14f91c5f479818b90fae8248c8bb3f7f40395e"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/veracier-proc01-truncated.snapshot.json",
+        "sha256": "sha256:48587df9174907163268baf567c824f0cb11e230ea980fd5345f1860403f52e8"
+      },
+      {
+        "path": "profiles/supplier-change/inputs/veracier-proc01.snapshot.json",
+        "sha256": "sha256:978550f7d4bedc6c820e83d37b16ce598405dd1fdeecde152ae7db268374a367"
+      }
+    ]
+  },
+  "inputClosureDigest": "sha256:6af686f553dab6f011bad1d13d8a36c560954c8ecf95cae6199acb57200456b8",
+  "inputSetDigest": "sha256:67ba894d95b23181cb850c318a6923e34e7d1f3611ac3b1b9360796fcb831799",
+  "inputSetRef": "benchmark/matched-inputs.json",
+  "metrics": {
+    "caseCount": 10,
+    "exactCandidateRoleSetMatches": 1,
+    "microCounts": {
+      "falseNegative": 24,
+      "falsePositive": 0,
+      "truePositive": 10
+    },
+    "microPrecision": 1.0,
+    "microRecall": 0.294118
+  },
+  "results": [
+    {
+      "caseDigest": "sha256:1e5290d2b1472c2a3a52300d1405c473b6927fc91920fec579ac11cafd7333db",
+      "caseId": "SC-001",
+      "changeDigest": "sha256:fc74047b43ad4a1231450db3519a2f2bb956188772e00df64058c4e303703928",
+      "outputDigest": "sha256:1715cf39b1a457241b572430187b37344c148efc739f1126fadb98d34d2c52fe",
+      "score": {
+        "candidateRoleRefs": [
+          "role:finance-exposure",
+          "role:legal-reviewer",
+          "role:operations-continuity",
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 4,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    {
+      "caseDigest": "sha256:051cf7779023c383d1c4d586fa7f897ef846376de9abcf2ba87d228945b104fe",
+      "caseId": "SC-002",
+      "changeDigest": "sha256:bb616755bc700c31127150fa73ed82fc9f942f03e40a1ab55469b222cb090d81",
+      "outputDigest": "sha256:ae884a9e02c7def60d20d8964901e4202acf3598a8a4f4dc53ec18a904b3e46e",
+      "score": {
+        "candidateRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "exactCandidateRoleSetMatch": true,
+        "falseNegative": 0,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    {
+      "caseDigest": "sha256:fca96d541c53c20c197527f8e0caca6adbb93b4d3f0b67a9417a8dc08c315ecb",
+      "caseId": "SC-003",
+      "changeDigest": "sha256:d467554b9b95ab35134e694ac1df555b6e02cee54e0f266f0599302684a8578a",
+      "outputDigest": "sha256:3540278f82a5b1c03c17ffa66f729f907548fdccc82fa752e5317ec0e1786b61",
+      "score": {
+        "candidateRoleRefs": [
+          "role:finance-exposure",
+          "role:legal-reviewer",
+          "role:operations-continuity",
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 4,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    {
+      "caseDigest": "sha256:4b7f7c86e95bcbaf397b182ba1c6fc198e83eb3840913a7aec0655d865178a16",
+      "caseId": "SC-004",
+      "changeDigest": "sha256:64fd1472ddceaf3e30311fce6f1f3b2b605eed48ef79e1cc20f238955ca4584c",
+      "outputDigest": "sha256:2e67efe9d1fb50136c07a3c33ccd3c97ffd12fa6b845db18f547b7a447e914af",
+      "score": {
+        "candidateRoleRefs": [
+          "role:operations-continuity",
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 2,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    {
+      "caseDigest": "sha256:03c39bec65035d605b35f45e4430884ec93138afbd93bc9622f7bfcedd3910c9",
+      "caseId": "SC-005",
+      "changeDigest": "sha256:3a2e2200790ae2f17d0ec6a39d0038b4fe369339c17e3e375bff1b4ae8bb3f54",
+      "outputDigest": "sha256:2f66e0e32a680cad5b978179e1f8d7db725f9f73b0846bcc4cfb3c9fc0a9cfaf",
+      "score": {
+        "candidateRoleRefs": [
+          "role:finance-exposure",
+          "role:operations-continuity",
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 3,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    {
+      "caseDigest": "sha256:f6f09084c29b4c00944a6a59655bf3153a4c488d66aa0d7557d052fb9070ce9f",
+      "caseId": "SC-006",
+      "changeDigest": "sha256:ef24b8b5c97f6be4ba901e8e0e857849976747ba863ed0fc44e326dcb59bb549",
+      "outputDigest": "sha256:b2cec6e71e60a667cb346e38ce1c1746bfbdd89c516d9de6ced27d76bfe07f8c",
+      "score": {
+        "candidateRoleRefs": [
+          "role:finance-exposure",
+          "role:legal-reviewer",
+          "role:procurement-owner"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 2,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    {
+      "caseDigest": "sha256:87f8b02669680997c92a6b9d2f6a690e83591a979d9a6f57c92780d5c6df19cb",
+      "caseId": "SC-007",
+      "changeDigest": "sha256:213d18071490e91e57178e2e01840c5403bb4e3c14e60fa2e194b2e7511de21a",
+      "outputDigest": "sha256:aad177d0b41387417d942cc4aba2864a3462cadbee40606c08ea3748da7d5378",
+      "score": {
+        "candidateRoleRefs": [
+          "role:finance-exposure",
+          "role:operations-continuity",
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 3,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:f4a1f14f6284c0a9355300ad8e42c49885b6a3e3c8fa9766c4ca5811dc116cf0"
+    },
+    {
+      "caseDigest": "sha256:22be5bcd811500f87ed40946bf67c16fdece9a0819fe554040d0b69395b78a06",
+      "caseId": "SC-008",
+      "changeDigest": "sha256:69ec666f7453286983111ec0254f8c67213156561224e05d958eea8aedc8d40c",
+      "outputDigest": "sha256:71b2f54c9b5a5a46fdeddfcd4828eb81ebedbb668e334728cf78e6796cd45d0c",
+      "score": {
+        "candidateRoleRefs": [
+          "role:operations-continuity",
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 2,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:quality-qualification"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:76073e824054b6a6b7de66e2b728069dea6ba83164f47d116f9f6eb0d4b1fe65"
+    },
+    {
+      "caseDigest": "sha256:354409e6c41a135ffa926a78a94cbbb918e97b2d07984e6b7b40df2974e5bbe3",
+      "caseId": "SC-009",
+      "changeDigest": "sha256:1cb4f27562a8a156cb6448bf9b65e2060905b917c16a696d1464fb5b1ffaac56",
+      "outputDigest": "sha256:bcf167dd21682822b4d657f4645d501549a8778cce35a2afd883018a343213cf",
+      "score": {
+        "candidateRoleRefs": [
+          "role:compliance-reviewer",
+          "role:operations-continuity",
+          "role:procurement-owner",
+          "role:quality-qualification"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 3,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:76073e824054b6a6b7de66e2b728069dea6ba83164f47d116f9f6eb0d4b1fe65"
+    },
+    {
+      "caseDigest": "sha256:f42588da286c64e241d8286c7e2c1af6af1f4dc9b740bda7f48f318711c09384",
+      "caseId": "SC-010",
+      "changeDigest": "sha256:be2131dc99c711e30031adb336fd9da4ee3f611e8b56d42239297951f39354d2",
+      "outputDigest": "sha256:a4197e3e4bcc2d386d5be222efaaeb1cbc76ecb3967a19d3562f0d771b223d20",
+      "score": {
+        "candidateRoleRefs": [
+          "role:evidence-discovery",
+          "role:procurement-owner"
+        ],
+        "exactCandidateRoleSetMatch": false,
+        "falseNegative": 1,
+        "falsePositive": 0,
+        "selectedRoleRefs": [
+          "role:procurement-owner"
+        ],
+        "truePositive": 1
+      },
+      "snapshotDigest": "sha256:0a2e623bebc8ca3eba838416c1dcd326030697efd74c20ec312c5df30ca5e301"
+    }
+  ],
+  "runId": "supplier-change-exploratory-10/initiator-only",
+  "runManifestVersion": "1.2",
+  "systemId": "initiator-only",
+  "systemVersion": "1.0"
+}

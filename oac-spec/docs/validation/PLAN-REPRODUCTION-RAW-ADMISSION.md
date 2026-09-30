@@ -1,22 +1,17 @@
-# Current reproduction after raw admission closure
+# Reproducing Plan acceptance from raw inputs
 
-The active fixed-Plan reproduction coordinate is `v0.1-repro-4`. This follow-up
-supersedes only the current-coordinate selection in `PLAN-REPRODUCTION-SUCCESSOR.md`;
-the historical document and reproduction directories remain unchanged.
+A reproducible Plan check binds the sealed Snapshot, Change and Plan, the selected Profile and verifier capability, and the implementation and dependency identities used for the check. Input admission follows the [raw CLI contract](CLI-ADMISSION.md); expected verdicts and reason policies belong to the evaluation harness, not the verifier request.
 
-The CLI, decoder and evidence provenance corrections changed source bytes bound
-by the previous coordinate. The existing writer therefore publishes one successor
-after those changes stabilize. It retains the exact `v0.1-repro-3` manifest and
-anchors its raw and detached digests; the existing recursive history checker
-verifies every older artifact. No additional evidence resolution protocol exists.
+## Material identity
 
-Both real adapters still execute every deletion candidate. `--check` independently
-repeats generation and compares every artifact path and byte, including current
-source, dependencies, runtime and rebuilt Go binary. It does not substitute a
-historical integrity check or a weaker parity claim for current exact replay.
+Record exact file hashes and byte counts in the reproduction ledger. The verifier recomputes resource digests and relevant derivation facts from the admitted inputs. A compiler certificate, reference verdict or historical report cannot replace those checks.
 
-The predecessor has 91 files totaling 9,987,291 bytes; 8,631,652 bytes are trial
-traces. A similarly sized new coordinate is the explicit storage cost of retaining
-the existing source-bound reproducibility contract. It adds no production module,
-service or execution path. The original three incidents, reason policy, deletion
-operators and controlled-local claim limit remain unchanged.
+A reproduction coordinate records all expected observations, including acceptance, rejection, protocol errors and `UNKNOWN`. Negative controls must bind the changed input bytes and the constraint they exercise. Renaming a case or retaining a previous success summary is not a fresh execution.
+
+## Source and installed execution
+
+Use the [public source gate](README.md) for the checks included in this workspace. For installation validation, build the selected OAC distribution, install it in a new environment, verify that imports resolve to that installation, and run the same declared CLI/TCK inputs. Record the artifact hash, environment and actual outputs.
+
+The included Go implementations provide same-project cross-language checks. Agreement applies to the selected constraints and inputs; it does not establish a clean-room implementation, workflow equivalence, complete Profile coverage or enterprise correctness.
+
+Complete historical reproduction also needs its exact source, generated inputs, observations and predecessor ledgers. Those archives are outside the public source profile. Changed source or dependencies use a new [evidence coordinate](HISTORICAL-EVIDENCE-VERSIONING.md), preserving the predecessor rather than rewriting it.

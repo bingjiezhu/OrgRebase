@@ -6,7 +6,7 @@ PostgreSQL 17 is the deployment backend verified by the integration suite. SQLit
 
 Writable file-backed SQLite stores and runtime journals require the upstream WAL-reset fix: SQLite 3.51.3 or later, or the official backports in the 3.44 branch from 3.44.6 and the 3.50 branch from 3.50.7. Both entry points reject an unsupported engine with `SQLITE_WAL_RUNTIME_UNSUPPORTED:<version>` before creating a file, connecting, or migrating. Upgrade the SQLite library linked to the selected Python interpreter; installing a newer standalone SQLite CLI does not necessarily change Python's library. PostgreSQL, in-memory StateStore and explicit read-only historical inspection are unaffected. The protection addresses concurrent writers/checkpoints on one WAL file; it does not certify that historical data is uncorrupted. See [SQLite's WAL-reset advisory](https://sqlite.org/wal.html).
 
-## Schema version 5
+## Schema version 6
 
 The eight original tables keep their existing business records and content addresses. SQLite migration accepts an empty database, the complete released unversioned schema, or version 1. It validates the previous definitions and foreign keys, creates the version 2 tables, and updates the version marker in one transaction. The version 1 DDL is unchanged.
 
@@ -38,6 +38,15 @@ Version 5 adds two non-unique indexes to the existing effect ledger. `effect_int
 
 The version 4-to-5 transition changes no business rows, target identities, event bytes, audit heads, receipts or command values. Stop the old services, preserve a backup and current deletion ledger, then run `orgrebase database migrate --tenant org:example --runtime-role orgrebase_app` with operator credentials. Index creation occurs inside the existing migration transaction and can block concurrent writes, so use a maintenance window. Qualify the database before restarting applications and workers that require schema version 5. This transition does not clear existing recovery isolation or repeat the version 3 target remapping.
 
+Version 6 adds `deployment_budget_reservations`, a deployment-period dispatch ledger keyed by tenant,
+deployment scope, period start and Preview attempt. It stores the originating workspace and request digest,
+the frozen policy digest, reserved micro-USD/calls, fixed deadline and conservative dispatch state. PostgreSQL
+forces tenant RLS against `store_metadata`; application roles receive access only through the explicit
+`--runtime-role` migration step. Same-period writers use a transaction advisory lock, while SQLite relies on
+its existing `BEGIN IMMEDIATE` writer boundary. The v5-to-v6 transition creates this empty table and policy in
+the schema migration transaction; it does not rewrite existing attempts, artifacts, events or audit heads.
+An injected DDL/policy failure rolls the version and table creation back together.
+
 ### Upgrade a version 2 or 3 effect database
 
 1. Stop every old API, source worker and effect worker, and fence their outbound target access. A migration cannot retract an already sent request, and a version check in new code cannot constrain an old binary. Preserve a current backup and deletion ledger before changing the database.
@@ -45,7 +54,7 @@ The version 4-to-5 transition changes no business rows, target identities, event
 3. Run `orgrebase database migrate --tenant org:example --runtime-role orgrebase_app`. For an existing version 2/3 database containing any effect, this command commits `recovery_required=1` in a separate transaction before attempting the upgrade. A later validation failure cannot roll back that isolation. Empty databases can upgrade without this manual recovery gate. SQLite is local-only: persist the same recovery flag in a separate operator transaction before opening its nonempty old database with `StateStore(..., maintenance=True)`.
 4. The transition rejects an unexpired effect or source lease, inconsistent Dataverse request/tenant/ID/digest, invalid old projection, an orphan or mismatched barrier, and `DISPATCHING`/`COMMIT_UNKNOWN` without a barrier. It checks all currently occupied barriers before changing any projection. Two occupied old aliases that converge on one target produce `STATE_STORE_EFFECT_TARGET_COLLISION`; both old barriers and all old requests remain intact at version 3. Multiple READY or historical terminal intents for one target are permitted when they do not occupy conflicting barriers.
 5. After a rejected transition, keep the deployment stopped and isolated. Inspect each original effect's target receipt using the original request identity. Do not choose a barrier to discard, regenerate approval identities, or automatically replay a request. Resolve the conflicting history with independently verified target evidence before another migration attempt.
-6. After a successful transition, qualify the current version 5 schema and reconcile unresolved target effects before the deployment's operator-controlled recovery procedure releases access. The version 4 target remapping is followed by the version 5 index migration. The migration and qualification commands do not clear recovery isolation. Restart only application and worker artifacts that require schema version 5.
+6. After a successful transition, qualify the current version 6 schema and reconcile unresolved target effects before the deployment's operator-controlled recovery procedure releases access. The version 4 target remapping is followed by the version 5 index migration and version 6 empty dispatch-ledger creation. The migration and qualification commands do not clear recovery isolation. Restart only application and worker artifacts that require schema version 6.
 
 Historical inspection is explicit:
 
@@ -55,7 +64,7 @@ orgrebase database qualify --tenant org:example --read-schema-version 3
 orgrebase database deletion-ledger --tenant org:example --read-schema-version 3 --output current-deletions.json
 ```
 
-These commands use the configured database environment variable. The Python equivalent is `StateStore(..., maintenance=True, read_only=True, read_schema_version=3)`. Use `4` instead for a released version 4 database. Both selectors validate and report the actual historical schema and enterprise, and reject transactions. Normal runtime opening requires version 5. The recovery-inventory command accepts the same historical selector and validates old projected keys against the original request before making read-only target queries; it does not CANCEL, EXECUTE or release a barrier. Restoring a version 4 backup upgrades its indexes but reports `derived_target_identity_migrated=false`, because its target identities were already normalized.
+These commands use the configured database environment variable. The Python equivalent is `StateStore(..., maintenance=True, read_only=True, read_schema_version=3)`. Use `4` or `5` for the corresponding released historical schema. These selectors validate and report the actual historical schema and enterprise, and reject transactions. Normal runtime opening requires version 6. The recovery-inventory command accepts the same historical selector and validates old projected keys against the original request before making read-only target queries; it does not CANCEL, EXECUTE or release a barrier. Restoring a version 4 backup upgrades its indexes and adds the empty v6 ledger but reports `derived_target_identity_migrated=false`, because its target identities were already normalized.
 
 
 ## Enterprise isolation
@@ -70,7 +79,7 @@ Application roles must not own the database or have schema-changing privileges i
 
 Provision with `orgrebase database migrate --tenant org:example --runtime-role orgrebase_app` using operator credentials. Production opens use `StateStore(..., migrate=False)`; runtime schema validation never creates or upgrades tables. Registered WorkspaceService instances have separate connections and locks. Opening a workspace requires a server-owned registry/configuration binding; a client cannot select a connection string or invent an unregistered workspace.
 
-PostgreSQL FORCE RLS restricts business rows and effects to the connection's bound workspace, with additional explicit Core predicates. The registry is globally readable and registerable within the enterprise database; updates affect only the bound workspace and its existing profile/pack/Quote binding cannot change. Target barriers are globally readable, can be acquired only for an owned effect with the same target, and can be deleted only for an owned terminal effect. An expired or UNKNOWN effect cannot release a barrier through ordinary SQL. Maintenance mode does not bypass PostgreSQL permissions or RLS.
+PostgreSQL FORCE RLS restricts business rows and effects to the connection's bound workspace, with additional explicit Core predicates. The registry is globally readable and registerable within the enterprise database; updates affect only the bound workspace and its existing profile/pack/Quote binding cannot change. Target barriers are globally readable, can be acquired only for an owned effect with the same target, and can be deleted only for an owned terminal effect. The deployment budget ledger is shared across workspaces in the same bound enterprise database and its separate FORCE RLS policy rejects rows for any other tenant. An expired or UNKNOWN effect cannot release a barrier through ordinary SQL. Maintenance mode does not bypass PostgreSQL permissions or RLS.
 
 The isolation boundary covers normal SQL on a correctly bound runtime connection. It does not defend against a database administrator or malicious code deliberately changing PostgreSQL session configuration. Current identity and server-owned workspace selection remain mandatory. SQLite accepts only `default`; multi-workspace production has one PostgreSQL path.
 
@@ -111,6 +120,8 @@ WorkspaceService cold startup reads the current checkpoint rather than replaying
 Pagination does not turn a partial page into proof of a complete audit history. `verify_event_chain()` and complete evidence export remain separate explicit operations. The full verifier reads the event rows and stored head in one database snapshot and rejects a valid-prefix truncation as well as changed events.
 
 ## Backup and isolated restore
+
+A version 2 backup captured at StateStore schema version 5 can restore into the current version 6 schema while retaining recovery isolation.
 
 The executable operator entry point is:
 

@@ -1,0 +1,82 @@
+{
+  "caseId": "C1-CLOSURE-001",
+  "expect": {
+    "result": {
+      "falseFrontiers": [],
+      "kind": "ClosureMicroReport",
+      "paths": [
+        {
+          "edgeRefs": [],
+          "reasonCodes": [],
+          "state": "affected",
+          "targetRef": "A",
+          "truncated": false
+        },
+        {
+          "edgeRefs": [
+            "e1"
+          ],
+          "reasonCodes": [],
+          "state": "affected",
+          "targetRef": "B",
+          "truncated": false
+        },
+        {
+          "edgeRefs": [
+            "e1",
+            "e2"
+          ],
+          "reasonCodes": [],
+          "state": "affected",
+          "targetRef": "C",
+          "truncated": false
+        }
+      ],
+      "rootRef": "A",
+      "unresolvedRefs": []
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "edges": [
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "e1",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "e2",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      }
+    ],
+    "maxDepth": 4,
+    "maxPathPrefixes": 10,
+    "nodes": [
+      {
+        "admission": "admitted",
+        "id": "A"
+      },
+      {
+        "admission": "admitted",
+        "id": "B"
+      },
+      {
+        "admission": "admitted",
+        "id": "C"
+      }
+    ],
+    "root": "A"
+  },
+  "operation": "closureMicro",
+  "requirementRefs": [
+    "REQ-CLOSURE-MICRO"
+  ],
+  "testTarget": "SUT"
+}

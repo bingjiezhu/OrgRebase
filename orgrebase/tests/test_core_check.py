@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -21,7 +22,33 @@ def test_core_target_keeps_bounded_invariants_and_isolated_runtime_probe() -> No
     commands = result.stdout.splitlines()
     assert any("scripts/verify_packaged_runtime_assets.py" in command for command in commands)
     test_command = next(command for command in commands if "-m pytest" in command)
-    for module in ("test_impact.py", "test_workflow_and_store.py", "test_commit_gateway.py", "test_skills.py"):
+    selectors = [token for token in shlex.split(test_command) if token.startswith("tests/")]
+    assert selectors, "Core must select concrete test modules"
+    for selector in selectors:
+        path = selector.split("::", 1)[0]
+        assert (ROOT / path).is_file(), f"Core test selector has no source file: {selector}"
+    for module in (
+        "test_dependency_lock.py",
+        "test_impact.py",
+        "test_runtime_version.py",
+        "test_state_snapshot.py",
+        "test_workflow_and_store.py",
+        "test_commit_gateway.py",
+        "test_skills.py",
+        "test_change_operations.py",
+        "test_change_budget.py",
+        "test_change_notifications.py",
+        "test_onboarding_status.py",
+        "test_onboarding_draft_recovery.py",
+        "test_bounded_execution.py",
+        "test_vertex_candidate_contract.py",
+        "test_runtime_revision.py",
+        "test_deliverable_set.py",
+        "test_quote_pattern_bridge.py",
+        "test_quote_recovery_governed_learning.py",
+        "test_quote_recovery_adoption_matrix.py",
+        "test_quote_recovery_operations.py",
+    ):
         assert module in test_command
     assert "--cov" not in test_command  # This subset must not claim whole-product coverage.
     assert "OAC_ROOT" not in result.stdout and "oac-spec" not in result.stdout
@@ -30,6 +57,38 @@ def test_core_target_keeps_bounded_invariants_and_isolated_runtime_probe() -> No
         check=True, capture_output=True, text=True,
     )
     assert "-m pytest -W error --cov=orgrebase" in full.stdout
+
+
+def test_enterprise_boundary_target_requires_postgres_and_keeps_selected_scope() -> None:
+    default = subprocess.run(
+        [
+            "make",
+            "-n",
+            "check-enterprise-boundaries",
+            f"PYTHON={sys.executable}",
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "test_quote_recovery_operations_postgres.py" in default.stdout
+    result = subprocess.run(
+        [
+            "make",
+            "-n",
+            "check-enterprise-boundaries",
+            f"PYTHON={sys.executable}",
+            "ENTERPRISE_BOUNDARY_TESTS=tests/test_source_bindings.py tests/test_effect_operations.py",
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "ORGREBASE_REQUIRE_POSTGRES_TESTS=1" in result.stdout
+    assert "tests/test_source_bindings.py tests/test_effect_operations.py" in result.stdout
+    assert "--cov" not in result.stdout
 
 
 def test_core_target_stops_at_failed_hygiene_instead_of_reporting_a_pass(tmp_path: Path) -> None:

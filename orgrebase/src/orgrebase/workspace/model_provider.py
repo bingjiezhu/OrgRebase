@@ -19,23 +19,37 @@ from typing import Any, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from orgrebase.digest import sha256_digest
+from orgrebase.digest import canonical_json, sha256_digest
 from orgrebase.domain import EvidenceClass
+from orgrebase.workspace.model_budget import ModelBudget
 from orgrebase.workspace.model_observations import (
     ModelAttempt,
     ModelAttemptObserver,
+    ModelUsage,
     legacy_token_count,
     observed_usage,
 )
-from orgrebase.workspace.models import ModelRequest, ModelResponseReceipt
+from orgrebase.workspace.models import (
+    ModelRequest,
+    ModelRequestV3,
+    ModelRequestV4,
+    ModelResponseReceipt,
+    ModelResponseReceiptV3,
+    ModelResponseReceiptV4,
+)
 from orgrebase.workspace.openai_responses import OpenAIResponsesProvider as OpenAIResponsesProvider
+from orgrebase.workspace.vertex_candidate import (
+    build_vertex_advice_body,
+    build_vertex_candidate_body,
+    vertex_advice_wire_digests,
+    vertex_candidate_wire_digests,
+)
 
 T = TypeVar("T", bound=BaseModel)
 
 DEFAULT_VERTEX_MODEL_ID = "gemini-3.7-flash"
-SUPPORTED_VERTEX_MODEL_IDS = frozenset(
-    {DEFAULT_VERTEX_MODEL_ID, "gemini-3.8-flash"}
-)
+VERTEX_CANDIDATE_MODEL_ID = "gemini-3.8-flash"
+SUPPORTED_VERTEX_MODEL_IDS = frozenset({DEFAULT_VERTEX_MODEL_ID, VERTEX_CANDIDATE_MODEL_ID})
 
 
 def configured_vertex_model_id() -> str:
@@ -60,6 +74,7 @@ _VERTEX_CLAIM_BOUNDARY = (
     "NOT_CANONICAL_WRITE"
 )
 _PROJECT_ID = re.compile(r"^[a-z][a-z0-9-]{4,61}[a-z0-9]$")
+_PROVIDER_IDENTIFIER = re.compile(r"^[A-Za-z0-9_-][A-Za-z0-9_.:/-]{0,255}$")
 
 
 def _receipt(
@@ -98,6 +113,93 @@ def _receipt(
         error_code=error_code,
         completed_at=completed_at,
         evidence_class=evidence_class,
+    )
+
+
+def _candidate_dispatch_state(observation: ModelAttempt) -> str:
+    return {
+        "NOT_DISPATCHED": "NOT_SENT",
+        "DISPATCH_MAY_HAVE_OCCURRED": "SENT_UNKNOWN",
+        "RESPONSE_RECEIVED": "RESPONSE_RECEIVED",
+    }[observation.dispatch_state]
+
+
+def _vertex_candidate_receipt(
+    request: ModelRequestV3 | ModelRequestV4,
+    *,
+    observation: ModelAttempt,
+    body: dict[str, Any] | None,
+    status: str,
+    value: Any | None,
+    provider_request_id: str | None,
+    observed_model_id: str | None,
+    schema_valid: bool,
+    error_code: str | None,
+    usage: ModelUsage | None = None,
+    latency_ms: int = 0,
+    finish_reason: str | None = None,
+    observed_at: str,
+) -> ModelResponseReceiptV3 | ModelResponseReceiptV4:
+    normalized = value.model_dump(mode="json") if isinstance(value, BaseModel) else value
+    dispatch_state = _candidate_dispatch_state(observation)
+    usage = usage or ModelUsage(status="UNAVAILABLE", basis="unavailable")
+    evidence_class = (
+        "LIVE_MODEL" if status == "VALID" else "NOT_RUN" if dispatch_state == "NOT_SENT" else "MODEL_ATTEMPT"
+    )
+    receipt_type = ModelResponseReceiptV4 if isinstance(request, ModelRequestV4) else ModelResponseReceiptV3
+    v4_user = (
+        json.loads(body["contents"][0]["parts"][0]["text"])
+        if isinstance(request, ModelRequestV4) and body is not None else None
+    )
+    extra = (
+        {
+            "business_projection_digest": request.business_projection_digest,
+            "advice_digest": request.advice_digest,
+            "business_wire_digest": (
+                sha256_digest(v4_user["business_input_projections"])
+                if v4_user is not None else None
+            ),
+            "advice_wire_digest": (
+                sha256_digest(v4_user["UNTRUSTED_ADVICE"])
+                if v4_user is not None else None
+            ),
+        }
+        if isinstance(request, ModelRequestV4) else {}
+    )
+    return receipt_type(
+        provider="vertex-ai",
+        id=f"model-response:{request.request_id}:attempt-{request.attempt}",
+        request_ref=request.request_id,
+        request_digest=request.digest,
+        status=status,
+        dispatch_state=dispatch_state,
+        value=normalized,
+        output_digest=sha256_digest(normalized) if normalized is not None else None,
+        provider_request_id=provider_request_id,
+        requested_model_id=request.model_id,
+        observed_model_id=observed_model_id,
+        projection_digest=(
+            request.business_projection_digest if isinstance(request, ModelRequestV4)
+            else request.projection_digest
+        ),
+        schema_digest=request.schema_digest,
+        wire_schema_digest=(
+            sha256_digest(body["generationConfig"]["responseJsonSchema"]) if body is not None else None
+        ),
+        prompt_digest=sha256_digest(body["systemInstruction"]) if body is not None else None,
+        body_digest=sha256_digest(body) if body is not None else None,
+        schema_valid=schema_valid,
+        input_tokens=usage.input_tokens,
+        output_tokens=usage.output_tokens,
+        thinking_tokens=usage.thinking_tokens,
+        total_tokens=usage.total_tokens,
+        cached_tokens=usage.cached_tokens,
+        latency_ms=latency_ms,
+        finish_reason=finish_reason,
+        error_code=error_code,
+        observed_at=observed_at,
+        evidence_class=evidence_class,
+        **extra,
     )
 
 
@@ -668,6 +770,11 @@ class VertexAIStructuredProvider:
     response ID and an observed model version and Pydantic accepts the JSON.
     """
 
+    candidate_contract_version = "3"
+    supported_candidate_contract_versions = ("3", "4")
+    max_transport_attempts = 3
+    supports_parallel_calls = False
+
     def __init__(
         self,
         *,
@@ -680,6 +787,9 @@ class VertexAIStructuredProvider:
         adc_token_resolver: Callable[[], str | None] | None = None,
         project_resolver: Callable[[], str | None] | None = None,
         observer: ModelAttemptObserver | None = None,
+        model_budget: ModelBudget | None = None,
+        max_request_bytes: int = 262144,
+        max_response_bytes: int = 1048576,
     ) -> None:
         self.prompt_payload = json.loads(
             json.dumps(dict(prompt_payload), ensure_ascii=False, allow_nan=False)
@@ -690,8 +800,20 @@ class VertexAIStructuredProvider:
         self._api_key = api_key
         if not math.isfinite(timeout_seconds) or not 0 < timeout_seconds <= 120:
             raise ValueError("VERTEX_TIMEOUT_INVALID")
+        if (
+            isinstance(max_request_bytes, bool)
+            or not isinstance(max_request_bytes, int)
+            or not 0 < max_request_bytes <= 1048576
+            or isinstance(max_response_bytes, bool)
+            or not isinstance(max_response_bytes, int)
+            or not 0 < max_response_bytes <= 4194304
+        ):
+            raise ValueError("VERTEX_BYTE_LIMIT_INVALID")
         self.timeout_seconds = timeout_seconds
         self.observer = observer or ModelAttemptObserver()
+        self.model_budget = model_budget
+        self.max_request_bytes = max_request_bytes
+        self.max_response_bytes = max_response_bytes
         self._default_adc_resolver = adc_token_resolver is None
         self._default_project_resolver = project_resolver is None
         self._adc_token_resolver = adc_token_resolver or (
@@ -718,6 +840,40 @@ class VertexAIStructuredProvider:
             "request_or_response_content_disclosed": False,
         }
 
+    @property
+    def configuration_binding(self) -> dict[str, Any]:
+        return {
+            "protocol": "vertex-generate-content-v3",
+            "provider": "vertex-ai",
+            "model_id": self.model_id,
+            "location": VERTEX_LOCATION,
+            "endpoint_origin": "https://aiplatform.googleapis.com",
+            "timeout_seconds": self.timeout_seconds,
+            "max_request_bytes": self.max_request_bytes,
+            "max_response_bytes": self.max_response_bytes,
+            "max_transport_attempts": self.max_transport_attempts,
+            "automatic_retry_statuses": [429],
+            "candidate_contract_version": self.candidate_contract_version,
+            "supports_parallel_calls": self.supports_parallel_calls,
+            "model_budget": self.model_budget.model_dump(mode="json") if self.model_budget else None,
+        }
+
+    def require_available(self) -> None:
+        """Preflight the V3 candidate path without exposing resolved credentials."""
+
+        if self.model_id != VERTEX_CANDIDATE_MODEL_ID:
+            raise ValueError("VERTEX_CANDIDATE_MODEL_REQUIRED")
+        project = self._resolve_project()
+        if project is None or _PROJECT_ID.fullmatch(project) is None:
+            raise ValueError("VERTEX_PROJECT_MISSING_OR_INVALID")
+        if self._resolve_credential() is None:
+            raise ValueError("VERTEX_CREDENTIALS_MISSING")
+        if self.model_budget is None:
+            raise ValueError("MODEL_PRICE_CONTRACT_REQUIRED")
+        self.model_budget.require_current()
+        if self.model_budget.model_id != self.model_id:
+            raise ValueError("MODEL_PRICE_MODEL_MISMATCH")
+
     @staticmethod
     def _now() -> str:
         return datetime.now(UTC).isoformat().replace("+00:00", "Z")
@@ -728,8 +884,13 @@ class VertexAIStructuredProvider:
             or os.environ.get("ORGREBASE_VERTEX_PROJECT_ID")
             or os.environ.get("GOOGLE_CLOUD_PROJECT")
             or os.environ.get("GCLOUD_PROJECT")
-            or (_gcloud_value("config", "get-value", "project", timeout=max(0.001, min(20, deadline - time.monotonic())))
-                if deadline is not None and self._default_project_resolver else self._project_resolver())
+            or (
+                _gcloud_value(
+                    "config", "get-value", "project", timeout=max(0.001, min(20, deadline - time.monotonic()))
+                )
+                if deadline is not None and self._default_project_resolver
+                else self._project_resolver()
+            )
         )
         return value.strip() if isinstance(value, str) and value.strip() else None
 
@@ -748,9 +909,16 @@ class VertexAIStructuredProvider:
             return "ENV_API_KEY", environment_key
         if deadline is not None and time.monotonic() > deadline:
             return None
-        adc_token = (_gcloud_value("auth", "application-default", "print-access-token",
-                                   timeout=max(0.001, min(20, deadline - time.monotonic())))
-                     if deadline is not None and self._default_adc_resolver else self._adc_token_resolver())
+        adc_token = (
+            _gcloud_value(
+                "auth",
+                "application-default",
+                "print-access-token",
+                timeout=max(0.001, min(20, deadline - time.monotonic())),
+            )
+            if deadline is not None and self._default_adc_resolver
+            else self._adc_token_resolver()
+        )
         if adc_token:
             return "ADC_GCLOUD_ACCESS_TOKEN", adc_token
         return None
@@ -765,35 +933,71 @@ class VertexAIStructuredProvider:
             raise ValueError("VERTEX_PARENT_CREDENTIALS_UNAVAILABLE")
         source, value = credential
         key = "ORGREBASE_VERTEX_API_KEY" if source.endswith("API_KEY") else "ORGREBASE_VERTEX_ACCESS_TOKEN"
-        return {"ORGREBASE_VERTEX_PROJECT_ID": project, "ORGREBASE_VERTEX_MODEL_ID": self.model_id, key: value}
+        return {
+            "ORGREBASE_VERTEX_PROJECT_ID": project,
+            "ORGREBASE_VERTEX_MODEL_ID": self.model_id,
+            key: value,
+        }
 
-    def generate_structured(self, *, request: ModelRequest, output_model: type[T]) -> ModelResponseReceipt:
-        for name in ("error_code", "response_observation_digest", "observed_model_version", "provider_request_id_present"):
+    def generate_structured(
+        self,
+        *,
+        request: ModelRequest | ModelRequestV3 | ModelRequestV4,
+        output_model: type[T],
+        deadline_monotonic: float | None = None,
+    ) -> ModelResponseReceipt | ModelResponseReceiptV3 | ModelResponseReceiptV4:
+        if deadline_monotonic is not None and not math.isfinite(deadline_monotonic):
+            raise ValueError("VERTEX_DEADLINE_INVALID")
+        for name in (
+            "error_code",
+            "response_observation_digest",
+            "observed_model_version",
+            "provider_request_id_present",
+        ):
             self.runtime_binding.pop(name, None)
         self.runtime_binding["status"] = "NOT_RUN"
         operation_started = time.monotonic()
         deadline = operation_started + self.timeout_seconds
+        if deadline_monotonic is not None:
+            deadline = min(deadline, deadline_monotonic)
         transport_context: dict[str, Any] = {}
-        retry = {"max_attempts": 3, "deadline_seconds": self.timeout_seconds,
-                 "attempts": [], "provider_attempts": 0, "successful_calls": 0,
-                 "receipt_latency_scope": "FINAL_ATTEMPT_ONLY"}
+        retry = {
+            "max_attempts": self.max_transport_attempts,
+            "deadline_seconds": max(0.0, deadline - operation_started),
+            "attempts": [],
+            "provider_attempts": 0,
+            "successful_calls": 0,
+            "receipt_latency_scope": "FINAL_ATTEMPT_ONLY",
+        }
         self.runtime_binding["transport_retry"] = retry
-        for index in range(3):
+        for index in range(self.max_transport_attempts):
             self.runtime_binding.pop("retry_after_seconds", None)
             self.runtime_binding.pop("http_status", None)
             self.runtime_binding.pop("error_code", None)
             with self.observer.observe(request) as observation:
                 receipt = self._generate_structured(
-                    request=request, output_model=output_model, observation=observation, deadline=deadline, transport_context=transport_context,
+                    request=request,
+                    output_model=output_model,
+                    observation=observation,
+                    deadline=deadline,
+                    transport_context=transport_context,
                 )
                 observation.receipt = receipt
             sent = observation.dispatch_state != "NOT_DISPATCHED"
             retry["provider_attempts"] += int(sent)
-            row = {"dispatch_id": observation.dispatch_id, "response_receipt_digest": receipt.digest,
-                   "status": receipt.status, "error_code": receipt.error_code,
-                   "http_status": self.runtime_binding.get("http_status"), "sent": sent}
+            row = {
+                "dispatch_id": observation.dispatch_id,
+                "response_receipt_digest": receipt.digest,
+                "status": receipt.status,
+                "error_code": receipt.error_code,
+                "http_status": self.runtime_binding.get("http_status"),
+                "sent": sent,
+            }
             retry["attempts"].append(row)
-            if self.observer.directory is not None and self.observer.summary()["records"][-1]["persistence"] != "DURABLE":
+            if (
+                self.observer.directory is not None
+                and self.observer.summary()["records"][-1]["persistence"] != "DURABLE"
+            ):
                 retry["stop_reason"] = "OBSERVATION_DURABILITY_LOST"
                 retry["elapsed_ms"] = int((time.monotonic() - operation_started) * 1000)
                 if observation.write_failed:
@@ -803,17 +1007,43 @@ class VertexAIStructuredProvider:
                 self.runtime_binding.update(
                     status="PROVIDER_ERROR", error_code="MODEL_OBSERVATION_RESULT_WRITE_FAILED"
                 )
-                return _receipt(request, status="PROVIDER_ERROR", value=None, provider_request_id=receipt.provider_request_id,
-                                schema_valid=False, error_code="MODEL_OBSERVATION_RESULT_WRITE_FAILED",
-                                evidence_class=EvidenceClass.NOT_RUN, completed_at=self._now())
+                if isinstance(request, (ModelRequestV3, ModelRequestV4)):
+                    payload = receipt.model_dump(mode="json", exclude={"digest"})
+                    payload.update(
+                        status="PROVIDER_ERROR",
+                        value=None,
+                        output_digest=None,
+                        schema_valid=False,
+                        error_code="MODEL_OBSERVATION_RESULT_WRITE_FAILED",
+                        evidence_class=(
+                            "NOT_RUN" if payload["dispatch_state"] == "NOT_SENT" else "MODEL_ATTEMPT"
+                        ),
+                    )
+                    return type(receipt).model_validate(payload)
+                return _receipt(
+                    request,
+                    status="PROVIDER_ERROR",
+                    value=None,
+                    provider_request_id=receipt.provider_request_id,
+                    schema_valid=False,
+                    error_code="MODEL_OBSERVATION_RESULT_WRITE_FAILED",
+                    evidence_class=EvidenceClass.NOT_RUN,
+                    completed_at=self._now(),
+                )
             if receipt.status == "VALID":
                 retry["successful_calls"] = 1
-            if receipt.error_code != "VERTEX_HTTP_ERROR:429" or index == 2:
-                retry["stop_reason"] = "MAX_ATTEMPTS" if receipt.error_code == "VERTEX_HTTP_ERROR:429" else "TERMINAL_RESPONSE"
+            if receipt.error_code != "VERTEX_HTTP_ERROR:429" or index == self.max_transport_attempts - 1:
+                retry["stop_reason"] = (
+                    "MAX_ATTEMPTS" if receipt.error_code == "VERTEX_HTTP_ERROR:429" else "TERMINAL_RESPONSE"
+                )
                 retry["elapsed_ms"] = int((time.monotonic() - operation_started) * 1000)
                 return receipt
             requested_wait = self.runtime_binding.get("retry_after_seconds")
-            wait = requested_wait if requested_wait is not None else random.uniform(0.5, 1.0) * (2 ** (index + 1))
+            wait = (
+                requested_wait
+                if requested_wait is not None
+                else random.uniform(0.5, 1.0) * (2 ** (index + 1))
+            )
             row["wait_reason"] = "RETRY_AFTER" if requested_wait is not None else "HTTP_429_BACKOFF"
             row["planned_wait_seconds"] = wait
             if wait >= deadline - time.monotonic():
@@ -828,18 +1058,33 @@ class VertexAIStructuredProvider:
     def _generate_structured(
         self,
         *,
-        request: ModelRequest,
+        request: ModelRequest | ModelRequestV3 | ModelRequestV4,
         output_model: type[T],
         observation: ModelAttempt,
         deadline: float | None = None,
         transport_context: dict[str, Any] | None = None,
-    ) -> ModelResponseReceipt:
-        if (
+    ) -> ModelResponseReceipt | ModelResponseReceiptV3 | ModelResponseReceiptV4:
+        candidate_versioned = isinstance(request, (ModelRequestV3, ModelRequestV4))
+        request_binding_invalid = (
             request.provider != "vertex-ai"
             or request.model_id != self.model_id
-            or request.model_version != self.model_id
-            or request.seed is not None
-        ):
+            or (candidate_versioned and request.model_id != VERTEX_CANDIDATE_MODEL_ID)
+            or (not candidate_versioned and (request.model_version != self.model_id or request.seed is not None))
+        )
+        if request_binding_invalid:
+            if candidate_versioned:
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=None,
+                    status="NOT_RUN",
+                    value=None,
+                    provider_request_id=None,
+                    observed_model_id=None,
+                    schema_valid=False,
+                    error_code="VERTEX_REQUEST_BINDING_MISMATCH",
+                    observed_at=self._now(),
+                )
             return _receipt(
                 request,
                 status="NOT_RUN",
@@ -853,9 +1098,20 @@ class VertexAIStructuredProvider:
         response_schema = output_model.model_json_schema(mode="validation")
         expected_schema_digest = sha256_digest(response_schema)
         if expected_schema_digest != request.schema_digest:
-            self.runtime_binding["error_code"] = (
-                "VERTEX_OUTPUT_SCHEMA_BINDING_MISMATCH"
-            )
+            self.runtime_binding["error_code"] = "VERTEX_OUTPUT_SCHEMA_BINDING_MISMATCH"
+            if candidate_versioned:
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=None,
+                    status="NOT_RUN",
+                    value=None,
+                    provider_request_id=None,
+                    observed_model_id=None,
+                    schema_valid=False,
+                    error_code="VERTEX_OUTPUT_SCHEMA_BINDING_MISMATCH",
+                    observed_at=self._now(),
+                )
             return _receipt(
                 request,
                 status="SCHEMA_ERROR",
@@ -866,10 +1122,173 @@ class VertexAIStructuredProvider:
                 evidence_class=EvidenceClass.NOT_RUN,
                 completed_at=self._now(),
             )
+        if candidate_versioned:
+            try:
+                body = (
+                    build_vertex_advice_body(request, output_model)
+                    if isinstance(request, ModelRequestV4)
+                    else build_vertex_candidate_body(request, output_model)
+                )
+                # Force independent compilation now; the verifier repeats it later.
+                if isinstance(request, ModelRequestV4):
+                    vertex_advice_wire_digests(request, output_model)
+                else:
+                    vertex_candidate_wire_digests(request, output_model)
+            except (ValidationError, ValueError, TypeError):
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=None,
+                    status="NOT_RUN",
+                    value=None,
+                    provider_request_id=None,
+                    observed_model_id=None,
+                    schema_valid=False,
+                    error_code="VERTEX_REQUEST_CONTRACT_INVALID",
+                    observed_at=self._now(),
+                )
+            raw_request = canonical_json(body).encode("utf-8")
+        else:
+            generation_config: dict[str, Any] = {
+                "maxOutputTokens": request.max_output_tokens,
+                "responseMimeType": "application/json",
+                "responseJsonSchema": response_schema,
+                "thinkingConfig": {"thinkingLevel": "LOW"},
+            }
+            body = {
+                "systemInstruction": {
+                    "parts": [
+                        {
+                            "text": (
+                                "You are a candidate-only enterprise workflow reviewer. "
+                                "Return only JSON matching the supplied response schema. "
+                                "A worker ABSTAIN or any missing required field requires "
+                                "REPLAN; otherwise return PASS. Your answer is advisory "
+                                "and cannot approve or write canonical state."
+                            )
+                        }
+                    ]
+                },
+                "contents": [
+                    {
+                        "role": "user",
+                        "parts": [
+                            {
+                                "text": json.dumps(
+                                    self.prompt_payload,
+                                    ensure_ascii=False,
+                                    sort_keys=True,
+                                    separators=(",", ":"),
+                                )
+                            }
+                        ],
+                    }
+                ],
+                "generationConfig": generation_config,
+            }
+            raw_request = json.dumps(body, ensure_ascii=False, allow_nan=False, separators=(",", ":")).encode(
+                "utf-8"
+            )
+        if len(raw_request) > self.max_request_bytes:
+            if candidate_versioned:
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=body,
+                    status="NOT_RUN",
+                    value=None,
+                    provider_request_id=None,
+                    observed_model_id=None,
+                    schema_valid=False,
+                    error_code="VERTEX_REQUEST_TOO_LARGE",
+                    observed_at=self._now(),
+                )
+            return _receipt(
+                request,
+                status="NOT_RUN",
+                value=None,
+                provider_request_id=None,
+                schema_valid=False,
+                error_code="VERTEX_REQUEST_TOO_LARGE",
+                evidence_class=EvidenceClass.NOT_RUN,
+                completed_at=self._now(),
+            )
+        if deadline is not None and time.monotonic() >= deadline:
+            if candidate_versioned:
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=body,
+                    status="NOT_RUN",
+                    value=None,
+                    provider_request_id=None,
+                    observed_model_id=None,
+                    schema_valid=False,
+                    error_code="VERTEX_TOTAL_DEADLINE_EXHAUSTED",
+                    observed_at=self._now(),
+                )
+            return _receipt(
+                request,
+                status="NOT_RUN",
+                value=None,
+                provider_request_id=None,
+                schema_valid=False,
+                error_code="VERTEX_TOTAL_DEADLINE_EXHAUSTED",
+                evidence_class=EvidenceClass.NOT_RUN,
+                completed_at=self._now(),
+            )
         transport_context = transport_context if transport_context is not None else {}
+        if candidate_versioned:
+            if self.model_budget is None:
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=body,
+                    status="NOT_RUN",
+                    value=None,
+                    provider_request_id=None,
+                    observed_model_id=None,
+                    schema_valid=False,
+                    error_code="MODEL_PRICE_CONTRACT_REQUIRED",
+                    observed_at=self._now(),
+                )
+            if not transport_context.get("budget_reserved"):
+                try:
+                    transport_context["budget_reservation"] = self.model_budget.reserve(
+                        model_id=request.model_id,
+                        calls=self.max_transport_attempts,
+                        max_output_tokens=request.max_output_tokens,
+                    )
+                    transport_context["budget_reserved"] = True
+                except ValueError as exc:
+                    return _vertex_candidate_receipt(
+                        request,
+                        observation=observation,
+                        body=body,
+                        status="NOT_RUN",
+                        value=None,
+                        provider_request_id=None,
+                        observed_model_id=None,
+                        schema_valid=False,
+                        error_code=str(exc),
+                        observed_at=self._now(),
+                    )
         project_id = transport_context.get("project_id") or self._resolve_project(deadline=deadline)
         if project_id is None or _PROJECT_ID.fullmatch(project_id) is None:
             self.runtime_binding["error_code"] = "VERTEX_PROJECT_MISSING_OR_INVALID"
+            if candidate_versioned:
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=body,
+                    status="NOT_RUN",
+                    value=None,
+                    provider_request_id=None,
+                    observed_model_id=None,
+                    schema_valid=False,
+                    error_code="VERTEX_PROJECT_MISSING_OR_INVALID",
+                    observed_at=self._now(),
+                )
             return _receipt(
                 request,
                 status="NOT_RUN",
@@ -883,6 +1302,19 @@ class VertexAIStructuredProvider:
         credential = transport_context.get("credential") or self._resolve_credential(deadline=deadline)
         if credential is None:
             self.runtime_binding["error_code"] = "VERTEX_CREDENTIALS_MISSING"
+            if candidate_versioned:
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=body,
+                    status="NOT_RUN",
+                    value=None,
+                    provider_request_id=None,
+                    observed_model_id=None,
+                    schema_valid=False,
+                    error_code="VERTEX_CREDENTIALS_MISSING",
+                    observed_at=self._now(),
+                )
             return _receipt(
                 request,
                 status="NOT_RUN",
@@ -901,46 +1333,6 @@ class VertexAIStructuredProvider:
                 "project_id_digest": sha256_digest(project_id),
             }
         )
-        generation_config: dict[str, Any] = {
-            "maxOutputTokens": request.max_output_tokens,
-            "responseMimeType": "application/json",
-            "responseJsonSchema": response_schema,
-            "thinkingConfig": {"thinkingLevel": "LOW"},
-        }
-        body = {
-            "systemInstruction": {
-                "parts": [
-                    {
-                        "text": (
-                            "You are a candidate-only enterprise workflow reviewer. "
-                            "Return only JSON matching the supplied response schema. "
-                            "A worker ABSTAIN or any missing required field requires "
-                            "REPLAN; otherwise return PASS. Your answer is advisory "
-                            "and cannot approve or write canonical state."
-                        )
-                    }
-                ]
-            },
-            "contents": [
-                {
-                    "role": "user",
-                    "parts": [
-                        {
-                            "text": json.dumps(
-                                self.prompt_payload,
-                                ensure_ascii=False,
-                                sort_keys=True,
-                                separators=(",", ":"),
-                            )
-                        }
-                    ],
-                }
-            ],
-            "generationConfig": generation_config,
-        }
-        raw_request = json.dumps(
-            body, ensure_ascii=False, allow_nan=False, separators=(",", ":")
-        ).encode("utf-8")
         self.runtime_binding.update(
             {
                 "request_payload_digest": sha256_digest(body),
@@ -969,28 +1361,66 @@ class VertexAIStructuredProvider:
             method="POST",
         )
         started = time.perf_counter()
-        remaining = self.timeout_seconds if deadline is None else deadline - time.monotonic()
-        if remaining <= 0:
-            return _receipt(request, status="NOT_RUN", value=None, provider_request_id=None,
-                            schema_valid=False, error_code="VERTEX_TOTAL_DEADLINE_EXHAUSTED",
-                            evidence_class=EvidenceClass.NOT_RUN, completed_at=self._now())
-        if not observation.before_send(raw_request):
+
+        def result(
+            status: str,
+            error_code: str | None,
+            *,
+            value: Any | None = None,
+            provider_request_id: str | None = None,
+            observed_model_id: str | None = None,
+            schema_valid: bool = False,
+            usage: ModelUsage | None = None,
+            finish_reason: str | None = None,
+            observed_at: str | None = None,
+            legacy_evidence: str = EvidenceClass.NOT_RUN,
+        ) -> ModelResponseReceipt | ModelResponseReceiptV3 | ModelResponseReceiptV4:
+            elapsed = int((time.perf_counter() - started) * 1000)
+            if candidate_versioned:
+                return _vertex_candidate_receipt(
+                    request,
+                    observation=observation,
+                    body=body,
+                    status=status,
+                    value=value,
+                    provider_request_id=provider_request_id,
+                    observed_model_id=observed_model_id,
+                    schema_valid=schema_valid,
+                    error_code=error_code,
+                    usage=usage,
+                    latency_ms=elapsed,
+                    finish_reason=finish_reason,
+                    observed_at=observed_at or self._now(),
+                )
+            usage = usage or ModelUsage(status="UNAVAILABLE", basis="unavailable")
             return _receipt(
                 request,
-                status="NOT_RUN",
-                value=None,
-                provider_request_id=None,
-                schema_valid=False,
-                error_code=observation.error_code,
-                evidence_class=EvidenceClass.NOT_RUN,
-                completed_at=self._now(),
+                status=status,
+                value=value,
+                provider_request_id=provider_request_id,
+                schema_valid=schema_valid,
+                error_code=error_code,
+                evidence_class=legacy_evidence,
+                latency_ms=elapsed,
+                input_tokens=legacy_token_count(usage.input_tokens),
+                output_tokens=legacy_token_count(usage.output_tokens),
+                finish_reason=finish_reason,
+                completed_at=observed_at or self._now(),
             )
+
+        remaining = self.timeout_seconds if deadline is None else deadline - time.monotonic()
+        if remaining <= 0:
+            return result("NOT_RUN", "VERTEX_TOTAL_DEADLINE_EXHAUSTED")
+        if not observation.before_send(raw_request):
+            return result("NOT_RUN", observation.error_code)
         try:
-            with urllib.request.urlopen(
-                http_request, timeout=remaining
-            ) as response:
+            with urllib.request.urlopen(http_request, timeout=remaining) as response:
                 self.runtime_binding["http_status"] = getattr(response, "status", 200)
-                raw_response = _read_vertex_response(response, deadline)
+                raw_response = _read_vertex_response(
+                    response,
+                    deadline,
+                    max_bytes=self.max_response_bytes,
+                )
                 observation.response(raw_response)
             payload = json.loads(raw_response.decode("utf-8"))
         except urllib.error.HTTPError as exc:
@@ -999,17 +1429,27 @@ class VertexAIStructuredProvider:
             if exc.code == 429:
                 observation.error_code = "VERTEX_RATE_LIMITED"
                 try:
-                    error_body = _read_vertex_response(exc.fp, deadline, max_bytes=65536)
+                    error_body = _read_vertex_response(
+                        exc.fp,
+                        deadline,
+                        max_bytes=min(65536, self.max_response_bytes),
+                    )
                     if len(error_body) <= 65536:
                         observation.response(error_body)
                         error_payload = json.loads(error_body)
                         if isinstance(error_payload, dict):
                             observation.metadata(
-                                usage=observed_usage(error_payload.get("usageMetadata"), {
-                                    "input_tokens": "promptTokenCount", "output_tokens": "candidatesTokenCount",
-                                    "thinking_tokens": "thoughtsTokenCount", "total_tokens": "totalTokenCount",
-                                    "cached_tokens": "cachedContentTokenCount",
-                                }), observed_model=error_payload.get("modelVersion"),
+                                usage=observed_usage(
+                                    error_payload.get("usageMetadata"),
+                                    {
+                                        "input_tokens": "promptTokenCount",
+                                        "output_tokens": "candidatesTokenCount",
+                                        "thinking_tokens": "thoughtsTokenCount",
+                                        "total_tokens": "totalTokenCount",
+                                        "cached_tokens": "cachedContentTokenCount",
+                                    },
+                                ),
+                                observed_model=error_payload.get("modelVersion"),
                                 provider_request_id=error_payload.get("responseId"),
                             )
                 except (OSError, TypeError, ValueError, AttributeError):
@@ -1032,16 +1472,12 @@ class VertexAIStructuredProvider:
                     "error_code": f"VERTEX_HTTP_ERROR:{exc.code}",
                 }
             )
-            return _receipt(
-                request,
-                status="PROVIDER_ERROR",
-                value=None,
-                provider_request_id=None,
-                schema_valid=False,
-                error_code=f"VERTEX_HTTP_ERROR:{exc.code}",
-                evidence_class=EvidenceClass.NOT_RUN,
-                latency_ms=int((time.perf_counter() - started) * 1000),
-                completed_at=self._now(),
+            return result(
+                "PROVIDER_ERROR",
+                f"VERTEX_HTTP_ERROR:{exc.code}",
+                provider_request_id=observation.provider_request_id,
+                observed_model_id=observation.observed_model,
+                usage=observation.usage,
             )
         except (
             OSError,
@@ -1056,16 +1492,9 @@ class VertexAIStructuredProvider:
                     "error_code": f"VERTEX_PROVIDER_ERROR:{type(exc).__name__}",
                 }
             )
-            return _receipt(
-                request,
-                status="PROVIDER_ERROR",
-                value=None,
-                provider_request_id=None,
-                schema_valid=False,
-                error_code=f"VERTEX_PROVIDER_ERROR:{type(exc).__name__}",
-                evidence_class=EvidenceClass.NOT_RUN,
-                latency_ms=int((time.perf_counter() - started) * 1000),
-                completed_at=self._now(),
+            return result(
+                "PROVIDER_ERROR",
+                f"VERTEX_PROVIDER_ERROR:{type(exc).__name__}",
             )
         response_digest = sha256_digest(payload)
         provider_request_id = (
@@ -1074,6 +1503,17 @@ class VertexAIStructuredProvider:
         observed_model_version = (
             str(payload.get("modelVersion") or "") if isinstance(payload, dict) else ""
         )
+        if candidate_versioned:
+            provider_request_id = (
+                provider_request_id
+                if _PROVIDER_IDENTIFIER.fullmatch(provider_request_id)
+                else ""
+            )
+            observed_model_version = (
+                observed_model_version
+                if _PROVIDER_IDENTIFIER.fullmatch(observed_model_version)
+                else ""
+            )
         usage = observed_usage(
             payload.get("usageMetadata") if isinstance(payload, dict) else None,
             {
@@ -1097,16 +1537,12 @@ class VertexAIStructuredProvider:
             self.runtime_binding.update(
                 {"status": "NOT_RUN", "error_code": "VERTEX_RESPONSE_BINDING_MISSING"}
             )
-            return _receipt(
-                request,
-                status="PROVIDER_ERROR",
-                value=None,
+            return result(
+                "PROVIDER_ERROR",
+                "VERTEX_RESPONSE_BINDING_MISSING",
                 provider_request_id=provider_request_id or None,
-                schema_valid=False,
-                error_code="VERTEX_RESPONSE_BINDING_MISSING",
-                evidence_class=EvidenceClass.NOT_RUN,
-                latency_ms=int((time.perf_counter() - started) * 1000),
-                completed_at=self._now(),
+                observed_model_id=observed_model_version or None,
+                usage=usage,
             )
         if observed_model_version != self.model_id:
             self.runtime_binding.update(
@@ -1115,16 +1551,12 @@ class VertexAIStructuredProvider:
                     "error_code": "VERTEX_MODEL_VERSION_MISMATCH",
                 }
             )
-            return _receipt(
-                request,
-                status="PROVIDER_ERROR",
-                value=None,
+            return result(
+                "PROVIDER_ERROR",
+                "VERTEX_MODEL_VERSION_MISMATCH",
                 provider_request_id=provider_request_id,
-                schema_valid=False,
-                error_code="VERTEX_MODEL_VERSION_MISMATCH",
-                evidence_class=EvidenceClass.NOT_RUN,
-                latency_ms=int((time.perf_counter() - started) * 1000),
-                completed_at=self._now(),
+                observed_model_id=observed_model_version,
+                usage=usage,
             )
         candidates = payload.get("candidates")
         first_candidate = (
@@ -1135,8 +1567,6 @@ class VertexAIStructuredProvider:
             else {}
         )
         finish_reason = str(first_candidate.get("finishReason") or "unknown")
-        input_tokens = legacy_token_count(usage.input_tokens)
-        output_tokens = legacy_token_count(usage.output_tokens)
         self.runtime_binding.update(
             {
                 "thinking_tokens": usage.thinking_tokens,
@@ -1150,19 +1580,15 @@ class VertexAIStructuredProvider:
                     "error_code": f"VERTEX_FINISH_REASON_NOT_STOP:{finish_reason}",
                 }
             )
-            return _receipt(
-                request,
-                status="SCHEMA_ERROR",
-                value=None,
+            return result(
+                "SCHEMA_ERROR",
+                f"VERTEX_FINISH_REASON_NOT_STOP:{finish_reason}",
                 provider_request_id=provider_request_id,
-                schema_valid=False,
-                error_code=f"VERTEX_FINISH_REASON_NOT_STOP:{finish_reason}",
-                evidence_class="LIVE_MODEL",
-                latency_ms=int((time.perf_counter() - started) * 1000),
-                input_tokens=input_tokens,
-                output_tokens=output_tokens,
+                observed_model_id=observed_model_version,
+                usage=usage,
                 finish_reason=finish_reason,
-                completed_at=str(payload.get("createTime") or self._now()),
+                observed_at=str(payload.get("createTime") or self._now()),
+                legacy_evidence="LIVE_MODEL",
             )
         try:
             parts = first_candidate["content"]["parts"]
@@ -1174,7 +1600,12 @@ class VertexAIStructuredProvider:
             if not raw_content:
                 raise ValueError("VERTEX_RESPONSE_TEXT_MISSING")
             decoded = json.loads(raw_content)
-            value = output_model.model_validate(decoded)
+            if candidate_versioned:
+                value = output_model.model_validate_json(raw_content, strict=True)
+                if canonical_json(decoded) != canonical_json(value.model_dump(mode="json", by_alias=True)):
+                    raise ValueError("VERTEX_RESPONSE_SCHEMA_REPAIRED")
+            else:
+                value = output_model.model_validate(decoded)
         except (
             KeyError,
             TypeError,
@@ -1188,19 +1619,15 @@ class VertexAIStructuredProvider:
                     "error_code": f"VERTEX_SCHEMA_MISMATCH:{type(exc).__name__}",
                 }
             )
-            return _receipt(
-                request,
-                status="SCHEMA_ERROR",
-                value=None,
+            return result(
+                "SCHEMA_ERROR",
+                f"VERTEX_SCHEMA_MISMATCH:{type(exc).__name__}",
                 provider_request_id=provider_request_id,
-                schema_valid=False,
-                error_code=f"VERTEX_SCHEMA_MISMATCH:{type(exc).__name__}",
-                evidence_class="LIVE_MODEL",
-                latency_ms=int((time.perf_counter() - started) * 1000),
-                input_tokens=input_tokens,
-                output_tokens=output_tokens,
+                observed_model_id=observed_model_version,
+                usage=usage,
                 finish_reason=finish_reason,
-                completed_at=str(payload.get("createTime") or self._now()),
+                observed_at=str(payload.get("createTime") or self._now()),
+                legacy_evidence="LIVE_MODEL",
             )
         self.runtime_binding.update(
             {
@@ -1209,19 +1636,17 @@ class VertexAIStructuredProvider:
                 "response_schema_digest": expected_schema_digest,
             }
         )
-        return _receipt(
-            request,
-            status="VALID",
+        return result(
+            "VALID",
+            None,
             value=value,
             provider_request_id=provider_request_id,
+            observed_model_id=observed_model_version,
             schema_valid=True,
-            error_code=None,
-            evidence_class="LIVE_MODEL",
-            latency_ms=int((time.perf_counter() - started) * 1000),
-            input_tokens=input_tokens,
-            output_tokens=output_tokens,
+            usage=usage,
             finish_reason=finish_reason,
-            completed_at=str(payload.get("createTime") or self._now()),
+            observed_at=str(payload.get("createTime") or self._now()),
+            legacy_evidence="LIVE_MODEL",
         )
 
 

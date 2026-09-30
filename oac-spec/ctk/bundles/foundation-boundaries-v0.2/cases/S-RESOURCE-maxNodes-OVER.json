@@ -1,0 +1,15 @@
+{
+  "caseId": "S-RESOURCE-maxNodes-OVER",
+  "expect": {
+    "errorCode": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED",
+    "sutStatus": "RESOURCE_EXHAUSTED"
+  },
+  "input": {
+    "maxNodes": 257
+  },
+  "operation": "resourceCheck",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

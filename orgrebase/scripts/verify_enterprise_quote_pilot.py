@@ -306,7 +306,10 @@ def _verify_sqlite(
             # effect target projections and version 5 adds non-unique effect
             # indexes; neither changes these event/object content hashes.
             declared = [row[0] for row in versions]
-            _require(declared in ([3], [4], [5]), f"SQLITE_SCHEMA_VERSION_UNSUPPORTED:{path.name}")
+            _require(
+                declared in ([3], [4], [5], [6]),
+                f"SQLITE_SCHEMA_VERSION_UNSUPPORTED:{path.name}",
+            )
             user_version = connection.execute("PRAGMA user_version").fetchone()[0]
             _require(user_version == declared[0], f"SQLITE_SCHEMA_VERSION_MISMATCH:{path.name}")
             for table in ("domain_events", "artifacts", "object_versions", "current_pointers", "version_states", "workspace_registry"):

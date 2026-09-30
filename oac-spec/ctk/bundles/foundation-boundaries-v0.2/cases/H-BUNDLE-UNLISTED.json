@@ -1,0 +1,14 @@
+{
+  "caseId": "H-BUNDLE-UNLISTED",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "bundle-unlisted"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-BUNDLE"
+  ],
+  "testTarget": "HARNESS"
+}

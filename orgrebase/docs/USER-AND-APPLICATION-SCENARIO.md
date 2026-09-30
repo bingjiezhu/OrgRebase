@@ -2,28 +2,26 @@
 
 > Start with the [L0 product truth](SYSTEM-MAP.md). This file provides scenario and metric detail;
 > its synthetic or modelled results are not real-enterprise acceptance.
+> Recorded Golden counts below describe a retained reference run. Current usage and supported paths are documented in the [core approach](guide/approach.en.md) and [demo guide](guide/demo.en.md).
 
-## Two-sentence competition opening
+## Product overview
 
-> 企业成果已经交付，但产品发布日期、法务义务或财务政策会继续变化；传统流程只能广播通知、
-> 人工搜索并全量重做，仍可能漏改、越权读取或沿用陈旧审批。
-> OrgRebase 用 OAC 把现有成果的事实、权限与依赖编译为可验证组织模型：基线 Formation 先跑通固定版本
-> AgentTeams 生命周期；变化到达后再从持久收据投影受影响领域的最小变化团队，复用已准入能力完成候选修正
-> 与证据验收，只在规范写入前通知精确 Human Owner，
-> 批准后选择性 Rebase。Enterprise Quote 是当前受控验证切片；0/72 impact mismatch、0/32 越权成功和
-> normalized action cost 8.00→4.05 都是合成或模型化证据，真实企业 ROI 仍待 Shadow Pilot 验证。
+> 企业事实、政策、职责或产品方案发生变更后，已有成果需要重新核对依据、影响与责任。
+> OrgRebase 将来源版本、任务候选、独立校验、精确批准与选择性更新连接成可复查的工作链。
+> Enterprise Quote 是当前受控参考场景；本文中的合成或模型化指标不代表客户流程或真实企业 ROI。
 
-## Why this is not just a script or one super-Agent
+## Domain tasks and deterministic control
 
-| Approach | What it is good at | Why it is insufficient for this task |
+| Component | Role in this design | Boundary |
 |---|---|---|
-| Deterministic script | Schema checks, impact calculation, approval validation, atomic writes | It cannot own or interpret continuously changing Product, Legal, Finance and GTM knowledge |
-| One super-Agent | Flexible synthesis in one context | It either sees excessive restricted data or impersonates several independent authorities; its completion cannot become business truth |
-| Domain AgentTeam + deterministic control | Each domain sees its least-authority projection and submits independent evidence; control verifies and writes | This is the OrgRebase split: probabilistic work stays candidate-only, while approvals and canonical transitions remain deterministic |
+| Deterministic control | Schema checks, dependency-based impact, approval validation and transactional writes | Uses admitted inputs; it does not invent enterprise facts or act as a human owner |
+| Candidate Agent | Interprets bounded context and prepares source-bound candidates | Candidate output does not grant admission, approval or write authority |
+| Domain task team | Separates scoped inputs and evidence handoffs across required domains | Adds coordination overhead; unrelated domains need not participate |
 
-Multiple Agents are therefore needed for **authority and evidence separation**, not to inflate Agent count. A
-script still performs the parts that should be deterministic; the AgentTeam handles the bounded cross-domain work
-whose inputs, owners and evidence differ.
+Domain tasks are useful when inputs, owners and evidence obligations differ. A single
+candidate Agent with independent approval, or an ordinary workflow, can also separate
+authority. The choice of multiple Agents must be justified by context boundaries and
+handoffs, rather than assumed to improve quality or security.
 
 ## Product job to be done
 
@@ -32,20 +30,22 @@ policies owned by several departments. The enterprise needs to know **which exac
 trustworthy, which objects actually depend on a changed premise, which Domain Agents may prepare the repair, and which
 Human Owner must authorize the canonical successor**.
 
-The current competition scenario is deliberately narrow and executable:
+The retained Golden reference scenario is deliberately narrow and executable:
 
 > Evergreen Industries is admitted once through OAC. Quote v1 baseline Formation then runs the pinned Product / Legal /
 > Finance / GTM AgentTeams lifecycle: Finance first abstains because `price_band` evidence is missing, Reviewer replans,
 > a read-only HTTP Tool supplies the exact bytes, and only that baseline branch is retried before Quote v1 becomes the
 > existing controlled-synthetic result. When an admitted launch-date or currency ChangeSet later arrives, OrgRebase
 > freezes the affected universe, projects the minimum change team from durable dependency receipts, and reuses the
-> already-admitted capabilities; current evidence does not claim a new native taskflow for each change. Deterministic
+> already-admitted capabilities; that recorded run did not establish a new native taskflow for each change. Deterministic
 > Preview + VMRC still performs zero canonical writes. Only the affected Product or Finance Human Owner is
-> notified; one explicit decision resumes automatic selective Rebase and produces Quote v2/v3 (`2026-10-15 / EUR`),
+> notified; an authorized Apply after approval produces Quote v2/v3 (`2026-10-15 / EUR`),
 > field diff, receipts and rollback anchor. Model responses remain advisory and the recovery pattern becomes a governed
 > `SINGLE_RUN_SEED` Skill candidate only after the business journey ends.
 
-This is the current minimum vertical slice for enterprise work that crosses authority, privacy, change-management, human approval and organizational learning boundaries. The older Northstar/Acme flow remains a retained deterministic regression profile; it is not the current Golden authority line.
+This records one controlled vertical slice across authority, privacy, change management,
+approval and learning boundaries. It does not qualify later candidate source. The older
+Northstar/Acme flow remains a retained deterministic regression profile.
 
 ## Primary users and stakeholders
 
@@ -137,31 +137,30 @@ This workflow has four structural gaps:
 4. The released quote-compose Skill is discovered, qualified and invoked candidate-only with canonical target writes = 0; Quote v1, WorkTrace and the dependency graph become the existing baseline.
 5. An upstream launch-date or currency change is admitted as a frozen ChangeSet under the same business run.
 6. Impact discovery uses actual reads and exact source versions; no-path outside the frozen universe becomes `UNKNOWN`, not “unaffected”.
-7. Persisted dependency receipts project the minimal change team and reuse admitted capabilities; current evidence does not claim a fresh native AgentTeams taskflow for each ChangeSet.
+7. Persisted dependency receipts project the required change team and reuse admitted capabilities. Current `golden` mode executes an isolated pinned AgentTeams lifecycle for that ChangeSet; the local reference mode remains deterministic. Historical run counts do not establish a fresh execution.
 8. Deterministic control locks final Preview + VMRC and persistently pauses at the exact affected Human Owner; refresh or restart must preserve the run, digest and owner.
-9. A single visible Owner decision records Approval and then automatically resumes Apply; these remain distinct receipts and states.
+9. The Owner decision records Approval. Apply requires execution permission and a fresh server projection that still permits the action; the UI can continue automatically only when the same account satisfies both gates.
 10. Selective Rebase produces Quote v2/v3, exact field diff, successor graph, archive and rollback anchor; preserved and `UNKNOWN` objects remain explicit.
 11. The baseline AgentTeams lifecycle, Model, Tool, Skill, later change projections, Approval, Apply and Terminal evidence remain bound to the same business run; BPI and generic OAC reference runs stay separate evidence lanes.
 ```
 
-The evaluator-facing full OAC walkthrough is `./run-semifinal-demo.sh` (default `interactive`): it creates a fresh recoverable workspace, derives the current OAC draft from the enterprise pack, and requires Contract Owner admission before Quote formation. Business candidates use local Ollama; the browser retains the explicit owner decisions. The retired `guided` mode refuses to copy historical mapping receipts into a new workspace. A fresh Vertex execution uses `./run-semifinal-demo.sh live` and receives a new run ID. `make serve` now requires production authentication configuration by default; `make serve-demo` explicitly starts a synthetic local demonstration. Neither replaces the full evaluator walkthrough. `make workspace-demo` remains the Northstar/Acme deterministic regression path. The exact step-to-code/evidence mapping is in [AGENT-TASK-CLOSURE](AGENT-TASK-CLOSURE.md) and [VERIFICATION-EVIDENCE-MAP](VERIFICATION-EVIDENCE-MAP.md).
+The evaluator-facing full OAC walkthrough is `./run-semifinal-demo.sh` (default `interactive`): it creates a fresh recoverable workspace, derives the current OAC draft from the enterprise pack, and requires Contract Owner admission before Quote formation. Business candidates use local Ollama; the browser retains the explicit owner decisions. The retired `guided` mode refuses to copy historical mapping receipts into a new workspace. A fresh Vertex execution uses `./run-semifinal-demo.sh live` and receives a new run ID. `make serve` now requires production authentication configuration by default; `make serve-demo` explicitly starts a synthetic local demonstration. Neither replaces the full evaluator walkthrough. `make workspace-demo` remains the Northstar/Acme deterministic regression path. The exact step-to-code/evidence mapping is in [AGENT-TASK-CLOSURE](AGENT-TASK-CLOSURE.md) and [WORKSPACE-EVALUATION](WORKSPACE-EVALUATION.md).
 
-## What success means
+## Reference workflow acceptance
 
-The current Golden profile is successful only when all of the following are true:
+The reference workflow requires an admitted enterprise Pack, one run identity and source-bound task/context receipts. Planned and actual domain tasks must agree; model and tool outputs remain candidates until the deterministic control plane verifies them.
 
-- one sealed project-authored controlled synthetic Pack, one unique `run_id` and one stable business `correlation_id` bind the whole journey;
-- 40 pinned AgentTeams control-plane actions reconcile with 7 task bindings, 5 Worker and 2 Reviewer processes;
-- Finance A1 `ABSTAIN` is followed by Reviewer `REPLAN`, an exact read-only Tool receipt, Finance A2 and Reviewer `PASS`;
-- two Vertex `gemini-3.8-flash` responses are schema-valid, retain distinct provider response IDs, remain advisory-only and produce zero canonical writes;
-- released quote-compose is discoverable, loadable and invoked only after its exact 8/8 qualification;
-- Agent, Reviewer, Model, Tool and Skill remain candidate-only; exact-reviewed Formation and deterministic control own canonical writes;
-- both business approvals satisfy server-side time, owner, digest and freshness gates before Quote v3 reaches `2026-10-15 / EUR`;
-- the experience candidate stays `SINGLE_RUN_SEED`, current-Quote consumption is false, and only a separate Skill Steward decision admits CANARY;
-- independent stdlib verification reports 101 entries, causal `PASS`, experience `PASS`, and no product imports;
-- real connectors, external IAM/UAT, measured ROI, distributed production Workers and production SLA/HA/DR remain explicit `NOT_RUN` rather than being inferred from local success.
+The acceptance checks cover:
 
-Thresholds are machine-readable in `configs/workspace/metric-registry.json` and explained in [WORKSPACE-EVALUATION](WORKSPACE-EVALUATION.md).
+- source, Profile, context, output and dependency digests belong to the same run;
+- missing evidence produces abstention or a hold, with a bound supplemental-evidence path;
+- each business approval binds its exact owner, target version, digest and freshness;
+- Apply has current execution permission and writes the allowed successors and receipts atomically;
+- a released Skill is discovered and invoked only under its exact dependency and qualification contract;
+- experience candidates cannot self-publish or retroactively change the run that produced them;
+- unknown outcomes and external effects retain their separate recovery and reconciliation state.
+
+Machine-readable thresholds live in `configs/workspace/metric-registry.json`; [evaluation](WORKSPACE-EVALUATION.md) describes their scope. Local reference success does not establish real connectors, external IAM, employee UAT, distributed production execution, SLA or ROI.
 
 ## Deployment and adoption path
 
@@ -172,14 +171,11 @@ The included release is a local, single-organization deterministic reference imp
 3. import owner-approved dependency coverage rather than inferring global completeness;
 4. keep Agent output candidate-only while the deterministic control plane remains the only canonical writer;
 5. conduct consented role-based walkthroughs before a production pilot;
-6. require trusted Source-byte resolution, recomputed digests, a local Source-admission receipt, Runtime-consumption/projection proof, and then close Spec 030/031 zero-effect Shadow gates plus Spec 021 identity/tenant, schema-migration and external-approval gates before a single-enterprise read-only Shadow Pilot;
+6. verify trusted Source-byte resolution, recomputed digests, exact Source admission and runtime projection, then qualify read-only target effects, identity/tenant isolation, schema migration and external approval before a single-enterprise Shadow pilot;
 7. add live AgentTeams transport only when K8s, Matrix, candidate bytes, Skill bytes, and provider request IDs can be correlated in one run;
 8. move from local SQLite to an enterprise store only after the semantic and evidence contracts are stable.
 
-Adoption verdict: competition technical MVP=`GO`; single-enterprise isolated
-read-only Shadow Pilot=`CONDITIONAL GO` only after all Source, identity,
-approval, mapping, and zero-effect gates above close; arbitrary enterprise
-production=`NO-GO`.
+The included reference supports controlled local evaluation. A single-enterprise read-only Shadow pilot requires all Source, identity, approval, mapping and zero-effect gates above. General enterprise production qualification remains open.
 
 No production connector, production ROI, or externally validated buyer demand is claimed by the current repository.
 

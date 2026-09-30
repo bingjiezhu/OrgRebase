@@ -1,0 +1,16 @@
+{
+  "caseId": "S-WITNESS-NO-DELIMITER",
+  "expect": {
+    "errorCode": "APPLICABILITY_WITNESS_MISMATCH",
+    "sutStatus": "ERROR"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "urn:a/spec"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

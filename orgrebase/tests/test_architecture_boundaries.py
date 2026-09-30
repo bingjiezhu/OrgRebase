@@ -102,6 +102,34 @@ def test_core_modules_do_not_depend_on_workspace_implementation() -> None:
     assert violations == []
 
 
+def test_pattern_production_module_exposes_no_fixture_invocation_bypass() -> None:
+    path = CORE / "workspace" / "pattern_evolution.py"
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    service = next(
+        node
+        for node in tree.body
+        if isinstance(node, ast.ClassDef) and node.name == "GovernedPatternService"
+    )
+    public_methods = {
+        node.name
+        for node in service.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and not node.name.startswith("_")
+    }
+    assert "invoke" in public_methods
+    assert not any("fixture" in name.casefold() for name in public_methods)
+    for product_path in sorted(CORE.rglob("*.py")):
+        product_tree = ast.parse(
+            product_path.read_text(encoding="utf-8"), filename=str(product_path)
+        )
+        if product_path == path:
+            continue
+        assert not any(
+            isinstance(node, ast.Attribute) and node.attr == "_invoke_admitted"
+            for node in ast.walk(product_tree)
+        ), str(product_path)
+
+
 def test_runtime_composition_imports_only_the_workspace_factory_dependencies() -> None:
     tree = ast.parse((CORE / "runtime_config.py").read_text())
     dependencies = {

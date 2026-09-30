@@ -17,12 +17,50 @@ SOURCE_SNAPSHOT_OUTPUT ?= ../goai-source-snapshot
 GOAI_REPO_DEMO_MEDIA = $(firstword $(wildcard submission/demo.mp4 submission/demo.mov submission/demo.webm))
 PYRUN = PYTHONPATH=$(PYTHONPATH) $(PYTHON)
 PYTEST = $(PYRUN) -m pytest
-CORE_TESTS = tests/test_architecture_boundaries.py tests/test_impact.py \
+CORE_TESTS = tests/workspace/test_reseal_skill_package_licensing.py tests/test_public_release_source_parity.py tests/workspace/test_licensing_contracts.py \
+	tests/test_dependency_lock.py \
+	tests/test_architecture_boundaries.py tests/test_runtime_version.py tests/test_impact.py \
+	tests/test_installed_oac_parity_assets.py \
+	tests/test_source_snapshot.py::test_github_release_excludes_internal_review_and_planning_prose \
+	tests/test_source_snapshot.py::test_github_release_retains_formal_contracts_and_operating_guides \
+	tests/test_source_snapshot.py::test_public_gate_rejects_internal_work_material_before_running_tools \
+	tests/test_source_snapshot.py::test_public_checkout_closure_does_not_require_archive_only_guides \
 	tests/test_workflow_and_store.py tests/test_commit_gateway.py tests/test_skills.py \
-	tests/workspace/test_pricing.py tests/test_core_check.py
+	tests/workspace/test_pricing.py tests/workspace/test_change_operations.py \
+	tests/workspace/test_pricing_source_admission.py tests/workspace/test_public_priced_onboarding.py \
+	tests/workspace/test_change_budget.py tests/workspace/test_change_notifications.py \
+	tests/workspace/test_onboarding_status.py tests/workspace/test_onboarding_draft_recovery.py \
+	tests/workspace/test_bounded_execution.py tests/workspace/test_execution_lane_qualification.py \
+	tests/workspace/test_vertex_candidate_contract.py tests/workspace/test_runtime_revision.py \
+	tests/workspace/test_deliverable_set.py tests/workspace/test_deliverable_set_http.py \
+	tests/workspace/test_deliverable_apply_receipt_projection.py \
+	tests/workspace/test_deliverable_candidate_namespaces.py \
+	tests/workspace/test_deliverable_set_console.py tests/workspace/test_quote_pattern_bridge.py \
+	tests/workspace/test_quote_recovery_governed_learning.py \
+	tests/workspace/test_quote_recovery_adoption_matrix.py \
+	tests/workspace/test_quote_recovery_operations.py tests/workspace/test_state_snapshot.py tests/test_core_check.py
+ENTERPRISE_BOUNDARY_TESTS ?= tests/test_identity_boundary.py tests/test_browser_sessions.py \
+	tests/test_browser_session_store.py tests/test_workspace_catalog.py tests/test_workflow_and_store.py \
+	tests/test_store_operations.py tests/test_enterprise_operations_cycle.py \
+	tests/test_workspace_store.py tests/test_store_metadata_integrity.py \
+	tests/test_source_bindings.py tests/test_source_worker.py tests/test_source_lease.py \
+	tests/test_commit_gateway.py tests/test_effect_operations.py tests/test_effect_worker_postgres.py \
+	tests/workspace/test_change_budget.py tests/workspace/test_change_notifications.py \
+	tests/workspace/test_execution_lane_qualification.py \
+	tests/workspace/test_onboarding_draft_recovery_postgres.py \
+	tests/workspace/test_public_priced_onboarding.py tests/workspace/test_pricing_source_admission.py \
+	tests/workspace/test_deliverable_set_http.py tests/workspace/test_deliverable_set_console.py \
+	tests/workspace/test_deliverable_set_postgres.py \
+	tests/workspace/test_deliverable_apply_receipt_projection.py \
+	tests/workspace/test_deliverable_candidate_namespaces.py \
+	tests/workspace/test_quote_recovery_governed_learning_postgres.py \
+	tests/workspace/test_quote_recovery_operations_postgres.py \
+	tests/test_architecture_boundaries.py tests/workspace/test_state_snapshot.py \
+	tests/workspace/test_oac_adaptation_projection.py \
+	tests/workspace/test_oac_agentic_runtime.py tests/workspace/test_oac_quote_adaptation.py
 OAC_ROOT_ARG = $(if $(strip $(OAC_ROOT)),--oac-root "$(OAC_ROOT)",)
 
-.PHONY: help setup test check check-core release-hygiene demo evidence-verify serve serve-demo vertex-probe agentteams-preflight build \
+.PHONY: help setup test check check-core check-enterprise-boundaries release-hygiene demo evidence-verify serve serve-demo vertex-probe agentteams-preflight build \
 	goai-agentteams-demo goai-agentteams-verify goai-agentteams-check goai-semifinal-check \
 	goai-source-snapshot goai-source-snapshot-verify \
 	workspace-oac-admission-demo workspace-oac-admission-verify workspace-oac-admission-check \
@@ -38,14 +76,16 @@ OAC_ROOT_ARG = $(if $(strip $(OAC_ROOT)),--oac-root "$(OAC_ROOT)",)
 	skill-predecessor-rollback-check semifinal-governed-run \
 	semifinal-governed-verify semifinal-governed-mutation-check \
 	semifinal-governed-check semifinal-mvp-build semifinal-mvp-verify \
-	semifinal-mvp-check semifinal-demo enterprise-pilot-preflight \
+	semifinal-mvp-check semifinal-demo enterprise-pilot-preflight enterprise-pilot-draft-preflight \
 	enterprise-pilot-check enterprise-pilot-start enterprise-pilot-init \
 	enterprise-pilot-seal
 
 help:
 	@printf '%s\n' 'Core contributor checks without OAC or service credentials: make check-core'
+	@printf '%s\n' 'Changed enterprise boundaries with PostgreSQL tools: make check-enterprise-boundaries'
 	@printf '%s\n' 'Full validation with the admitted OAC checkout and PostgreSQL tools: make check'
 	@printf '%s\n' 'Deployable single-enterprise Quote Pilot: make enterprise-pilot-check'
+	@printf '%s\n' 'Read-only draft preflight: make enterprise-pilot-draft-preflight ENTERPRISE_PILOT_DRAFT=/path/to/draft'
 	@printf '%s\n' 'Interactive localhost Pilot: make enterprise-pilot-start'
 	@printf '%s\n' 'Final governed semifinal MVP: make semifinal-mvp-check'
 	@printf '%s\n' 'Clickable evaluator demo: ./run-semifinal-demo.sh interactive'
@@ -81,6 +121,7 @@ check: release-hygiene
 
 # A bounded contributor gate, not a substitute for the complete OAC/PostgreSQL suite.
 check-core: release-hygiene
+	$(PYRUN) scripts/fetch_pinned_agentteams.py
 	$(PYRUN) -m ruff check src tests scripts
 	$(PYRUN) scripts/validate_assets.py
 	$(PYRUN) scripts/export_contract_schemas.py --check
@@ -88,6 +129,13 @@ check-core: release-hygiene
 	$(PYRUN) scripts/verify_proof_pack.py evidence/latest/proof-pack.json
 	$(PYRUN) scripts/verify_packaged_runtime_assets.py
 	$(PYTEST) -W error $(CORE_TESTS)
+
+# CI and direct callers use this single complete boundary matrix. A local
+# focused run may override the list, but cannot qualify the complete CI gate.
+check-enterprise-boundaries: release-hygiene
+	@test -n "$(strip $(ENTERPRISE_BOUNDARY_TESTS))" || (printf '%s\n' 'BOUNDARY_TESTS_EMPTY' >&2; exit 2)
+	$(PYRUN) scripts/fetch_pinned_agentteams.py
+	ORGREBASE_REQUIRE_POSTGRES_TESTS=1 $(PYTEST) -W error $(ENTERPRISE_BOUNDARY_TESTS)
 
 demo:
 	uv run orgrebase demo --output evidence/latest/demo.json
@@ -204,6 +252,10 @@ semifinal-demo:
 enterprise-pilot-preflight:
 	./run-enterprise-pilot.sh preflight --pack "$(ENTERPRISE_PILOT_PACK)" $(if $(strip $(ENTERPRISE_PILOT_WORK_DIR)),--work-dir "$(ENTERPRISE_PILOT_WORK_DIR)",)
 
+enterprise-pilot-draft-preflight:
+	@test -n "$(strip $(ENTERPRISE_PILOT_DRAFT))" || { printf '%s\n' 'ENTERPRISE_PILOT_DRAFT is required'; exit 2; }
+	$(PYRUN) -m orgrebase.cli enterprise-pilot-draft-preflight --draft "$(ENTERPRISE_PILOT_DRAFT)"
+
 enterprise-pilot-check:
 	./run-enterprise-pilot.sh check --pack "$(ENTERPRISE_PILOT_PACK)" $(if $(strip $(ENTERPRISE_PILOT_WORK_DIR)),--work-dir "$(ENTERPRISE_PILOT_WORK_DIR)",)
 
@@ -257,20 +309,20 @@ goai-semifinal-check:
 	# wheel evidence is absent or stale. A final rebuild below binds fixed facts.
 	$(MAKE) workspace-oac-evolution-check OAC_ROOT="$(OAC_ROOT)"
 	./verify-agentteams-demo.sh
-	# release-facts.json is intentionally packaged in the wheel. Two passes make
-	# ProductPath converge from a stale checked-in fact surface. QuoteValue binds
-	# the exact ProductPath observation, so each pass closes Spec 045 before facts.
+	# Historical release-facts.json stays immutable in the wheel. Development
+	# aggregation is separate and never reseals retained qualification. QuoteValue
+	# binds the exact ProductPath observation for this controlled workflow.
 	$(PYRUN) scripts/workspace_product_path_blackbox.py --output evidence/workspace/latest/product-path-blackbox.json
 	$(MAKE) semifinal-closure-check
-	$(PYRUN) scripts/generate_release_facts.py
+	$(PYRUN) scripts/generate_release_facts.py --output evidence/development-release-facts.json
 	$(PYRUN) scripts/workspace_product_path_blackbox.py --output evidence/workspace/latest/product-path-blackbox.json
 	$(MAKE) semifinal-closure-check
-	$(PYRUN) scripts/generate_release_facts.py
-	$(PYRUN) scripts/generate_release_facts.py --check
-	# Rebuild both retained Evolution wheels from the converged fact bytes, then
-	# prove that the wheel report did not change the non-self-referential facts.
+	$(PYRUN) scripts/generate_release_facts.py --output evidence/development-release-facts.json
+	$(PYRUN) scripts/generate_release_facts.py --output evidence/development-release-facts.json --check
+	# Rebuild both Evolution wheels with the immutable historical facts, then
+	# check that their report did not change the separate development aggregate.
 	$(MAKE) workspace-oac-evolution-wheel-check OAC_ROOT="$(OAC_ROOT)"
-	$(PYRUN) scripts/generate_release_facts.py --check
+	$(PYRUN) scripts/generate_release_facts.py --output evidence/development-release-facts.json --check
 	# Spec 041 owns a separate public QuoteValue coordinate. Refresh it only
 	# after ProductPath/release-facts reach their fixed point so the aggregate
 	# gate cannot accept a current Spec 045 child beside a stale top-level copy.
@@ -353,15 +405,16 @@ workspace-package-check:
 	$(PYRUN) scripts/verify_packaged_runtime_assets.py
 
 workspace-product-path-blackbox-check:
-	# Fixed point: each ProductPath observation refresh is followed by the Spec
-	# 045 parent closure because QuoteValue content-addresses that observation.
-	# Pass two then retains the wheel built from the converged fact bytes.
+	# Each ProductPath observation refresh is followed by the Spec 045 parent
+	# closure because QuoteValue content-addresses that observation. Development
+	# facts remain separate from the immutable historical facts in the wheel.
 	$(PYRUN) scripts/workspace_product_path_blackbox.py --output evidence/workspace/latest/product-path-blackbox.json
 	$(MAKE) semifinal-closure-check
-	$(PYRUN) scripts/generate_release_facts.py
+	$(PYRUN) scripts/generate_release_facts.py --output evidence/development-release-facts.json
 	$(PYRUN) scripts/workspace_product_path_blackbox.py --output evidence/workspace/latest/product-path-blackbox.json
 	$(MAKE) semifinal-closure-check
-	$(PYRUN) scripts/generate_release_facts.py
+	$(PYRUN) scripts/generate_release_facts.py --output evidence/development-release-facts.json
+	$(PYRUN) scripts/generate_release_facts.py --output evidence/development-release-facts.json --check
 	$(MAKE) quote-value-check
 	$(PYRUN) scripts/goai_gate.py --verify-product-path-only
 

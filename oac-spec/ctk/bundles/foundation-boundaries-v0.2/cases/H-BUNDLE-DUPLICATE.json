@@ -1,0 +1,14 @@
+{
+  "caseId": "H-BUNDLE-DUPLICATE",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "bundle-duplicate"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-BUNDLE"
+  ],
+  "testTarget": "HARNESS"
+}

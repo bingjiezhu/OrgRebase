@@ -1,0 +1,32 @@
+{
+  "caseId": "S-ID-WORK-UNIT-ACCOUNTABLE",
+  "expect": {
+    "result": {
+      "identifier": "urn:oac:id:sha256:v1:work-unit:29ff9a7f1819cfaad399633ae667f8b7c5622bf4606c8e238e69c43ca1144588"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "fields": {
+      "body": {
+        "accountableRoleInstanceRef": "urn:r:two",
+        "obligationRefs": [
+          "urn:o:one",
+          "urn:o:two"
+        ],
+        "roleInstanceRefs": [
+          "urn:r:one",
+          "urn:r:two"
+        ]
+      },
+      "changeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "snapshotDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "identifierKind": "work-unit"
+  },
+  "operation": "deriveIdentifier",
+  "requirementRefs": [
+    "REQ-INSTANCE-ID-V1"
+  ],
+  "testTarget": "SUT"
+}

@@ -1,6 +1,6 @@
 # Workspace 原生模型候选运行说明
 
-变化预览可以使用 OpenAI Responses 生成各领域的候选解释。模型只接收已准入的领域投影；GTM 接收已经核验的领域结果。候选仍经过独立验证、负责人批准和既有提交规则，不能自行修改组织规则、批准报价或调用目标系统。
+变化预览可以使用本地确定性候选、OpenAI Responses V2，或原生 Vertex `generateContent` V3 生成各领域的候选解释。模型只接收已准入的领域投影；GTM 接收已经核验的领域结果。候选仍经过独立验证、负责人批准和既有提交规则，不能自行修改组织规则、批准报价或调用目标系统。
 
 本文描述当前代码的配置与恢复方式。协议夹具、受控本地测试和真实供应商调用是不同证据；本批实现没有运行真实模型请求，也不构成客户上线或收益证明。
 
@@ -10,12 +10,13 @@
 
 | 配置 | 当前行为 |
 |---|---|
-| `ORGREBASE_CHANGE_MODEL_PROVIDER` | 未设置时为 `local-deterministic`，变化轮使用本地参考候选；显式设置 `openai-responses` 才启用原生模型。其他值拒绝 |
-| `ORGREBASE_CHANGE_MODEL_ID` | 原生模式必须明确指定账户可用的模型 ID；没有内置“最新模型”默认值，也不自动升级模型 |
+| `ORGREBASE_CHANGE_MODEL_PROVIDER` | 未设置时为 `local-deterministic`；可显式选 `openai-responses` 或 `vertex-ai`。候选过程不在 provider 间回退 |
+| `ORGREBASE_CHANGE_MODEL_ID` | Responses 模式必须明确指定模型。Vertex 模式仅接受固定的 `gemini-3.8-flash`；其他值在启动时拒绝 |
 | `ORGREBASE_CHANGE_MODEL_BUDGET_PATH` | 部署确认的冻结价格合同 JSON 路径，字段见下文；缺少合同时不派发真实付费调用 |
 | `ORGREBASE_OPENAI_API_KEY` | 由部署的密钥设施注入服务进程；不要写入仓库、浏览器、命令记录、日志或导出材料 |
+| `ORGREBASE_VERTEX_PROJECT_ID` / `ORGREBASE_VERTEX_ACCESS_TOKEN` / `ORGREBASE_VERTEX_API_KEY` | Vertex 的服务端项目与短期凭据；不进入浏览器、回执或运行绑定 |
 
-新预览在占用持久 attempt 前检查凭据、价格合同及整轮预留额度；缺失分别返回 `OPENAI_CREDENTIALS_MISSING` 或 `MODEL_PRICE_CONTRACT_REQUIRED`。这只是本地前置检查，不会探测账户权限、余额、实际价格或模型可用性。已经持久化的候选／预览在绑定仍有效时可直接读取，缓存读取不要求密钥。
+新预览在占用持久 attempt 前检查凭据、价格合同及整轮预留额度；Responses 缺凭据返回 `OPENAI_CREDENTIALS_MISSING`，Vertex 缺项目或凭据返回对应的 `VERTEX_*` 公开错误码，两者缺价格合同都返回 `MODEL_PRICE_CONTRACT_REQUIRED`。这只是本地前置检查，不会探测账户权限、余额、实际价格或模型可用性。已经持久化的候选／预览在绑定仍有效时可直接读取，缓存读取不要求密钥。
 
 原生模式使用固定 HTTPS 端点 `https://api.openai.com/v1/responses`，不接受来源正文提供的地址，不跟随重定向，也不读取环境代理。只发送当前任务范围的实际投影正文和结构化输出 schema；工具集合为空，`store=false`、`background=false`、`truncation=disabled`、`service_tier=default`。标准档位避免自动继承项目的其他服务档位；有价格合同的响应若缺少实际档位或返回其他档位，不准入候选。协议失败不会切换到 compatible adapter 或本地参考答案。[OpenAI 服务档位与输出上限](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)
 
@@ -23,7 +24,7 @@
 
 ## 请求、回执和保留
 
-新通路使用 `ModelRequestV2`、`ModelResponseReceiptV2`。本次不增加改变历史 V1／V2 摘要的默认字段；价格预留进入现有 attempt 记录。新请求明确标准档位，因此实际 wire body 摘要和运行实现绑定随之更新；不能把新 wire body 倒写进旧回执。历史 V1 类型和摘要算法保持可读，不能把 V1 中的示例时间、请求模型版本或默认用量解释为本次模型调用的观察事实。
+Responses 通路使用 `ModelRequestV2/ModelResponseReceiptV2`；Vertex 通路使用独立的 `ModelRequestV3/ModelResponseReceiptV3`，固定 `provider=vertex-ai` 和 `model_id=gemini-3.8-flash`。V3 独立绑定 projection/schema/prompt/body 摘要，不把 Vertex 回执伪装成 Responses。历史 V1/V2 类型和摘要算法保持可读；价格预留继续进入现有 attempt 记录。
 
 V2 绑定租户、工作区、任务、actor、purpose、run、nonce、领域、对象范围和投影内容摘要，同时保留模板、实际 prompt、实际请求正文及 schema 摘要。记录的 `requested_model_id` 与供应商返回的 `observed_model_id` 分开；供应商返回别名时，该别名不等于已证明不可变模型快照。
 
@@ -105,6 +106,6 @@ OpenAI 官方将关闭连接列为取消同步响应的方法；本实现维持�
 - [service.py](../src/orgrebase/workspace/service.py)：真实模式配置与普通预览的两阶段准入。
 - [source_readmission.py](../src/orgrebase/workspace/source_readmission.py)、[preview_execution.py](../src/orgrebase/workspace/preview_execution.py)：多来源预览和共用的持久 attempt。
 - [advisory.py](../src/orgrebase/workspace/advisory.py)：领域范围、预算、候选生成及独立验证。
-- [openai_responses.py](../src/orgrebase/workspace/openai_responses.py)、[models.py](../src/orgrebase/workspace/models.py)：原生协议、V2 合同与观察语义。
+- [openai_responses.py](../src/orgrebase/workspace/openai_responses.py)、[model_provider.py](../src/orgrebase/workspace/model_provider.py)、[vertex_candidate.py](../src/orgrebase/workspace/vertex_candidate.py)、[models.py](../src/orgrebase/workspace/models.py)：Responses V2、Vertex V3 和观察语义。
 - [openai_http_worker.py](../src/orgrebase/workspace/openai_http_worker.py)：唯一 HTTP 实现与受控进程入口；凭据经私有 stdin 传入，不进入子进程命令或继承的部署环境。
 - [model_budget.py](../src/orgrebase/workspace/model_budget.py)：价格合同、每次完整预览的最高费用及确定性取整。

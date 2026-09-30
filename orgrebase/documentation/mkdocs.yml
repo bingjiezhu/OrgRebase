@@ -1,5 +1,5 @@
 site_name: OrgRebase 文档
-site_description: 企业规则变化的受治理执行：安装、运行、接入、开发与验证。
+site_description: 企业变更从影响分析与候选，到精确批准和选择性业务更新。
 use_directory_urls: true
 strict: true
 theme:
@@ -48,6 +48,7 @@ plugins:
       nav_translations:
         开始使用: Getting started
         产品简介: Introduction
+        核心方法: Core approach
         安装与快速开始: Installation and quickstart
         模型接入: Model providers
         Vertex Gemini: Vertex Gemini
@@ -66,8 +67,8 @@ plugins:
         本站源码与下载: Site source and downloads
         文档站工具链许可: Documentation toolchain licenses
         深层技术资料（原文）: Detailed references (original languages)
-      site_description: 'Governed execution of enterprise rule changes: installation,
-        model integration, deployment, architecture and verification.'
+      site_description: 'Govern enterprise change from impact and candidates to exact
+        approval and selective application.'
       theme:
         palette:
         - scheme: default
@@ -100,6 +101,7 @@ validation:
 nav:
 - 开始使用:
   - 产品简介: index.md
+  - 核心方法: guides/approach.md
   - 安装与快速开始: guides/quickstart.md
 - 模型接入:
   - Vertex Gemini: guides/models-vertex.md

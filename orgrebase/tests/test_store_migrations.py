@@ -180,9 +180,10 @@ def test_legacy_upgrade_preserves_every_row_and_hash(
             "workspace_registry",
             "workspace_changes",
             "oidc_login_transactions",
-            "browser_sessions",
-            "browser_session_revocations",
-        }
+                "browser_sessions",
+                "browser_session_revocations",
+                "deployment_budget_reservations",
+            }
         assert store.verify_event_chain() == {"status": "PASS", "events": 2, "head_digest": previous}
         assert store.load_artifact("artifact:old").payload == {"old": True}
         assert store.get_pointer(item.id)["revision"] == 7

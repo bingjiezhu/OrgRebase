@@ -12,18 +12,20 @@ Project-owned rows below are redistributable under Apache-2.0. See [LICENSE.md](
 | OWB evaluator gold | `benchmark/orgworkbench/evaluator` | project-generated | PolyForm-Noncommercial-1.0.0; bundled but evaluator-isolated | synthetic answer key | canonical evaluator only |
 | Private synthetic Domain source pack | `benchmark/orgworkbench/sources/private-synthetic-sources.jsonl` and local providers | project-generated | PolyForm-Noncommercial-1.0.0; bundled for local test | synthetic restricted values | canonical, never public Agent input |
 | Northstar core fixture | `fixtures/canonical-enterprise.json` | project-generated | PolyForm-Noncommercial-1.0.0 | synthetic business objects | legacy/core reference |
-| Evergreen Enterprise Quote Pack | `examples/enterprise-quote-pilot/evergreen` | project-authored fictional reference scenario | PolyForm-Noncommercial-1.0.0 | high-fidelity synthetic; no PII or customer source | Specs 056–057 baseline; Specs 059–060 Golden input |
-| Golden HTTP Source/Tool/Skill payloads and receipts | `evidence/golden-competition/latest/pilot` | runtime-derived from the sealed Evergreen Pack and controlled fault injection | PolyForm-Noncommercial-1.0.0 | synthetic source bytes plus run metadata | current causal proof |
-| Current Golden Vertex advisory receipts | same Golden evidence pack | two runtime calls to Vertex `gemini-3.8-flash` | sanitized receipt metadata may be redistributed under the project license; provider service terms remain separate | provider response ID, request/output digests, token/latency/finish metadata; no credential, GCP project, project endpoint, raw prompt or free-form output | controlled-local live-model advisory proof only; not production-provider qualification |
-| Governed experience artifacts | `state.json`, `manifest.json`, and `evidence-export.json` in the same Golden pack | deterministically derived from the same-run Finance recovery chain | PolyForm-Noncommercial-1.0.0 | digest-bound candidate/evaluation/approval/release metadata; no new customer data | Spec 060 single-run-seed governance proof only |
-| Employee Task Intake receipt | Workspace SQLite artifact, state and evidence export | runtime-derived from an employee work description and exact human confirmation | deployment-specific; public Demo uses the project-owned scenario | prompt digest/length plus candidate, approval, task, OAC and Formation digests; raw work description excluded | same-run causal start proof only; not a general prompt planner |
-| Private Task Intake work-description record | access-controlled Workspace SQLite artifact only | exact employee-submitted text, bounded to 500 Unicode characters / 2048 UTF-8 bytes | deployment-specific; never copied into bundled evidence | raw work description plus exact run, actor, candidate, approval and Formation bindings | task-intent display for the current actor only; contributes no facts, authority or canonical writes |
+| Evergreen Enterprise Quote Pack | `examples/enterprise-quote-pilot/evergreen` | project-authored fictional reference scenario | PolyForm-Noncommercial-1.0.0 | high-fidelity synthetic; no PII or customer source | Enterprise Quote reference Pack and retained controlled-local Golden input |
+| Retained Golden HTTP Source/Tool/Skill payloads and receipts | historical frozen Golden archive; public source retains a summary | derived in the original run from the sealed Evergreen Pack and controlled fault injection | PolyForm-Noncommercial-1.0.0 sealed identifier | synthetic source bytes plus run metadata | historical run proof only; not current-build qualification |
+| Retained Golden Vertex advisory receipts | same historical frozen archive | two original runtime calls to Vertex `gemini-3.8-flash` | sanitized receipt metadata may be redistributed under the project license; provider service terms remain separate | provider response ID, request/output digests, token/latency/finish metadata; no credential, GCP project, project endpoint, raw prompt or free-form output | historical controlled-local advisory proof only; not a new model call or production-provider qualification |
+| Retained governed experience artifacts | historical Golden `state.json`, `manifest.json`, and `evidence-export.json` | derived from the original same-run Finance recovery chain | PolyForm-Noncommercial-1.0.0 sealed identifier | digest-bound candidate/evaluation/approval/release metadata; no new customer data | retained single-run-seed governance evidence only |
+| Employee Task Intake receipt | workspace-scoped StateStore artifacts, state and evidence export | runtime-derived from an employee work description and exact human confirmation | deployment-specific; public Demo uses the project-owned scenario | prompt digest/length plus candidate, approval, task, OAC and Formation digests; raw work description excluded | same-run causal start proof only; not a general prompt planner |
+| Private Task Intake work-description record | `private_records` in the tenant/workspace-scoped StateStore; local SQLite or production PostgreSQL | exact employee-submitted text, bounded to 500 Unicode characters / 2048 UTF-8 bytes | deployment-specific; never copied into bundled evidence | raw work description plus exact run, actor, candidate, approval and Formation bindings; expiry/deletion enforced separately from business artifacts | exact admitted task actor access under current authorization and retention; contributes no facts, authority or canonical writes |
 | Microsoft sample-schema adapter | optional, not bundled as canonical rows | upstream sample repository | MIT; pin version/commit before use | public sample schema | non-scoring realism only |
 | CUAD / ContractNLI adapters | optional link/download adapters | upstream datasets | CC-BY-4.0 attribution; separate/download-only | public contract text, review required | non-scoring Legal stress only |
 | Consented walkthrough records | supplied separately by the operator | external participants | consent terms, not redistributed by default | redacted qualitative findings | external validation only |
 | Live K8s/Matrix/model evidence | supplied separately by the operator | external runtime | deployment-specific | IDs, digests, timestamps; may be sensitive | live milestone only |
 
 The machine-readable canonical inventory is `benchmark/orgworkbench/license-manifest.json`; the benchmark manifest binds cases, gold, organizations, private source pack, seed, splits, and digests. Optional external assets are never downloaded automatically and cannot replace OWB dependency, impact, or privacy gold.
+
+The public source profile includes the retained Golden summary at `evidence/golden-competition/latest/pilot/golden-run/summary.json`, but not its complete payload, provider or governed-experience archive. That summary is a historical reference, not an independently replayable qualification of this source revision. New source and artifacts need fresh, separately identified validation. Private work descriptions are stored through `PrivateRecordStore` in the Formation transaction; immutable business artifacts contain references and digests. The [private-input lifecycle](PRIVATE-DATA-LIFECYCLE.md) defines expiry, owner access, deletion and backup-recovery requirements.
 
 ### License boundary
 
@@ -51,7 +53,7 @@ Real company data would be difficult to redistribute and would still lack comple
 ### Evergreen generation and rights statement
 
 Evergreen Industries, Blue Harbor, every employee/owner identifier, policy, date, price band, clause and Quote value
-in the current Specs 059–060 Golden scenario is fictional and authored for this project. The fixture was not copied, scraped or sampled
+in the controlled-local Enterprise Quote scenario is fictional and authored for this project. The fixture was not copied, scraped or sampled
 from a customer system and contains no real person, company, contract or quote. `enterprise-pilot-seal` recomputes
 the Pack's exact content digests; the Golden run then derives task envelopes, the intentional Finance-A1 missing-
 evidence fault, HTTP Source/Tool results and receipts from those project-owned bytes. The injected fault is labelled
@@ -151,9 +153,10 @@ Public observability excludes by default:
 - personal/company identifiers from user walkthroughs.
 
 For Vertex/Gemini, public evidence also excludes GCP project IDs, ADC JSON, API keys, access tokens, authorization
-headers, and project-scoped endpoint values. The current frozen Golden records two schema-valid Vertex
-`gemini-3.8-flash` advisories, provider response IDs, request/output digests and token/latency/finish metadata; it does
-not retain credentials or raw prompt/free-form response text.
+headers, and project-scoped endpoint values. The retained frozen Golden run recorded two schema-valid Vertex
+`gemini-3.8-flash` advisories, provider response IDs, request/output digests and token/latency/finish metadata; it did
+not retain credentials or raw prompt/free-form response text. Those records belong to that historical run;
+the public summary does not qualify a new source build or establish a fresh provider call.
 `run-semifinal-demo.sh` defaults to a fresh `interactive` workspace and local Ollama candidate calls; it does not copy
 frozen Quote state or historical mapping receipts. An explicit `ORGREBASE_DEMO_WORK_DIR` can reopen an existing
 workspace, whose historical evidence remains identified as history. The default path makes no Vertex call.

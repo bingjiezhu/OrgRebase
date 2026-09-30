@@ -42,7 +42,7 @@ RESOURCE_OR_DEADLINE / CANARY` 八个分区都要达到各自声明的门槛，�
 `PROCESS_LOCAL_EXACT_OBJECT_MEMBERSHIP`：它是受控本地信任模型，不是持久化签名服务。
 依赖漂移后必须用新评测收据和已恢复的 exact dependency set 经过
 `REQUALIFICATION_REQUIRED → EVALUATED → SHADOW → CANARY`；旧收据不能重放授权。
-当前 Golden 主链只使用其自身的发布/调用收据；retained Spec 052 已另行验证
+每个运行只使用其自身的发布/调用收据。受控本地回滚检查验证
 `enterprise-quote-compose@1.3.1` 精确恢复并受限调用 direct predecessor `1.3.0`，
 并通过幂等重放、进程状态重建与权限/系谱/绑定篡改拒绝。该独立事件不能
 拼入当前 Golden run，也不等于生产 Registry 回滚。
@@ -103,8 +103,7 @@ Skill induction、跨企业泛化、持久化发布信任或生产净增益。
 
 ## 运行后经验治理（不是第四个 Skill）
 
-Specs 059–060 的正式 run
-`run:golden-competition:8e5f49fe-ba22-4107-93d3-48194333b308` 核对 Finance
+受控补证例子核对 Finance
 `ABSTAIN → REPLAN → HTTP Tool → PASS` 的同运行状态、缺槽原因和精确收据，
 匹配预声明恢复模式后登记候选；不符合模式则 `NO_CANDIDATE`。候选绑定来源轨迹，
 但其恢复步骤和执行映射由代码预声明，不由模型从轨迹归纳生成。目标是改进现有
@@ -124,5 +123,31 @@ Specs 059–060 的正式 run
 
 `APPROVED_CANARY` 只说明 exact 候选经过当前受控发布账本获得后续 dry-call 权限；它不把一次经验
 升级为通用知识，也不让 Skill 绕过下一次运行的任务、权限、准入、Reviewer 或人工审批。
+
+较新的 `GovernedPatternService` 已另行提供持久 corpus/replay、held-out/反例、
+baseline/candidate 真实受限调用观察、当前 Source/head 恢复与证据撤回。它比上述
+Golden 单运行经验路径更完整，但当前候选主要改变 applicability/boundary，
+不代表已能从任意业务失败自动改写程序。`quote_pattern_bridge` 现只会把“缺证退回、
+精确补证、新决定/结果”绑定成一个去值化、未准入的 Quote case，并在进入 corpus 前
+重读原回执。它不自动发布 Skill。只有受限内容被实际 consumer 使用、独立业务 oracle
+证明行为改善、当前 Skill Steward 精确批准，且新 run 产生自己的消费回执后，才能称为
+“下一次任务实际使用了改进版本”。
+
+现在已有一条限定的受控本地实现：`workspace-quote-evidence-recovery-v1`
+以 exact bytes 装载 instruction/reference/checklist，实际 deterministic consumer 在声明该
+profile 时核对 request/resume/outcome 三个摘要，独立 oracle 对比前驱与候选并
+拒绝 `NO_BEHAVIOR_DELTA`。SQLite 证据包含跨 OS 进程恢复和新 run 消费；生产采用
+默认关闭。当前 Principal 适配、head CAS、幂等决定、PostgreSQL受限角色恢复/并发决定和撤回/前驱 bytes 恢复只证明
+机制。生产适配只接受代码内审定的exact bundle/target/predecessor，并要求corpus→
+proposal→candidate→evaluation→decision的四身份Principal chain与decision/Source digest一致；
+旧direct fixture记录可读但不可生产采用。客户员工实际批准、真实 Vertex 与业务收益仍
+`NOT_RUN`。详见 [Quote 补证经验的受控演化](GOVERNED-QUOTE-RECOVERY-LEARNING.md)。
+该profile的candidate调用已分为capture/reserve、锁外consumer和提交前重验；在途
+Source/证据撤回、依赖/head漂移或Principal撤权时不保存success result。Canary退化后
+只能用受权restoration ref在全新run显式调用exact predecessor，旧Quote/调用/外部effect不回写。
+生产core invoke同时要求当前授权和适配层签发的一次性运行内authority；legacy仅保留
+明确fixture API。Reserve事务内会重解dependency/head/capture digest，consumer异常持久
+FAILED/RESULT_UNKNOWN，同candidate+run不重派。Restored run在全局Pattern锁内按不含actor的run id
+唯一，两actor并发或PG重启都不能生成双结果。
 
 许可：项目自有 Skill 适用 Apache-2.0。封存清单里的 `PolyForm-Noncommercial-1.0.0` 是内容寻址标识，不缩小当前授权。

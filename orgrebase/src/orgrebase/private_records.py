@@ -98,6 +98,39 @@ class PrivateRecordStore:
                 raise IntegrityError("PRIVATE_RECORD_DIGEST_MISMATCH")
             return payload
 
+    def read_owned(
+        self,
+        record_id: str,
+        *,
+        owner_id: str,
+        scope_ref: str,
+    ) -> dict[str, Any] | None:
+        """Read one live record only through its exact owner and private scope.
+
+        ``read`` remains available for trusted internal migrations.  Request-facing
+        recovery flows must use this method so a guessed record identifier cannot
+        cross an actor or workspace/draft boundary.  Expired and erased content is
+        deliberately indistinguishable here; callers may expose ``record_status``
+        only after they have independently authorized the safe metadata record.
+        """
+
+        if not record_id or not owner_id or not scope_ref:
+            raise ValueError("PRIVATE_RECORD_BINDING_REQUIRED")
+        with self.store.read_connection() as connection:
+            row = self._row(connection, record_id)
+            if row is None:
+                return None
+            if row["owner_id"] != owner_id or row["scope_ref"] != scope_ref:
+                raise PermissionError("PRIVATE_RECORD_BINDING_DENIED")
+            if row["deleted_at"] is not None:
+                return None
+            if utc_datetime(self.clock.now()) >= utc_datetime(row["expires_at"]):
+                return None
+            payload = json.loads(row["content_json"])
+            if not isinstance(payload, dict) or sha256_digest(payload) != row["content_digest"]:
+                raise IntegrityError("PRIVATE_RECORD_DIGEST_MISMATCH")
+            return payload
+
     def record_status(self, record_id: str) -> str:
         """Expose retention state without reading or returning the private payload."""
         with self.store.read_connection() as connection:

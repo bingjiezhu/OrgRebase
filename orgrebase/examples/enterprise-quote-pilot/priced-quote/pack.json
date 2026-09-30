@@ -1,0 +1,97 @@
+{
+  "schema_version": "orgrebase.enterprise-quote-pilot-pack.v2",
+  "pack_id": "pack:evergreen-priced-quote",
+  "revision": "r1",
+  "adapter_id": "enterprise-quote-v1",
+  "profile_path": "profile.json",
+  "components": [
+    {
+      "component_kind": "DOMAIN",
+      "locator": "pilot://evergreen/domain@r1",
+      "path": "components/domain.json"
+    },
+    {
+      "component_kind": "KNOWLEDGE",
+      "locator": "pilot://evergreen/knowledge@r1",
+      "path": "components/knowledge.json"
+    },
+    {
+      "component_kind": "AUTHORITY",
+      "locator": "pilot://evergreen/authority@r1",
+      "path": "components/authority.json"
+    },
+    {
+      "component_kind": "CAPABILITY",
+      "locator": "pilot://evergreen/capability@r1",
+      "path": "components/capability.json"
+    },
+    {
+      "component_kind": "DEPENDENCY",
+      "locator": "pilot://evergreen/dependency@r1",
+      "path": "components/dependency.json"
+    }
+  ],
+  "runtime": {
+    "quote_object_id": "work:quote-blue-harbor",
+    "quote_label": "Blue Harbor Enterprise Quote",
+    "graph_pointer_id": "graph:workspace",
+    "graph_snapshot_id": "workspace-graph:evergreen",
+    "task_receipt_id": "task-receipt:quote-blue-harbor@v1",
+    "default_run_id": "run:workspace:quote-blue-harbor@v1",
+    "universe_artifact_id": "workspace-universe:evergreen@r1",
+    "universe_id": "workspace-universe:evergreen",
+    "universe_revision": "r1",
+    "built_at": "2026-08-27T00:00:00Z"
+  },
+  "scenario": {
+    "label": "Synthetic priced enterprise quote",
+    "primary_user": "Enterprise Quote Operator",
+    "workflow": "enterprise_quote",
+    "deployment_unit": "single_enterprise_single_quote"
+  },
+  "boundaries": {
+    "execution_profile": "AUTHENTICATED_SINGLE_TENANT",
+    "enterprise_input": "EXACT_DIRECTORY_PACK",
+    "external_writes": "DISABLED",
+    "approval_mode": "EXPLICIT_OWNER_COMMAND",
+    "deployment_maturity": "AUTHENTICATED_SINGLE_TENANT"
+  },
+  "enterprise_binding": {
+    "digest": "sha256:cf009493f77c551eb821cf3e9d560a8f2d3e6eb3acd477f89db68b2ca20f514c",
+    "organization_id": "org:evergreen-industries",
+    "quote_object_id": "work:quote-blue-harbor",
+    "domain_pack_digest": "sha256:a9a3f8e3a74b3161c4d77d522dab7bb6d47ae164c37616fc6de3708643632e7d",
+    "resources": [
+      {
+        "slot_id": "launch_date",
+        "object_id": "claim:product.launch_date",
+        "domain_id": "product",
+        "owner_id": "human:evergreen-product-owner"
+      },
+      {
+        "slot_id": "currency",
+        "object_id": "policy:finance.currency",
+        "domain_id": "finance",
+        "owner_id": "human:evergreen-finance-owner"
+      },
+      {
+        "slot_id": "product_plan",
+        "object_id": "claim:product.enterprise_plan",
+        "domain_id": "product",
+        "owner_id": "human:evergreen-product-owner"
+      },
+      {
+        "slot_id": "quote_basket",
+        "object_id": "claim:product.quote_basket",
+        "domain_id": "product",
+        "owner_id": "human:evergreen-product-owner"
+      },
+      {
+        "slot_id": "pricing_policy",
+        "object_id": "policy:finance.pricing",
+        "domain_id": "finance",
+        "owner_id": "human:evergreen-finance-owner"
+      }
+    ]
+  }
+}

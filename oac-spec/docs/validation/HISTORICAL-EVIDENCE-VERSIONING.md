@@ -1,52 +1,35 @@
-# Historical evidence and successor coordinates
+# Evidence versioning
 
-## Rule
+Versioned evidence coordinates are immutable. Current source may demonstrate compatibility with frozen inputs, but a historical source closure cannot be relabeled as new source. A claim about changed source requires a new coordinate and manifest.
 
-Versioned evidence is immutable. A later source tree may prove compatibility with a historical
-coordinate, but it cannot make the historical implementation byte closure equal to new bytes. If new
-bytes are part of a new validation claim, publish a new coordinate.
+## Current minimum-profile coordinate
 
-Three checks are deliberately separate:
+`oac.evolution.minimum/v0.1-seed-8` is the current full-workspace source-bound
+coordinate. Seed-7 is its exact historical predecessor; the seed-7 manifest and
+all 60 original materials, including the earlier versions of both validation
+guides, are captured under new seed-8 paths. Seed-1 through seed-7 manifests and
+captures retain their original bytes.
 
-1. **coordinate integrity** verifies exact serialization, detached digests, internal ledgers and
-   archived artifact cross-bindings;
-2. **successor compatibility** reruns current behavior against frozen public inputs while preserving
-   the historical implementation identity;
-3. **current validation** binds the successor source, contract, fixtures and bounded claim under a new
-   versioned manifest.
+The current checker verifies those captures and the complete ancestor chain before
+it verifies current source equality. A historical coordinate cannot pass as current
+source, and a changed current guide cannot reuse the published seed-8 manifest.
+This evidence format and its source/root-vector claim ceiling are unchanged; the
+coordinate does not establish enterprise outcomes or production qualification.
 
-Passing one class does not imply either of the others.
+## Verification scopes
 
-## Applied boundaries
+| Scope | Meaning |
+| --- | --- |
+| Coordinate integrity | Exact serialization, detached digests, material ledgers and archived artifact bindings agree within the supplied coordinate |
+| Successor compatibility | The selected current implementation is exercised against frozen public inputs, preserving the original historical identities |
+| Current validation | The new implementation, contract, fixtures and observations are bound under a new versioned manifest |
 
-| Evidence | Immutable identity | Current-tree check |
-|---|---|---|
-| Supplier `v0.2-seed-2` | source/install summaries, wheel ledger, manifest and claim | historical ledger is checked internally and against its archived wheel/install; `make supplier-parity-check` remains an explicit compatibility replay, not a default historical-integrity prerequisite |
-| Plan verification `v0.1-seed-1` | 39-case capsule, summaries, mutation record, source closure and manifest | the published manifest digest anchors its source ledger; `--write` refuses in-place re-signing |
-| mechanics benchmark run manifests | exact input, result, metric and implementation closures | `benchmark-check` compares every behavioral field but retains the historical implementation bytes and detached digest |
-| Evolution minimum `v0.1-seed-1` | three core Kinds, six root domains, schemas, public vectors, tests and claim ceiling | immutable predecessor; seed-2 captures and verifies every bound historical input byte |
-| Evolution minimum `v0.1-seed-2` | original full Python source and CTK schema exporter; unchanged domain roots and claim ceiling | immutable predecessor; seed-3 captures its 41 material files and original manifest while retaining the seed-1 chain |
-| Evolution minimum `v0.1-seed-3` | successor source, exact original predecessor captures and verified ancestor chain | `make evolution-evidence-check` checks the published current closure; publish only after combined source integration through the [seed-3 procedure](EVOLUTION-SEED3-PUBLICATION.md) |
+Passing one scope does not imply either of the others. A raw-file SHA-256 identifies exact bytes; a detached resource digest identifies the canonical resource representation. Their meanings must remain distinct in a material ledger.
 
-## Successor publication gate
+## Successor requirements
 
-A successor evidence coordinate MUST:
+A successor coordinate uses a new directory and identity before its manifest is written. It binds the exact source, contract, schemas, TCK inputs and dependency identities needed for the stated checks, records its predecessor, and retains rejected, `UNKNOWN`, counterexample and unresolved observations.
 
-- use a new coordinate and directory before any manifest is written;
-- bind exact source/contract/schema/TCK bytes and one explicit base revision;
-- state whether a clean archive and external implementation were replayed;
-- retain rejected, `UNKNOWN`, counterexample and unresolved observations;
-- preserve the predecessor manifest and all historical bytes;
-- cap claims to the evidence actually carried by that coordinate.
+The manifest must state whether a clean source archive, isolated installation and independently maintained implementation were actually exercised. Preserve predecessor bytes and manifests; do not regenerate old observations to make a new implementation match them. An unexpected file, changed binding or missing material is a verification failure within the declared closure.
 
-Publication stops if the candidate needs an in-place historical rewrite, omits a changed semantic
-material, loses a negative observation, or claims execution, interoperability, enterprise outcome, or
-production readiness without the corresponding independent evidence.
-
-## Current claim ceiling
-
-The Spec 009 coordinate proves only a source-bound Python reference slice: three OAC Core Kinds, six
-domain-separated root functions, one recomputed public root vector and nine named negative controls. It
-does not prove independent implementation agreement, runtime execution provenance, autonomous
-evolution, enterprise outcome effectiveness, complete OAC conformance, clean-archive reproduction or
-production readiness.
+The [public validation gate](README.md) checks the supplied reference source profile. Complete historical archive replay requires its separately obtained inputs. Neither compatibility nor matching digests establish runtime provenance, external human review, autonomous promotion, enterprise outcomes or production readiness.

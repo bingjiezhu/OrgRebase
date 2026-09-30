@@ -1,0 +1,14 @@
+{
+  "caseId": "H-RESPONSE-WRONG-REQUEST",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "response-wrong-request"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-ADAPTER"
+  ],
+  "testTarget": "HARNESS"
+}

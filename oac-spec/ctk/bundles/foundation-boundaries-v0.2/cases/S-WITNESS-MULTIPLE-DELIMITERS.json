@@ -1,0 +1,16 @@
+{
+  "caseId": "S-WITNESS-MULTIPLE-DELIMITERS",
+  "expect": {
+    "errorCode": "APPLICABILITY_WITNESS_MISMATCH",
+    "sutStatus": "ERROR"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "urn:a#/a#b"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

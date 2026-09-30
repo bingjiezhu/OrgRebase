@@ -476,7 +476,7 @@ def test_chinese_primary_copy_uses_natural_terms_and_marks_vertex_receipt_as_fro
     assert "真实 Vertex 模型建议" in chinese_catalog
     assert "已冻结回执" in chinese_catalog
     assert "本地验证环境" in chinese_catalog
-    assert "协作引擎：AgentTeams" in chinese_catalog
+    assert "协作协议：AgentTeams" in chinese_catalog
     assert "生产就绪：否 · 待企业验证" in chinese_catalog
     assert "PRODUCTION READY: NO · ENTERPRISE VALIDATION PENDING" in javascript
     assert "报价 v1 基线组队回看" in chinese_catalog

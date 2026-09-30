@@ -1,0 +1,270 @@
+{
+  "apiVersion": "oac.ctk.requirements/v0alpha2",
+  "kind": "PlanVerificationRequirementSet",
+  "requirementSetId": "oac.supplier.plan-verification/v0.1-seed-1/required",
+  "capabilitySetId": "oac.supplier.plan-verification.plural-capsule/v0.1-seed-1",
+  "protocolVersion": "oac.ctk.stdio/v3",
+  "cases": [
+    {
+      "caseId": "PV-POS-SC008-BASE",
+      "sutStatus": "COMPLETED",
+      "verdict": "ACCEPT",
+      "requiredReasonCodes": [],
+      "forbiddenReasonCodes": ["APPLICABILITY_EVALUATION_MISMATCH", "EVIDENCE_DUTY_MISSING", "IMPACT_PATH_OMITTED", "OBLIGATION_UNSATISFIED", "ORDER_CONSTRAINT_MISSING", "PLAN_NOT_MINIMAL", "QUALIFICATION_INVALID", "RESPONSIBILITY_BINDING_INVALID", "SEPARATION_OF_DUTIES_VIOLATION", "UNKNOWN_NOT_PRESERVED"]
+    },
+    {
+      "caseId": "PV-POS-SC008-SPLIT",
+      "sutStatus": "COMPLETED",
+      "verdict": "ACCEPT",
+      "requiredReasonCodes": [],
+      "forbiddenReasonCodes": ["APPLICABILITY_EVALUATION_MISMATCH", "EVIDENCE_DUTY_MISSING", "IMPACT_PATH_OMITTED", "OBLIGATION_UNSATISFIED", "ORDER_CONSTRAINT_MISSING", "PLAN_NOT_MINIMAL", "QUALIFICATION_INVALID", "RESPONSIBILITY_BINDING_INVALID", "SEPARATION_OF_DUTIES_VIOLATION", "UNKNOWN_NOT_PRESERVED"]
+    },
+    {
+      "caseId": "PV-POS-SC009-PROVISIONAL",
+      "sutStatus": "COMPLETED",
+      "verdict": "PROVISIONAL",
+      "requiredReasonCodes": ["CANDIDATE_INPUT_NOT_AUTHORITY"],
+      "forbiddenReasonCodes": ["ROOT_APPLICABILITY_UNKNOWN", "UNKNOWN_NOT_PRESERVED"]
+    },
+    {
+      "caseId": "PV-POS-SC010-UNKNOWN",
+      "sutStatus": "COMPLETED",
+      "verdict": "UNKNOWN",
+      "requiredReasonCodes": ["ROOT_APPLICABILITY_UNKNOWN"],
+      "forbiddenReasonCodes": ["UNKNOWN_NOT_PRESERVED"]
+    },
+    {
+      "caseId": "PV-NEG-SNAPSHOT-DIGEST-TAMPER",
+      "sutStatus": "ERROR",
+      "errorCode": "ROOT_DIGEST_MISMATCH"
+    },
+    {
+      "caseId": "PV-NEG-CHANGE-DIGEST-TAMPER",
+      "sutStatus": "ERROR",
+      "errorCode": "ROOT_DIGEST_MISMATCH"
+    },
+    {
+      "caseId": "PV-NEG-PLAN-DIGEST-TAMPER",
+      "sutStatus": "ERROR",
+      "errorCode": "ROOT_DIGEST_MISMATCH"
+    },
+    {
+      "caseId": "PV-NEG-INPUT-ROOT-MISMATCH",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["INPUT_ROOT_MISMATCH"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-RESOURCE-COHERENCE",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["RESOURCE_COHERENCE_VIOLATION"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-OBLIGATION-PROJECTION-FORGERY",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["OBLIGATION_SET_MISMATCH"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-OBLIGATION-DISCHARGE-OMISSION",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["OBLIGATION_UNSATISFIED"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-EVALUATION-FORGERY",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["APPLICABILITY_EVALUATION_MISMATCH"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-PATH-OMISSION",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["IMPACT_PATH_OMITTED"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-UNKNOWN-ERASURE",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["UNKNOWN_NOT_PRESERVED"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-PLAN-STATUS-MISMATCH",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["PLAN_STATUS_MISMATCH"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-AUTHORITY-COLLAPSE",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["QUALIFICATION_INVALID", "SEPARATION_OF_DUTIES_VIOLATION"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-MISSION-MISMATCH",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["QUALIFICATION_INVALID"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-RESPONSIBILITY-FORGERY",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["RESPONSIBILITY_BINDING_INVALID"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-MISSING-EVIDENCE",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["EVIDENCE_DUTY_MISSING"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-REVERSE-ORDER",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["ORDER_CONSTRAINT_INVALID", "ORDER_CONSTRAINT_MISSING"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-ORDER-REMOVAL",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["ORDER_CONSTRAINT_MISSING", "PREREQUISITE_OBLIGATION_ORDER_MISSING"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-ORDER-CYCLE",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["ORDER_CYCLE"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-DECISION-LEDGER-FORGERY",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["PLAN_NOT_MINIMAL"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-REDUNDANT-WORK",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["OBLIGATION_UNSATISFIED", "PLAN_NOT_MINIMAL"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-EFFECT-ENUM",
+      "sutStatus": "ERROR",
+      "errorCode": "CORE_SCHEMA_INVALID"
+    },
+    {
+      "caseId": "PV-NEG-DUPLICATE-ROLE-COVERAGE",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["OBLIGATION_UNSATISFIED"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-ACCOUNTABLE-BINDING",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["OBLIGATION_UNSATISFIED", "RESPONSIBILITY_BINDING_INVALID"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-INACTIVE-PRINCIPAL-BINDING",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["QUALIFICATION_INVALID"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-NONADMITTED-PRINCIPAL-BINDING",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["QUALIFICATION_INVALID"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-ROLE-QUALIFICATION-REFS",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["QUALIFICATION_INVALID"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-ORDER-REASON-REFS",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["ORDER_CONSTRAINT_INVALID", "ORDER_CONSTRAINT_MISSING", "PREREQUISITE_OBLIGATION_ORDER_MISSING"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-ORDER-DANGLING-ENDPOINT",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["ORDER_CONSTRAINT_INVALID"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-ORDER-DUPLICATE-EDGE",
+      "sutStatus": "ERROR",
+      "errorCode": "CORE_SCHEMA_INVALID"
+    },
+    {
+      "caseId": "PV-NEG-MINIMALITY-CONSIDERED-SETS",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["PLAN_NOT_MINIMAL"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-MINIMALITY-NONREMOVABLE-REFS",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["PLAN_NOT_MINIMAL"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-ROLE-EFFECT-ENUM",
+      "sutStatus": "ERROR",
+      "errorCode": "CORE_SCHEMA_INVALID"
+    },
+    {
+      "caseId": "PV-NEG-WORK-EFFECT-ENUM",
+      "sutStatus": "ERROR",
+      "errorCode": "CORE_SCHEMA_INVALID"
+    },
+    {
+      "caseId": "PV-NEG-CANDIDATE-DECISION-CONTENT",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["PLAN_NOT_MINIMAL"],
+      "forbiddenReasonCodes": []
+    },
+    {
+      "caseId": "PV-NEG-RETRACTED-DECISION-CONTENT",
+      "sutStatus": "COMPLETED",
+      "verdict": "REJECT",
+      "requiredReasonCodes": ["PLAN_NOT_MINIMAL"],
+      "forbiddenReasonCodes": []
+    }
+  ],
+  "digestAlgorithm": "sha256-jcs-detached/v1",
+  "requirementSetDigest": "sha256:4c8e2d705faacda1f71d1687aaa4a73634ed5764ad04d7d02ca5e0148cedc089"
+}

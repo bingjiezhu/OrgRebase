@@ -1,0 +1,14 @@
+{
+  "caseId": "H-BUNDLE-BACKSLASH",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "bundle-backslash"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-BUNDLE"
+  ],
+  "testTarget": "HARNESS"
+}

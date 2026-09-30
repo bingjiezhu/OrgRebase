@@ -6,6 +6,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 from types import ModuleType
 from typing import Any
@@ -13,12 +14,15 @@ from typing import Any
 import pytest
 
 from orgrebase.cli import _enterprise_pilot_check
+from orgrebase.domain import AuthorizationError
 from orgrebase.workspace.pilot import load_enterprise_quote_pilot_pack
 from orgrebase.workspace.pilot_authoring import (
     EnterpriseQuotePilotAuthoringError,
     initialize_enterprise_quote_pilot_draft,
+    preflight_enterprise_quote_pilot_draft,
     seal_enterprise_quote_pilot_pack,
 )
+from orgrebase.workspace.service import WorkspaceService
 
 ROOT = Path(__file__).resolve().parents[2]
 VERIFIER_PATH = ROOT / "scripts" / "verify_enterprise_quote_pilot.py"
@@ -100,6 +104,45 @@ def _set_internal_enterprise_shape(draft: Path) -> None:
         _write_json(path, component)
 
 
+def _replace_strings(value: Any, replacements: dict[str, str]) -> Any:
+    if isinstance(value, str):
+        for old, new in replacements.items():
+            value = value.replace(old, new)
+        return value
+    if isinstance(value, list):
+        return [_replace_strings(item, replacements) for item in value]
+    if isinstance(value, dict):
+        return {key: _replace_strings(item, replacements) for key, item in value.items()}
+    return value
+
+
+def _make_distinct_enterprise_pack(
+    root: Path,
+    *,
+    slug: str,
+    customer: str,
+    product_plan: str,
+    proposed_date: str,
+) -> Path:
+    draft = root / "draft"
+    sealed = root / "sealed"
+    initialize_enterprise_quote_pilot_draft(draft)
+    replacements = {
+        "evergreen-industries": slug,
+        "evergreen": slug,
+        "Evergreen": slug.replace("-", " ").title(),
+        "blue-harbor": customer,
+        "Blue Harbor": customer.replace("-", " ").title(),
+        "enterprise-quote-operator": f"{slug}-quote-operator",
+        "Evergreen Enterprise Plus": product_plan,
+        "2026-10-15": proposed_date,
+    }
+    for path in sorted(draft.rglob("*.json")):
+        _write_json(path, _replace_strings(_read_json(path), replacements))
+    seal_enterprise_quote_pilot_pack(draft, sealed)
+    return sealed
+
+
 @pytest.fixture(scope="module")
 def internal_pilot_delivery(tmp_path_factory: pytest.TempPathFactory) -> dict[str, Any]:
     base = tmp_path_factory.mktemp("enterprise-pilot-delivery")
@@ -111,6 +154,7 @@ def internal_pilot_delivery(tmp_path_factory: pytest.TempPathFactory) -> dict[st
         path.relative_to(draft).as_posix(): path.read_bytes()
         for path in sorted(draft.rglob("*.json"))
     }
+    preflight_receipt = preflight_enterprise_quote_pilot_draft(draft)
     seal_receipt = seal_enterprise_quote_pilot_pack(draft, sealed)
     draft_bytes_after = {
         path.relative_to(draft).as_posix(): path.read_bytes()
@@ -123,6 +167,7 @@ def internal_pilot_delivery(tmp_path_factory: pytest.TempPathFactory) -> dict[st
         "sealed": sealed,
         "init": init_receipt,
         "seal": seal_receipt,
+        "preflight": preflight_receipt,
         "check": check,
         "draft_bytes_before": draft_bytes_before,
         "draft_bytes_after": draft_bytes_after,
@@ -139,6 +184,16 @@ def test_internal_enterprise_shape_seals_runs_and_verifies_without_claim_inflati
 
     assert internal_pilot_delivery["init"]["status"] == "DRAFT_CREATED"
     assert internal_pilot_delivery["seal"]["status"] == "SEALED_AND_PREFLIGHT_PASSED"
+    assert internal_pilot_delivery["preflight"]["status"] == "DRAFT_PREFLIGHT_PASSED"
+    assert internal_pilot_delivery["preflight"]["candidate_pack_digest"] == runtime.pack_digest
+    assert internal_pilot_delivery["preflight"]["sealed_output_created"] is False
+    assert internal_pilot_delivery["preflight"]["profile_admitted_for_workspace"] is False
+    assert internal_pilot_delivery["preflight"]["workspace_activated"] is False
+    assert len(internal_pilot_delivery["preflight"]["required_inputs"]) == 5
+    assert all(
+        item["status"] == "READY"
+        for item in internal_pilot_delivery["preflight"]["required_inputs"]
+    )
     assert internal_pilot_delivery["draft_bytes_before"] == internal_pilot_delivery["draft_bytes_after"]
     assert runtime.profile.organization_id == "org:internal-pilot-enterprise"
     assert runtime.profile.synthetic is False
@@ -154,6 +209,147 @@ def test_internal_enterprise_shape_seals_runs_and_verifies_without_claim_inflati
     assert summary["production_ready"] is False
     assert summary["external_enterprise_target_writes"] == 0
     assert str(internal_pilot_delivery["base"]) not in json.dumps(result)
+
+
+def test_two_distinct_enterprises_reuse_one_template_without_authority_or_receipt_leakage(
+    tmp_path: Path,
+) -> None:
+    packs = {
+        "alpha": _make_distinct_enterprise_pack(
+            tmp_path / "alpha",
+            slug="alpha-industries",
+            customer="customer-alpha",
+            product_plan="Alpha Enterprise",
+            proposed_date="2026-11-15",
+        ),
+        "beta": _make_distinct_enterprise_pack(
+            tmp_path / "beta",
+            slug="beta-industries",
+            customer="customer-beta",
+            product_plan="Beta Enterprise",
+            proposed_date="2026-12-20",
+        ),
+    }
+    runtimes = {name: load_enterprise_quote_pilot_pack(path) for name, path in packs.items()}
+    assert runtimes["alpha"].profile.default_task.template_ref == runtimes["beta"].profile.default_task.template_ref
+    assert runtimes["alpha"].profile.organization_id != runtimes["beta"].profile.organization_id
+    assert runtimes["alpha"].pack_digest != runtimes["beta"].pack_digest
+    assert set(runtimes["alpha"].profile.governance.owner_refs).isdisjoint(
+        runtimes["beta"].profile.governance.owner_refs
+    )
+
+    services = {
+        name: WorkspaceService(
+            store_path=tmp_path / name / "workspace.sqlite",
+            runtime_configuration=runtime,
+            review_duration_seconds=0,
+        )
+        for name, runtime in runtimes.items()
+    }
+    try:
+        for service in services.values():
+            service.form_quote()
+            service.preview_change("launch_date")
+
+        alpha = services["alpha"]
+        beta = services["beta"]
+        alpha_approval = alpha.approve_change(
+            "launch_date",
+            actor_id=alpha.change_owner["launch_date"],
+            preview_digest=alpha._preview_record("launch_date")["preview_digest"],
+        )
+        alpha.apply_approved_change(
+            "launch_date",
+            approval_digest=alpha_approval["approval_digest"],
+        )
+
+        with pytest.raises(AuthorizationError):
+            beta.approve_change(
+                "launch_date",
+                actor_id=alpha.change_owner["launch_date"],
+                preview_digest=beta._preview_record("launch_date")["preview_digest"],
+            )
+        with pytest.raises(RuntimeError, match="WORKSPACE_APPROVAL"):
+            beta.apply_approved_change(
+                "launch_date",
+                approval_digest=alpha_approval["approval_digest"],
+            )
+        beta_approval = beta.approve_change(
+            "launch_date",
+            actor_id=beta.change_owner["launch_date"],
+            preview_digest=beta._preview_record("launch_date")["preview_digest"],
+        )
+        beta.apply_approved_change(
+            "launch_date",
+            approval_digest=beta_approval["approval_digest"],
+        )
+
+        exports = {name: service.export_evidence() for name, service in services.items()}
+        assert exports["alpha"]["scenario"]["organization_id"] == "org:alpha-industries"
+        assert exports["beta"]["scenario"]["organization_id"] == "org:beta-industries"
+        assert exports["alpha"]["quote"]["payload"]["launch_date"] == "2026-11-15"
+        assert exports["beta"]["quote"]["payload"]["launch_date"] == "2026-12-20"
+        assert alpha_approval["approval_digest"] != beta_approval["approval_digest"]
+    finally:
+        for service in services.values():
+            service.close()
+
+    for name, runtime in runtimes.items():
+        reopened = WorkspaceService.reopen(
+            tmp_path / name / "workspace.sqlite",
+            runtime_configuration=runtime,
+            review_duration_seconds=0,
+        )
+        try:
+            assert reopened.current_quote().payload["launch_date"] == {
+                "alpha": "2026-11-15",
+                "beta": "2026-12-20",
+            }[name]
+            assert reopened.export_evidence()["enterprise_seed_profile"]["organization_id"] == (
+                f"org:{name}-industries"
+            )
+        finally:
+            reopened.close()
+
+
+def test_draft_preflight_cli_returns_exact_read_only_status_without_output_directory(
+    tmp_path: Path,
+) -> None:
+    draft = tmp_path / "draft"
+    initialize_enterprise_quote_pilot_draft(draft)
+    before = {
+        path.relative_to(tmp_path).as_posix(): path.read_bytes()
+        for path in sorted(draft.rglob("*.json"))
+    }
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "orgrebase.cli",
+            "enterprise-pilot-draft-preflight",
+            "--draft",
+            str(draft),
+        ],
+        cwd=tmp_path,
+        env={**os.environ, "PYTHONPATH": str(ROOT / "src")},
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    payload = json.loads(result.stdout)
+    assert payload["status"] == "DRAFT_PREFLIGHT_PASSED"
+    assert payload["sealed_output_created"] is False
+    assert payload["profile_admitted_for_workspace"] is False
+    assert payload["workspace_activated"] is False
+    assert payload["authority_created_by_preflight"] is False
+    assert payload["canonical_target_writes"] == 0
+    assert payload["real_enterprise_validated"] == "NOT_RUN"
+    assert not any(path.is_dir() for path in tmp_path.iterdir() if path != draft)
+    assert before == {
+        path.relative_to(tmp_path).as_posix(): path.read_bytes()
+        for path in sorted(draft.rglob("*.json"))
+    }
 
 
 def test_independent_verifier_timeout_cannot_report_pilot_success(
@@ -215,6 +411,55 @@ def test_init_and_seal_reject_unowned_output_or_extra_input_files(tmp_path: Path
     with pytest.raises(EnterpriseQuotePilotAuthoringError, match="PILOT_AUTHOR_FILE_SET_MISMATCH"):
         seal_enterprise_quote_pilot_pack(draft, output)
     assert not output.exists()
+
+
+def test_default_init_preserves_every_historical_template_byte(tmp_path: Path) -> None:
+    source = ROOT / "examples/enterprise-quote-pilot/evergreen"
+    output = tmp_path / "default"
+    initialize_enterprise_quote_pilot_draft(output)
+    assert {p.relative_to(source).as_posix(): p.read_bytes() for p in source.rglob("*.json")} == {
+        p.relative_to(output).as_posix(): p.read_bytes() for p in output.rglob("*.json")
+    }
+
+
+def test_priced_init_is_initial_facts_v2_and_reseals_without_identity_drift(tmp_path: Path) -> None:
+    draft = tmp_path / "priced-draft"
+    initialized = initialize_enterprise_quote_pilot_draft(draft, template_name="priced-quote")
+    preflight = preflight_enterprise_quote_pilot_draft(draft)
+    sealed = tmp_path / "priced-pack"
+    receipt = seal_enterprise_quote_pilot_pack(draft, sealed)
+    runtime = load_enterprise_quote_pilot_pack(sealed)
+    assert runtime.schema_version == "orgrebase.enterprise-quote-pilot-pack.v2"
+    assert runtime.profile.synthetic is True
+    assert runtime.profile.default_task.template_ref == "template:enterprise_quote@v2"
+    assert runtime.profile.change_family == () and not runtime.proposed_values
+    assert {item.slot_id for item in runtime.enterprise_binding.resources} == {
+        "launch_date", "currency", "product_plan", "quote_basket", "pricing_policy",
+    }
+    assert initialized["copied_pack_digest"] == preflight["candidate_pack_digest"] == receipt["pack_digest"]
+    assert preflight["profile_admitted_for_workspace"] is False
+    assert preflight["workspace_activated"] is False
+    assert initialized["canonical_target_writes"] == 0
+
+
+@pytest.mark.parametrize("template_name", ["unsupported", "../evergreen", "/private/customer"])
+def test_init_rejects_unregistered_templates_before_creating_output(tmp_path: Path, template_name: str) -> None:
+    output = tmp_path / "parent-not-created" / "draft"
+    with pytest.raises(EnterpriseQuotePilotAuthoringError, match="PILOT_AUTHOR_TEMPLATE_UNSUPPORTED"):
+        initialize_enterprise_quote_pilot_draft(output, template_name=template_name)
+    assert not output.parent.exists()
+
+
+def test_priced_init_cli_uses_public_template_without_test_imports(tmp_path: Path) -> None:
+    draft = tmp_path / "priced-cli"
+    result = subprocess.run(
+        [sys.executable, "-m", "orgrebase", "enterprise-pilot-init", "--template", "priced-quote", "--output", str(draft)],
+        cwd=tmp_path, env={**os.environ, "PYTHONPATH": str(ROOT / "src")},
+        check=False, capture_output=True, text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert json.loads(result.stdout)["synthetic"] is True
+    assert load_enterprise_quote_pilot_pack(draft).profile.default_task.template_ref == "template:enterprise_quote@v2"
 
 
 @pytest.mark.parametrize(

@@ -47,7 +47,9 @@ class ChangeProposalInput(BaseModel):
             if len(raw.encode("utf-8")) > 65_536:
                 raise ValueError("CHANGE_PROPOSAL_VALUE_TOO_LARGE")
             model = QuoteBasket if self.slot_id == "quote_basket" else PricingPolicy
-            model.model_validate_json(raw)
+            structured = model.model_validate_json(raw)
+            if structured.source_ref != self.source_ref:
+                raise ValueError("CHANGE_PROPOSAL_PRICING_SOURCE_MISMATCH")
         elif not isinstance(self.value, str) or not 1 <= len(self.value) <= 2000:
             raise ValueError("CHANGE_PROPOSAL_STRING_VALUE_REQUIRED")
         return self
@@ -251,7 +253,14 @@ def change_detail(workspace: Any, event_id: str) -> dict[str, Any]:
             actions.append("REJECT")
         if status == "PREVIEWED" and owner and _can(workspace, "approve"):
             actions.append("APPROVE")
-        if status in {"APPROVED", "RECOVERY_REQUIRED"} and _can(workspace, "execute"):
+        output_gate_ready = getattr(
+            workspace, "deliverable_set_apply_ready", lambda _event_id: True
+        )(event_id)
+        if (
+            status in {"APPROVED", "RECOVERY_REQUIRED"}
+            and output_gate_ready
+            and _can(workspace, "execute")
+        ):
             actions.append("APPLY")
         authority = authority_detail(workspace, event_id)
         if status != "RECOVERY_REQUIRED" and principal is not None and principal.actor_id == event.owner_id and _can(workspace, "approve"):
@@ -267,7 +276,7 @@ def change_detail(workspace: Any, event_id: str) -> dict[str, Any]:
         preview = workspace._preview_record(event_id)
         runtime = preview_runtime_status(workspace, event_id, preview["preview_digest"],
                                          historical=status in {"APPLIED", "RECOVERY_REQUIRED"}) if preview else None
-        return {
+        detail = {
             "execution_run_id": workspace.effective_workflow_run_id,
             "source_group_id": group["group_id"] if group else None,
             "runtime_compatibility": runtime,
@@ -284,7 +293,19 @@ def change_detail(workspace: Any, event_id: str) -> dict[str, Any]:
             "approval": approval,
             "approval_expiry": approval["approval"]["expires_at"] if approval else None,
             "outcome": workspace._outcome_record(event_id),
+            **(
+                {
+                    "deliverable_approval_required": (
+                        status == "APPROVED" and not output_gate_ready
+                    )
+                }
+                if getattr(workspace, "deliverable_set_profile", None) is not None
+                else {}
+            ),
         }
+        safe = workspace._learning_history_view(detail, surface="api")
+        require_action(workspace, "read")
+        return safe
 
 
 class ReviewObservationInput(BaseModel):

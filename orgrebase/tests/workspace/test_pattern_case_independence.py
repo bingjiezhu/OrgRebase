@@ -7,6 +7,7 @@ import pytest
 from orgrebase.domain import IntegrityError
 from orgrebase.store import StateStore
 from orgrebase.workspace.pattern_evolution import CaseObservation, GovernedPatternService, _record
+from tests.workspace.pattern_fixture_support import invoke_pattern_fixture
 from tests.workspace.test_pattern_evolution import decide, observed, prepare
 
 
@@ -166,7 +167,8 @@ def test_restart_denies_release_without_independent_qualification_basis(tmp_path
         )
         value = public()
         with pytest.raises(IntegrityError, match="PATTERN_PERSISTED_ADMISSION_BINDING_MISMATCH"):
-            service.invoke(
+            invoke_pattern_fixture(
+                service,
                 candidate,
                 value,
                 context=InvocationContext(

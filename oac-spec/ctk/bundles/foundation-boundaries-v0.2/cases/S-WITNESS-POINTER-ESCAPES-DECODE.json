@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-POINTER-ESCAPES-DECODE",
+  "expect": {
+    "result": {
+      "pointer": "/~01/~1/~0",
+      "resourceId": "urn:source:a"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "urn:source:a#/~01/~1/~0"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

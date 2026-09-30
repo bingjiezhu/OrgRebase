@@ -1,0 +1,19 @@
+{
+  "schema_version": "orgrebase.change-preparation.v1",
+  "workspace_id": "default",
+  "access_token_variable": "ORGREBASE_CHANGE_WORKER_TOKEN",
+  "enabled": false,
+  "provider_mode": "local-deterministic",
+  "max_changes_per_run": 20,
+  "dispatch_budget": {
+    "schema_version": "orgrebase.deployment-dispatch-budget.v1",
+    "deployment_scope": "replace-with-stable-deployment-id",
+    "currency": "USD",
+    "period_seconds": 3600,
+    "max_reserved_microusd": 50000000,
+    "max_reserved_calls": 100,
+    "max_dispatches_per_period": 50,
+    "max_queue_reservations_per_period": 50,
+    "max_active_attempts": 2
+  }
+}

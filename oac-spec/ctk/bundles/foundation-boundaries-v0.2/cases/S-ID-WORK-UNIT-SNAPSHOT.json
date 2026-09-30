@@ -1,0 +1,32 @@
+{
+  "caseId": "S-ID-WORK-UNIT-SNAPSHOT",
+  "expect": {
+    "result": {
+      "identifier": "urn:oac:id:sha256:v1:work-unit:a7e58b5340852bd5dbb5bd4ccb2df8086668e796f83c85a149c540f824eadf26"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "fields": {
+      "body": {
+        "accountableRoleInstanceRef": "urn:r:one",
+        "obligationRefs": [
+          "urn:o:one",
+          "urn:o:two"
+        ],
+        "roleInstanceRefs": [
+          "urn:r:one",
+          "urn:r:two"
+        ]
+      },
+      "changeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "snapshotDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "identifierKind": "work-unit"
+  },
+  "operation": "deriveIdentifier",
+  "requirementRefs": [
+    "REQ-INSTANCE-ID-V1"
+  ],
+  "testTarget": "SUT"
+}

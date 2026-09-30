@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0alpha1/RunResult.schema.json",
+  "title": "RunResult",
+  "description": "Structural schema for the current Phase A runner result with distinct case, SUT, and domain outcome layers.",
+  "$comment": "This schema describes runner output but is not yet claimed as a runtime validation dependency of the runner.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "runResultVersion",
+    "bundleDigest",
+    "requirementSetDigest",
+    "capabilityStatement",
+    "capabilityStatementDigest",
+    "environment",
+    "environmentDigest",
+    "requiredPassed",
+    "summary",
+    "caseResults"
+  ],
+  "properties": {
+    "runResultVersion": {
+      "const": "oac.ctk.run-result/v0alpha1"
+    },
+    "bundleDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "requirementSetDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "capabilityStatement": {
+      "$ref": "#/$defs/capabilityStatement"
+    },
+    "capabilityStatementDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
+    },
+    "environmentDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "requiredPassed": {
+      "type": "boolean"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "caseResults": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/caseResult"
+      }
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "caseId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "reasonCode": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Z][A-Z0-9_]*(?::[A-Za-z][A-Za-z0-9_]*)?$"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "additionalProperties": true
+    },
+    "operation": {
+      "enum": [
+        "canonicalize",
+        "deriveIdentifier",
+        "witness",
+        "strongKleene",
+        "closureMicro",
+        "resourceCheck"
+      ]
+    },
+    "sutStatus": {
+      "enum": [
+        "COMPLETED",
+        "UNSUPPORTED",
+        "RESOURCE_EXHAUSTED",
+        "ERROR",
+        "TIMEOUT",
+        "CRASH"
+      ]
+    },
+    "track": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "operation",
+        "profileId",
+        "profileVersion",
+        "wireVersion"
+      ],
+      "properties": {
+        "role": {
+          "const": "semantic-kernel"
+        },
+        "operation": {
+          "$ref": "#/$defs/operation"
+        },
+        "profileId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "profileVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "wireVersion": {
+          "const": "oac.ctk.stdio/v1"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    },
+    "capabilityObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sutStatus",
+        "errorCode"
+      ],
+      "properties": {
+        "sutStatus": {
+          "$ref": "#/$defs/sutStatus"
+        },
+        "errorCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    },
+    "capabilityStatement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationId",
+        "implementationVersion",
+        "adapterProtocolVersion",
+        "tracks"
+      ],
+      "properties": {
+        "implementationId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "implementationVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "adapterProtocolVersion": {
+          "const": "oac.ctk.stdio/v1"
+        },
+        "tracks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/track"
+          }
+        },
+        "observation": {
+          "$ref": "#/$defs/capabilityObservation"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "system",
+        "machine",
+        "pythonImplementation",
+        "pythonVersion"
+      ],
+      "properties": {
+        "system": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "machine": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "pythonImplementation": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "pythonVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "passed",
+        "failed",
+        "notScored"
+      ],
+      "properties": {
+        "required": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "passed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "notScored": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "caseResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseId",
+        "caseOutcome",
+        "sutStatus",
+        "stage",
+        "reasonCodes",
+        "domainVerdict",
+        "elapsedMs"
+      ],
+      "properties": {
+        "caseId": {
+          "$ref": "#/$defs/caseId"
+        },
+        "caseOutcome": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "NOT_SCORED",
+            "NOT_RUN",
+            "INDETERMINATE",
+            "HARNESS_ERROR"
+          ]
+        },
+        "sutStatus": {
+          "$ref": "#/$defs/sutStatus"
+        },
+        "stage": {
+          "enum": [
+            "CAPABILITY",
+            "ADAPTER",
+            "HARNESS",
+            "PARSE",
+            "SCHEMA",
+            "CANONICAL_BYTES",
+            "DERIVATION",
+            "VERDICT",
+            "REASON_SET",
+            "WITNESS_BINDING",
+            "RESOURCE_EXHAUSTION"
+          ]
+        },
+        "reasonCodes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/reasonCode"
+          }
+        },
+        "domainVerdict": {
+          "enum": [
+            "ACCEPT",
+            "REJECT",
+            "PROVISIONAL",
+            "UNKNOWN",
+            null
+          ]
+        },
+        "elapsedMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "sutStatus": {
+                "enum": [
+                  "UNSUPPORTED",
+                  "RESOURCE_EXHAUSTED",
+                  "ERROR",
+                  "TIMEOUT",
+                  "CRASH"
+                ]
+              }
+            },
+            "required": [
+              "sutStatus"
+            ]
+          },
+          "then": {
+            "properties": {
+              "domainVerdict": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "domainVerdict": {
+                "enum": [
+                  "ACCEPT",
+                  "REJECT",
+                  "PROVISIONAL",
+                  "UNKNOWN"
+                ]
+              }
+            },
+            "required": [
+              "domainVerdict"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sutStatus": {
+                "const": "COMPLETED"
+              },
+              "stage": {
+                "const": "VERDICT"
+              },
+              "caseOutcome": {
+                "enum": [
+                  "PASS",
+                  "FAIL"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "caseOutcome": {
+                "enum": [
+                  "NOT_SCORED",
+                  "NOT_RUN",
+                  "INDETERMINATE"
+                ]
+              }
+            },
+            "required": [
+              "caseOutcome"
+            ]
+          },
+          "then": {
+            "properties": {
+              "domainVerdict": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "caseOutcome": {
+                "const": "HARNESS_ERROR"
+              }
+            },
+            "required": [
+              "caseOutcome"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sutStatus": {
+                "const": "ERROR"
+              },
+              "stage": {
+                "const": "HARNESS"
+              },
+              "domainVerdict": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

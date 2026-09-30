@@ -104,6 +104,7 @@ const I18N = Object.freeze({
     "command.unavailableActor": "工作区状态服务",
     "command.unavailableRole": "默认拒绝 · 保留最后一次已验证状态",
     "command.downloadQuote": "下载工作结果",
+    "command.downloadDeliverableSet": "下载报价与折扣说明",
     "command.downloadEvidence": "下载审计记录",
     "command.reviewWait": "服务端四秒审阅门尚未到时；还需 {seconds} 秒。倒计时结束后，人工批准按钮才会解锁。",
     "command.reviewButton": "请审阅预演 · {seconds} 秒",
@@ -1247,7 +1248,7 @@ const I18N = Object.freeze({
     "header.currentTask.progress": "当前任务：{stage}",
     "header.currentTask.complete": "当前任务：已完成",
     "header.currentTask.unavailable": "当前任务：状态不可用",
-    "header.goldenPilot": "协作引擎：AgentTeams",
+    "header.goldenPilot": "协作协议：AgentTeams",
     "header.realEnterpriseNotRun": "生产就绪：否 · 待企业验证",
     "hero.scenario": "企业工作区 / 企业报价",
     "complexity.solution.kicker": "03 · OrgRebase 解法",
@@ -1778,6 +1779,7 @@ const I18N = Object.freeze({
     "command.unavailableActor": "Workspace state service",
     "command.unavailableRole": "FAIL CLOSED · PRESERVE THE LAST VERIFIED STATE",
     "command.downloadQuote": "Download work result",
+    "command.downloadDeliverableSet": "Download Quote and Discount Memo",
     "command.downloadEvidence": "Download audit record",
     "command.reviewWait": "The server review gate is not open yet; {seconds}s remaining. The human approval button unlocks when the countdown ends.",
     "command.reviewButton": "Review preview · {seconds}s",
@@ -2921,7 +2923,7 @@ const I18N = Object.freeze({
     "header.currentTask.progress": "ACTIVE TASK: {stage}",
     "header.currentTask.complete": "ACTIVE TASK: COMPLETED",
     "header.currentTask.unavailable": "ACTIVE TASK: STATE UNAVAILABLE",
-    "header.goldenPilot": "ORCHESTRATION: AGENTTEAMS",
+    "header.goldenPilot": "ORCHESTRATION PROTOCOL: AGENTTEAMS",
     "header.realEnterpriseNotRun": "PRODUCTION READY: NO · ENTERPRISE VALIDATION PENDING",
     "hero.scenario": "ENTERPRISE WORKSPACE / ENTERPRISE QUOTE",
     "complexity.solution.kicker": "03 · ORGREBASE SOLUTION",
@@ -9573,6 +9575,8 @@ function renderCommand(state) {
   primaryButton.dataset.kind = action.kind || "";
   primaryButton.dataset.mode = mode;
   const hasQuote = Boolean(state.quote);
+  quoteDownloadButton.textContent = t(state.deliverable_set?.schema_version === "orgrebase.deliverable-set-view.v1"
+    ? "command.downloadDeliverableSet" : "command.downloadQuote");
   quoteDownloadButton.hidden = !completed;
   evidenceDownloadButton.hidden = !completed;
   quoteDownloadButton.classList.toggle("button-primary", completed);
@@ -10581,6 +10585,8 @@ function renderWorkspaceUnavailable({ notify = true, reason = null } = {}) {
   currentState = null;
   renderCurrentRunEvidenceRetry();
   workspaceStateAvailability = "unavailable";
+  const reloadingIdentity = reason === "identity-changed";
+  if (reloadingIdentity) workspaceStateAvailability = "loading";
   inFlight = false;
   clearTimeout(reviewTimer);
   reviewTimer = null;
@@ -10592,17 +10598,17 @@ function renderWorkspaceUnavailable({ notify = true, reason = null } = {}) {
   const commandBar = byId("command-bar");
   commandBar.dataset.mode = "system";
   text("command-kicker", t("command.next"));
-  text("command-title", t("command.unavailableTitle"));
-  text("command-detail", t("command.unavailableDetail"));
+  text("command-title", t(reloadingIdentity ? "command.loadingTitle" : "command.unavailableTitle"));
+  text("command-detail", t(reloadingIdentity ? "command.loadingDetail" : "command.unavailableDetail"));
   localizedBusinessText("current-actor", t("command.unavailableActor"));
   text("actor-role", t("command.unavailableRole"));
-  primaryButton.textContent = t("command.unavailableButton");
+  primaryButton.textContent = t(reloadingIdentity ? "command.loadingButton" : "command.unavailableButton");
   primaryButton.disabled = true;
   primaryButton.dataset.method = "";
   primaryButton.dataset.kind = "";
   quoteDownloadButton.disabled = true;
   evidenceDownloadButton.disabled = true;
-  text("semifinal-status-badge", t("header.currentTask.unavailable"));
+  text("semifinal-status-badge", t(reloadingIdentity ? "header.currentTask.waiting" : "header.currentTask.unavailable"));
   byId("semifinal-status-badge").classList.remove("badge-pass");
   text("profile-data-badge", t("header.dataUnavailable"));
   text("active-boundary-note", t("active.boundary.unavailable"));
@@ -10618,7 +10624,7 @@ function renderWorkspaceUnavailable({ notify = true, reason = null } = {}) {
   renderOperations(UNAVAILABLE_WORKSPACE_PROJECTION);
   if (notify) {
     window.dispatchEvent(new CustomEvent("orgrebase:stateunavailable", {
-      detail: { status: "UNAVAILABLE", ...(reason ? { reason } : {}) },
+      detail: { status: reloadingIdentity ? "LOADING" : "UNAVAILABLE", ...(reason ? { reason } : {}) },
     }));
   }
 }
@@ -10734,7 +10740,9 @@ function refreshChangedWorkspace() {
   refreshState().catch(() => renderWorkspaceUnavailable());
 }
 
-window.addEventListener("orgrebase:sessionended", invalidateWorkspaceState);
+window.addEventListener("orgrebase:sessionended", (event) => invalidateWorkspaceState({
+  reason: event.detail?.reason === "role-switch" ? "identity-changed" : event.detail?.reason || null,
+}));
 window.addEventListener("pagehide", invalidateWorkspaceState);
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) {
@@ -10746,7 +10754,7 @@ window.addEventListener("orgrebase:sessionchange", (event) => {
   const next = sessionIdentity(event.detail);
   const changed = workspaceSessionIdentity !== next;
   const available = event.detail && (!event.detail.authentication_required || event.detail.authenticated === true);
-  if (workspaceSessionIdentity !== null && changed) {
+  if (changed && (available || workspaceSessionIdentity !== null)) {
     invalidateWorkspaceState({ reason: available ? "identity-changed" : "session-unavailable" });
   }
   // Keep the last usable identity through a temporary expiry, so its own draft
@@ -10865,7 +10873,12 @@ setLanguage(storedLanguage(), { persist: false });
 
 primaryButton.addEventListener("click", runPrimaryAction);
 byId("current-run-evidence-retry").addEventListener("click", retryCurrentRunEvidence);
-quoteDownloadButton.addEventListener("click", () => downloadJson("/api/workspace/export/quote", "orgrebase-quote.json"));
+function downloadCurrentWorkResult() {
+  const grouped = currentState?.deliverable_set?.schema_version === "orgrebase.deliverable-set-view.v1";
+  return downloadJson(grouped ? "/api/workspace/export/deliverable-set" : "/api/workspace/export/quote",
+    grouped ? "orgrebase-quote-and-discount-memo.json" : "orgrebase-quote.json");
+}
+quoteDownloadButton.addEventListener("click", downloadCurrentWorkResult);
 evidenceDownloadButton.addEventListener("click", () => downloadJson("/api/workspace/export/evidence", "orgrebase-evidence-pack.json"));
 const acceptanceQuoteDownloadButton = byId("acceptance-download-quote");
 const acceptanceEvidenceDownloadButton = byId("acceptance-download-evidence");

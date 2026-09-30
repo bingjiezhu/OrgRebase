@@ -1,5 +1,6 @@
 {
   "$defs": {
+    "JsonValue": {},
     "SkillBoundary": {
       "additionalProperties": false,
       "properties": {
@@ -88,6 +89,43 @@
       "title": "Author Id",
       "type": "string"
     },
+    "base_head_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Base Head Digest"
+    },
+    "base_head_generation": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Base Head Generation"
+    },
+    "base_head_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Base Head Ref"
+    },
     "base_package_digest": {
       "pattern": "^sha256:[0-9a-f]{64}$",
       "title": "Base Package Digest",
@@ -102,9 +140,51 @@
       "title": "Claim Boundary",
       "type": "string"
     },
+    "content_bundle": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Bundle"
+    },
     "corpus_ref": {
       "title": "Corpus Ref",
       "type": "string"
+    },
+    "diagnostic_policy_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Diagnostic Policy Digest"
+    },
+    "diagnostic_reason_map": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Diagnostic Reason Map"
     },
     "digest": {
       "default": "",
@@ -126,6 +206,21 @@
     "pattern_ref": {
       "title": "Pattern Ref",
       "type": "string"
+    },
+    "principal_binding": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Principal Binding"
     },
     "proposal_ref": {
       "title": "Proposal Ref",

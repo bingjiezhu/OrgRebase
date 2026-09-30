@@ -428,4 +428,5 @@ def test_one_real_case_still_cannot_qualify_or_admit_skill(store, experiments):
             actor_id="scripted:skill-governance",
             verdict="ADMIT",
             expected_candidate_digest=record["digest"],
+            expected_head_package_digest=record["base_package_digest"],
         )

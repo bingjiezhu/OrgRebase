@@ -198,7 +198,7 @@ def _workspace_inventory(
     ledgers = []
     recovery = {"unresolved_effects": [], "target_barriers": [], "source_checkpoints": []}
     version = store.check_health()["schema_version"]
-    historical_version = version if version in {3, 4} else None
+    historical_version = version if version in {3, 4, 5} else None
     for row in rows:
         workspace_id = row["workspace_id"]
         with StateStore(
@@ -448,6 +448,7 @@ def restore_postgres(
         ("orgrebase.postgres-backup.v1", STATE_STORE_SCHEMA_VERSION),
         ("orgrebase.postgres-backup.v2", 3),
         ("orgrebase.postgres-backup.v2", 4),
+        ("orgrebase.postgres-backup.v2", 5),
         ("orgrebase.postgres-backup.v2", STATE_STORE_SCHEMA_VERSION),
     } or manifest.get("tenant_id") != tenant_id:
         raise StoreOperationError("BACKUP_MANIFEST_BINDING_MISMATCH")
@@ -489,7 +490,9 @@ def restore_postgres(
             prepare_legacy_restore_inspection(connection)
         inspection_version = 3
     original_snapshot = qualify_postgres(
-        restored_dsn, tenant_id=tenant_id, read_schema_version=inspection_version if inspection_version in {3, 4} else None
+        restored_dsn,
+        tenant_id=tenant_id,
+        read_schema_version=inspection_version if inspection_version in {3, 4, 5} else None,
     )
     _verify_restored_snapshot(manifest, original_snapshot)
     # Schema upgrades are operator-only and retain the original default event bytes.
@@ -547,7 +550,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--deletion-ledger", type=Path)
     parser.add_argument("--new-database")
     parser.add_argument("--runtime-role")
-    parser.add_argument("--read-schema-version", type=int, choices=(3, 4))
+    parser.add_argument("--read-schema-version", type=int, choices=(3, 4, 5))
     args = parser.parse_args(argv)
     dsn = os.environ.get(args.database_env, "")
     if not dsn:

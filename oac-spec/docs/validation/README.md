@@ -1,41 +1,31 @@
-# Validation evidence index
+# Validation and reproducibility
 
-Validation reports are immutable, revision-scoped evidence. A later report does not rewrite an older
-claim boundary.
+OAC validation is scoped to an exact Profile, resource version, implementation and input set. A passing schema check, accepted Plan, completed execution and accepted Outcome are different results. None grants runtime permission or enterprise source authority.
 
-| Slice | Code revision | Report | Meaning |
-|---|---|---|---|
-| M0 Shadow mechanics | `424004e` | [STATUS.md](STATUS.md) | Historical v0alpha1 mechanics evidence |
-| M1 contextual applicability | `3e66c6853b1f0f2558d48af0da285790ea4c3903` | [STATUS-v0.2.md](STATUS-v0.2.md) | Current v0.2 technical-slice evidence |
-| A0 conformance lab | working tree over `e301952` | [STATUS-v0.3-phase-a.md](STATUS-v0.3-phase-a.md) | Phase A runner/protocol and internal cross-language differential evidence |
-| A1 Supplier seed-1 development | working tree over `e301952` | [STATUS-v0.4-a1-portability.md](STATUS-v0.4-a1-portability.md) | Superseded by ADR 0006: historical 34-observation selected set; capability/generator/summary/install evidence debt prevents a current validation claim |
-| A1 Supplier seed-2 semantic matrix | working tree over `e301952` | [STATUS-v0.5-a1-semantic-matrix.md](STATUS-v0.5-a1-semantic-matrix.md) | Current bounded internal evidence: source and installed 52/52, seven incident/resolution pairs, two rejected mutants, and a closed v0alpha2 machine manifest; not independent/full-profile/clean-archive evidence |
-| A1 plural fixed-Plan verification | working tree over `e301952` | [STATUS-v0.6-a1-plural-plan-verification.md](STATUS-v0.6-a1-plural-plan-verification.md) | Current bounded internal evidence: two accepted topologies in one acceptance fiber; 39/39 on Python and same-repository Go from source and isolated install; three permitted diagnostic variances, three killed aggregate mutants, and 14/14 killed exact source-rule mutants; not equivalence/independence/full-profile/enterprise evidence |
-| Spec 009 minimum evolution profile | working tree over `e301952`, validated 2026-09-09 | [STATUS-2026-09-09-spec009.md](STATUS-2026-09-09-spec009.md) | Current composite gate: 480 tests and build pass; fresh wheel: 7 evolution tests and 33 TCK cases pass; frozen coordinate unchanged; same-reference zero-effect evidence |
+## Public source checks
 
-The current cross-Spec implementation order and blockers are tracked in
-[SPEC-PORTFOLIO-2026-09-09.md](SPEC-PORTFOLIO-2026-09-09.md). It is a working-tree audit, not
-revision-scoped validation evidence. The earlier [v0.3 portfolio](SPEC-PORTFOLIO-v0.3.md) remains
-historical. Spec 009's frozen task list is preserved byte-for-byte; its later T009-011/012 completion
-is recorded in the current matrix and execution report.
+The public workspace contains the product and OAC as adjacent projects. Use CPython 3.12.13, Go 1.22 and the locked development environment:
 
-ADR 0006's bounded semantic branch matrix and durable disagreement/evidence coordinate are recorded in
-v0.5 without rewriting v0.4. The active Spec 003 priority is now plural fixed-plan verification, while
-clean-archive replay and external organizational independence remain separate gates.
+```sh
+cd oac-spec
+uv sync --locked --all-extras
+cd ..
+python3 -B orgrebase/scripts/build_source_snapshot.py public-check --snapshot-root .
+```
 
-The seed-2 derivation machine coordinate is
-[`evidence-manifest.json`](../../experiments/supplier-v02-portability/v0.2-seed-2/evidence-manifest.json).
-Its isolated-install ledger is explicitly self-attested rather than cryptographic execution
-provenance, excludes Python standard-library and operating-system bytes, and does not turn the
-cross-host portable CI projection into an exact release identity.
+The public gate checks schemas and registries, the bounded mechanics benchmark, CTK bundles and successor behavior, the separate CTK runner, the included Go implementations, runtime lowering, TCK and selected public API tests. The Python and Go implementations belong to the same project; cross-language agreement does not establish organizational independence.
 
-The separate fixed-Plan machine coordinate is
-[`evidence-manifest.json`](../../experiments/plan-verification-portability/v0.1-seed-1/evidence-manifest.json).
-Its accepted-set witness records different obligation partitions and different Plan-induced order
-reachability while requiring both Plans to realize the same mandatory contract. The public corpus is
-fingerprintable and the Go verifier is not clean-room. The exact source-rule mutation ledger covers
-14 enumerated branches, not all possible verifier defects; one RoleDefinition-admission conjunct is
-equivalent or unreachable under the frozen seed-1 roots and is explicitly excluded from its denominator.
+See the [OAC README](../../README.md) for CLI examples and installation. Historical archive replay needs the matching complete archive inputs and is outside this public source profile. Missing archives must not be treated as successful checks.
 
-No report here is formal OAC conformance, Human Ground Truth, enterprise-effectiveness evidence, or
-production authorization, supply-chain attestation, or proof of a universal enterprise standard.
+## Validation boundaries
+
+| Boundary | Required check |
+| --- | --- |
+| Input admission | Exact sealed bytes, detached digest, expected Kind and Profile; see [CLI admission](CLI-ADMISSION.md) |
+| Plan acceptance | Admitted source roots, obligation coverage, qualification, authority, ordering, evidence and explicit Unknown constraints |
+| Runtime lowering | A contract-valid Plan lowers under the selected handler/effect ceiling; acceptance does not authorize execution |
+| Execution and Outcome | Execution evidence records completion; an Outcome requires its own admitted observations and acceptance relation |
+| Reproduction | Source, inputs, dependency identities and expected observations are bound to the supplied coordinate; see [raw-input reproduction](PLAN-REPRODUCTION-RAW-ADMISSION.md) |
+| Historical compatibility | Frozen coordinates remain immutable; see [evidence versioning](HISTORICAL-EVIDENCE-VERSIONING.md) |
+
+Reports must identify the exact inputs and implementation, rejected and unresolved cases, tested constraints and omitted coverage. `UNKNOWN` is preserved as unresolved knowledge, and protocol rejection is distinct from a completed domain rejection. The included reference checks do not establish complete OAC conformance, external human Ground Truth, enterprise effectiveness, production safety or authorization.

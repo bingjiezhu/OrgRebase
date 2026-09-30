@@ -21,7 +21,12 @@ from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from orgrebase.digest import canonical_json, verify_content_digest
 from orgrebase.domain import ContentAddressedModel
 from orgrebase.http_errors import public_error
-from orgrebase.workspace.models import ModelRequest, ModelResponseReceipt
+from orgrebase.workspace.models import (
+    ModelRequest,
+    ModelRequestV3,
+    ModelResponseReceipt,
+    ModelResponseReceiptV3,
+)
 
 _FIELDS = ("input_tokens", "output_tokens", "thinking_tokens", "total_tokens", "cached_tokens")
 
@@ -146,7 +151,7 @@ class ModelAttemptObserver:
         self._lock = threading.Lock()
 
     @contextmanager
-    def observe(self, request: ModelRequest) -> Iterator[ModelAttempt]:
+    def observe(self, request: ModelRequest | ModelRequestV3) -> Iterator[ModelAttempt]:
         attempt = ModelAttempt(self, request)
         try:
             yield attempt
@@ -186,7 +191,7 @@ class ModelAttemptObserver:
 
 
 class ModelAttempt:
-    def __init__(self, observer: ModelAttemptObserver, request: ModelRequest) -> None:
+    def __init__(self, observer: ModelAttemptObserver, request: ModelRequest | ModelRequestV3) -> None:
         self.observer, self.request = observer, request
         self.dispatch_id = uuid4().hex
         self.started = time.monotonic()
@@ -197,7 +202,7 @@ class ModelAttempt:
         self.observed_model: str | None = None
         self.provider_request_id: str | None = None
         self.usage = ModelUsage(status="NOT_APPLICABLE", basis="not_dispatched")
-        self.receipt: ModelResponseReceipt | None = None
+        self.receipt: ModelResponseReceipt | ModelResponseReceiptV3 | None = None
         self.error_code: str | None = None
         self.write_failed = False
 

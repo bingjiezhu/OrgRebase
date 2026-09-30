@@ -1,0 +1,18 @@
+{
+  "caseId": "S-RESOURCE-maxWitnessRefsPerEvaluation-EXACT",
+  "expect": {
+    "result": {
+      "profileId": "oac.supplier.transfer/conformance-resource-profile/v1",
+      "withinProfile": true
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "maxWitnessRefsPerEvaluation": 256
+  },
+  "operation": "resourceCheck",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

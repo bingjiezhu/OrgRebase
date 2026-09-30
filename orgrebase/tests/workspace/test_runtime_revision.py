@@ -77,6 +77,10 @@ def test_native_transport_dependency_is_bound():
     current = runtime_revision.current_revision()
     assert "httpx2" in current["dependencies"]
     assert "workspace/openai_responses.py" in current["implementation"]
+    assert "workspace/vertex_candidate.py" in current["implementation"]
+    assert "workspace/bounded_execution.py" in current["implementation"]
+    assert "workspace/domain_agents.py" in current["implementation"]
+    assert "workspace/formation.py" in current["implementation"]
     assert "workspace/preview_execution.py" in current["implementation"]
 
 
@@ -102,7 +106,12 @@ def test_effect_authority_and_target_identity_are_bound_to_approved_implementati
     "workspace/model_budget.py", "workspace/openai_http_worker.py", "workspace/enterprise_binding.py",
     "workspace/owner_change.py", "workspace/source_worker.py", "local_storage.py",
     "workspace/change_agentteams.py", "workspace/native_taskflow.py", "agentteams_source.py", "workspace/pricing.py",
-    "workspace/context.py", "workspace/rebuild.py",
+    "workspace/context.py", "workspace/rebuild.py", "workspace/formation.py",
+    "workspace/domain_agents.py", "workspace/bounded_execution.py", "workspace/vertex_candidate.py",
+    "workspace/profile_contracts.py", "workspace/source_admission.py",
+    "workspace/profile_admission.py", "workspace/pilot.py", "workspace/coalition.py",
+    "workspace/planner.py", "workspace/demand_formation.py", "workspace/context_residency.py",
+    "workspace/change_budget.py", "workspace/formation_integrity.py",
 ))
 def test_paused_approval_cannot_resume_after_execution_semantics_change(module, tmp_path, monkeypatch):
     path = tmp_path / "paused.sqlite"

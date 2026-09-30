@@ -1,0 +1,10 @@
+{
+  "caseId": "C0-RESOURCE-001",
+  "expect": {
+    "result": {"profileId": "oac.supplier.transfer/conformance-resource-profile/v1", "withinProfile": true},
+    "sutStatus": "COMPLETED"
+  },
+  "input": {"maxNodes": 256},
+  "operation": "resourceCheck",
+  "requirementRefs": ["REQ-RESOURCE-EXHAUSTION"]
+}

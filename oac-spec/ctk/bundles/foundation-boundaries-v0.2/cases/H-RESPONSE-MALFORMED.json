@@ -1,0 +1,14 @@
+{
+  "caseId": "H-RESPONSE-MALFORMED",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "response-malformed"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-ADAPTER"
+  ],
+  "testTarget": "HARNESS"
+}

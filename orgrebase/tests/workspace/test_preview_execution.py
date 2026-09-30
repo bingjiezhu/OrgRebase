@@ -10,6 +10,12 @@ from orgrebase.clock import FrozenClock
 from orgrebase.domain import IntegrityError, ObjectState
 from orgrebase.workspace import source_readmission
 from orgrebase.workspace.advisory import WorkspaceApplyAdvisoryVerifier
+from orgrebase.workspace.bounded_execution import BoundedExecutionError
+from orgrebase.workspace.change_budget import (
+    DeploymentDispatchBudget,
+    dispatch_budget,
+    reconcile_expired_dispatch_quotas,
+)
 from orgrebase.workspace.pilot import load_enterprise_quote_pilot_pack
 from orgrebase.workspace.service import WorkspaceService
 from orgrebase.workspace.source_readmission import group_detail
@@ -35,6 +41,27 @@ class PricedProvider(RecordingProvider):
         return type(receipt).model_validate(payload)
 
 
+class UnconfirmedCancellationAdvisory:
+    provider = None
+    native_required = False
+
+    def __init__(self, delegate):
+        self.delegate = delegate
+        self.max_elapsed_seconds = delegate.max_elapsed_seconds
+        self.calls = 0
+
+    @property
+    def configuration_binding(self):
+        return self.delegate.configuration_binding
+
+    def cost_reservation(self, **_kwargs):
+        return None
+
+    def run(self, **_kwargs):
+        self.calls += 1
+        raise BoundedExecutionError("BOUNDED_EXECUTION_CANCELLATION_UNCONFIRMED")
+
+
 def priced_service(tmp_path, provider, backend, postgres_runtime):
     pack = load_enterprise_quote_pilot_pack(PACK)
     if backend == "postgresql":
@@ -57,6 +84,19 @@ def cost_attempts(service):
     return [json.loads(row["result_json"]) for row in rows]
 
 
+def deployment_budget() -> DeploymentDispatchBudget:
+    return DeploymentDispatchBudget(
+        schema_version="orgrebase.deployment-dispatch-budget.v1",
+        deployment_scope="deployment:preview-test",
+        period_seconds=3600,
+        max_reserved_microusd=10_000_000,
+        max_reserved_calls=100,
+        max_dispatches_per_period=100,
+        max_queue_reservations_per_period=100,
+        max_active_attempts=10,
+    )
+
+
 @pytest.mark.parametrize("backend", ["sqlite", "postgresql"])
 def test_complete_round_price_limit_rejects_before_attempt_and_any_call(tmp_path, postgres_runtime, backend):
     provider = PricedProvider(limit="0.20")  # One call fits; domain + GTM together do not.
@@ -75,7 +115,7 @@ def test_unknown_paid_attempt_retains_full_reservation_without_redispatch(tmp_pa
     provider = PricedProvider(unknown=True)
     service = priced_service(tmp_path, provider, backend, postgres_runtime)
     try:
-        with pytest.raises(IntegrityError):
+        with dispatch_budget(deployment_budget()), pytest.raises(IntegrityError):
             service.preview_change("currency")
         original = cost_attempts(service)
         assert len(original) == 1
@@ -84,9 +124,17 @@ def test_unknown_paid_attempt_retains_full_reservation_without_redispatch(tmp_pa
         result = service.store.list_artifacts(artifact_id_prefix="workspace-preview-attempt:")[0].payload
         assert result["cost_reservation"] == reserved
         assert result["usage_status"] == "UNKNOWN"
+        assert result["status"] == "RESULT_UNKNOWN"
         assert result["receipts"][0]["dispatch_state"] == "SENT_UNKNOWN"
         assert result["receipts"][0]["input_tokens"] is None
-        with pytest.raises(IntegrityError, match="WORKSPACE_ADVISORY_ATTEMPT_FAILED"):
+        ledger = service.store.connection.execute(
+            "SELECT state FROM deployment_budget_reservations"
+        ).fetchone()
+        assert ledger[0] == "DISPATCHING"
+        with (
+            dispatch_budget(deployment_budget()),
+            pytest.raises(IntegrityError, match="WORKSPACE_ADVISORY_RESULT_UNKNOWN"),
+        ):
             service.preview_change("currency")
         assert len(provider.requests) == 1 and cost_attempts(service) == original
     finally:
@@ -133,6 +181,147 @@ def test_missing_result_deadline_never_refunds_or_redispatches(tmp_path, postgre
         assert len(provider.requests) == 1 and cost_attempts(service) == original
     finally:
         service.close()
+
+
+@pytest.mark.parametrize("backend", ["sqlite", "postgresql"])
+def test_crash_after_reservation_before_send_stays_unknown_without_dispatch(
+    tmp_path,
+    postgres_runtime,
+    backend,
+    monkeypatch,
+):
+    from orgrebase.workspace import service as service_module
+
+    provider = PricedProvider()
+    service = priced_service(tmp_path, provider, backend, postgres_runtime)
+    original_execute = service_module.execute_attempt
+    policy = deployment_budget()
+
+    def crash_before_send(*_args, **_kwargs):
+        raise RuntimeError("SIMULATED_CRASH_AFTER_RESERVATION")
+
+    try:
+        monkeypatch.setattr(service_module, "execute_attempt", crash_before_send)
+        with dispatch_budget(policy), pytest.raises(
+            RuntimeError,
+            match="SIMULATED_CRASH_AFTER_RESERVATION",
+        ):
+            service.preview_change("currency")
+        assert provider.requests == []
+        attempts = cost_attempts(service)
+        assert len(attempts) == 1
+        assert service.store.list_artifacts(
+            artifact_id_prefix="workspace-preview-attempt:"
+        ) == ()
+        assert service.store.connection.execute(
+            "SELECT state FROM deployment_budget_reservations"
+        ).fetchone()[0] == "DISPATCHING"
+
+        monkeypatch.setattr(service_module, "execute_attempt", original_execute)
+        with dispatch_budget(policy), pytest.raises(
+            IntegrityError,
+            match="WORKSPACE_ADVISORY_IN_PROGRESS",
+        ):
+            service.preview_change("currency")
+        monkeypatch.setattr(
+            service,
+            "_wall_clock",
+            lambda: attempts[0]["execution_deadline_epoch_ms"] / 1000 + 1,
+        )
+        with dispatch_budget(policy):
+            assert reconcile_expired_dispatch_quotas(service) == 1
+        with dispatch_budget(policy), pytest.raises(
+            IntegrityError,
+            match="WORKSPACE_ADVISORY_RESULT_UNKNOWN",
+        ):
+            service.preview_change("currency")
+        assert provider.requests == []
+        assert service.store.connection.execute(
+            "SELECT state FROM deployment_budget_reservations"
+        ).fetchone()[0] == "RESULT_UNKNOWN"
+    finally:
+        service.close()
+
+
+@pytest.mark.parametrize("backend", ["sqlite", "postgresql"])
+def test_unconfirmed_cancellation_stays_unknown_across_restart_and_keeps_ledger_active(
+    tmp_path,
+    postgres_runtime,
+    backend,
+):
+    pack = load_enterprise_quote_pilot_pack(PACK)
+    if backend == "postgresql":
+        database = postgres_runtime(tenant_id=pack.profile.organization_id)
+        options = {
+            "store_path": database["runtime_dsn"],
+            "store_tenant_id": pack.profile.organization_id,
+            "store_migrate": False,
+        }
+    else:
+        options = {"store_path": tmp_path / "cancel-unknown.sqlite"}
+    policy = deployment_budget()
+    service = WorkspaceService(
+        **options,
+        runtime_configuration=pack,
+        clock=FrozenClock("2026-08-15T00:00:00Z"),
+        review_duration_seconds=0,
+    )
+    restarted = None
+    try:
+        service.form_quote()
+        event = proposal(service, "cancel-unknown", "product_plan", "Enterprise cancelled")
+        service.register_change(event)
+        advisory = UnconfirmedCancellationAdvisory(service.advisory_factory)
+        service.advisory_factory = advisory
+        with dispatch_budget(policy), pytest.raises(
+            BoundedExecutionError,
+            match="BOUNDED_EXECUTION_CANCELLATION_UNCONFIRMED",
+        ):
+            service.preview_change(event.event_id)
+        attempt = cost_attempts(service)[0]
+        artifact = next(
+            item.payload
+            for item in service.store.list_artifacts(
+                artifact_id_prefix="workspace-preview-attempt:"
+            )
+            if item.payload.get("error_code")
+            == "BOUNDED_EXECUTION_CANCELLATION_UNCONFIRMED"
+        )
+        assert artifact["status"] == "RESULT_UNKNOWN"
+        assert advisory.calls == 1
+        assert service.store.connection.execute(
+            "SELECT state FROM deployment_budget_reservations"
+        ).fetchone()[0] == "DISPATCHING"
+        service.close()
+
+        restarted = WorkspaceService(
+            **options,
+            runtime_configuration=pack,
+            clock=FrozenClock("2026-08-15T00:00:00Z"),
+            review_duration_seconds=0,
+        )
+        after_restart = UnconfirmedCancellationAdvisory(restarted.advisory_factory)
+        restarted.advisory_factory = after_restart
+        with dispatch_budget(policy), pytest.raises(
+            IntegrityError,
+            match="WORKSPACE_ADVISORY_RESULT_UNKNOWN",
+        ):
+            restarted.preview_change(event.event_id)
+        assert after_restart.calls == 0
+        assert restarted.store.connection.execute(
+            "SELECT state FROM deployment_budget_reservations"
+        ).fetchone()[0] == "DISPATCHING"
+        restarted._wall_clock_epoch_ms = lambda: attempt["execution_deadline_epoch_ms"] + 1
+        with dispatch_budget(policy):
+            assert reconcile_expired_dispatch_quotas(restarted) == 1
+        assert restarted.store.connection.execute(
+            "SELECT state FROM deployment_budget_reservations"
+        ).fetchone()[0] == "RESULT_UNKNOWN"
+    finally:
+        if restarted is not None:
+            restarted.close()
+        else:
+            service.close()
 
 
 class BlockingAdvisory:
@@ -184,6 +373,55 @@ def test_preview_releases_locks_and_deduplicates_concurrent_and_completed_comman
         again = service.preview_command(event.event_id)
         assert again["artifact_digest"] == result["artifact_digest"]
         assert adapter.calls == 1
+    finally:
+        adapter.release.set()
+        service.close()
+
+
+def test_result_returning_after_persisted_deadline_is_not_saved_as_complete(
+    tmp_path,
+    monkeypatch,
+):
+    from orgrebase.workspace import service as service_module
+
+    service = make_service(tmp_path / "late-result.sqlite")
+    event = register(service)
+    adapter = block(service)
+    observed = {}
+    original_execute = service_module.execute_attempt
+
+    def observe_attempt(*args, **kwargs):
+        observed["deadline"] = args[1].execution_deadline_epoch_ms
+        try:
+            return original_execute(*args, **kwargs)
+        finally:
+            observed["finished_at"] = service._wall_clock_epoch_ms()
+
+    monkeypatch.setattr(service_module, "execute_attempt", observe_attempt)
+    try:
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            pending = pool.submit(service.preview_change, event.event_id)
+            assert adapter.entered.wait(5)
+            monkeypatch.setattr(
+                service,
+                "_wall_clock_epoch_ms",
+                lambda: observed["deadline"] + 1,
+            )
+            assert service._wall_clock_epoch_ms() > observed["deadline"]
+            adapter.release.set()
+            error = pending.exception(timeout=5)
+            assert isinstance(error, IntegrityError), observed
+            assert "WORKSPACE_ADVISORY_LATE_RESULT" in str(error)
+        result = next(
+            item.payload
+            for item in service.store.list_artifacts(
+                artifact_id_prefix="workspace-preview-attempt:"
+            )
+            if item.payload.get("error_code") == "WORKSPACE_ADVISORY_LATE_RESULT"
+        )
+        assert result["status"] == "FAILED"
+        assert result["error_code"] == "WORKSPACE_ADVISORY_LATE_RESULT"
+        assert service._preview_record(event.event_id) is None
     finally:
         adapter.release.set()
         service.close()

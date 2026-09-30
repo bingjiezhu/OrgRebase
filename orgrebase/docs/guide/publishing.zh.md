@@ -2,15 +2,9 @@
 
 ## 产品源码目录
 
-[OrgRebase产品仓库](https://github.com/bingjiezhu/OrgRebase)维护源码、契约、测试、文档和许可证。
+[OrgRebase 仓库](https://github.com/bingjiezhu/OrgRebase)以工作区为根：`orgrebase/` 是产品源码，`oac-spec/` 是并列的独立契约项目。一次 clone 提供两棵树；在 `orgrebase/` 中运行 `uv sync`、`make check-core` 和文档站构建。OAC 不嵌入产品 Python 包，部署配置、客户凭据与运行数据库也不放进源码。
 
-原先：GitHub 产品根就是产品源码根，含`pyproject.toml`、`src/`、`docs/`、`documentation/`与`LICENSE`；完整源码分发里该目录名为`orgrebase/`。
-
-现状：公开仓库是工作区根。上述产品文件在`orgrebase/`下，旁边是独立的`oac-spec/`。`git clone`之后进入`orgrebase/`再执行`uv sync`、`make check-core`和文档站构建。部署文件、客户凭据与运行数据库仍分别管理。
-
-为什么：一次 clone 带上配套 OAC，同时不把 OAC 嵌进产品包，也不改写其 Apache-2.0。
-
-OAC是独立依赖。原先：GitHub 产品根不含 OAC，完整源码分发才并列 `orgrebase/` 与 `oac-spec/`；单独产品仓库需另取版本放到`../oac-spec`或配置`ORGREBASE_OAC_ROOT`。现状：若按工作区发布，一次 clone 的仓库根即含两棵树，默认`../oac-spec`可用。为什么：配套交付，同时避免把 OAC 嵌进产品包内部或改写其 Apache-2.0 许可。完整CI在产品根布局下通过`OAC_REPOSITORY`与40位`OAC_REVISION`绑定；改为工作区后应在`orgrebase/`子目录跑检查，并直接使用仓库内的`oac-spec/`。core CI不需要 OAC。
+受保护源码和运行资源变更触发产品 Core、OAC 公开契约门及 PostgreSQL/OAC 企业边界检查。完整内部历史档案不在公开白名单内，因此公开 CI 不把旧 `make check` 或 `make archive-replay-check` 冒充新源码的发布资格。维护者手动启动公开发布门；构建、隔离安装、SBOM 与签署结果必须绑定同一提交。当前 Beta 本地检查不等于 GitHub 远端 CI 已通过。
 
 ## 发布前检查
 
@@ -21,7 +15,7 @@ OAC是独立依赖。原先：GitHub 产品根不含 OAC，完整源码分发才
 
 ## 构建双语站点
 
-原先：在产品根（即含`pyproject.toml`的目录）执行。现状：工作区 clone 后该目录是`orgrebase/`。
+在工作区的 `orgrebase/` 目录执行：
 
 ```bash
 uv sync --project documentation --locked --python 3.12.13
@@ -34,8 +28,7 @@ python3 -m http.server 8018 --bind 127.0.0.1 --directory /tmp/orgrebase-docs-new
 
 加入经过审核的源码下载时，同时提供`--source-archive`与`--source-sha256`。构建器验证摘要及文档、引用源码和工具源字节；下载仅进入静态产物。分发包与站内下载使用同一源码ZIP和摘要。
 
-原先：GitHub Pages 工作流默认只构建预览，有权维护者配置 Pages 并选择部署后才会发布站点。
-现状：`main` 上的文档变更会构建并发布到 [bingjiezhu.github.io/OrgRebase](https://bingjiezhu.github.io/OrgRebase/)。工作流仍可用 `workflow_dispatch` 指定 `site_url`。详细命令及维护范围见[建站说明](../DOCUMENTATION-SITE.md)。
+PR 只构建并保留只读预览；`main` 上的文档或站点输入变更才会构建并部署到 [bingjiezhu.github.io/OrgRebase](https://bingjiezhu.github.io/OrgRebase/)。本地建站不会推送或覆盖线上站。合并后还须检查线上“本站源码与下载”、许可页及语言切换，确认 Pages 已更新到目标源码。详细命令见[建站说明](../DOCUMENTATION-SITE.md)。
 
 ## 版本与验收记录
 

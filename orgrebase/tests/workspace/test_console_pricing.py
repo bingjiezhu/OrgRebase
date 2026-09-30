@@ -13,6 +13,69 @@ ROOT = Path(__file__).resolve().parents[2]
 pytestmark = pytest.mark.skipif(shutil.which("node") is None, reason="Node.js required")
 
 
+def test_basket_submission_uses_the_reviewed_source_without_changing_decimal_prices() -> None:
+    run_node(r'''
+const vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync('demo/console/change-workbench.js','utf8');
+const submit=source.slice(source.indexOf('  async function submit(e) {'),source.indexOf('  function watchPreview('));
+let submitted;
+const basket={currency:'USD',items:[{line_id:'line:one',sku:'SKU',description:'Item',quantity:2,unit_price:'0.335000000000000001'}],source_ref:'source:old'};
+const draft={event_id:null,slot_id:'quote_basket',base_version:'v1',base_digest:'sha256:base',value:JSON.stringify(basket),source_ref:'source:new',reason:'Updated quantity',operation:'UPDATE'};
+const session={},client={session:()=>session,workspace:()=> 'ws',json:async(path,options)=>{submitted=options.body;return {event_id:options.body.event_id};}};
+const nodes={'change-submit':{dataset:{unavailable:'false'}},'change-proposal-form':{},'change-editor':{open:true}};
+const window={dispatchEvent:()=>{}};
+const context={draft,busy:false,byId:id=>nodes[id],field:()=>({slot_id:'quote_basket',value_kind:'json',allowed_operations:['UPDATE'],current:{version:'v1',digest:'sha256:base'}}),fail:()=>{},showNotice:()=>{},renderEditor:()=>{},setBusy:()=>{},tr:(_zh,en)=>en,crypto:{randomUUID:()=> 'id'},client,options:{execution_run_id:'run'},state:{execution:{run_id:'run'}},commandSequence:0,selectedId:null,draftEdited:true,refresh:async()=>{},window,CustomEvent:class{}};
+vm.runInNewContext(submit,context);
+(async()=>{await context.submit({preventDefault(){}});
+assert.equal(submitted.value.source_ref,submitted.source_ref,'basket and versioned source must identify the same reviewed source');
+assert.equal(submitted.value.items[0].unit_price,basket.items[0].unit_price,'unit prices remain exact decimal strings');
+assert.equal(submitted.value.items[0].line_id,'line:one');
+assert.equal(basket.source_ref,'source:old','the predecessor is unchanged');
+})().catch(error=>{console.error(error);process.exitCode=1});
+''')
+
+
+def test_basket_line_editor_retains_identity_precision_and_safe_unsent_drafts() -> None:
+    source = json.dumps((ROOT / "demo/console/change-workbench.js").read_text())
+    run_node(r'''
+const assert=require('node:assert/strict'),vm=require('node:vm');
+const {document,window,CustomEvent,nodes,tick,button}=require('./tests/workspace/console_dom_harness.js');
+const basket={currency:'USD',items:[{line_id:'line:one',sku:'SKU-1',description:'<img src=x onerror=evil()>',quantity:3,unit_price:'0.335000000000000001'}],source_ref:'source:old'};
+const configuration={execution_run_id:'run:basket',fields:[{slot_id:'quote_basket',value_kind:'json',current:{version:'v1',digest:'sha256:base',state:'CURRENT',value:basket},owner_id:'owner:product',allowed_operations:['UPDATE']}]};
+const submitted=[],session={mode:'local',principal:null};let uuid=0;
+window.OrgRebaseClient={session:()=>session,workspace:()=> 'workspace:one',async json(path,request={}){
+ if(path.endsWith('/change-options'))return structuredClone(configuration);
+ if(path.includes('/changes?'))return {items:[],next_cursor:null};
+ if(path.endsWith('/change-proposals')){submitted.push(structuredClone(request.body));return {event_id:request.body.event_id};}
+ throw new Error(path);
+}};
+vm.runInNewContext(SOURCE,{window,document,CustomEvent,performance,crypto:{randomUUID:()=>String(++uuid)}});
+async function input(id,value){nodes.get(id).value=value;await nodes.get(id).emit('input');}
+(async()=>{
+ await tick();await tick();
+ assert.equal(nodes.get('change-basket-unit_price-0').value,'0.335000000000000001');
+ assert.equal(nodes.get('change-basket-description-0').value,'<img src=x onerror=evil()>');
+ assert.equal(nodes.get('change-value-mount').querySelectorAll('button')[0].disabled,true,'the last line cannot be removed');
+ await input('change-basket-quantity-0','4');await input('change-source','source:new');
+ await window.OrgRebaseChangeWorkbench.refresh();
+ assert.equal(nodes.get('change-basket-quantity-0').value,'4','refresh preserves the unsent line edit');
+ await input('change-basket-unit_price-0','1e1');await nodes.get('change-proposal-form').emit('submit');
+ assert.equal(submitted.length,0,'scientific notation is rejected rather than normalized');
+ await input('change-basket-unit_price-0','0.335000000000000001');
+ await input('change-basket-quantity-0','1000001');await nodes.get('change-proposal-form').emit('submit');assert.equal(submitted.length,0);
+ await input('change-basket-quantity-0','4');await button('Add line').emit('click');
+ await input('change-basket-sku-1','SKU-2');await input('change-basket-description-1','Additional item');await input('change-basket-unit_price-1','12.5000');
+ await window.OrgRebaseChangeWorkbench.refresh();assert.equal(nodes.get('change-basket-unit_price-1').value,'12.5000');
+ await nodes.get('change-proposal-form').emit('submit');await tick();assert.equal(submitted.length,1);
+ const body=submitted[0];assert.equal(body.value.items.length,2);assert.equal(body.value.items[0].line_id,'line:one');
+ assert.equal(body.value.items[0].quantity,4);assert.equal(body.value.items[0].unit_price,'0.335000000000000001');
+ assert.equal(body.value.items[1].unit_price,'12.5000');assert(body.value.items[1].line_id.startsWith('line:'));
+ assert.equal(body.value.currency,'USD');assert.equal(body.value.source_ref,body.source_ref);
+ assert(!Object.hasOwn(body,'basket_input'));assert.equal(basket.items[0].quantity,3);
+})().catch(error=>{console.error(error);process.exitCode=1});
+'''.replace('SOURCE', source))
+
+
 def test_current_quote_renders_server_money_without_recalculation_or_html() -> None:
     run_node(r'''
 const assert=require('node:assert/strict'),vm=require('node:vm');

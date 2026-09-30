@@ -18,6 +18,7 @@ GOAI_REPO_DEMO_MEDIA = $(firstword $(wildcard submission/demo.mp4 submission/dem
 PYRUN = PYTHONPATH=$(PYTHONPATH) $(PYTHON)
 PYTEST = $(PYRUN) -m pytest
 CORE_TESTS = tests/workspace/test_reseal_skill_package_licensing.py tests/test_public_release_source_parity.py tests/workspace/test_licensing_contracts.py \
+	tests/test_dependency_lock.py \
 	tests/test_architecture_boundaries.py tests/test_runtime_version.py tests/test_impact.py \
 	tests/test_installed_oac_parity_assets.py \
 	tests/test_source_snapshot.py::test_github_release_excludes_internal_review_and_planning_prose \

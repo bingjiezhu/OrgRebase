@@ -28,6 +28,7 @@ def test_core_target_keeps_bounded_invariants_and_isolated_runtime_probe() -> No
         path = selector.split("::", 1)[0]
         assert (ROOT / path).is_file(), f"Core test selector has no source file: {selector}"
     for module in (
+        "test_dependency_lock.py",
         "test_impact.py",
         "test_runtime_version.py",
         "test_state_snapshot.py",

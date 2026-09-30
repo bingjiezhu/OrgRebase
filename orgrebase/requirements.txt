@@ -11,6 +11,8 @@ anyio==4.14.2
     #   watchfiles
 authlib==1.8.0
     # via orgrebase
+certifi==2026.7.22
+    # via orgrebase
 cffi==2.1.1 ; platform_python_implementation != 'PyPy'
     # via cryptography
 click==8.4.2
@@ -57,7 +59,7 @@ pydantic==2.13.4
     #   orgrebase
 pydantic-core==2.46.4
     # via pydantic
-pyjwt==2.13.0
+pyjwt==2.15.1
     # via orgrebase
 python-dotenv==1.2.2
     # via uvicorn

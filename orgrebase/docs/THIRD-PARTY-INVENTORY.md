@@ -10,6 +10,7 @@
 | FastAPI | 0.141.1; `>=0.116,<1` | MIT | HTTP/OpenAPI surface for Workspace, certificates, receipts, and `ToolContract` |
 | Authlib | 1.8.0; `>=1.8,<2` | BSD-3-Clause | OIDC Authorization Code client with PKCE for browser sessions |
 | HTTPX2 | 2.12.0; `>=2.12,<3` | BSD-3-Clause | Verified HTTPS for the OIDC client, source reader and target adapter |
+| certifi | 2026.7.22; `>=2026.7.22` | MPL-2.0 | Explicit public CA bundle for the operations HTTPS client; private enterprise roots require its configured CA bundle |
 | Pydantic | 2.13.4; `>=2.11,<3` | MIT | Frozen Agent, Skill, tool, state, and evidence contracts; JSON Schema export |
 | rfc8785.py | 0.1.4; `>=0.1.4,<0.2` | Apache-2.0 | RFC 8785 canonicalization for the versioned JSON wire protocol; retained content artifacts keep their original digest codec |
 | Uvicorn | 0.52.3; `>=0.35,<1` | BSD-3-Clause | Local ASGI server; it has no canonical write authority by itself |

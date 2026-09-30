@@ -8,6 +8,8 @@
 - Reject symlinked ancestors and changed input identities in the offline distribution builder.
 - Resolve the complete lockfile dependency graph by exact identity, including optional and development groups; preserve extras and marker provenance and reject ambiguous references.
 - Match development fact generation with explicit checks of that output, while keeping retained historical fact verification separate.
+- Fix the operations client's default CA bundle explicitly across platforms; ambient certificate environment variables cannot replace it. Preserve explicit private CA configuration, certificate validation and hostname checks.
+- Keep the pip installation requirements synchronized with the frozen runtime lock, including the current PyJWT security floor, and check this agreement in contributor CI.
 - Pin GitHub Actions by immutable commit identity; run required checks on every pull request and main push. Build both components, their SBOMs and the documentation source download from the same verified commit. Sign artifact provenance and publish prereleases with immutable tags and assets.
 
 - Generate public iterations from the canonical workspace with a fixed source policy and exact content/executable-bit parity checks; preserve older iterations instead of overlaying them.

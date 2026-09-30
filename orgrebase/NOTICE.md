@@ -10,7 +10,7 @@ Historical releases retain their original release terms. Content-addressed Skill
 benchmark records may contain historical license identifiers; these are preserved
 for verification and do not narrow the current grant for project-owned material.
 
-Runtime dependencies are Authlib (BSD-3-Clause), HTTPX2 (BSD-3-Clause),
+Runtime dependencies are Authlib (BSD-3-Clause), HTTPX2 (BSD-3-Clause), certifi (MPL-2.0),
 FastAPI (MIT), Pydantic (MIT), rfc8785.py (Apache-2.0),
 Uvicorn (BSD-3-Clause), SQLAlchemy (MIT), Psycopg and psycopg-binary (LGPL-3.0-only),
 PyJWT (MIT), cryptography (Apache-2.0 OR BSD-3-Clause), and their locked transitive dependencies.

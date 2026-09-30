@@ -80,8 +80,10 @@ systemd timer / Kubernetes CronJob 等调度器；调度器负责启动、捕获
 
 如果服务 HTTPS 证书使用企业私有 CA，在同一配置中显式增加
 `"ca_bundle": "/private/ops/enterprise-ca.pem"`。该路径必须是绝对路径，指向可读、非符号链接的
-普通 PEM 证书文件；组和其他用户不得具有写权限，文件上限为 1 MiB。未配置时使用客户端默认 TLS
-信任库，不从 `SSL_CERT_FILE` 环境变量或代理设置改变信任，也不跟随重定向。无论哪种方式，证书链与主机名校验始终开启；
+普通 PEM 证书文件；组和其他用户不得具有写权限，文件上限为 1 MiB。未配置时显式加载锁定版本
+certifi 的 Mozilla 公共 CA；企业内部 CA 必须通过 `ca_bundle` 提供。两种配置都使用标准
+`SSLContext`，不从 `SSL_CERT_FILE`、`SSL_CERT_DIR` 或环境代理改变信任，也不跟随重定向。
+证书链与主机名校验始终开启；
 文件缺失、无效 PEM 或不安全文件权限返回不含路径的 `OPERATIONS_CA_BUNDLE_UNAVAILABLE`，不受信
 证书或主机名不匹配返回 `OPERATIONS_REQUEST_UNAVAILABLE`，不会推进观察游标。
 

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
+import re
 import ssl
+import subprocess
 import sys
 import threading
 from datetime import UTC, datetime
@@ -9,6 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+import certifi
 import httpx2 as httpx
 import pytest
 from browser_oidc_provider import tls_files
@@ -16,6 +20,16 @@ from browser_oidc_provider import tls_files
 from scripts import run_enterprise_operations_cycle as cycle
 
 NOW = datetime(2026, 9, 28, 12, 0, tzinfo=UTC)
+
+
+def _hashed_ca_directory(certificate: Path) -> Path:
+    digest = subprocess.run(
+        ["openssl", "x509", "-in", str(certificate), "-noout", "-subject_hash"],
+        check=True, capture_output=True, text=True,
+    ).stdout.strip()
+    assert len(digest) == 8 and all(character in "0123456789abcdef" for character in digest)
+    (certificate.parent / (digest + ".0")).write_bytes(certificate.read_bytes())
+    return certificate.parent
 
 
 def config(tmp_path: Path, **overrides) -> cycle.CycleConfig:
@@ -354,8 +368,51 @@ def test_cli_observe_accepts_explicit_private_ca_with_certificate_and_hostname_v
     assert str(certificate) not in captured.out
 
 
+@pytest.mark.parametrize("ambient", ["file", "directory", "both"])
+def test_default_tls_context_uses_only_the_locked_public_ca_bundle(
+    tmp_path, monkeypatch, ambient,
+):
+    certificate, _ = tls_files(tmp_path)
+    if ambient in {"file", "both"}:
+        monkeypatch.setenv("SSL_CERT_FILE", str(certificate))
+    if ambient in {"directory", "both"}:
+        monkeypatch.setenv("SSL_CERT_DIR", str(_hashed_ca_directory(certificate)))
+    monkeypatch.setenv("SSLKEYLOGFILE", str(tmp_path / "keylog"))
+    environment_before = {
+        name: os.environ.get(name)
+        for name in ("SSL_CERT_FILE", "SSL_CERT_DIR", "SSLKEYLOGFILE")
+    }
+    context = cycle._tls_verify(config(tmp_path))
+    assert isinstance(context, ssl.SSLContext)
+    assert context.check_hostname and context.verify_mode == ssl.CERT_REQUIRED
+    assert context.minimum_version >= ssl.TLSVersion.TLSv1_2
+    assert context.keylog_filename is None
+    expected = {
+        ssl.PEM_cert_to_DER_cert(pem)
+        for pem in re.findall(
+            r"-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----",
+            Path(certifi.where()).read_text(), flags=re.DOTALL,
+        )
+    }
+    assert len(expected) > 100  # Verify a real public trust pool, not an empty rejecting context.
+    assert set(context.get_ca_certs(binary_form=True)) == expected
+    assert ssl.PEM_cert_to_DER_cert(certificate.read_text()) not in expected
+    assert environment_before == {
+        name: os.environ.get(name) for name in environment_before
+    }
+    assert not (tmp_path / "keylog").exists()
+
+
+def test_missing_public_ca_bundle_fails_closed(tmp_path, monkeypatch):
+    monkeypatch.setattr(cycle.certifi, "where", lambda: str(tmp_path / "missing.pem"))
+    with pytest.raises(cycle.CycleError) as rejected:
+        cycle._tls_verify(config(tmp_path))
+    assert str(rejected.value) == "OPERATIONS_CA_BUNDLE_UNAVAILABLE"
+
+
 @pytest.mark.parametrize("problem, expected", [
     ("default-trust", "OPERATIONS_REQUEST_UNAVAILABLE"),
+    ("default-trust-dir", "OPERATIONS_REQUEST_UNAVAILABLE"),
     ("wrong-ca", "OPERATIONS_REQUEST_UNAVAILABLE"),
     ("wrong-hostname", "OPERATIONS_REQUEST_UNAVAILABLE"),
     ("missing-file", "OPERATIONS_CA_BUNDLE_UNAVAILABLE"),
@@ -372,7 +429,7 @@ def test_cli_tls_rejections_preserve_existing_cursor_and_never_issue_business_re
     origin, certificate, observed = operations_https(wrong_hostname=problem == "wrong-hostname")
     payload = config(tmp_path, origin=origin).model_dump()
     payload["ca_bundle"] = str(certificate)
-    if problem == "default-trust":
+    if problem in {"default-trust", "default-trust-dir"}:
         payload.pop("ca_bundle")
     elif problem == "wrong-ca":
         other = tmp_path / "other-ca"
@@ -404,6 +461,9 @@ def test_cli_tls_rejections_preserve_existing_cursor_and_never_issue_business_re
     monkeypatch.setenv("OPS_READ_TOKEN", "local-ops-secret")
     # Ambient trust must not override the explicit server-owned configuration.
     monkeypatch.setenv("SSL_CERT_FILE", str(certificate))
+    if problem == "default-trust-dir":
+        monkeypatch.delenv("SSL_CERT_FILE", raising=False)
+        monkeypatch.setenv("SSL_CERT_DIR", str(_hashed_ca_directory(certificate)))
     monkeypatch.setattr(cycle, "_invoke_worker", lambda _: pytest.fail("TLS rejection invoked a worker"))
     monkeypatch.setattr(sys, "argv", ["ops-cycle", "--config", str(config_file),
                                       "--state-file", str(state_file), "--mode", "observe"])

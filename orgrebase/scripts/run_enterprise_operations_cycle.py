@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any, Literal
 from urllib.parse import urlsplit
 
+import certifi
 import httpx2 as httpx
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -116,9 +117,14 @@ def load_config(path: Path) -> CycleConfig:
         raise CycleError("OPERATIONS_CONFIG_INVALID") from exc
 
 
-def _tls_verify(config: CycleConfig) -> bool | ssl.SSLContext:
+def _tls_verify(config: CycleConfig) -> ssl.SSLContext:
     if config.ca_bundle is None:
-        return True
+        try:
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            context.load_verify_locations(cafile=certifi.where())
+            return context
+        except OSError as exc:
+            raise CycleError("OPERATIONS_CA_BUNDLE_UNAVAILABLE") from exc
     try:
         descriptor = os.open(config.ca_bundle, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
         with os.fdopen(descriptor, "rb") as stream:
@@ -128,7 +134,9 @@ def _tls_verify(config: CycleConfig) -> bool | ssl.SSLContext:
                 raise CycleError("OPERATIONS_CA_BUNDLE_UNAVAILABLE")
             # Load the already checked descriptor, preserving the no-symlink
             # boundary if the configured pathname is replaced concurrently.
-            return ssl.create_default_context(cafile=f"/dev/fd/{stream.fileno()}")
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            context.load_verify_locations(cafile=f"/dev/fd/{stream.fileno()}")
+            return context
     except OSError as exc:
         raise CycleError("OPERATIONS_CA_BUNDLE_UNAVAILABLE") from exc
 

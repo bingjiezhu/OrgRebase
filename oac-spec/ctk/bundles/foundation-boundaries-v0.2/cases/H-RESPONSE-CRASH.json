@@ -1,0 +1,14 @@
+{
+  "caseId": "H-RESPONSE-CRASH",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "response-crash"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-ADAPTER"
+  ],
+  "testTarget": "HARNESS"
+}

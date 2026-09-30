@@ -11,6 +11,36 @@ from tests.workspace.test_workspace_client import run_node
 ROOT = Path(__file__).resolve().parents[2]
 
 
+@pytest.mark.skipif(shutil.which("node") is None, reason="Node.js required")
+def test_classified_advisory_subreasons_select_exact_guidance_without_reflecting_private_messages():
+    run_node(r'''
+const assert=require('node:assert/strict'),vm=require('node:vm');
+const source=fs.readFileSync('demo/console/change-workbench.js','utf8');
+const helper=source.slice(source.indexOf('  function fail('),source.indexOf('  function setBusy('));
+let language='en',notice='';const window={};
+const context={detail:null,tr:(zh,en)=>language==='en'?en:zh,showNotice:value=>{notice=value;}};
+vm.runInNewContext(helper,context);
+const reasons=['WORKSPACE_ADVISORY_RESULT_UNKNOWN','WORKSPACE_ADVISORY_ATTEMPT_FAILED','WORKSPACE_ADVISORY_INPUT_CHANGED_REQUIRE_NEW_EVENT'];
+for(language of ['en','zh-CN']){
+ for(const reason of reasons){context.fail({status:409,code:'EVIDENCE_INTEGRITY_FAILED',detail:{message:reason}});
+  assert(notice.includes(language==='en'?'Ask the owner to reject':'请由负责人拒绝本提案'));
+  assert(notice.includes('EVIDENCE_INTEGRITY_FAILED'));
+ }
+ for(const reason of ['opaque-private-field:PRIVATE_MESSAGE_SENTINEL token=PRIVATE_MESSAGE_SENTINEL','WORKSPACE_ADVISORY_RESULT_UNKNOWN:PRIVATE_MESSAGE_SENTINEL']){
+  context.fail({status:409,code:'EVIDENCE_INTEGRITY_FAILED',detail:{message:reason}});
+  assert(!notice.includes('PRIVATE_MESSAGE_SENTINEL'));assert(!notice.includes('opaque-private-field'));
+  assert(!notice.includes(language==='en'?'Ask the owner to reject':'请由负责人拒绝本提案'),'prefix or arbitrary messages never select a known path');
+ }
+ context.fail({status:403,code:'AUTH_ACTION_DENIED',detail:{message:reasons[0]}});
+ assert(!notice.includes(language==='en'?'Ask the owner to reject':'请由负责人拒绝本提案'));
+ context.fail({status:401,code:'AUTH_REQUIRED',detail:{message:reasons[0]}});
+ assert(!notice.includes(language==='en'?'Ask the owner to reject':'请由负责人拒绝本提案'));
+ context.fail({message:'opaque-private-field:PRIVATE_MESSAGE_SENTINEL token=PRIVATE_MESSAGE_SENTINEL'});
+ assert(!notice.includes('PRIVATE_MESSAGE_SENTINEL'));assert(notice.includes('REQUEST_FAILED'));
+}
+''')
+
+
 def test_attempt_summary_never_infers_approval_or_billing_and_never_retries():
     source = json.dumps((ROOT / "demo/console/change-workbench.js").read_text())
     harness = json.dumps(str(ROOT / "tests/workspace/console_dom_harness.js"))
@@ -93,7 +123,7 @@ const visibleAdvice=()=>nodes.get('change-detail-body').children.find(node=>node
  for(const [code,expected] of [
   ['WORKSPACE_ADVISORY_IN_PROGRESS','Refresh later'],
   ['WORKSPACE_ADVISORY_RESULT_UNKNOWN','Ask the owner to reject'],
-  ['WORKSPACE_ADVISORY_ATTEMPT_FAILED:OPENAI_TIMEOUT','Ask the owner to reject'],
+  ['WORKSPACE_ADVISORY_ATTEMPT_FAILED','Ask the owner to reject'],
   ['WORKSPACE_ADVISORY_INPUT_CHANGED_REQUIRE_NEW_EVENT','Ask the owner to reject'],
   ['OPENAI_CREDENTIALS_MISSING','Ask an administrator'],
  ]){

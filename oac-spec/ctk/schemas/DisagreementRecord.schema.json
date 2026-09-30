@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0.1/DisagreementRecord.schema.json",
+  "title": "DisagreementRecord",
+  "description": "Closed governance record for preserving a conformance disagreement without majority or reference-wins semantics.",
+  "$comment": "No current Phase A runner path emits this resource; this schema freezes the published stage, classification, and status vocabulary without claiming runtime integration.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "disagreementId",
+    "caseId",
+    "bundleDigest",
+    "stage",
+    "observations",
+    "classification",
+    "status",
+    "owner",
+    "affectedVersion",
+    "resolutionRef",
+    "regressionCaseRef",
+    "digest"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "oac.ctk.disagreement/v0.1"
+    },
+    "disagreementId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "caseId": {
+      "$ref": "#/$defs/caseId"
+    },
+    "bundleDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "stage": {
+      "enum": [
+        "ADAPTER",
+        "HARNESS",
+        "PARSE",
+        "SCHEMA",
+        "CANONICAL_BYTES",
+        "DERIVATION",
+        "VERDICT",
+        "REASON_SET",
+        "WITNESS_BINDING",
+        "RESOURCE_EXHAUSTION"
+      ]
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/observation"
+      }
+    },
+    "classification": {
+      "enum": [
+        "IMPLEMENTATION_DEFECT",
+        "SPECIFICATION_DEFECT",
+        "FIXTURE_DEFECT",
+        "HARNESS_DEFECT",
+        "CONTESTED_SEMANTICS"
+      ]
+    },
+    "status": {
+      "enum": [
+        "OPEN",
+        "RESOLVED"
+      ]
+    },
+    "owner": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "affectedVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "resolutionRef": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "regressionCaseRef": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "generatedCase": {
+      "$ref": "#/$defs/generatedCase"
+    },
+    "digest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "OPEN"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "resolutionRef": {
+            "type": "null"
+          },
+          "regressionCaseRef": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "RESOLVED"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "resolutionRef": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "regressionCaseRef": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "caseId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "additionalProperties": true
+    },
+    "digestMap": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/sha256Digest"
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationId",
+        "implementationBuildDigest",
+        "artifactDigests",
+        "observationDigest"
+      ],
+      "properties": {
+        "implementationId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "implementationBuildDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "artifactDigests": {
+          "$ref": "#/$defs/digestMap"
+        },
+        "observationDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    },
+    "generatedCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generatorId",
+        "generatorVersion",
+        "generatorDigest",
+        "seed",
+        "originalInputDigest",
+        "minimizedReproducerDigest",
+        "minimizerVersion"
+      ],
+      "properties": {
+        "generatorId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "generatorVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "generatorDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "seed": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "originalInputDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "minimizedReproducerDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "minimizerVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    }
+  }
+}

@@ -27,6 +27,7 @@ from typing import Any, Literal
 
 from pydantic import Field
 
+from orgrebase import __version__
 from orgrebase.digest import sha256_digest
 from orgrebase.domain import ContentAddressedModel, IntegrityError
 from orgrebase.local_storage import prepare_private_sqlite_path
@@ -1013,7 +1014,7 @@ def build_joint_otlp(
         "attributes": _otlp_attributes(
             {
                 "service.name": "orgrebase",
-                "service.version": "0.4.0",
+                "service.version": __version__,
                 "deployment.environment.name": "controlled-local",
             }
         )

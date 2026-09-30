@@ -161,7 +161,8 @@ def test_priced_change_submission_remains_candidate_only_and_rejects_currency_sw
         assert fields["quote_basket"]["blocked_reason"] is None
         current = service.store.get_object("policy:finance.pricing")
         request = ChangeProposalInput(event_id="policy-edit", slot_id="pricing_policy", base_version=current.version,
-                                      base_digest=current.digest, value={**POLICY, "discount_bps": 1000},
+                                      base_digest=current.digest, value={**POLICY, "discount_bps": 1000,
+                                                                       "source_ref": "source:owner-reviewed@v2"},
                                       source_ref="source:owner-reviewed@v2")
         receipt = submit_change(service, request)
         assert receipt["event"]["proposal"]["state"] == "PROPOSED"
@@ -177,13 +178,14 @@ def test_priced_change_submission_remains_candidate_only_and_rejects_currency_sw
         basket = fields["quote_basket"]["current"]
         mixed_basket = ChangeProposalInput(
             event_id="basket-currency-edit", slot_id="quote_basket", base_version=basket["version"],
-            base_digest=basket["digest"], value={**BASKET, "currency": "GBP"}, source_ref="source:basket@v2")
+            base_digest=basket["digest"], value={**BASKET, "currency": "GBP", "source_ref": "source:basket@v2"}, source_ref="source:basket@v2")
         with pytest.raises(IntegrityError, match="CHANGE_EVENT_PRICING_CURRENCY_MISMATCH"):
             submit_change(service, mixed_basket)
         assert service.store.verify_event_chain() == before
         same_currency = mixed_basket.model_copy(update={
             "event_id": "basket-quantity-edit",
-            "value": {**BASKET, "items": [{**BASKET["items"][0], "quantity": 4}]},
+            "value": {**BASKET, "items": [{**BASKET["items"][0], "quantity": 4}],
+                      "source_ref": "source:basket@v2"},
         })
         receipt = submit_change(service, same_currency)
         assert receipt["event"]["proposal"]["state"] == "PROPOSED"

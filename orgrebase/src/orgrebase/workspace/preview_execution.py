@@ -10,6 +10,7 @@ from typing import Any
 
 from sqlalchemy import select
 
+from orgrebase.clock import utc_datetime
 from orgrebase.database import idempotency_records
 from orgrebase.digest import sha256_digest
 from orgrebase.domain import IntegrityError, RunEnvelope, StructuredHandoff
@@ -21,16 +22,37 @@ from orgrebase.workspace.change_agentteams import (
     native_tenant_id,
     progress_summary,
 )
+from orgrebase.workspace.change_budget import (
+    finish_dispatch_quota,
+    reserve_dispatch_quota,
+)
 from orgrebase.workspace.models import VerifiedAdvisoryBundle
 from orgrebase.workspace.runtime_revision import workspace_revision
 
 _MEDIA = "application/vnd.orgrebase.preview-candidate-attempt+json"
+_REASON_CODE = re.compile(r"^[A-Z][A-Z0-9_.:-]{0,255}$")
+_UNKNOWN_EXECUTION_CODES = frozenset(
+    {
+        "BOUNDED_EXECUTION_CANCELLATION_UNCONFIRMED",
+    }
+)
 
 
 def _attempt_key(command: str, run_id: str, nonce: str) -> str:
     return "workspace-preview-attempt:" + sha256_digest({
         "command": command, "run_id": run_id, "nonce": nonce,
     })[7:]
+
+
+def _bounded_error_code(error: BaseException) -> str:
+    reason = getattr(error, "reason_code", None)
+    if isinstance(reason, str) and _REASON_CODE.fullmatch(reason):
+        return reason
+    if isinstance(error, IntegrityError):
+        reason = str(error)
+        if _REASON_CODE.fullmatch(reason):
+            return reason
+    return type(error).__name__
 
 
 def _receipt_summaries(result: dict[str, Any]) -> list[dict[str, Any]]:
@@ -42,7 +64,9 @@ def _receipt_summaries(result: dict[str, Any]) -> list[dict[str, Any]]:
     summaries = []
     for receipt in receipts:
         request_id = receipt.get("provider_request_id")
-        if not isinstance(request_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}", request_id):
+        if not isinstance(request_id, str) or not re.fullmatch(
+            r"[A-Za-z0-9_-][A-Za-z0-9_.:/-]{0,255}", request_id
+        ):
             request_id = None
         dispatch = receipt.get("dispatch_state")
         if dispatch not in {"NOT_SENT", "SENT_UNKNOWN", "RESPONSE_RECEIVED"}:
@@ -173,6 +197,8 @@ def reserve_attempt(workspace: Any, connection: Any, *, command: str, fixture: A
             raise IntegrityError(code) from exc
         if result["request_digest"] != request_digest:
             raise IntegrityError("WORKSPACE_ADVISORY_ATTEMPT_BINDING_INVALID")
+        if result["status"] == "RESULT_UNKNOWN":
+            raise IntegrityError("WORKSPACE_ADVISORY_RESULT_UNKNOWN")
         if result["status"] != "COMPLETE":
             raise IntegrityError("WORKSPACE_ADVISORY_ATTEMPT_FAILED:" + result["error_code"])
         return PreviewAttempt(key, request_digest, RunEnvelope.model_validate(previous["run_envelope"]), invalidation_digest,
@@ -188,13 +214,24 @@ def reserve_attempt(workspace: Any, connection: Any, *, command: str, fixture: A
     execution_deadline = workspace._wall_clock_epoch_ms() + int(
         getattr(workspace.advisory_factory, "max_elapsed_seconds", 120) * 1000
     )
-    workspace.store.save_idempotent(connection, key, request_digest, {
+    deployment_reservation = reserve_dispatch_quota(
+        workspace,
+        connection,
+        attempt_key=key,
+        request_digest=request_digest,
+        cost_reservation=cost_reservation,
+        deadline_epoch_ms=execution_deadline,
+    )
+    reservation = {
         "schema_version": "orgrebase.preview-candidate-attempt.v2",
         "run_envelope": envelope.model_dump(mode="json"),
         "deadline_epoch_ms": execution_deadline,
         "execution_deadline_epoch_ms": execution_deadline,
         "cost_reservation": cost_reservation,
-    })
+    }
+    if deployment_reservation is not None:
+        reservation["deployment_budget_reservation"] = deployment_reservation
+    workspace.store.save_idempotent(connection, key, request_digest, reservation)
     return PreviewAttempt(key, request_digest, envelope, invalidation_digest,
                           execution_deadline_epoch_ms=execution_deadline, cost_reservation=cost_reservation)
 
@@ -238,17 +275,30 @@ def execute_attempt(workspace: Any, attempt: PreviewAttempt, *, fixture: Any,
                                    **({"require_native": False} if native is not None else {}))
         if native is not None:
             advisory = advisory.model_copy(update={"native_execution": native.finish(advisory)})
+        if (
+            attempt.execution_deadline_epoch_ms is not None
+            and workspace._wall_clock_epoch_ms() >= attempt.execution_deadline_epoch_ms
+        ):
+            raise IntegrityError("WORKSPACE_ADVISORY_LATE_RESULT")
+        if utc_datetime(workspace.clock.now()) >= utc_datetime(attempt.envelope.expires_at):
+            raise IntegrityError("WORKSPACE_ADVISORY_PREVIEW_EXPIRED")
+        require_attempt_sources(workspace, attempt)
     except BaseException as error:
         receipts = tuple(getattr(error, "receipts", ()))
         # Provider adapters expose bounded public codes; arbitrary exception
         # messages can contain credentials or remote response bodies.
-        code = getattr(error, "reason_code", type(error).__name__)
+        code = _bounded_error_code(error)
+        result_unknown = code in _UNKNOWN_EXECUTION_CODES or "RESULT_UNKNOWN" in code or any(
+            getattr(receipt, "dispatch_state", None) == "SENT_UNKNOWN"
+            for receipt in receipts
+        )
         if native is not None:
-            native.status = "RESULT_UNKNOWN" if "RESULT_UNKNOWN" in code else "FAILED"
+            native.status = "RESULT_UNKNOWN" if result_unknown else "FAILED"
             save_progress(native.snapshot())
         with workspace.store.transaction() as connection:
             workspace.store.save_artifact(connection, attempt.key, _MEDIA, {
-                "request_digest": attempt.request_digest, "status": "FAILED",
+                "request_digest": attempt.request_digest,
+                "status": "RESULT_UNKNOWN" if result_unknown else "FAILED",
                 "error_code": code,
                 "cost_reservation": attempt.cost_reservation,
                 "usage_status": "UNKNOWN",
@@ -257,6 +307,14 @@ def execute_attempt(workspace: Any, attempt: PreviewAttempt, *, fixture: Any,
                     for item in collaboration.get("handoffs", ()) if isinstance(item, StructuredHandoff)],
                 **({"native_execution": native.snapshot()} if native is not None else {}),
             })
+            if not result_unknown:
+                finish_dispatch_quota(
+                    workspace,
+                    connection,
+                    attempt_key=attempt.key,
+                    request_digest=attempt.request_digest,
+                    state="FAILED",
+                )
         raise
     finally:
         if native is not None:
@@ -267,4 +325,11 @@ def execute_attempt(workspace: Any, attempt: PreviewAttempt, *, fixture: Any,
             "cost_reservation": attempt.cost_reservation,
             "advisory": advisory.model_dump(mode="json"),
         })
+        finish_dispatch_quota(
+            workspace,
+            connection,
+            attempt_key=attempt.key,
+            request_digest=attempt.request_digest,
+            state="COMPLETE",
+        )
     return advisory

@@ -1,0 +1,16 @@
+{
+  "caseId": "S-WITNESS-SHORT-PERCENT",
+  "expect": {
+    "errorCode": "APPLICABILITY_WITNESS_MISMATCH",
+    "sutStatus": "ERROR"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "urn:a%2#/spec"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

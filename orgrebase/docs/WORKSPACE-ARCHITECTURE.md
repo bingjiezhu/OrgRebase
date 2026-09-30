@@ -96,7 +96,7 @@ The coalition follows organizational authority rather than arbitrary parallelism
 | Finance | price band and currency Policy candidates | Legal source access; canonical admission |
 | GTM | customer/task intent and partner terms | restricted legal source; state transition |
 
-The `CoalitionPlanner` enumerates all 15 non-empty subsets of the four fixed cards and selects by exact coverage, then card count, declared cost and lexical order. A Quote selects four Domains; a public launch summary selects Product + GTM only.
+The `CoalitionPlanner` derives required Domains from admitted task slots and requires exactly one currently eligible Capability Card for each Domain. Missing or ambiguous providers fail closed. The current policy records declared cost but does not rank multiple providers or solve a global set-cover problem. A Quote selects four Domains; a public launch summary selects Product + GTM only.
 
 ## Execution-born dependencies
 
@@ -146,6 +146,8 @@ A process restart is forced between the launch-date and currency changes. Quote 
 ## Governed Skill Foundry
 
 The current Curator records task/trace provenance refs but does not read or induce behavior from trace content. It emits an immutable declarative program from a fixed action table, not executable arbitrary Python. The evaluator loads the exact stored candidate bytes and checks 16 constructed cases across replay, held-out, negative-transfer, permission, injection, malformed, resource and canary partitions; expected actions come from that same fixed mapping. Safety failures veto the candidate; the only outcomes are `CANARY` and `QUARANTINED`. This validates a governance scaffold, not trajectory learning, generalization, or production gain.
+
+The newer Finance learning path keeps the same authority boundary. A default-off collector observes ordinary Quote recovery events; a separate evaluator may sign a case only against current controlled source coverage and exact case evidence. Private Lesson candidates require an author, reviewer, exact content decision and current provenance before bounded sparse recall. A Finance generation-0 Skill contains a reviewed static instruction and reference, but begins `UNQUALIFIED` with adoption off. V4 advisory requests separate enterprise business projections from untrusted `ADVICE`, and isolated evaluations use the same compiler, provider interface and independent verifier. Controlled four-arm simulated runs and an adoption wiring test exist; the sealed first-exposure proof, real multi-arm terminal receipts, live Vertex quality and customer benefit do not. Normal adoption therefore fails closed at the independent release verifier. The model never receives approval or Apply authority.
 
 ## AgentTeams boundary
 

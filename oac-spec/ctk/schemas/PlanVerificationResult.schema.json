@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/ctk/schemas/PlanVerificationResult.schema.json",
+  "title": "OAC PlanVerificationResult v0alpha1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["snapshotDigest", "changeDigest", "planDigest", "verdict", "reasonCodes"],
+  "properties": {
+    "snapshotDigest": {"$ref": "#/$defs/digest"},
+    "changeDigest": {"$ref": "#/$defs/digest"},
+    "planDigest": {"$ref": "#/$defs/digest"},
+    "verdict": {"enum": ["ACCEPT", "REJECT", "PROVISIONAL", "UNKNOWN"]},
+    "reasonCodes": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

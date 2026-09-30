@@ -594,7 +594,11 @@ def main() -> None:
     workspace_command_parser = subparsers.add_parser(
         "workspace", help="Use the same authenticated Workspace commands as the HTTP interface",
     )
-    workspace_command_parser.add_argument("action", choices=("state", "register", "preview", "approve", "reject", "apply"))
+    workspace_command_parser.add_argument("action", choices=(
+        "state", "register", "preview", "approve", "reject", "apply",
+        "experience-cases", "experience-case", "experience-lessons", "experience-lesson",
+        "experience-candidates",
+    ))
     workspace_command_parser.add_argument("--url", default="http://127.0.0.1:8081")
     workspace_command_parser.add_argument(
         "--workspace", help="Select an authorized workspace; omit to use the server default"
@@ -602,6 +606,9 @@ def main() -> None:
     workspace_command_parser.add_argument("--event-id")
     workspace_command_parser.add_argument("--digest")
     workspace_command_parser.add_argument("--reason")
+    workspace_command_parser.add_argument("--ref", dest="record_ref", help="Exact case ref or lesson ID for a read")
+    workspace_command_parser.add_argument("--after", help="Opaque cursor for a case or lesson page")
+    workspace_command_parser.add_argument("--limit", type=int, default=50)
     workspace_command_parser.add_argument("--input", type=Path)
     workspace_command_parser.add_argument("--token-variable", default="ORGREBASE_ACCESS_TOKEN")
 
@@ -609,6 +616,14 @@ def main() -> None:
     source_sync_parser.add_argument("--config", type=Path, required=True)
     source_sync_parser.add_argument("--max-pages", type=int, default=10)
     source_sync_parser.add_argument("--discover", action="store_true", help="Read field metadata and propose owner mappings before synchronization")
+    change_worker_parser = subparsers.add_parser(
+        "change-worker",
+        help="Prepare bounded candidate-only work for pending admitted changes",
+    )
+    change_worker_parser.add_argument("--config", type=Path, required=True)
+    change_worker_parser.add_argument(
+        "--dry-run", action="store_true", help="Report eligible changes without dispatching candidate work"
+    )
     effect_worker_parser = subparsers.add_parser("effect-worker", help="Observe drafts or process explicitly queued effects")
     effect_worker_parser.add_argument("--config", type=Path, required=True)
     effect_worker_parser.add_argument("--observe", action="store_true")
@@ -781,9 +796,19 @@ def main() -> None:
 
     pilot_init = subparsers.add_parser(
         "enterprise-pilot-init",
-        help="Copy the packaged Enterprise Quote template to one new editable draft directory",
+        help="Copy one supported synthetic Enterprise Quote template to a new draft directory",
     )
     pilot_init.add_argument("--output", required=True, type=Path)
+    pilot_init.add_argument(
+        "--template", choices=("evergreen", "priced-quote"), default="evergreen",
+        help="evergreen preserves the historical v1 template; priced-quote provides initial-facts v2 pricing",
+    )
+
+    pilot_draft_preflight = subparsers.add_parser(
+        "enterprise-pilot-draft-preflight",
+        help="Validate an editable Enterprise Quote draft without sealing or activating it",
+    )
+    pilot_draft_preflight.add_argument("--draft", required=True, type=Path)
 
     pilot_seal = subparsers.add_parser(
         "enterprise-pilot-seal",
@@ -983,6 +1008,18 @@ def main() -> None:
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return
 
+    if args.command == "change-worker":
+        from orgrebase.auth import AuthenticationError
+        from orgrebase.workspace.change_operations import run_change_preparation
+
+        try:
+            result = run_change_preparation(args.config, dry_run=args.dry_run)
+        except (AuthenticationError, ValueError, OSError) as error:
+            print(f"ERROR: {error}", file=sys.stderr)
+            raise SystemExit(2) from error
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+
     if args.command == "serve":
         import uvicorn
 
@@ -1010,6 +1047,8 @@ def main() -> None:
 
         try:
             payload = None
+            if args.action.startswith("experience-") and args.input is not None:
+                raise OperationError("EXPERIENCE_READ_INPUT_FORBIDDEN")
             if args.input is not None:
                 if args.input.stat().st_size > 1_048_576:
                     raise OperationError("CHANGE_EVENT_INPUT_TOO_LARGE")
@@ -1020,6 +1059,7 @@ def main() -> None:
                 args.url, args.action, event_id=args.event_id, digest=args.digest,
                 reason=args.reason,
                 payload=payload, token_variable=args.token_variable, workspace_id=args.workspace,
+                record_ref=args.record_ref, after=args.after, limit=args.limit,
             )
         except (OperationError, OSError, ValueError) as error:
             print(f"ERROR: {error}", file=sys.stderr)
@@ -1325,7 +1365,20 @@ def main() -> None:
         from orgrebase.workspace.pilot_authoring import initialize_enterprise_quote_pilot_draft
 
         try:
-            result = initialize_enterprise_quote_pilot_draft(args.output)
+            result = initialize_enterprise_quote_pilot_draft(
+                args.output, template_name=args.template,
+            )
+        except (OSError, RuntimeError, ValueError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            raise SystemExit(2) from exc
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "enterprise-pilot-draft-preflight":
+        from orgrebase.workspace.pilot_authoring import preflight_enterprise_quote_pilot_draft
+
+        try:
+            result = preflight_enterprise_quote_pilot_draft(args.draft)
         except (OSError, RuntimeError, ValueError) as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
             raise SystemExit(2) from exc
@@ -1380,7 +1433,12 @@ def main() -> None:
         from orgrebase.api import create_app
         from orgrebase.auth import CONTROLLED_LOCAL_SESSION_IDENTITY
         from orgrebase.local_role_session import LocalRoleSessionSettings
-        from orgrebase.runtime_config import DeploymentSettings
+        from orgrebase.runtime_config import (
+            QUOTE_DISCOUNT_MEMO_PROFILE,
+            SINGLE_QUOTE_PROFILE,
+            DeploymentSettings,
+        )
+        from orgrebase.workspace.formation import quote_discount_memo_profile
         from orgrebase.workspace.pilot import (
             enterprise_quote_pilot_run_id,
             load_enterprise_quote_pilot_pack,
@@ -1392,12 +1450,26 @@ def main() -> None:
         if local_origin:
             if os.environ.get("ORGREBASE_DEPLOYMENT_MODE", "local").strip() != "local":
                 raise ValueError("AUTH_LOCAL_SESSION_DEPLOYMENT_FORBIDDEN")
-            local_session = LocalRoleSessionSettings(local_origin)
+            local_session = LocalRoleSessionSettings(
+                local_origin,
+                session_seconds=int(os.environ.get("ORGREBASE_LOCAL_ROLE_SESSION_SECONDS", "3600")),
+            )
             console_host = f"[{args.host}]" if args.host == "::1" else args.host
             if local_origin != f"http://{console_host}:{args.port}":
                 raise ValueError("AUTH_LOCAL_SESSION_LISTENER_ORIGIN_MISMATCH")
-        settings = DeploymentSettings(mode="local", local_role_session=local_session)
+        settings = DeploymentSettings(
+            mode="local",
+            local_role_session=local_session,
+            deliverable_profile=os.environ.get(
+                "ORGREBASE_DELIVERABLE_PROFILE", SINGLE_QUOTE_PROFILE
+            ).strip(),
+        )
         runtime = load_enterprise_quote_pilot_pack(args.pack)
+        deliverable_set_profile = (
+            quote_discount_memo_profile(runtime)
+            if settings.deliverable_profile == QUOTE_DISCOUNT_MEMO_PROFILE
+            else None
+        )
         competition_checkout = args.competition_checkout.expanduser().resolve()
         if args.competition_mode == "golden" and not competition_checkout.is_dir():
             fetch_script = _PROJECT_ROOT / "scripts" / "fetch_pinned_agentteams.py"
@@ -1440,6 +1512,7 @@ def main() -> None:
             store_path=args.store,
             workflow_run_id=enterprise_quote_pilot_run_id(runtime),
             runtime_configuration=runtime,
+            deliverable_set_profile=deliverable_set_profile,
             review_duration_seconds=args.review_seconds,
             approval_identity_mode=CONTROLLED_LOCAL_SESSION_IDENTITY if local_session else args.identity_mode,
             task_intake_required=task_intake_setting == "1",
@@ -1459,11 +1532,15 @@ def main() -> None:
         print(f"State: {args.store.resolve()}")
         print(f"Console: http://{args.host}:{args.port}")
         print(f"Approval control: server wait {args.review_seconds:g}s · {workspace.approval_identity_mode}")
-        print(
-            f"Formation runtime: {args.competition_mode} · "
-            f"reviewer {args.competition_model_provider} · "
-            f"evidence {competition_evidence_root}"
-        )
+        if args.competition_mode == "off":
+            print("Formation runtime: deterministic · reviewer model not used")
+            print(f"Business clock: frozen at {workspace.clock.now()} · controlled simulation only")
+        else:
+            print(
+                f"Formation runtime: {args.competition_mode} · "
+                f"reviewer {args.competition_model_provider} · "
+                f"evidence {competition_evidence_root}"
+            )
         print("Boundary: localhost Shadow Pilot · external enterprise writes 0")
         import uvicorn
 

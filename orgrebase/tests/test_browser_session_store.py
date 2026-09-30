@@ -4,9 +4,11 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 
 import pytest
+from sqlalchemy import func, select
 
 from orgrebase.auth import AuthenticationError
 from orgrebase.browser_session_store import BrowserSessionStore
+from orgrebase.database import execute_core, oidc_login_transactions
 from orgrebase.store import StateStore
 
 
@@ -29,6 +31,30 @@ def test_login_state_is_browser_bound_expiring_and_single_use(sessions):
     assert sessions.consume_login("state", "browser", now=110)["payload_ciphertext"] == "encrypted"
     with pytest.raises(AuthenticationError, match="AUTH_LOGIN_STATE_INVALID"):
         sessions.consume_login("state", "browser", now=110)
+
+
+def test_expired_session_cleanup_is_stably_batched(sessions):
+    for index in range(7):
+        sessions.save_login({
+            "transaction_id": f"expired-{index}", "browser_digest": "browser",
+            "payload_ciphertext": "encrypted", "created_at": 1, "expires_at": 10,
+        }, now=0)
+
+    def count():
+        with sessions.store.read_connection() as connection:
+            return execute_core(
+                connection, select(func.count()).select_from(oidc_login_transactions)
+            ).fetchone()[0]
+
+    assert count() == 7
+    assert sessions.cleanup_expired(now=10, batch_size=3)["oidc_login_transactions"] == 3
+    assert count() == 4
+    assert sessions.cleanup_expired(now=10, batch_size=3)["oidc_login_transactions"] == 3
+    assert count() == 1
+    assert sessions.cleanup_expired(now=10, batch_size=3)["oidc_login_transactions"] == 1
+    assert count() == 0
+    with pytest.raises(ValueError, match="AUTH_SESSION_CLEANUP_BATCH_INVALID"):
+        sessions.cleanup_expired(now=10, batch_size=1001)
 
 
 def test_session_revocation_and_provider_fence_prevent_late_login(sessions):

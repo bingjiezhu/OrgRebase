@@ -1,0 +1,18 @@
+{
+  "caseId": "S-RESOURCE-maxSemanticDepth-EXACT",
+  "expect": {
+    "result": {
+      "profileId": "oac.supplier.transfer/conformance-resource-profile/v1",
+      "withinProfile": true
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "maxSemanticDepth": 32
+  },
+  "operation": "resourceCheck",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

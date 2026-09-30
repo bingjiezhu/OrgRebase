@@ -15,19 +15,50 @@
 | Uvicorn | 0.52.3; `>=0.35,<1` | BSD-3-Clause | Local ASGI server; it has no canonical write authority by itself |
 | SQLite | Python standard library | public domain upstream | Append-only object versions, pointers, events, artifacts, and idempotency in the local profile |
 | SQLAlchemy | 2.0.52; `>=2.0,<3` | MIT | One Core statement implementation for SQLite and production PostgreSQL transactions |
-| Psycopg / psycopg-binary | 3.3.5; `>=3.2,<4` | LGPL-3.0-only | PostgreSQL driver; installed distributions retain their own license files |
-| PyJWT | 2.13.0; `>=2.10,<3` | MIT | JWT signature, issuer, audience and validity verification |
+| Psycopg / psycopg-binary | 3.3.5; `>=3.2,<4` | LGPL-3.0-only | PostgreSQL driver; commercial use is permitted, with distribution obligations for the driver and any included client libraries |
+| PyJWT | 2.15.1; `>=2.14,<3` | MIT | JWT signature, issuer, audience and validity verification |
 | cryptography | 50.0.1; `>=50,<51` | Apache-2.0 OR BSD-3-Clause | JWT asymmetric primitives and independent Ed25519 audit checkpoints |
 | PostgreSQL | Local validation: 17.9; CI: supported 17.x packages | PostgreSQL License | Production state, per-record concurrency and isolated backup/restore qualification |
 | AgentTeams | v1.2.3, commit `223ddc2b8073e4c8b93bcbb15e1d717f196c04d9` | Apache-2.0 upstream | Required multi-Agent design and transport target; exact complete Git bundle vendored for offline reconstruction and digest-checked before use. Historical distributed deployment qualification retains its own v1.2.2 identity. |
 
 The development extra directly requests `pytest==9.1.1` (MIT), `pytest-cov==7.1.0` (MIT), `PyYAML==6.0.3` (MIT), and `ruff==0.16.3` (MIT). PyYAML also belongs to the resolved runtime through Uvicorn's standard extra. Complete transitive versions are in `uv.lock`; `requirements.txt` is the frozen runtime export and `requirements-dev.txt` is its frozen additive development delta. `NOTICE.md` records the release-level license boundary.
 
-Project-owned code, documentation, Skills, fixtures, and the synthetic benchmark are Apache-2.0. See [LICENSE.md](../LICENSE.md). Earlier revisions used `PolyForm-Noncommercial-1.0.0`, and one commit used CC BY 4.0 for prose. This grant does not relicense AgentTeams, Python dependencies, upstream datasets, or optional models. Sealed Skill and dataset manifests may still record the older SPDX identifier.
+The separate `offline-learning` extra pins `gepa==0.1.4` (MIT). Its wheel SHA256 is
+`12b971039599625c156d2231f6d72a29c31a22e9c237689459b5f1a3c353f532` in
+`uv.lock`. It is an optional offline candidate optimizer, not a default runtime
+dependency or a model provider. OrgRebase retains the scope, budget, evaluation,
+approval and publication gates; installing the extra alone does not enable a
+model call or qualify a new Skill version. The research adapter probe and the
+production implementation each have their own validation scope.
+
+Project-owned code, documentation, Skills, fixtures and synthetic benchmark material
+are Apache-2.0. See [LICENSE.md](../LICENSE.md) for the current grant and historical
+release terms. Retained sealed Skill and dataset records may contain an earlier
+license identifier as historical metadata; their bytes remain immutable and the
+identifier does not narrow the current grant. Third-party material retains its
+upstream terms.
+
+Psycopg's [upstream license](https://github.com/psycopg/psycopg/blob/3.3.5/LICENSE.txt)
+permits commercial use under LGPL-3.0. A customer distribution must preserve the
+applicable notices and comply with its source, modification and linking conditions.
+The binary installation also packages client libraries; their licenses remain
+separate. Follow [Psycopg's installation documentation](https://www.psycopg.org/psycopg3/docs/basic/install.html)
+and inspect the exact installed distributions when preparing a delivery. An
+OrgRebase source archive does not itself redistribute the separately installed
+Python dependency wheels.
 
 ## Local reference model
 
-The pinned `qwen2.5:3b` local model is subject to the [Qwen RESEARCH LICENSE AGREEMENT](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct/blob/main/LICENSE), whose non-commercial grant is for research or evaluation; commercial use requires a license from its upstream licensor. This was checked against the upstream text and `ollama show --license qwen2.5:3b`. The Ollama application license is separate and does not grant model rights. Model weights are not redistributed in this source package. The reference run is a controlled evaluation; commercial deployment needs upstream permission or a separately qualified model/service with appropriate terms. No model or digest was changed for this disclosure.
+The pinned `qwen2.5:3b` local model is subject to the
+[Qwen RESEARCH LICENSE AGREEMENT](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct/blob/main/LICENSE).
+Its grant is limited to research or evaluation; commercial use requires a separate
+license from the upstream licensor. The Ollama application license does not grant
+rights to the model weights.
+
+Model weights are not redistributed in this source package. The local reference
+is a controlled evaluation. Commercial deployment must obtain the required upstream
+permission or use a separately qualified model or service with suitable terms.
+The Apache-2.0 license on OrgRebase's adapters does not change model or provider terms.
 
 ## Competition toolchain mapping
 
@@ -36,7 +67,7 @@ The default profile favors a deterministic, offline-verifiable control plane. Ev
 | Competition item | Current implementation and call path | Why this release uses it | Permission boundary | Migration work |
 |---|---|---|---|---|
 | AgentTeams (required) | v1.2.3; exact source lock; pinned native `projectflow/taskflow` `call_tool` path; fixed Product/Legal/Finance/GTM roles | It is the required collaboration basis and carries exact task/delegation/candidate bytes | AgentTeams owns operational Task state only; candidates have `target_writes=0`; SQLite control plane remains the only canonical writer | Controlled-local native lifecycle is verified. A separate Core proposal-plane live run binds K8s pods, Matrix publication and four provider executions; Workspace/Golden autonomous Matrix-inbound Worker handoff and same-run OAC Resume remain `NOT_RUN` |
-| Aliyun cloud Skills | Current project heads: `structured-domain-handoff@1.1.2`, `enterprise-quote-compose@1.3.1`, `enterprise-launch-readiness@1.4.2`; no official cloud Skill is claimed. Manifest v2 bundles exact input/output Schema bytes and the controlled lifecycle runs from an isolated installed wheel | Three exact packages expose governed domain capability contracts, local-only Schema resolution, uniform evaluation partitions and fresh dependency requalification. Each has one canonical bilingual-discoverable `SKILL.md`, Chinese/English references, and Chinese/English/mixed-language evaluation cases | Skill output cannot admit facts, approve Apply, write canonical state, or publish itself; release authority remains process-local and constructed cases do not prove external security/generalization | Spec 052 proves controlled-local restore and restricted invocation of Quote Compose's exact direct predecessor `1.3.0`, including idempotent replay, state rehydration and tamper probes. Persistent signed trust, production rollout rollback and cross-enterprise qualification remain future work |
+| Aliyun cloud Skills | Current project heads: `structured-domain-handoff@1.1.2`, `enterprise-quote-compose@1.3.1`, `enterprise-launch-readiness@1.4.2`; no official cloud Skill is claimed. Manifest v2 bundles exact input/output Schema bytes and the controlled lifecycle runs from an isolated installed wheel | Three exact packages expose governed domain capability contracts, local-only Schema resolution, uniform evaluation partitions and fresh dependency requalification. Each has one canonical bilingual-discoverable `SKILL.md`, Chinese/English references, and Chinese/English/mixed-language evaluation cases | Skill output cannot admit facts, approve Apply, write canonical state, or publish itself; release authority remains process-local and constructed cases do not prove external security/generalization | The controlled-local predecessor check validates restore and restricted invocation of Quote Compose's exact direct predecessor `1.3.0`, including idempotent replay, state rehydration and tamper probes. Persistent signed trust, production rollout rollback and cross-enterprise qualification remain future work |
 | Nacos | Frozen JSON model/metric/identity configuration plus source-lock digest | Offline runs need immutable reviewed configuration and deterministic replay | Config changes cannot bypass admission, context, approval, or source-lock verification | Map the existing config/card schemas to Nacos records and add identity/auth plus revision receipts; medium effort |
 | Higress | Direct FastAPI endpoints, `ModelProvider`, and HTTP `ToolContract` | A local demo does not need an ingress control plane | Gateway may authenticate, route, rate-limit, and observe; it cannot obtain canonical write authority | Route existing HTTP/model endpoints through Higress and preserve request, schema, idempotency, and audit headers; low-to-medium effort |
 | PolarDB for PostgreSQL | Single `StateStore` now supports PostgreSQL through SQLAlchemy Core/Psycopg; local SQLite remains available | Real PostgreSQL transactions, tenant binding, claims and isolated restore are locally verified | Database credentials stay with the control plane and are excluded from candidate subprocesses | Qualify the specific managed database version, network/IAM, backup service and capacity; no PolarDB production qualification is claimed |

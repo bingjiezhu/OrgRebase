@@ -1,0 +1,18 @@
+{
+  "caseId": "S-RESOURCE-maxBundleFiles-EXACT",
+  "expect": {
+    "result": {
+      "profileId": "oac.supplier.transfer/conformance-resource-profile/v1",
+      "withinProfile": true
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "maxBundleFiles": 512
+  },
+  "operation": "resourceCheck",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

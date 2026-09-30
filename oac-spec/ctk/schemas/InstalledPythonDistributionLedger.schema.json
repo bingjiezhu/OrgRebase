@@ -1,0 +1,541 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0alpha2/InstalledPythonDistributionLedger.schema.json",
+  "title": "InstalledPythonDistributionLedger",
+  "description": "Closed byte-level ledger for a wheel and the complete importlib.metadata distribution inventory observed by a target Python process under -I from an empty working directory.",
+  "$comment": "This is a self-attested replay observation, not a supply-chain attestation. runtimeBindingDigest is SHA-256 over RFC 8785 JCS of the closed projection containing wheelRawSha256, wheelEntryPreimageDigest, installedPayloadClosureDigest, targetPython, environmentClosureDigest, repositoryInputClosureDigest, and semanticProductionSourceClosureDigest. digest is SHA-256 over RFC 8785 JCS of the complete top-level object with digest omitted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "serialization",
+    "replayBindingClass",
+    "observation",
+    "wheel",
+    "installedPayload",
+    "targetPython",
+    "installedEnvironment",
+    "repositoryInputs",
+    "semanticProduction",
+    "runtimeBindingDigest",
+    "limitations",
+    "digestAlgorithm",
+    "digest"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "oac.installed-material-ledger/v0alpha2"
+    },
+    "kind": {
+      "const": "InstalledPythonDistributionLedger"
+    },
+    "serialization": {
+      "const": "rfc8785+jcs+lf/v1"
+    },
+    "replayBindingClass": {
+      "const": "self-attested-isolated-process-observation/v1"
+    },
+    "observation": {
+      "$ref": "#/$defs/observation"
+    },
+    "wheel": {
+      "$ref": "#/$defs/wheel"
+    },
+    "installedPayload": {
+      "$ref": "#/$defs/installedPayload"
+    },
+    "targetPython": {
+      "$ref": "#/$defs/targetPython"
+    },
+    "installedEnvironment": {
+      "$ref": "#/$defs/installedEnvironment"
+    },
+    "repositoryInputs": {
+      "$ref": "#/$defs/repositoryInputs"
+    },
+    "semanticProduction": {
+      "$ref": "#/$defs/semanticProduction"
+    },
+    "runtimeBindingDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "const": "python-standard-library-not-covered"
+        },
+        {
+          "const": "operating-system-not-covered"
+        },
+        {
+          "const": "cryptographic-execution-provenance-not-covered"
+        }
+      ],
+      "items": false
+    },
+    "digestAlgorithm": {
+      "const": "sha256-jcs-detached/v1"
+    },
+    "digest": {
+      "$ref": "#/$defs/sha256Digest"
+    }
+  },
+  "$defs": {
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "nonBlankString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*//)(?!.*[\\u0000-\\u001F\\u007F])[^/]+(?:/[^/]+)*$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rawSha256",
+        "sizeBytes"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collectorMode",
+        "isolatedFlag",
+        "safePathFlag",
+        "workingDirectoryWasEmpty"
+      ],
+      "properties": {
+        "collectorMode": {
+          "const": "target-python--I-empty-cwd/v1"
+        },
+        "isolatedFlag": {
+          "const": true
+        },
+        "safePathFlag": {
+          "const": true
+        },
+        "workingDirectoryWasEmpty": {
+          "const": true
+        }
+      }
+    },
+    "wheelEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rawSha256",
+        "sizeBytes",
+        "compressedSizeBytes",
+        "crc32",
+        "compressionMethod",
+        "generalPurposeFlagBits",
+        "externalAttributes"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "compressedSizeBytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "crc32": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        },
+        "compressionMethod": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "generalPurposeFlagBits": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "externalAttributes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        }
+      }
+    },
+    "wheel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fileName",
+        "distributionName",
+        "normalizedDistributionName",
+        "version",
+        "rawSha256",
+        "sizeBytes",
+        "recordPath",
+        "entryCount",
+        "entries",
+        "entryPreimageDigest"
+      ],
+      "properties": {
+        "fileName": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 1024,
+          "pattern": "^[^/\\\\]+\\.whl$"
+        },
+        "distributionName": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "normalizedDistributionName": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "version": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "recordPath": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*\\.\\./)[^\\u0000-\\u001F\\u007F\\\\]+\\.dist-info/RECORD$"
+        },
+        "entryCount": {
+          "type": "integer",
+          "minimum": 3
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/wheelEntry"
+          }
+        },
+        "entryPreimageDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "installedPayloadFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wheelPath",
+        "installedPath",
+        "wheelRawSha256",
+        "installedRawSha256",
+        "sizeBytes",
+        "byteEqual"
+      ],
+      "properties": {
+        "wheelPath": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "installedPath": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "wheelRawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "installedRawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byteEqual": {
+          "const": true
+        }
+      }
+    },
+    "installedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "distributionName",
+        "normalizedDistributionName",
+        "version",
+        "excludedComparisonPaths",
+        "exclusionReason",
+        "files",
+        "matchedFileCount",
+        "payloadByteMatch",
+        "payloadClosureDigest"
+      ],
+      "properties": {
+        "distributionName": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "normalizedDistributionName": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "version": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "excludedComparisonPaths": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*\\.\\./)[^\\u0000-\\u001F\\u007F\\\\]+\\.dist-info/RECORD$"
+          }
+        },
+        "exclusionReason": {
+          "const": "pip-rewritten-record/v1"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/installedPayloadFile"
+          }
+        },
+        "matchedFileCount": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "payloadByteMatch": {
+          "const": true
+        },
+        "payloadClosureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "targetPython": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executableRawSha256",
+        "executableSizeBytes",
+        "version",
+        "implementation",
+        "cacheTag"
+      ],
+      "properties": {
+        "executableRawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "executableSizeBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[^\\u0000-\\u001F\\u007F]*)$"
+        },
+        "implementation": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]*$"
+        },
+        "cacheTag": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        }
+      }
+    },
+    "installedEnvironmentFile": {
+      "$ref": "#/$defs/artifact"
+    },
+    "installedDistribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "normalizedName",
+        "version",
+        "installationRootPath",
+        "metadataPath",
+        "files",
+        "fileCount",
+        "fileLedgerDigest"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "normalizedName": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "version": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "installationRootPath": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "metadataPath": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/installedEnvironmentFile"
+          }
+        },
+        "fileCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "fileLedgerDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "installedEnvironment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "distributionCount",
+        "distributions",
+        "environmentClosureDigest"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256-jcs-installed-distribution-ledger/v1"
+        },
+        "distributionCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "distributions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/installedDistribution"
+          }
+        },
+        "environmentClosureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "repositoryInputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "pyprojectToml",
+        "uvLock",
+        "closureDigest"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256-jcs-file-ledger/v1"
+        },
+        "pyprojectToml": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/artifact"
+            },
+            {
+              "properties": {
+                "path": {
+                  "const": "pyproject.toml"
+                }
+              }
+            }
+          ]
+        },
+        "uvLock": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/artifact"
+            },
+            {
+              "properties": {
+                "path": {
+                  "const": "uv.lock"
+                }
+              }
+            }
+          ]
+        },
+        "closureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "semanticProduction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "sourceRoot",
+        "files",
+        "fileCount",
+        "closureDigest"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256-jcs-file-ledger/v1"
+        },
+        "sourceRoot": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/artifact"
+          }
+        },
+        "fileCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "closureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    }
+  }
+}

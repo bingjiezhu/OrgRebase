@@ -8,7 +8,9 @@ Product, Legal, Finance and GTM prepare candidates within their own domains. The
 
 The native task flow creates, delegates, acknowledges, submits, checks and completes tasks through TeamHarness projectflow/taskflow. Each subsequent change binds its own ChangeSet, preview and task receipts. Initial Formation and later changes can be inspected separately.
 
-## Evidence recovery for the same ChangeSet {#evidence-recovery}
+<a id="evidence-recovery"></a>
+
+## Evidence recovery for the same ChangeSet
 
 In native execution mode, the exact approval owner can return an unapproved, ungrouped proposal for evidence. A user with proposal permission can then resume execution:
 

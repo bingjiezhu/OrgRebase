@@ -15,9 +15,9 @@ Skill 都可替换，且只能产生候选事实；它们不能自我授权、�
 
 | 当前状态 | 已验证 | 尚未验证 |
 | --- | --- | --- |
-| `VALIDATED_CONTROLLED_LOCAL` | 五类企业材料的确定性校验、Unknown/Gap 保留、负责人准入与精确激活绑定；当前 Golden 在同一 `run_id` 中消费该绑定，形成任务、最小上下文和 AgentTeams 执行计划，并完成后续业务闭环 | 真实企业人审、真实企业数据与连接器、员工 UAT、任意流程零配置适配、分布式 AgentTeams 或生产 SLA/HA/DR |
+| `VALIDATED_CONTROLLED_LOCAL` | 五类企业材料的确定性校验、Unknown/Gap 保留、负责人准入与精确激活绑定；保留的 Golden 参考运行在同一 `run_id` 中消费该绑定，形成任务、最小上下文和 AgentTeams 执行计划，并完成后续业务闭环 | 真实企业人审、真实企业数据与连接器、员工 UAT、任意流程零配置适配、分布式 AgentTeams 或生产 SLA/HA/DR |
 
-> 当前 Golden 的公开验证包含 101 条内容寻址记录。它证明 OAC 激活绑定确实进入了同一业务运行；它仍不等于真实企业验证或生产就绪。五条独立证据链的 entries 与 `run_id` 不相加、不伪合并。
+> 保留的 Golden 参考运行的公开验证包含 101 条内容寻址记录；这属于该参考档案，不表示本版源码重新运行了同一链路。它证明 OAC 激活绑定确实进入了同一业务运行；它仍不等于真实企业验证或生产就绪。五条独立证据链的 entries 与 `run_id` 不相加、不伪合并。
 
 <!-- CURRENT-OAC-VALIDATION-STATUS:END -->
 
@@ -46,9 +46,9 @@ Skill 都可替换，且只能产生候选事实；它们不能自我授权、�
 OAC 企业适配层是 OrgRebase 的“部署前准入步骤”，不是第二 Runtime、第二 StateStore、第二 Registry
 或第二个业务故事。它只解决一个问题：**企业提供的材料，在什么契约、未知项和人类责任下，才可以安全进入 OrgRebase。**
 
-## 当前已经从“准入”走到“动态执行绑定”
+## 任务形成与执行绑定
 
-Spec 067/068 将 OAC 的价值从静态契约延伸为可执行的参考链，但仍不让 OAC 成为第二 Runtime：
+参考集成把已准入 OAC 材料绑定到具体任务、上下文和执行计划；执行与规范写入仍由 OrgRebase 控制面负责：
 
 ```text
 企业五根材料 / 公开真实流程数据
@@ -114,11 +114,11 @@ claim=OAC_SOURCE_DEMAND_ADMITTED_AND_ORGREBASE_FORMATION_PARITY
 `QuoteFormationParityReceipt` 不是 OAC `PlanCertificate`。用实现侧自签证书替代标准符合性，
 会使这项创新失去可信性。
 
-## 4. 五条当前证据链，不能相加或拼接
+## 4. 五条独立验证范围
 
 | 证据面 | 当前状态 | 证明什么 | 不证明什么 |
 | --- | --- | --- | --- |
-| 当前 Golden 业务闭环 | `VALIDATED_CONTROLLED_LOCAL`，101 条内容寻址记录 | 同 run OAC 激活绑定、员工任务准入、Formation / Context / AT Plan、AgentTeams、Tool、Skill、两次人工批准、选择性 Rebase、终态和完成态重启 | 真实企业 UAT、ROI 或生产 SLA/HA/DR |
+| 保留的 Golden 参考闭环 | `VALIDATED_CONTROLLED_LOCAL`，101 条内容寻址记录 | 同 run OAC 激活绑定、员工任务准入、Formation / Context / AT Plan、AgentTeams、Tool、Skill、两次人工批准、选择性 Rebase、终态和完成态重启 | 真实企业 UAT、ROI 或生产 SLA/HA/DR |
 | OAC 企业资料适配 | `VALIDATED_CONTROLLED_LOCAL` | 五类材料、Unknown/Gap、负责人准入、SourceAdmission、Formation parity 与不可变激活绑定；缺失责任信息的反例保持 `HOLD` | 任意企业零配置接入、真实企业人员验收或生产连接器 |
 | BPI 2019 公开真实流程 | `VALIDATED_CONTROLLED_LOCAL` | 公开真实匿名采购到付款日志的来源绑定、固定投影、128 个任务规则查询与闭世重放 | 报价数据、人工因果真值、企业价值观或 ROI |
 | 动态 Formation 拓扑 | `VALIDATED_CONTROLLED_LOCAL` | 不同需求形成不同领域 Agent + Reviewer 拓扑，证明团队不是固定全量队列 | 与 Golden 是同一 run，或 Agent 获得业务写入权 |
@@ -141,18 +141,17 @@ ProductPath v0.3 是独立的黑盒产品路径与发布防退化门；它检查
 这些层是可组合关系，不是多套“全能 Agent 框架”。OAC 的价值不在再造 transport，而在使**企业材料、
 组织义务、人类权威、运行候选与最终业务状态之间的关系可移植、可拒绝、可验证**。
 
-## 6. 复赛中怎样呈现，才不本末倒置
+## 6. 参考集成的运行顺序
 
-1. 主角是 Quote Operations Owner，主故事从“上游变化使既有成果过期”开始；“协作工作稿 → 上线日期确认稿 → 币种确认稿”是当前验证切片，不是产品定义。
-2. OAC 企业适配是首次接入阶段：五类材料 → 候选映射 → 确定性校验 → 负责人等待并准入 → 不可变激活绑定。
-3. 运行先展示既有成果与依赖基线，再由一次上游语义变化冻结 ChangeSet；Formation 只选择受影响领域的 Domain Agent。
-4. 随后展示同一 Golden 运行中的 AgentTeams、Tool、Skill、Reviewer 和最终零写入 Preview；流程只在精确 Human Owner 权威点暂停，批准后选择性 Rebase。
-5. 五条证据链和 ProductPath v0.3 只在验证档案中作为可复验证明出现；不把比赛评分或内部文件名放进产品界面。
-6. 边界始终明确：OAC 不拥有 Runtime 或规范写入，生产就绪仍为 `false`。
+企业接入先校验五类材料、来源与负责人，再生成候选映射，保留 Unknown/Gap，并由有权负责人准入精确契约。不可变激活绑定约束随后运行的 profile、Pack 和任务范围。
 
-## 7. 通用 OAC Plan 是下一阶段，不在当前 MVP 伪造
+任务 Formation 依据准入目标、证据义务、能力与依赖选择必要领域。已有工作发生企业变更时，控制面冻结 ChangeSet、识别影响并生成可审阅的候选；AgentTeams、Tool、Skill 与 Reviewer 提供各自的任务和验证记录。正式成果只通过当前权限、精确批准和 Apply 事务更新。
 
-只有在 sibling `oac-spec` 完成以下内容后，才能宣称“OAC 自动生成并认证 Quote Agent 架构”：
+OAC 材料准入、任务完成、独立验证、负责人批准和结果生效分别保留回执。它们可以组成一条受验证的运行链，但不能由单个阶段的成功推断整个流程或客户环境已取得资格。
+
+## 7. Quote Plan 编译与认证的支持边界
+
+当前 Quote Formation 由 OrgRebase 控制面完成。OAC 原生 Quote Plan 的编译与认证需要以下完整能力链：
 
 ```text
 bounded enterprise-quote Profile
@@ -162,9 +161,9 @@ bounded enterprise-quote Profile
   -> OrganizationPlan -> PlanCertificate -> RuntimeBinding -> zero-effect bundle
 ```
 
-该工作已作为独立待做规格固化，不混入当前收尾。
+在这条能力链完成并通过独立验证前，Source/Demand 准入与 Formation parity 不能替代 Quote 的 OAC PlanCertificate。
 
-## 8. 永久主张防火墙
+## 8. 权威状态与提交边界
 
 ```text
 AT task completed
@@ -181,4 +180,4 @@ AT task completed
   != Production ready
 ```
 
-这一组“不等号”是 OAC 与 OrgRebase 共享的核心，也是它们与“更强的单个 Agent”最根本的差异。
+这些状态分别对应不同主体、证据和提交边界。每一步只授予合同规定的范围，后续步骤仍须独立验证和授权。

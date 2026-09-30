@@ -30,7 +30,7 @@ def test_console_is_one_recoverable_workspace_product_flow() -> None:
     assert ".runtime-badges #profile-data-badge { display: none; }" in styles
     assert 'data-i18n="header.currentTask.waiting"' in html
     assert "RUN CHECK: CHECKING" in javascript
-    assert "ORCHESTRATION: AGENTTEAMS" in javascript
+    assert "ORCHESTRATION PROTOCOL: AGENTTEAMS" in javascript
     assert "PRODUCTION READY: NO · ENTERPRISE VALIDATION PENDING" in javascript
     assert "frozen live-run candidate receipt" in javascript
     assert "SEPARATE RUN · SIGKILL RECOVERY" in javascript
@@ -228,7 +228,7 @@ def test_console_is_one_recoverable_workspace_product_flow() -> None:
     assert "现状 R 是当前人工执行者" in html
     assert "变化后执行者是智能体或受控系统" in html
     assert "A 仍是最终负责与批准的人" in html
-    assert "开发者接口（OpenAPI）" in html
+    assert 'href="/docs"' not in html
     assert 'state.stage === "EMPTY"' in javascript
     assert 'state.business_complete === true' in javascript
     assert '"collaboration.local.active.title"' in javascript
@@ -2266,8 +2266,9 @@ def test_workspace_shell_starts_with_enterprise_onboarding_then_change_response(
     assert 'ROUTES.some((item) => item.id === route) ? route : "onboarding"' in shell
     assert "企业组织契约尚未激活，当前不能建立可演化基线" in shell
     assert "产品智能体 ↔ 产品负责人" in shell
-    assert "智能体默认连续自动执行，只有精确权威边界才暂停并通知对应负责人" in shell
-    assert "批准前规范写入为 0" in shell
+    assert "批准后由有权执行人应用更新" in shell
+    assert "智能体默认连续自动执行，只有精确权威边界才暂停并通知对应负责人" not in shell
+    assert "生效前已有成果保留原版本" in shell
     assert "不重复执行当前报价任务" in shell
     assert 'const acceptance = byId("current-task-acceptance");' in shell
     assert 'const validation = byId("cockpit-value")' in shell
@@ -2292,7 +2293,8 @@ def test_change_driven_surface_separates_agent_execution_owner_pause_and_referen
     ):
         assert pair in shell
     assert "任务使用已激活组织契约中的事实与权限" in shell
-    assert "智能体默认连续自动执行，只有精确权威边界才暂停并通知对应负责人" in shell
+    assert "批准后由有权执行人应用更新" in shell
+    assert "智能体默认连续自动执行，只有精确权威边界才暂停并通知对应负责人" not in shell
     assert "审批前看候选影响 · 审批后看后继版本" in html
     assert "参考人工基线" in html
     assert "Quote v1 has not been formed yet" in javascript
@@ -2332,7 +2334,7 @@ def test_change_driven_surface_separates_agent_execution_owner_pause_and_referen
     assert "/api/workspace/apply/" not in runner
 
 
-def test_quote_work_moves_one_pre_task_process_baseline_before_task_intake() -> None:
+def test_quote_work_keeps_task_intake_before_reference_process_details() -> None:
     html = (CONSOLE / "index.html").read_text(encoding="utf-8")
     shell = (CONSOLE / "workspace-shell.js").read_text(encoding="utf-8")
 
@@ -2357,10 +2359,10 @@ def test_quote_work_moves_one_pre_task_process_baseline_before_task_intake() -> 
     )[0]
     expected_order = (
         'buildTaskPrerequisite(),',
+        'buildTaskIntake(),',
+        'buildTaskCompass(),',
         'buildTaskExecutionPreview(),',
         'buildTaskProcessBaseline(acceptance),',
-        'buildTaskCompass(),',
-        'buildTaskIntake(),',
     )
     positions = [assembly.index(marker) for marker in expected_order]
     assert positions == sorted(positions)
@@ -3209,7 +3211,8 @@ def test_console_never_turns_loading_or_fetch_failure_into_empty_workspace() -> 
     assert "页面不会把失败伪装成空工作区" in javascript
     assert 'let stateAvailability = "loading";' in shell
     assert 'stateAvailability === "ready"' in shell
-    assert 'renderState(null, { availability: "unavailable" })' in shell
+    assert 'event?.detail?.status === "LOADING" ? "loading" : "unavailable"' in shell
+    assert 'availability === "unavailable"' in shell
 
 
 def test_workspace_shell_preserves_original_orgrebase_visual_language() -> None:

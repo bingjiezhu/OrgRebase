@@ -1,9 +1,10 @@
 # Reuse and licensing
 
-OrgRebase separates the rules an enterprise supplies from the controls that make a
-change reviewable, approved, and traceable. The current executable reference covers
-one Quote per workspace. Reusing that reference is a smaller task than introducing
-a new business object or qualifying a customer system.
+OrgRebase separates enterprise facts, policies and responsibilities from the controls
+that make changes reviewable, authorized and traceable. The default workspace manages
+one Quote; the explicit [Quote + Discount Memo profile](QUOTE-DISCOUNT-MEMO.md) manages
+two deliverables in a new isolated workspace. Reusing a supported profile requires
+less adaptation than introducing a new business object or qualifying a customer system.
 
 ## What stays and what changes
 
@@ -80,7 +81,7 @@ prompt is insufficient. There is no supported drop-in registration API for arbit
 business handlers; review the [Pilot compatibility check](../src/orgrebase/workspace/pilot.py)
 and [OAC adaptation boundary](OAC-ORGREBASE-PRODUCT-BOUNDARY.md) before extending it.
 
-## Try a rule Pack without changing the engine
+## Try an Enterprise Pack without changing the engine
 
 This exercise changes two facts in a fictional enterprise, seals a new Pack and
 runs the existing deterministic handler. It needs the locked product environment
@@ -138,9 +139,16 @@ Invalid, missing or inconsistent inputs must be corrected at their source.
 
 ## Reuse verification separately
 
-The standard-library command in the [README](../README.md#run-the-reference-journey)
-verifies the retained Golden without installing OrgRebase or OAC. It checks that
-specific historical package; it is not a general-purpose business acceptance API.
+When the matching complete retained archive is available, this standard-library
+verifier checks that historical Golden package without installing OrgRebase or OAC:
+
+```bash
+python3 scripts/verify_golden_pilot_evidence.py \
+  --root evidence/golden-competition/latest/pilot
+```
+
+The public source profile may omit historical inputs required by this command.
+Its result applies to the supplied archive, rather than a new business execution.
 
 Core verifier interfaces also exist at `POST /api/receipts/verify`,
 `POST /api/receipts/rollback/verify`, `POST /api/impact-certificates/verify` and
@@ -149,30 +157,39 @@ in [the Core API](../src/orgrebase/api.py). Core and authenticated Workspace API
 are different surfaces: production Workspace deployment disables the Core surface
 by default. Do not expose the local Core API as an unauthenticated enterprise
 service. Verification never approves or applies a change. See the
-[evidence map](VERIFICATION-EVIDENCE-MAP.md) for precise verifier scope and tests.
+[validation method](WORKSPACE-EVALUATION.md) and [contributor checks](../CONTRIBUTING.md) for verifier scope and tests.
 
 ## License scope
 
 | Material | Current terms | Adoption boundary |
 |---|---|---|
-| OrgRebase engine, project-authored adapters, documentation and synthetic fixtures | [Apache-2.0](../LICENSE) | Includes documentation. Earlier revisions used PolyForm Noncommercial 1.0.0, then a CC BY 4.0 prose split; see [LICENSE.md](../LICENSE.md). |
-| Project-owned domain rules and Skill packages | Apache-2.0 for the current tree. Sealed package `license` and contract `distribution.license` may still read `PolyForm-Noncommercial-1.0.0` | That sealed identifier keeps historical content addresses stable. Check the exact package and resource digests. |
-| OAC, in this workspace or beside it | Apache-2.0 for project-owned material, as allocated by its `LICENSE.md` | Its proposed-standard status does not establish external certification. |
+| OrgRebase engine, project-authored adapters, documentation and synthetic fixtures | [Apache-2.0](../LICENSE) | Commercial use, modification and redistribution are permitted under the license. See [LICENSE.md](../LICENSE.md) for scope and historical releases. |
+| Project-owned domain rules and Skill packages | Apache-2.0 for material in the current tree | Retained sealed records may contain `PolyForm-Noncommercial-1.0.0` as historical metadata. Preserve their exact bytes and digests; the identifier does not narrow the current project grant. |
+| OAC, in this workspace or beside it | Apache-2.0 for project-owned text, code and interoperability resources | Its proposed-standard status does not establish external certification or an adopted standards patent policy. |
 | Upstream AgentTeams | Apache-2.0 | The [vendor notice](../vendor/agentteams/README.md) identifies the exact reconstructable source bundle. Project-authored integration code retains the product terms. |
-| Python and database dependencies | Each distribution's own terms; see [third-party inventory](THIRD-PARTY-INVENTORY.md) and [NOTICE.md](../NOTICE.md) | Psycopg and psycopg-binary are LGPL-3.0-only in the current lock. Preserve their notices and review the exact distributions supplied to customers. |
+| Python and database dependencies | Each distribution's own terms; see [third-party inventory](THIRD-PARTY-INVENTORY.md) and [NOTICE.md](../NOTICE.md) | Psycopg and psycopg-binary are LGPL-3.0-only in the current lock. Commercial use is permitted; redistribution must comply with their license and any included client-library terms. |
 | Enterprise data, hosted services and optional datasets | Customer contracts, provider terms or the stated dataset license | Product permission does not grant rights to third-party data or services. See [data and privacy](WORKSPACE-DATA-AND-PRIVACY.md). |
 
 The installed `psycopg[binary]` profile uses separately installed distributions with
 packaged client libraries, as described by [Psycopg's installation documentation](https://www.psycopg.org/psycopg3/docs/basic/install.html).
 Do not describe this as a license-free database dependency or assume the whole dependency
-tree has only one license. The generated SBOM records versions, relationships and
-artifact bindings; its components currently have no license fields, so use the
-distribution license files as well when reviewing a delivery.
+tree has only one license. The generated SBOM binds versions, dependency relationships
+and exact artifacts. A valid SPDX expression in explicitly supplied, exact-version
+supplier metadata is recorded as a declaration; missing or ambiguous declarations
+remain `UNKNOWN`. The dependency graph covers potential relationships in the complete
+lock, including optional and development groups; it does not claim those groups are
+installed in every deployment. Review the actual distribution license and notice
+files alongside this inventory. See [source and SBOM provenance](RELEASE-SOURCE-PARITY.md).
 
-Apache-2.0 section 3 is the patent license for executable project assets. The earlier
-PolyForm text also contained a patent defense termination; that text remains the grant
-for revisions that still carry it, including tag `v0.4.0`. This guide adds no further
-patent grant, contribution agreement, or service commitment.
+Apache-2.0 Section 3 defines the contributor patent grant for project-owned material.
+The [OAC patent non-assertion draft](../../oac-spec/PATENT-NON-ASSERTION.md) is a separate
+proposal requiring independent legal review. It is not an adopted patent policy or
+an additional condition on the software license.
+
+Implementation, hosting, support and any SLA require a separate service agreement.
+They do not change the license of the existing authentication, authorization,
+governance, audit or recovery code. No separately licensed commercial edition is
+distributed in this repository. See [commercial use and services](../COMMERCIAL-LICENSE.md).
 
 ## What an evaluator can reproduce
 
@@ -187,14 +204,13 @@ customer adoption, production capacity or financial savings. Keep verification s
 | Fresh interactive journey | Locked product environment, sibling OAC implementation and configured model provider | New execution under the selected local configuration and its own receipts |
 | Enterprise acceptance | Customer identities, source/target access, operational requirements and representative workload | Only the customer-specific behavior actually exercised and measured |
 
-Previously: a complete source bundle could include `orgrebase/` and `oac-spec/` as
-siblings while a standalone product clone did not supply OAC; full integration CI
-required an explicit `OAC_REPOSITORY` and exact `OAC_REVISION`.
-Now: the public GitHub workspace clone already has both trees, so default
-`../oac-spec` works. Fork CI still runs `check-core` without service credentials.
-Full integration CI is `workflow_dispatch` against the in-tree `oac-spec/`; a skipped
-full job cannot qualify a release candidate. Check the actual delivered revision and
-files before claiming that a public repository reproduces a newer local working tree.
+The public GitHub workspace clone includes both `orgrebase/` and `oac-spec/`, so
+default `../oac-spec` works. Protected source and runtime-resource changes trigger
+core, independent OAC conformance and PostgreSQL/OAC boundary checks. Public product
+and OAC release qualification remains a maintainer-initiated `workflow_dispatch`
+job; a skipped release job cannot qualify a candidate. Check the actual delivered
+revision and files before claiming that a public repository reproduces a newer local
+working tree.
 Reuse attempts and integration feedback belong in the public Reuse issue template;
 this guide does not list unaffiliated production deployments.
 

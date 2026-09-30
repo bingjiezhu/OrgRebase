@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
+from decimal import Decimal
 
 from pydantic import JsonValue
 
@@ -14,11 +15,15 @@ from orgrebase.domain import ManifestCompleteness
 from orgrebase.runtime_contracts import StoredArtifact
 from orgrebase.workspace.models import (
     CoverageStatus,
+    DiscountMemoComparison,
+    DiscountMemoPayload,
+    DiscountMemoTaskLiterals,
     OutputFieldLineage,
     OutputProducedEvent,
     QuotePayload,
     QuoteTaskLiterals,
     ReferenceResolvedEvent,
+    ResolvedDiscountMemoInputs,
     ResolvedQuoteInputs,
     RuntimeDependencyEntry,
     RuntimeDependencyManifest,
@@ -28,7 +33,7 @@ from orgrebase.workspace.models import (
     TraceCoverageReceipt,
     WorkTrace,
 )
-from orgrebase.workspace.pricing import PricingPolicy, QuoteBasket, calculate_quote
+from orgrebase.workspace.pricing import PricedQuote, PricingPolicy, QuoteBasket, calculate_quote
 
 
 @dataclass(frozen=True)
@@ -198,6 +203,125 @@ class QuoteInputAssembler:
         )
 
 
+class DiscountMemoInputAssembler:
+    SLOT_ORDER = ("currency", "quote_basket", "pricing_policy")
+
+    def assemble(self, monitor: ExecutionReferenceMonitor) -> ResolvedDiscountMemoInputs:
+        values = {slot_id: monitor.resolve(slot_id) for slot_id in self.SLOT_ORDER}
+        return self.from_values(values)
+
+    @staticmethod
+    def from_values(values: Mapping[str, JsonValue]) -> ResolvedDiscountMemoInputs:
+        if set(values) != {"currency", "quote_basket", "pricing_policy"}:
+            raise ValueError("DISCOUNT_MEMO_INPUT_SET_INVALID")
+        return ResolvedDiscountMemoInputs(
+            currency=str(values["currency"]),
+            quote_basket=QuoteBasket.model_validate_json(json.dumps(values["quote_basket"])),
+            pricing_policy=PricingPolicy.model_validate_json(json.dumps(values["pricing_policy"])),
+        )
+
+
+class DiscountMemoRenderer:
+    version = "workspace-discount-memo-renderer@2.0.0"
+
+    def render(
+        self,
+        *,
+        task_literals: DiscountMemoTaskLiterals,
+        inputs: ResolvedDiscountMemoInputs,
+        change_set_ref: str | None = None,
+        change_set_digest: str | None = None,
+        previous_pricing: PricedQuote | None = None,
+    ) -> DiscountMemoPayload:
+        pricing = calculate_quote(
+            inputs.quote_basket,
+            inputs.pricing_policy,
+            currency=inputs.currency,
+        )
+        basis = sha256_digest(
+            {
+                "quote_object_id": task_literals.quote_object_id,
+                "currency": pricing.currency,
+                "basket_digest": pricing.basket_digest,
+                "policy_digest": pricing.policy_digest,
+            }
+        )
+        previous = (
+            PricedQuote.model_validate(previous_pricing.model_dump(mode="json"))
+            if previous_pricing is not None
+            else None
+        )
+        comparison = None
+        if previous is not None:
+            if change_set_ref is None or change_set_digest is None:
+                raise ValueError("DISCOUNT_MEMO_COMPARISON_REQUIRES_CHANGE_BINDING")
+
+            def difference(after: str, before: str) -> str:
+                value = Decimal(after) - Decimal(before)
+                return format(value, f".{pricing.minor_units}f")
+
+            comparison = DiscountMemoComparison(
+                before_discount_bps=previous.discount_rate_bps,
+                after_discount_bps=pricing.discount_rate_bps,
+                before_discount_amount=previous.discount_amount,
+                after_discount_amount=pricing.discount_amount,
+                discount_amount_delta=difference(
+                    pricing.discount_amount, previous.discount_amount
+                ),
+                before_net_amount=previous.net_amount,
+                after_net_amount=pricing.net_amount,
+                net_amount_delta=difference(pricing.net_amount, previous.net_amount),
+                before_total=previous.total,
+                after_total=pricing.total,
+                total_delta=difference(pricing.total, previous.total),
+            )
+        return DiscountMemoPayload(
+            owner=task_literals.owner,
+            customer_id=task_literals.customer_id,
+            quote_object_id=task_literals.quote_object_id,
+            pricing=pricing,
+            pricing_basis_digest=basis,
+            previous_pricing=previous,
+            comparison=comparison,
+            reason_refs=((change_set_ref,) if change_set_ref is not None else ()),
+            last_price_change_set_ref=change_set_ref,
+            last_price_change_set_digest=change_set_digest,
+        )
+
+
+def discount_memo_output_lineage() -> tuple[OutputFieldLineage, ...]:
+    return (
+        OutputFieldLineage(field_path="owner", source_kind="TASK_LITERAL"),
+        OutputFieldLineage(field_path="deliverable_kind", source_kind="DETERMINISTIC_COMPUTED"),
+        OutputFieldLineage(field_path="customer_id", source_kind="TASK_LITERAL"),
+        OutputFieldLineage(field_path="quote_object_id", source_kind="TASK_LITERAL"),
+        OutputFieldLineage(
+            field_path="pricing",
+            source_kind="DETERMINISTIC_COMPUTED",
+            source_slot_ids=("quote_basket", "pricing_policy", "currency"),
+        ),
+        OutputFieldLineage(
+            field_path="pricing_basis_digest",
+            source_kind="DETERMINISTIC_COMPUTED",
+            source_slot_ids=("quote_basket", "pricing_policy", "currency"),
+        ),
+        OutputFieldLineage(
+            field_path="previous_pricing",
+            source_kind="DETERMINISTIC_COMPUTED",
+            source_slot_ids=("quote_basket", "pricing_policy", "currency"),
+        ),
+        OutputFieldLineage(
+            field_path="comparison",
+            source_kind="DETERMINISTIC_COMPUTED",
+            source_slot_ids=("quote_basket", "pricing_policy", "currency"),
+        ),
+        OutputFieldLineage(field_path="reason_refs", source_kind="TASK_LITERAL"),
+        OutputFieldLineage(field_path="limitations", source_kind="DETERMINISTIC_COMPUTED"),
+        OutputFieldLineage(field_path="last_price_change_set_ref", source_kind="TASK_LITERAL"),
+        OutputFieldLineage(field_path="last_price_change_set_digest", source_kind="TASK_LITERAL"),
+    )
+
+
 class QuoteRenderer:
     version = "workspace-quote-renderer@2.0.0"
 
@@ -268,7 +392,11 @@ class TraceCoverageVerifier:
         duplicates = len(observed) != len(set(observed))
         unmediated = tuple(sorted(set(observed_channels) - {"REFERENCE_MONITOR"}))
         output_digest_ok = trace.output_digest == sha256_digest(dict(output_payload))
-        lineage = quote_output_lineage(priced="pricing" in output_payload)
+        lineage = (
+            discount_memo_output_lineage()
+            if template.deliverable_kind == "DISCOUNT_MEMO"
+            else quote_output_lineage(priced="pricing" in output_payload)
+        )
         business_fields = set(output_payload) - {"rebased_from", "rebase_change_set", "context_manifest"}
         lineage_fields = {item.field_path for item in lineage}
         lineage_ok = business_fields.issubset(lineage_fields)

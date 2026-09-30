@@ -8,7 +8,9 @@ Product、Legal、Finance与GTM分别处理自己的领域候选。当前原生�
 
 原生任务链通过TeamHarness的projectflow/taskflow接口创建、委派、接收、提交、检查与完成任务。后续变化单独绑定ChangeSet、预览和任务回执；初次Formation与后续变化分别可查。
 
-## 同一ChangeSet补证恢复 {#evidence-recovery}
+<a id="evidence-recovery"></a>
+
+## 同一ChangeSet补证恢复
 
 原生执行模式下，尚未批准的独立提案可以由该提案的精确审批负责人退回补证，再由有提案权限的用户恢复执行：
 

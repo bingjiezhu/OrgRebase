@@ -44,6 +44,7 @@ class ResumeChangeInput(BaseModel):
     recovery_digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
     executor_id: str = Field(min_length=1, max_length=256)
     evidence: list[EvidenceReference] = Field(min_length=1, max_length=16)
+    defer_candidate_preparation: bool = False
 
 
 def _prefix(event_id: str) -> str:
@@ -389,7 +390,7 @@ def resume_change(workspace: Any, event_id: str, command: ResumeChangeInput) -> 
                 raise IntegrityError("CHANGE_RECOVERY_COMMAND_CONFLICT")
         else:
             _require_pending(workspace, event_id)
-            fixture, _, _, plan = _capture(workspace, event_id)
+            fixture, change_set, preview, plan = _capture(workspace, event_id)
             tasks, sources = _catalog(workspace, fixture, plan)
             task = next((item for item in tasks if item["task_id"] == request["task_id"]), None)
             if task is None:
@@ -414,11 +415,22 @@ def resume_change(workspace: Any, event_id: str, command: ResumeChangeInput) -> 
                 "preserved_context": request["preserved_context"], "executor": executor,
                 "evidence": evidence, "previous_candidate": _previous_candidate(workspace, request),
                 "submitted_at": workspace.clock.now()})
+            from orgrebase.workspace.finance_adoption import require_finance_recovery_preflight
+            require_finance_recovery_preflight(
+                workspace, event_id, fixture=fixture, change_set=change_set,
+                preview=preview, immediate=not command.defer_candidate_preparation,
+                connection=connection, resume_digest=record["digest"],
+            )
             workspace.store.save_artifact(connection, _prefix(event_id) + f"resume:{request['round']:04d}", RESUME_MEDIA, record)
             workspace.store.append_event(connection, "WORKSPACE_CHANGE_EVIDENCE_SUPPLIED", {
                 "event_id": event_id, "round": request["round"], "recovery_digest": record["digest"],
                 "actor_id": actor, "executor_id": executor["executor_id"]})
-    workspace.preview_change(event_id)
+    # An exact response-loss retry reads the already persisted Preview. It
+    # must not turn a completed historical operation into a fresh policy/head
+    # admission request after the deployment has since closed adoption.
+    if (not command.defer_candidate_preparation
+            and (old is None or workspace._preview_record(event_id) is None)):
+        workspace.preview_change(event_id)
     return recovery_detail(workspace, event_id)
 
 

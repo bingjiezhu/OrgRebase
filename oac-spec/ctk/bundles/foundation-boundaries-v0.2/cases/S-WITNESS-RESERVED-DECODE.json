@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-RESERVED-DECODE",
+  "expect": {
+    "result": {
+      "pointer": "/:?@!$&'()*+,;=[]",
+      "resourceId": "urn:a:/?@!$&'()*+,;=[]"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "urn:a:/?@!$&'()*+,;=%5B%5D#/%3A%3F%40%21%24%26%27%28%29%2A%2B%2C%3B%3D%5B%5D"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

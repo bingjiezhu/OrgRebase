@@ -1,0 +1,15 @@
+{
+  "caseId": "S-RESOURCE-maxSemanticDepth-OVER",
+  "expect": {
+    "errorCode": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED",
+    "sutStatus": "RESOURCE_EXHAUSTED"
+  },
+  "input": {
+    "maxSemanticDepth": 33
+  },
+  "operation": "resourceCheck",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

@@ -1,0 +1,15 @@
+{
+  "caseId": "S-RESOURCE-maxRequestBytes-OVER",
+  "expect": {
+    "errorCode": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED",
+    "sutStatus": "RESOURCE_EXHAUSTED"
+  },
+  "input": {
+    "maxRequestBytes": 1048577
+  },
+  "operation": "resourceCheck",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

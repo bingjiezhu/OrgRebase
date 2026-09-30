@@ -1,0 +1,16 @@
+{
+  "caseId": "S-WITNESS-UTF8-ABOVE-UNICODE-RESOURCE",
+  "expect": {
+    "errorCode": "APPLICABILITY_WITNESS_MISMATCH",
+    "sutStatus": "ERROR"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "urn:a%F4%90%80%80#/spec"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

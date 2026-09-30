@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0.1/IndependenceStatement.schema.json",
+  "title": "IndependenceStatement",
+  "description": "Closed provenance and dependency disclosure. Validation never awards organizational independence.",
+  "$comment": "A separately maintained implementation and external evidence review remain M2 governance gates outside this self-authored statement.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "statementId",
+    "implementation",
+    "maintainer",
+    "source",
+    "build",
+    "sbom",
+    "referenceAccess",
+    "generatedCode",
+    "dependencies",
+    "claimLimit",
+    "digest"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "oac.ctk.independence/v0.1"
+    },
+    "kind": {
+      "const": "IndependenceStatement"
+    },
+    "statementId": {
+      "$ref": "#/$defs/nonBlankString"
+    },
+    "implementation": {
+      "$ref": "#/$defs/implementation"
+    },
+    "maintainer": {
+      "$ref": "#/$defs/maintainer"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "build": {
+      "$ref": "#/$defs/build"
+    },
+    "sbom": {
+      "$ref": "#/$defs/sbom"
+    },
+    "referenceAccess": {
+      "$ref": "#/$defs/referenceAccess"
+    },
+    "generatedCode": {
+      "$ref": "#/$defs/generatedCode"
+    },
+    "dependencies": {
+      "$ref": "#/$defs/dependencies"
+    },
+    "claimLimit": {
+      "const": "provenance_and_dependency_disclosure_only"
+    },
+    "digest": {
+      "$ref": "#/$defs/sha256Digest"
+    }
+  },
+  "$defs": {
+    "nonBlankString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationId",
+        "implementationVersion",
+        "artifactDigest"
+      ],
+      "properties": {
+        "implementationId": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "implementationVersion": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "artifactDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "maintainer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maintainerId",
+        "organizationRef",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "maintainerId": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "organizationRef": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/nonBlankString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/stringSet"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repositoryRef",
+        "revision",
+        "sourceDigest"
+      ],
+      "properties": {
+        "repositoryRef": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "revision": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "sourceDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "buildSystem",
+        "recipeDigest",
+        "environmentDigest",
+        "artifactDigest"
+      ],
+      "properties": {
+        "buildSystem": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "recipeDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "environmentDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "artifactDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "sbom": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "documentRef",
+        "documentDigest"
+      ],
+      "properties": {
+        "format": {
+          "enum": [
+            "CycloneDX",
+            "SPDX",
+            "other"
+          ]
+        },
+        "documentRef": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "documentDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "referenceAccess": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "artifactRefs",
+        "attestation"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "normative_artifacts_only",
+            "reference_source_observed",
+            "reference_executable_observed",
+            "unknown"
+          ]
+        },
+        "artifactRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "attestation": {
+          "$ref": "#/$defs/nonBlankString"
+        }
+      }
+    },
+    "generatedCode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "used",
+        "generatorRefs",
+        "generatedSourceDigest"
+      ],
+      "properties": {
+        "used": {
+          "type": "boolean"
+        },
+        "generatorRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "generatedSourceDigest": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "used": {
+                "const": false
+              }
+            },
+            "required": [
+              "used"
+            ]
+          },
+          "then": {
+            "properties": {
+              "generatorRefs": {
+                "maxItems": 0
+              },
+              "generatedSourceDigest": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "generatorRefs": {
+                "minItems": 1
+              },
+              "generatedSourceDigest": {
+                "$ref": "#/$defs/sha256Digest"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "language",
+        "runtime",
+        "library",
+        "ffi",
+        "process",
+        "service"
+      ],
+      "properties": {
+        "language": {
+          "$ref": "#/$defs/dependencySet"
+        },
+        "runtime": {
+          "$ref": "#/$defs/dependencySet"
+        },
+        "library": {
+          "$ref": "#/$defs/dependencySet"
+        },
+        "ffi": {
+          "$ref": "#/$defs/dependencySet"
+        },
+        "process": {
+          "$ref": "#/$defs/dependencySet"
+        },
+        "service": {
+          "$ref": "#/$defs/dependencySet"
+        }
+      }
+    },
+    "dependencySet": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/dependency"
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "artifactDigest",
+        "sharedWithReference",
+        "semanticRole"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "version": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "artifactDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "sharedWithReference": {
+          "type": "boolean"
+        },
+        "semanticRole": {
+          "enum": [
+            "build",
+            "canonicalization",
+            "model",
+            "none",
+            "parsing",
+            "semantic_kernel",
+            "transport",
+            "verification"
+          ]
+        }
+      }
+    },
+    "stringSet": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonBlankString"
+      }
+    }
+  }
+}

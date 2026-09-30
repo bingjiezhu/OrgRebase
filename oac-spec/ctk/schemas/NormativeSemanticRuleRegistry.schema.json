@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0.1/NormativeSemanticRuleRegistry.schema.json",
+  "title": "NormativeSemanticRuleRegistry",
+  "description": "Closed, digest-bound semantic-rule projection with no executable binding fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "registryKind",
+    "rules",
+    "digest"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "oac.dev/v0alpha1"
+    },
+    "registryKind": {
+      "const": "NormativeSemanticRuleRegistry"
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "digest": {
+      "$ref": "#/$defs/sha256Digest"
+    }
+  },
+  "$defs": {
+    "nonBlankString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleId",
+        "ruleVersion",
+        "appliesToKinds",
+        "scope",
+        "jsonSchemaEnforced",
+        "failureReasonCode",
+        "description",
+        "normativeRef",
+        "quantifier"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "string",
+          "pattern": "^OAC-SEM-[0-9]{3}$"
+        },
+        "ruleVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "appliesToKinds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonBlankString"
+          }
+        },
+        "scope": {
+          "enum": [
+            "authority_envelope",
+            "cross_field",
+            "deterministic_evidence",
+            "graph_integrity",
+            "provenance_state",
+            "referential_integrity",
+            "set_uniqueness"
+          ]
+        },
+        "jsonSchemaEnforced": {
+          "type": "boolean"
+        },
+        "failureReasonCode": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{2,127}$"
+        },
+        "description": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "normativeRef": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "quantifier": {
+          "enum": [
+            "for_each_annotation",
+            "for_each_authority_envelope",
+            "for_each_declared_collection",
+            "for_each_order_constraint",
+            "for_each_reference",
+            "for_each_resource",
+            "for_each_verification_dimension"
+          ]
+        }
+      }
+    }
+  }
+}

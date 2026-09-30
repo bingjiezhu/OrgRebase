@@ -1,0 +1,7 @@
+{
+  "caseId": "C0-CANON-002",
+  "expect": {"errorCode": "CORE_SCHEMA_INVALID", "sutStatus": "ERROR"},
+  "input": {"rawBase64": "eyJhIjoxLCJhIjoyfQ=="},
+  "operation": "canonicalize",
+  "requirementRefs": ["REQ-DUPLICATE-KEY-REJECT"]
+}

@@ -1,0 +1,130 @@
+{
+  "$defs": {
+    "capabilityObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "errorCode": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "sutStatus": {
+          "$ref": "#/$defs/sutStatus"
+        }
+      },
+      "required": [
+        "sutStatus",
+        "errorCode"
+      ],
+      "type": "object"
+    },
+    "extensions": {
+      "additionalProperties": true,
+      "propertyNames": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "nonEmptyString": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "type": "string"
+    },
+    "operation": {
+      "enum": [
+        "canonicalize",
+        "deriveIdentifier",
+        "witness",
+        "strongKleene",
+        "closureMicro",
+        "resourceCheck"
+      ]
+    },
+    "sutStatus": {
+      "enum": [
+        "COMPLETED",
+        "UNSUPPORTED",
+        "RESOURCE_EXHAUSTED",
+        "ERROR",
+        "TIMEOUT",
+        "CRASH"
+      ]
+    },
+    "track": {
+      "additionalProperties": false,
+      "properties": {
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "operation": {
+          "$ref": "#/$defs/operation"
+        },
+        "profileId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "profileVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "role": {
+          "const": "semantic-kernel"
+        },
+        "wireVersion": {
+          "const": "oac.ctk.stdio/v1"
+        }
+      },
+      "required": [
+        "role",
+        "operation",
+        "profileId",
+        "profileVersion",
+        "wireVersion"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/ctk/v0alpha2/CapabilityStatement.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural schema for a Phase A stdio-v1 adapter capability statement.",
+  "properties": {
+    "adapterProtocolVersion": {
+      "const": "oac.ctk.stdio/v1"
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    },
+    "implementationId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "implementationVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "observation": {
+      "$ref": "#/$defs/capabilityObservation"
+    },
+    "tracks": {
+      "items": {
+        "$ref": "#/$defs/track"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "implementationId",
+    "implementationVersion",
+    "adapterProtocolVersion",
+    "tracks"
+  ],
+  "title": "CapabilityStatement",
+  "type": "object"
+}

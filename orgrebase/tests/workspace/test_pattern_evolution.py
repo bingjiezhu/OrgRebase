@@ -18,6 +18,7 @@ from orgrebase.workspace.pattern_evolution import (
     _record,
 )
 from orgrebase.workspace.skill_packages import PARTITIONS, InvocationContext
+from tests.workspace.pattern_fixture_support import invoke_pattern_fixture
 
 
 @dataclass
@@ -158,7 +159,142 @@ def decide(service, candidate, evaluation):
         actor_id="scripted:skill-governance",
         verdict="ADMIT",
         expected_candidate_digest=service._load(candidate)["digest"],
+        expected_head_package_digest=service._load(candidate)["base_package_digest"],
     )
+
+
+def test_core_admit_requires_expected_head_even_for_qualified_candidate(setup):
+    service, _, _ = setup
+    candidate, evaluation, _, _, _ = qualify(service)
+    with pytest.raises(IntegrityError, match="EXPECTED_HEAD_REQUIRED"):
+        service.decide(
+            candidate,
+            evaluation,
+            actor_id=service.governance_authority,
+            verdict="ADMIT",
+            expected_candidate_digest=service._load(candidate)["digest"],
+        )
+    assert service._family("decision") == ()
+    assert service._family("admission") == ()
+
+
+def test_second_generation_uses_persisted_predecessor_and_stale_peer_cannot_admit(setup):
+    service, store, _ = setup
+    first, first_evaluation, _, corpus, suite = qualify(service)
+    second_proposal = service.open_proposal(
+        proposal_id="proposal:peer",
+        corpus_ref=corpus,
+        replay_ref=suite,
+        skill_name="structured-domain-handoff",
+        author_id="learner:bounded",
+        budget=ProposalBudget(max_cases=10, max_skill_invocations=100, max_seconds=100),
+    )
+    installed = service.registry.load("structured-domain-handoff")
+    peer_boundary = SkillBoundary(
+        preconditions=("declared domain matches",),
+        required_knowledge=("knowledge:handoff-v1",),
+        required_qualifications=("qualification:handoff-review",),
+        evidence_duties=("exact task and delegation digest",),
+        rollback_package_digest=installed.package_digest,
+        known_failure_envelope=("missing provenance abstains", "permission expansion denies"),
+    )
+    (peer,) = service.propose(second_proposal, actor_id="learner:bounded", boundary=peer_boundary)
+    peer_evaluation = service.evaluate(peer, actor_id=service.evaluator_authority)
+    decide(service, first, first_evaluation)
+    first_head = service.current_skill_head_package_digest("structured-domain-handoff")
+    assert first_head != installed.package_digest
+    stable_first = service._current_stable_head("structured-domain-handoff")
+    assert stable_first is not None
+    assert stable_first.payload["generation"] == 1
+    assert stable_first.payload["adoption_enabled"] is False
+    genesis = store.get_object(stable_first.id, "g00000000")
+    assert genesis.payload["transition_kind"] == "GENESIS"
+    assert genesis.state is ObjectState.SUPERSEDED
+    with pytest.raises(IntegrityError, match="HEAD_CHANGED"):
+        decide(service, peer, peer_evaluation)
+
+    # The second proposal now binds N+1, and both its baseline and candidate
+    # are evaluated against the complete persisted N+1 package snapshot.
+    successor_proposal = service.open_proposal(
+        proposal_id="proposal:second-generation",
+        corpus_ref=corpus,
+        replay_ref=suite,
+        skill_name="structured-domain-handoff",
+        author_id="learner:bounded",
+        budget=ProposalBudget(max_cases=10, max_skill_invocations=100, max_seconds=100),
+    )
+    assert service._load(successor_proposal)["base_package_digest"] == first_head
+    successor_boundary = SkillBoundary(
+        **{
+            **peer_boundary.model_dump(mode="json", exclude={"digest"}),
+            "rollback_package_digest": first_head,
+        }
+    )
+    (successor,) = service.propose(
+        successor_proposal, actor_id="learner:bounded", boundary=successor_boundary
+    )
+    successor_evaluation = service.evaluate(successor, actor_id=service.evaluator_authority)
+    comparison = service._load(successor_evaluation)
+    assert comparison["prior"]["premise_lock"]["package"] == first_head
+    assert comparison["current"]["premise_lock"]["package"] != first_head
+    decide(service, successor, successor_evaluation)
+    assert service.current_skill_head_package_digest("structured-domain-handoff") != first_head
+    stable_second = service._current_stable_head("structured-domain-handoff")
+    assert stable_second is not None
+    assert stable_second.payload["generation"] == 2
+    assert stable_second.payload["previous_head_ref"] == stable_first.ref
+    assert stable_second.payload["previous_head_digest"] == stable_first.digest
+    assert stable_second.payload["effective_version_parent_ref"] == stable_first.payload["effective_version_ref"]
+    assert store.get_object(stable_first.id, stable_first.version).state is ObjectState.SUPERSEDED
+    admissions = service._family("admission")
+    assert len(admissions) == 2
+    states = []
+    for admission in admissions:
+        source_id, version = admission["source_ref"].rsplit("@", 1)
+        source = store.get_object(source_id, version)
+        states.append(source.state)
+        assert source.payload["package_snapshot_ref"]
+    assert states.count(ObjectState.CURRENT) == 1
+    assert states.count(ObjectState.SUPERSEDED) == 1
+
+
+def test_rollback_advances_generation_and_old_installed_digest_cannot_aba(setup):
+    service, store, _ = setup
+    first, first_evaluation, _, corpus, suite = qualify(service)
+    old_base = service.registry.load("structured-domain-handoff").package_digest
+    proposal = service.open_proposal(
+        proposal_id="proposal:stale-after-rollback", corpus_ref=corpus, replay_ref=suite,
+        skill_name="structured-domain-handoff", author_id="learner:bounded",
+        budget=ProposalBudget(max_cases=10, max_skill_invocations=100, max_seconds=100),
+    )
+    boundary = SkillBoundary(
+        preconditions=("declared domain matches",),
+        required_knowledge=("knowledge:handoff-v1",),
+        required_qualifications=("qualification:handoff-review",),
+        evidence_duties=("exact task and delegation digest",),
+        rollback_package_digest=old_base,
+        known_failure_envelope=("missing provenance abstains", "permission expansion denies"),
+    )
+    (stale,) = service.propose(proposal, actor_id="learner:bounded", boundary=boundary)
+    stale_evaluation = service.evaluate(stale, actor_id=service.evaluator_authority)
+    decide(service, first, first_evaluation)
+    advanced = service._current_stable_head("structured-domain-handoff")
+    assert advanced is not None and advanced.payload["generation"] == 1
+    service.retract(first, actor_id=service.governance_authority, reason="controlled regression")
+    service.restore_predecessor(
+        first, actor_id=service.governance_authority,
+        expected_predecessor_digest=old_base, reason="restore exact predecessor",
+    )
+    rolled_back = service._current_stable_head("structured-domain-handoff")
+    assert rolled_back is not None
+    assert rolled_back.payload["generation"] == 2
+    assert rolled_back.payload["transition_kind"] == "ROLLBACK"
+    assert rolled_back.payload["previous_head_ref"] == advanced.ref
+    assert rolled_back.payload["package_digest"] == old_base
+    assert rolled_back.payload["adoption_enabled"] is False
+    assert store.get_object(advanced.id, advanced.version).state is ObjectState.SUPERSEDED
+    with pytest.raises(IntegrityError, match="ROLLBACK_REQUALIFICATION_REQUIRED"):
+        decide(service, stale, stale_evaluation)
 
 
 def test_declared_grouping_retains_complete_support_counterexample_null_unknown(setup):
@@ -225,7 +361,8 @@ def test_governance_source_and_existing_ledger_invocation_survive_restart(setup)
             prerequisite_resolver=service.prerequisite_resolver,
         )
         value = public()
-        invocation = resumed.invoke(
+        invocation = invoke_pattern_fixture(
+            resumed,
             candidate,
             value,
             context=InvocationContext(
@@ -367,7 +504,8 @@ def test_case_retraction_propagates_through_skill_source_plan_and_compatibility(
     assert store.get_object(source_id).state is ObjectState.REQUALIFICATION_REQUIRED
     value = public()
     with pytest.raises(AuthorizationError, match="SOURCE_RETRACTED"):
-        service.invoke(
+        invoke_pattern_fixture(
+            service,
             candidate,
             value,
             context=InvocationContext(
@@ -413,7 +551,8 @@ def test_untrusted_qualification_strings_do_not_authorize_invocation(setup):
     decide(service, candidate, evaluation)
     value = public()
     with pytest.raises(AuthorizationError, match="PREREQUISITES_MISSING"):
-        service.invoke(
+        invoke_pattern_fixture(
+            service,
             candidate,
             value,
             context=InvocationContext(
@@ -503,7 +642,8 @@ def test_admitted_skill_does_not_replay_or_spend_expired_proposal_budget(setup, 
 
     monkeypatch.setattr(SkillPackageEvaluator, "evaluate", forbidden)
     value = public()
-    invocation = service.invoke(
+    invocation = invoke_pattern_fixture(
+        service,
         candidate,
         value,
         context=InvocationContext(
@@ -574,9 +714,9 @@ def test_invocation_budget_is_independent_and_records_actual_release_calls(setup
         "knowledge_refs": ("knowledge:handoff-v1",),
         "qualification_refs": ("qualification:handoff-review",),
     }
-    assert service.invoke(candidate, value, **arguments).result["action"] == "HANDOFF"
-    with pytest.raises(IntegrityError, match="INVOCATION_BUDGET_EXHAUSTED"):
-        service.invoke(candidate, value, **arguments)
+    assert invoke_pattern_fixture(service, candidate, value, **arguments).result["action"] == "HANDOFF"
+    with pytest.raises(IntegrityError, match="INVOCATION_ALREADY_RESERVED"):
+        invoke_pattern_fixture(service, candidate, value, **arguments)
     assert len(service._family("invocation-reservation")) == len(service._family("invocation-result")) == 1
     assert len(service._family("invocation-denial")) == 1
     assert service._usage(proposal) == usage_before

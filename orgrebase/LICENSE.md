@@ -1,21 +1,47 @@
 # Licensing
 
-Project-owned OrgRebase material in this tree is Apache License 2.0, including code, tests, schemas, Skills, fixtures, documentation and other project prose. The grant text is [LICENSE](LICENSE). Copyright 2026 Bingjie Zhu.
+Copyright 2026 Bingjie Zhu. Contributors retain copyright in their contributions.
 
-## 原先
+Project-owned OrgRebase material is licensed under the **Apache License, Version 2.0**.
+This includes source code, documentation, schemas, Skills, tests, examples and
+project-authored synthetic fixtures. The authoritative license text is [LICENSE](LICENSE).
 
-Public revisions through tag `v0.4.0` used PolyForm Noncommercial 1.0.0. Commercial use of those revisions needed a separate written grant.
+Commercial use, modification, redistribution and use in a hosted service are permitted
+under Apache-2.0. No additional OrgRebase commercial license is required for these
+rights. Redistribution must preserve the applicable license, attribution and change
+notices. See [NOTICE.md](NOTICE.md) for attribution and third-party material, and
+[COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md) for the boundary between software rights
+and separately agreed services.
 
-A later `main` commit used the OAC path split: Apache-2.0 for executable and machine-readable assets, CC BY 4.0 for normative prose.
+## Third-party material
 
-## 现状
+The project license does not replace the licenses of dependencies, upstream software,
+datasets or optional model weights. Those materials retain their own terms and notices,
+regardless of their location in this tree. In particular:
 
-This tree offers all project-owned OrgRebase files under Apache-2.0. Commercial use is included. [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md) records that change.
+- `vendor/agentteams/` retains the upstream Apache-2.0 license and source identity.
+- Public dataset projections retain their source attribution and dataset license.
+- `LICENSES/CC-BY-4.0.txt` supplies the license text for attributed upstream data; it
+  does not license OrgRebase's own documentation.
+- Optional model weights are not distributed with the source package. Their license
+  and the terms of any hosted provider must be checked separately.
 
-## 为什么会有这样的更新
+See the [third-party inventory](docs/THIRD-PARTY-INVENTORY.md) for component-specific
+terms.
 
-The copyright holder chose one OSI license for the repository's own material. `LICENSES/CC-BY-4.0.txt` remains so upstream CC BY datasets can be read with their own terms. It is not a grant for OrgRebase project-owned files.
+## Historical releases and sealed records
 
-`vendor/agentteams/` keeps the upstream Apache-2.0 terms in `vendor/agentteams/README.md`. `benchmark/public-retail-quote/` keeps its upstream CC BY 4.0 notice. Dependencies, PostgreSQL and optional models keep their own terms. Model weights are not included.
+An earlier release remains subject to the license supplied with that release. Public
+revisions through tag `v0.4.0` used PolyForm Noncommercial 1.0.0; some subsequent
+revisions used separate CC BY 4.0 terms for project prose.
 
-Skill manifests and the OrgWorkBench dataset manifest still contain the sealed identifier `PolyForm-Noncommercial-1.0.0`. That string is part of the content address used by retained evidence. It does not narrow the Apache-2.0 grant for project-owned files in the current tree.
+The Apache-2.0 grant in this tree covers its project-owned material, including retained
+Skill and benchmark records. A sealed record may still contain
+`PolyForm-Noncommercial-1.0.0` as historical metadata. Its bytes and content address are
+preserved for verification; that identifier does not restrict the current grant.
+
+## Patents and names
+
+Apache-2.0 Section 3 defines the contributor patent grant and its limits. It does not
+license third-party patent claims. Apache-2.0 does not grant rights to the project's
+names or marks beyond the uses permitted by its trademark clause.

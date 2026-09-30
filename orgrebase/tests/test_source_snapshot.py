@@ -1158,6 +1158,140 @@ def test_runtime_profile_excludes_history_but_keeps_install_resources(tmp_path):
     assert (output / snapshot.ARCHIVE_NAME).read_bytes() == (second / snapshot.ARCHIVE_NAME).read_bytes()
 
 
+def test_github_profile_retains_oac_public_gate_inputs_without_experiment_mirror(tmp_path):
+    org, oac = _source_roots(tmp_path)
+    for relative in (*snapshot.GITHUB_OAC_REQUIRED_FILES, *snapshot.GITHUB_OAC_CHECK_INPUT_FILES):
+        path = oac / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}\n", encoding="utf-8")
+    private = oac / "experiments/supplier-v02-portability/private-session.json"
+    private.write_text("private fixture outside the public closure\n", encoding="utf-8")
+    database = oac / "ctk/private.sqlite3"
+    database.write_bytes(b"private runtime database")
+    for relative in snapshot.GITHUB_ORGREBASE_TEST_SUPPORT_FILES:
+        path = org / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}\n", encoding="utf-8")
+    private_mapping_neighbor = org / "evidence/oac-agentic-adaptation/latest/private-mapping.json"
+    private_mapping_neighbor.write_text("private neighbor outside the public closure\n", encoding="utf-8")
+    output = tmp_path / "github"
+    metadata = snapshot.build_source_snapshot(org, oac, output, profile="github")
+    paths = {item["path"] for item in metadata["inventory"]["files"]}
+    assert all(f"oac-spec/{relative}" in paths for relative in snapshot.GITHUB_OAC_REQUIRED_FILES)
+    assert all(f"oac-spec/{relative}" in paths for relative in snapshot.GITHUB_OAC_CHECK_INPUT_FILES)
+    assert "oac-spec/experiments/supplier-v02-portability/private-session.json" not in paths
+    assert "oac-spec/ctk/private.sqlite3" not in paths
+    assert all(f"orgrebase/{relative}" in paths for relative in snapshot.GITHUB_ORGREBASE_TEST_SUPPORT_FILES)
+    assert "orgrebase/evidence/oac-agentic-adaptation/latest/private-mapping.json" not in paths
+    assert metadata["runtimeClosure"]["oacPublicCheck"] == "NOT_RUN_BY_PACKAGER"
+    assert snapshot.verify_source_snapshot(org, oac, output, profile="github")["status"] == "PASS"
+    with pytest.raises(snapshot.SnapshotError, match="METADATA_RELEASE_ALLOWLIST_INVALID"):
+        snapshot.verify_source_snapshot(org, oac, output, profile="runtime")
+
+
+@pytest.mark.parametrize("component,path", [
+    ("orgrebase", "RELEASE-VERIFICATION.md"),
+    ("orgrebase", "docs/REVIEW-READINESS.md"),
+    ("orgrebase", "docs/UPSTREAM-CHANGE-REVIEW.md"),
+    ("orgrebase", "docs/PRELIMINARY-TO-OAC-EVOLUTION-ARCHITECTURE.md"),
+    ("orgrebase", "docs/VERIFICATION-EVIDENCE-MAP.md"),
+    ("oac-spec", "docs/research/landscape-2026.md"),
+    ("oac-spec", "docs/decisions/0005-a1-portability-capsule-hard-grill.md"),
+    ("oac-spec", "docs/validation/STATUS-2026-09-09-spec009.md"),
+    ("oac-spec", "docs/validation/EVOLUTION-SEED3-PUBLICATION.md"),
+])
+def test_github_release_excludes_internal_review_and_planning_prose(component, path):
+    relative = PurePosixPath(path)
+    assert snapshot._release_allowlist_reason(relative, component, is_dir=False, profile="github")
+    assert snapshot._release_allowlist_reason(relative, component, is_dir=False, profile="full") is None
+
+
+@pytest.mark.parametrize("component,path", [
+    ("orgrebase", "skills/enterprise-quote-compose/SKILL.md"),
+    ("orgrebase", "docs/RELEASE-CANDIDATES.md"),
+    ("oac-spec", "docs/validation/CLI-ADMISSION.md"),
+    ("oac-spec", "docs/validation/README.md"),
+    ("oac-spec", "docs/decisions/0001-mvp-boundary.md"),
+])
+def test_github_release_retains_formal_contracts_and_operating_guides(component, path):
+    assert snapshot._release_allowlist_reason(
+        PurePosixPath(path), component, is_dir=False, profile="github",
+    ) is None
+
+
+def test_github_profile_requires_real_oac_gate_sources(tmp_path):
+    root = tmp_path / "snapshot"
+    oac = root / "oac-spec"
+    oac.mkdir(parents=True)
+    for name in ("README.md", "LICENSES.md", "README-FIRST.md", "README-FIRST.zh-CN.md"):
+        (root / name).write_text("fixture\n", encoding="utf-8")
+    for name in ("README.md", "uv.lock", "LICENSE.md", "NOTICE.md", "THIRD_PARTY.yml"):
+        (oac / name).write_text("fixture\n", encoding="utf-8")
+    (oac / "pyproject.toml").write_text("[project]\nname = 'oac-contract'\n", encoding="utf-8")
+    with pytest.raises(snapshot.SnapshotError, match="GITHUB_OAC_SOURCE_CLOSURE_INCOMPLETE"):
+        snapshot._verify_github_profile_closure(root)
+
+
+@pytest.mark.parametrize("path", [
+    "spec/STATUS.md", ".codex/session.md", "RELEASE-REPORT.md",
+    "orgrebase/docs/UPSTREAM-CHANGE-REVIEW.md",
+    "oac-spec/docs/research/landscape-2026.md",
+    "oac-spec/docs/validation/STATUS-2026-09-09-spec009.md",
+])
+def test_public_gate_rejects_internal_work_material_before_running_tools(tmp_path, monkeypatch, path):
+    material = tmp_path / path
+    material.parent.mkdir(parents=True, exist_ok=True)
+    material.write_text("internal working material", encoding="utf-8")
+    calls = []
+    monkeypatch.setattr(snapshot.subprocess, "run", lambda *args, **kwargs: calls.append(args))
+    with pytest.raises(snapshot.SnapshotError, match="PUBLIC_INTERNAL_WORK_MATERIAL"):
+        snapshot.run_public_check(tmp_path)
+    assert not calls
+
+
+def test_public_checkout_closure_does_not_require_archive_only_guides(tmp_path):
+    (tmp_path / "README.md").write_text("# Public checkout", encoding="utf-8")
+    (tmp_path / "LICENSES.md").write_text("Apache-2.0", encoding="utf-8")
+    assert snapshot._verify_github_profile_closure(
+        tmp_path, require_archive_guides=False,
+    )["status"] == "PASS"
+    with pytest.raises(snapshot.SnapshotError, match="RUNTIME_PROFILE_CLOSURE_INCOMPLETE"):
+        snapshot._verify_github_profile_closure(tmp_path)
+    (tmp_path / "LICENSES.md").unlink()
+    with pytest.raises(snapshot.SnapshotError, match="RUNTIME_PROFILE_CLOSURE_INCOMPLETE"):
+        snapshot._verify_github_profile_closure(tmp_path, require_archive_guides=False)
+
+
+def test_public_oac_gate_runs_core_tests_only_after_conformance_passes(tmp_path, monkeypatch):
+    root = tmp_path / "snapshot"
+    (root / "oac-spec").mkdir(parents=True)
+    monkeypatch.setattr(snapshot, "_verify_github_profile_closure", lambda _root, **_options: {"status": "PASS"})
+    calls = []
+
+    def record(command, *, cwd, check):
+        calls.append((tuple(command), cwd, check))
+        return subprocess.CompletedProcess(command, 0)
+
+    monkeypatch.setattr(snapshot.subprocess, "run", record)
+    assert snapshot.run_public_check(root) == 0
+    assert calls == [
+        (("make", *snapshot.PUBLIC_OAC_CHECK_TARGETS), root / "oac-spec", False),
+        (("uv", "run", "pytest", "-q", *snapshot.PUBLIC_OAC_TEST_MODULES), root / "oac-spec", False),
+    ]
+
+    calls.clear()
+    monkeypatch.setattr(
+        snapshot.subprocess,
+        "run",
+        lambda command, *, cwd, check: (
+            calls.append((tuple(command), cwd, check))
+            or subprocess.CompletedProcess(command, 2)
+        ),
+    )
+    assert snapshot.run_public_check(root) == 2
+    assert len(calls) == 1
+
+
 @pytest.mark.parametrize("name", (".env", ".env.local", "production.env"))
 def test_evidence_allowlist_never_bypasses_environment_exclusion(name):
     assert snapshot._exclusion_reason(

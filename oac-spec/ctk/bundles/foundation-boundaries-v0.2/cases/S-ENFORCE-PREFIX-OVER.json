@@ -1,0 +1,1061 @@
+{
+  "caseId": "S-ENFORCE-PREFIX-OVER",
+  "expect": {
+    "errorCode": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED",
+    "sutStatus": "RESOURCE_EXHAUSTED"
+  },
+  "input": {
+    "edges": [
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-00",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-01",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-02",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-03",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-04",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-05",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-06",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-07",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-08",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-09",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-10",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-11",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-12",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-13",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-14",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-15",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-16",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-17",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-18",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-19",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-20",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-21",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-22",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-23",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-24",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-25",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-26",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-27",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-28",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-29",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-30",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-31",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-32",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-33",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-34",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-35",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-36",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-37",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-38",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-39",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-40",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-41",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-42",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-43",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-44",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-45",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-46",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-47",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-48",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-49",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-50",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-51",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-52",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-53",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-54",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-55",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-56",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-57",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-58",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-59",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-60",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-61",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "a-62",
+        "result": "TRUE",
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-00",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-01",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-02",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-03",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-04",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-05",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-06",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-07",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-08",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-09",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-10",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-11",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-12",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-13",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-14",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-15",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-16",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-17",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-18",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-19",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-20",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-21",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-22",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-23",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-24",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-25",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-26",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-27",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-28",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-29",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-30",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-31",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-32",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-33",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-34",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-35",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-36",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-37",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-38",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-39",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-40",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-41",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-42",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-43",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-44",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-45",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-46",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-47",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-48",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-49",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-50",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-51",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-52",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-53",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-54",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-55",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-56",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-57",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-58",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-59",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-60",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-61",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-62",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "b-63",
+        "result": "TRUE",
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "admission": "admitted",
+        "covered": true,
+        "id": "c-00",
+        "result": "TRUE",
+        "source": "A",
+        "target": "D"
+      }
+    ],
+    "maxDepth": 2,
+    "maxPathPrefixes": 4096,
+    "nodes": [
+      {
+        "admission": "admitted",
+        "id": "A"
+      },
+      {
+        "admission": "admitted",
+        "id": "B"
+      },
+      {
+        "admission": "admitted",
+        "id": "C"
+      },
+      {
+        "admission": "admitted",
+        "id": "D"
+      }
+    ],
+    "root": "A"
+  },
+  "operation": "closureMicro",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

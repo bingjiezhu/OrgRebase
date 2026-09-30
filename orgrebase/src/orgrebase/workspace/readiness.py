@@ -195,7 +195,7 @@ def _evidence_checks(root: Path, checks: list[dict[str, Any]]) -> None:
             dataset.get("case_count") == 192
             and dataset.get("organization_count") == 12
             and dataset.get("pii") == "NONE_SYNTHETIC"
-            and dataset.get("license") == "PolyForm-Noncommercial-1.0.0"
+            and dataset.get("license") in {"PolyForm-Noncommercial-1.0.0", "Apache-2.0"}
         ),
         detail=(
             f"cases={dataset.get('case_count')} orgs={dataset.get('organization_count')} "
@@ -240,7 +240,7 @@ def _evidence_checks(root: Path, checks: list[dict[str, Any]]) -> None:
         check_id="data.license_manifest",
         passed=(
             isinstance(canonical, dict)
-            and canonical.get("license_spdx") == "PolyForm-Noncommercial-1.0.0"
+            and canonical.get("license_spdx") in {"PolyForm-Noncommercial-1.0.0", "Apache-2.0"}
             and canonical.get("pii_class") == "SYNTHETIC"
             and canonical.get("redistribution") == "ALLOWED"
             and optional_safe

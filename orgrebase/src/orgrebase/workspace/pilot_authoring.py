@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import tempfile
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -21,7 +22,9 @@ from orgrebase.workspace.pilot import (
     PILOT_PACK_FILENAME,
     EnterpriseQuotePilotPack,
     load_enterprise_quote_pilot_pack,
+    validate_enterprise_quote_pilot_payloads,
 )
+from orgrebase.workspace.profile_admission import enterprise_input_preflight
 from orgrebase.workspace.profile_contracts import EnterpriseSeedProfile, SeedComponentKind
 from orgrebase.workspace.source_admission import (
     EnterpriseSeedComponentRoot,
@@ -30,6 +33,10 @@ from orgrebase.workspace.source_admission import (
 
 MAX_AUTHORING_JSON_BYTES = 1_048_576
 EVERGREEN_TEMPLATE_ASSET = "examples/enterprise-quote-pilot/evergreen"
+PILOT_DRAFT_TEMPLATES = {
+    "evergreen": EVERGREEN_TEMPLATE_ASSET,
+    "priced-quote": "examples/enterprise-quote-pilot/priced-quote",
+}
 
 
 class EnterpriseQuotePilotAuthoringError(ValueError):
@@ -152,10 +159,15 @@ def _publish_files(
         return runtime
 
 
-def initialize_enterprise_quote_pilot_draft(output_root: str | Path) -> dict[str, Any]:
-    """Copy the packaged Evergreen template to a new editable directory."""
+def initialize_enterprise_quote_pilot_draft(
+    output_root: str | Path, *, template_name: str = "evergreen",
+) -> dict[str, Any]:
+    """Copy one allowlisted synthetic template without granting business authority."""
 
-    template = runtime_asset_path(EVERGREEN_TEMPLATE_ASSET).resolve(strict=True)
+    asset = PILOT_DRAFT_TEMPLATES.get(template_name)
+    if asset is None:
+        raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_TEMPLATE_UNSUPPORTED")
+    template = runtime_asset_path(asset).resolve(strict=True)
     if template.is_symlink() or not template.is_dir():
         raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_TEMPLATE_INVALID", str(template))
     manifest = _parse_pack(_strict_json(template / PILOT_PACK_FILENAME, root=template))
@@ -205,12 +217,51 @@ def seal_enterprise_quote_pilot_pack(
     manifest = _parse_pack(manifest_value)
     declared = _declared_paths(manifest)
     _validate_exact_tree(draft, declared)
-    profile_value = _strict_json(draft / manifest.profile_path, root=draft)
+    files = {relative: _strict_json(draft / relative, root=draft) for relative in declared}
+    sealed_files, receipt = seal_enterprise_quote_pilot_payloads(files)
+    payloads = sealed_enterprise_quote_pilot_bytes(
+        sealed_files, expected_pack_digest=receipt["pack_digest"],
+    )
+    output = _output_location(output_root)
+    runtime = _publish_files(output=output, payloads=payloads, validate=True)
+    if runtime is None or runtime.pack_digest != receipt["pack_digest"]:
+        raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_EXPORT_IDENTITY_MISMATCH")
+    return {**receipt, "output_locator": f"directory:{output.name}"}
+
+
+def seal_enterprise_quote_pilot_payloads(
+    files: Mapping[str, Mapping[str, Any]],
+) -> tuple[dict[str, dict[str, Any]], dict[str, Any]]:
+    """Seal and admit private draft values without writing them to the OS.
+
+    Both directory and private-draft authoring use this single content compiler.
+    Private request content never needs a crash-persistent scratch directory.
+    """
+
+    copied: dict[str, dict[str, Any]] = {}
+    for relative, value in files.items():
+        if not isinstance(relative, str) or not isinstance(value, Mapping):
+            raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_MEMORY_PAYLOAD_INVALID")
+        raw = _json_bytes(dict(value))
+        if len(raw) > MAX_AUTHORING_JSON_BYTES:
+            raise EnterpriseQuotePilotAuthoringError(
+                "PILOT_AUTHOR_JSON_SIZE_LIMIT",
+                relative,
+            )
+        copied[relative] = json.loads(raw)
+    try:
+        manifest_value = copied[PILOT_PACK_FILENAME]
+    except KeyError as exc:
+        raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_FILE_SET_MISMATCH") from exc
+    manifest = _parse_pack(manifest_value)
+    declared = set(_declared_paths(manifest))
+    if set(copied) != declared:
+        raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_FILE_SET_MISMATCH")
+    profile_value = copied[manifest.profile_path]
     source_roots = profile_value.get("source_roots")
     components = profile_value.get("components")
     if not isinstance(source_roots, list) or not isinstance(components, list):
         raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_PROFILE_STRUCTURE_INVALID")
-
     source_by_locator = {
         item.get("locator"): item for item in source_roots if isinstance(item, dict)
     }
@@ -225,7 +276,7 @@ def seal_enterprise_quote_pilot_pack(
     projection_digests: dict[str, str] = {}
     component_digests: dict[str, str] = {}
     for binding in manifest.components:
-        root_value = _strict_json(draft / binding.path, root=draft)
+        root_value = copied[binding.path]
         projection = root_value.get("projection")
         if not isinstance(projection, dict) or not projection:
             raise EnterpriseQuotePilotAuthoringError(
@@ -280,42 +331,150 @@ def seal_enterprise_quote_pilot_pack(
     try:
         profile = EnterpriseSeedProfile.model_validate(profile_value)
     except ValidationError as exc:
-        raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_PROFILE_SCHEMA_INVALID", str(exc)) from exc
+        raise EnterpriseQuotePilotAuthoringError(
+            "PILOT_AUTHOR_PROFILE_SCHEMA_INVALID", str(exc)
+        ) from exc
     payloads[manifest.profile_path] = _json_bytes(profile_value)
-
-    output = _output_location(output_root)
-    runtime = _publish_files(output=output, payloads=payloads, validate=True)
-    if runtime is None:  # pragma: no cover - validate=True invariant
-        raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_PREFLIGHT_MISSING")
-    return {
+    validation = validate_enterprise_quote_pilot_payloads(payloads)
+    sealed_files = {
+        relative: json.loads(raw.decode("utf-8")) for relative, raw in payloads.items()
+    }
+    receipt = {
         "schema_version": "orgrebase.enterprise-quote-pilot-seal-receipt.v1",
         "status": "SEALED_AND_PREFLIGHT_PASSED",
-        "output_locator": f"directory:{output.name}",
-        "pack_id": runtime.pack_id,
-        "pack_revision": runtime.pack_revision,
-        "adapter_id": runtime.adapter_id,
-        "organization_id": runtime.profile.organization_id,
-        "synthetic": runtime.profile.synthetic,
-        "data_class": runtime.profile.data_class.value,
-        "pack_digest": runtime.pack_digest,
+        "output_locator": "memory:retention-managed-private-draft",
+        "pack_id": validation.manifest.pack_id,
+        "pack_revision": validation.manifest.revision,
+        "adapter_id": validation.manifest.adapter_id,
+        "organization_id": validation.profile.organization_id,
+        "synthetic": validation.profile.synthetic,
+        "data_class": validation.profile.data_class.value,
+        "pack_digest": validation.pack_digest,
         "profile_ref": profile.ref,
         "profile_digest": profile.digest,
         "source_root_digests": root_digests,
         "projection_digests": projection_digests,
         "component_declaration_digests": component_digests,
-        "source_admission_receipt_digest": runtime.source_admission.digest,
-        "runtime_projection_receipt_digest": runtime.runtime_projection.digest,
-        "universe_digest": runtime.universe.digest,
+        "source_admission_receipt_digest": validation.source_admission.digest,
+        "runtime_projection_receipt_digest": validation.runtime_projection.digest,
+        "universe_digest": validation.universe.digest,
         "file_count": len(payloads),
         "canonical_target_writes": 0,
         "claim_ceiling_after_acceptance": "PILOT_READY_CONTROLLED_LOCAL",
         "real_enterprise_validated": "NOT_RUN",
         "production_ready": False,
     }
+    return sealed_files, receipt
+
+
+def sealed_enterprise_quote_pilot_bytes(
+    files: Mapping[str, Mapping[str, Any]], *, expected_pack_digest: str,
+    exact_texts: Mapping[str, str] | None = None,
+) -> dict[str, bytes]:
+    """Export existing sealed content exactly; never repair or reseal it.
+
+    The indent-2 UTF-8 encoding is part of this export contract, since component
+    source declarations bind raw bytes. Existing directory Pack identities stay
+    unchanged. Old memory-only receipts remain readable but require a new seal
+    before export; they are never silently reinterpreted as directory receipts.
+    """
+
+    if exact_texts is None:
+        payloads = {relative: _json_bytes(dict(value)) for relative, value in files.items()}
+    else:
+        if set(exact_texts) != set(files) or any(not isinstance(value, str) for value in exact_texts.values()):
+            raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_EXPORT_BYTES_INVALID")
+        payloads = {relative: value.encode("utf-8") for relative, value in exact_texts.items()}
+        if sha256_digest({relative: json.loads(raw) for relative, raw in payloads.items()}) != sha256_digest(files):
+            raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_EXPORT_CONTENT_MISMATCH")
+    validation = validate_enterprise_quote_pilot_payloads(payloads)
+    if validation.pack_digest != expected_pack_digest:
+        raise EnterpriseQuotePilotAuthoringError("PILOT_AUTHOR_EXPORT_IDENTITY_MISMATCH")
+    return payloads
+
+
+def preflight_enterprise_quote_pilot_payloads(
+    files: Mapping[str, Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Validate private draft values in memory without publishing a Pack."""
+
+    sealed_files, sealed = seal_enterprise_quote_pilot_payloads(files)
+    payloads = {relative: _json_bytes(value) for relative, value in sealed_files.items()}
+    validation = validate_enterprise_quote_pilot_payloads(payloads)
+    inputs = enterprise_input_preflight(
+        validation.profile,
+        source_admission=validation.source_admission,
+    )
+    return {
+        "schema_version": "orgrebase.enterprise-quote-pilot-draft-preflight.v1",
+        "status": "DRAFT_PREFLIGHT_PASSED",
+        "pack_id": sealed["pack_id"],
+        "pack_revision": sealed["pack_revision"],
+        "adapter_id": sealed["adapter_id"],
+        "organization_id": sealed["organization_id"],
+        "candidate_pack_digest": sealed["pack_digest"],
+        "profile_ref": sealed["profile_ref"],
+        "profile_digest": sealed["profile_digest"],
+        "source_admission_receipt_digest": sealed["source_admission_receipt_digest"],
+        "runtime_projection_receipt_digest": sealed["runtime_projection_receipt_digest"],
+        "universe_digest": sealed["universe_digest"],
+        "required_inputs": inputs["inputs"],
+        "profile_admission_status": inputs["status"],
+        "sealed_output_created": False,
+        "profile_admitted_for_workspace": False,
+        "workspace_activated": False,
+        "authority_created_by_preflight": False,
+        "canonical_target_writes": 0,
+        "real_enterprise_validated": "NOT_RUN",
+    }
+
+
+def preflight_enterprise_quote_pilot_draft(draft_root: str | Path) -> dict[str, Any]:
+    """Validate one editable draft without publishing or activating a Pack.
+
+    The existing seal path remains the single implementation of digest
+    recomputation and strict Pack admission.  This function runs that path in an
+    ephemeral directory, returns the would-be exact identities, and discards the
+    temporary sealed bytes before returning.
+    """
+
+    with tempfile.TemporaryDirectory(prefix="orgrebase-pilot-preflight-") as temporary:
+        candidate = Path(temporary) / "candidate"
+        sealed = seal_enterprise_quote_pilot_pack(draft_root, candidate)
+        runtime = load_enterprise_quote_pilot_pack(candidate)
+        inputs = enterprise_input_preflight(
+            runtime.profile,
+            source_admission=runtime.source_admission,
+        )
+
+    return {
+        "schema_version": "orgrebase.enterprise-quote-pilot-draft-preflight.v1",
+        "status": "DRAFT_PREFLIGHT_PASSED",
+        "pack_id": sealed["pack_id"],
+        "pack_revision": sealed["pack_revision"],
+        "adapter_id": sealed["adapter_id"],
+        "organization_id": sealed["organization_id"],
+        "candidate_pack_digest": sealed["pack_digest"],
+        "profile_ref": sealed["profile_ref"],
+        "profile_digest": sealed["profile_digest"],
+        "source_admission_receipt_digest": sealed["source_admission_receipt_digest"],
+        "runtime_projection_receipt_digest": sealed["runtime_projection_receipt_digest"],
+        "required_inputs": inputs["inputs"],
+        "profile_admission_status": inputs["status"],
+        "sealed_output_created": False,
+        "profile_admitted_for_workspace": False,
+        "workspace_activated": False,
+        "authority_created_by_preflight": False,
+        "canonical_target_writes": 0,
+        "real_enterprise_validated": "NOT_RUN",
+    }
 
 
 __all__ = (
     "EnterpriseQuotePilotAuthoringError",
     "initialize_enterprise_quote_pilot_draft",
+    "preflight_enterprise_quote_pilot_draft",
+    "preflight_enterprise_quote_pilot_payloads",
     "seal_enterprise_quote_pilot_pack",
+    "seal_enterprise_quote_pilot_payloads",
 )

@@ -6,6 +6,7 @@ import json
 import os
 import re
 import stat
+from contextlib import nullcontext
 from datetime import timedelta
 from pathlib import Path
 from typing import Any, Literal
@@ -380,8 +381,10 @@ def active_binding(workspace: Any, config: SourceBindingConfig) -> dict[str, Any
             "connector_id": config.source.connector_id + ":" + proposal["proposal_digest"][7:39]}
 
 
-def mark_unavailable(workspace: Any, config: SourceBindingConfig, reason: str) -> None:
-    with workspace.store.transaction() as connection:
+def mark_unavailable(
+    workspace: Any, config: SourceBindingConfig, reason: str, *, connection: Any | None = None,
+) -> None:
+    with (workspace.store.transaction() if connection is None else nullcontext(connection)) as connection:
         lock_binding_scope(workspace, connection)
         _event(workspace, connection, config, "SOURCE_BINDING_UNAVAILABLE", {"reason": reason, "observed_at": workspace.clock.now()})
 

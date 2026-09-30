@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 import zipfile
 from importlib import metadata
 from pathlib import Path
@@ -36,7 +37,6 @@ ROOT_PAGES = (
     "COMMERCIAL-LICENSE.md",
     "NOTICE.md",
     "CHANGELOG.md",
-    "RELEASE-VERIFICATION.md",
     "LICENSE",
     "LICENSE.md",
 )
@@ -54,7 +54,8 @@ PUBLIC_SOURCE_DIRS = {
     "tests",
 }
 TEXT_SUFFIXES = {".py", ".json", ".yaml", ".yml", ".toml", ".md", ".txt", ".sh"}
-LINK = re.compile(r"(!?\[[^\]\n]*\]\()([^\s)]+)(\))")
+LINK = re.compile(r"(!?\[[^\]]*\]\()([^\s)]+)(\))")
+BADGE_LINK = re.compile(r"(\[!\[[^\]\n]*\]\([^\s)]+\)\]\()([^\s)]+)(\))")
 HREF = re.compile(r'(href|src)="([^"\n]+)"')
 
 
@@ -101,10 +102,19 @@ def main() -> int:
         ):
             parser.error("site URL must be an HTTPS address without credentials, query or fragment")
 
+    product_metadata = (ROOT / "pyproject.toml").read_bytes()
+    product_version = tomllib.loads(product_metadata.decode("utf-8"))["project"]["version"]
+    if not isinstance(product_version, str) or not product_version:
+        raise ValueError("Product version missing from pyproject.toml")
+
     mapping = {
         name: {
             "README.md": "reference/readme-english.md",
             "README.zh-CN.md": "reference/readme-chinese.md",
+            # An extensionless static file would become ``site/LICENSE`` while
+            # LICENSE.md renders to ``site/LICENSE/index.html``.  Keep both
+            # source records, but give the Apache text an unambiguous site path.
+            "LICENSE": "reference/apache-2.0-license.txt",
         }.get(name, name)
         for name in ROOT_PAGES
     }
@@ -233,6 +243,12 @@ def main() -> int:
                 )
             # A remote CI badge describes remote HEAD, not this local content snapshot.
             text = re.sub(r"^\[!\[CI\].*\n", "", text, flags=re.M)
+            text = BADGE_LINK.sub(
+                lambda m, original=original, rendered=rendered: (
+                    m[1] + destination(m[2], original, rendered) + m[3]
+                ),
+                text,
+            )
             text = LINK.sub(
                 lambda m, original=original, rendered=rendered: (
                     m[1] + destination(m[2], original, rendered) + m[3]
@@ -297,6 +313,7 @@ def main() -> int:
         (pages / "assets").mkdir(exist_ok=True)
         (pages / "assets/site.css").write_bytes(css)
         for name in (
+            "pyproject.toml",
             "documentation/build.py",
             "documentation/mkdocs.yml",
             "documentation/pyproject.toml",
@@ -310,6 +327,7 @@ def main() -> int:
         digest = sha(json.dumps(records, sort_keys=True, separators=(",", ":")).encode())
         identity = {
             "schema_version": "orgrebase.documentation-snapshot.v1",
+            "product_version": product_version,
             "content_sha256": digest,
             "scope": "DOCUMENTS_LINKED_SOURCE_AND_SITE_TOOLING_NOT_COMPLETE_PRODUCT",
             "files": records,
@@ -343,8 +361,9 @@ def main() -> int:
             )
         (pages / "source-manifest.json").write_text(json.dumps(identity, ensure_ascii=False, indent=2) + "\n")
         (pages / "source-version.zh.md").write_text(
-            "# 本站源码与版本\n\n"
+            "# 本站源码与下载\n\n"
             + download
+            + f"产品包元数据版本：`{product_version}`。版本号不等于已签署的 GitHub Release；是否发布以对应提交和制品为准。\n\n"
             + "本站直接从同一源码工作区的 README、用户文档、贡献与许可文件生成；核心指南逐页中英配对，详细资料标明原文语言；每种语言只有一份维护源。\n\n"
             f"文档、引用源码与站点工具链的内容摘要：`{digest}`。这不是整个产品的源码摘要或发布资格。\n\n"
             "[逐文件来源清单](source-manifest.json)说明本站实际读取了哪些字节。站内源码引用展示同一构建读取的文本；"
@@ -366,6 +385,7 @@ def main() -> int:
         (pages / "source-version.en.md").write_text(
             "# Site source and downloads\n\n"
             + english_download
+            + f"Product package metadata version: `{product_version}`. The version string alone is not a signed GitHub Release; check the corresponding commit and artifacts for publication status.\n\n"
             + "This site is generated from the same source tree's Markdown guides, repository documentation and license files. Core guides are paired in Chinese and English; detailed original-language references are labeled.\n\n"
             f"Content identity for documents, referenced source and site tooling: `{digest}`. This is not a whole-product source digest or release qualification.\n\n"
             "[Per-file source manifest](source-manifest.json) records the bytes used. Local source-reference pages never substitute a different remote main revision. Directories, large files and missing historical assets are explicitly distinguished.\n\n"
@@ -381,7 +401,7 @@ def main() -> int:
         config.update(
             docs_dir=str(pages),
             site_dir=str(output),
-            copyright=f"OrgRebase · Source-available · Documentation snapshot {digest[:12]}",
+            copyright=f"OrgRebase {product_version} · Apache-2.0 · Documentation snapshot {digest[:12]}",
         )
         if args.site_url:
             config["site_url"] = args.site_url

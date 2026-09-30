@@ -1,14 +1,20 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 import re
 from concurrent.futures import ThreadPoolExecutor
 
 import pytest
-from fastapi import HTTPException
+from fastapi import HTTPException, Request
 from fastapi.testclient import TestClient
 
-from orgrebase.api import create_app
+from orgrebase.api import (
+    MAX_REQUEST_BODY_BYTES,
+    LoginRateLimiter,
+    RequestBodyDeadlineMiddleware,
+    create_app,
+)
 from orgrebase.http_errors import public_error, public_http_error, request_incident_scope
 from orgrebase.workspace_catalog import WorkspaceDispatcher
 
@@ -121,3 +127,141 @@ def test_concurrent_child_requests_have_independent_incidents(caplog):
     assert len(records) == 8
     assert all(sum(identifier in r.getMessage() for r in records) == 1 for identifier in identifiers)
     assert "private-" not in caplog.text
+
+
+def test_request_body_limit_counts_actual_chunks_before_endpoint_execution():
+    app = create_app()
+    calls = []
+    events = []
+    app.state.security_events._sink = events.append
+
+    @app.post("/api/workspace/body-limit-probe")
+    async def probe(request: Request):
+        body = await request.body()
+        calls.append(len(body))
+        return {"size": len(body)}
+
+    @app.post("/api/workspace/no-body-write-probe")
+    def no_body_write():
+        calls.append("MUTATED")
+        return {"ok": True}
+
+    with TestClient(app) as client:
+        accepted = client.post(
+            "/api/workspace/body-limit-probe", content=b"a" * MAX_REQUEST_BODY_BYTES
+        )
+        rejected = client.post(
+            "/api/workspace/body-limit-probe",
+            content=b"b" * (MAX_REQUEST_BODY_BYTES + 1),
+            headers={"Content-Length": "1"},
+        )
+        chunked = client.post(
+            "/api/workspace/body-limit-probe",
+            content=(b"c" * 131_072 for _ in range(9)),
+        )
+        no_read_declared = client.post(
+            "/api/workspace/no-body-write-probe", content=b"x",
+            headers={"Content-Length": str(MAX_REQUEST_BODY_BYTES + 1)},
+        )
+        no_read_chunked = client.post(
+            "/api/workspace/no-body-write-probe",
+            content=(b"d" * 131_072 for _ in range(9)),
+        )
+    assert accepted.status_code == 200 and accepted.json()["size"] == MAX_REQUEST_BODY_BYTES
+    assert rejected.status_code == 413 and chunked.status_code == 413
+    assert no_read_declared.status_code == 413 and no_read_chunked.status_code == 413
+    assert no_read_declared.json()["detail"]["code"] == "REQUEST_BODY_TOO_LARGE"
+    assert calls == [MAX_REQUEST_BODY_BYTES]
+    assert rejected.headers["cache-control"] == "no-store"
+    assert len(events) == 4
+    assert all(event["reason"] == "REQUEST_BODY_TOO_LARGE" for event in events)
+
+
+def test_request_body_deadline_is_total_across_receive_chunks():
+    entered = []
+
+    async def inner(scope, receive, send):
+        entered.append(True)
+        while True:
+            message = await receive()
+            if not message.get("more_body", False):
+                break
+        await send({"type": "http.response.start", "status": 200, "headers": []})
+        await send({"type": "http.response.body", "body": b"ok"})
+
+    request_count = 0
+
+    async def receive():
+        nonlocal request_count
+        request_count += 1
+        if request_count == 1:
+            return {"type": "http.request", "body": b"a", "more_body": True}
+        await asyncio.sleep(0.05)
+        return {"type": "http.request", "body": b"b", "more_body": False}
+
+    sent = []
+
+    async def send(message):
+        sent.append(message)
+
+    middleware = RequestBodyDeadlineMiddleware(inner, timeout_seconds=0.01)
+    asyncio.run(middleware({"type": "http", "method": "POST", "path": "/"}, receive, send))
+    assert entered == []
+    assert next(message["status"] for message in sent if message["type"] == "http.response.start") == 408
+    assert b"REQUEST_BODY_DEADLINE_EXCEEDED" in b"".join(
+        message.get("body", b"") for message in sent
+    )
+
+
+def test_disconnected_body_never_reaches_business_code_and_replay_preserves_disconnect():
+    async def run_case(messages, inner):
+        sent = []
+
+        async def receive():
+            return messages.pop(0)
+
+        async def send(message):
+            sent.append(message)
+
+        middleware = RequestBodyDeadlineMiddleware(inner, timeout_seconds=1)
+        await middleware(
+            {"type": "http", "method": "POST", "path": "/", "headers": []}, receive, send
+        )
+        return sent
+
+    called = []
+
+    async def forbidden_inner(_scope, _receive, _send):
+        called.append(True)
+
+    sent = asyncio.run(run_case([
+        {"type": "http.request", "body": b"{", "more_body": True},
+        {"type": "http.disconnect"},
+    ], forbidden_inner))
+    assert called == []
+    assert next(item["status"] for item in sent if item["type"] == "http.response.start") == 400
+    assert b"REQUEST_BODY_INCOMPLETE" in b"".join(item.get("body", b"") for item in sent)
+
+    observed = []
+
+    async def replay_inner(_scope, receive, send):
+        observed.extend([await receive(), await receive()])
+        await send({"type": "http.response.start", "status": 200, "headers": []})
+        await send({"type": "http.response.body", "body": b"ok"})
+
+    asyncio.run(run_case([
+        {"type": "http.request", "body": b"{}", "more_body": False},
+        {"type": "http.disconnect"},
+    ], replay_inner))
+    assert observed[0] == {"type": "http.request", "body": b"{}", "more_body": False}
+    assert observed[1] == {"type": "http.disconnect"}
+
+
+def test_login_limiter_has_fixed_capacity_and_recovers_after_window():
+    clock = [0.0]
+    limiter = LoginRateLimiter(limit=3, window_seconds=10, monotonic=lambda: clock[0])
+    assert [limiter.admit() for _ in range(4)] == [True, True, True, False]
+    assert len(limiter._events) == 3
+    clock[0] = 11
+    assert limiter.admit()
+    assert len(limiter._events) == 1

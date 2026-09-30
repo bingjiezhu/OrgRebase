@@ -6,7 +6,7 @@
       "skill:predecessor:invoke"
     ],
     "candidate_only": true,
-    "created_at": "2026-09-19T12:35:16.999612Z",
+    "created_at": "2026-09-30T10:41:47.195576Z",
     "current_input_digest": "sha256:753b31ab91c588911d54a5ffe1c76c34e03738a6a0ec764e6e88883baf015dbb",
     "current_invocation_receipt_digest": "sha256:ea3549fcaadadaa951dbb5b882cc5674b5e91f1aee66cdbbba3bcba4194c60cd",
     "current_output_digest": "sha256:7ccb88e6b0eae908526dba8641769cd3ff6350cb5a81f4214e4e8ee2c1c3efc1",
@@ -14,7 +14,7 @@
     "delegation_id": "sha256:8dab4aab575ae1de893502da2245e5f8b110d2faffac4c840bcd4d913b920464",
     "dependency_result_digest": "sha256:5b520b7f7cf9ef822b33e81f486b5b85a8bce545bcdb2ea99fbe4104bf9700ab",
     "dependency_tool_receipt_digest": "sha256:bd6930602287a3f1639550b3d23d553329c16cd24d54ed9683adb5836b60d349",
-    "digest": "sha256:af75fd7df55dbdeabc8b01d3694781f328fa36452f9d21134c1d645408abccff",
+    "digest": "sha256:08efda88e411499950772edc3dc2cc5fbf240e3cec06de56be7290047ac07ab1",
     "effective_package_digest": "sha256:91398536ad1308de5438a7bf3817ecbd0dcb474abbe929e49100a8452b78540a",
     "event_index": 1,
     "event_type": "EXECUTABLE_PREDECESSOR_ROLLBACK",

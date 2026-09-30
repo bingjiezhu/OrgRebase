@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-DELIMITER-DECODE",
+  "expect": {
+    "result": {
+      "pointer": "/a#b",
+      "resourceId": "urn:a#b"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "urn:a%23b#/a%23b"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

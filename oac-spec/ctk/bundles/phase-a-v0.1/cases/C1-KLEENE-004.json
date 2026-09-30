@@ -1,0 +1,7 @@
+{
+  "caseId": "C1-KLEENE-004",
+  "expect": {"result": {"result": "TRUE"}, "sutStatus": "COMPLETED"},
+  "input": {"operator": "any", "values": ["UNKNOWN", "TRUE"]},
+  "operation": "strongKleene",
+  "requirementRefs": ["REQ-STRONG-KLEENE"]
+}

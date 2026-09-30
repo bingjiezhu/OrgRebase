@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
-from contextlib import closing
+from contextlib import closing, contextmanager
 from threading import Barrier
 
 import pytest
+from fastapi.testclient import TestClient
 
+from orgrebase.api import create_app
 from orgrebase.domain import IntegrityError
 from orgrebase.workspace.pilot import load_enterprise_quote_pilot_pack
 from orgrebase.workspace.service import WorkspaceService
@@ -100,3 +102,73 @@ def test_concurrent_intake_initialization_returns_one_durable_nonce(backend, tmp
     finally:
         first.close()
         second.close()
+
+
+@contextmanager
+def _completion_workspace_pair(backend, tmp_path, request):
+    pack = load_enterprise_quote_pilot_pack(PACK)
+    if backend == "postgresql":
+        database = request.getfixturevalue("postgres_runtime")(tenant_id=pack.profile.organization_id)
+        options = {"store_path": database["runtime_dsn"], "store_tenant_id": pack.profile.organization_id,
+                   "store_migrate": False, "runtime_configuration": pack}
+    else:
+        options = {"store_path": tmp_path / "completion.sqlite", "runtime_configuration": pack}
+    with closing(WorkspaceService(**options)) as first, closing(WorkspaceService(**options)) as second:
+        yield first, second
+
+
+@pytest.mark.parametrize("backend", ["sqlite", "postgresql"])
+def test_completion_history_keeps_verified_head_and_envelopes_in_one_snapshot(
+    backend, tmp_path, request, monkeypatch,
+) -> None:
+    with _completion_workspace_pair(backend, tmp_path, request) as (workspace, writer):
+        original = workspace.store.verify_event_chain
+        before = original()
+
+        def append_after_verification():
+            verified = original()
+            with writer.store.transaction() as connection:
+                writer.store.append_event(connection, "CONCURRENT_HISTORY_PROBE", {"probe": True})
+            return verified
+
+        monkeypatch.setattr(workspace.store, "verify_event_chain", append_after_verification)
+        history = workspace.completion_history()
+        chain = history["event_chain"]
+        assert chain["status"] == "PASS"
+        assert chain["events"] == len(chain["envelopes"]) == before["events"]
+        assert chain["head_digest"] == chain["envelopes"][-1]["event_digest"]
+        assert writer.store.verify_event_chain()["events"] == before["events"] + 1
+
+
+@pytest.mark.parametrize("backend", ["sqlite", "postgresql"])
+@pytest.mark.parametrize("path", ["/api/workspace/run-archive", "/api/workspace/run-observability"])
+def test_completion_api_combines_state_and_history_from_one_snapshot(
+    backend, tmp_path, request, monkeypatch, path,
+) -> None:
+    with _completion_workspace_pair(backend, tmp_path, request) as (workspace, writer):
+        observed = {}
+        original_state = workspace.state
+        original_history = workspace._completion_history_snapshot
+
+        def append_after_state():
+            state = original_state()
+            observed["state"] = state["event_chain"]
+            with writer.store.transaction() as connection:
+                writer.store.append_event(connection, "CONCURRENT_COMPLETION_PROBE", {"probe": True})
+            return state
+
+        def capture_history():
+            history = original_history()
+            observed["history"] = history["event_chain"]
+            return history
+
+        monkeypatch.setattr(workspace, "state", append_after_state)
+        monkeypatch.setattr(workspace, "_completion_history_snapshot", capture_history)
+        with TestClient(create_app(workspace_service=workspace)) as client:
+            response = client.get(path)
+        assert response.status_code == 200
+        state_chain, history_chain = observed["state"], observed["history"]
+        assert state_chain["status"] == history_chain["status"] == "PASS"
+        assert state_chain["events"] == history_chain["events"] == len(history_chain["envelopes"])
+        assert state_chain["head_digest"] == history_chain["head_digest"]
+        assert writer.store.verify_event_chain()["events"] == history_chain["events"] + 1

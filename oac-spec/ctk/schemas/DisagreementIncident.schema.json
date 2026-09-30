@@ -1,0 +1,530 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0.1/DisagreementIncident.schema.json",
+  "title": "DisagreementIncident",
+  "description": "Immutable, content-bound evidence of a cross-implementation semantic disagreement. Resolution is always a separate resource.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "incidentId",
+    "status",
+    "stage",
+    "classification",
+    "semanticClass",
+    "recipeCase",
+    "bindings",
+    "input",
+    "request",
+    "observations",
+    "difference",
+    "digest"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "oac.ctk.disagreement-incident/v0.1"
+    },
+    "kind": {
+      "const": "DisagreementIncident"
+    },
+    "incidentId": {
+      "type": "string",
+      "pattern": "^DIS-[0-9]{3}$"
+    },
+    "status": {
+      "enum": [
+        "OPEN",
+        "HISTORICAL"
+      ]
+    },
+    "stage": {
+      "const": "DERIVATION"
+    },
+    "classification": {
+      "const": "CONTESTED_SEMANTICS"
+    },
+    "semanticClass": {
+      "$ref": "#/$defs/nonBlankString"
+    },
+    "recipeCase": {
+      "$ref": "#/$defs/recipeCase"
+    },
+    "bindings": {
+      "$ref": "#/$defs/bindings"
+    },
+    "input": {
+      "$ref": "#/$defs/input"
+    },
+    "request": {
+      "$ref": "#/$defs/exactArtifact"
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/observation"
+      }
+    },
+    "difference": {
+      "$ref": "#/$defs/difference"
+    },
+    "digest": {
+      "$ref": "#/$defs/sha256Digest"
+    }
+  },
+  "$defs": {
+    "nonBlankString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000]+$"
+    },
+    "exactArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "serialization",
+        "base64",
+        "rawSha256",
+        "sizeBytes"
+      ],
+      "properties": {
+        "serialization": {
+          "enum": [
+            "rfc8785+jcs/v1",
+            "rfc8785+jcs+lf/v1",
+            "json-wire/v1",
+            "raw-bytes/v1"
+          ]
+        },
+        "base64": {
+          "type": "string",
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777216
+        }
+      }
+    },
+    "contentBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rawSha256",
+        "detachedDigest"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "detachedDigest": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capsule",
+        "profile",
+        "protocol",
+        "semanticRuleSet",
+        "capabilitySet",
+        "recipeSet",
+        "generatorSource"
+      ],
+      "properties": {
+        "capsule": {
+          "$ref": "#/$defs/contentBinding"
+        },
+        "profile": {
+          "$ref": "#/$defs/contentBinding"
+        },
+        "protocol": {
+          "$ref": "#/$defs/contentBinding"
+        },
+        "semanticRuleSet": {
+          "$ref": "#/$defs/contentBinding"
+        },
+        "capabilitySet": {
+          "$ref": "#/$defs/contentBinding"
+        },
+        "recipeSet": {
+          "$ref": "#/$defs/contentBinding"
+        },
+        "generatorSource": {
+          "$ref": "#/$defs/contentBinding"
+        }
+      }
+    },
+    "recipeCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseId",
+        "publicSeed",
+        "recipeIndex",
+        "inputDigest"
+      ],
+      "properties": {
+        "caseId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "publicSeed": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "recipeIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "inputDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "resourceInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "resourceDigest",
+        "exactJcs"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "OrganizationSnapshot",
+            "SemanticChangeSet"
+          ]
+        },
+        "resourceDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "exactJcs": {
+          "$ref": "#/$defs/exactArtifact"
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot",
+        "change",
+        "pairDigest"
+      ],
+      "properties": {
+        "snapshot": {
+          "$ref": "#/$defs/resourceInput"
+        },
+        "change": {
+          "$ref": "#/$defs/resourceInput"
+        },
+        "pairDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "sourceFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rawSha256",
+        "sizeBytes"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777216
+        }
+      }
+    },
+    "sourceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identityKind",
+        "rootRef",
+        "sourceDigest",
+        "files",
+        "buildInfo",
+        "attestation"
+      ],
+      "properties": {
+        "identityKind": {
+          "enum": [
+            "sha256-jcs-source-ledger/v1",
+            "historical-source-unavailable/v1"
+          ]
+        },
+        "rootRef": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sourceDigest": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "files": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/sourceFile"
+          }
+        },
+        "buildInfo": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/exactArtifact"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attestation": {
+          "$ref": "#/$defs/nonBlankString"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "identityKind": {
+                "const": "sha256-jcs-source-ledger/v1"
+              }
+            },
+            "required": [
+              "identityKind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sourceDigest": {
+                "$ref": "#/$defs/sha256Digest"
+              },
+              "files": {
+                "minItems": 1
+              },
+              "buildInfo": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "sourceDigest": {
+                "type": "null"
+              },
+              "files": {
+                "maxItems": 0
+              },
+              "buildInfo": {
+                "$ref": "#/$defs/exactArtifact"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "executable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rawSha256",
+        "sizeBytes"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "semanticProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sutStatus",
+        "errorCode",
+        "reportDigest",
+        "projectionDigest"
+      ],
+      "properties": {
+        "sutStatus": {
+          "enum": [
+            "COMPLETED",
+            "ERROR",
+            "UNSUPPORTED",
+            "RESOURCE_EXHAUSTED"
+          ]
+        },
+        "errorCode": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/nonBlankString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reportDigest": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectionDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationId",
+        "implementationVersion",
+        "command",
+        "commandDigest",
+        "executable",
+        "sourceIdentity",
+        "capabilityRequest",
+        "capabilityWireResponse",
+        "capabilityResponseJcs",
+        "capabilityStatementDigest",
+        "deriveWireResponse",
+        "deriveResponseJcs",
+        "semanticProjection"
+      ],
+      "properties": {
+        "implementationId": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "implementationVersion": {
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/nonBlankString"
+          }
+        },
+        "commandDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "executable": {
+          "$ref": "#/$defs/executable"
+        },
+        "sourceIdentity": {
+          "$ref": "#/$defs/sourceIdentity"
+        },
+        "capabilityRequest": {
+          "$ref": "#/$defs/exactArtifact"
+        },
+        "capabilityWireResponse": {
+          "$ref": "#/$defs/exactArtifact"
+        },
+        "capabilityResponseJcs": {
+          "$ref": "#/$defs/exactArtifact"
+        },
+        "capabilityStatementDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "deriveWireResponse": {
+          "$ref": "#/$defs/exactArtifact"
+        },
+        "deriveResponseJcs": {
+          "$ref": "#/$defs/exactArtifact"
+        },
+        "semanticProjection": {
+          "$ref": "#/$defs/semanticProjection"
+        }
+      }
+    },
+    "difference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed",
+        "leftProjectionDigest",
+        "rightProjectionDigest",
+        "summary"
+      ],
+      "properties": {
+        "observed": {
+          "const": true
+        },
+        "leftProjectionDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "rightProjectionDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "summary": {
+          "$ref": "#/$defs/nonBlankString"
+        }
+      }
+    }
+  }
+}

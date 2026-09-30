@@ -9,12 +9,17 @@ from pydantic import BaseModel
 from orgrebase.workspace.models import (
     ModelRequest,
     ModelRequestV2,
+    ModelRequestV3,
     ModelResponseReceipt,
     ModelResponseReceiptV2,
+    ModelResponseReceiptV3,
 )
 
 T = TypeVar("T", bound=BaseModel)
 
 
-class ModelProvider[RequestT: ModelRequest | ModelRequestV2, ResponseT: ModelResponseReceipt | ModelResponseReceiptV2](Protocol):
+class ModelProvider[
+    RequestT: ModelRequest | ModelRequestV2 | ModelRequestV3,
+    ResponseT: ModelResponseReceipt | ModelResponseReceiptV2 | ModelResponseReceiptV3,
+](Protocol):
     def generate_structured(self, *, request: RequestT, output_model: type[T]) -> ResponseT: ...

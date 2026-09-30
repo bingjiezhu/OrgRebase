@@ -24,10 +24,10 @@ The current suite, `orgrebase.quote-skill-qualification.v2`, contains nine cases
 
 Eight-partition checks are constructive qualification, not sampled generalization estimates. HELD_OUT and CANARY labels in the current case set are not statistical holdouts or production traffic rollout. New enterprises or deliverable types require their own handlers, domain tests and business acceptance.
 
-## Change rules without changing the engine
+## Configure enterprise facts without changing the engine
 
-Follow the [Pack exercise](../REUSE-AND-LICENSING.md#try-a-rule-pack-without-changing-the-engine): initialize a draft, edit supported knowledge fields, seal into a new directory and run the check. Do not edit digests manually or mark incomplete sources COMPLETE.
+Follow the [Enterprise Pack exercise](../REUSE-AND-LICENSING.md#try-an-enterprise-pack-without-changing-the-engine): initialize a draft, edit the supported product-plan and currency facts, seal into a new directory, and run the check. It does not translate free-text policy into executable rules. Do not edit digests manually or mark incomplete sources `COMPLETE`.
 
-Keep the governance path, authority checks and receipts; replace enterprise facts, owners, source mappings and target adapters. Each workspace currently manages one Quote. Four Workers sharing the handoff package is implemented reuse, not evidence of support for arbitrary business workflows.
+Keep the governance path, authority checks and receipts; replace enterprise facts, owners, source mappings and target adapters. The default `single-quote` workspace manages one Quote. An explicit [Quote + Discount Memo profile](../QUOTE-DISCOUNT-MEMO.md) manages exactly two canonical deliverables in a new isolated workspace; it has controlled-local validation and no external writes. Four domain Workers sharing the handoff package is implemented reuse. Any new deliverable still needs its own handler, source binding and acceptance.
 
 See the original-language [Skill inventory](../SKILL-LIST.md) for full interfaces and qualification boundaries.

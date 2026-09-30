@@ -57,7 +57,9 @@ def test_selected_card_version_controls_context_and_transport(compilation, monke
             "output_schema_refs": ("schema:workspace.domain-candidate-bundle@v2",),
         }
     )
-    monkeypatch.setattr(templates, "default_capability_cards", lambda: (*catalog, replacement))
+    monkeypatch.setattr(
+        templates, "default_capability_cards", lambda *_args: (*catalog, replacement)
+    )
     plan = kwargs["coalition"]
     plan = changed_plan(
         plan,
@@ -160,7 +162,9 @@ def test_two_selected_versions_cannot_silently_choose_one_domain(compilation, mo
     catalog = templates.default_capability_cards()
     original = catalog[0]
     replacement = original.model_copy(update={"version": "v2", "worker_id": "other-worker"})
-    monkeypatch.setattr(templates, "default_capability_cards", lambda: (*catalog, replacement))
+    monkeypatch.setattr(
+        templates, "default_capability_cards", lambda *_args: (*catalog, replacement)
+    )
     plan = kwargs["coalition"]
     plan = changed_plan(plan, selected_card_refs=tuple(sorted((*plan.selected_card_refs, replacement.ref))))
     with pytest.raises(IntegrityError, match="CAPABILITY_DOMAIN_DUPLICATE"):

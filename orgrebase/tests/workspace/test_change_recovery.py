@@ -14,6 +14,7 @@ from orgrebase.api import create_app
 from orgrebase.domain import IntegrityError
 from orgrebase.local_role_session import LocalRoleSessionSettings
 from orgrebase.runtime_config import DeploymentSettings
+from orgrebase.workspace.change_operations import prepare_pending_changes
 from orgrebase.workspace.change_proposals import change_detail
 from orgrebase.workspace.change_recovery import (
     EvidenceReference,
@@ -145,6 +146,30 @@ def test_real_native_round_keeps_intent_history_and_separate_approval_apply(tmp_
         assert workspace.current_quote().payload["product_plan"] == event.proposal.payload["canonical_value"]
         assert change_detail(workspace, event.event_id)["status"] == "APPLIED"
         assert recovery_detail(workspace, event.event_id)["allowed_actions"] == []
+
+
+def test_deferred_resume_is_durable_and_the_bounded_worker_prepares_it_once(tmp_path):
+    workspace, event = prepare(tmp_path)
+    with closing(workspace):
+        returned = return_for_evidence(
+            workspace,
+            event.event_id,
+            return_command(workspace, event.event_id),
+        )
+        command = resume_command(workspace, event.event_id).model_copy(
+            update={"defer_candidate_preparation": True}
+        )
+
+        deferred = resume_change(workspace, event.event_id, command)
+
+        assert returned["state"] == "NEEDS_EVIDENCE"
+        assert deferred["state"] == "RESUMING"
+        assert workspace._preview_record(event.event_id) is None
+        prepared = prepare_pending_changes(workspace, max_changes=1)
+        assert prepared["records"][0]["result"] == "CANDIDATE_PREPARED"
+        assert recovery_detail(workspace, event.event_id)["state"] == "READY_FOR_REVIEW"
+        assert prepare_pending_changes(workspace, max_changes=1)["records"] == []
+        assert workspace._approval_record(event.event_id) is None
 
 
 def test_bad_evidence_executor_and_command_reuse_cannot_dispatch(tmp_path):

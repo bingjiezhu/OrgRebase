@@ -80,7 +80,10 @@
     byId("change-notice").hidden = !message;
   }
   function fail(error) {
-    const code = error.code || error.message || "UNAVAILABLE";
+    const reported = error.code || error.message || "UNAVAILABLE";
+    const code = /^[A-Z][A-Z0-9_]{2,127}$/.test(reported) ? reported : "REQUEST_FAILED";
+    const advisoryReasons = new Set(["WORKSPACE_ADVISORY_RESULT_UNKNOWN", "WORKSPACE_ADVISORY_ATTEMPT_FAILED", "WORKSPACE_ADVISORY_INPUT_CHANGED_REQUIRE_NEW_EVENT"]);
+    const advisoryReason = advisoryReasons.has(error.detail?.message) ? error.detail.message : advisoryReasons.has(code) ? code : null;
     const message = error.status === 401 ? tr("请重新登录；草稿仍保留，操作不会自动重发。", "Sign in again. Your draft is retained; no operation is replayed.")
       : /^CHANGE_RECOVERY_/.test(code) ? code === "CHANGE_RECOVERY_CONTEXT_CHANGED"
         ? tr("变更依据已更新。请刷新并核对新的任务与证据，再发起补证。", "The change context has been updated. Refresh and review the tasks and evidence before requesting a new round.")
@@ -95,7 +98,7 @@
             ? tr("本轮执行回执尚未确认，请先核查原任务记录，当前不能重新委派。", "This attempt's execution receipt is unconfirmed. Check the original task record; it cannot be delegated again yet.")
             : tr("本轮补证执行未完成。请负责人核对失败记录，需要继续时重新发起补证。", "This evidence attempt did not complete. The reviewer should inspect the failure and request a new evidence round if needed.")
         : /WORKSPACE_ADVISORY_IN_PROGRESS/.test(code) ? tr("领域建议正在生成，请稍后刷新查看，无需再次提交。", "Domain advice is being generated. Refresh later to view it; no resubmission is needed.")
-          : /WORKSPACE_ADVISORY_(RESULT_UNKNOWN|ATTEMPT_FAILED|INPUT_CHANGED_REQUIRE_NEW_EVENT)/.test(code) ? tr("本次候选未能完成或结果未确认，系统不会自动重复调用。请由负责人拒绝本提案，再修订为新提案。", "This candidate attempt failed or its result is unconfirmed. No automatic retry will occur. Ask the owner to reject this proposal, then revise it as a new proposal.")
+          : advisoryReason ? tr("本次候选未能完成或结果未确认，系统不会自动重复调用。请由负责人拒绝本提案，再修订为新提案。", "This candidate attempt failed or its result is unconfirmed. No automatic retry will occur. Ask the owner to reject this proposal, then revise it as a new proposal.")
             : /OPENAI_CREDENTIALS_MISSING/.test(code) ? tr("模型接入尚未配置。请联系管理员完成配置后重试。", "The model connection is not configured. Ask an administrator to configure it, then retry.")
               : code === "WORKSPACE_RUNTIME_REPLAN_REQUIRED" ? tr("执行代码或模型配置已变化，原预演不能继续用于审批。请刷新后修订为新提案，重新预演并审批。", "Execution code or model configuration changed; the old preview cannot be approved. Refresh, revise as a new proposal, then preview and approve again.")
               : /STALE|CONFLICT|BASE_|EXPIRED|REJECTED/.test(code) ? tr("依据或提案状态已变化。草稿已保留；刷新后核对当前值，再提交新的提案。", "The base or proposal changed. Your draft is retained. Refresh, review the current value, then submit a new proposal.")
@@ -186,13 +189,67 @@
     if (points > 10000) throw new Error("PRICING_PERCENT_INVALID");
     return points;
   }
+  function basketDraftValue() {
+    const value = JSON.parse(draft.value);
+    if (!draft.basket_input) return {...value, source_ref: draft.source_ref};
+    const items = draft.basket_input.map(line => {
+      if (!/^[1-9]\d{0,6}$/.test(line.quantity) || Number(line.quantity) > 1000000
+        || !/^(?:0|[0-9]{1,12})(?:\.[0-9]{1,18})?$/.test(line.unit_price)
+        || !line.sku.trim() || !line.description.trim()) throw new Error("PRICING_BASKET_LINE_INVALID");
+      return {...line, quantity: Number(line.quantity)};
+    });
+    if (!items.length || items.length > 200) throw new Error("PRICING_BASKET_SIZE_INVALID");
+    return {...value, items, source_ref: draft.source_ref};
+  }
+  function renderBasketEditor() {
+    const basket = JSON.parse(draft.value);
+    draft.basket_input ||= basket.items.map(line => ({...line, quantity: String(line.quantity)}));
+    const group = document.createElement("div"); group.className = "change-basket-editor";
+    const note = document.createElement("p");
+    note.textContent = tr("币种保持为", "Currency remains") + ` ${basket.currency}. `
+      + tr("每行有稳定标识，调整数量和单价不会改变标识。单价保留输入精度；金额在预演时由服务端计算。", "Each line has a stable identity. Quantity and price edits retain it. Unit prices keep their entered precision; the server calculates amounts during preview.");
+    group.append(note);
+    draft.basket_input.forEach((line, index) => {
+      const row = document.createElement("fieldset"); row.className = "change-basket-line";
+      const legend = document.createElement("legend"); legend.textContent = tr(`商品 ${index + 1}`, `Line ${index + 1}`); row.append(legend);
+      const fields = document.createElement("div"); fields.className = "change-basket-fields";
+      for (const [key, zh, en] of [["sku", "商品编码", "SKU"], ["description", "商品说明", "Description"], ["quantity", "数量", "Quantity"], ["unit_price", "单价", "Unit price"]]) {
+        const label = document.createElement("label"), caption = document.createElement("span"), input = document.createElement("input");
+        caption.textContent = tr(zh, en); input.id = `change-basket-${key}-${index}`; input.type = "text";
+        input.required = true; input.value = line[key]; input.maxLength = key === "quantity" ? 7 : key === "unit_price" ? 31 : 2000;
+        if (key === "quantity") { input.inputMode = "numeric"; input.pattern = "[1-9][0-9]{0,6}"; }
+        if (key === "unit_price") { input.inputMode = "decimal"; input.pattern = "(?:0|[0-9]{1,12})(?:[.][0-9]{1,18})?"; }
+        input.addEventListener("input", () => { line[key] = input.value; editDraft(); });
+        label.append(caption, input); fields.append(label);
+      }
+      const identity = document.createElement("small"); identity.textContent = tr("行标识：", "Line ID: ") + line.line_id;
+      const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button-quiet";
+      remove.textContent = tr("移除此行", "Remove line"); remove.disabled = busy || draft.basket_input.length <= 1;
+      remove.dataset.unavailable = String(draft.basket_input.length <= 1);
+      remove.addEventListener("click", () => {
+        if (busy || draft.basket_input.length <= 1) return;
+        draft.basket_input.splice(index, 1); editDraft(); renderEditor();
+        byId(`change-basket-sku-${Math.min(index, draft.basket_input.length - 1)}`)?.focus();
+      });
+      row.append(fields, identity, remove); group.append(row);
+    });
+    const add = document.createElement("button"); add.type = "button"; add.id = "change-basket-add"; add.className = "button button-secondary";
+    add.textContent = tr("添加商品", "Add line"); add.disabled = busy || draft.basket_input.length >= 200;
+    add.dataset.unavailable = String(draft.basket_input.length >= 200);
+    add.addEventListener("click", () => {
+      if (busy || draft.basket_input.length >= 200) return;
+      draft.basket_input.push({line_id: `line:${crypto.randomUUID()}`, sku: "", description: "", quantity: "1", unit_price: ""});
+      editDraft(); renderEditor(); byId(`change-basket-sku-${draft.basket_input.length - 1}`)?.focus();
+    });
+    group.append(add); byId("change-value-mount").replaceChildren(group);
+  }
   function editDraft() {
     if (!draft) return;
     draftEdited = true;
     if (field()?.value_kind === "pricing_policy") {
       draft.pricing_input = { discount: byId("change-value")?.value || "", tax: byId("change-tax-rate")?.value || "",
         label: byId("change-tax-label")?.value || "" };
-    } else draft.value = byId("change-value")?.value || "";
+    } else if (!draft.basket_input) draft.value = byId("change-value")?.value || "";
     draft.source_ref = byId("change-source").value.trim();
     draft.reason = byId("change-proposal-reason").value.trim() || null;
     draft.operation = byId("change-operation").value;
@@ -236,7 +293,9 @@
     const input = document.createElement(selected.value_kind === "enum" ? "select" : selected.value_kind === "json" ? "textarea" : "input");
     input.id = "change-value"; input.required = true;
     input.setAttribute("aria-labelledby", "change-value-label");
-    if (selected.value_kind === "pricing_policy") {
+    if (selected.slot_id === "quote_basket" && selected.value_kind === "json") {
+      renderBasketEditor();
+    } else if (selected.value_kind === "pricing_policy") {
       const policy = draft.value || {}, entries = draft.pricing_input || {
         discount: basisPointsText(policy.discount_bps), tax: basisPointsText(policy.tax_bps), label: policy.tax_label || "",
       };
@@ -264,7 +323,7 @@
     } else if (selected.value_kind === "json") {
       input.rows = 8; input.maxLength = 64000; input.spellcheck = false;
     } else { input.type = selected.value_kind === "date" ? "date" : "text"; input.maxLength = 500; input.autocomplete = "off"; }
-    if (selected.value_kind !== "pricing_policy") {
+    if (selected.value_kind !== "pricing_policy" && selected.slot_id !== "quote_basket") {
       input.value = draft.value;
       input.addEventListener("input", editDraft);
       byId("change-value-mount").replaceChildren(input);
@@ -720,12 +779,75 @@
       || !matching(receipt.preview_ref, bundle.preview?.id)
       || !matching(preview.preview_digest, bundle.preview?.digest, outcome.preview_digest, binding.preview_digest, approval.preview_digest)
       || !matching(approval.digest, detail.approval.approval_digest, outcome.approval?.digest, outcome.approval_digest, receipt.approval_digest)
+      || !matching(approval.actor_id, outcome.approval?.actor_id, receipt.approval_actor_id)
+      || !matching(approval.id, outcome.approval?.id, receipt.approval_ref)
       || !matching(receipt.id, commit.base_rebase_receipt_ref) || !matching(receipt.digest, commit.base_rebase_receipt_digest)
       || !matching(quote.payload?.rebased_from, binding.predecessor_ref)
-      || !Array.isArray(commit.successor_object_refs) || commit.successor_object_refs.length !== 1
-      || !matching(objectRef(quote), commit.successor_object_refs[0])
+      || !Array.isArray(commit.successor_object_refs)
       || !matching(objectRef(outcome.graph_pointer), commit.graph_pointer_ref)) return null;
-    return { outcome, bundle, approval, binding, receipt, commit, quote };
+    const dual = Boolean(preview.deliverable_set_profile || commit.deliverable_set_receipt_ref);
+    const batch = dual ? verifiedDeliverableEffect({outcome, preview, bundle, receipt, commit, quote, binding}) : null;
+    if (dual ? !batch : commit.successor_object_refs.length !== 1 || !matching(objectRef(quote), commit.successor_object_refs[0])) return null;
+    return { outcome, bundle, approval, binding, receipt, commit, quote, batch };
+  }
+
+  function verifiedDeliverableEffect({outcome, preview, bundle, receipt, commit, quote, binding}) {
+    const view = detail.deliverable_set_effect, candidate = view?.candidate_set, approvals = view?.approval_set, batch = view?.apply_receipt;
+    const original = preview.deliverable_candidates?.candidate_set;
+    const sameRefs = (left, right) => Array.isArray(left) && Array.isArray(right)
+      && new Set(left).size === left.length && new Set(right).size === right.length
+      && left.length === right.length && left.every(value => typeof value === "string" && right.includes(value));
+    if (view?.schema_version !== "orgrebase.deliverable-set-change-view.v1"
+      || !matching(view.event_id, detail.event.event_id) || !matching(view.preview_digest, preview.preview_digest)
+      || !matching(view.source_approval_digest, outcome.approval_digest)
+      || !matching(view.outcome?.artifact_digest, detail.outcome.artifact_digest)
+      || !candidate || candidate.state !== "READY" || !matching(candidate.digest, original?.digest) || !equalJsonValue(candidate, original)
+      || !matching(candidate.change_set_digest, bundle.change_set.digest)
+      || !matching(candidate.change_set_ref, receipt.change_set_ref) || !matching(candidate.preview_digest, preview.preview_digest)
+      || !matching(candidate.snapshot_ref, bundle.snapshot_ref) || !matching(candidate.snapshot_digest, bundle.snapshot_digest)
+      || !matching(candidate.runtime_revision, preview.deliverable_set_profile?.runtime_revision)
+      || approvals?.schema_version !== "orgrebase.deliverable-approval-set.v1" || approvals.status !== "COMPLETE"
+      || !matching(approvals.candidate_set_digest, candidate.digest)
+      || batch?.schema_version !== "orgrebase.deliverable-set-apply-receipt.v1" || batch.status !== "COMPLETED" || batch.external_effects !== "DISABLED"
+      || commit.schema_version !== "orgrebase.workspace-rebase-receipt.v2"
+      || !matching(batch.id, commit.deliverable_set_receipt_ref) || !matching(batch.digest, commit.deliverable_set_receipt_digest)
+      || !matching(batch.base_rebase_receipt_ref, receipt.id) || !matching(batch.base_rebase_receipt_digest, receipt.digest)
+      || !matching(batch.binding_ref, candidate.binding_ref) || !matching(batch.binding_digest, candidate.binding_digest)
+      || !matching(batch.candidate_set_digest, candidate.digest) || !matching(batch.approval_set_digest, approvals.digest)
+      || !matching(batch.graph_pointer_ref, commit.graph_pointer_ref, objectRef(outcome.graph_pointer))
+      || !matching(batch.snapshot_ref, commit.successor_snapshot_ref, outcome.graph_pointer?.payload?.snapshot_ref)
+      || !matching(batch.snapshot_digest, commit.successor_snapshot_digest, outcome.graph_pointer?.payload?.snapshot_digest)
+      || !matching(batch.committed_at, commit.committed_at) || view.external_effects !== "DISABLED"
+      || !Array.isArray(candidate.members) || candidate.members.length !== 2
+      || !Array.isArray(batch.members) || batch.members.length !== 2
+      || !Array.isArray(outcome.deliverables) || outcome.deliverables.length !== 2
+      || !Array.isArray(approvals.decisions) || !Array.isArray(view.review_members) || view.review_members.length !== 2
+      || !sameRefs(candidate.members.map(item => item.deliverable_kind), ["QUOTE", "DISCOUNT_MEMO"])
+      || !sameRefs(candidate.members.map(item => item.object_id), batch.members?.map(item => item.object_id))
+      || !sameRefs(candidate.members.map(item => item.object_id), outcome.deliverables?.map(item => item.id))) return null;
+    const owners = [...new Set(candidate.members.filter(item => item.disposition === "REBUILD").map(item => item.owner_id))];
+    if (!sameRefs(owners, approvals.decisions?.map(item => item.owner_id)) || !sameRefs(owners, view.required_owner_ids)) return null;
+    for (const decision of approvals.decisions) {
+      const scopes = [...new Set(candidate.members.filter(item => item.owner_id === decision.owner_id).flatMap(item => item.required_scopes || []))];
+      if (decision.decision !== "APPROVED" || !matching(decision.actor_id, decision.owner_id)
+        || !matching(decision.candidate_set_digest, candidate.digest) || !sameRefs(decision.scopes, scopes)) return null;
+    }
+    for (const member of candidate.members) {
+      const applied = batch.members.find(item => item.object_id === member.object_id);
+      const result = outcome.deliverables.find(item => item.id === member.object_id);
+      const review = view.review_members?.find(item => item.object_id === member.object_id);
+      if (!["REBUILD", "PRESERVE_WITHIN_BOUNDARY"].includes(member.disposition)
+        || !matching(applied.deliverable_kind, member.deliverable_kind, result.payload?.deliverable_kind)
+        || !matching(applied.disposition, member.disposition) || !matching(applied.predecessor_ref, member.predecessor_ref)
+        || !matching(applied.result_ref, objectRef(result), member.candidate_ref) || !matching(applied.result_digest, result.digest)
+        || !matching(review?.owner_id, member.owner_id) || !matching(review?.candidate_ref, member.candidate_ref)
+        || !matching(review?.candidate_payload_digest, member.candidate_payload_digest)
+        || !review.safe_payload || !Object.entries(review.safe_payload).every(([key, value]) => equalJsonValue(result.payload[key], value))
+        || member.disposition === "PRESERVE_WITHIN_BOUNDARY" && (!matching(applied.result_ref, member.predecessor_ref) || !matching(applied.result_digest, member.predecessor_digest))) return null;
+      if (member.deliverable_kind === "QUOTE" && (!matching(applied.predecessor_ref, binding.predecessor_ref)
+        || !matching(member.predecessor_digest, binding.predecessor_digest) || !matching(applied.result_ref, objectRef(quote)) || !matching(applied.result_digest, quote.digest))) return null;
+    }
+    return sameRefs(commit.successor_object_refs, batch.members.filter(item => item.disposition === "REBUILD").map(item => item.result_ref)) ? batch : null;
   }
 
   function renderContextUsage(container, receipt, bundle) {
@@ -959,8 +1081,11 @@
     if (!evidence) {
       const message = document.createElement("p"); message.textContent = tr("生效记录缺失或绑定不一致，暂不展示已核对的前后对照。请刷新并核查审计记录。", "The effect record is missing or its bindings differ. A verified comparison is unavailable; refresh and inspect the audit records."); section.append(message); restoreFocus(); return;
     }
-    const { outcome, bundle, approval, binding, receipt, commit, quote } = evidence;
+    const { outcome, bundle, approval, binding, receipt, commit, quote, batch } = evidence;
     const summary = document.createElement("p"); summary.textContent = `${binding.predecessor_ref} → ${objectRef(quote)} · ${commit.committed_at}`; section.append(summary);
+    if (batch) {
+      const note = document.createElement("p"); note.textContent = tr("报价与折扣说明已按完整的成果批准范围共同提交；保留的成员保持原版本。", "Quote and Memo were committed together under the complete deliverable approval scope; preserved members retain their earlier versions."); section.append(note);
+    }
     const history = state?.execution?.run_id === detail.execution_run_id && state?.enterprise_data_lineage?.run_id === detail.execution_run_id
       ? state.enterprise_data_lineage.quotes?.versions : null;
     const candidates = Array.isArray(history) ? history.filter(item => item?.ref === binding.predecessor_ref) : [];
@@ -1021,6 +1146,7 @@
     addFact(facts, tr("上下文引用", "Context references"), contexts.length ? contexts.map(context => `${context.id}@${context.version} · ${context.actor_id}\n${context.digest}`).join("\n\n") : tr("未记录", "Not recorded"), true);
     addFact(facts, businessTimeLabel("批准依据", "Approval evidence"), `${approval.actor_id} · ${approval.approved_at}\n${approval.digest}`, true);
     addFact(facts, businessTimeLabel("生效记录", "Effect receipt"), `${commit.id} · ${commit.committed_at}\n${commit.digest}\n${receipt.evidence_class}`, true);
+    if (batch) addFact(facts, tr("双成果集合回执", "Deliverable set receipt"), `${batch.id}\n${batch.digest}\n${batch.members.map(member => `${member.deliverable_kind} · ${member.result_ref} · ${member.disposition}`).join("\n")}`, true);
     addFact(facts, tr("版本锁", "Revision lock"), Object.entries(receipt.revision_lock || {}).map(([key, value]) => `${key}: ${value}`).join("\n"), true);
     lineage.append(facts);
     renderContextUsage(lineage, receipt, bundle);
@@ -1276,6 +1402,10 @@
       const result = await client.json(`/api/workspace/changes/${encodeURIComponent(eventId)}`);
       if (sequence !== selectionSequence) return false;
       if (result?.event?.event_id !== eventId || result.execution_run_id !== options?.execution_run_id) throw new Error("CHANGE_DETAIL_RESPONSE_INVALID");
+      if (result.status === "APPLIED" && result.outcome?.outcome?.workspace_rebase_receipt?.deliverable_set_receipt_ref) {
+        result.deliverable_set_effect = await client.json(`/api/workspace/deliverable-set/changes/${encodeURIComponent(eventId)}`);
+        if (sequence !== selectionSequence) return false;
+      }
       if (selectedId !== eventId || result.preview?.preview_digest !== detail?.preview?.preview_digest) { acknowledgementDigest = null; activeReviewMs = 0; }
       selectedId = eventId; detail = result; renderList(); renderDetail();
       if (focus) { byId("change-detail-title").focus(); resumeReview(); }
@@ -1341,10 +1471,11 @@
     draftEdited = true;
     draft.value = selected.value_kind === "pricing_policy"
       ? JSON.parse(JSON.stringify(event.proposal.payload.canonical_value)) : valueText(event.proposal.payload.canonical_value);
+    delete draft.basket_input;
     draft.source_ref = event.proposal.source_refs[0] || "";
     draft.reason = current?.reason || null;
     draft.revises_event_id = event.event_id;
-    renderEditor(); byId("change-editor").open = true; byId("change-value").focus();
+    renderEditor(); byId("change-editor").open = true; (byId("change-basket-sku-0") || byId("change-value"))?.focus();
     showNotice(tr("已建立独立草稿。原拒绝和审批记录保留；此提案需重新预演与批准。", "A separate draft is ready. Prior decisions remain unchanged; this proposal needs a new preview and approval."), "info");
   }
   async function submit(e) {
@@ -1361,17 +1492,20 @@
         value = {...value, discount_bps: percentBasisPoints(entries.discount), tax_bps: percentBasisPoints(entries.tax),
           tax_label: entries.label.trim(), source_ref: draft.source_ref};
       } else if (selected.value_kind === "json") {
-        value = JSON.parse(value);
+        value = selected.slot_id === "quote_basket" && draft.basket_input ? basketDraftValue() : JSON.parse(value);
         if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("PRICING_OBJECT_REQUIRED");
+        if (selected.slot_id === "quote_basket") value = {...value, source_ref: draft.source_ref};
       } else if (!value.trim()) return;
     } catch (_) {
       showNotice(selected.value_kind === "pricing_policy"
         ? tr("请填写 0–100 之间、最多两位小数的折扣率和税率，并说明税费口径。", "Enter discount and tax rates from 0 to 100 with at most two decimal places, and provide a tax basis label.")
+        : selected.slot_id === "quote_basket"
+        ? tr("请核对每行商品编码与说明、1–1000000 的整数数量，以及非负十进制单价。单价最多 12 位整数、18 位小数，不支持科学计数法。", "Check every SKU and description, integer quantities from 1 to 1000000, and nonnegative decimal prices with at most 12 integer and 18 fractional digits. Scientific notation is unsupported.")
         : tr("请输入有效的 JSON 对象；明细结构将在提交时核验。", "Enter a valid JSON object; the basket structure is validated on submission."));
       return;
     }
     draft.event_id ||= `ui:${crypto.randomUUID()}`;
-    const submitted = { ...draft, value }; delete submitted.pricing_input;
+    const submitted = { ...draft, value }; delete submitted.pricing_input; delete submitted.basket_input;
     const session = client.session(), workspaceId = client.workspace?.(), runId = options?.execution_run_id;
     const sameContext = () => client.session() === session && client.workspace?.() === workspaceId
       && options?.execution_run_id === runId && (!state || state.execution?.run_id === runId);
@@ -1479,7 +1613,9 @@
           || approved.approval?.approval_digest !== result.approval_digest || approved.status !== "APPROVED") {
           throw new Error("CHANGE_APPROVAL_CONTINUATION_MISMATCH");
         }
-        message = tr("提案已批准，等待有执行权限的账号应用。", "Proposal approved; awaiting an account with execution permission.");
+        message = approved.deliverable_approval_required
+          ? tr("来源变更已批准，还需各成果负责人审阅并签署报价与折扣说明。", "Source change approved; the Quote and Discount Memo owners must still review and sign their deliverable scopes.")
+          : tr("提案已批准，等待有执行权限的账号应用。", "Proposal approved; awaiting an account with execution permission.");
         if (approved.allowed_actions?.includes("APPLY")) {
           operation = "APPLY";
           showNotice(tr("批准已记录，正在应用这份提案…", "Approval recorded; applying this proposal…"), "info");

@@ -1,13 +1,13 @@
 {
   "action": "delegate_task",
-  "digest": "sha256:2a92cbc75c2ac40cc167df7e4de8d911d172b5c38b055af1c29bfa187a73627f",
+  "digest": "sha256:205c4915ef686d93c93590879c7f65bad51c6b4acadf84f116c133920ba6b315",
   "error": null,
   "key": "at-reviewer-barrier-7e3227d5ab73:delegate",
   "ok": true,
-  "payload_digest": "sha256:416986fe6d5d13adbf46ec5324890af45a886a0f8f8f47a5ac1c09d264496bde",
+  "payload_digest": "sha256:9d34263b0518d93ae3fcec931572834ab1785f0c08f78661e5539d80c258d6c9",
   "raw_ref": "raw-mcp/015-at-reviewer-barrier-7e3227d5ab73-delegate-90d973c4.json",
-  "request_digest": "sha256:dbf044cb28da464a81df4efa50216f67ad1814e20f35e6510aef612d1d3f54a7",
-  "response_digest": "sha256:0e491e65574e1e572580a3962b88b4b67c3a9ef82c28f24f7f78c664d3002905",
+  "request_digest": "sha256:9100501588e3b25481382ee8727c9f682458d948807dae6b092d5493ea56740b",
+  "response_digest": "sha256:6c86c60dde01665a2288652607bb850cc933de0b03491fe3e1d0fba9f42818e9",
   "sequence": 15,
   "status": "assigned",
   "tool": "taskflow"

@@ -1,0 +1,7 @@
+{
+  "caseId": "C0-CANON-007",
+  "expect": {"errorCode": "NON_I_JSON", "sutStatus": "ERROR"},
+  "input": {"rawBase64": "eyJzIjoiXHVkODAwIn0="},
+  "operation": "canonicalize",
+  "requirementRefs": ["REQ-CANONICAL-IJSON"]
+}

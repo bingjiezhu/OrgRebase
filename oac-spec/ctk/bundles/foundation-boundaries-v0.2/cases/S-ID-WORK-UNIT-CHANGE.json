@@ -1,0 +1,32 @@
+{
+  "caseId": "S-ID-WORK-UNIT-CHANGE",
+  "expect": {
+    "result": {
+      "identifier": "urn:oac:id:sha256:v1:work-unit:ccd8df38be06251f93ff110f99bd51679c4e95eceb6a28bb9bd4a87c80ad69a7"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "fields": {
+      "body": {
+        "accountableRoleInstanceRef": "urn:r:one",
+        "obligationRefs": [
+          "urn:o:one",
+          "urn:o:two"
+        ],
+        "roleInstanceRefs": [
+          "urn:r:one",
+          "urn:r:two"
+        ]
+      },
+      "changeDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "snapshotDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "identifierKind": "work-unit"
+  },
+  "operation": "deriveIdentifier",
+  "requirementRefs": [
+    "REQ-INSTANCE-ID-V1"
+  ],
+  "testTarget": "SUT"
+}

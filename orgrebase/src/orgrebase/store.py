@@ -72,9 +72,14 @@ class StateStore:
         read_schema_version: int | None = None,
     ) -> None:
         if read_schema_version is not None and (
-            type(read_schema_version) is not int or read_schema_version not in {3, 4} or not maintenance or not read_only
+            type(read_schema_version) is not int
+            or read_schema_version not in {3, 4, 5}
+            or not maintenance
+            or not read_only
         ):
-            raise ValueError("STATE_STORE_HISTORICAL_READ_REQUIRES_MAINTENANCE_READ_ONLY_V3_OR_V4")
+            raise ValueError(
+                "STATE_STORE_HISTORICAL_READ_REQUIRES_MAINTENANCE_READ_ONLY_V3_V4_OR_V5"
+            )
         self._expected_schema_version = read_schema_version or STATE_STORE_SCHEMA_VERSION
         self._validate_workspace_id(workspace_id)
         self.workspace_id = workspace_id
@@ -635,6 +640,40 @@ class StateStore:
                 ),
             )
 
+    def create_current_if_absent(self, connection: Connection, item: VersionedObject) -> None:
+        """Create a version and its first pointer without replacing a current head.
+
+        Callers own the surrounding transaction and append their domain event
+        in that same unit. The commit check also prevents a caller that catches
+        a losing compare-and-create error from committing orphan version rows.
+        """
+        try:
+            item = VersionedObject.model_validate(item.model_dump(mode="json"))
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise IntegrityError("VERSIONED_OBJECT_MODEL_INVALID") from exc
+        if item.state is not ObjectState.CURRENT:
+            raise IntegrityError("CURRENT_POINTER_REQUIRES_CURRENT_VERSION")
+        if self._lock_current_pointers(connection, (item.id,)).get(item.id) is not None:
+            raise IntegrityError("CURRENT_POINTER_ALREADY_EXISTS")
+
+        created = False
+
+        def require_created() -> None:
+            if not created:
+                raise IntegrityError("CURRENT_POINTER_CREATE_INCOMPLETE")
+
+        self.require_before_commit(connection, require_created)
+        self.insert_version(connection, item, make_current=False)
+        result = self._execute(
+            connection,
+            self._insert(current_pointers)
+            .values(object_id=item.id, version_key=item.ref, revision=1)
+            .on_conflict_do_nothing(index_elements=["workspace_id", "object_id"]),
+        )
+        if result.rowcount != 1:
+            raise IntegrityError("CURRENT_POINTER_ALREADY_EXISTS")
+        created = True
+
     def _row_to_object(self, row: sqlite3.Row) -> VersionedObject:
         payload = json.loads(row["payload_json"])
         persisted = VersionedObject.model_validate(payload)
@@ -688,6 +727,60 @@ class StateStore:
             if row is None:
                 raise KeyError(f"missing object {object_id}@{version or 'current'}")
             return self._row_to_object(row)
+
+    def current_object_page(
+        self, *, object_id_prefix: str, after: str | None = None, limit: int = 100
+    ) -> dict[str, Any]:
+        """Page current pointers in one scoped statement, verifying each version.
+
+        Pointer existence is not content qualification: callers must separately
+        reject stale, revoked or unauthorized objects before using their text.
+        """
+        if (
+            not isinstance(object_id_prefix, str)
+            or not object_id_prefix
+            or object_id_prefix != object_id_prefix.strip()
+            or len(object_id_prefix) > 256
+            or isinstance(limit, bool)
+            or not isinstance(limit, int)
+            or not 1 <= limit <= 100
+        ):
+            raise ValueError("STATE_STORE_OBJECT_PAGE_INVALID")
+        if after is not None and (
+            not isinstance(after, str) or not after.startswith(object_id_prefix)
+            or len(after) > 512
+        ):
+            raise ValueError("STATE_STORE_OBJECT_CURSOR_INVALID")
+        statement = (
+            select(
+                current_pointers.c.object_id,
+                current_pointers.c.version_key,
+                object_versions.c.payload_json,
+                object_versions.c.payload_digest,
+                version_states.c.state.label("effective_state"),
+            )
+            .select_from(current_pointers.join(object_versions).join(version_states))
+            .where(current_pointers.c.object_id.startswith(object_id_prefix, autoescape=True))
+            .order_by(current_pointers.c.object_id)
+            .limit(limit + 1)
+        )
+        if after is not None:
+            statement = statement.where(current_pointers.c.object_id > after)
+        with self.read_snapshot() as connection:
+            rows = self._execute(connection, statement).fetchall()
+            items = []
+            for row in rows[:limit]:
+                try:
+                    item = self._row_to_object(row)
+                except (TypeError, ValueError) as exc:
+                    raise IntegrityError("STATE_STORE_CURRENT_OBJECT_INVALID") from exc
+                if item.id != row["object_id"] or item.ref != row["version_key"]:
+                    raise IntegrityError("STATE_STORE_CURRENT_POINTER_BINDING_INVALID")
+                items.append(item)
+        return {
+            "items": tuple(items),
+            "next_cursor": items[-1].id if len(rows) > limit else None,
+        }
 
     def state_snapshot(self, object_ids: tuple[str, ...] | list[str]) -> dict[str, dict[str, str]]:
         with self._lock:
@@ -1847,6 +1940,88 @@ class StateStore:
                 fence=source_checkpoints.c.fence + 1,
             ),
         )
+        return self.get_source_checkpoint(connector_id, connection=connection)
+
+    def renew_source_claim(
+        self,
+        connection: Connection,
+        *,
+        connector_id: str,
+        worker_id: str,
+        fence: int,
+        expected_revision: int,
+        expected_cursor: str | None,
+        now: float,
+        lease_seconds: float,
+        max_lease_until: float,
+    ) -> dict[str, Any] | None:
+        """Extend one still-current source claim without reviving an expired lease.
+
+        The source worker may need several bounded readbacks to establish the
+        final-page coverage claim.  Renewal is therefore an exact compare-and-
+        swap over the original page identity and fence, rather than a broader
+        lease update.  A replaced, expired, or advanced claim returns ``None``.
+        """
+
+        if (
+            not isinstance(connector_id, str)
+            or not connector_id.strip()
+            or not isinstance(worker_id, str)
+            or not worker_id.strip()
+            or isinstance(fence, bool)
+            or not isinstance(fence, int)
+            or fence < 1
+            or isinstance(expected_revision, bool)
+            or not isinstance(expected_revision, int)
+            or expected_revision < 0
+            or (expected_cursor is not None and not isinstance(expected_cursor, str))
+            or not math.isfinite(now)
+            or not math.isfinite(lease_seconds)
+            or lease_seconds <= 0
+            or not math.isfinite(now + lease_seconds)
+            or not math.isfinite(max_lease_until)
+            or max_lease_until < now
+        ):
+            raise ValueError("SOURCE_LEASE_INVALID")
+        cursor_matches = (
+            source_checkpoints.c.cursor.is_(None)
+            if expected_cursor is None
+            else source_checkpoints.c.cursor == expected_cursor
+        )
+        row = self._execute(
+            connection,
+            self._lock_row(
+                select(source_checkpoints).where(
+                    source_checkpoints.c.connector_id == connector_id,
+                    source_checkpoints.c.lease_owner == worker_id,
+                    source_checkpoints.c.fence == fence,
+                    source_checkpoints.c.revision == expected_revision,
+                    cursor_matches,
+                    source_checkpoints.c.lease_until > now,
+                    source_checkpoints.c.lease_until <= max_lease_until,
+                )
+            )
+        ).fetchone()
+        if row is None:
+            return None
+        current_until = float(row["lease_until"])
+        renewed_until = min(max_lease_until, max(current_until, now + lease_seconds))
+        changed = self._execute(
+            connection,
+            update(source_checkpoints)
+            .where(
+                source_checkpoints.c.connector_id == connector_id,
+                source_checkpoints.c.lease_owner == worker_id,
+                source_checkpoints.c.fence == fence,
+                source_checkpoints.c.revision == expected_revision,
+                cursor_matches,
+                source_checkpoints.c.lease_until == current_until,
+                source_checkpoints.c.lease_until > now,
+            )
+            .values(lease_until=renewed_until),
+        ).rowcount
+        if changed != 1:  # pragma: no cover - the selected row is held by this transaction
+            raise RuntimeError("SOURCE_CHECKPOINT_CONFLICT")
         return self.get_source_checkpoint(connector_id, connection=connection)
 
     def commit_source_page(

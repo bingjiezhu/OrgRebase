@@ -1,0 +1,88 @@
+{
+  "$defs": {
+    "caseId": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string"
+    },
+    "extensions": {
+      "additionalProperties": true,
+      "propertyNames": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "nonEmptyString": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "type": "string"
+    },
+    "notScoredCase": {
+      "additionalProperties": false,
+      "properties": {
+        "caseId": {
+          "$ref": "#/$defs/caseId"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "reason": {
+          "enum": [
+            "extension",
+            "added_after_release",
+            "pending"
+          ]
+        }
+      },
+      "required": [
+        "caseId",
+        "reason"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/ctk/v0alpha2/RequirementSet.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural schema for the frozen Phase A required and not-scored case partition.",
+  "properties": {
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    },
+    "notScored": {
+      "items": {
+        "$ref": "#/$defs/notScoredCase"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "profileVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "required": {
+      "items": {
+        "$ref": "#/$defs/caseId"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "requirementSetId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "standardVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    }
+  },
+  "required": [
+    "requirementSetId",
+    "standardVersion",
+    "profileVersion",
+    "required",
+    "notScored"
+  ],
+  "title": "RequirementSet",
+  "type": "object"
+}

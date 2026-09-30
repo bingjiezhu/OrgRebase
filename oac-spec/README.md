@@ -33,7 +33,7 @@ contract choices relate to authorization consistency, provenance, and governed a
 
 ## Implemented minimum lifecycle profile
 
-Spec 009 adds three strict, portable Kinds to the existing Source/Plan/lowering resources:
+The minimum lifecycle Profile defines three strict, portable Kinds alongside the Source/Plan/lowering resources:
 
 | Kind | What it records | What it does not grant |
 |---|---|---|
@@ -45,7 +45,7 @@ The three Kinds are implemented in the model, Kind Registry, generated schemas, 
 
 `ExecutionReceipt`, `OutcomeObservation`, procedure candidates, governance transactions, and the active Source pointer remain implementation-owned extensions referenced by exact resource identifiers. **This repository does not own a Runtime.**
 
-The formal contract is [Spec 009](specs/009-proof-carrying-evolution-minimum-profile/spec.md). Its source/root-vector evidence remains bounded single-reference evidence; historical Spec status and external-independence gates remain explicit.
+The public [Core draft](standard/oac-core-v0.1.md) and [generated schemas](schemas/) describe the implemented contract surface. The internal Spec Kit design record is outside this source distribution. Source/root-vector evidence remains bounded single-reference evidence; external-independence gates remain explicit.
 
 ## Existing Supplier profile and plural Plans
 
@@ -90,15 +90,7 @@ Source/Demand admission
 
 That journey is an **external reference implementation of the profile**, not a Runtime owned by OAC and not production proof for the standard. Its current evidence is synthetic, zero-effect, and scripted-governance only. Human review, real-enterprise use, authenticated enterprise Source, and production deployment remain `NOT_RUN`.
 
-From the two-directory source snapshot:
-
-```bash
-cd orgrebase
-uv sync --all-extras
-make workspace-oac-evolution-check
-```
-
-The defensible combined claim belongs to the OrgRebase reference: one complete synthetic controlled OAC loop plus byte-exact regression of its preliminary Quote loop. It is not a claim that OAC itself executed an enterprise or generalized across enterprises.
+The archived combined exercise belongs to the OrgRebase reference: one synthetic controlled OAC loop plus byte-exact regression of its preliminary Quote loop. Its retained historical evidence is outside this public source profile. For a fresh clone, use the [product Quick Start](../orgrebase/README.md#first-run-verify-one-public-transaction) and the public OAC gate below. The archived result is not a claim that OAC itself executed an enterprise or generalized across enterprises.
 
 ## Quick start
 
@@ -108,19 +100,17 @@ but equivalent installation and behavior validation has not been established for
 Select CPython 3.12.13 explicitly when reproducing those records.
 
 ```bash
-uv sync --all-extras
+uv sync --locked --all-extras
 uv run oac demo
 uv run oac tck
-make evolution-evidence-check
-make runtime-lowering-check
-make check
+python3 -B ../orgrebase/scripts/build_source_snapshot.py public-check --snapshot-root ..
 ```
 
 Useful public commands:
 
 ```text
 oac validate             strict registered-resource validation
-oac validate-evolution   Spec 009 semantic validation
+oac validate-evolution   Lifecycle semantic validation
 oac digest               detached RFC 8785 + SHA-256 digest
 oac compile              Supplier Profile reference compiler
 oac verify               compiler-separated Plan verification
@@ -129,7 +119,7 @@ oac registry             machine-readable registries
 oac tck                  manifest-driven development TCK
 ```
 
-`make check` is fail-closed against checked-in path and installed-material commitments. In a relocated or extracted copy, `make archive-replay-check` recomputes the live Plan-verification result and compares only its documented host-portable semantic projection with the immutable seed-1 coordinate before running the same composite gate. It never rewrites the frozen parity summary, installed ledger, or evidence manifest.
+The `public-check` command runs the OAC conformance checks supported by this GitHub source profile, including the CTK, Go reference implementations and selected core tests. Historical `make check` and `make archive-replay-check` require retained archive inputs outside this public source profile; their earlier results do not qualify a fresh clone. The public gate does not establish customer or production acceptance.
 
 ## Evidence boundary
 
@@ -137,7 +127,7 @@ oac tck                  manifest-driven development TCK
 |---|---|
 | Strict wire kinds, detached digests, registries, schemas, and installed package | implemented and checked |
 | Contextual Supplier Profile and bounded plural-valid Plan relation | implemented and checked on frozen public coordinates |
-| Spec 009 minimum Demand/Admission/Outcome kinds and lifecycle-root negative inventory | implemented and checked |
+| Minimum lifecycle Demand/Admission/Outcome kinds and lifecycle-root negative inventory | implemented and checked |
 | Zero-effect reference lowering | implemented; still requires external Runtime admission |
 | External OrgRebase controlled synthetic reference loop | `PASS` in that repository; not OAC production evidence |
 | Qualified human Ground Truth | `NOT_RUN` |
@@ -158,7 +148,6 @@ OAC is an experimental proposed draft. It does not claim formal certification, v
 | `ctk/` | self-contained bundles, protocols, schemas, and code-independent runner |
 | `implementations/` | disclosed same-repository cross-language falsification seeds |
 | `experiments/` | revision-scoped portability and disagreement evidence |
-| `specs/` | Spec Kit requirements and evidence-gated proposals |
 | `docs/` | decisions, research, architecture, validation reports, and [roadmap](docs/ROADMAP.md) |
 
 ## Licensing
@@ -168,4 +157,4 @@ the [code of conduct](CODE_OF_CONDUCT.md), and private vulnerability reporting i
 [SECURITY](SECURITY.md). See the [changelog](CHANGELOG.md) for source history;
 unreleased source versions are not published-release or conformance claims.
 
-Project-owned OAC material, including normative text, schemas, TCK/CTK, examples and reference code, is available under [Apache-2.0](LICENSES/Apache-2.0.txt). See [LICENSE.md](LICENSE.md), [NOTICE](NOTICE.md), [CONTRIBUTING](CONTRIBUTING.md), and the [patent non-assertion](PATENT-NON-ASSERTION.md).
+Project-owned OAC material, including normative text, schemas, TCK/CTK, examples and reference code, is available under [Apache-2.0](LICENSES/Apache-2.0.txt). See [LICENSE.md](LICENSE.md), [NOTICE](NOTICE.md), [CONTRIBUTING](CONTRIBUTING.md), and the [patent non-assertion draft](PATENT-NON-ASSERTION.md).

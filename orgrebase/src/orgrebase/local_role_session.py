@@ -40,19 +40,24 @@ class LocalRoleSessionSettings:
             valid = False
         if not valid:
             raise ValueError("AUTH_LOCAL_SESSION_LOOPBACK_ORIGIN_REQUIRED")
-        if type(self.session_seconds) is not int or not 60 <= self.session_seconds <= 3600:
+        if type(self.session_seconds) is not int or not (self.session_seconds == 0 or 60 <= self.session_seconds <= 86400):
             raise ValueError("AUTH_LOCAL_SESSION_LIFETIME_INVALID")
 
     @property
     def secure(self) -> bool:
         return self.public_origin.startswith("https:")
 
+    @property
+    def cookie_max_age(self) -> int:
+        # Browsers cap persistent cookies; zero disables the server timeout only.
+        return self.session_seconds or 400 * 86400
+
 
 @dataclass(frozen=True)
 class _Session:
     actor_id: str | None
     csrf: str
-    expires_at: int
+    expires_at: int | None
 
 
 class LocalRoleSessions:
@@ -102,6 +107,15 @@ class LocalRoleSessions:
             domain = next(iter(owned)) if len(owned) == 1 else None
             label, label_en = labels.get(domain, (f"领域负责人 · {actor}", f"Domain owner · {actor}"))
             add(actor, label, label_en, "approver")
+        deliverable_profile = getattr(workspace, "deliverable_set_profile", None)
+        if deliverable_profile is not None:
+            for member in deliverable_profile.members:
+                add(
+                    member.owner_id,
+                    f"成果负责人 · {member.owner_id}",
+                    f"Deliverable owner · {member.owner_id}",
+                    "approver",
+                )
         add("human:local-change-executor", "变更执行人", "Change executor", "executor")
         add(self.skill_steward_actor, "Skill 维护负责人", "Skill steward", "governor")
         names = [entry["label"] for entry in entries.values()]
@@ -117,10 +131,10 @@ class LocalRoleSessions:
                 return actor
         raise AuthenticationError("AUTH_LOCAL_ACTOR_DENIED", 403)
 
-    def _principal(self, actor_id: str, expires_at: int) -> Principal:
+    def _principal(self, actor_id: str, expires_at: int | None) -> Principal:
         actor = self._actor(actor_id)
         return Principal(LOCAL_SESSION_ISSUER, actor_id, self.workspace().profile.organization_id,
-                         actor_id, frozenset(actor["roles"]), expires_at)
+                         actor_id, frozenset(actor["roles"]), expires_at if expires_at is not None else 2**63 - 1)
 
     @staticmethod
     def _key(cookie: str | None) -> str:
@@ -132,7 +146,7 @@ class LocalRoleSessions:
         with self._lock:
             key = self._key(cookie)
             session = self._sessions.get(key)
-            if session is None or session.expires_at <= int(time.time()):
+            if session is None or (session.expires_at is not None and session.expires_at <= int(time.time())):
                 self._sessions.pop(key, None)
                 raise AuthenticationError("AUTH_LOCAL_SESSION_REQUIRED")
             return session
@@ -142,17 +156,19 @@ class LocalRoleSessions:
             self._actor(actor_id)
         with self._lock:
             now = int(time.time())
-            self._sessions = {key: value for key, value in self._sessions.items() if value.expires_at > now}
+            self._sessions = {key: value for key, value in self._sessions.items()
+                              if value.expires_at is None or value.expires_at > now}
             if previous is not None:
                 self.read(previous)
                 self._sessions.pop(self._key(previous), None)
             if len(self._sessions) >= 256:
                 raise AuthenticationError("AUTH_LOCAL_SESSION_LIMIT", 503)
             cookie = secrets.token_urlsafe(32)
-            self._sessions[self._key(cookie)] = _Session(actor_id, secrets.token_urlsafe(32), now + self.settings.session_seconds)
+            expiry = now + self.settings.session_seconds if self.settings.session_seconds else None
+            self._sessions[self._key(cookie)] = _Session(actor_id, secrets.token_urlsafe(32), expiry)
             return cookie
 
-    def authenticate(self, cookie: str | None) -> tuple[Principal, str, int]:
+    def authenticate(self, cookie: str | None) -> tuple[Principal, str, int | None]:
         session = self.read(cookie)
         if session.actor_id is None:
             raise AuthenticationError("AUTH_LOCAL_ACTOR_REQUIRED")

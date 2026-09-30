@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0alpha1/RequirementSet.schema.json",
+  "title": "RequirementSet",
+  "description": "Structural schema for the frozen Phase A required and not-scored case partition.",
+  "$comment": "Cross-resource coverage, ordering, and disjointness remain semantic runner checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "requirementSetId",
+    "standardVersion",
+    "profileVersion",
+    "required",
+    "notScored"
+  ],
+  "properties": {
+    "requirementSetId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "standardVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "profileVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "required": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/caseId"
+      }
+    },
+    "notScored": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/notScoredCase"
+      }
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "caseId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "additionalProperties": true
+    },
+    "notScoredCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseId",
+        "reason"
+      ],
+      "properties": {
+        "caseId": {
+          "$ref": "#/$defs/caseId"
+        },
+        "reason": {
+          "enum": [
+            "extension",
+            "added_after_release",
+            "pending"
+          ]
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        }
+      }
+    }
+  }
+}

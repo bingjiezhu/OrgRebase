@@ -1,0 +1,963 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0alpha2/SupplierPortabilityEvidenceManifest.schema.json",
+  "title": "SupplierPortabilityEvidenceManifest",
+  "description": "Closed, content-bound release evidence for the bounded Supplier v0.2 seed-2 portability matrix. Repository artifacts are byte-verifiable; unavailable build outputs are explicitly digest attestations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "manifestId",
+    "serialization",
+    "schema",
+    "sourceState",
+    "frozenMaterials",
+    "summaries",
+    "implementations",
+    "replays",
+    "disagreements",
+    "mutants",
+    "matrixResult",
+    "claim",
+    "digestAlgorithm",
+    "digest"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "oac.portability.evidence-manifest/v0alpha2"
+    },
+    "kind": {
+      "const": "SupplierPortabilityEvidenceManifest"
+    },
+    "manifestId": {
+      "const": "oac.supplier.transfer/v0.2-seed-2/evidence"
+    },
+    "serialization": {
+      "const": "rfc8785+jcs+lf/v1"
+    },
+    "schema": {
+      "$ref": "#/$defs/repositoryArtifact"
+    },
+    "sourceState": {
+      "$ref": "#/$defs/sourceState"
+    },
+    "frozenMaterials": {
+      "$ref": "#/$defs/frozenMaterials"
+    },
+    "summaries": {
+      "$ref": "#/$defs/summaries"
+    },
+    "implementations": {
+      "$ref": "#/$defs/implementations"
+    },
+    "replays": {
+      "$ref": "#/$defs/replays"
+    },
+    "disagreements": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/disagreementPair"
+      }
+    },
+    "mutants": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/cannedThreeMutant"
+        },
+        {
+          "$ref": "#/$defs/rootForgeryMutant"
+        }
+      ],
+      "items": false
+    },
+    "matrixResult": {
+      "$ref": "#/$defs/matrixResult"
+    },
+    "claim": {
+      "$ref": "#/$defs/claim"
+    },
+    "digestAlgorithm": {
+      "const": "sha256-jcs-detached/v1"
+    },
+    "digest": {
+      "$ref": "#/$defs/sha256Digest"
+    }
+  },
+  "$defs": {
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[A-Za-z0-9._/-]+$"
+    },
+    "repositoryArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rawSha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "sourceState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseRevision",
+        "workingTree",
+        "cleanArchiveReplayed"
+      ],
+      "properties": {
+        "baseRevision": {
+          "const": "e301952ae08986e6398a636f04f883036bc88c8d"
+        },
+        "workingTree": {
+          "const": "uncommitted"
+        },
+        "cleanArchiveReplayed": {
+          "const": false
+        }
+      }
+    },
+    "detachedRepositoryArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rawSha256",
+        "detachedField",
+        "detachedDigest"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "detachedField": {
+          "enum": [
+            "bundleDigest",
+            "capabilitySetDigest",
+            "capsuleDigest",
+            "digest",
+            "recipeSetDigest"
+          ]
+        },
+        "detachedDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "frozenMaterials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capsule",
+        "protocol",
+        "semanticRuleSet",
+        "capabilitySet",
+        "recipeSet",
+        "generatorSource",
+        "harnessSource",
+        "installedLedgerSchema",
+        "installedLedgerBuilderSource"
+      ],
+      "properties": {
+        "capsule": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        },
+        "protocol": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "semanticRuleSet": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        },
+        "capabilitySet": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        },
+        "recipeSet": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        },
+        "generatorSource": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "harnessSource": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "installedLedgerSchema": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "installedLedgerBuilderSource": {
+          "$ref": "#/$defs/repositoryArtifact"
+        }
+      }
+    },
+    "summaryArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "rawSha256",
+        "observationManifestDigest"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "observationManifestDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "summaryRelationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model",
+        "rawSummariesDiffer",
+        "observationManifestDigestsDiffer",
+        "pythonCommandDigestsDiffer",
+        "goCommandDigestsEqual",
+        "allOtherSummaryFieldsEqual"
+      ],
+      "properties": {
+        "model": {
+          "const": "same-evidence-except-python-command-identity/v1"
+        },
+        "rawSummariesDiffer": {
+          "const": true
+        },
+        "observationManifestDigestsDiffer": {
+          "const": true
+        },
+        "pythonCommandDigestsDiffer": {
+          "const": true
+        },
+        "goCommandDigestsEqual": {
+          "const": true
+        },
+        "allOtherSummaryFieldsEqual": {
+          "const": true
+        }
+      }
+    },
+    "summaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "installed",
+        "relationship"
+      ],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/summaryArtifact"
+        },
+        "installed": {
+          "$ref": "#/$defs/summaryArtifact"
+        },
+        "relationship": {
+          "$ref": "#/$defs/summaryRelationship"
+        }
+      }
+    },
+    "productionSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "root",
+        "algorithm",
+        "closureDigest"
+      ],
+      "properties": {
+        "root": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "algorithm": {
+          "const": "executable-production-source-closure/v1"
+        },
+        "closureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceCommandDigest",
+        "installedCommandDigest"
+      ],
+      "properties": {
+        "sourceCommandDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "installedCommandDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationId",
+        "implementationVersion",
+        "language",
+        "productionSource",
+        "commands"
+      ],
+      "properties": {
+        "implementationId": {
+          "enum": [
+            "oac.reference.python.supplier-v02",
+            "oac.supplier.go.internal"
+          ]
+        },
+        "implementationVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "language": {
+          "enum": [
+            "Python",
+            "Go"
+          ]
+        },
+        "productionSource": {
+          "$ref": "#/$defs/productionSource"
+        },
+        "commands": {
+          "$ref": "#/$defs/commands"
+        }
+      }
+    },
+    "externalArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactId",
+        "artifactType",
+        "rawSha256",
+        "byteIdenticalBuilds",
+        "verificationMode",
+        "repositoryBytesAvailable",
+        "attestationSourceId"
+      ],
+      "properties": {
+        "artifactId": {
+          "enum": [
+            "seed2-installed-python-wheel",
+            "seed2-final-go-executable"
+          ]
+        },
+        "artifactType": {
+          "enum": [
+            "python-wheel",
+            "go-executable"
+          ]
+        },
+        "rawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "byteIdenticalBuilds": {
+          "const": 2
+        },
+        "verificationMode": {
+          "const": "digest-attestation"
+        },
+        "repositoryBytesAvailable": {
+          "const": false
+        },
+        "attestationSourceId": {
+          "const": "seed2-isolated-replay-record"
+        }
+      }
+    },
+    "implementations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "production",
+        "externalArtifacts",
+        "externalArtifactAttestation",
+        "goIndependenceStatement",
+        "installedPythonLedger"
+      ],
+      "properties": {
+        "production": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/implementation"
+          }
+        },
+        "externalArtifacts": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/externalArtifact"
+          }
+        },
+        "externalArtifactAttestation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "attestationSourceId",
+            "bindingClass",
+            "source"
+          ],
+          "properties": {
+            "attestationSourceId": {
+              "const": "seed2-isolated-replay-record"
+            },
+            "bindingClass": {
+              "const": "self-attested-isolated-process-observation/v1"
+            },
+            "source": {
+              "$ref": "#/$defs/repositoryArtifact"
+            }
+          }
+        },
+        "goIndependenceStatement": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        },
+        "installedPythonLedger": {
+          "$ref": "#/$defs/installedPythonLedger"
+        }
+      }
+    },
+    "installedPythonLedger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact",
+        "schema",
+        "builderSource",
+        "replayBindingClass",
+        "wheelRawSha256",
+        "wheelEntryPreimageDigest",
+        "wheelEntryCount",
+        "pythonExecutableRawSha256",
+        "semanticProductionSourceClosureDigest",
+        "environmentClosureDigest",
+        "runtimeBindingDigest",
+        "repositoryInputClosureDigest",
+        "installedPayloadClosureDigest",
+        "installedDistributionFileLedgerDigest",
+        "payloadByteMatch",
+        "matchedPayloadFiles",
+        "distributionCount",
+        "environmentFileCount",
+        "limitations"
+      ],
+      "properties": {
+        "artifact": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        },
+        "schema": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "builderSource": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "replayBindingClass": {
+          "const": "self-attested-isolated-process-observation/v1"
+        },
+        "wheelRawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "wheelEntryPreimageDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "wheelEntryCount": {
+          "const": 116
+        },
+        "pythonExecutableRawSha256": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "semanticProductionSourceClosureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "environmentClosureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "runtimeBindingDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "repositoryInputClosureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "installedPayloadClosureDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "installedDistributionFileLedgerDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "payloadByteMatch": {
+          "const": true
+        },
+        "matchedPayloadFiles": {
+          "const": 115
+        },
+        "distributionCount": {
+          "const": 13
+        },
+        "environmentFileCount": {
+          "const": 442
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "const": "python-standard-library-not-covered"
+            },
+            {
+              "const": "operating-system-not-covered"
+            },
+            {
+              "const": "cryptographic-execution-provenance-not-covered"
+            }
+          ],
+          "items": false
+        }
+      }
+    },
+    "legacyReplay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact",
+        "passed",
+        "failed"
+      ],
+      "properties": {
+        "artifact": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "passed": {
+          "const": 33
+        },
+        "failed": {
+          "const": 0
+        }
+      }
+    },
+    "phaseAReplay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact",
+        "bundle",
+        "requirementSet",
+        "resourceProfile",
+        "required",
+        "passed",
+        "failed",
+        "requiredPassed"
+      ],
+      "properties": {
+        "artifact": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "bundle": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        },
+        "requirementSet": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "resourceProfile": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "required": {
+          "const": 24
+        },
+        "passed": {
+          "const": 24
+        },
+        "failed": {
+          "const": 0
+        },
+        "requiredPassed": {
+          "const": true
+        }
+      }
+    },
+    "demoReplay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact",
+        "caseId",
+        "verdict",
+        "planStatus",
+        "effectCeiling",
+        "obligationCount",
+        "planDigest",
+        "certificateDigest"
+      ],
+      "properties": {
+        "artifact": {
+          "$ref": "#/$defs/repositoryArtifact"
+        },
+        "caseId": {
+          "const": "SC-001"
+        },
+        "verdict": {
+          "const": "ACCEPT"
+        },
+        "planStatus": {
+          "const": "planned"
+        },
+        "effectCeiling": {
+          "const": "zero_effect"
+        },
+        "obligationCount": {
+          "const": 17
+        },
+        "planDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "certificateDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    },
+    "replays": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bindingClass",
+        "artifactExecutionProvenance",
+        "completeRuntimeEnvironmentReproducibility",
+        "legacyTck",
+        "phaseA",
+        "demo",
+        "installedCapability"
+      ],
+      "properties": {
+        "bindingClass": {
+          "const": "self-attested-isolated-process-observation/v1"
+        },
+        "artifactExecutionProvenance": {
+          "const": "not-cryptographically-established"
+        },
+        "completeRuntimeEnvironmentReproducibility": {
+          "const": false
+        },
+        "legacyTck": {
+          "$ref": "#/$defs/legacyReplay"
+        },
+        "phaseA": {
+          "$ref": "#/$defs/phaseAReplay"
+        },
+        "demo": {
+          "$ref": "#/$defs/demoReplay"
+        },
+        "installedCapability": {
+          "$ref": "#/$defs/repositoryArtifact"
+        }
+      }
+    },
+    "disagreementPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "incidentId",
+        "incident",
+        "resolution"
+      ],
+      "properties": {
+        "incidentId": {
+          "type": "string",
+          "pattern": "^DIS-00[2-8]$"
+        },
+        "incident": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        },
+        "resolution": {
+          "$ref": "#/$defs/detachedRepositoryArtifact"
+        }
+      }
+    },
+    "mutantBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mutantId",
+        "artifactDigest",
+        "frozenCasesPassed",
+        "rejected",
+        "rejectedBy",
+        "conclusion"
+      ],
+      "properties": {
+        "mutantId": {
+          "type": "string"
+        },
+        "artifactDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "frozenCasesPassed": {
+          "const": 3
+        },
+        "rejected": {
+          "const": true
+        },
+        "rejectedBy": {
+          "type": "string"
+        },
+        "conclusion": {
+          "type": "string"
+        }
+      }
+    },
+    "cannedThreeMutant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mutantId",
+        "artifactDigest",
+        "frozenCasesPassed",
+        "rejected",
+        "rejectedBy",
+        "conclusion"
+      ],
+      "properties": {
+        "mutantId": {
+          "const": "oac.mutant.canned-three"
+        },
+        "artifactDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "frozenCasesPassed": {
+          "const": 3
+        },
+        "rejected": {
+          "const": true
+        },
+        "rejectedBy": {
+          "const": "generated:scope-order"
+        },
+        "conclusion": {
+          "const": "canned-three-rejected"
+        }
+      }
+    },
+    "rootForgeryMutant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mutantId",
+        "artifactDigest",
+        "frozenCasesPassed",
+        "rejected",
+        "rejectedBy",
+        "conclusion"
+      ],
+      "properties": {
+        "mutantId": {
+          "const": "oac.mutant.root-unknown-forgery"
+        },
+        "artifactDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "frozenCasesPassed": {
+          "const": 3
+        },
+        "rejected": {
+          "const": true
+        },
+        "rejectedBy": {
+          "const": "generated:candidate-root"
+        },
+        "conclusion": {
+          "const": "root-unknown-forgery-rejected"
+        }
+      }
+    },
+    "validationCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frozen",
+        "probes",
+        "total",
+        "passed"
+      ],
+      "properties": {
+        "frozen": {
+          "const": 5
+        },
+        "probes": {
+          "const": 20
+        },
+        "total": {
+          "const": 25
+        },
+        "passed": {
+          "const": 25
+        }
+      }
+    },
+    "derivationCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frozen",
+        "publicGenerated",
+        "total",
+        "passed"
+      ],
+      "properties": {
+        "frozen": {
+          "const": 3
+        },
+        "publicGenerated": {
+          "const": 24
+        },
+        "total": {
+          "const": 27
+        },
+        "passed": {
+          "const": 27
+        }
+      }
+    },
+    "matrixResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "totalCases",
+        "passedCases",
+        "openDisagreements",
+        "validation",
+        "derivation"
+      ],
+      "properties": {
+        "status": {
+          "const": "PASS"
+        },
+        "totalCases": {
+          "const": 52
+        },
+        "passedCases": {
+          "const": 52
+        },
+        "openDisagreements": {
+          "const": 0
+        },
+        "validation": {
+          "$ref": "#/$defs/validationCounts"
+        },
+        "derivation": {
+          "$ref": "#/$defs/derivationCounts"
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ceiling",
+        "scope",
+        "exclusions",
+        "sdistDisposition",
+        "archiveDisposition",
+        "executionProvenanceDisposition",
+        "runtimeEnvironmentDisposition"
+      ],
+      "properties": {
+        "ceiling": {
+          "const": "internal-bounded-cross-language-two-implementation-parity"
+        },
+        "scope": {
+          "const": "exact frozen and public generated seed-2 capsule cases only"
+        },
+        "exclusions": {
+          "type": "array",
+          "minItems": 11,
+          "maxItems": 11,
+          "uniqueItems": true,
+          "prefixItems": [
+            {
+              "const": "clean-room independence"
+            },
+            {
+              "const": "organizational independence"
+            },
+            {
+              "const": "complete Supplier v0.2 conformance"
+            },
+            {
+              "const": "complete OAC conformance"
+            },
+            {
+              "const": "enterprise correctness"
+            },
+            {
+              "const": "standard consensus"
+            },
+            {
+              "const": "clean Git archive reproducibility"
+            },
+            {
+              "const": "sdist as final evidence"
+            },
+            {
+              "const": "hidden or held-out generalization"
+            },
+            {
+              "const": "cryptographic replay-to-artifact execution provenance"
+            },
+            {
+              "const": "complete Python standard-library and operating-system reproducibility"
+            }
+          ],
+          "items": false
+        },
+        "sdistDisposition": {
+          "const": "excluded-from-final-evidence"
+        },
+        "archiveDisposition": {
+          "const": "working-tree-evidence-not-clean-archive"
+        },
+        "executionProvenanceDisposition": {
+          "const": "self-attested-not-cryptographic"
+        },
+        "runtimeEnvironmentDisposition": {
+          "const": "installed-distributions-bound-standard-library-and-os-excluded"
+        }
+      }
+    }
+  }
+}

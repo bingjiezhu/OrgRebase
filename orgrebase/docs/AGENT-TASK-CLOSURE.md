@@ -65,7 +65,7 @@ MCP is not used. Tool calling uses the equivalent `ToolContract`. Knowledge-base
 |---:|---|---|---|---|---|---|
 | 1 | Task intake | `TemplateBoundTaskInterpreter` | `TaskRequest`, template catalog | `TemplateCandidate`, requirement candidates | template and slot allowlist | `examples/input/enterprise-quote-task.json`; formation tests |
 | 2 | Template match | `TaskTemplateMatcher` | candidate + catalog | exact active template | deliverable kind / explicit template binding | interpretation receipt |
-| 3 | Coalition plan | `CoalitionPlanner` | admitted slots + capability cards | `CoalitionPlan` | enumerate all 15 non-empty subsets; coverage → size → cost → lexical | `formation/coalition-plan.json` |
+| 3 | Coalition plan | `CoalitionPlanner` | admitted slots + capability cards | `CoalitionPlan` | derive required domains; require one eligible provider per domain; missing or ambiguous providers fail closed | `formation/coalition-plan.json` |
 | 4 | Domain read | Domain provider / optional transport | `DomainReadRequest` and actor projection | `DomainReadProjection`, Claim candidates | exact domain, actor, purpose, slot, projection | admission decisions and context tests |
 | 5 | Admission | `AdmissionController` | template slot, source-bound candidate, revisions | admitted reference or rejection | authority, source, freshness, purpose, recipient, org/task scope | eight admission decisions |
 | 6 | Context compile | `TaskContextCompiler` | admitted references + coalition | task manifest + actor projections | minimum sufficient set; explicit exclusions | `formation/task-context.json` |

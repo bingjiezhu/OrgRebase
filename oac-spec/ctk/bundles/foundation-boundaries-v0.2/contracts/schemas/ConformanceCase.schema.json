@@ -1,0 +1,1295 @@
+{
+  "$defs": {
+    "admission": {
+      "enum": [
+        "admitted",
+        "candidate",
+        "disputed",
+        "retracted"
+      ]
+    },
+    "base64": {
+      "minLength": 1,
+      "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+      "type": "string"
+    },
+    "canonicalizeExpectation": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/completedExpectationBase"
+            },
+            {
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/canonicalizeResult"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "$ref": "#/$defs/errorExpectation"
+        }
+      ]
+    },
+    "canonicalizeInput": {
+      "additionalProperties": false,
+      "properties": {
+        "rawBase64": {
+          "$ref": "#/$defs/base64"
+        }
+      },
+      "required": [
+        "rawBase64"
+      ],
+      "type": "object"
+    },
+    "canonicalizeResult": {
+      "additionalProperties": false,
+      "properties": {
+        "canonicalBase64": {
+          "$ref": "#/$defs/base64"
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      },
+      "required": [
+        "canonicalBase64",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "caseId": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string"
+    },
+    "closureEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "admission": {
+          "$ref": "#/$defs/admission"
+        },
+        "covered": {
+          "type": "boolean"
+        },
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "result": {
+          "$ref": "#/$defs/triValue"
+        },
+        "source": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "target": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target",
+        "result",
+        "admission",
+        "covered"
+      ],
+      "type": "object"
+    },
+    "closureMicroExpectation": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/completedExpectationBase"
+            },
+            {
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/closureMicroResult"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "$ref": "#/$defs/errorExpectation"
+        }
+      ]
+    },
+    "closureMicroInput": {
+      "additionalProperties": false,
+      "properties": {
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/closureEdge"
+          },
+          "maxItems": 1024,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "maxDepth": {
+          "maximum": 32,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "maxPathPrefixes": {
+          "maximum": 4096,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/closureNode"
+          },
+          "maxItems": 256,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "root": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "required": [
+        "root",
+        "maxDepth",
+        "maxPathPrefixes",
+        "nodes",
+        "edges"
+      ],
+      "type": "object"
+    },
+    "closureMicroResult": {
+      "additionalProperties": false,
+      "properties": {
+        "falseFrontiers": {
+          "items": {
+            "$ref": "#/$defs/falseFrontier"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "kind": {
+          "const": "ClosureMicroReport"
+        },
+        "paths": {
+          "items": {
+            "$ref": "#/$defs/closurePath"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "rootRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "unresolvedRefs": {
+          "$ref": "#/$defs/stringSet"
+        }
+      },
+      "required": [
+        "kind",
+        "rootRef",
+        "paths",
+        "falseFrontiers",
+        "unresolvedRefs"
+      ],
+      "type": "object"
+    },
+    "closureNode": {
+      "additionalProperties": false,
+      "properties": {
+        "admission": {
+          "$ref": "#/$defs/admission"
+        },
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "required": [
+        "id",
+        "admission"
+      ],
+      "type": "object"
+    },
+    "closurePath": {
+      "additionalProperties": false,
+      "properties": {
+        "edgeRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "reasonCodes": {
+          "$ref": "#/$defs/reasonCodes"
+        },
+        "state": {
+          "enum": [
+            "affected",
+            "unknown"
+          ]
+        },
+        "targetRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "edgeRefs",
+        "reasonCodes",
+        "state",
+        "targetRef",
+        "truncated"
+      ],
+      "type": "object"
+    },
+    "completedExpectationBase": {
+      "additionalProperties": false,
+      "properties": {
+        "domainVerdict": {
+          "enum": [
+            "ACCEPT",
+            "REJECT",
+            "PROVISIONAL",
+            "UNKNOWN"
+          ]
+        },
+        "forbiddenReasonCodes": {
+          "$ref": "#/$defs/reasonCodes"
+        },
+        "requiredReasonCodes": {
+          "$ref": "#/$defs/reasonCodes"
+        },
+        "result": {
+          "type": "object"
+        },
+        "sutStatus": {
+          "const": "COMPLETED"
+        }
+      },
+      "required": [
+        "sutStatus",
+        "result"
+      ],
+      "type": "object"
+    },
+    "deriveIdentifierExpectation": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/completedExpectationBase"
+            },
+            {
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/deriveIdentifierResult"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "$ref": "#/$defs/errorExpectation"
+        }
+      ]
+    },
+    "deriveIdentifierInput": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "$ref": "#/$defs/evaluationIdentifierFields"
+            },
+            "identifierKind": {
+              "const": "evaluation"
+            }
+          },
+          "required": [
+            "identifierKind",
+            "fields"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "$ref": "#/$defs/pathIdentifierFields"
+            },
+            "identifierKind": {
+              "const": "path"
+            }
+          },
+          "required": [
+            "identifierKind",
+            "fields"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "$ref": "#/$defs/obligationIdentifierFields"
+            },
+            "identifierKind": {
+              "const": "obligation"
+            }
+          },
+          "required": [
+            "identifierKind",
+            "fields"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/instanceIdentifierFieldsBase"
+                },
+                {
+                  "properties": {
+                    "body": {
+                      "$ref": "#/$defs/roleInstanceBody"
+                    }
+                  }
+                }
+              ]
+            },
+            "identifierKind": {
+              "const": "role-instance"
+            }
+          },
+          "required": [
+            "identifierKind",
+            "fields"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/instanceIdentifierFieldsBase"
+                },
+                {
+                  "properties": {
+                    "body": {
+                      "$ref": "#/$defs/workUnitBody"
+                    }
+                  }
+                }
+              ]
+            },
+            "identifierKind": {
+              "const": "work-unit"
+            }
+          },
+          "required": [
+            "identifierKind",
+            "fields"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/instanceIdentifierFieldsBase"
+                },
+                {
+                  "properties": {
+                    "body": {
+                      "$ref": "#/$defs/planDecisionBody"
+                    }
+                  }
+                }
+              ]
+            },
+            "identifierKind": {
+              "const": "plan-decision"
+            }
+          },
+          "required": [
+            "identifierKind",
+            "fields"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "deriveIdentifierResult": {
+      "additionalProperties": false,
+      "properties": {
+        "identifier": {
+          "pattern": "^urn:oac:(?:mvp:(?:evaluation|path|obligation):[0-9a-f]{24}|id:sha256:v1:(?:role-instance|work-unit|plan-decision):[0-9a-f]{64})$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "identifier"
+      ],
+      "type": "object"
+    },
+    "errorExpectation": {
+      "additionalProperties": false,
+      "properties": {
+        "errorCode": {
+          "$ref": "#/$defs/reasonCode"
+        },
+        "sutStatus": {
+          "enum": [
+            "UNSUPPORTED",
+            "RESOURCE_EXHAUSTED",
+            "ERROR"
+          ]
+        }
+      },
+      "required": [
+        "sutStatus",
+        "errorCode"
+      ],
+      "type": "object"
+    },
+    "evaluationIdentifierFields": {
+      "additionalProperties": false,
+      "properties": {
+        "changeDigest": {
+          "$ref": "#/$defs/nullableDigest"
+        },
+        "changeSubjectRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "predicateVersion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reasonCodes": {
+          "$ref": "#/$defs/reasonCodes"
+        },
+        "result": {
+          "$ref": "#/$defs/triValue"
+        },
+        "snapshotDigest": {
+          "$ref": "#/$defs/nullableDigest"
+        },
+        "sourceRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "witnessRefs": {
+          "$ref": "#/$defs/stringSet"
+        }
+      },
+      "required": [
+        "snapshotDigest",
+        "changeDigest",
+        "changeSubjectRef",
+        "sourceRef",
+        "predicateVersion",
+        "result",
+        "reasonCodes",
+        "witnessRefs"
+      ],
+      "type": "object"
+    },
+    "extensions": {
+      "additionalProperties": true,
+      "propertyNames": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "falseFrontier": {
+      "additionalProperties": false,
+      "properties": {
+        "authoritative": {
+          "type": "boolean"
+        },
+        "edgeId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "edgeRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "sourceRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "targetRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "required": [
+        "authoritative",
+        "edgeId",
+        "edgeRefs",
+        "sourceRef",
+        "targetRef"
+      ],
+      "type": "object"
+    },
+    "instanceIdentifierFieldsBase": {
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "type": "object"
+        },
+        "changeDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "snapshotDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      },
+      "required": [
+        "snapshotDigest",
+        "changeDigest",
+        "body"
+      ],
+      "type": "object"
+    },
+    "nonEmptyString": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "type": "string"
+    },
+    "nonNegativeSafeInteger": {
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "nullableDigest": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "obligationIdentifierFields": {
+      "additionalProperties": false,
+      "properties": {
+        "changeDigest": {
+          "$ref": "#/$defs/nullableDigest"
+        },
+        "obligationType": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "origin": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "pathRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "requiredRoleRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "resolutionState": {
+          "enum": [
+            "affected",
+            "unknown"
+          ]
+        },
+        "snapshotDigest": {
+          "$ref": "#/$defs/nullableDigest"
+        },
+        "targetRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "required": [
+        "snapshotDigest",
+        "changeDigest",
+        "origin",
+        "targetRef",
+        "requiredRoleRef",
+        "obligationType",
+        "resolutionState",
+        "pathRefs"
+      ],
+      "type": "object"
+    },
+    "operation": {
+      "enum": [
+        "canonicalize",
+        "deriveIdentifier",
+        "witness",
+        "strongKleene",
+        "closureMicro",
+        "resourceCheck"
+      ]
+    },
+    "pathIdentifierFields": {
+      "additionalProperties": false,
+      "properties": {
+        "changeDigest": {
+          "$ref": "#/$defs/nullableDigest"
+        },
+        "dutyRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "edgeRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "evaluationRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "origin": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "ruleRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "snapshotDigest": {
+          "$ref": "#/$defs/nullableDigest"
+        },
+        "state": {
+          "enum": [
+            "affected",
+            "unknown",
+            "unaffected_proven",
+            "out_of_declared_scope"
+          ]
+        },
+        "targetRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "snapshotDigest",
+        "changeDigest",
+        "targetRef",
+        "state",
+        "edgeRefs",
+        "ruleRefs",
+        "evaluationRefs",
+        "dutyRefs",
+        "origin",
+        "truncated"
+      ],
+      "type": "object"
+    },
+    "planDecisionBody": {
+      "additionalProperties": false,
+      "properties": {
+        "disposition": {
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "inputClass": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reasonCodes": {
+          "$ref": "#/$defs/reasonCodes"
+        },
+        "subjectRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "required": [
+        "subjectRef",
+        "inputClass",
+        "disposition",
+        "reasonCodes"
+      ],
+      "type": "object"
+    },
+    "reasonCode": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^[A-Z][A-Z0-9_]*(?::[A-Za-z][A-Za-z0-9_]*)?$",
+      "type": "string"
+    },
+    "reasonCodes": {
+      "items": {
+        "$ref": "#/$defs/reasonCode"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "resourceCheckExpectation": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/completedExpectationBase"
+            },
+            {
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/resourceCheckResult"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "$ref": "#/$defs/errorExpectation"
+        }
+      ]
+    },
+    "resourceCheckInput": {
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "adapterTimeoutMs": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxAdapterOutputBytes": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxBundleBytes": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxBundleFiles": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxCaseBytes": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxDuties": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxEdges": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxEvaluations": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxJsonDepth": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxNodes": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxPathPrefixes": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxPlanBytes": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxRequestBytes": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxResourceBytes": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxRules": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxSemanticDepth": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxTotalWitnessRefs": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        },
+        "maxWitnessRefsPerEvaluation": {
+          "$ref": "#/$defs/nonNegativeSafeInteger"
+        }
+      },
+      "type": "object"
+    },
+    "resourceCheckResult": {
+      "additionalProperties": false,
+      "properties": {
+        "profileId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "withinProfile": {
+          "const": true
+        }
+      },
+      "required": [
+        "profileId",
+        "withinProfile"
+      ],
+      "type": "object"
+    },
+    "roleInstanceBody": {
+      "additionalProperties": false,
+      "properties": {
+        "obligationRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "principalRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "roleDefinitionRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "required": [
+        "roleDefinitionRef",
+        "principalRef",
+        "obligationRefs"
+      ],
+      "type": "object"
+    },
+    "sha256Digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "stringSet": {
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "strongKleeneExpectation": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/completedExpectationBase"
+            },
+            {
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/strongKleeneResult"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "$ref": "#/$defs/errorExpectation"
+        }
+      ]
+    },
+    "strongKleeneInput": {
+      "additionalProperties": false,
+      "properties": {
+        "operator": {
+          "enum": [
+            "all",
+            "any"
+          ]
+        },
+        "values": {
+          "items": {
+            "$ref": "#/$defs/triValue"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "operator",
+        "values"
+      ],
+      "type": "object"
+    },
+    "strongKleeneResult": {
+      "additionalProperties": false,
+      "properties": {
+        "result": {
+          "$ref": "#/$defs/triValue"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "type": "object"
+    },
+    "triValue": {
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ]
+    },
+    "witnessExpectation": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/completedExpectationBase"
+            },
+            {
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/witnessResult"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "$ref": "#/$defs/errorExpectation"
+        }
+      ]
+    },
+    "witnessInput": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "const": "encode"
+            },
+            "pointer": {
+              "maxLength": 4096,
+              "pattern": "^(?:|/.*)$",
+              "type": "string"
+            },
+            "resourceId": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          },
+          "required": [
+            "mode",
+            "resourceId",
+            "pointer"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "const": "decode"
+            },
+            "witnessRef": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          },
+          "required": [
+            "mode",
+            "witnessRef"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "witnessResult": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "witnessRef": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          },
+          "required": [
+            "witnessRef"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "pointer": {
+              "maxLength": 4096,
+              "pattern": "^(?:|/.*)$",
+              "type": "string"
+            },
+            "resourceId": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          },
+          "required": [
+            "resourceId",
+            "pointer"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "workUnitBody": {
+      "additionalProperties": false,
+      "properties": {
+        "accountableRoleInstanceRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "obligationRefs": {
+          "$ref": "#/$defs/stringSet"
+        },
+        "roleInstanceRefs": {
+          "$ref": "#/$defs/stringSet"
+        }
+      },
+      "required": [
+        "roleInstanceRefs",
+        "accountableRoleInstanceRef",
+        "obligationRefs"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://oac.dev/schemas/ctk/v0alpha2/ConformanceCase.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "canonicalize"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "expect": {
+            "$ref": "#/$defs/canonicalizeExpectation"
+          },
+          "input": {
+            "$ref": "#/$defs/canonicalizeInput"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "deriveIdentifier"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "expect": {
+            "$ref": "#/$defs/deriveIdentifierExpectation"
+          },
+          "input": {
+            "$ref": "#/$defs/deriveIdentifierInput"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "witness"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "expect": {
+            "$ref": "#/$defs/witnessExpectation"
+          },
+          "input": {
+            "$ref": "#/$defs/witnessInput"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "strongKleene"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "expect": {
+            "$ref": "#/$defs/strongKleeneExpectation"
+          },
+          "input": {
+            "$ref": "#/$defs/strongKleeneInput"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "closureMicro"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "expect": {
+            "$ref": "#/$defs/closureMicroExpectation"
+          },
+          "input": {
+            "$ref": "#/$defs/closureMicroInput"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "resourceCheck"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "expect": {
+            "$ref": "#/$defs/resourceCheckExpectation"
+          },
+          "input": {
+            "$ref": "#/$defs/resourceCheckInput"
+          }
+        }
+      }
+    },
+    {
+      "else": {
+        "properties": {
+          "operation": {
+            "$ref": "#/$defs/operation"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "testTarget": {
+            "const": "HARNESS"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "expect": {
+            "additionalProperties": false,
+            "properties": {
+              "harnessStatus": {
+                "const": "BOUNDARY_ENFORCED"
+              }
+            },
+            "required": [
+              "harnessStatus"
+            ],
+            "type": "object"
+          },
+          "input": {
+            "additionalProperties": false,
+            "properties": {
+              "probe": {
+                "enum": [
+                  "bundle-traversal",
+                  "bundle-absolute",
+                  "bundle-backslash",
+                  "bundle-nul",
+                  "bundle-duplicate",
+                  "bundle-casefold",
+                  "bundle-missing",
+                  "bundle-unlisted",
+                  "bundle-digest",
+                  "bundle-size",
+                  "bundle-symlink",
+                  "bundle-hardlink",
+                  "bundle-fifo",
+                  "response-malformed",
+                  "response-duplicate-key",
+                  "response-invalid-utf8",
+                  "response-wrong-request",
+                  "response-partial-exhaustion",
+                  "response-timeout",
+                  "response-crash",
+                  "response-output-overflow",
+                  "response-no-input-read"
+                ]
+              }
+            },
+            "required": [
+              "probe"
+            ],
+            "type": "object"
+          },
+          "operation": {
+            "const": "harnessProbe"
+          }
+        }
+      }
+    }
+  ],
+  "description": "Structural schema for the six frozen Phase A stdio-v1 conformance operations.",
+  "properties": {
+    "caseId": {
+      "$ref": "#/$defs/caseId"
+    },
+    "expect": {
+      "type": "object"
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    },
+    "input": {
+      "type": "object"
+    },
+    "operation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/operation"
+        },
+        {
+          "const": "harnessProbe"
+        }
+      ]
+    },
+    "requirementRefs": {
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "testTarget": {
+      "enum": [
+        "SUT",
+        "HARNESS"
+      ]
+    }
+  },
+  "required": [
+    "caseId",
+    "operation",
+    "input",
+    "expect",
+    "requirementRefs",
+    "testTarget"
+  ],
+  "title": "ConformanceCase",
+  "type": "object"
+}

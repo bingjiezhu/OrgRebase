@@ -117,10 +117,12 @@
     }catch(error){if(turn===sequence)failure(error);}
   }
   async function refresh(append=false) {
+    const session=client.session?.();
+    if(!session || (session.authentication_required && !session.authenticated))return;
     const turn=++sequence;
     try {const [options,page]=await Promise.all([client.json("/api/workspace/source-readmission-options"),client.json(`/api/workspace/source-readmission-groups?limit=20${append&&cursor?`&after=${encodeURIComponent(cursor)}`:""}`)]);
       if(turn!==sequence)return;if(options.schema_version!=="orgrebase.source-readmission-options.v1" || !Array.isArray(page.items))throw new Error("SOURCE_GROUP_OPTIONS_INVALID");
-      candidates=options.candidates;available=options.allowed_actions.includes("CREATE");items=append?[...items,...page.items]:page.items;cursor=page.next_cursor;renderCandidates();renderList();
+      notice("");candidates=options.candidates;available=options.allowed_actions.includes("CREATE");items=append?[...items,...page.items]:page.items;cursor=page.next_cursor;renderCandidates();renderList();
       if(failedDraftId) {
         const id=failedDraftId;
         try {
@@ -154,6 +156,7 @@
   }
   node("source-group-form").addEventListener("submit",create);node("source-group-refresh").addEventListener("click",()=>refresh());node("source-group-more").addEventListener("click",()=>refresh(true));node("source-group-reason").addEventListener("input",()=>{if(!failedDraftId)draftId=null;});node("source-group-check-attempt").addEventListener("click",checkAttempt);
   window.addEventListener("orgrebase:workspacechange",()=>refresh());window.addEventListener("orgrebase:languagechange",translate);
-  window.addEventListener("orgrebase:sessionended",()=>{++sequence;items=[];candidates=[];chosen.clear();selected=null;acknowledged=null;available=false;draftId=null;failedDraftId=null;attempt=null;busy=false;node("source-group-reason").value="";renderCandidates();renderList();renderDetail();renderAttempt();});
+  window.addEventListener("orgrebase:sessionchange",()=>refresh());
+  window.addEventListener("orgrebase:sessionended",()=>{++sequence;notice("");items=[];candidates=[];chosen.clear();selected=null;acknowledged=null;available=false;draftId=null;failedDraftId=null;attempt=null;busy=false;node("source-group-reason").value="";renderCandidates();renderList();renderDetail();renderAttempt();});
   window.OrgRebaseSourceReadmission=Object.freeze({refresh,select});translate();refresh();
 })();

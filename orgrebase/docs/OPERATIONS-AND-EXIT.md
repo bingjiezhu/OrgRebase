@@ -52,6 +52,76 @@ OAC 安装探测最多等待 10 秒，单次编译、校验或降低调用最多
 `PILOT_INDEPENDENT_VERIFICATION_TIMEOUT`，不会报告验收成功。保留该次工作目录调查，复验时使用新目录。
 以上是本地工具的等待上限，不是生产服务的 SLA。
 
+## 单次周期作业（部署方调度）
+
+仓库提供 `scripts/run_enterprise_operations_cycle.py`，将已有的 `source-sync`、
+`change-worker`、`effect-worker`、管理员隐私清扫 API 与只读 `operations` 投影接成**一次有界作业**。
+它不建立第二套队列、长期进程或消息平台。按工作区分别部署一个配置和状态文件，交给客户已有的
+systemd timer / Kubernetes CronJob 等调度器；调度器负责启动、捕获退出码与 stdout JSON、检测作业缺席，
+并把告警送到客户选定的责任人。当前产品只输出告警码，**没有实际投递通知**。
+
+配置必须是不可由组/其他用户写入的普通 JSON 文件；worker 子配置也必须是同一工作区，且继续受各自
+`ORGREBASE_*` 部署配置、当前身份、源/目标准入和预算约束。令牌只通过每次调用时读取的环境变量从
+部署密钥管理器注入，不写入配置、命令行、状态文件或成功回执。最小的只读配置为：
+
+```json
+{
+  "schema_version": "orgrebase.enterprise-operations-cycle.v1",
+  "origin": "https://orgrebase.example",
+  "workspace_id": "renewals",
+  "read_token_variable": "ORGREBASE_OPS_READ_TOKEN",
+  "max_event_pages": 5,
+  "max_unresolved_changes": 100,
+  "max_ready_effects": 100,
+  "max_unknown_age_seconds": 60,
+  "max_cycle_gap_seconds": 900
+}
+```
+
+如果服务 HTTPS 证书使用企业私有 CA，在同一配置中显式增加
+`"ca_bundle": "/private/ops/enterprise-ca.pem"`。该路径必须是绝对路径，指向可读、非符号链接的
+普通 PEM 证书文件；组和其他用户不得具有写权限，文件上限为 1 MiB。未配置时使用客户端默认 TLS
+信任库，不从 `SSL_CERT_FILE` 环境变量或代理设置改变信任，也不跟随重定向。无论哪种方式，证书链与主机名校验始终开启；
+文件缺失、无效 PEM 或不安全文件权限返回不含路径的 `OPERATIONS_CA_BUNDLE_UNAVAILABLE`，不受信
+证书或主机名不匹配返回 `OPERATIONS_REQUEST_UNAVAILABLE`，不会推进观察游标。
+
+在产品源码 checkout 的锁定环境中先运行只读观察；状态目录由部署方预建且仅作业身份可写：
+
+```sh
+uv run --project /path/to/orgrebase --frozen \
+  python /path/to/orgrebase/scripts/run_enterprise_operations_cycle.py \
+  --config /private/ops/renewals.json \
+  --state-file /private/ops/renewals.state.json \
+  --mode observe
+```
+
+`observe` 只访问受权 `GET /api/workspace/operations`，不会调用 worker 或隐私清扫；它保存低敏事件游标和
+上次观察时间，供后续分页与漏跑检测使用。一次最多读取 `max_event_pages` 页；超限返回
+`OPERATIONS_EVENT_BACKLOG_PARTIAL`，保留下一轮可继续的游标。UNKNOWN、来源覆盖不足、候选或效果积压、
+上次周期超时都有独立告警码。首次运行无上次心跳，不把“未知历史运行”伪装成漏跑已测；调度器仍须在
+完全没有新作业记录时主动报警，因为停止运行的进程不能给自己发送告警。
+
+完成工作区真实身份、只读来源与预算验收后，部署方可以在同一配置内显式添加
+`source_config`、`change_config` 的绝对路径、`purge_private: true` 和
+`admin_token_variable`，再使用 `--mode run`。每轮来源至多 `max_source_pages` 页；候选 worker
+沿用自己的预算与幂等回执；隐私清扫每次 API 至多 1000 条、整轮至多 `max_purge_batches` 次。
+只有同时配置 `effect_config`、`effect_mode: "dispatch"` **并**加
+`--allow-target-dispatch` 才执行已排队的目标命令；当前真实目标资格未完成时保持默认
+`effect_mode: "disabled"`。`effect_mode: "observe"` 只执行既有目标只读观察，但仍需客户目标读取资格。
+脚本不授予审批、Apply 或写入权限；任何业务状态变化仍由现有受权 worker、批准与效果状态机控制。
+
+成功且无告警退出码为 0；完成但有待处置告警为 3；身份拒绝、HTTP 失败、超时或结果不可信为 2，
+打印不含令牌和原文的稳定错误码。worker 超时的动作结果为 **UNKNOWN_OR_INCOMPLETE**，脚本不会立即
+重新发送；先回读同一来源游标、候选 attempt 或 effect operation，再依原有恢复规则处理。
+隐私清扫响应丢失同样不能记成已清空。`private_records_purged` 只证明本轮应用层清扫数，
+不证明 WAL、备份、复制或模型提供方原文已删除。状态文件只保存观察时间、工作区、游标和检查点；
+文件锁阻止同工作区并发周期。该脚本属于部署材料，现有 wheel 并未把 `scripts/` 安装成运行时命令；
+使用时须随已审定的源码制品交付并固定版本，不能把任意本地文件当成受信生产脚本。
+
+随源码的 `tests/test_enterprise_operations_cycle.py` 与既有 HTTPS worker/API 测试覆盖受控机制；
+真实客户 IdP/token 轮换、来源新鲜度、长期调度、告警到人、目标写回、清扫积压和客户认可的阈值仍需
+在选定环境逐项执行，当前为 **NOT_RUN**。
+
 ## 数据退出与服务撤回
 
 退出顺序应明确由客户接受：冻结新的业务批准和执行准入；盘点所有在途和 UNKNOWN 效果；导出已完成业务对象、完整证据及独立审计检查点；按组织留存/删除规则处理私有来源；撤销来源、目标和 IdP 凭据；最后下线服务。任何尚未确认的外部效果必须随退出交接，不得把它从分母或导出清单删掉。

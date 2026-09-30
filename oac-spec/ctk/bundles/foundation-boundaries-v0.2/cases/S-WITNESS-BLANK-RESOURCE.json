@@ -1,0 +1,16 @@
+{
+  "caseId": "S-WITNESS-BLANK-RESOURCE",
+  "expect": {
+    "errorCode": "APPLICABILITY_WITNESS_MISMATCH",
+    "sutStatus": "ERROR"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "%20#/spec"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

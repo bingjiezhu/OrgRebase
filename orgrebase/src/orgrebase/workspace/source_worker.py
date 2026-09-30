@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import os
 import re
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
+from contextlib import nullcontext
 from datetime import date
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
+from orgrebase.clock import utc_datetime
 from orgrebase.digest import sha256_digest
 from orgrebase.domain import IntegrityError, ObjectState, VersionedObject
 from orgrebase.workspace.dataverse import DataverseSettings, SourceError
@@ -36,6 +38,7 @@ class WorkspaceSourceAdmission:
         self.service = service
         self.settings = settings
         self.mappings = mappings
+        self.confirmed_binding_digest = confirmed_binding_digest
         try:
             service.current_quote()
         except KeyError:
@@ -66,7 +69,7 @@ class WorkspaceSourceAdmission:
             )],
         })
 
-    def source_unavailable(self, error: SourceError) -> None:
+    def source_unavailable(self, error: SourceError, *, connection: Any | None = None) -> None:
         code, _, details = str(error).partition(":")
         if code not in {
             "SOURCE_AUTHENTICATION_FAILED", "SOURCE_PERMISSION_DENIED", "SOURCE_ENDPOINT_UNAVAILABLE",
@@ -76,12 +79,18 @@ class WorkspaceSourceAdmission:
             "SOURCE_MAPPING_RECONFIRMATION_REQUIRED", "SOURCE_METADATA_QUALIFICATION_REQUIRED",
             "SOURCE_ORGANIZATION_MISMATCH", "SOURCE_METADATA_INCOMPLETE", "SOURCE_METADATA_AMBIGUOUS",
             "SOURCE_SLOT_TYPE_UNSUPPORTED",
+            # Bounded transport/lease failures mean the authorized snapshot was
+            # not completed. Treat them like other source availability loss:
+            # coverage remains UNKNOWN and the mapped facts become stale.
+            "SOURCE_OPERATION_DEADLINE_EXCEEDED", "SOURCE_OPERATION_READ_BUDGET_EXCEEDED",
+            "SOURCE_OPERATION_BYTE_BUDGET_EXCEEDED", "SOURCE_DEADLINE_ENFORCEMENT_UNAVAILABLE",
+            "SOURCE_LEASE_RENEWAL_BUDGET_EXCEEDED", "SOURCE_STALE_CLAIM",
         }:
             return
         affected_fields = set(details.split(",")) if code == "SOURCE_FIELDS_UNAVAILABLE" else set(self.settings.fields)
         if code == "SOURCE_SLOT_TYPE_UNSUPPORTED":
             affected_fields = {item.field for item in self.mappings if item.slot_id in STRUCTURED_SOURCE_SLOTS}
-        with self.service.store.transaction() as connection:
+        with (self.service.store.transaction() if connection is None else nullcontext(connection)) as connection:
             lock_binding_scope(self.service, connection)
             if binding_revision(self.service) != self.binding_revision:
                 raise SourceError("SOURCE_MAPPING_RECONFIRMATION_REQUIRED")
@@ -205,6 +214,38 @@ class WorkspaceSourceAdmission:
                 )
 
 
+def _record_owned_source_failure(
+    service: WorkspaceService, config: Any, receiver: WorkspaceSourceAdmission,
+    connection: Any, claim: dict[str, Any], error: BaseException, *, now: Callable[[], str],
+) -> None:
+    from orgrebase.auth import AuthenticationError
+    from orgrebase.workspace.source_bindings import active_binding, mark_unavailable
+
+    if not isinstance(error, (SourceError, AuthenticationError)):
+        return
+    # Match normal admission's binding -> checkpoint order. A late worker may
+    # report its own error but cannot revoke newer coverage or canonical facts
+    # after its claim expired, advanced or changed.
+    lock_binding_scope(service, connection)
+    current = service.store.get_source_checkpoint(claim["connector_id"], connection=connection)
+    if (current is None
+            or any(current[key] != claim[key] for key in ("lease_owner", "fence", "revision", "cursor"))
+            or current["lease_until"] is None
+            or current["lease_until"] <= utc_datetime(now()).timestamp()):
+        return
+    if receiver.confirmed_binding_digest is not None:
+        try:
+            binding = active_binding(service, config)
+        except (SourceError, AuthenticationError):
+            return
+        if binding["binding_digest"] != receiver.confirmed_binding_digest:
+            return
+    code = error.code if isinstance(error, AuthenticationError) else str(error).split(":", 1)[0]
+    mark_unavailable(service, config, code, connection=connection)
+    if isinstance(error, SourceError):
+        receiver.source_unavailable(error, connection=connection)
+
+
 def run_source_sync(config_path: Path, *, max_pages: int = 10, discover: bool = False) -> dict[str, Any]:
     from orgrebase.auth import (
         AuthenticationError,
@@ -263,6 +304,7 @@ def run_source_sync(config_path: Path, *, max_pages: int = 10, discover: bool = 
     authorization_token = request_authorization.set(check_authorization)
     principal_token = request_principal.set(principal)
     receiver = None
+    sync_scope_started = False
     try:
         # Retain only enough of the previous confirmed scope to mark its facts
         # unavailable when the next metadata observation contradicts it.
@@ -276,7 +318,8 @@ def run_source_sync(config_path: Path, *, max_pages: int = 10, discover: bool = 
         except SourceError:
             pass
         metadata_reader = DataverseReader(config.source.reader_settings(("quoteid",)), metadata_token)
-        observe_inventory(service, config, read_inventory(metadata_reader, config))
+        with metadata_reader.execution_budget():
+            observe_inventory(service, config, read_inventory(metadata_reader, config))
         if discover:
             return {**binding_view(service, config), "external_writes": 0}
         binding = active_binding(service, config)
@@ -308,13 +351,20 @@ def run_source_sync(config_path: Path, *, max_pages: int = 10, discover: bool = 
                 {"complete": True, "record_ids": sorted(records), "method": "CURRENT_POINT_READ",
                  "cross_source_atomic": False})
 
+        def page_failed(connection: Any, claim: dict[str, Any], error: BaseException) -> None:
+            _record_owned_source_failure(
+                service, config, receiver, connection, claim, error, now=synchronizer.clock.now,
+            )
+
         synchronizer = SourceSynchronizer(service.store, reader,
             worker_id=f"source-worker:{uuid4()}", admit=receiver, admission_digest=receiver.admission_digest,
             retention_seconds=settings.private_retention_seconds,
             verify_page=verify_page,
+            page_failed=page_failed,
             page_committed=lambda connection, inbox, checkpoint, page: record_coverage(
                 service, config, binding, connection, inbox, checkpoint, page))
         pages = []
+        sync_scope_started = True
         for _ in range(max_pages):
             check_authorization()
             result = synchronizer.sync_page()
@@ -327,9 +377,10 @@ def run_source_sync(config_path: Path, *, max_pages: int = 10, discover: bool = 
                 "live_qualification": "NOT_ESTABLISHED_BY_SYNC"}
     except (SourceError, AuthenticationError) as error:
         code = error.code if isinstance(error, AuthenticationError) else str(error).split(":", 1)[0]
-        mark_unavailable(service, config, code)
-        if receiver is not None and isinstance(error, SourceError):
-            receiver.source_unavailable(error)
+        if not sync_scope_started:
+            mark_unavailable(service, config, code)
+            if receiver is not None and isinstance(error, SourceError):
+                receiver.source_unavailable(error)
         raise
     finally:
         request_principal.reset(principal_token)

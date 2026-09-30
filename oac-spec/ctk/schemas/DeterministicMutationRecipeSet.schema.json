@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0alpha1/DeterministicMutationRecipeSet.schema.json",
+  "title": "DeterministicMutationRecipeSet",
+  "description": "Closed, content-bound public JSON mutation recipes for a deterministic generated conformance set.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "recipeSetId",
+    "generatorId",
+    "generatorVersion",
+    "profileId",
+    "profileVersion",
+    "digestAlgorithm",
+    "cases",
+    "recipeSetDigest"
+  ],
+  "properties": {
+    "apiVersion": {"const": "oac.ctk.mutation-recipes/v0alpha1"},
+    "kind": {"const": "DeterministicMutationRecipeSet"},
+    "recipeSetId": {"$ref": "#/$defs/nonBlankString"},
+    "generatorId": {"const": "oac.supplier-v02.recipe-generator"},
+    "generatorVersion": {"const": "v2"},
+    "profileId": {"const": "oac.supplier.transfer"},
+    "profileVersion": {"const": "v0.2"},
+    "digestAlgorithm": {"const": "sha256-jcs-detached/v1"},
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/case"}
+    },
+    "recipeSetDigest": {"$ref": "#/$defs/sha256Digest"}
+  },
+  "$defs": {
+    "nonBlankString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "caseId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256Digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caseId", "semanticClass", "publicSeed", "baseCaseId", "mutations"],
+      "properties": {
+        "caseId": {"$ref": "#/$defs/caseId"},
+        "semanticClass": {"$ref": "#/$defs/nonBlankString"},
+        "publicSeed": {"$ref": "#/$defs/nonBlankString"},
+        "baseCaseId": {"$ref": "#/$defs/caseId"},
+        "mutations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/mutation"}
+        }
+      }
+    },
+    "mutation": {
+      "oneOf": [
+        {"$ref": "#/$defs/replace"},
+        {"$ref": "#/$defs/remove"},
+        {"$ref": "#/$defs/reverse"},
+        {"$ref": "#/$defs/append"}
+      ]
+    },
+    "mutationBase": {
+      "type": "object",
+      "properties": {
+        "target": {"enum": ["snapshot", "change"]},
+        "path": {"type": "string", "pattern": "^/(?:[^~]|~[01])*$"}
+      }
+    },
+    "replace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "target", "path", "value"],
+      "properties": {
+        "operation": {"const": "replace"},
+        "target": {"enum": ["snapshot", "change"]},
+        "path": {"type": "string", "pattern": "^/(?:[^~]|~[01])*$"},
+        "value": {}
+      }
+    },
+    "remove": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "target", "path"],
+      "properties": {
+        "operation": {"const": "remove"},
+        "target": {"enum": ["snapshot", "change"]},
+        "path": {"type": "string", "pattern": "^/(?:[^~]|~[01])*$"}
+      }
+    },
+    "reverse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "target", "path"],
+      "properties": {
+        "operation": {"const": "reverse"},
+        "target": {"enum": ["snapshot", "change"]},
+        "path": {"type": "string", "pattern": "^/(?:[^~]|~[01])*$"}
+      }
+    },
+    "append": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "target", "path", "value"],
+      "properties": {
+        "operation": {"const": "append"},
+        "target": {"enum": ["snapshot", "change"]},
+        "path": {"type": "string", "pattern": "^/(?:[^~]|~[01])*$"},
+        "value": {}
+      }
+    }
+  }
+}

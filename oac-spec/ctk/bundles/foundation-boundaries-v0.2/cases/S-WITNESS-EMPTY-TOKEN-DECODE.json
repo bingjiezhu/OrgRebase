@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-EMPTY-TOKEN-DECODE",
+  "expect": {
+    "result": {
+      "pointer": "/",
+      "resourceId": "urn:source:a"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "decode",
+    "witnessRef": "urn:source:a#/"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

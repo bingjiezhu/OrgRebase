@@ -1,0 +1,23 @@
+{
+  "baselineInputVersion": "1.0",
+  "baselineId": "initiator-only",
+  "evaluationClass": "mechanics-only",
+  "inputSetRef": "benchmark/matched-inputs.json",
+  "inputSetDigest": "sha256:67ba894d95b23181cb850c318a6923e34e7d1f3611ac3b1b9360796fcb831799",
+  "policy": {
+    "machinePolicy": "subject-owner-only",
+    "selection": "select only the admitted owner role of the changed subject",
+    "dependencyTraversal": "none",
+    "organizationalRules": "ignored",
+    "unknownHandling": "record no discovery role",
+    "ordering": "none"
+  },
+  "expectedFailureModes": [
+    "cross-domain obligation omission",
+    "evidence-duty omission",
+    "Unknown erasure"
+  ],
+  "executionStatus": "mechanics-run-available",
+  "runManifestRef": "benchmark/runs/initiator-only.run.json",
+  "claimLimit": "The run measures agreement with project-authored exploratory candidate roles, not Ground Truth or enterprise quality."
+}

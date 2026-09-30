@@ -773,6 +773,10 @@
             <header><div><span>03</span><strong id="skill-experience-title" data-shell-copy="skillExperienceTitle">经验候选审阅</strong></div><small data-shell-copy="skillExperienceBoundary">运行经验只是候选；人工决策是 Skill 发布批准，不是业务结果批准</small></header>
             <div id="experience-governance-mount"></div>
           </section>
+          <section class="capability-section" aria-labelledby="experience-library-title">
+            <header><div><span>04</span><strong id="experience-library-title">经验与 Finance 指导</strong></div><small id="experience-library-boundary">观察、评估、发布与实际使用分别核对</small></header>
+            <div id="experience-library-mount" class="experience-library" aria-live="polite" aria-busy="true"></div>
+          </section>
           <p class="capability-lifecycle" data-shell-copy="skillLifecycle">完成运行 → 经验候选 → 独立评测 → 人工决策 → 受控灰度试调用</p>
 
         <dialog class="skill-source-dialog" id="skill-source-dialog" aria-labelledby="skill-source-dialog-title">
@@ -981,12 +985,11 @@
 
     <footer>
       <span data-i18n="footer.copy">OrgRebase · 企业工作持续演化引擎 · 受控演示场景</span>
-      <a href="/docs" data-i18n="footer.api">开发者接口（OpenAPI）</a>
     </footer>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="/assets/wire.js?v=1" defer></script>
-    <script src="/assets/workspace-client.js?v=0.5.0-3" defer></script>
+    <script src="/assets/workspace-client.js?v=0.5.0-4" defer></script>
     <script src="/assets/source-readmission-proof.js?v=1" defer></script>
     <script src="/assets/archive-revalidation.js?v=1" defer></script>
     <script src="/assets/app.js?v=0.4.0-15" defer></script>
@@ -994,9 +997,11 @@
     <script src="/assets/workspace-shell.js?v=0.4.0-13" defer></script>
     <script src="/assets/change-recovery.js?v=0.5.0-1" defer></script>
     <script src="/assets/change-workbench.js?v=0.5.0-6" defer></script>
+    <script src="/assets/deliverable-set.js?v=0.6.0-1" defer></script>
     <script src="/assets/skill-validation.js?v=0.5.0-2" defer></script>
+    <script src="/assets/experience-library.js?v=0.1.0-1" defer></script>
     <script src="/assets/effect-workbench.js?v=0.5.0-1" defer></script>
-    <script src="/assets/source-readmission.js?v=0.5.0-1" defer></script>
+    <script src="/assets/source-readmission.js?v=0.5.0-2" defer></script>
     <script src="/assets/source-binding.js?v=0.5.0-4" defer></script>
     <script src="/assets/owner-change.js?v=0.5.0-1" defer></script>
   </body>

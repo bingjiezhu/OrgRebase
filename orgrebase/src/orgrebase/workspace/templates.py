@@ -222,6 +222,40 @@ def discount_exception_template() -> TaskTemplateVersion:
     )
 
 
+def priced_discount_memo_template() -> TaskTemplateVersion:
+    """A real pricing-dependent memo; the v1 label-only template stays readable."""
+
+    return TaskTemplateVersion(
+        id="template:discount_exception_memo",
+        version="v2",
+        deliverable_kind="DISCOUNT_MEMO",
+        slots=(
+            _slot("quote_basket", SemanticKind.CLAIM, "product", output=("pricing",)),
+            _slot(
+                "pricing_policy",
+                SemanticKind.POLICY,
+                "finance",
+                relation="REQUIRES_POLICY",
+                output=("pricing",),
+            ),
+            _slot(
+                "currency",
+                SemanticKind.POLICY,
+                "finance",
+                relation="REQUIRES_POLICY",
+                output=("pricing",),
+            ),
+        ),
+        extra_requirement_policy=ExtraRequirementPolicy.REJECT,
+        renderer_id="renderer:discount-exception",
+        renderer_version="2.0.0",
+        preservation_fields=("customer_id", "quote_object_id"),
+        forbidden_fields=("raw_contract_text", "internal_cost_floor", "secret"),
+        output_schema_ref="schema:workspace.discount-memo@v2",
+        state=ObjectState.ACTIVE,
+    )
+
+
 class TemplateRegistry:
     def __init__(self, templates: tuple[TaskTemplateVersion, ...] | None = None) -> None:
         values = templates or (
@@ -230,6 +264,7 @@ class TemplateRegistry:
             public_launch_summary_template(),
             residency_faq_template(),
             discount_exception_template(),
+            priced_discount_memo_template(),
         )
         self._templates = {item.ref: item for item in values}
         self._by_kind = {item.deliverable_kind: item for item in values}
@@ -339,7 +374,10 @@ def default_capability_cards(template_ref: str | None = None) -> tuple[DomainCap
             **common,
         ),
     )
-    if template_ref != "template:enterprise_quote@v2":
+    if template_ref not in {
+        "template:enterprise_quote@v2",
+        "template:discount_exception_memo@v2",
+    }:
         return cards
     additions = {
         "product": ("quote_basket", "claim:product.quote_basket"),
@@ -361,8 +399,7 @@ def default_capability_cards(template_ref: str | None = None) -> tuple[DomainCap
 def selected_capability_cards(plan: CoalitionPlan) -> dict[str, DomainCapabilityCardVersion]:
     """Resolve the exact selected card versions and their declared slot ownership."""
 
-    catalog = (default_capability_cards(plan.template_ref)
-               if plan.template_ref == "template:enterprise_quote@v2" else default_capability_cards())
+    catalog = default_capability_cards(plan.template_ref)
     by_ref = {card.ref: card for card in catalog}
     if len(by_ref) != len(catalog):
         raise IntegrityError("CAPABILITY_CATALOG_REFERENCE_DUPLICATE")

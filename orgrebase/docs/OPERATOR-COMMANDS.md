@@ -25,11 +25,13 @@ CLI 只封装同一 HTTP 命令，不直接修改数据库、不自报负责人�
 | 命令 | 用途 |
 |---|---|
 | `orgrebase source-sync --help` | [负责人确认后的 Dataverse 接收](DATAVERSE-SOURCE-ONBOARDING.md)，有界分页、当前点读与持久游标 |
+| `orgrebase change-worker --help` | [变化待办与候选准备](CHANGE-OPERATIONS.md)，复用当前事件和 Preview attempt，只生成候选 |
 | `orgrebase dataverse-target --help` | [目标元数据资格与管理员建表材料](DATAVERSE-TARGET-OPERATIONS.md) |
 | `orgrebase recovery-inventory --help` | [恢复库与外部回执双向盘点](RECOVERY-EFFECT-INVENTORY.md) |
 | `orgrebase database --help` | 一套数据库备份、恢复隔离和资格检查 |
 | `orgrebase audit --help` | [独立审计检查点](AUDIT-CHECKPOINTS.md)，操作员签署、只读验证 |
 | `orgrebase business-report --help` | [配对业务观测](BUSINESS-OBSERVATIONS.md)，完整成本与失败分母 |
+| `python -m orgrebase.workspace.pattern_governance --config /private/pattern-decision.json` | [Quote 补证 Skill 治理](GOVERNED-QUOTE-RECOVERY-LEARNING.md)；只处理 exact 已评测候选的当前 Principal 决定，默认不打开新 run 采用 |
 
 旧演示命令仍可复验原有受控本地证据；它们不提供生产身份或外部写回资格。当前唯一正式效果状态机见 [提交门](COMMIT-GATEWAY.md)。
 

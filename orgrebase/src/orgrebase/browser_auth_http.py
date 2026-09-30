@@ -126,7 +126,7 @@ def session_router(*, production: bool, sessions: BrowserSessions | None,
             require_csrf(request, local_sessions, session.csrf)
             anonymous = local_sessions.create(previous=cookie)
             response = JSONResponse(local_sessions.view(anonymous), headers=_HEADERS)
-            response.set_cookie(LOCAL_SESSION_COOKIE, anonymous, max_age=local_sessions.settings.session_seconds,
+            response.set_cookie(LOCAL_SESSION_COOKIE, anonymous, max_age=local_sessions.settings.cookie_max_age,
                                 secure=local_sessions.settings.secure, httponly=True, samesite="strict", path="/")
             return response
         configured(request)
@@ -184,7 +184,7 @@ def session_router(*, production: bool, sessions: BrowserSessions | None,
                 raise AuthenticationError("AUTH_LOCAL_ACTOR_REQUEST_INVALID", 400)
             selected = local_sessions.create(payload["actor_id"], previous=cookie)
             response = JSONResponse(local_sessions.view(selected), headers=_HEADERS)
-            response.set_cookie(LOCAL_SESSION_COOKIE, selected, max_age=local_sessions.settings.session_seconds,
+            response.set_cookie(LOCAL_SESSION_COOKIE, selected, max_age=local_sessions.settings.cookie_max_age,
                                 secure=local_sessions.settings.secure, httponly=True, samesite="strict", path="/")
             return response
 

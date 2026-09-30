@@ -1,0 +1,435 @@
+{
+  "accepted_mapping_set_digest": "sha256:59400b5cb5aaadc164b473cf1120f35077f862ea9597f9a9b22ab728910296e0",
+  "accepted_mappings": [
+    {
+      "adaptation_run_id": "run:oac-adaptation:evergreen-industries:5a14c7a1a57d35b3e209@v1",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "component_kind": "DOMAIN",
+      "declared_unknowns": [],
+      "digest": "sha256:ca43b9463b2a70c88c92c1e921237309a99b3742bba2bb4f7bef622f35c18023",
+      "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+      "producer": "agentteams:vertex-ai:sha256:0acb3787de45e204bb8670dac518d5285c19c266dd065565baaacffbf7fadd1d",
+      "reason_codes": [],
+      "schema_version": "orgrebase.oac-candidate-semantic-mapping.v1",
+      "source_digest": "sha256:08bea3bbc74f0ae690e7352e306c3642e113c6d1934260f0d4f8934d28e0e440",
+      "source_root_ref": "source:evergreen:domain@r1",
+      "target_oac_paths": [
+        "OrganizationSnapshot.spec.nodes",
+        "OrganizationalDemand.spec.subjectRefs"
+      ],
+      "task_id": "oac-intake-c8a7f553113eb75f-mapper-a1"
+    },
+    {
+      "adaptation_run_id": "run:oac-adaptation:evergreen-industries:5a14c7a1a57d35b3e209@v1",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "component_kind": "KNOWLEDGE",
+      "declared_unknowns": [],
+      "digest": "sha256:0bc62f59955e072901f25bef0aa875b591e1edc1d1219eb4163b480295153d43",
+      "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+      "producer": "agentteams:vertex-ai:sha256:0acb3787de45e204bb8670dac518d5285c19c266dd065565baaacffbf7fadd1d",
+      "reason_codes": [],
+      "schema_version": "orgrebase.oac-candidate-semantic-mapping.v1",
+      "source_digest": "sha256:91b87e2714d4ec4290a2c35f9722093ba438c1ec36eea996ea960efa6331d9a4",
+      "source_root_ref": "source:evergreen:knowledge@r1",
+      "target_oac_paths": [
+        "OrganizationalDemand.spec.evidenceObligationRefs"
+      ],
+      "task_id": "oac-intake-c8a7f553113eb75f-mapper-a1"
+    },
+    {
+      "adaptation_run_id": "run:oac-adaptation:evergreen-industries:5a14c7a1a57d35b3e209@v1",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "component_kind": "AUTHORITY",
+      "declared_unknowns": [],
+      "digest": "sha256:4994135a260d1a1f16758d60c7f5b36b7984dec444882d25c7bd8d3bf995e2b9",
+      "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+      "producer": "agentteams:vertex-ai:sha256:0acb3787de45e204bb8670dac518d5285c19c266dd065565baaacffbf7fadd1d",
+      "reason_codes": [],
+      "schema_version": "orgrebase.oac-candidate-semantic-mapping.v1",
+      "source_digest": "sha256:b71c748c58b4e2293e0ffa924426ba4c66621ab7cadc8f7b219731915db45972",
+      "source_root_ref": "source:evergreen:authority@r1",
+      "target_oac_paths": [
+        "OrganizationSnapshot.spec.roleDefinitions",
+        "OrganizationSnapshot.spec.principals",
+        "SourceAdmissionReceipt.spec.decisionAuthorityRef"
+      ],
+      "task_id": "oac-intake-c8a7f553113eb75f-mapper-a1"
+    },
+    {
+      "adaptation_run_id": "run:oac-adaptation:evergreen-industries:5a14c7a1a57d35b3e209@v1",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "component_kind": "CAPABILITY",
+      "declared_unknowns": [],
+      "digest": "sha256:3ad1b6a8221e9962d2bf32eb3a7171eff5b4aa023cdf4c0ec223e24e36fa163a",
+      "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+      "producer": "agentteams:vertex-ai:sha256:0acb3787de45e204bb8670dac518d5285c19c266dd065565baaacffbf7fadd1d",
+      "reason_codes": [],
+      "schema_version": "orgrebase.oac-candidate-semantic-mapping.v1",
+      "source_digest": "sha256:528db9ebc04e0b695fb7a1c2c06d5d28f42cf6aff477fe95786f8b8f97d832ce",
+      "source_root_ref": "source:evergreen:capability@r1",
+      "target_oac_paths": [
+        "OrganizationSnapshot.spec.roleDefinitions[].responsibilityTypes"
+      ],
+      "task_id": "oac-intake-c8a7f553113eb75f-mapper-a1"
+    },
+    {
+      "adaptation_run_id": "run:oac-adaptation:evergreen-industries:5a14c7a1a57d35b3e209@v1",
+      "candidate_only": true,
+      "canonical_target_writes": 0,
+      "component_kind": "DEPENDENCY",
+      "declared_unknowns": [],
+      "digest": "sha256:3ad6942e6fb79168d08711c5dc3374c18bd6dad2c18b961c3186d24b5ab3444d",
+      "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+      "producer": "agentteams:vertex-ai:sha256:0acb3787de45e204bb8670dac518d5285c19c266dd065565baaacffbf7fadd1d",
+      "reason_codes": [],
+      "schema_version": "orgrebase.oac-candidate-semantic-mapping.v1",
+      "source_digest": "sha256:34e59d1fa8671cc192ee3f76e4b26f37047b90e69d6107fb5aad1322138abca4",
+      "source_root_ref": "source:evergreen:dependency@r1",
+      "target_oac_paths": [
+        "OrganizationSnapshot.spec.dependencyEdges",
+        "OrganizationalDemand.spec.evidenceObligationRefs"
+      ],
+      "task_id": "oac-intake-c8a7f553113eb75f-mapper-a1"
+    }
+  ],
+  "adaptation_run_id": "run:oac-adaptation:evergreen-industries:5a14c7a1a57d35b3e209@v1",
+  "baseline_mapping_set_digest": "sha256:61a8e93c5c02cee4f2abeeb1a675337a76b287470c7563218a9686776841e7a5",
+  "candidate_only": true,
+  "canonical_target_writes": 0,
+  "digest": "sha256:f630a9eb0fa9176b5cd1926f467486379f32046f38daca39e0b0686cab21e291",
+  "effect_ceiling": "ZERO_EXTERNAL_EFFECTS",
+  "human_approval_granted": false,
+  "input_digest": "sha256:ed6c11f0e583bbe82974437db7f5cb6fd45f6106d2670020243bd664fc9f25f8",
+  "mapping_mode": "LIVE_AGENT_ATTEMPT",
+  "model_observation": {
+    "credential_material_persisted": false,
+    "digest": "sha256:41b3ba5c877b06bf9badd9160891abb61a9383427684c15dc613e582fe1a848d",
+    "error_code": null,
+    "evidence_class": "LIVE_MODEL",
+    "finish_reason": "STOP",
+    "input_digest": "sha256:ed6c11f0e583bbe82974437db7f5cb6fd45f6106d2670020243bd664fc9f25f8",
+    "input_tokens": 3151,
+    "latency_ms": 6253,
+    "model_id": "gemini-3.8-flash",
+    "model_version": "gemini-3.8-flash",
+    "output_digest": "sha256:1de08c2beeee43db1952b18005221a6014ab675b3d752037876f5a9550ef97e6",
+    "output_schema_digest": "sha256:053fb160b5e562ebddb0e523012e45e0612608a500c3ec6148168f8e15a655f7",
+    "output_tokens": 950,
+    "provider": "vertex-ai",
+    "provider_request_id": "SROZapKCEembq8YPgIK1UQ",
+    "provider_response_receipt_digest": "sha256:0acb3787de45e204bb8670dac518d5285c19c266dd065565baaacffbf7fadd1d",
+    "raw_prompt_persisted": false,
+    "raw_provider_body_persisted": false,
+    "request_digest": "sha256:d6a5036e8d2d2d846a22f89044f813ce03a62978cc7423536d8e5c9f37237929",
+    "schema_version": "orgrebase.oac-agent-model-observation.v1",
+    "status": "VALID"
+  },
+  "native_agentteams": {
+    "action_sequence": [
+      "create_project",
+      "plan_dag",
+      "ready_nodes",
+      "delegate_task",
+      "ack_task",
+      "submit_task",
+      "check_task",
+      "accept_task_result",
+      "complete_project"
+    ],
+    "actions": [
+      {
+        "action": "create_project",
+        "digest": "sha256:e5aa70ae3769d307d249c259a411a7f9483662b522d716a5bdf2c450876f052d",
+        "error": null,
+        "key": "project:create",
+        "ok": true,
+        "payload_digest": "sha256:30065c61f25aaeb4b9c963ccdec0f4f99b842847dcf095d3abd680adbec2bc08",
+        "raw_ref": "raw-mcp/001-project-create-151c52fe.json",
+        "request_digest": "sha256:7a79c0a46c12034ca6fb431c82565a7e20ec0bf4c669cbe3dd76e614c0217650",
+        "response_digest": "sha256:7b1cd3d12270874ab4a9167218ea89775bf7f825f53846a6450cd84e1d333c1b",
+        "sequence": 1,
+        "status": "active",
+        "tool": "projectflow"
+      },
+      {
+        "action": "plan_dag",
+        "digest": "sha256:410e6d5228d7732fbc4883e3f95aba190ac1ee88f966cb679ae02c0d2fbac27e",
+        "error": null,
+        "key": "project:plan",
+        "ok": true,
+        "payload_digest": "sha256:0afee3091cf304aaf0efe1a895e48cd02809a4f501aace6acc4c469817270846",
+        "raw_ref": "raw-mcp/002-project-plan-1c351f5d.json",
+        "request_digest": "sha256:a01ea7e81071768ae4fe5bfa8eb70bddf12badd3f5a002277c4d0af818c0370c",
+        "response_digest": "sha256:e4d7afcee86f8c7cbe591bc784bd8d68948fe8a9489d6aa41913204827e84197",
+        "sequence": 2,
+        "status": "active",
+        "tool": "projectflow"
+      },
+      {
+        "action": "ready_nodes",
+        "digest": "sha256:76dc721fcc607a52bec948baf778b0a9a84f1baa3cd4ca870f016cfdaae5de82",
+        "error": null,
+        "key": "project:ready",
+        "ok": true,
+        "payload_digest": "sha256:580e525a4e6b7c3bf657b72ced533e17fbb1cc97f3ffced136b429c0f77605fb",
+        "raw_ref": "raw-mcp/003-project-ready-1fb0c8ad.json",
+        "request_digest": "sha256:4e13afb5561c860cc2d275565caf0d69db3c0d592c661bd850744aefa225b765",
+        "response_digest": "sha256:fb5972e856cc0e0e9b5b97c0ba00cdc0055767f4d4cb6e9ab64bb9888667f9ad",
+        "sequence": 3,
+        "status": "active",
+        "tool": "projectflow"
+      },
+      {
+        "action": "delegate_task",
+        "digest": "sha256:b6bfedbf7c5bff3ca2e3f21118e1681a787ffc73be3e0a2bcceb4b6433af673e",
+        "error": null,
+        "key": "oac-intake-c8a7f553113eb75f-mapper-a1:delegate",
+        "ok": true,
+        "payload_digest": "sha256:a632bce4714e465def6d0fbd5d3d77930928086615a964464e5b65d0b9ccf6f6",
+        "raw_ref": "raw-mcp/004-oac-intake-c8a7f553113eb75f-mapper-a1-delegate-e235bef7.json",
+        "request_digest": "sha256:e210736b7cffa099d58f89f43618a04337a014e1deb040e7232b218b6a31498c",
+        "response_digest": "sha256:81cef2690f9e2ef05454804fdaae7985fd374f5e117c3badc46b19b3f86984c6",
+        "sequence": 4,
+        "status": "assigned",
+        "tool": "taskflow"
+      },
+      {
+        "action": "ack_task",
+        "digest": "sha256:de30e6ce72723d9ef49c1c6cee597634d3fbddfc3ee1b86143a38ca3bf4c4e59",
+        "error": null,
+        "key": "oac-intake-c8a7f553113eb75f-mapper-a1:ack",
+        "ok": true,
+        "payload_digest": "sha256:fd8ac9956f2cdd0990b96ade28a083e6efac2737500e400d00510d5b56752826",
+        "raw_ref": "raw-mcp/005-oac-intake-c8a7f553113eb75f-mapper-a1-ack-025cfbc9.json",
+        "request_digest": "sha256:9b274926e419f9498cdaeaef47a77e5084204dcf7ef7d63638877e5b50fd3390",
+        "response_digest": "sha256:a9538c4bf2a45a41a94bb01368b353048148e0dab02cdfcb351b798298fe22a9",
+        "sequence": 5,
+        "status": "in_progress",
+        "tool": "taskflow"
+      },
+      {
+        "action": "submit_task",
+        "digest": "sha256:c542712f490c4e7384b202f23577760157a3a75936fc133d9431ec1a814cf6e7",
+        "error": null,
+        "key": "oac-intake-c8a7f553113eb75f-mapper-a1:submit",
+        "ok": true,
+        "payload_digest": "sha256:b4d896bb207bc3ebe8a69ff9dca1e7a02ce8b534dfdd3a61ccec134dfdf8b71f",
+        "raw_ref": "raw-mcp/006-oac-intake-c8a7f553113eb75f-mapper-a1-submit-5af3b963.json",
+        "request_digest": "sha256:b38799fb676d6e35b4f82abe8042a24d41cfea9bd9d0dcbdcbfa3302ee1b899e",
+        "response_digest": "sha256:367378777e9f8467422b9979eb5a00a404e63d47c0160400e29e86445b679503",
+        "sequence": 6,
+        "status": "submitted",
+        "tool": "taskflow"
+      },
+      {
+        "action": "check_task",
+        "digest": "sha256:204ceb0f967fb4779e6f9ecf87c4564023d584326976c386c01703e4165cc788",
+        "error": null,
+        "key": "oac-intake-c8a7f553113eb75f-mapper-a1:check",
+        "ok": true,
+        "payload_digest": "sha256:2e587c7728b9c999333c83634eb91500cc82bdb96fb535fd6e2f3dfdd00cbcca",
+        "raw_ref": "raw-mcp/007-oac-intake-c8a7f553113eb75f-mapper-a1-check-86be687c.json",
+        "request_digest": "sha256:f18198b5ed55f07b74f145b4d1736f58597749604393cd445fe63ef174f4f879",
+        "response_digest": "sha256:aed1a0ef1e62d5d8fef9c5b3d6d8c1c55cbe42963cded0efd81ab5c9508ec24d",
+        "sequence": 7,
+        "status": "submitted",
+        "tool": "taskflow"
+      },
+      {
+        "action": "accept_task_result",
+        "digest": "sha256:fb31b55b6353fb48bfdb47cbf9bdf9339c84c2c9b22e6f584f3a714e38507327",
+        "error": null,
+        "key": "oac-intake-c8a7f553113eb75f-mapper-a1:accept",
+        "ok": true,
+        "payload_digest": "sha256:8bb008f4a98d557e8a91af8e184c385537f418cbd302a08cce8eba75af9e9da6",
+        "raw_ref": "raw-mcp/008-oac-intake-c8a7f553113eb75f-mapper-a1-accept-61698dfa.json",
+        "request_digest": "sha256:553f98bef297bc08162db2c2d1e56043cbf5a2d5693e64ed2525e6423b64d33e",
+        "response_digest": "sha256:96377b111c834ff3ede0bb4c6130f0daefbb7175d6de61fa482e72caafd5a8db",
+        "sequence": 8,
+        "status": "completed",
+        "tool": "projectflow"
+      },
+      {
+        "action": "complete_project",
+        "digest": "sha256:a978f73e7dab23e6c459d26ed786e7c563ebc9ed5c8a7e238930c337860107e1",
+        "error": null,
+        "key": "project:complete",
+        "ok": true,
+        "payload_digest": "sha256:620e5b9d583791e9b7d4be4077af3281f17619eaa462d9068a6cfb381c647203",
+        "raw_ref": "raw-mcp/009-project-complete-1a1cf51b.json",
+        "request_digest": "sha256:23ca28609790724960b4fd14ca317f8e2fbb29fc0ee3f382e447697ec9f32e51",
+        "response_digest": "sha256:f93e4ae1dad61ca41893bfbed389977e4ffc6b26873286c0e4092348d20d07ac",
+        "sequence": 9,
+        "status": "completed",
+        "tool": "projectflow"
+      }
+    ],
+    "agentteams_commit": "849182af8e017168a5a200a87b1062142caf462d",
+    "agentteams_version": "v1.2.2",
+    "assignment_event_id": "$controlled-4a20e3c92b67a16e01626d6a",
+    "candidate_only": true,
+    "canonical_target_writes": 0,
+    "claim_boundary": "PINNED_IN_PROCESS_CALL_TOOL_WITH_LIVE_MODEL_CANDIDATE_NOT_LIVE_DISTRIBUTED_WORKER",
+    "context_digest": "sha256:c4fb11d633adea399edf1475a8cd675c123ab48047f8ea87ffde0215e69fdbc6",
+    "digest": "sha256:652af7cdd55173f2868a8908d7339513293012b4d9208b52f3faebe6da6ffd09",
+    "evidence_class": "CONTROLLED_LOCAL_NATIVE_TASKFLOW",
+    "matrix_request_count": 2,
+    "observed_result_digest": "sha256:74d546e43eb31b4d6340f5b87d6eb83d9ddab2d1cbc136f2e1202c727014d4ea",
+    "project_id": "oac-intake-c8a7f553113eb75f",
+    "project_terminal_state": "completed",
+    "run_id": "run:oac-adaptation:evergreen-industries:5a14c7a1a57d35b3e209@v1",
+    "schema_version": "orgrebase.oac-agentteams-mapping-lifecycle.v1",
+    "source_lock_digest": "sha256:d62e5470ad2d803d19fdc00b26958cb2d5f1e237b84870cf7c79464d75cb4888",
+    "submitted_result_digest": "sha256:74d546e43eb31b4d6340f5b87d6eb83d9ddab2d1cbc136f2e1202c727014d4ea",
+    "task_id": "oac-intake-c8a7f553113eb75f-mapper-a1",
+    "task_spec_digest": "sha256:5e5f2ecb9862b71d127d04c0f1aee8cfe54a96fb3d1bcbfa8b354cb2f30213bf",
+    "worker_ref": "@oac-intake-mapper:controlled.local"
+  },
+  "oac_source_admitted": false,
+  "pack_digest": "sha256:5a14c7a1a57d35b3e2098d230c6557554b07c1a50a805e222d7f0ddb2f650f84",
+  "profile_digest": "sha256:eebd6ed6ff6ffe105793a44d2da763cf95f2e6adf135fc4ce882547e43d372f0",
+  "schema_version": "orgrebase.oac-agent-mapping-receipt.v1",
+  "status": "VALIDATED_CANDIDATE",
+  "validation": {
+    "accepted_mapping_set_digest": "sha256:59400b5cb5aaadc164b473cf1120f35077f862ea9597f9a9b22ab728910296e0",
+    "candidate_only": true,
+    "canonical_target_writes": 0,
+    "checks": [
+      {
+        "check_id": "run-binding",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "profile-binding",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "pack-binding",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "candidate-only",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "approval-separation",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "domain-source-ref",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "domain-target-paths",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "domain-unknown-preservation",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "domain-authority",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "knowledge-source-ref",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "knowledge-target-paths",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "knowledge-unknown-preservation",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "knowledge-authority",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "authority-source-ref",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "authority-target-paths",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "authority-unknown-preservation",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "authority-authority",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "capability-source-ref",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "capability-target-paths",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "capability-unknown-preservation",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "capability-authority",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "dependency-source-ref",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "dependency-target-paths",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "dependency-unknown-preservation",
+        "passed": true,
+        "reason_code": "PASS"
+      },
+      {
+        "check_id": "dependency-authority",
+        "passed": true,
+        "reason_code": "PASS"
+      }
+    ],
+    "digest": "sha256:bc4b528b4e1e792d3230612047ca7b5b9d499054e6e641406463a5c4cad92c0b",
+    "reason_codes": [
+      "ALL_DETERMINISTIC_CHECKS_PASS"
+    ],
+    "schema_version": "orgrebase.oac-agent-validation.v1",
+    "verdict": "PASS"
+  }
+}

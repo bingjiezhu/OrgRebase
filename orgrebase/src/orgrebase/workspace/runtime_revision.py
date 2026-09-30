@@ -16,17 +16,24 @@ _MEDIA = "application/vnd.orgrebase.runtime-compatibility+json"
 _MODULES = (
     "auth.py", "clock.py", "fixture.py", "skills.py", "change_projection.py",
     "domain.py", "change_events.py", "impact.py", "certificates.py", "workflow.py", "digest.py", "context.py",
-    "runtime_contracts.py", "workspace/rebuild.py", "workspace/execution.py", "workspace/graph.py",
-    "workspace/context.py", "workspace/admission.py", "workspace/models.py", "workspace/templates.py", "workspace/pricing.py",
+    "runtime_contracts.py", "workspace/rebuild.py", "workspace/execution.py", "workspace/formation.py",
+    "workspace/domain_agents.py", "workspace/bounded_execution.py", "workspace/graph.py",
+    "workspace/context.py", "workspace/admission.py", "workspace/profile_contracts.py",
+    "workspace/source_admission.py", "workspace/profile_admission.py", "workspace/pilot.py",
+    "workspace/models.py", "workspace/templates.py", "workspace/pricing.py", "workspace/coalition.py",
+    "workspace/planner.py", "workspace/demand_formation.py", "workspace/context_residency.py",
     "workspace/advisory.py", "workspace/source_bindings.py", "workspace/dataverse.py",
-    "workspace/model_provider.py", "workspace/model_observations.py", "workspace/openai_responses.py", "workspace/ports.py",
+    "workspace/model_provider.py", "workspace/vertex_candidate.py", "workspace/model_observations.py",
+    "workspace/openai_responses.py", "workspace/ports.py",
     "workspace/model_budget.py", "workspace/openai_http_worker.py",
+    "workspace/finance_adoption.py", "workspace/experience_recall.py",
+    "workspace/skill_evolution_v2.py", "workspace/finance_skill_qualification.py",
     "workspace/enterprise_binding.py", "workspace/owner_change.py", "workspace/source_worker.py",
-    "workspace/transport.py", "workspace/preview_execution.py",
+    "workspace/transport.py", "workspace/preview_execution.py", "workspace/change_budget.py",
     "workspace/change_agentteams.py", "workspace/change_recovery.py", "workspace/native_taskflow.py", "agentteams_source.py",
     "workspace/runtime_revision.py",
     "workspace/source_readmission.py", "workspace/read_dependencies.py", "workspace/approval_authority.py",
-    "workspace/service.py", "workspace/formation.py", "workspace/formation_integrity.py",
+    "workspace/service.py", "workspace/formation_integrity.py",
     "workspace/changes.py", "workspace/change_proposals.py", "store.py", "database.py", "local_storage.py",
 )
 
@@ -54,10 +61,18 @@ def workspace_revision(workspace: Any) -> dict[str, Any]:
     current = current_revision()
     adapter = getattr(workspace, "advisory_factory", None)
     configuration = getattr(adapter, "configuration_binding", None)
-    if configuration is None:
+    deliverable_profile = getattr(workspace, "deliverable_set_profile", None)
+    if configuration is None and deliverable_profile is None:
         return current
     body = {key: value for key, value in current.items() if key != "revision_digest"}
-    body["advisory_configuration"] = configuration
+    if configuration is not None:
+        body["advisory_configuration"] = configuration
+    if deliverable_profile is not None:
+        body["deliverable_set_profile"] = {
+            "profile_ref": deliverable_profile.ref,
+            "profile_digest": deliverable_profile.digest,
+            "runtime_revision": deliverable_profile.runtime_revision,
+        }
     return {**body, "revision_digest": sha256_digest(body)}
 
 
@@ -66,10 +81,11 @@ def _key(event_id: str, preview_digest: str) -> str:
 
 
 def bind_preview_runtime(workspace: Any, connection: Any, event_id: str, preview_digest: str) -> str:
+    profile_digest = getattr(workspace, "workspace_profile_digest", workspace.profile_digest)
     body = {"schema_version": "orgrebase.paused-work-runtime-binding.v1", "event_id": event_id,
             "preview_digest": preview_digest, "workspace_id": workspace.store.workspace_id,
             "tenant_id": workspace.store.tenant_id, "run_id": workspace.effective_workflow_run_id,
-            "profile_digest": workspace.profile_digest, "runtime": workspace_revision(workspace)}
+            "profile_digest": profile_digest, "runtime": workspace_revision(workspace)}
     return workspace.store.save_artifact(connection, _key(event_id, preview_digest), _MEDIA, body)
 
 
@@ -81,10 +97,11 @@ def preview_runtime_status(workspace: Any, event_id: str, preview_digest: str, *
     except KeyError:
         return {"decision": "READ_ONLY_HISTORICAL" if historical else "REPLAN_REQUIRED", "reason": "RUNTIME_BINDING_MISSING",
                 "current_revision": current_digest, "previous_revision": None}
+    profile_digest = getattr(workspace, "workspace_profile_digest", workspace.profile_digest)
     expected_scope = {"schema_version": "orgrebase.paused-work-runtime-binding.v1", "event_id": event_id,
                       "preview_digest": preview_digest, "workspace_id": workspace.store.workspace_id,
                       "tenant_id": workspace.store.tenant_id, "run_id": workspace.effective_workflow_run_id,
-                      "profile_digest": workspace.profile_digest}
+                      "profile_digest": profile_digest}
     if any(saved.get(key) != value for key, value in expected_scope.items()):
         return {"decision": "READ_ONLY_HISTORICAL" if historical else "REPLAN_REQUIRED", "reason": "RUNTIME_BINDING_SCOPE_CHANGED",
                 "current_revision": current_digest,

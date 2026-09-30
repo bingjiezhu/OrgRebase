@@ -1,0 +1,149 @@
+{
+  "$defs": {
+    "exhaustion": {
+      "additionalProperties": false,
+      "properties": {
+        "errorCode": {
+          "const": "CONFORMANCE_RESOURCE_PROFILE_EXCEEDED"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "partialDomainResultPermitted": {
+          "const": false
+        },
+        "sutStatus": {
+          "const": "RESOURCE_EXHAUSTED"
+        }
+      },
+      "required": [
+        "sutStatus",
+        "errorCode",
+        "partialDomainResultPermitted"
+      ],
+      "type": "object"
+    },
+    "extensions": {
+      "additionalProperties": true,
+      "propertyNames": {
+        "maxLength": 255,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "limits": {
+      "additionalProperties": false,
+      "properties": {
+        "adapterTimeoutMs": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxAdapterOutputBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxBundleBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxBundleFiles": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxCaseBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxDuties": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxEdges": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxEvaluations": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxJsonDepth": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxNodes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxPathPrefixes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxPlanBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxRequestBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxResourceBytes": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxRules": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxSemanticDepth": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxTotalWitnessRefs": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        },
+        "maxWitnessRefsPerEvaluation": {
+          "$ref": "#/$defs/positiveSafeInteger"
+        }
+      },
+      "required": [
+        "adapterTimeoutMs",
+        "maxAdapterOutputBytes",
+        "maxBundleBytes",
+        "maxBundleFiles",
+        "maxCaseBytes",
+        "maxRequestBytes",
+        "maxDuties",
+        "maxEdges",
+        "maxEvaluations",
+        "maxJsonDepth",
+        "maxNodes",
+        "maxPathPrefixes",
+        "maxPlanBytes",
+        "maxResourceBytes",
+        "maxRules",
+        "maxSemanticDepth",
+        "maxTotalWitnessRefs",
+        "maxWitnessRefsPerEvaluation"
+      ],
+      "type": "object"
+    },
+    "positiveSafeInteger": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "$id": "https://oac.dev/schemas/ctk/v0alpha2/ConformanceResourceProfile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural schema for the bounded Phase A conformance resource profile used by the current runner and adapter.",
+  "properties": {
+    "exhaustion": {
+      "$ref": "#/$defs/exhaustion"
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    },
+    "limits": {
+      "$ref": "#/$defs/limits"
+    },
+    "profileId": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profileId",
+    "limits",
+    "exhaustion"
+  ],
+  "title": "ConformanceResourceProfile",
+  "type": "object"
+}

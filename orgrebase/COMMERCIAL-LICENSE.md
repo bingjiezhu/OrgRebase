@@ -1,17 +1,36 @@
-# Commercial use
+# Commercial use and services
 
-Copyright 2026 Bingjie Zhu.
+Project-owned OrgRebase code, documentation and Skills are available under
+[Apache-2.0](LICENSE). The license already permits commercial use, including internal
+enterprise deployment, modification, redistribution and paid hosting. A separate
+commercial software license is not required for this material.
 
-## 原先
+## Services
 
-Earlier public revisions, including tag `v0.4.0` and the 2026-09-20 workspace snapshot, used PolyForm Noncommercial 1.0.0. Commercial use needed a separate written license from the copyright holder. This file was the notice for that reserved grant, not the commercial agreement itself.
+Implementation, integration, managed hosting, training, maintenance and support may
+be provided under a separate service agreement. Any pricing, service level, response
+time, warranty or deployment responsibility must be stated in that agreement; the
+open-source license creates no service commitment.
 
-## 现状
+Payment for a service does not change the rights granted by Apache-2.0. The existing
+authentication, authorization, governance, audit and recovery code remains covered by
+the same project license.
 
-Project-owned OrgRebase material in this tree, including documentation, is Apache License 2.0. See [LICENSE](LICENSE) and [LICENSE.md](LICENSE.md).
+## Separately distributed extensions
 
-Commercial use of that project-owned material is included. Questions about the grant: 957493761@qq.com
+A future commercial extension would need an explicit product boundary, its own
+distribution and clearly identified terms. This repository currently includes no
+separately licensed commercial edition. An extension's terms would not replace the
+Apache-2.0 grant for existing community material or for contributions accepted under
+that license.
 
-## 为什么会有这样的更新
+## Third-party and historical terms
 
-The copyright holder first matched OAC's Apache-2.0 / CC BY 4.0 path split, then placed all project-owned repository files under Apache-2.0. Third-party software, upstream datasets, optional models, and content-addressed Skill or benchmark identifiers keep their own terms. A sealed manifest field that still reads `PolyForm-Noncommercial-1.0.0` preserves historical evidence; it does not replace [LICENSE](LICENSE) for the current tree.
+Dependencies, datasets, optional models and hosted providers retain their own terms;
+commercial permission for OrgRebase does not grant permission to use those materials
+or services. See [LICENSE.md](LICENSE.md) and the
+[third-party inventory](docs/THIRD-PARTY-INVENTORY.md).
+
+Earlier releases that carried PolyForm Noncommercial 1.0.0 remain governed by their
+original release license and any separate written grant. Historical license identifiers
+in sealed records do not narrow the current tree's Apache-2.0 grant.

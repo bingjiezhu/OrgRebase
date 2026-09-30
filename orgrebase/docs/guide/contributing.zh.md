@@ -5,11 +5,11 @@
 ## 开发环境与检查
 
 ```bash
-uv sync --locked --all-extras
+uv sync --locked --extra dev
 make check-core
 ```
 
-`check-core`是有限的贡献者检查，不需要相邻OAC、PostgreSQL或服务凭据，不能代替完整集成验收。完整`make check`还需要准入的OAC源码、PostgreSQL工具以及对应历史档案；轻量分发包可能不含这些档案，不可用skip或旧结果宣称完整发布通过。
+首次依赖安装需要网络或完整缓存。`check-core`会从随附的 Git bundle 重建固定版本 AgentTeams checkout；它是有限的贡献者检查，不需要相邻 OAC、PostgreSQL 或外部服务凭据，不能代替完整集成验收。公开仓库另有 OAC 契约和 PostgreSQL 企业边界门；内部完整`make check`还依赖未随公开白名单分发的历史档案，不可用 skip 或旧结果宣称新源码通过。
 
 行为改动应提供适合其风险的负例和验证。修复权限或一致性问题时，保留错误Owner、陈旧摘要、重试与未知结果的测试，并核对其仍能捕获相应错误。
 

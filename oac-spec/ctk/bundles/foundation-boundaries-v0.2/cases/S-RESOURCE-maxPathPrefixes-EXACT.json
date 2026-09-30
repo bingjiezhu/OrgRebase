@@ -1,0 +1,18 @@
+{
+  "caseId": "S-RESOURCE-maxPathPrefixes-EXACT",
+  "expect": {
+    "result": {
+      "profileId": "oac.supplier.transfer/conformance-resource-profile/v1",
+      "withinProfile": true
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "maxPathPrefixes": 4096
+  },
+  "operation": "resourceCheck",
+  "requirementRefs": [
+    "REQ-RESOURCE-EXHAUSTION"
+  ],
+  "testTarget": "SUT"
+}

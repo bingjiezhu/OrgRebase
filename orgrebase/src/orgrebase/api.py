@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import subprocess
 import sys
 import tempfile
-from collections.abc import AsyncIterator, Mapping
+import time
+from collections import deque
+from collections.abc import AsyncIterator, Callable, Mapping
 from contextlib import AsyncExitStack, asynccontextmanager
 from datetime import UTC, datetime
 from pathlib import Path
@@ -17,10 +20,14 @@ from typing import Any
 
 from fastapi import FastAPI, Header, HTTPException, Query, Response
 from fastapi.encoders import jsonable_encoder
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.concurrency import run_in_threadpool
+from starlette.middleware.body_limit import RequestBodyLimitMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
+from starlette.routing import Match
 
 from orgrebase import __version__
 from orgrebase.agentteams_source import default_agentteams_checkout
@@ -91,12 +98,248 @@ OPERATING_MODEL_STEP_IDS = (
     "quote-step:selective-update",
 )
 
+MAX_REQUEST_BODY_BYTES = 1024 * 1024
+REQUEST_BODY_DEADLINE_SECONDS = 15.0
+MAX_CONCURRENT_REQUESTS = 128
+
+
+class _RequestBodyDeadlineExceeded(Exception):
+    pass
+
+
+class _RequestBodyTooLarge(Exception):
+    pass
+
+
+class _RequestBodyIncomplete(Exception):
+    pass
+
+
+class RequestBodyDeadlineMiddleware:
+    """Admit unsafe request bodies before authentication or business code."""
+
+    def __init__(
+        self, app: Any, timeout_seconds: float,
+        max_body_size: int = MAX_REQUEST_BODY_BYTES,
+        security_events: SecurityEventEmitter | None = None,
+    ) -> None:
+        self.app = app
+        self.timeout_seconds = timeout_seconds
+        self.max_body_size = max_body_size
+        self.security_events = security_events
+
+    async def __call__(self, scope: dict[str, Any], receive: Callable, send: Callable) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        if scope.get("method") in {"GET", "HEAD", "OPTIONS"}:
+            await self.app(scope, receive, send)
+            return
+        deadline = time.monotonic() + self.timeout_seconds
+        body = bytearray()
+        header_values = [value for key, value in scope.get("headers", ()) if key.lower() == b"content-length"]
+
+        try:
+            if len(header_values) == 1:
+                try:
+                    declared = int(header_values[0])
+                except ValueError:
+                    declared = 0
+                if declared > self.max_body_size:
+                    raise _RequestBodyTooLarge
+            import anyio
+
+            more = True
+            with anyio.fail_after(max(0, deadline - time.monotonic())):
+                while more:
+                    message = await receive()
+                    if message["type"] != "http.request":
+                        raise _RequestBodyIncomplete
+                    chunk = message.get("body", b"")
+                    if len(body) + len(chunk) > self.max_body_size:
+                        raise _RequestBodyTooLarge
+                    body.extend(chunk)
+                    more = message.get("more_body", False)
+        except TimeoutError:
+            error = _RequestBodyDeadlineExceeded()
+        except (_RequestBodyDeadlineExceeded, _RequestBodyTooLarge, _RequestBodyIncomplete) as caught:
+            error = caught
+        else:
+            delivered = False
+
+            async def replay_body():
+                nonlocal delivered
+                if delivered:
+                    return await receive()
+                delivered = True
+                return {"type": "http.request", "body": bytes(body), "more_body": False}
+
+            await self.app(scope, replay_body, send)
+            return
+
+        if isinstance(error, _RequestBodyTooLarge):
+            code, status = "REQUEST_BODY_TOO_LARGE", 413
+        elif isinstance(error, _RequestBodyIncomplete):
+            code, status = "REQUEST_BODY_INCOMPLETE", 400
+        else:
+            code, status = "REQUEST_BODY_DEADLINE_EXCEEDED", 408
+        scope["orgrebase.security_event"] = {
+            "event_type": "REQUEST_RESOURCE_REJECTED", "outcome": "DENIED", "reason": code,
+        }
+        response = JSONResponse(
+            {"detail": {"code": code}}, status_code=status,
+            headers={"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff"},
+        )
+        await response(scope, receive, send)
+
+
+class LoginRateLimiter:
+    """A bounded per-process brake; ingress remains the deployment-wide gate."""
+
+    def __init__(
+        self, *, limit: int = 60, window_seconds: float = 60,
+        monotonic: Callable[[], float] = time.monotonic,
+    ) -> None:
+        self.limit = limit
+        self.window_seconds = window_seconds
+        self.monotonic = monotonic
+        self._events: deque[float] = deque(maxlen=limit)
+        self._lock = Lock()
+
+    def admit(self) -> bool:
+        now = self.monotonic()
+        with self._lock:
+            while self._events and self._events[0] <= now - self.window_seconds:
+                self._events.popleft()
+            if len(self._events) >= self.limit:
+                return False
+            self._events.append(now)
+            return True
+
+
+class ConcurrencyLimitMiddleware:
+    """Reject excess in-process work without an unbounded waiting queue."""
+
+    def __init__(
+        self, app: Any, max_concurrent: int,
+        security_events: SecurityEventEmitter | None = None,
+    ) -> None:
+        self.app = app
+        self.max_concurrent = max_concurrent
+        self.security_events = security_events
+        self._active = 0
+        self._lock = Lock()
+
+    async def __call__(self, scope: dict[str, Any], receive: Callable, send: Callable) -> None:
+        if scope["type"] != "http" or scope.get("path") in {"/api/health", "/readyz"}:
+            await self.app(scope, receive, send)
+            return
+        with self._lock:
+            admitted = self._active < self.max_concurrent
+            if admitted:
+                self._active += 1
+        if not admitted:
+            if self.security_events is not None:
+                self.security_events.emit(
+                    event_type="REQUEST_RESOURCE_REJECTED", outcome="DENIED",
+                    reason="REQUEST_CONCURRENCY_LIMITED", route=_security_route(scope),
+                )
+            response = JSONResponse(
+                {"detail": {"code": "REQUEST_CONCURRENCY_LIMITED"}}, status_code=503,
+                headers={"Cache-Control": "no-store", "Retry-After": "1",
+                         "X-Content-Type-Options": "nosniff"},
+            )
+            await response(scope, receive, send)
+            return
+        try:
+            await self.app(scope, receive, send)
+        finally:
+            with self._lock:
+                self._active -= 1
+
+
+class SecurityEventEmitter:
+    """Emit fixed, low-sensitivity events without buffering request data."""
+
+    def __init__(self, sink: Callable[[dict[str, str]], None] | None = None) -> None:
+        self._sink = sink or self._log
+        self._lock = Lock()
+        self._dropped_total = 0
+
+    @staticmethod
+    def _log(event: dict[str, str]) -> None:
+        logging.getLogger("orgrebase.security").info(
+            "security_event time=%s event=%s outcome=%s reason=%s route=%s scope_ref=%s subject_ref=%s",
+            event["server_time"], event["event_type"], event["outcome"], event["reason"],
+            event["route"], event["scope_ref"], event["subject_ref"],
+        )
+
+    def emit(
+        self, *, event_type: str, outcome: str, reason: str, route: str,
+        scope_ref: str = "none", subject_ref: str = "none",
+    ) -> None:
+        safe_code = re.compile(r"^[A-Z][A-Z0-9_]{2,127}$")
+        event = {
+            "server_time": datetime.now(UTC).isoformat(),
+            "event_type": event_type if safe_code.fullmatch(event_type) else "SECURITY_EVENT_INVALID",
+            "outcome": outcome if safe_code.fullmatch(outcome) else "UNKNOWN",
+            "reason": reason if safe_code.fullmatch(reason) else "SECURITY_REASON_REDACTED",
+            "route": route if re.fullmatch(r"/[A-Za-z0-9_./{}:-]{0,255}", route) else "unmatched",
+            "scope_ref": scope_ref if re.fullmatch(r"(?:sha256:[0-9a-f]{64}|none)", scope_ref) else "none",
+            "subject_ref": subject_ref if re.fullmatch(r"(?:sha256:[0-9a-f]{64}|none)", subject_ref) else "none",
+        }
+        try:
+            self._sink(event)
+        except Exception:
+            # A broken collector must not turn an authorization decision into
+            # an availability or privilege change. Only a saturated scalar is
+            # retained, so failures cannot create an unbounded memory queue.
+            with self._lock:
+                self._dropped_total = min(2**63 - 1, self._dropped_total + 1)
+
+    @property
+    def dropped_total(self) -> int:
+        with self._lock:
+            return self._dropped_total
+
+
+def _security_route(scope: Mapping[str, Any]) -> str:
+    route = getattr(scope.get("route"), "path", None)
+    if isinstance(route, str):
+        return route
+    application = scope.get("app")
+    for candidate in getattr(getattr(application, "router", None), "routes", ()):
+        match, _ = candidate.matches(dict(scope))
+        if match == Match.FULL:
+            candidate_path = getattr(candidate, "path", None)
+            return candidate_path if isinstance(candidate_path, str) else "unmatched"
+    return "unmatched"
+
+
+def _security_principal(principal: Any | None) -> tuple[str, str]:
+    if principal is None:
+        return "none", "none"
+    return (
+        sha256_digest({"tenant_id": principal.tenant_id}),
+        sha256_digest({"tenant_id": principal.tenant_id, "actor_id": principal.actor_id}),
+    )
+
 
 def _active_golden_evidence_root() -> Path:
     """Resolve the one read-only Golden root shared by every API projection."""
 
     configured = os.environ.get("ORGREBASE_GOLDEN_EVIDENCE_ROOT", "").strip()
-    return Path(configured).expanduser().resolve() if configured else GOLDEN_EVIDENCE_ROOT
+    if configured:
+        return Path(configured).expanduser().resolve()
+    if GOLDEN_EVIDENCE_ROOT.is_dir():
+        return GOLDEN_EVIDENCE_ROOT
+    try:
+        summary = runtime_asset_path(
+            "evidence/golden-competition/latest/pilot/golden-run/summary.json"
+        )
+    except FileNotFoundError:
+        return GOLDEN_EVIDENCE_ROOT
+    return summary.parent.parent
 
 
 def _run_oac_bound_shadow_independent_verifier(
@@ -1089,9 +1332,15 @@ def _workspace_current_run_archive_view(
     agree on one terminal ``run_id``.
     """
 
+    history_included = False
     if projected_state is None:
         try:
-            projected = workspace.state()
+            completion_state = getattr(workspace, "state_with_completion_history", None)
+            if include_history and callable(completion_state):
+                projected = completion_state()
+                history_included = True
+            else:
+                projected = workspace.state()
         except (IntegrityError, RuntimeError, ValueError, KeyError, OSError) as exc:
             return {
                 "schema_version": "orgrebase.workspace-current-run-archive-view.v1",
@@ -1106,7 +1355,7 @@ def _workspace_current_run_archive_view(
         projected = projected_state
     state = dict(projected) if isinstance(projected, Mapping) else {}
     completion_history = getattr(workspace, "completion_history", None)
-    if include_history and callable(completion_history):
+    if include_history and not history_included and callable(completion_history):
         try:
             state.update(completion_history())
         except (IntegrityError, RuntimeError, ValueError, KeyError, OSError) as exc:
@@ -1747,10 +1996,10 @@ def create_app(
         lifespan=lifespan,
         default_response_class=WireJSONResponse,
     )
-    application.add_middleware(
-        TrustedHostMiddleware,
-        allowed_hosts=list(settings.allowed_hosts),
-    )
+    security_events = SecurityEventEmitter()
+    login_rate_limiter = LoginRateLimiter()
+    application.state.security_events = security_events
+    application.state.login_rate_limiter = login_rate_limiter
     browser_sessions = (
         BrowserSessions(settings.browser_session, authenticator, BrowserSessionStore(get_workspace_runtime().store))
         if settings.browser_session is not None else None
@@ -1770,8 +2019,24 @@ def create_app(
         workspace.identity_issuer = LOCAL_SESSION_ISSUER
         workspace.authorize_workspace_subject = settings.authorize_workspace
 
+    @application.exception_handler(RequestValidationError)
+    async def private_draft_validation_error(request, exc):
+        if request.url.path.startswith("/api/workspace/onboarding-drafts"):
+            # Pydantic's default errors include the rejected input and context.
+            # Neither belongs in private-draft error responses or client logs.
+            return JSONResponse(
+                {"detail": {"code": "ONBOARDING_DRAFT_REQUEST_INVALID"}},
+                status_code=422, headers={"Cache-Control": "no-store"},
+            )
+        return await request_validation_exception_handler(request, exc)
+
     @application.exception_handler(AuthenticationError)
     async def authentication_error_handler(request, exc):
+        request.scope["orgrebase.security_event"] = {
+            "event_type": "AUTHENTICATION_REJECTED",
+            "outcome": "DENIED",
+            "reason": exc.code,
+        }
         return JSONResponse({"detail": {"code": exc.code}}, status_code=exc.status_code,
                             headers={"Cache-Control": "no-store", "Referrer-Policy": "no-referrer"})
 
@@ -1781,11 +2046,26 @@ def create_app(
             return await call_next(request)
         token = None
         authorization_token = None
+        principal = None
         try:
             if browser_sessions is not None:
                 require_browser_origin(request, browser_sessions)
             if local_sessions is not None:
                 local_sessions.require_request(request)
+            if (
+                browser_sessions is not None
+                and request.url.path == "/api/session/login"
+                and not login_rate_limiter.admit()
+            ):
+                request.scope["orgrebase.security_event"] = {
+                    "event_type": "LOGIN_RATE_LIMITED",
+                    "outcome": "DENIED",
+                    "reason": "AUTH_LOGIN_RATE_LIMITED",
+                }
+                return JSONResponse(
+                    {"detail": {"code": "AUTH_LOGIN_RATE_LIMITED"}}, status_code=429,
+                    headers={"Cache-Control": "no-store", "Retry-After": "60"},
+                )
             if request.url.path == "/api/session" or request.url.path.startswith("/api/session/"):
                 return await call_next(request)
             if (browser_sessions is not None or local_sessions is not None) and (request.url.path == "/" or request.url.path.startswith("/assets/")):
@@ -1832,11 +2112,27 @@ def create_app(
                     settings.authorize_workspace(current.subject)
                 request_principal.set(current)
             authorization_token = request_authorization.set(reauthorize_commit)
+            scope_ref, subject_ref = _security_principal(principal)
+            request.scope["orgrebase.security_event"] = {
+                "event_type": "REQUEST_AUTHORIZED",
+                "outcome": "ALLOWED",
+                "reason": "AUTHENTICATED",
+                "scope_ref": scope_ref,
+                "subject_ref": subject_ref,
+            }
             response = await call_next(request)
             response.headers["Cache-Control"] = "no-store"
             response.headers["Vary"] = "Cookie, Authorization, X-OrgRebase-Workspace"
             return response
         except AuthenticationError as exc:
+            scope_ref, subject_ref = _security_principal(principal)
+            request.scope["orgrebase.security_event"] = {
+                "event_type": "AUTHENTICATION_REJECTED",
+                "outcome": "DENIED",
+                "reason": exc.code,
+                "scope_ref": scope_ref,
+                "subject_ref": subject_ref,
+            }
             response = JSONResponse(
                 {"detail": {"code": exc.code}}, status_code=exc.status_code,
                 headers={"WWW-Authenticate": "Bearer", "Cache-Control": "no-store"},
@@ -1849,6 +2145,30 @@ def create_app(
                 request_principal.reset(token)
             if authorization_token is not None:
                 request_authorization.reset(authorization_token)
+
+    # Registration order is intentional. response_policy (declared next) is
+    # outermost, then Host validation and body admission run before any token
+    # verification or business endpoint. Starlette's native limiter remains a
+    # second byte-counting boundary behind the pre-reader.
+    application.add_middleware(
+        RequestBodyLimitMiddleware,
+        max_body_size=MAX_REQUEST_BODY_BYTES,
+    )
+    application.add_middleware(
+        RequestBodyDeadlineMiddleware,
+        timeout_seconds=REQUEST_BODY_DEADLINE_SECONDS,
+        max_body_size=MAX_REQUEST_BODY_BYTES,
+        security_events=security_events,
+    )
+    application.add_middleware(
+        ConcurrencyLimitMiddleware,
+        max_concurrent=MAX_CONCURRENT_REQUESTS,
+        security_events=security_events,
+    )
+    application.add_middleware(
+        TrustedHostMiddleware,
+        allowed_hosts=list(settings.allowed_hosts),
+    )
 
     @application.middleware("http")
     async def response_policy(request, call_next):
@@ -1864,6 +2184,38 @@ def create_app(
             if incident.incident_id is not None:
                 response.headers["X-OrgRebase-Incident"] = incident.incident_id
                 incident.log(status=response.status_code, route=getattr(request.scope.get("route"), "path", None))
+        event = request.scope.pop("orgrebase.security_event", None)
+        route = _security_route(request.scope)
+        if response.status_code in {401, 403} and (
+            event is None or event.get("outcome") != "DENIED"
+        ):
+            event = {
+                "event_type": "AUTHORIZATION_REJECTED",
+                "outcome": "DENIED",
+                "reason": f"HTTP_{response.status_code}",
+                "scope_ref": (event or {}).get("scope_ref", "none"),
+                "subject_ref": (event or {}).get("subject_ref", "none"),
+            }
+        elif event is None and response.status_code in {408, 413}:
+            event = {
+                "event_type": "REQUEST_RESOURCE_REJECTED",
+                "outcome": "DENIED",
+                "reason": "REQUEST_BODY_TOO_LARGE" if response.status_code == 413 else "REQUEST_BODY_DEADLINE_EXCEEDED",
+            }
+        elif event is None and (
+            route == "/api/session" or route.startswith("/api/session/")
+        ):
+            event = {
+                "event_type": "SESSION_OPERATION",
+                "outcome": "ALLOWED" if response.status_code < 400 else "DENIED",
+                "reason": "SESSION_OPERATION_COMPLETED" if response.status_code < 400 else f"HTTP_{response.status_code}",
+            }
+        if event is not None:
+            security_events.emit(
+                event_type=event["event_type"], outcome=event["outcome"], reason=event["reason"],
+                route=route, scope_ref=event.get("scope_ref", "none"),
+                subject_ref=event.get("subject_ref", "none"),
+            )
         response.headers["X-Content-Type-Options"] = "nosniff"
         path = request.url.path
         if response.status_code < 400 and (path == "/" or path.startswith("/assets/")):
@@ -1957,7 +2309,18 @@ def create_app(
             raise HTTPException(status_code=503, detail="RELEASE_FACTS_INVALID") from None
         if not isinstance(value, dict):
             raise HTTPException(status_code=503, detail="RELEASE_FACTS_INVALID")
-        return value
+        evidence_release = value.get("release")
+        return {
+            **value,
+            "release_context": {
+                "runtime_version": __version__,
+                "evidence_release": evidence_release,
+                "relationship": (
+                    "SAME_RELEASE_FACTS" if evidence_release == __version__
+                    else "HISTORICAL_RELEASE_FACTS"
+                ),
+            },
+        }
 
     @application.get("/api/platform/evidence")
     @application.get("/api/semifinal/evidence", include_in_schema=False)
@@ -2120,7 +2483,17 @@ def create_app(
                 **state.get("agentteams_operations", {}),
                 "element_observation": observation_view(workspace, state),
             }
+            from orgrebase.workspace.change_proposals import require_action
+            projected = WorkspaceService._learning_history_view(projected, surface="api")
+            if hasattr(workspace, "profile"):
+                require_action(workspace, "read")
+            else:
+                reauthorize = request_authorization.get()
+                if reauthorize is not None:
+                    reauthorize()
             return projected
+        except AuthorizationError as exc:
+            raise HTTPException(status_code=403, detail=_workspace_error(exc)) from exc
         except (IntegrityError, RuntimeError, ValueError, KeyError, OSError) as exc:
             raise HTTPException(status_code=409, detail=_workspace_error(exc)) from exc
 
@@ -2187,9 +2560,13 @@ def create_app(
 
         workspace = get_workspace_runtime()
         try:
-            projected = workspace.state()
-            if projected.get("schema_version") == "orgrebase.workspace-state.v2":
-                projected.update(workspace.completion_history())
+            completion_state = getattr(workspace, "state_with_completion_history", None)
+            if callable(completion_state):
+                projected = completion_state()
+            else:
+                projected = workspace.state()
+                if projected.get("schema_version") == "orgrebase.workspace-state.v2":
+                    projected.update(workspace.completion_history())
         except (IntegrityError, RuntimeError, ValueError, KeyError, OSError) as exc:
             return build_completed_run_observability_from_trusted_state(
                 {},
@@ -2489,6 +2866,33 @@ def create_app(
             if not isinstance(approval_digest, str) or approval_digest != approval.digest:
                 raise IntegrityError("TASK_INTAKE_APPROVAL_DIGEST_MISMATCH")
 
+            existing_intake = workspace._task_intake_run_record()
+            if existing_intake is not None:
+                if (
+                    existing_intake["actor_id"] != identity
+                    or existing_intake["candidate_digest"] != candidate.digest
+                    or existing_intake["approval_digest"] != approval.digest
+                    or existing_intake["prompt_digest"] != sha256_digest(work_description)
+                    or existing_intake["prompt_length"] != len(work_description)
+                    or existing_intake["candidate_receipt"] != candidate.model_dump(mode="json")
+                    or existing_intake["confirmation_receipt"] != approval.model_dump(mode="json")
+                ):
+                    raise IntegrityError("WORKSPACE_TASK_INTAKE_RECEIPT_CONFLICT")
+                from orgrebase.workspace.service import TASK_INTAKE_WORK_DESCRIPTION_ARTIFACT_ID
+                from orgrebase.workspace.task_intake import TaskIntakeRunSummary
+
+                summary = TaskIntakeRunSummary.model_validate({
+                    key: existing_intake[key] for key in TaskIntakeRunSummary.model_fields
+                })
+                private_description = workspace._build_task_intake_work_description_record(
+                    work_description=work_description, run_summary=summary,
+                )
+                if not workspace.private_records.matches(
+                    TASK_INTAKE_WORK_DESCRIPTION_ARTIFACT_ID,
+                    private_description.model_dump(mode="json"),
+                ):
+                    raise IntegrityError("WORKSPACE_TASK_INTAKE_WORK_DESCRIPTION_CONFLICT")
+
             progress_started = True
             update_workspace_run_progress(
                 status="RUNNING",
@@ -2517,11 +2921,56 @@ def create_app(
                     formation_decision, context_envelope = (
                         get_oac_agentic_runtime().formation_roots_for_current_task(
                             expected_activation_binding_digest=binding.digest,
+                            **({"expected_existing_intake_digest": existing_intake["digest"]}
+                               if existing_intake is not None else {}),
                         )
                     )
                 activation_binding_payload = binding.model_dump(mode="json")
                 formation_decision_payload = formation_decision.model_dump(mode="json")
                 context_envelope_payload = context_envelope.model_dump(mode="json")
+
+            if existing_intake is not None:
+                # A completed command reads its original evidence. Preparing a
+                # new Formation or Tool request would use superseding sources.
+                from orgrebase.workspace.models import WorkTrace
+
+                with workspace._command_lock, workspace.store.read_snapshot():
+                    retained = workspace._task_intake_run_record()
+                    if retained is None or retained["digest"] != existing_intake["digest"]:
+                        raise IntegrityError("WORKSPACE_TASK_INTAKE_RECEIPT_CONFLICT")
+                    formation = workspace._formation_record()
+                    if formation is None or formation.digest != retained["formation_receipt_digest"]:
+                        raise IntegrityError("WORKSPACE_TASK_INTAKE_FORMATION_BINDING_MISMATCH")
+                    tool_evidence = workspace._dependency_evidence_tool_record()
+                    if tool_evidence["status"] != "SUCCEEDED":
+                        raise IntegrityError("WORKSPACE_DEPENDENCY_TOOL_AUDIT_INCOMPLETE")
+                    trace = WorkTrace.model_validate(workspace.store.load_artifact(formation.trace_ref).payload)
+                    result = {
+                        "receipt": formation,
+                        "tool_invocation": tool_evidence["invocation"],
+                        "tool_called_event": tool_evidence["called_event"],
+                        "formation_run_id": trace.run_id,
+                        "tool_evidence": tool_evidence,
+                        "oac_activation": workspace.oac_activation_state(),
+                        "state": workspace.state(),
+                        "task_intake": retained,
+                    }
+                    if required:
+                        current_binding = get_oac_adaptation_runtime().require_activation_binding(
+                            profile_digest=workspace.profile_digest,
+                            pack_digest=workspace.runtime_configuration.pack_digest,
+                            execution_run_id=workspace.effective_workflow_run_id,
+                        )
+                        if current_binding.digest != binding_digest:
+                            raise IntegrityError("TASK_INTAKE_OAC_BINDING_CHANGED")
+                    authorization = request_authorization.get()
+                    if authorization is not None:
+                        authorization()
+                update_workspace_run_progress(
+                    status="COMPLETED" if result["state"].get("business_complete") else "ACTIVE",
+                    stage=str(result["state"].get("stage") or "CURRENT"),
+                )
+                return result
 
             update_workspace_run_progress(stage="AGENTTEAMS_EXECUTION")
             result = workspace.form_quote_with_dependency_evidence(

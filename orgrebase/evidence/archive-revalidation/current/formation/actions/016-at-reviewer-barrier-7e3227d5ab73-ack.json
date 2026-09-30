@@ -1,13 +1,13 @@
 {
   "action": "ack_task",
-  "digest": "sha256:1e038d75ec729a791d8e6cc8cb4e850ad882c8ad8929b7f2439c9eed0e463be7",
+  "digest": "sha256:278b8e57c46e8103201871f455bae313afa77a95b7c704b21c9fc056a9ceea48",
   "error": null,
   "key": "at-reviewer-barrier-7e3227d5ab73:ack",
   "ok": true,
-  "payload_digest": "sha256:951325d2cc4833abe8307d78e789ca136ecaf6463ac2f51d89a5f924c950fe66",
+  "payload_digest": "sha256:cbe4bf003fdb91b5da7494c3e440777acea847a5bb65ca96922626d01a3e83cf",
   "raw_ref": "raw-mcp/016-at-reviewer-barrier-7e3227d5ab73-ack-d08dbcc0.json",
   "request_digest": "sha256:c4c374890a0069bb0011603b5cbd299195393063bf83a195769c6a8d2e4e9560",
-  "response_digest": "sha256:69ea16cfa20eecce8cc65c9e192e7274588e145232ec2cccc74b211d6a02cfdd",
+  "response_digest": "sha256:f1741e64ae656478e1119ab0a4e2e6b0f7948a20c1071f4fd9d054ad8fb5f986",
   "sequence": 16,
   "status": "in_progress",
   "tool": "taskflow"

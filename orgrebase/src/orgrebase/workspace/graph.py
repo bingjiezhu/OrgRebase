@@ -361,6 +361,11 @@ class WorkspaceSnapshotBuilder:
         manifest_refs = tuple(
             sorted(
                 [item.ref for item in universe.imported_manifests if item.target_id not in replaced_ids]
+                + [
+                    item.ref
+                    for item in universe.runtime_manifests
+                    if split_ref(item.consumer_ref)[0] not in replaced_ids
+                ]
                 + [item.ref for item in replacement_manifests]
             )
         )

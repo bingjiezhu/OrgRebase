@@ -88,9 +88,12 @@ def test_two_postgres_governance_calls_create_only_one_source(postgres_runtime):
             result = list(pool.map(admit, services))
         assert result.count("ADMITTED") == 1
         assert all(
-            value in {"ADMITTED", "PATTERN_GOVERNANCE_ALREADY_FINAL", "PATTERN_PROPOSAL_TERMINAL"}
+            value in {
+                "ADMITTED", "PATTERN_GOVERNANCE_ALREADY_FINAL",
+                "PATTERN_PROPOSAL_TERMINAL", "PATTERN_GOVERNANCE_HEAD_CHANGED",
+            }
             for value in result
-        )
+        ), result
         assert len(services[0]._family("admission")) == len(services[0]._family("decision")) == 1
 
 

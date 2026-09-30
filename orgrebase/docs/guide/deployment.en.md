@@ -4,6 +4,8 @@ Local demonstrations and customer deployments share the business control plane b
 
 ## Customer-deployment prerequisites
 
+For first-time setup, the five enterprise input classes, draft preflight, separation of seal/admission/activation, clean installation and upgrade rollback, use the [enterprise onboarding guide](../ENTERPRISE-ONBOARDING.md).
+
 | Area | Requirement |
 |---|---|
 | Database | PostgreSQL, migrated and provisioned before startup; no runtime superuser/BYPASSRLS |
@@ -35,3 +37,7 @@ API identity settings alone enable Bearer clients. Browser login additionally re
 Expired private text becomes unreadable, but clearing it requires an administrator purge or external scheduler. There is no built-in retention scheduler, and backups/WAL have separate lifetimes. See the [maintenance client (English)](../PRIVATE-DATA-LIFECYCLE.md#run-the-expiry-sweep).
 
 Measure capacity against the actual workload and retain timeout, rejection and drop denominators. A passing health endpoint is not Quote capacity, and one local run is not an SLA. See the [capacity reference (English)](../HTTP-CAPACITY.md).
+
+## Upgrade boundary
+
+The production runtime never migrates its schema automatically. Before an upgrade, enter a maintenance window, retain pending and UNKNOWN intents plus the current deletion ledger, and run the documented [database migration](../STATE-STORE-MIGRATIONS.md) against a new or restored database first. Preflight the new artifact and Pack again. Old previews, approvals and source confirmations do not become current decisions merely because the application was upgraded. Rolling back application code cannot reverse an external effect that already happened.

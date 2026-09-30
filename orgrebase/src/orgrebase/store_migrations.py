@@ -20,6 +20,7 @@ from orgrebase.database import (
     EMPTY_EVENT_DIGEST,
     SCOPED_TABLES,
     Connection,
+    deployment_budget_reservations,
     metadata,
     workspace_registry,
 )
@@ -28,7 +29,7 @@ from orgrebase.domain import IntegrityError
 from orgrebase.store_schema_v2 import POSTGRES_SCHEMA_V2
 from orgrebase.store_schema_v4 import migrate_effect_barriers
 
-STATE_STORE_SCHEMA_VERSION = 5
+STATE_STORE_SCHEMA_VERSION = 6
 _ASCII_CASE_FOLD = str.maketrans("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")
 
 _SCHEMA_V1 = (
@@ -195,6 +196,14 @@ _POSTGRES_CHECKS_V3 = {
     "browser_session_revocations": (
         "CHECK ((kind = ANY (ARRAY['SUBJECT'::text, 'SID'::text, 'EVENT'::text])))",
     ),
+    "deployment_budget_reservations": (
+        "CHECK ((period_start_epoch_ms >= 0))",
+        "CHECK ((period_end_epoch_ms > period_start_epoch_ms))",
+        "CHECK ((reserved_microusd >= 0))",
+        "CHECK ((reserved_calls >= 0))",
+        "CHECK ((deadline_epoch_ms > 0))",
+        "CHECK ((state = ANY (ARRAY['DISPATCHING'::text, 'COMPLETE'::text, 'FAILED'::text, 'RESULT_UNKNOWN'::text])))",
+    ),
 }
 
 
@@ -203,11 +212,16 @@ def _sqlite_statements(version: int) -> tuple[str, ...]:
         return _SCHEMA_V1 + (_SCHEMA_V2 if version == 2 else ())
     from sqlalchemy.dialects.sqlite import dialect
 
+    tables = (
+        table
+        for table in metadata.sorted_tables
+        if version >= 6 or table is not deployment_budget_reservations
+    )
     return tuple(
         _SCHEMA_V2[0]
         if table.name == "store_metadata"
         else str(CreateTable(table).compile(dialect=dialect()))
-        for table in metadata.sorted_tables
+        for table in tables
     )
 
 
@@ -272,6 +286,38 @@ def _upgrade_effect_query_indexes(connection: Connection) -> None:
         connection.execute("PRAGMA user_version=5")
 
 
+def _create_deployment_budget_policy(connection: psycopg.Connection) -> None:
+    """Restrict the deployment ledger to the database's bound tenant."""
+
+    connection.execute(
+        "ALTER TABLE deployment_budget_reservations ENABLE ROW LEVEL SECURITY"
+    )
+    connection.execute(
+        "ALTER TABLE deployment_budget_reservations FORCE ROW LEVEL SECURITY"
+    )
+    predicate = (
+        "tenant_id = (SELECT tenant_id FROM store_metadata WHERE singleton = 1)"
+    )
+    connection.execute(
+        "CREATE POLICY deployment_budget_tenant ON deployment_budget_reservations "
+        f"USING ({predicate}) WITH CHECK ({predicate})"
+    )
+
+
+def _upgrade_deployment_budget(connection: Connection) -> None:
+    """Add the v6 deployment-scoped dispatch ledger without rewriting v5 rows."""
+
+    from sqlalchemy.dialects import postgresql, sqlite
+
+    dialect = postgresql.dialect() if isinstance(connection, psycopg.Connection) else sqlite.dialect()
+    connection.execute(str(CreateTable(deployment_budget_reservations).compile(dialect=dialect)))
+    if isinstance(connection, psycopg.Connection):
+        _create_deployment_budget_policy(connection)
+    connection.execute("UPDATE store_metadata SET schema_version=6")
+    if isinstance(connection, sqlite3.Connection):
+        connection.execute("PRAGMA user_version=6")
+
+
 def _history_head(connection: Connection) -> tuple[int, str]:
     """Validate the legacy chain once during the explicit schema transition."""
     previous = EMPTY_EVENT_DIGEST
@@ -316,26 +362,29 @@ def _upgrade_sqlite_v3(connection: sqlite3.Connection) -> None:
     indexes = list(
         connection.execute("SELECT name,sql FROM sqlite_schema WHERE type='index' AND sql IS NOT NULL")
     )
-    managed_indexes = {index.name for table in metadata.sorted_tables for index in table.indexes}
+    v3_tables = tuple(
+        table for table in metadata.sorted_tables if table is not deployment_budget_reservations
+    )
+    managed_indexes = {index.name for table in v3_tables for index in table.indexes}
     for name, _statement in indexes:
         connection.execute('DROP INDEX "' + name.replace('"', '""') + '"')
-    for table in metadata.sorted_tables:
+    for table in v3_tables:
         if table.name in rebuilt:
             connection.execute(f'ALTER TABLE "{table.name}" RENAME TO "_v2_{table.name}"')
-    for table in metadata.sorted_tables:
+    for table in v3_tables:
         if table.name not in existing or table.name in rebuilt:
             connection.execute(str(CreateTable(table).compile(dialect=dialect())))
     connection.execute(
         "INSERT INTO workspace_registry(workspace_id,audit_sequence,audit_head) VALUES (?,?,?)",
         (DEFAULT_WORKSPACE_ID, sequence, head),
     )
-    for table in metadata.sorted_tables:
+    for table in v3_tables:
         if table.name not in rebuilt:
             continue
         columns = [name for name in POSTGRES_SCHEMA_V2[table.name]["columns"]]
         names = ",".join('"' + name + '"' for name in columns)
         connection.execute(f'INSERT INTO "{table.name}" ({names}) SELECT {names} FROM "_v2_{table.name}"')
-    for table in reversed(metadata.sorted_tables):
+    for table in reversed(v3_tables):
         if table.name in rebuilt:
             connection.execute(f'DROP TABLE "_v2_{table.name}"')
     _create_sqlite_indexes(connection)
@@ -358,7 +407,7 @@ def migrate_state_store(connection: Connection) -> None:
     if not connection.in_transaction:
         raise RuntimeError("STATE_STORE_MIGRATION_REQUIRES_TRANSACTION")
     version = connection.execute("PRAGMA user_version").fetchone()[0]
-    if version not in (0, 1, 2, 3, 4, STATE_STORE_SCHEMA_VERSION):
+    if version not in (0, 1, 2, 3, 4, 5, STATE_STORE_SCHEMA_VERSION):
         raise IntegrityError(f"STATE_STORE_SCHEMA_VERSION_UNSUPPORTED:{version}")
     existing = connection.execute(
         "SELECT 1 FROM sqlite_schema WHERE name NOT GLOB 'sqlite_*' LIMIT 1"
@@ -388,6 +437,10 @@ def migrate_state_store(connection: Connection) -> None:
     if version == 4:
         validate_state_store(connection, version=4)
         _upgrade_effect_query_indexes(connection)
+        version = 5
+    if version == 5:
+        validate_state_store(connection, version=5)
+        _upgrade_deployment_budget(connection)
     validate_state_store(connection)
 
 
@@ -411,7 +464,9 @@ _REGISTRY_BINDING_GUARD = """BEGIN
 END"""
 
 
-def _create_postgres_policies(connection: psycopg.Connection) -> None:
+def _create_postgres_policies(
+    connection: psycopg.Connection, *, include_deployment_budget: bool = False
+) -> None:
     from psycopg import sql
 
     for table in (*SCOPED_TABLES, metadata.tables["effect_intents"]):
@@ -453,6 +508,8 @@ def _create_postgres_policies(connection: psycopg.Connection) -> None:
         "CREATE POLICY target_barriers_release ON target_barriers FOR DELETE USING "
         + _BARRIER_TERMINAL_EFFECT
     )
+    if include_deployment_budget:
+        _create_deployment_budget_policy(connection)
 
 
 def _upgrade_postgres_v3(connection: psycopg.Connection) -> None:
@@ -464,6 +521,8 @@ def _upgrade_postgres_v3(connection: psycopg.Connection) -> None:
     # detached schema so upgrading one database cannot affect another store.
     transition_metadata = MetaData()
     for table in metadata.sorted_tables:
+        if table is deployment_budget_reservations:
+            continue
         table.to_metadata(transition_metadata)
     sequence, head = _history_head(connection)
     connection.execute(str(CreateTable(workspace_registry).compile(dialect=dialect())))
@@ -503,6 +562,8 @@ def _upgrade_postgres_v3(connection: psycopg.Connection) -> None:
                 )
             )
     for table in metadata.sorted_tables:
+        if table is deployment_budget_reservations:
+            continue
         if table in SCOPED_TABLES and table.name in POSTGRES_SCHEMA_V2:
             for constraint in transition_metadata.tables[table.name].constraints:
                 if type(constraint).__name__ in {
@@ -545,9 +606,9 @@ def _migrate_postgres(connection: psycopg.Connection) -> None:
             connection.execute(str(CreateTable(table).compile(dialect=dialect())))
             for index in table.indexes:
                 connection.execute(str(CreateIndex(index).compile(dialect=dialect())))
-        connection.execute("INSERT INTO store_metadata(singleton,tenant_id,schema_version) VALUES (1,NULL,5)")
+        connection.execute("INSERT INTO store_metadata(singleton,tenant_id,schema_version) VALUES (1,NULL,6)")
         connection.execute("INSERT INTO workspace_registry(workspace_id) VALUES ('default')")
-        _create_postgres_policies(connection)
+        _create_postgres_policies(connection, include_deployment_budget=True)
     else:
         if "store_metadata" not in tables:
             raise IntegrityError("STATE_STORE_SCHEMA_INCOMPATIBLE")
@@ -564,6 +625,10 @@ def _migrate_postgres(connection: psycopg.Connection) -> None:
         if version == 4:
             _validate_postgres(connection, version=4)
             _upgrade_effect_query_indexes(connection)
+            version = 5
+        if version == 5:
+            _validate_postgres(connection, version=5)
+            _upgrade_deployment_budget(connection)
         elif version != STATE_STORE_SCHEMA_VERSION:
             raise IntegrityError(f"STATE_STORE_SCHEMA_VERSION_UNSUPPORTED:{version}")
     _validate_postgres(connection)
@@ -606,7 +671,15 @@ def validate_state_store(connection: Connection, *, version: int = STATE_STORE_S
 def _validate_postgres(connection: psycopg.Connection, *, version: int = STATE_STORE_SCHEMA_VERSION) -> None:
     from sqlalchemy.dialects.postgresql import dialect
 
-    expected_tables = set(POSTGRES_SCHEMA_V2) if version == 2 else set(metadata.tables)
+    expected_tables = (
+        set(POSTGRES_SCHEMA_V2)
+        if version == 2
+        else {
+            name
+            for name in metadata.tables
+            if version >= 6 or name != deployment_budget_reservations.name
+        }
+    )
     tables = {
         row[0]
         for row in connection.execute("SELECT tablename FROM pg_tables WHERE schemaname=current_schema()")
@@ -758,3 +831,28 @@ def _validate_postgres(connection: psycopg.Connection, *, version: int = STATE_S
             "target_barriers_release": ("d", True, _normalized_definition(_BARRIER_TERMINAL_EFFECT), None),
         }:
             raise IntegrityError("STATE_STORE_WORKSPACE_POLICY_INVALID:target_barriers")
+    if version >= 6:
+        relation = connection.execute(
+            "SELECT relrowsecurity,relforcerowsecurity FROM pg_class "
+            "WHERE oid='deployment_budget_reservations'::regclass"
+        ).fetchone()
+        policies = connection.execute(
+            "SELECT polname,polcmd,polpermissive,pg_get_expr(polqual,polrelid),"
+            "pg_get_expr(polwithcheck,polrelid) FROM pg_policy "
+            "WHERE polrelid='deployment_budget_reservations'::regclass"
+        ).fetchall()
+        predicate = _normalized_definition(
+            "(tenant_id = (SELECT store_metadata.tenant_id FROM store_metadata "
+            "WHERE (store_metadata.singleton = 1)))"
+        )
+        if (
+            not relation
+            or not all(relation)
+            or len(policies) != 1
+            or policies[0][0:3] != ("deployment_budget_tenant", "*", True)
+            or _normalized_definition(policies[0][3]) != predicate
+            or _normalized_definition(policies[0][4]) != predicate
+        ):
+            raise IntegrityError(
+                "STATE_STORE_DEPLOYMENT_BUDGET_POLICY_INVALID"
+            )

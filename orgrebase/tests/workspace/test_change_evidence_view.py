@@ -3,11 +3,117 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+from fastapi.testclient import TestClient
+
+from orgrebase.api import create_app
 from orgrebase.workspace.change_proposals import change_detail
 from orgrebase.workspace.service import WorkspaceService
 from tests.workspace.test_workspace_client import run_node
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+@pytest.mark.parametrize("slot", ["pricing_policy", "quote_basket"])
+def test_dual_change_effect_uses_complete_typed_http_receipts_and_rejects_tampering(tmp_path: Path, slot: str):
+    from tests.workspace.test_deliverable_set import make_dual_service
+    from tests.workspace.test_priced_quote_pack import BASKET, POLICY
+
+    workspace, _, profile = make_dual_service(tmp_path, name=f"dual-ui-{slot}")
+    try:
+        workspace.form_quote()
+        event_id = f"ui-effect:{slot}"
+        source_ref = f"source:reviewed-{slot}@v2"
+        value = ({**POLICY, "discount_bps": 1000} if slot == "pricing_policy"
+                 else {**BASKET, "items": [{**BASKET["items"][0], "quantity": 4}]})
+        value["source_ref"] = source_ref
+        with TestClient(create_app(workspace_service=workspace)) as client:
+            fields = client.get("/api/workspace/change-options").json()["fields"]
+            field = next(item for item in fields if item["slot_id"] == slot)
+            submitted = client.post("/api/workspace/change-proposals", json={
+                "event_id": event_id, "slot_id": slot, "base_version": field["current"]["version"],
+                "base_digest": field["current"]["digest"], "value": value, "source_ref": source_ref,
+            })
+            assert submitted.status_code == 200, submitted.text
+            preview = client.post(f"/api/workspace/preview/{event_id}")
+            assert preview.status_code == 200, preview.text
+            preview_digest = preview.json()["preview_digest"]
+            with workspace._test_as_actor(workspace.change_owner[event_id]):
+                source = client.post(f"/api/workspace/approve/{event_id}", json={
+                    "actor_id": workspace.change_owner[event_id], "preview_digest": preview_digest,
+                })
+            assert source.status_code == 200, source.text
+            for member in profile.members:
+                with workspace._test_as_actor(member.owner_id):
+                    decision = client.post(f"/api/workspace/approve/{event_id}/deliverable-set", json={
+                        "operation_id": "effect-display-review", "preview_digest": preview_digest, "decision": "APPROVED",
+                    })
+                assert decision.status_code == 200, decision.text
+            with workspace._test_as_actor("executor:one"):
+                applied = client.post(f"/api/workspace/apply/{event_id}", json={"approval_digest": source.json()["approval_digest"]})
+            assert applied.status_code == 200, applied.text
+            detail = client.get(f"/api/workspace/changes/{event_id}")
+            effect = client.get(f"/api/workspace/deliverable-set/changes/{event_id}")
+            assert detail.status_code == effect.status_code == 200
+            state = client.get("/api/workspace/state").json()
+            observed = {"detail": detail.json(), "effect": effect.json(), "state": {
+                key: state[key] for key in ("quote", "execution", "enterprise_data_lineage")
+            }}
+            assert observed["effect"]["apply_receipt"]["schema_version"] == "orgrebase.deliverable-set-apply-receipt.v1"
+    finally:
+        workspace.close()
+
+    script = r'''
+const assert=require('node:assert/strict'),vm=require('node:vm');
+const {document,window,CustomEvent,nodes,tick}=require('./tests/workspace/console_dom_harness.js');
+const observed=OBSERVED,calls=[];let detail=structuredClone(observed.detail),effect=structuredClone(observed.effect);
+const session={mode:'local',principal:null};
+window.OrgRebaseClient={session:()=>session,workspace:()=> 'workspace:one',async json(path,request={}){
+ calls.push({path,request});if(path.endsWith('/change-options'))return {execution_run_id:detail.execution_run_id,fields:[]};
+ if(path.includes('/changes?'))return {items:[structuredClone(detail)],next_cursor:null};
+ if(path.includes('/deliverable-set/changes/'))return structuredClone(effect);
+ return structuredClone(detail);
+}};
+vm.runInNewContext(SOURCE,{window,document,CustomEvent,performance,crypto});
+const walk=node=>node?[node,...node.children.flatMap(walk)]:[],text=node=>walk(node).map(item=>item.textContent||'').join('\n');
+const section=()=>nodes.get('change-result'),reload=()=>window.OrgRebaseChangeWorkbench.select(detail.event.event_id);
+(async()=>{
+ await tick();await tick();window.dispatchEvent(new CustomEvent('orgrebase:staterendered',{detail:observed.state}));await tick();
+ assert.equal(section().dataset.evidenceStatus,'BOUND','a real complete two-deliverable HTTP result must be bound');
+ assert(text(section()).includes('Quote and Memo were committed together'));
+ assert(text(section()).includes(effect.apply_receipt.id));
+ assert(text(section()).includes(detail.outcome.outcome.quote.payload.pricing.total));
+ assert(calls.some(call=>call.path.includes('/deliverable-set/changes/')),'the typed set receipt is read rather than fabricated');
+ for(const mutate of [
+  (_d,v)=>delete v.apply_receipt,
+  (_d,v)=>v.apply_receipt.digest='sha256:wrong',
+  (_d,v)=>v.apply_receipt.base_rebase_receipt_digest='sha256:wrong',
+  (_d,v)=>v.apply_receipt.candidate_set_digest='sha256:wrong',
+  (_d,v)=>v.apply_receipt.approval_set_digest='sha256:wrong',
+  (_d,v)=>v.apply_receipt.members.pop(),
+  (_d,v)=>v.apply_receipt.members[0].result_digest='sha256:wrong',
+  (_d,v)=>v.apply_receipt.graph_pointer_ref='pointer:wrong@v1',
+  (_d,v)=>v.apply_receipt.snapshot_digest='sha256:wrong',
+  (_d,v)=>v.approval_set.decisions[0].actor_id='actor:wrong',
+  (_d,v)=>v.approval_set.status='INCOMPLETE',
+  (_d,v)=>v.approval_set.decisions[0].scopes=['unknown.scope'],
+  (_d,v)=>v.outcome.artifact_digest='sha256:wrong',
+  (_d,v)=>v.candidate_set.members[0].predecessor_digest='sha256:wrong',
+  (d,_v)=>d.outcome.outcome.workspace_rebase_receipt.successor_object_refs=['work:wrong@v9'],
+  (d,_v)=>d.outcome.outcome.deliverables.find(item=>item.payload.deliverable_kind==='DISCOUNT_MEMO').payload.pricing.total='0.00',
+  (d,_v)=>d.outcome.outcome.rebase_receipt.workflow_run_id='run:wrong',
+  (d,_v)=>d.outcome.outcome.rebase_receipt.approval_actor_id='actor:wrong',
+ ]){
+   detail=structuredClone(observed.detail);effect=structuredClone(observed.effect);mutate(detail,effect);await reload();
+   assert.equal(section().dataset.evidenceStatus,'INCOMPLETE','an incomplete or mismatched set cannot display a verified effect');
+   assert(!text(section()).includes('Quote and Memo were committed together'));
+ }
+ detail=structuredClone(observed.detail);effect=structuredClone(observed.effect);await reload();
+ assert.equal(section().dataset.evidenceStatus,'BOUND');
+ assert.equal(calls.filter(call=>call.request.method==='POST').length,0,'effect reading and rendering never execute a command');
+})().catch(error=>{console.error(error);process.exitCode=1});
+'''
+    run_node(script.replace("OBSERVED", json.dumps(observed)).replace("SOURCE", json.dumps((ROOT / "demo/console/change-workbench.js").read_text())))
 
 
 def test_selected_change_uses_its_actual_receipts_and_predecessor(tmp_path: Path):

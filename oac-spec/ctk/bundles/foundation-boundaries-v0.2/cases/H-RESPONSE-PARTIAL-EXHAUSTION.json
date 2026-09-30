@@ -1,0 +1,14 @@
+{
+  "caseId": "H-RESPONSE-PARTIAL-EXHAUSTION",
+  "expect": {
+    "harnessStatus": "BOUNDARY_ENFORCED"
+  },
+  "input": {
+    "probe": "response-partial-exhaustion"
+  },
+  "operation": "harnessProbe",
+  "requirementRefs": [
+    "REQ-HARNESS-ADAPTER"
+  ],
+  "testTarget": "HARNESS"
+}

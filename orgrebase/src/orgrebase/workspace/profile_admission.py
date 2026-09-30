@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from pydantic import ValidationError
 
@@ -23,12 +23,22 @@ from orgrebase.workspace.profile_contracts import (
     ReadinessGate,
     RuntimeCompatibilityMode,
     SeedCompleteness,
+    SeedComponentKind,
     minimum_gap_gates,
 )
 from orgrebase.workspace.reference_profiles import northstar_acme_quote_profile
 
 if TYPE_CHECKING:
     from orgrebase.workspace.source_admission import EnterpriseSeedSourceAdmissionReceipt
+
+
+ENTERPRISE_INPUT_LABELS = {
+    SeedComponentKind.DOMAIN: "BUSINESS_SCOPE",
+    SeedComponentKind.KNOWLEDGE: "FACTS_AND_RULES",
+    SeedComponentKind.AUTHORITY: "RESPONSIBILITY_AND_PERMISSION",
+    SeedComponentKind.CAPABILITY: "CAPABILITIES",
+    SeedComponentKind.DEPENDENCY: "DEPENDENCIES",
+}
 
 
 def parse_enterprise_seed_admission_receipt(
@@ -258,6 +268,85 @@ def require_reference_runtime_compatible(
             f"profile={profile.ref},digest={profile.digest}",
         )
     return receipt
+
+
+def enterprise_input_preflight(
+    value: EnterpriseSeedProfile | dict[str, object],
+    *,
+    receipt: EnterpriseSeedAdmissionReceipt | dict[str, object] | None = None,
+    source_admission: EnterpriseSeedSourceAdmissionReceipt | None = None,
+) -> dict[str, Any]:
+    """Project the five exact enterprise inputs and their blocking gaps.
+
+    This is a read-only projection over the existing profile/source admission
+    contracts.  It deliberately excludes source locators because those may be
+    server paths, and it never turns completeness labels into business approval.
+    """
+
+    profile = parse_enterprise_seed_profile(value)
+    admitted = parse_enterprise_seed_admission_receipt(
+        receipt
+        or admit_enterprise_seed_profile(
+            profile,
+            source_admission=source_admission,
+        )
+    )
+    if admitted.profile_ref != profile.ref or admitted.profile_digest != profile.digest:
+        raise EnterpriseSeedAdmissionError("PROFILE_PREFLIGHT_RECEIPT_MISMATCH")
+
+    roots = {root.id: root for root in profile.source_roots}
+    actions = {action.gap_ref: action for action in admitted.gap_actions}
+    inputs: list[dict[str, Any]] = []
+    for component in sorted(profile.components, key=lambda item: item.kind.value):
+        gaps = tuple(gap for gap in profile.gaps if gap.component == component.kind)
+        blocking_gates = tuple(
+            gate.value
+            for gate in ReadinessGate
+            if any(gate in actions[gap.id].effective_blocks for gap in gaps)
+        )
+        inputs.append(
+            {
+                "input_class": ENTERPRISE_INPUT_LABELS[component.kind],
+                "component_kind": component.kind.value,
+                "status": (
+                    "READY"
+                    if component.completeness == SeedCompleteness.COMPLETE and not gaps
+                    else "HOLD"
+                ),
+                "completeness": component.completeness.value,
+                "declared_digest": component.declared_digest,
+                "source_roots": [
+                    {
+                        "source_root_ref": roots[reference].id,
+                        "revision": roots[reference].revision,
+                        "media_type": roots[reference].media_type,
+                        "declared_digest": roots[reference].declared_digest,
+                    }
+                    for reference in component.source_root_refs
+                ],
+                "open_gap_refs": [gap.id for gap in gaps],
+                "blocking_gates": list(blocking_gates),
+            }
+        )
+
+    return {
+        "schema_version": "orgrebase.enterprise-input-preflight.v1",
+        "profile_ref": profile.ref,
+        "profile_digest": profile.digest,
+        "source_admission_receipt_digest": admitted.source_admission_receipt_digest,
+        "profile_admission_receipt_digest": admitted.digest,
+        "status": (
+            "RUNTIME_READY"
+            if admitted.reference_runtime_compatible
+            and all(item["status"] == "READY" for item in inputs)
+            else "HOLD"
+        ),
+        "inputs": inputs,
+        "admission_authority_refs": list(profile.governance.admission_authority_refs),
+        "owner_refs": list(profile.governance.owner_refs),
+        "authority_created_by_preflight": False,
+        "canonical_target_writes": 0,
+    }
 
 
 def profile_summary(

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oac.dev/schemas/ctk/v0alpha1/CTKBundle.schema.json",
+  "title": "CTKBundle",
+  "description": "Structural schema for the frozen Phase A CTK bundle manifest.",
+  "$comment": "The frozen A0 runner combines bespoke bootstrap checks with this bundle-pinned schema after verifying an external suite coordinate and digest trust anchor.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "bundleFormatVersion",
+    "suiteId",
+    "suiteVersion",
+    "standardVersion",
+    "profileId",
+    "profileVersion",
+    "requirementSetRef",
+    "resourceProfileRef",
+    "artifacts",
+    "extensions",
+    "bundleDigest"
+  ],
+  "properties": {
+    "bundleFormatVersion": {
+      "const": "oac.ctk.bundle/v0alpha1"
+    },
+    "suiteId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "suiteVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "standardVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "profileId": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "profileVersion": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "requirementSetRef": {
+      "$ref": "#/$defs/logicalArtifactPath"
+    },
+    "resourceProfileRef": {
+      "$ref": "#/$defs/logicalArtifactPath"
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/artifactLedgerEntry"
+      }
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions"
+    },
+    "bundleDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "logicalArtifactPath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?![A-Za-z]:)(?!.*\\u0000)(?!.*\\\\)(?!\\.{1,2}(?:/|$))[^/]+(?:/(?!\\.{1,2}(?:/|$))[^/]+)*$"
+    },
+    "mediaType": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9!#$&^_.+-]+/[A-Za-z0-9!#$&^_.+-]+(?:;[ \\t]*[A-Za-z0-9!#$&^_.+-]+=(?:[A-Za-z0-9!#$&^_.+-]+|\\\"[^\\r\\n\\\"]*\\\"))*$",
+      "maxLength": 255
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "additionalProperties": true
+    },
+    "artifactLedgerEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "mediaType",
+        "size",
+        "digest"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/logicalArtifactPath"
+        },
+        "mediaType": {
+          "$ref": "#/$defs/mediaType"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256Digest"
+        }
+      }
+    }
+  }
+}

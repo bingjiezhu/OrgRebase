@@ -15,7 +15,7 @@ import rfc8785
 
 ROOT = Path(__file__).resolve().parents[1]
 CHECKER_PATH = ROOT / "scripts/check_evolution_minimum_evidence.py"
-MANIFEST_PATH = ROOT / "experiments/evolution-minimum/v0.1-seed-7/evidence-manifest.json"
+MANIFEST_PATH = ROOT / "experiments/evolution-minimum/v0.1-seed-8/evidence-manifest.json"
 
 
 def _load_module(path: Path, name: str) -> ModuleType:
@@ -78,28 +78,29 @@ def test_evolution_module_stays_within_the_five_hundred_nonblank_line_gate() -> 
 
 
 def test_previous_coordinate_is_preserved_but_cannot_be_current() -> None:
-    old = ROOT / "experiments/evolution-minimum/v0.1-seed-6/evidence-manifest.json"
+    old = ROOT / "experiments/evolution-minimum/v0.1-seed-7/evidence-manifest.json"
     with pytest.raises(
         CHECKER.EvolutionEvidenceError, match="does not equal its versioned materials"
     ):
         CHECKER.check(old)
     manifest = CHECKER.check()
     assert manifest["apiVersion"] == "oac.evolution.evidence/v0alpha3"
-    assert manifest["coordinate"] == "oac.evolution.minimum/v0.1-seed-7"
+    assert manifest["coordinate"] == "oac.evolution.minimum/v0.1-seed-8"
     assert manifest["predecessor"]["manifest"]["rawSha256"] == _digest(old.read_bytes())
     assert manifest["predecessor"]["verificationClass"] == "EXACT_HISTORICAL_MATERIAL_PRESERVATION"
 
-    assert len(manifest["predecessor"]["materials"]) == 56
+    assert len(manifest["predecessor"]["materials"]) == 60
     assert manifest["predecessor"]["capturedManifest"]["rawSha256"] == _digest(old.read_bytes())
     ancestors = manifest["predecessor"]["ancestors"]
-    assert len(ancestors) == 5
-    assert len(ancestors[0]["materials"]) == 54
-    assert len(ancestors[1]["materials"]) == 53
-    assert len(ancestors[2]["materials"]) == 49
-    assert len(ancestors[3]["materials"]) == 41
-    assert len(ancestors[4]["materials"]) == 21
+    assert len(ancestors) == 6
+    assert len(ancestors[0]["materials"]) == 56
+    assert len(ancestors[1]["materials"]) == 54
+    assert len(ancestors[2]["materials"]) == 53
+    assert len(ancestors[3]["materials"]) == 49
+    assert len(ancestors[4]["materials"]) == 41
+    assert len(ancestors[5]["materials"]) == 21
     assert (
-        ancestors[4]["manifest"]["path"]
+        ancestors[5]["manifest"]["path"]
         == "experiments/evolution-minimum/v0.1-seed-1/evidence-manifest.json"
     )
 
@@ -113,6 +114,25 @@ def test_default_provenance_correction_keeps_positive_and_strict_profile_control
         "tests/fixtures/evolution/README.md",
         "specs/009-proof-carrying-evolution-minimum-profile/default-provenance-compatibility.md",
     } <= entries
+
+
+def test_seed7_manifest_and_original_guide_bodies_are_preserved() -> None:
+    old = ROOT / "experiments/evolution-minimum/v0.1-seed-7/evidence-manifest.json"
+    raw = old.read_bytes()
+    assert _digest(raw) == (
+        "sha256:54eac0dddf79651d41ea3a64beaceca3564f72c796389badd09967a4c019daf9"
+    )
+    assert (CHECKER.EVIDENCE_ROOT / "predecessor-manifest.json").read_bytes() == raw
+    historical = json.loads(raw)
+    entries = {entry["path"]: entry for entry in historical["contractClosure"]["entries"]}
+    for path in (
+        "docs/validation/EVOLUTION-SEED3-PUBLICATION.md",
+        "docs/validation/HISTORICAL-EVIDENCE-VERSIONING.md",
+    ):
+        captured = (CHECKER.EVIDENCE_ROOT / "predecessor-materials" / path).read_bytes()
+        assert _digest(captured) == entries[path]["rawSha256"]
+        assert len(captured) == entries[path]["sizeBytes"]
+        assert captured != (ROOT / path).read_bytes()
 
 
 def _sandbox_checker(tmp_path: Path) -> ModuleType:
@@ -154,8 +174,12 @@ def test_current_closure_cannot_exclude_a_new_python_module(tmp_path: Path, path
     "path,message",
     (
         (
-            "experiments/evolution-minimum/v0.1-seed-7/predecessor-materials/src/oac/models.py",
+            "experiments/evolution-minimum/v0.1-seed-8/predecessor-materials/src/oac/models.py",
             "historical predecessor material mismatch",
+        ),
+        (
+            "experiments/evolution-minimum/v0.1-seed-7/predecessor-materials/src/oac/models.py",
+            "historical ancestor material mismatch",
         ),
         (
             "experiments/evolution-minimum/v0.1-seed-6/predecessor-materials/src/oac/models.py",
@@ -178,7 +202,15 @@ def test_current_closure_cannot_exclude_a_new_python_module(tmp_path: Path, path
             "historical ancestor material mismatch",
         ),
         (
+            "experiments/evolution-minimum/v0.1-seed-8/predecessor-manifest.json",
+            "historical predecessor identity mismatch",
+        ),
+        (
             "experiments/evolution-minimum/v0.1-seed-7/predecessor-manifest.json",
+            "historical predecessor identity mismatch",
+        ),
+        (
+            "experiments/evolution-minimum/v0.1-seed-7/evidence-manifest.json",
             "historical predecessor identity mismatch",
         ),
         (
@@ -236,7 +268,7 @@ def test_publish_is_once_only_and_preserves_old_coordinates(
     checker.MANIFEST_PATH.unlink()  # Remove only a copy of the newly generated test coordinate.
     old_paths = [
         checker.ROOT / f"experiments/evolution-minimum/v0.1-seed-{seed}/evidence-manifest.json"
-        for seed in (1, 2, 3, 4, 5, 6)
+        for seed in (1, 2, 3, 4, 5, 6, 7)
     ]
     originals = [path.read_bytes() for path in old_paths]
     monkeypatch.setattr(sys, "argv", ["check-evolution", "--publish-new"])
@@ -256,3 +288,51 @@ def test_failed_predecessor_validation_never_creates_a_manifest(
     monkeypatch.setattr(sys, "argv", ["check-evolution", "--publish-new"])
     assert checker.main() == 2
     assert not checker.MANIFEST_PATH.exists()
+
+
+@pytest.mark.parametrize(
+    "path",
+    (
+        "docs/validation/EVOLUTION-SEED3-PUBLICATION.md",
+        "docs/validation/HISTORICAL-EVIDENCE-VERSIONING.md",
+    ),
+)
+@pytest.mark.parametrize("fault", ("missing", "modified"))
+def test_invalid_historical_guide_capture_cannot_publish(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, path: str, fault: str
+) -> None:
+    checker = _sandbox_checker(tmp_path)
+    checker.MANIFEST_PATH.unlink()
+    original = checker.ROOT / "experiments/evolution-minimum/v0.1-seed-7/evidence-manifest.json"
+    original_bytes = original.read_bytes()
+    captured = checker.EVIDENCE_ROOT / "predecessor-materials" / path
+    if fault == "missing":
+        captured.unlink()
+    else:
+        captured.write_bytes(captured.read_bytes() + b" ")
+    monkeypatch.setattr(sys, "argv", ["check-evolution", "--publish-new"])
+    assert checker.main() == 2
+    assert not checker.MANIFEST_PATH.exists()
+    assert original.read_bytes() == original_bytes
+
+
+@pytest.mark.parametrize(
+    "path",
+    (
+        "docs/validation/EVOLUTION-SEED3-PUBLICATION.md",
+        "docs/validation/HISTORICAL-EVIDENCE-VERSIONING.md",
+    ),
+)
+def test_current_guide_change_requires_a_new_coordinate(tmp_path: Path, path: str) -> None:
+    checker = _sandbox_checker(tmp_path)
+    published = checker.MANIFEST_PATH.read_bytes()
+    predecessor = checker.EVIDENCE_ROOT / "predecessor-materials" / path
+    original_body = predecessor.read_bytes()
+    current = checker.ROOT / path
+    current.write_bytes(current.read_bytes() + b"\nCurrent guide changed.\n")
+    with pytest.raises(
+        checker.EvolutionEvidenceError, match="does not equal its versioned materials"
+    ):
+        checker.check()
+    assert checker.MANIFEST_PATH.read_bytes() == published
+    assert predecessor.read_bytes() == original_body

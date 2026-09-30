@@ -377,6 +377,22 @@ def validate_read_dependencies(workspace: Any, premises: Iterable[VersionedObjec
             raise ReadDependencyError("READ_DEPENDENCY_CHANGED")
 
 
+def validate_change_proposal_sources(
+    workspace: Any, proposals: Iterable[VersionedObject], now: str,
+) -> None:
+    """One current-source gate for both connector and human proposals.
+
+    Connector observations and bounded read witnesses are independent claims.
+    A human ``proposal-*`` may have no connector observation while still
+    carrying a formal witness that must not outlive its coverage/revision.
+    Materialize the input once so iterators cannot silently skip one check.
+    """
+
+    selected = tuple(proposals)
+    validate_source_observations(workspace, selected, now)
+    validate_read_dependencies(workspace, selected, now)
+
+
 def require_read_dependency_validator(
     premises: tuple[VersionedObject, ...], now: str, validator: ReadDependencyValidator | None
 ) -> None:

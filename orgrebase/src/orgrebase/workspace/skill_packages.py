@@ -8,6 +8,8 @@ callable only through a current release-ledger head.
 
 from __future__ import annotations
 
+import base64
+import binascii
 import hashlib
 import json
 import re
@@ -52,6 +54,49 @@ EXPECTED_ENTRY_POINTS = {
 CALLABLE_RELEASE_STATES = frozenset({"SHADOW", "CANARY", "ACTIVE"})
 _DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
 _ZERO_DIGEST = "sha256:" + "0" * 64
+_PROJECT_SKILL_LICENSE = "Apache-2.0"
+# The reviewed project notice is a non-executable attachment. Pin its complete
+# text so a self-resealed truncated notice cannot masquerade as that grant.
+_PROJECT_SKILL_LICENSE_DIGEST = (
+    "sha256:15d0f574f2d6cbd183f62e871eb02c606d01325e21f66dc03420295067b2469c"
+)
+_MAX_LICENSE_FILE_BYTES = 32_768
+_LICENSE_MEDIA_TYPE = "text/plain; charset=utf-8"
+
+SKILL_CONTENT_BUNDLE_SCHEMA = "orgrebase.skill-content-bundle.v1"
+SKILL_CONTENT_CHECKLIST_SCHEMA = "orgrebase.skill-content-checklist.v1"
+QUOTE_RECOVERY_PROFILE = "workspace-quote-evidence-recovery-v1"
+QUOTE_DIAGNOSTIC_REASON_CATALOG = {
+    "request": "QUOTE_RECOVERY_REQUEST_UNVERIFIED",
+    "resume": "QUOTE_RECOVERY_RESUME_UNVERIFIED",
+    "outcome": "QUOTE_RECOVERY_OUTCOME_PENDING",
+}
+
+
+def quote_diagnostic_policy_digest(package: LoadedSkillPackage) -> str:
+    """Commit to the closed leaf and the protected interpreter resources."""
+
+    return sha256_digest({
+        "schema_version": "orgrebase.reviewed-quote-diagnostic-policy.v1",
+        "target_skill": "structured-domain-handoff",
+        "profile_id": QUOTE_RECOVERY_PROFILE,
+        "allowed_leaf": "candidate_diagnostic_reason_map",
+        "reason_catalog": QUOTE_DIAGNOSTIC_REASON_CATALOG,
+        "contract_digest": sha256_digest(package.contract),
+        "program_digest": package.manifest["program_content_digest"],
+        "input_schema_digest": sha256_digest(package.input_schema),
+        "output_schema_digest": sha256_digest(package.output_schema),
+        "allowed_tools": package.manifest["permissions"]["allowed_tools"],
+        "side_effects": package.manifest["permissions"]["side_effects"],
+    })
+QUOTE_RECOVERY_CONSUMER = "quote-evidence-recovery-checklist-v1"
+_CONTENT_RESOURCE_ALLOWLIST = {
+    "instructions/quote-evidence-recovery.md": ("instruction", "text/markdown"),
+    "references/quote-evidence-recovery.md": ("reference", "text/markdown"),
+    "checklists/quote-evidence-recovery.v1.json": ("checklist", "application/json"),
+}
+_MAX_CONTENT_RESOURCE_BYTES = 16_384
+_MAX_CONTENT_BUNDLE_BYTES = 32_768
 
 _QUOTE_DENY_FLAGS = frozenset(
     {"permission_expansion", "request_restricted_source", "target_write_requested"}
@@ -104,6 +149,54 @@ def _raw_digest(value: bytes) -> str:
     return f"sha256:{hashlib.sha256(value).hexdigest()}"
 
 
+def _validated_license_files(manifest: Mapping[str, Any]) -> dict[str, bytes]:
+    """Decode only the reviewed, non-executable LICENSE attachment.
+
+    Legacy manifests have no attachment and keep their exact original meaning.
+    This validates distributed notice bytes; it grants no business permission,
+    release authority, or authority to execute the associated Skill.
+    """
+
+    if "license_files" not in manifest:
+        if manifest.get("license") == _PROJECT_SKILL_LICENSE:
+            raise IntegrityError("SKILL_LICENSE_FILE_INVALID")
+        return {}
+    files = manifest["license_files"]
+    if (
+        manifest.get("license") != _PROJECT_SKILL_LICENSE
+        or not isinstance(files, dict)
+        or set(files) != {"LICENSE"}
+    ):
+        raise IntegrityError("SKILL_LICENSE_FILE_INVALID")
+    declaration = files["LICENSE"]
+    if (
+        not isinstance(declaration, dict)
+        or set(declaration) != {
+            "encoding", "media_type", "content_base64", "size_bytes", "sha256",
+        }
+        or declaration.get("encoding") != "base64"
+        or declaration.get("media_type") != _LICENSE_MEDIA_TYPE
+        or not isinstance(declaration.get("size_bytes"), int)
+        or isinstance(declaration.get("size_bytes"), bool)
+        or not 0 < declaration["size_bytes"] <= _MAX_LICENSE_FILE_BYTES
+        or not isinstance(declaration.get("content_base64"), str)
+        or len(declaration["content_base64"]) > 45_000
+    ):
+        raise IntegrityError("SKILL_LICENSE_FILE_INVALID")
+    try:
+        raw = base64.b64decode(declaration["content_base64"], validate=True)
+        raw.decode("utf-8")
+    except (ValueError, binascii.Error, UnicodeDecodeError) as exc:
+        raise IntegrityError("SKILL_LICENSE_FILE_INVALID") from exc
+    if (
+        len(raw) != declaration["size_bytes"]
+        or _raw_digest(raw) != declaration.get("sha256")
+        or declaration["sha256"] != _PROJECT_SKILL_LICENSE_DIGEST
+    ):
+        raise IntegrityError("SKILL_LICENSE_FILE_INVALID")
+    return {"LICENSE": raw}
+
+
 def _record(payload: Mapping[str, Any]) -> dict[str, Any]:
     result = deepcopy(dict(payload))
     result["digest"] = sha256_digest(payload)
@@ -115,6 +208,15 @@ def _verify_record(payload: Mapping[str, Any], *, error: str) -> None:
     body = {key: value for key, value in payload.items() if key != "digest"}
     if not isinstance(declared, str) or declared != sha256_digest(body):
         raise IntegrityError(error)
+
+
+def _unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise IntegrityError("SKILL_CONTENT_CHECKLIST_DUPLICATE_KEY")
+        result[key] = value
+    return result
 
 
 def _safe_resource_name(value: str) -> str:
@@ -427,6 +529,142 @@ class LoadedSkillPackage:
     skill_bytes: bytes
     reference_bytes: dict[str, bytes]
     resource_digests: dict[str, str]
+    raw_resource_bytes: dict[str, bytes]
+
+
+def skill_license_files(package: LoadedSkillPackage) -> dict[str, bytes]:
+    """Read exact UTF-8 LICENSE bytes from a package or restored snapshot.
+
+    Only the fixed name ``LICENSE`` is returned. These notices are separate
+    from the seven executable/interpreter resources and are never consumed as
+    model instructions. Legacy packages without an attachment return an empty
+    mapping; their inherited metadata and repository license remain unchanged.
+    """
+
+    return _validated_license_files(package.manifest)
+
+
+def skill_package_snapshot(package: LoadedSkillPackage) -> dict[str, Any]:
+    """Retain the complete effective package, including original raw resources."""
+
+    skill_license_files(package)
+    body = {
+        "schema_version": "orgrebase.skill-package-snapshot.v1",
+        "name": package.name,
+        "version": package.version,
+        "package_digest": package.package_digest,
+        "manifest": deepcopy(package.manifest),
+        "contract": deepcopy(package.contract),
+        "program": deepcopy(package.program),
+        "input_schema": deepcopy(package.input_schema),
+        "output_schema": deepcopy(package.output_schema),
+        "description": package.description,
+        "skill_bytes_base64": base64.b64encode(package.skill_bytes).decode("ascii"),
+        "reference_bytes_base64": {
+            key: base64.b64encode(value).decode("ascii")
+            for key, value in sorted(package.reference_bytes.items())
+        },
+        "resource_digests": deepcopy(package.resource_digests),
+        "raw_resource_bytes_base64": {
+            key: base64.b64encode(value).decode("ascii")
+            for key, value in sorted(package.raw_resource_bytes.items())
+        },
+    }
+    return {**body, "digest": sha256_digest(body)}
+
+
+def load_skill_package_snapshot(payload: Mapping[str, Any]) -> LoadedSkillPackage:
+    """Decode a stored snapshot only after checking content and protected bytes."""
+
+    value = deepcopy(dict(payload))
+    body = {key: item for key, item in value.items() if key != "digest"}
+    if set(value) != {
+        "schema_version", "name", "version", "package_digest", "manifest", "contract",
+        "program", "input_schema", "output_schema", "description", "skill_bytes_base64",
+        "reference_bytes_base64", "resource_digests", "raw_resource_bytes_base64", "digest",
+    }:
+        raise IntegrityError("SKILL_PACKAGE_SNAPSHOT_INVALID")
+    if (
+        value.get("schema_version") != "orgrebase.skill-package-snapshot.v1"
+        or value.get("digest") != sha256_digest(body)
+        or not isinstance(value.get("manifest"), dict)
+        or not isinstance(value.get("package_digest"), str)
+        or value["manifest"].get("manifest_digest") != value["package_digest"]
+        or value["package_digest"] != sha256_digest(
+            {key: item for key, item in value["manifest"].items() if key != "manifest_digest"}
+        )
+        or value["manifest"].get("name") != value.get("name")
+        or value["manifest"].get("version") != value.get("version")
+    ):
+        raise IntegrityError("SKILL_PACKAGE_SNAPSHOT_INVALID")
+    _validated_license_files(value["manifest"])
+    try:
+        skill_bytes = base64.b64decode(value["skill_bytes_base64"], validate=True)
+        references = {
+            key: base64.b64decode(encoded, validate=True)
+            for key, encoded in value["reference_bytes_base64"].items()
+        }
+        raw_resources = {
+            key: base64.b64decode(encoded, validate=True)
+            for key, encoded in value["raw_resource_bytes_base64"].items()
+        }
+    except (KeyError, TypeError, ValueError, binascii.Error) as exc:
+        raise IntegrityError("SKILL_PACKAGE_SNAPSHOT_BYTES_INVALID") from exc
+    declared = value.get("resource_digests")
+    if (
+        not isinstance(declared, dict)
+        or declared.get("skill") != _raw_digest(skill_bytes)
+        or set(raw_resources) != {
+            "skill", "reference_zh_cn", "reference_en", "contract", "program",
+            "input_schema", "output_schema",
+        }
+        or any(declared.get(key) != _raw_digest(raw) for key, raw in raw_resources.items())
+        or skill_bytes != raw_resources["skill"]
+        or references != {
+            "zh-CN": raw_resources["reference_zh_cn"],
+            "en": raw_resources["reference_en"],
+        }
+    ):
+        raise IntegrityError("SKILL_PACKAGE_SNAPSHOT_RESOURCE_MISMATCH")
+    for key in ("contract", "program", "input_schema", "output_schema"):
+        if not isinstance(value.get(key), dict):
+            raise IntegrityError("SKILL_PACKAGE_SNAPSHOT_RESOURCE_MISMATCH")
+    try:
+        parsed_resources = {
+            key: json.loads(raw_resources[key].decode("utf-8"))
+            for key in ("contract", "program", "input_schema", "output_schema")
+        }
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise IntegrityError("SKILL_PACKAGE_SNAPSHOT_RESOURCE_MISMATCH") from exc
+    if (
+        not isinstance(value["manifest"].get("resources"), dict)
+        or value["manifest"].get("program_content_digest") != sha256_digest(
+            {key: item for key, item in value["program"].items() if key != "digest"}
+        )
+        or value["manifest"].get("resources", {}).get("skill", {}).get("sha256")
+        != declared["skill"]
+        or any(
+            value["manifest"].get("resources", {}).get(key, {}).get("sha256") != digest
+            for key, digest in declared.items() if not key.startswith("candidate:")
+        )
+        or any(parsed_resources[key] != value[key] for key in parsed_resources)
+    ):
+        raise IntegrityError("SKILL_PACKAGE_SNAPSHOT_PROTECTED_MISMATCH")
+    return LoadedSkillPackage(
+        name=value["name"],
+        version=value["version"],
+        package_digest=value["package_digest"],
+        manifest=value["manifest"],
+        contract=value["contract"],
+        program=value["program"],
+        input_schema=value["input_schema"],
+        output_schema=value["output_schema"],
+        description=value["description"],
+        skill_bytes=skill_bytes,
+        reference_bytes=references,
+        resource_digests=declared,
+        raw_resource_bytes=raw_resources,
+    )
 
 
 @dataclass(frozen=True)
@@ -443,6 +681,193 @@ class SkillEvaluationCase:
     expected_action: str
 
 
+@dataclass(frozen=True)
+class SkillContentBundle:
+    """Immutable, allowlisted content used by one reviewed deterministic consumer.
+
+    Resources are embedded as exact bytes in the persisted candidate rather
+    than loaded from an author-controlled path.  The bundle cannot add code,
+    tools, permissions, schemas, or side effects.
+    """
+
+    payload: dict[str, Any]
+
+    @classmethod
+    def create(
+        cls,
+        *,
+        target_skill: str,
+        predecessor_package_digest: str,
+        instruction_bytes: bytes,
+        reference_bytes: bytes,
+        checklist_bytes: bytes,
+    ) -> SkillContentBundle:
+        resources = []
+        supplied = {
+            "instructions/quote-evidence-recovery.md": instruction_bytes,
+            "references/quote-evidence-recovery.md": reference_bytes,
+            "checklists/quote-evidence-recovery.v1.json": checklist_bytes,
+        }
+        for path, value in supplied.items():
+            kind, media_type = _CONTENT_RESOURCE_ALLOWLIST[path]
+            if not isinstance(value, bytes):
+                raise TypeError("SKILL_CONTENT_RESOURCE_BYTES_REQUIRED")
+            resources.append(
+                {
+                    "path": path,
+                    "kind": kind,
+                    "media_type": media_type,
+                    "encoding": "base64",
+                    "content_base64": base64.b64encode(value).decode("ascii"),
+                    "size_bytes": len(value),
+                    "sha256": _raw_digest(value),
+                }
+            )
+        body = {
+            "schema_version": SKILL_CONTENT_BUNDLE_SCHEMA,
+            "profile_id": QUOTE_RECOVERY_PROFILE,
+            "consumer_id": QUOTE_RECOVERY_CONSUMER,
+            "target_skill": target_skill,
+            "predecessor_package_digest": predecessor_package_digest,
+            "resources": resources,
+            "permissions": {
+                "allowed_tools": [],
+                "side_effects": [],
+                "target_writes_max": 0,
+            },
+        }
+        return cls.from_payload({**body, "digest": sha256_digest(body)})
+
+    @classmethod
+    def from_payload(cls, payload: Mapping[str, Any]) -> SkillContentBundle:
+        value = deepcopy(dict(payload))
+        body = {key: item for key, item in value.items() if key != "digest"}
+        if value.get("digest") != sha256_digest(body):
+            raise IntegrityError("SKILL_CONTENT_BUNDLE_DIGEST_MISMATCH")
+        if (
+            value.get("schema_version") != SKILL_CONTENT_BUNDLE_SCHEMA
+            or value.get("profile_id") != QUOTE_RECOVERY_PROFILE
+            or value.get("consumer_id") != QUOTE_RECOVERY_CONSUMER
+            or value.get("target_skill") != "structured-domain-handoff"
+            or not _valid_nonzero_digest(value.get("predecessor_package_digest"))
+            or value.get("permissions")
+            != {"allowed_tools": [], "side_effects": [], "target_writes_max": 0}
+        ):
+            raise IntegrityError("SKILL_CONTENT_BUNDLE_CONTRACT_INVALID")
+        resources = value.get("resources")
+        if not isinstance(resources, list) or len(resources) != len(_CONTENT_RESOURCE_ALLOWLIST):
+            raise IntegrityError("SKILL_CONTENT_RESOURCE_SET_INVALID")
+        seen: set[str] = set()
+        total = 0
+        for resource in resources:
+            if not isinstance(resource, dict) or set(resource) != {
+                "path",
+                "kind",
+                "media_type",
+                "encoding",
+                "content_base64",
+                "size_bytes",
+                "sha256",
+            }:
+                raise IntegrityError("SKILL_CONTENT_RESOURCE_DECLARATION_INVALID")
+            path = str(resource.get("path", ""))
+            if path in seen or _CONTENT_RESOURCE_ALLOWLIST.get(path) != (
+                resource.get("kind"),
+                resource.get("media_type"),
+            ):
+                raise IntegrityError("SKILL_CONTENT_RESOURCE_PATH_NOT_ALLOWED")
+            if resource.get("encoding") != "base64":
+                raise IntegrityError("SKILL_CONTENT_RESOURCE_ENCODING_INVALID")
+            encoded = resource.get("content_base64")
+            if (
+                not isinstance(encoded, str)
+                or len(encoded) > ((_MAX_CONTENT_RESOURCE_BYTES + 2) // 3) * 4
+            ):
+                raise IntegrityError("SKILL_CONTENT_RESOURCE_ENCODING_INVALID")
+            try:
+                raw = base64.b64decode(encoded, validate=True)
+            except (ValueError, binascii.Error) as exc:
+                raise IntegrityError("SKILL_CONTENT_RESOURCE_ENCODING_INVALID") from exc
+            if (
+                not raw
+                or len(raw) > _MAX_CONTENT_RESOURCE_BYTES
+                or resource.get("size_bytes") != len(raw)
+                or resource.get("sha256") != _raw_digest(raw)
+            ):
+                raise IntegrityError("SKILL_CONTENT_RESOURCE_BYTES_MISMATCH")
+            try:
+                raw.decode("utf-8")
+            except UnicodeDecodeError as exc:
+                raise IntegrityError("SKILL_CONTENT_RESOURCE_UTF8_INVALID") from exc
+            total += len(raw)
+            seen.add(path)
+        if seen != set(_CONTENT_RESOURCE_ALLOWLIST) or total > _MAX_CONTENT_BUNDLE_BYTES:
+            raise IntegrityError("SKILL_CONTENT_RESOURCE_SET_INVALID")
+        bundle = cls(payload=value)
+        bundle.quote_recovery_checklist()
+        return bundle
+
+    @property
+    def digest(self) -> str:
+        return str(self.payload["digest"])
+
+    def resource_bytes(self, path: str) -> bytes:
+        for resource in self.payload["resources"]:
+            if resource["path"] == path:
+                raw = base64.b64decode(resource["content_base64"], validate=True)
+                if _raw_digest(raw) != resource["sha256"]:
+                    raise IntegrityError("SKILL_CONTENT_RESOURCE_BYTES_MISMATCH")
+                return raw
+        raise IntegrityError("SKILL_CONTENT_RESOURCE_PATH_NOT_ALLOWED")
+
+    def resource_digests(self) -> dict[str, str]:
+        return {
+            str(resource["path"]): str(resource["sha256"])
+            for resource in self.payload["resources"]
+        }
+
+    def quote_recovery_checklist(self) -> dict[str, Any]:
+        raw = self.resource_bytes("checklists/quote-evidence-recovery.v1.json")
+        try:
+            checklist = json.loads(
+                raw.decode("utf-8"), object_pairs_hook=_unique_json_object
+            )
+        except json.JSONDecodeError as exc:
+            raise IntegrityError("SKILL_CONTENT_CHECKLIST_INVALID_JSON") from exc
+        expected_paths = [
+            "/candidate_bundle/evidence/outcome_artifact_digest",
+            "/candidate_bundle/evidence/request_digest",
+            "/candidate_bundle/evidence/resume_digest",
+        ]
+        if (
+            not isinstance(checklist, dict)
+            or set(checklist) != {
+                "schema_version",
+                "profile_id",
+                "rule_id",
+                "applies_when_path",
+                "applies_when_equals",
+                "required_digest_paths",
+                "failure_action",
+                "failure_reason",
+                "allowed_tools",
+                "target_writes_max",
+            }
+            or checklist.get("schema_version") != SKILL_CONTENT_CHECKLIST_SCHEMA
+            or checklist.get("profile_id") != QUOTE_RECOVERY_PROFILE
+            or checklist.get("rule_id") != "require-verified-recovery-receipts"
+            or checklist.get("applies_when_path") != "/candidate_bundle/profile_id"
+            or checklist.get("applies_when_equals") != QUOTE_RECOVERY_PROFILE
+            or checklist.get("required_digest_paths") != expected_paths
+            or checklist.get("failure_action") != "ABSTAIN"
+            or checklist.get("failure_reason") != "QUOTE_RECOVERY_EVIDENCE_INCOMPLETE"
+            or checklist.get("allowed_tools") != []
+            or checklist.get("target_writes_max") != 0
+        ):
+            raise IntegrityError("SKILL_CONTENT_CHECKLIST_CONTRACT_INVALID")
+        return checklist
+
+
 class SkillPackageRegistry:
     """Discover and exact-load only the three reviewed package entry points."""
 
@@ -452,6 +877,7 @@ class SkillPackageRegistry:
         if checkout_registry.is_file():
             self._registry_resource: Any = checkout_registry
             self._package_root: Any = checkout / "skills"
+            self._license_resource: Any = checkout / "LICENSE"
             self.resource_mode = "SOURCE_CHECKOUT"
         else:
             package_root = resources.files("orgrebase")
@@ -459,6 +885,7 @@ class SkillPackageRegistry:
                 "_assets/configs/workspace/skill-registry.json"
             )
             self._package_root = package_root.joinpath("skill_packages")
+            self._license_resource = package_root.joinpath("_assets/licenses/Apache-2.0.txt")
             self.resource_mode = "INSTALLED_WHEEL"
         self._registry = self._load_registry()
 
@@ -506,6 +933,18 @@ class SkillPackageRegistry:
                 return dict(entry)
         raise KeyError(name)
 
+    def _project_license_files(self) -> dict[str, Any]:
+        raw = self._read_bytes(self._license_resource)
+        files = {"LICENSE": {
+            "encoding": "base64",
+            "media_type": _LICENSE_MEDIA_TYPE,
+            "content_base64": base64.b64encode(raw).decode("ascii"),
+            "size_bytes": len(raw),
+            "sha256": _raw_digest(raw),
+        }}
+        _validated_license_files({"license": _PROJECT_SKILL_LICENSE, "license_files": files})
+        return files
+
     def _package_resource(self, entry: Mapping[str, Any], name: str) -> Any:
         directory = _safe_resource_name(str(entry.get("path", "")))
         return self._package_root.joinpath(directory, *_safe_resource_path(name))
@@ -551,6 +990,7 @@ class SkillPackageRegistry:
             or (expected_package_digest is not None and expected_package_digest != actual_digest)
         ):
             raise IntegrityError("SKILL_PACKAGE_MANIFEST_DIGEST_MISMATCH")
+        _validated_license_files(manifest)
         if (
             manifest.get("name") != name
             or manifest.get("version") != entry.get("version")
@@ -687,6 +1127,7 @@ class SkillPackageRegistry:
             skill_bytes=bytes(raw["skill"]),
             reference_bytes=reference_bytes,
             resource_digests=resource_digests,
+            raw_resource_bytes=raw,
         )
 
     @staticmethod
@@ -924,16 +1365,93 @@ class SkillPackageRegistry:
         ):
             raise IntegrityError("SKILL_RELEASE_AUTHORIZATION_INVALID")
 
-    def interpret_candidate(
-        self, package: LoadedSkillPackage, public_input: Mapping[str, Any]
-    ) -> dict[str, Any]:
-        """Run an already verified package through the same bounded interpreter.
+    @staticmethod
+    def _pointer_value(value: Mapping[str, Any], path: str) -> Any:
+        current: Any = value
+        for part in path.split("/")[1:]:
+            key = part.replace("~1", "/").replace("~0", "~")
+            if not isinstance(current, Mapping) or key not in current:
+                return None
+            current = current[key]
+        return current
 
-        This produces a candidate only; it grants no release or write authority.
-        """
+    def _apply_candidate_content(
+        self,
+        package: LoadedSkillPackage,
+        public_input: Mapping[str, Any],
+        result: dict[str, Any],
+    ) -> tuple[dict[str, Any], dict[str, Any] | None]:
+        payload = package.manifest.get("candidate_content_bundle")
+        if payload is None:
+            return result, None
+        if not isinstance(payload, Mapping):
+            raise IntegrityError("SKILL_CONTENT_BUNDLE_CONTRACT_INVALID")
+        bundle = SkillContentBundle.from_payload(payload)
+        if (
+            bundle.payload["target_skill"] != package.name
+            or bundle.payload["predecessor_package_digest"]
+            != package.manifest["release_artifact"]["predecessor_package_digest"]
+        ):
+            raise IntegrityError("SKILL_CONTENT_BUNDLE_PACKAGE_BINDING_MISMATCH")
+        checklist = bundle.quote_recovery_checklist()
+        applies = (
+            self._pointer_value(public_input, str(checklist["applies_when_path"]))
+            == checklist["applies_when_equals"]
+        )
+        consumed: list[str] = []
+        passed: bool | None = None
+        if applies:
+            checklist_path = "checklists/quote-evidence-recovery.v1.json"
+            consumed.append(bundle.resource_digests()[checklist_path])
+            missing = [
+                path for path in checklist["required_digest_paths"]
+                if not _valid_nonzero_digest(self._pointer_value(public_input, path))
+            ]
+            passed = not missing
+            if not passed and result.get("action") == "HANDOFF":
+                diagnostic_map = package.manifest.get("candidate_diagnostic_reason_map", {})
+                if diagnostic_map and package.manifest.get(
+                    "candidate_diagnostic_policy_digest"
+                ) != quote_diagnostic_policy_digest(package):
+                    raise IntegrityError("SKILL_DIAGNOSTIC_POLICY_DRIFT")
+                if not isinstance(diagnostic_map, dict) or any(
+                    key not in QUOTE_DIAGNOSTIC_REASON_CATALOG
+                    or value != QUOTE_DIAGNOSTIC_REASON_CATALOG[key]
+                    for key, value in diagnostic_map.items()
+                ):
+                    raise IntegrityError("SKILL_DIAGNOSTIC_REASON_POLICY_DENIED")
+                reason = str(checklist["failure_reason"])
+                for key, path in (
+                    ("request", "/candidate_bundle/evidence/request_digest"),
+                    ("resume", "/candidate_bundle/evidence/resume_digest"),
+                    ("outcome", "/candidate_bundle/evidence/outcome_artifact_digest"),
+                ):
+                    if path in missing:
+                        reason = diagnostic_map.get(key, reason)
+                        break
+                result = self._candidate_result(
+                    package,
+                    str(checklist["failure_action"]),
+                    reason=reason,
+                )
+        return result, {
+            "bundle_digest": bundle.digest,
+            "consumer_id": bundle.payload["consumer_id"],
+            "loaded_resource_digests": sorted(bundle.resource_digests().values()),
+            "consumed_resource_digests": consumed,
+            "applicable": applies,
+            "checklist_passed": passed,
+            "target_writes": 0,
+        }
+
+    def _interpret_candidate_with_trace(
+        self, package: LoadedSkillPackage, public_input: Mapping[str, Any]
+    ) -> tuple[dict[str, Any], dict[str, Any] | None]:
         input_payload = deepcopy(dict(public_input))
+        trace = None
         if _json_schema_valid(input_payload, package.input_schema):
             result = self._execute(package, input_payload)
+            result, trace = self._apply_candidate_content(package, input_payload, result)
             applicability = package.manifest.get("candidate_applicability", {})
             for path, expected in applicability.items():
                 observed: Any = input_payload
@@ -943,8 +1461,14 @@ class SkillPackageRegistry:
                         observed = {"observation": "MISSING"}
                         break
                     observed = observed[key]
-                if sha256_digest(observed) != sha256_digest(expected) and result.get("action") not in {"DENY", "ABSTAIN", "SAFE_ABSTAIN", "ESCALATE"}:
-                    result = self._candidate_result(package, "ABSTAIN", reason="CANDIDATE_PRECONDITION_NOT_MET")
+                if (
+                    sha256_digest(observed) != sha256_digest(expected)
+                    and result.get("action")
+                    not in {"DENY", "ABSTAIN", "SAFE_ABSTAIN", "ESCALATE"}
+                ):
+                    result = self._candidate_result(
+                        package, "ABSTAIN", reason="CANDIDATE_PRECONDITION_NOT_MET"
+                    )
                     break
         else:
             result = self._candidate_result(
@@ -952,10 +1476,21 @@ class SkillPackageRegistry:
                 "ABSTAIN",
                 reason="INPUT_SCHEMA_VALIDATION_FAILED",
             )
+            result, trace = self._apply_candidate_content(package, input_payload, result)
         if result.get("target_writes") != 0 or result.get("candidate_only") is not True:
             raise IntegrityError("SKILL_RESULT_EFFECT_BOUNDARY_WIDENED")
         if not _json_schema_valid(result, package.output_schema):
             raise IntegrityError("SKILL_OUTPUT_SCHEMA_VALIDATION_FAILED")
+        return result, trace
+
+    def interpret_candidate(
+        self, package: LoadedSkillPackage, public_input: Mapping[str, Any]
+    ) -> dict[str, Any]:
+        """Run an already verified package through the same bounded interpreter.
+
+        This produces a candidate only; it grants no release or write authority.
+        """
+        result, _ = self._interpret_candidate_with_trace(package, public_input)
         return result
 
     def _invoke(
@@ -985,7 +1520,7 @@ class SkillPackageRegistry:
         else:
             raise IntegrityError("SKILL_INVOCATION_MODE_INVALID")
         input_payload = deepcopy(dict(public_input))
-        result = self.interpret_candidate(package, input_payload)
+        result, content_trace = self._interpret_candidate_with_trace(package, input_payload)
         action = str(result.get("action", "ABSTAIN"))
         if action == "DENY":
             outcome = "DENY"
@@ -1025,6 +1560,8 @@ class SkillPackageRegistry:
             "target_writes": 0,
             "created_at": created_at,
         }
+        if content_trace is not None:
+            receipt_body["candidate_content"] = content_trace
         return SkillInvocation(result=result, receipt=_record(receipt_body))
 
     def invoke(
@@ -1108,6 +1645,9 @@ class SkillCandidateOverlayRegistry(SkillPackageRegistry):
 
     TARGET_SKILL = "structured-domain-handoff"
 
+    def _project_license_files(self) -> dict[str, Any]:
+        return self.base_registry._project_license_files()
+
     def __init__(
         self,
         base_registry: SkillPackageRegistry,
@@ -1119,6 +1659,9 @@ class SkillCandidateOverlayRegistry(SkillPackageRegistry):
         target_skill: str = TARGET_SKILL,
         applicability: Mapping[str, Any] | None = None,
         boundary: Mapping[str, Any] | None = None,
+        content_bundle: Mapping[str, Any] | None = None,
+        diagnostic_reason_map: Mapping[str, str] | None = None,
+        historical_package_digest: str | None = None,
     ) -> None:
         if not candidate_ref.strip() or not source_run_id.strip():
             raise ValueError("SKILL_CANDIDATE_OVERLAY_BINDING_EMPTY")
@@ -1128,11 +1671,36 @@ class SkillCandidateOverlayRegistry(SkillPackageRegistry):
             raise ValueError("SKILL_CANDIDATE_OVERLAY_VERSION_EMPTY")
         if target_skill not in EXPECTED_ENTRY_POINTS:
             raise IntegrityError("SKILL_CANDIDATE_OVERLAY_TARGET_INVALID")
+        if historical_package_digest is not None and not _valid_nonzero_digest(
+            historical_package_digest
+        ):
+            raise IntegrityError("SKILL_PACKAGE_MANIFEST_DIGEST_MISMATCH")
         self.TARGET_SKILL = target_skill
         self.base_registry = base_registry
         self.resource_mode = "EVALUATION_ONLY_CANDIDATE_OVERLAY"
         base = base_registry.load(self.TARGET_SKILL)
+        verified_bundle = (
+            SkillContentBundle.from_payload(content_bundle)
+            if content_bundle is not None
+            else None
+        )
+        if verified_bundle is not None and (
+            verified_bundle.payload["target_skill"] != self.TARGET_SKILL
+            or verified_bundle.payload["predecessor_package_digest"] != base.package_digest
+        ):
+            raise IntegrityError("SKILL_CONTENT_BUNDLE_PACKAGE_BINDING_MISMATCH")
+        if diagnostic_reason_map is not None and (
+            any(
+                key not in QUOTE_DIAGNOSTIC_REASON_CATALOG
+                or value != QUOTE_DIAGNOSTIC_REASON_CATALOG[key]
+                for key, value in diagnostic_reason_map.items()
+            )
+        ):
+            raise IntegrityError("SKILL_DIAGNOSTIC_REASON_POLICY_DENIED")
         manifest = deepcopy(base.manifest)
+        # A v1 content bundle binds the exact predecessor.  It cannot be
+        # inherited as the next version's own bundle without re-review.
+        manifest.pop("candidate_content_bundle", None)
         manifest["package_id"] = (
             f"skill-package:{self.TARGET_SKILL}@{proposed_version}"
         )
@@ -1149,9 +1717,16 @@ class SkillCandidateOverlayRegistry(SkillPackageRegistry):
             "source_run_id": source_run_id,
             "candidate_digest": candidate_digest,
             "base_package_digest": base.package_digest,
-            "resource_change": "NONE",
+            "resource_change": (
+                "ALLOWLISTED_CONTENT_ONLY" if verified_bundle is not None else "NONE"
+            ),
             "claim_boundary": "CONTROLLED_LOCAL_GOVERNANCE_PROOF_NOT_PRODUCTION_GENERALIZATION",
         }
+        if verified_bundle is not None:
+            manifest["candidate_content_bundle"] = deepcopy(verified_bundle.payload)
+        if diagnostic_reason_map is not None:
+            manifest["candidate_diagnostic_reason_map"] = dict(sorted(diagnostic_reason_map.items()))
+            manifest["candidate_diagnostic_policy_digest"] = quote_diagnostic_policy_digest(base)
         if applicability is not None:
             if not applicability or any(not key.startswith("/") for key in applicability):
                 raise IntegrityError("SKILL_CANDIDATE_APPLICABILITY_INVALID")
@@ -1161,11 +1736,33 @@ class SkillCandidateOverlayRegistry(SkillPackageRegistry):
         provenance = list(manifest.get("provenance_refs", ()))
         provenance.append(candidate_ref)
         manifest["provenance_refs"] = provenance
+        # New candidates always carry the current grant. Only a verified
+        # historical read may reconstruct the original notice-free bytes, and
+        # only when their complete package digest exactly matches that read.
+        historical_body = {
+            key: value for key, value in manifest.items() if key != "manifest_digest"
+        }
+        if (
+            historical_package_digest is None
+            or sha256_digest(historical_body) != historical_package_digest
+        ):
+            manifest["license"] = _PROJECT_SKILL_LICENSE
+            manifest["license_files"] = base_registry._project_license_files()
         manifest_body = {
             key: value for key, value in manifest.items() if key != "manifest_digest"
         }
         package_digest = sha256_digest(manifest_body)
+        if historical_package_digest is not None and package_digest != historical_package_digest:
+            raise IntegrityError("SKILL_PACKAGE_MANIFEST_DIGEST_MISMATCH")
         manifest["manifest_digest"] = package_digest
+        resource_digests = deepcopy(base.resource_digests)
+        if verified_bundle is not None:
+            resource_digests.update(
+                {
+                    f"candidate:{path}": digest
+                    for path, digest in verified_bundle.resource_digests().items()
+                }
+            )
         self._overlay = LoadedSkillPackage(
             name=base.name,
             version=proposed_version,
@@ -1178,7 +1775,8 @@ class SkillCandidateOverlayRegistry(SkillPackageRegistry):
             description=base.description,
             skill_bytes=bytes(base.skill_bytes),
             reference_bytes=deepcopy(base.reference_bytes),
-            resource_digests=deepcopy(base.resource_digests),
+            resource_digests=resource_digests,
+            raw_resource_bytes=deepcopy(base.raw_resource_bytes),
         )
 
     def load(
@@ -1207,6 +1805,7 @@ class SkillCandidateOverlayRegistry(SkillPackageRegistry):
             skill_bytes=bytes(package.skill_bytes),
             reference_bytes=deepcopy(package.reference_bytes),
             resource_digests=deepcopy(package.resource_digests),
+            raw_resource_bytes=deepcopy(package.raw_resource_bytes),
         )
 
     def discover(self) -> tuple[dict[str, Any], ...]:
@@ -1314,6 +1913,7 @@ class SkillPackageEvaluator:
                 "case_ref": case.case_id,
                 "input_digest": invocation.receipt["input_digest"],
                 "result": deepcopy(invocation.result),
+                "receipt": deepcopy(invocation.receipt),
             })
             passed = action == case.expected_action
             partition_results[case.partition].append(passed)

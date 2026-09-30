@@ -15,6 +15,30 @@
       "title": "Committed At",
       "type": "string"
     },
+    "deliverable_set_receipt_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deliverable Set Receipt Digest"
+    },
+    "deliverable_set_receipt_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deliverable Set Receipt Ref"
+    },
     "digest": {
       "default": "",
       "title": "Digest",
@@ -27,6 +51,19 @@
     "id": {
       "title": "Id",
       "type": "string"
+    },
+    "schema_version": {
+      "anyOf": [
+        {
+          "const": "orgrebase.workspace-rebase-receipt.v2",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Schema Version"
     },
     "status": {
       "const": "COMPLETED",

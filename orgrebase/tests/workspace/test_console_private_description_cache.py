@@ -162,5 +162,6 @@ assert.equal(node('task-request-prompt').value,'');assert.equal(context.taskCand
 bindIdentityBridge(null);catalogs=0;reasons.length=0;
 const local={mode:'local',authentication_required:false,authenticated:false,principal:null};
 handlers.sessionchange({detail:local});handlers.sessionchange({detail:{...local}});
-assert.equal(catalogs,1);assert.equal(reasons.length,0,'local mode is an available identity without a login loop');
+assert.equal(catalogs,1);
+assert.deepEqual(reasons,['identity-changed'],'the first available local identity clears old views once without a login loop');
 ''')

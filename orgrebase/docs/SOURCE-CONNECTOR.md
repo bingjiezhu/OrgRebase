@@ -4,6 +4,8 @@
 
 源系统字段仍由客户负责。`new_currency` 等自定义字段只是配置示例；不得把 `transactioncurrencyid` 的 GUID 当 ISO 币种，也不得把报价有效日期擅自解释为产品发布日期。需要转换时，`value_map` 仅采用负责人确认的显式映射；缺少映射、空值、删除和未知类型产生具体来源缺口。
 
+该 connector 是标量字段连接器。`quote_basket` 和 `pricing_policy` 是结构化对象/规则，字段发现界面会显示 `SOURCE_SLOT_TYPE_UNSUPPORTED`，提案和已有 binding 也会拒绝将它们当成字符串映射。这两类输入使用 workspace 的有来源结构化变化合同，直到单独的结构化来源 adapter 通过全链资格验收。
+
 ## 运行
 
 使用 [认证部署配置](AUTHENTICATED-DEPLOYMENT.md)，已准入的企业包与数据库组织必须一致。API 只使用自己的身份配置；只读 worker 单独取得 Dataverse 的 read scope token。

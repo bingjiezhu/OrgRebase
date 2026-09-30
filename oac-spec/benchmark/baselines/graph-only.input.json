@@ -1,0 +1,23 @@
+{
+  "baselineInputVersion": "1.0",
+  "baselineId": "graph-only",
+  "evaluationClass": "mechanics-only",
+  "inputSetRef": "benchmark/matched-inputs.json",
+  "inputSetDigest": "sha256:67ba894d95b23181cb850c318a6923e34e7d1f3611ac3b1b9360796fcb831799",
+  "policy": {
+    "machinePolicy": "admitted-propagating-reachability",
+    "selection": "select owner roles of nodes reachable over admitted propagating edges",
+    "dependencyTraversal": "bounded breadth-first traversal",
+    "organizationalRules": "ignored",
+    "unknownHandling": "candidate/disputed edges stop traversal without a discovery obligation",
+    "ordering": "project graph edges into owner-role order"
+  },
+  "expectedFailureModes": [
+    "rule-only obligation omission",
+    "candidate-edge uncertainty loss",
+    "status-insensitive over-propagation"
+  ],
+  "executionStatus": "mechanics-run-available",
+  "runManifestRef": "benchmark/runs/graph-only.run.json",
+  "claimLimit": "The run measures agreement with project-authored exploratory candidate roles, not Ground Truth or enterprise quality."
+}

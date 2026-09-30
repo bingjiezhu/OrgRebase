@@ -46,6 +46,7 @@ Start environment:
                     compatibility overrides and are not the public-demo path.
 
 Authoring options:
+  --template NAME   evergreen (default, historical v1) or priced-quote (initial-facts v2)
   --output PATH     New draft directory for init; it must not exist
   --draft PATH      Edited draft Pack directory
   --output PATH     New sealed Pack directory for seal; it must not exist
@@ -93,10 +94,12 @@ model_provider="ollama-local"
 vertex_project=""
 draft=""
 sealed_output=""
+template_name="evergreen"
+template_selected="0"
 
 while (($# > 0)); do
   case "$1" in
-    --pack|--work-dir|--host|--port|--review-seconds|--identity-mode|--competition-mode|--competition-evidence-dir|--model-provider|--vertex-project|--draft|--output)
+    --pack|--work-dir|--host|--port|--review-seconds|--identity-mode|--competition-mode|--competition-evidence-dir|--model-provider|--vertex-project|--draft|--output|--template)
       (($# >= 2)) || die "missing value for $1"
       case "$1" in
         --pack) pack="$2" ;;
@@ -111,6 +114,7 @@ while (($# > 0)); do
         --vertex-project) vertex_project="$2" ;;
         --draft) draft="$2" ;;
         --output) sealed_output="$2" ;;
+        --template) template_name="$2"; template_selected="1" ;;
       esac
       shift 2
       ;;
@@ -123,6 +127,12 @@ while (($# > 0)); do
       ;;
   esac
 done
+
+if [[ "$template_selected" == "1" ]]; then
+  [[ "$command_name" == "init" ]] || die '--template is only supported by init'
+  [[ "$template_name" == "evergreen" || "$template_name" == "priced-quote" ]] || \
+    die 'template must be evergreen or priced-quote'
+fi
 
 case "$command_name" in
   check|preflight|start)
@@ -242,6 +252,6 @@ case "$command_name" in
     run_orgrebase enterprise-pilot-seal --draft "$draft" --output "$sealed_output"
     ;;
   init)
-    run_orgrebase enterprise-pilot-init --output "$sealed_output"
+    run_orgrebase enterprise-pilot-init --template "$template_name" --output "$sealed_output"
     ;;
 esac

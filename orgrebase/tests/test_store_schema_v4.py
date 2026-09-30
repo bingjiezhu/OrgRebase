@@ -91,6 +91,9 @@ def seed_v3(database, rows, *, quarantined=False):
                     ),
                 )
     with raw(database) as connection:
+        # The helper must describe an actual historical v3 schema.  A current
+        # store now also contains the v6 deployment budget ledger.
+        connection.execute("DROP TABLE deployment_budget_reservations")
         execute_core(
             connection, update(store_metadata).values(schema_version=3, recovery_required=int(quarantined))
         )
@@ -239,7 +242,9 @@ def test_real_postgres_v4_remap_blocks_alias_from_another_workspace(postgres_run
     effect = request()
     seed_v3(database, [(effect, "COMMIT_UNKNOWN", True)])
     before = snapshot(database)
-    assert migrate_postgres(database, tenant_id=TENANT)["schema_version"] == STATE_STORE_SCHEMA_VERSION
+    assert migrate_postgres(
+        database, tenant_id=TENANT, runtime_role=deployment["role_name"]
+    )["schema_version"] == STATE_STORE_SCHEMA_VERSION
     assert_content_unchanged(before, snapshot(database))
     with StateStore(database, tenant_id=TENANT, maintenance=True) as store:
         assert store.get_target_barrier(effect.barrier_key) == effect.effect_id

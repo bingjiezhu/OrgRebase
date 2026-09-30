@@ -84,7 +84,7 @@ The retained generations are `ProductPath-v0.1`, `ProductPath-v0.2-source-bound`
 and mutation sets belong to their own versions. Do not call the older v0.2 result the current release
 gate, combine counts across generations, or rewrite a frozen manifest to match today's source.
 Use [historical versus current-build verification](HISTORICAL-BUILD-VERIFICATION.md) and
-[the evidence map](VERIFICATION-EVIDENCE-MAP.md) to select the exact artifact and command.
+[the public release gates](RELEASE-CANDIDATES.md) to select the exact artifact and check.
 
 A retained verifier replay checks archived observations and bindings; it does not execute today's
 service. Current-build qualification must bind the newly built wheel and its fresh observations.

@@ -421,7 +421,7 @@ def test_lost_response_after_real_submission_does_not_redispatch_or_publish_acce
         assert service._preview_record(event.event_id) is None
         assert service._approval_record(event.event_id) is None
         assert service.current_quote() == before
-        with pytest.raises(IntegrityError, match="ADVISORY_ATTEMPT_FAILED"):
+        with pytest.raises(IntegrityError, match="ADVISORY_RESULT_UNKNOWN"):
             service.preview_change(event.event_id)
         assert len(submissions) == 1
     finally:

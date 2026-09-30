@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -22,16 +25,18 @@ jobs:
       run:
         working-directory: orgrebase
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
         with:
           enable-cache: true
       - name: Install locked core environment
         run: |
           uv python install
           uv sync --locked --all-extras
+      - name: Reconstruct the pinned AgentTeams checkout
+        run: uv run --frozen python scripts/fetch_pinned_agentteams.py
       - name: Validate the core contributor path
         run: make check-core
       - name: Verify CI gating boundaries
@@ -39,14 +44,119 @@ jobs:
       - name: Explain the validation boundary
         run: |
           printf '%s\n' 'Core checks do not qualify OAC integration, PostgreSQL, live services, or a release candidate.' >> "$GITHUB_STEP_SUMMARY"
-          printf '%s\n' 'The sibling oac-spec/ tree is present in this workspace clone. Full validation still needs PostgreSQL tools and is started with workflow_dispatch.' >> "$GITHUB_STEP_SUMMARY"
+          printf '%s\n' 'Separate automatic jobs check enterprise boundaries and the public OAC conformance profile. The manual release gate repeats those checks; private historical archive replay is outside this public source profile.' >> "$GITHUB_STEP_SUMMARY"
+
+  oac-contract:
+    name: Public OAC conformance and distributions
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: oac-spec
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: |
+            oac-spec/uv.lock
+            oac-spec/ctk/runner/uv.lock
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: '1.22.x'
+          cache: false
+      - name: Require complete OAC source closure
+        run: |
+          test -f ctk/runner/pyproject.toml
+          test -f implementations/go-phase-a/go.mod
+          test -f implementations/go-supplier-v02-internal/go.mod
+          test -f implementations/go-plan-verifier-v01-internal/go.mod
+      - name: Install locked OAC environment
+        run: |
+          uv python install
+          uv sync --locked --all-extras
+      - name: Validate the public OAC conformance profile
+        working-directory: .
+        run: python3 -B orgrebase/scripts/build_source_snapshot.py public-check --snapshot-root .
+      - name: Build OAC wheel and source archive
+        run: uv build --out-dir "$RUNNER_TEMP/oac-dist"
+      - name: Smoke the installed OAC CLI and TCK resources
+        run: |
+          uv venv --python 3.12.13 "$RUNNER_TEMP/oac-wheel"
+          uv pip install --python "$RUNNER_TEMP/oac-wheel/bin/python" "$RUNNER_TEMP/oac-dist/"*.whl
+          (
+            cd "$RUNNER_TEMP"
+            "$RUNNER_TEMP/oac-wheel/bin/oac" --help > /dev/null
+            "$RUNNER_TEMP/oac-wheel/bin/python" -I - <<'PY'
+          from importlib.resources import files
+          from pathlib import Path
+          import oac
+          import sys
+
+          assert Path(oac.__file__).resolve().is_relative_to(Path(sys.prefix).resolve())
+          assert files('oac').joinpath('resources/tck/manifest.json').is_file()
+          PY
+          )
+
+  enterprise-boundaries:
+    name: Enterprise boundaries (PostgreSQL and OAC)
+    needs: core
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: orgrebase
+    env:
+      ORGREBASE_OAC_ROOT: ${{ github.workspace }}/oac-spec
+      ORGREBASE_REQUIRE_POSTGRES_TESTS: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          enable-cache: true
+      - name: Install locked product environment
+        run: |
+          uv python install
+          uv sync --locked --all-extras
+      - name: Reconstruct the pinned AgentTeams checkout
+        run: uv run --frozen python scripts/fetch_pinned_agentteams.py
+      - name: Install PostgreSQL validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-common ca-certificates curl
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl --fail --silent --show-error https://www.postgresql.org/media/keys/ACCC4CF8.asc -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
+          sudo tee /etc/apt/sources.list.d/pgdg.sources > /dev/null <<'EOF'
+          Types: deb
+          URIs: https://apt.postgresql.org/pub/repos/apt
+          Suites: noble-pgdg
+          Components: main
+          Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
+          EOF
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-17 postgresql-client-17
+          printf '%s\n' /usr/lib/postgresql/17/bin >> "$GITHUB_PATH"
+      - name: Admit and install OAC source
+        run: |
+          uv run --frozen python scripts/verify_oac_dependency.py --root "$ORGREBASE_OAC_ROOT"
+          uv sync --project "$ORGREBASE_OAC_ROOT" --locked --all-extras
+      - name: Run the complete enterprise boundary suite
+        run: make check-enterprise-boundaries
+      - name: Explain the automatic gate
+        run: printf '%s\n' 'Every protected product/resource change runs the enterprise boundary suite, including PostgreSQL onboarding, learning and deliverable recovery. Release qualification still requires the manual public OAC and PostgreSQL gates.' >> "$GITHUB_STEP_SUMMARY"
 
   check:
-    name: Full OAC and PostgreSQL validation
+    name: Public OAC and PostgreSQL release gates
     needs: core
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 60
     defaults:
       run:
         working-directory: orgrebase
@@ -54,14 +164,18 @@ jobs:
       ORGREBASE_REQUIRE_POSTGRES_TESTS: "1"
       ORGREBASE_OAC_ROOT: ${{ github.workspace }}/oac-spec
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
       - name: Require the sibling OAC tree
         run: test -f "$ORGREBASE_OAC_ROOT/pyproject.toml"
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
         with:
           enable-cache: true
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: '1.22.x'
+          cache: false
       - name: Install Python
         run: uv python install
       - name: Install PostgreSQL validation tools
@@ -86,58 +200,229 @@ jobs:
         run: uv run --frozen python scripts/verify_oac_dependency.py --root "$ORGREBASE_OAC_ROOT"
       - name: Install the locked OAC CLI environment
         run: uv sync --project "$ORGREBASE_OAC_ROOT" --locked --all-extras
-      - name: Audit installed Python dependencies
-        run: >-
-          uv run --frozen --all-extras --with pip-audit==2.9.0
-          pip-audit --local --skip-editable --progress-spinner off
-      - name: Lint, asset validation, evidence, and tests
-        run: make check
+      - name: Validate the public OAC conformance profile
+        working-directory: .
+        run: |
+          test -f orgrebase/scripts/build_source_snapshot.py
+          test -f oac-spec/ctk/runner/pyproject.toml
+          test -f oac-spec/implementations/go-phase-a/go.mod
+          test -f oac-spec/implementations/go-supplier-v02-internal/go.mod
+          test -f oac-spec/implementations/go-plan-verifier-v01-internal/go.mod
+          python3 -B orgrebase/scripts/build_source_snapshot.py public-check --snapshot-root .
+      - name: Build OAC wheel and source archive
+        working-directory: oac-spec
+        run: |
+          uv build --out-dir "$RUNNER_TEMP/oac-dist"
+      - name: Smoke the installed OAC CLI and TCK resources
+        working-directory: oac-spec
+        run: |
+          uv venv --python 3.12.13 "$RUNNER_TEMP/oac-wheel"
+          uv pip install --python "$RUNNER_TEMP/oac-wheel/bin/python" "$RUNNER_TEMP/oac-dist/"*.whl
+          (
+            cd "$RUNNER_TEMP"
+            "$RUNNER_TEMP/oac-wheel/bin/oac" --help > /dev/null
+            "$RUNNER_TEMP/oac-wheel/bin/python" -I - <<'PY'
+          from importlib.resources import files
+          from pathlib import Path
+          import oac
+          import sys
+
+          assert Path(oac.__file__).resolve().is_relative_to(Path(sys.prefix).resolve())
+          assert files('oac').joinpath('resources/tck/manifest.json').is_file()
+          PY
+          )
+      - name: Audit exact locked Python dependencies
+        run: |
+          uv export --locked --all-extras --no-emit-project --format requirements-txt \
+            --output-file "$RUNNER_TEMP/orgrebase-locked-requirements.txt"
+          uv tool run --python .venv/bin/python --from pip-audit==2.9.0 pip-audit \
+            --requirement "$RUNNER_TEMP/orgrebase-locked-requirements.txt" \
+            --disable-pip --no-deps --progress-spinner off
+      - name: Run the complete public enterprise boundary suite
+        run: make check-enterprise-boundaries
 
   release-candidate:
     name: Build and attest a reviewed candidate
     needs: [core, check]
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && needs.core.result == 'success' && needs.check.result == 'success'
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: orgrebase
+    env:
+      ORGREBASE_OAC_ROOT: ${{ github.workspace }}/oac-spec
     permissions:
       contents: read
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@v6
-      - name: Install locked build environment
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+      - name: Install locked component build environments
         run: |
           uv python install
-          uv sync --frozen --all-extras
-      - name: Build wheel and source archive
-        run: uv build --out-dir dist
-      - name: Bind SBOM to the exact artifacts
+          uv sync --locked --all-extras
+          uv run --frozen python scripts/verify_oac_dependency.py --root "$ORGREBASE_OAC_ROOT"
+          uv sync --project "$ORGREBASE_OAC_ROOT" --locked --all-extras
+      - name: Build both component distributions
         run: |
-          uv run --frozen python scripts/generate_sbom.py --artifact dist/*.whl --artifact dist/*.tar.gz --output dist/sbom.cdx.json
-          uv run --frozen python scripts/generate_sbom.py --artifact dist/*.whl --artifact dist/*.tar.gz --output dist/sbom.cdx.json --check
-      - name: Attest build provenance
-        uses: actions/attest@v4
+          test ! -e "$RUNNER_TEMP/orgrebase-dist"
+          test ! -e "$RUNNER_TEMP/oac-dist"
+          uv build --out-dir "$RUNNER_TEMP/orgrebase-dist"
+          uv build --project "$ORGREBASE_OAC_ROOT" --out-dir "$RUNNER_TEMP/oac-dist"
+          for directory in "$RUNNER_TEMP/orgrebase-dist" "$RUNNER_TEMP/oac-dist"; do
+            test "$(find "$directory" -maxdepth 1 -type f -name '*.whl' | wc -l)" -eq 1
+            test "$(find "$directory" -maxdepth 1 -type f -name '*.tar.gz' | wc -l)" -eq 1
+          done
+      - name: Install each OrgRebase distribution and run public first-use smoke
+        run: |
+          for kind in wheel sdist; do
+            environment="$RUNNER_TEMP/orgrebase-$kind"
+            output="$RUNNER_TEMP/orgrebase-public-$kind"
+            uv venv --python 3.12.13 "$environment"
+            if [ "$kind" = wheel ]; then
+              uv pip install --python "$environment/bin/python" "$RUNNER_TEMP/orgrebase-dist/"*.whl
+            else
+              uv pip install --python "$environment/bin/python" "$RUNNER_TEMP/orgrebase-dist/"*.tar.gz
+            fi
+            (
+              cd "$RUNNER_TEMP"
+              "$environment/bin/orgrebase" --help > /dev/null
+              "$environment/bin/python" -I - <<'PY'
+          from pathlib import Path
+          from importlib.resources import files
+          from importlib.metadata import metadata
+          import orgrebase
+          import sys
+
+          package = Path(orgrebase.__file__).resolve()
+          assert package.is_relative_to(Path(sys.prefix).resolve()), package
+          assert metadata('orgrebase')['License-Expression'] == 'Apache-2.0'
+          assert files('orgrebase').joinpath('static/index.html').is_file()
+          assert files('orgrebase').joinpath('_assets/licenses/Apache-2.0.txt').is_file()
+          assert files('orgrebase').joinpath('_assets/fixtures/canonical-enterprise.json').is_file()
+          from orgrebase.resource_paths import runtime_asset_path
+          assert runtime_asset_path('benchmark/quote-value-v0.1/public/current-process-baseline.json').is_file()
+          PY
+              "$environment/bin/python" -I "$GITHUB_WORKSPACE/orgrebase/scripts/run_public_quote_replay.py" \
+                --sample "$GITHUB_WORKSPACE/orgrebase/benchmark/public-retail-quote/v1/sample.json" \
+                --output "$output" --limit 1
+              "$environment/bin/python" -I - "$output/report.json" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          report = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+          assert report['status'] == 'PASS', report['status']
+          assert report['measurement_summary']['planned_cases'] == 1
+          assert report['measurement_summary']['outcomes']['PASS'] == 1
+          assert report['cases'][0]['invoice_id'] == '560602'
+          PY
+            )
+          done
+      - name: Install each OAC distribution and smoke installed CLI resources
+        run: |
+          for kind in wheel sdist; do
+            environment="$RUNNER_TEMP/oac-$kind"
+            uv venv --python 3.12.13 "$environment"
+            if [ "$kind" = wheel ]; then
+              uv pip install --python "$environment/bin/python" "$RUNNER_TEMP/oac-dist/"*.whl
+            else
+              uv pip install --python "$environment/bin/python" "$RUNNER_TEMP/oac-dist/"*.tar.gz
+            fi
+            (
+              cd "$RUNNER_TEMP"
+              "$environment/bin/oac" --help > /dev/null
+              "$environment/bin/python" -I - <<'PY'
+          from importlib.resources import files
+          from importlib.metadata import metadata
+          from pathlib import Path
+          import oac
+          import sys
+
+          assert Path(oac.__file__).resolve().is_relative_to(Path(sys.prefix).resolve())
+          assert metadata('oac-contract')['License-Expression'] == 'Apache-2.0'
+          assert files('oac').joinpath('resources/tck/manifest.json').is_file()
+          assert files('oac').joinpath('resources/LICENSES/Apache-2.0.txt').is_file()
+          PY
+            )
+          done
+      - name: Build and verify the matching public source ZIP
+        run: |
+          uv run --frozen python scripts/build_source_snapshot.py build \
+            --orgrebase-root "$GITHUB_WORKSPACE/orgrebase" --oac-root "$ORGREBASE_OAC_ROOT" \
+            --profile github --output-dir "$RUNNER_TEMP/orgrebase-source"
+          uv run --frozen python scripts/build_source_snapshot.py verify \
+            --orgrebase-root "$GITHUB_WORKSPACE/orgrebase" --oac-root "$ORGREBASE_OAC_ROOT" \
+            --profile github --output-dir "$RUNNER_TEMP/orgrebase-source"
+      - name: Bind each SBOM to its own exact distributions
+        run: |
+          uv run --frozen python - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          import shutil
+          import subprocess
+          import sys
+
+          temporary = Path(os.environ['RUNNER_TEMP'])
+          workspace = Path(os.environ['GITHUB_WORKSPACE'])
+          delivery = temporary / 'orgrebase-candidate'
+          delivery.mkdir()
+          for component, build_directory, sbom_name in (
+              ('orgrebase', 'orgrebase-dist', 'orgrebase.sbom.cdx.json'),
+              ('oac-spec', 'oac-dist', 'oac-contract.sbom.cdx.json'),
+          ):
+              root = workspace / component
+              artifacts = tuple(sorted(
+                  path for path in (temporary / build_directory).iterdir()
+                  if path.name.endswith(('.whl', '.tar.gz'))
+              ))
+              assert len(artifacts) == 2 and all(item.is_file() for item in artifacts)
+              metadata = tuple(sorted((root / '.venv').glob('lib/python*/site-packages/*.dist-info/METADATA')))
+              args = [sys.executable, 'scripts/generate_sbom.py',
+                      '--lock', str(root / 'uv.lock'), '--pyproject', str(root / 'pyproject.toml'),
+                      '--output', str(delivery / sbom_name)]
+              for artifact in artifacts:
+                  args.extend(('--artifact', str(artifact)))
+                  shutil.copyfile(artifact, delivery / artifact.name)
+              for path in metadata:
+                  args.extend(('--license-metadata', str(path)))
+              subprocess.run(args, check=True)
+              subprocess.run([*args, '--check'], check=True)
+          source = temporary / 'orgrebase-source/orgrebase-oac-source-snapshot.zip'
+          shutil.copyfile(source, delivery / source.name)
+          checksums = ''.join(
+              hashlib.sha256(path.read_bytes()).hexdigest() + '  ' + path.name + '\n'
+              for path in sorted(delivery.iterdir())
+          )
+          (delivery / 'SHA256SUMS.txt').write_text(checksums, encoding='utf-8')
+          PY
+      - name: Attest all public candidate assets
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: ${{ runner.temp }}/orgrebase-candidate/*
+      - name: Attest the OrgRebase dependency inventory
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:
           subject-path: |
-            orgrebase/dist/*.whl
-            orgrebase/dist/*.tar.gz
-      - name: Attest dependency inventory
-        uses: actions/attest@v4
+            ${{ runner.temp }}/orgrebase-candidate/orgrebase-*.whl
+            ${{ runner.temp }}/orgrebase-candidate/orgrebase-*.tar.gz
+          sbom-path: ${{ runner.temp }}/orgrebase-candidate/orgrebase.sbom.cdx.json
+      - name: Attest the OAC dependency inventory
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:
           subject-path: |
-            orgrebase/dist/*.whl
-            orgrebase/dist/*.tar.gz
-          sbom-path: orgrebase/dist/sbom.cdx.json
-      - name: Retain candidate artifacts
-        uses: actions/upload-artifact@v4
+            ${{ runner.temp }}/orgrebase-candidate/oac_contract-*.whl
+            ${{ runner.temp }}/orgrebase-candidate/oac_contract-*.tar.gz
+          sbom-path: ${{ runner.temp }}/orgrebase-candidate/oac-contract.sbom.cdx.json
+      - name: Retain public candidate assets
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: orgrebase-candidate-${{ github.sha }}
-          path: orgrebase/dist/
+          path: ${{ runner.temp }}/orgrebase-candidate/
           if-no-files-found: error
           retention-days: 30

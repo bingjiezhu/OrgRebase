@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import time
 from collections.abc import Callable, Mapping
 from contextlib import contextmanager, suppress
@@ -20,15 +21,17 @@ from orgrebase.auth import (
     AuthenticationError,
     current_authorization,
     identity_claim_boundary,
+    request_principal,
 )
 from orgrebase.certificates import build_minimal_rebase_certificate
-from orgrebase.clock import Clock, FrozenClock, SystemClock, utc_datetime, workflow_times
+from orgrebase.clock import Clock, FrozenClock, SystemClock, timestamp, utc_datetime, workflow_times
 from orgrebase.digest import sha256_digest
 from orgrebase.domain import (
     Approval,
     AuthorizationError,
     ChangeSetRevision,
     EvidenceClass,
+    FreshnessError,
     IntegrityError,
     ObjectDelta,
     ObjectState,
@@ -57,25 +60,47 @@ from orgrebase.workspace.demand_formation import TaskFormationDecisionReceipt
 from orgrebase.workspace.domain_agents import LocalDomainCandidateRegistry
 from orgrebase.workspace.experience import GovernedExperienceService
 from orgrebase.workspace.formation import (
+    DELIVERABLE_SET_BINDING_ARTIFACT_ID,
+    DELIVERABLE_SET_BINDING_MEDIA_TYPE,
     PROFILE_BINDING_ARTIFACT_ID,
     PROFILE_BINDING_MEDIA_TYPE,
+    QuoteDiscountMemoFormationService,
     WorkspaceFormationService,
 )
-from orgrebase.workspace.graph import SNAPSHOT_MEDIA_TYPE, WorkspaceSnapshotBuilder, split_ref
+from orgrebase.workspace.formation import (
+    quote_discount_memo_profile as _quote_discount_memo_profile,
+)
+from orgrebase.workspace.graph import (
+    RUNTIME_MANIFEST_MEDIA_TYPE,
+    SNAPSHOT_MEDIA_TYPE,
+    WorkspaceSnapshotBuilder,
+    split_ref,
+)
 from orgrebase.workspace.models import (
     ActorContextProjection,
     ChangeEvent,
+    DeliverableApprovalDecision,
+    DeliverableApprovalSet,
+    DeliverableCandidateSet,
+    DeliverableReviewProjection,
+    DeliverableSetBinding,
+    DeliverableSetProfile,
     DomainPack,
     EnterpriseBinding,
     EnterpriseResourceBinding,
     ModelRequestV2,
+    ModelRequestV3,
     ModelResponseReceiptV2,
+    ModelResponseReceiptV3,
     OACActivationConsumptionReceipt,
+    PreparedDeliverableCandidateSet,
     PreparedFormationBundle,
+    RuntimeDependencyManifest,
     TaskContextManifest,
     TaskReceipt,
     TaskRequest,
     ToolCalledEvent,
+    TraceCoverageReceipt,
     WorkspaceApprovalBinding,
     WorkspaceChangeSpec,
     WorkspaceGraphSnapshot,
@@ -97,14 +122,22 @@ from orgrebase.workspace.profile import (
 from orgrebase.workspace.quote_skill_qualification import has_complete_case_identity
 from orgrebase.workspace.read_dependencies import (
     ReadDependencyError,
+    validate_change_proposal_sources,
     validate_read_dependencies,
-    validate_source_observations,
 )
 from orgrebase.workspace.rebuild import (
+    DELIVERABLE_REVIEW_PROJECTION_MEDIA_TYPE,
+    DELIVERABLE_SET_APPLY_RECEIPT_MEDIA_TYPE,
+    WORKSPACE_CONTEXT_MEDIA_TYPE,
+    WORKSPACE_COVERAGE_MEDIA_TYPE,
+    WORKSPACE_TRACE_MEDIA_TYPE,
+    DeliverableSetGraphApplyExtension,
+    DiscountMemoRebuildPayloadHandler,
     QuoteRebuildPayloadHandler,
     WorkspaceGraphApplyExtension,
     WorkspaceRebuildContextProvider,
     WorkspaceWorkflowClock,
+    build_deliverable_candidate_set,
 )
 from orgrebase.workspace.runtime_revision import (
     bind_preview_runtime,
@@ -133,6 +166,15 @@ DEPENDENCY_TOOL_CALLED_EVENT_ID = "tool-called:dependency-evidence@v1"
 WORKSPACE_PREVIEW_MEDIA_TYPE = "application/vnd.orgrebase.workspace-preview-bundle+json"
 WORKSPACE_APPROVAL_MEDIA_TYPE = "application/vnd.orgrebase.workspace-approval+json"
 WORKSPACE_APPROVAL_BINDING_MEDIA_TYPE = "application/vnd.orgrebase.workspace-approval-binding+json"
+DELIVERABLE_CANDIDATE_SET_MEDIA_TYPE = (
+    "application/vnd.orgrebase.deliverable-candidate-set+json"
+)
+DELIVERABLE_APPROVAL_SET_MEDIA_TYPE = (
+    "application/vnd.orgrebase.deliverable-approval-set+json"
+)
+DELIVERABLE_APPROVAL_DECISION_MEDIA_TYPE = (
+    "application/vnd.orgrebase.deliverable-approval-decision+json"
+)
 WORKSPACE_OUTCOME_MEDIA_TYPE = "application/vnd.orgrebase.workspace-apply-outcome+json"
 WORKSPACE_REVIEW_GATE_MEDIA_TYPE = "application/vnd.orgrebase.workspace-review-gate+json"
 WORKSPACE_TASK_CONTEXT_MEDIA_TYPE = "application/vnd.orgrebase.task-context+json"
@@ -192,6 +234,12 @@ WORKSPACE_BOUNDARIES = {
 }
 EXPLICIT_OWNER_APPROVAL_MODE = "EXPLICIT_OWNER_COMMAND"
 CONTROLLED_LOCAL_APPROVAL_INPUT_MODE = "CONTROLLED_LOCAL_SCRIPTED_COMMAND"
+
+
+def quote_discount_memo_profile(runtime_configuration: object) -> DeliverableSetProfile:
+    """Return the one server-admitted multi-deliverable profile."""
+
+    return _quote_discount_memo_profile(runtime_configuration)
 
 
 def _serialized(method):
@@ -304,8 +352,13 @@ class WorkspaceService:
         competition_ollama_endpoint: str | None = None,
         competition_vertex_project: str | None = None,
         competition_runner: Callable[..., dict[str, Any]] | None = None,
-        advisory_provider: ModelProvider[ModelRequestV2, ModelResponseReceiptV2] | None = None,
+        advisory_provider: (
+            ModelProvider[ModelRequestV2, ModelResponseReceiptV2]
+            | ModelProvider[ModelRequestV3, ModelResponseReceiptV3]
+            | None
+        ) = None,
         advisory_model_id: str | None = None,
+        deliverable_set_profile: DeliverableSetProfile | None = None,
     ) -> None:
         if workflow_run_id is not None and not workflow_run_id.strip():
             raise ValueError("WORKSPACE_WORKFLOW_RUN_ID_EMPTY")
@@ -328,8 +381,11 @@ class WorkspaceService:
             raise ValueError("WORKSPACE_COMPETITION_MODEL_PROVIDER_INVALID")
         self.review_duration_ms = math.ceil(selected_review_duration * 1000)
         self._wall_clock = wall_clock or time.time
-        native_advisory = (advisory_provider is not None
-                           or os.environ.get("ORGREBASE_CHANGE_MODEL_PROVIDER") == "openai-responses")
+        native_advisory = (
+            advisory_provider is not None
+            or os.environ.get("ORGREBASE_CHANGE_MODEL_PROVIDER")
+            in {"openai-responses", "vertex-ai"}
+        )
         self.clock = clock or (SystemClock() if native_advisory else FrozenClock("2026-08-15T00:00:00Z"))
         self._execution_clock = self.clock if native_advisory else clock
         self.store_tenant_id = store_tenant_id
@@ -406,6 +462,26 @@ class WorkspaceService:
             )
         )
         self.profile_digest = self.profile.digest
+        self.deliverable_set_profile = (
+            DeliverableSetProfile.model_validate(deliverable_set_profile.model_dump(mode="json"))
+            if deliverable_set_profile is not None
+            else None
+        )
+        if self.deliverable_set_profile is not None:
+            if runtime_configuration is None:
+                raise ValueError("DELIVERABLE_SET_RUNTIME_CONFIGURATION_REQUIRED")
+            if (
+                self.deliverable_set_profile.organization_id != self.profile.organization_id
+                or self.deliverable_set_profile.base_profile_digest != self.profile_digest
+                or self.deliverable_set_profile.pack_digest != runtime_configuration.pack_digest
+                or self.profile.default_task.template_ref != "template:enterprise_quote@v2"
+            ):
+                raise ValueError("DELIVERABLE_SET_RUNTIME_BINDING_MISMATCH")
+        self.workspace_profile_digest = (
+            self.deliverable_set_profile.digest
+            if self.deliverable_set_profile is not None
+            else self.profile_digest
+        )
         self.scenario = dict(getattr(runtime_configuration, "scenario", self.profile.scenario_view()))
         self.boundaries = dict(WORKSPACE_BOUNDARIES)
         self.boundaries["data_profile"] = self.profile.data_class.value
@@ -488,13 +564,26 @@ class WorkspaceService:
         # Reject a different valid enterprise pack against an existing database
         # before the new runtime is allowed to seed even immutable objects.
         self._verify_persisted_profile_binding()
-        self.store.bind_workspace(profile_digest=self.profile_digest,
+        self.store.bind_workspace(profile_digest=self.workspace_profile_digest,
                                   pack_digest=self.deployment_binding.get("pack_digest"),
                                   quote_object_id=self.quote_object_id)
         self.private_records = PrivateRecordStore(self.store, self.clock, retention_seconds=self.private_retention_seconds)
         self.private_records.migrate_artifact(TASK_INTAKE_WORK_DESCRIPTION_ARTIFACT_ID, TASK_INTAKE_WORK_DESCRIPTION_MEDIA_TYPE)
         runtime = self.runtime_configuration
-        domain_registry = LocalDomainCandidateRegistry(runtime.source_values) if runtime is not None else None
+        try:
+            formation_parallelism = int(
+                os.environ.get("ORGREBASE_FORMATION_MAX_PARALLEL_TASKS", "1").strip() or "1"
+            )
+        except ValueError as exc:
+            raise ValueError("FORMATION_PARALLELISM_INVALID") from exc
+        domain_registry = (
+            LocalDomainCandidateRegistry(
+                runtime.source_values,
+                max_parallel_tasks=formation_parallelism,
+            )
+            if runtime is not None
+            else None
+        )
         self.formation = WorkspaceFormationService(
             self.store,
             domain_registry=domain_registry,
@@ -518,13 +607,26 @@ class WorkspaceService:
         self.formation.clock = self.clock
         if self.formation.profile_digest != self.profile_digest:
             raise RuntimeError("WORKSPACE_PROFILE_BINDING_MISMATCH")
+        self.deliverable_formation = (
+            QuoteDiscountMemoFormationService(self.formation, self.deliverable_set_profile)
+            if self.deliverable_set_profile is not None
+            else None
+        )
         self.snapshot_builder = WorkspaceSnapshotBuilder()
         self.change_builder = WorkspaceChangeSetBuilder()
         provider = self._advisory_provider
         model_id = self._advisory_model_id
         mode = os.environ.get("ORGREBASE_CHANGE_MODEL_PROVIDER", "local-deterministic")
-        if mode not in {"local-deterministic", "openai-responses"}:
+        if mode not in {"local-deterministic", "openai-responses", "vertex-ai"}:
             raise ValueError("WORKSPACE_CHANGE_MODEL_PROVIDER_INVALID")
+        try:
+            advisory_parallelism = int(
+                os.environ.get("ORGREBASE_CHANGE_MAX_PARALLEL_TASKS", "1").strip() or "1"
+            )
+        except ValueError as exc:
+            raise ValueError("WORKSPACE_ADVISORY_PARALLELISM_INVALID") from exc
+        if (mode != "local-deterministic" or provider is not None) and advisory_parallelism != 1:
+            raise ValueError("WORKSPACE_ADVISORY_PARALLEL_PROVIDER_UNQUALIFIED")
         if provider is None and mode == "openai-responses":
             from orgrebase.workspace.model_budget import ModelBudget
             from orgrebase.workspace.openai_responses import OpenAIResponsesProvider
@@ -534,10 +636,35 @@ class WorkspaceService:
             budget_path = os.environ.get("ORGREBASE_CHANGE_MODEL_BUDGET_PATH")
             model_budget = ModelBudget.from_file(budget_path) if budget_path else None
             provider = OpenAIResponsesProvider(model_budget=model_budget)
+        if provider is None and mode == "vertex-ai":
+            from orgrebase.workspace.model_budget import ModelBudget
+            from orgrebase.workspace.model_provider import (
+                VERTEX_CANDIDATE_MODEL_ID,
+                VertexAIStructuredProvider,
+            )
+
+            selected_model = os.environ.get(
+                "ORGREBASE_CHANGE_MODEL_ID", VERTEX_CANDIDATE_MODEL_ID
+            ).strip()
+            if selected_model != VERTEX_CANDIDATE_MODEL_ID:
+                raise ValueError("WORKSPACE_ADVISORY_VERTEX_MODEL_REQUIRED")
+            budget_path = os.environ.get("ORGREBASE_CHANGE_MODEL_BUDGET_PATH")
+            if not budget_path:
+                raise ValueError("MODEL_PRICE_CONTRACT_REQUIRED")
+            model_budget = ModelBudget.from_file(budget_path)
+            provider = VertexAIStructuredProvider(
+                prompt_payload={},
+                project_id=os.environ.get("ORGREBASE_VERTEX_PROJECT_ID"),
+                model_id=VERTEX_CANDIDATE_MODEL_ID,
+                model_budget=model_budget,
+            )
+            model_id = VERTEX_CANDIDATE_MODEL_ID
         if provider is None and model_id is not None:
             raise ValueError("WORKSPACE_CHANGE_MODEL_PROVIDER_REQUIRED")
         from orgrebase.workspace.change_agentteams import ChangeAgentTeamsConfig
         native_required = self.competition_mode == GOLDEN_COMPETITION_MODE
+        if native_required and advisory_parallelism != 1:
+            raise ValueError("WORKSPACE_ADVISORY_PARALLEL_NATIVE_UNQUALIFIED")
         native_config = None
         if native_required and all((self.competition_checkout, self.competition_lock_path,
                                     self.competition_evidence_root)):
@@ -549,11 +676,16 @@ class WorkspaceService:
         self.advisory_factory = WorkspaceChangeAdvisoryAdapter(
             quote_object_id=self.quote_object_id, provider=provider, model_id=model_id,
             tenant_id=self.profile.organization_id, workspace_id=self.store.workspace_id,
+            max_parallel_tasks=advisory_parallelism,
             native_config=native_config, native_required=native_required,
         )
         self.advisory_verifier = WorkspaceApplyAdvisoryVerifier(self.advisory_factory, clock=lambda: self.clock.now())
         if provider is not None:
-            self.boundaries["change_candidate_provider"] = "OPENAI_RESPONSES_CONFIGURED"
+            self.boundaries["change_candidate_provider"] = (
+                "VERTEX_GEMINI_3_8_FLASH_CANDIDATE_CONFIGURED"
+                if getattr(provider, "candidate_contract_version", None) == "3"
+                else "OPENAI_RESPONSES_CONFIGURED"
+            )
         self.experience = GovernedExperienceService(
             self.store,
             wall_clock=self._wall_clock,
@@ -710,12 +842,17 @@ class WorkspaceService:
 
     @_serialized
     def completion_history(self) -> dict[str, Any]:
+        with self.store.read_snapshot():
+            self.changes.refresh()
+            return self._completion_history_snapshot()
+
+    def _completion_history_snapshot(self) -> dict[str, Any]:
         chain = self.store.verify_event_chain()
         chain["envelopes"] = list(self.store.event_envelopes())
         chain["records"] = [{key: value for key, value in event.items() if key != "payload"}
                             for event in chain["envelopes"]]
         from orgrebase.workspace.source_readmission import completion_groups, membership
-        return {"source_readmission_groups": completion_groups(self), "changes": {event_id: {"preview": self._preview_record(event_id),
+        history = {"source_readmission_groups": completion_groups(self), "changes": {event_id: {"preview": self._preview_record(event_id),
                                        "approval": self._approval_record(event_id),
                                        "outcome": self._outcome_record(event_id)}
                             for event_id in self.change_order},
@@ -725,6 +862,24 @@ class WorkspaceService:
                                   for event in self.changes.all()],
                 "event_chain": chain, "event_scopes": self._event_scopes(chain),
                 "completion_observed_at": datetime.now(UTC).isoformat().replace("+00:00", "Z")}
+        view = self._learning_history_view(history, surface="history")
+        authorization = current_authorization()
+        if authorization is not None:
+            authorization()
+        return view
+
+    @_serialized
+    def state_with_completion_history(self) -> dict[str, Any]:
+        """Read current state and its complete evidence from one DB snapshot."""
+        with self.store.read_snapshot():
+            self.changes.refresh()
+            view = self.state()
+            view.update(self._completion_history_snapshot())
+            view = self._learning_history_view(view, surface="state")
+            authorization = current_authorization()
+            if authorization is not None:
+                authorization()
+            return view
 
     @_serialized
     def invalidate_source(self, slot_id: str, source_ref: str, reason: str, *, connection: Any | None = None) -> dict[str, Any]:
@@ -779,7 +934,7 @@ class WorkspaceService:
         if current.version != event.base_version or current.digest != event.base_digest:
             return "STALE", "CHANGE_BASE_VERSION_CHANGED"
         try:
-            validate_source_observations(self, (event.proposal,), observed_at)
+            validate_change_proposal_sources(self, (event.proposal,), observed_at)
         except ReadDependencyError as error:
             return "STALE", error.code
         if preview is not None:
@@ -822,8 +977,20 @@ class WorkspaceService:
             quote = self.current_quote()
         except KeyError:
             return False
-        return (getattr(quote, "state", None) == ObjectState.CURRENT
-                and not self.changes.gaps() and self.changes.pending_count == 0)
+        deliverables_current = True
+        if self.deliverable_set_profile is not None:
+            try:
+                deliverables_current = all(
+                    item.state == ObjectState.CURRENT for item in self.current_deliverables()
+                )
+            except KeyError:
+                deliverables_current = False
+        return (
+            getattr(quote, "state", None) == ObjectState.CURRENT
+            and deliverables_current
+            and not self.changes.gaps()
+            and self.changes.pending_count == 0
+        )
 
     def _profile_binding_record(self) -> dict[str, Any] | None:
         try:
@@ -1302,6 +1469,30 @@ class WorkspaceService:
             raise RuntimeError("WORKSPACE_PERSISTED_PROFILE_BINDING_MISMATCH")
         if dict(payload.get("enterprise_pilot_pack") or {}) != self.deployment_binding:
             raise RuntimeError("PILOT_PACK_STORE_BINDING_MISMATCH")
+        try:
+            stored_set = self.store.load_artifact(
+                DELIVERABLE_SET_BINDING_ARTIFACT_ID,
+                DELIVERABLE_SET_BINDING_MEDIA_TYPE,
+            )
+        except KeyError:
+            stored_set = None
+        if self.deliverable_set_profile is None:
+            if stored_set is not None:
+                raise RuntimeError("WORKSPACE_DELIVERABLE_SET_PROFILE_REQUIRED")
+            return
+        if stored_set is None:
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_BINDING_MISSING")
+        binding = DeliverableSetBinding.model_validate(stored_set.payload)
+        if (
+            binding.profile_ref != self.deliverable_set_profile.ref
+            or binding.profile_digest != self.deliverable_set_profile.digest
+            or binding.base_profile_digest != self.profile_digest
+            or binding.pack_digest != self.deployment_binding.get("pack_digest")
+            or binding.runtime_revision != self.deliverable_set_profile.runtime_revision
+            or binding.members != self.deliverable_set_profile.members
+            or binding.workspace_id != self.store.workspace_id
+        ):
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_BINDING_MISMATCH")
 
     def close(self) -> None:
         self.store.close()
@@ -1335,6 +1526,7 @@ class WorkspaceService:
         competition_runner: Callable[..., dict[str, Any]] | None = None,
         advisory_provider: ModelProvider[ModelRequestV2, ModelResponseReceiptV2] | None = None,
         advisory_model_id: str | None = None,
+        deliverable_set_profile: DeliverableSetProfile | None = None,
     ) -> WorkspaceService:
         return cls(
             store_path=store_path,
@@ -1362,6 +1554,7 @@ class WorkspaceService:
             competition_runner=competition_runner,
             advisory_provider=advisory_provider,
             advisory_model_id=advisory_model_id,
+            deliverable_set_profile=deliverable_set_profile,
         )
 
     def _select_formation_request(
@@ -1390,6 +1583,17 @@ class WorkspaceService:
             if authorization is not None:
                 authorization()
             return existing
+        if self.deliverable_formation is not None:
+            receipt = self.deliverable_formation.form(
+                selected,
+                run_id=self.workflow_run_id,
+            )
+            quote_receipt = TaskReceipt.model_validate(
+                self.store.load_artifact(self.task_receipt_id).payload
+            )
+            if quote_receipt.digest not in receipt.task_receipt_digests:
+                raise IntegrityError("DELIVERABLE_SET_QUOTE_RECEIPT_MISMATCH")
+            return quote_receipt
         return self.formation.form_quote(
             selected,
             run_id=self.workflow_run_id,
@@ -2709,11 +2913,14 @@ class WorkspaceService:
 
         selected, formation = self._select_formation_request(request)
         prepared_formation = None
+        prepared_deliverable_set = None
         activation_consumption = None
         persisted_activation_consumption = self._oac_activation_consumption_record()
         competition_evidence = self._competition_evidence_record()
         if formation is None:
             if self.competition_mode == GOLDEN_COMPETITION_MODE:
+                if self.deliverable_formation is not None:
+                    raise IntegrityError("WORKSPACE_DELIVERABLE_SET_GOLDEN_FORMATION_NOT_SUPPORTED")
                 if task_formation_decision_receipt is not None and context_envelope is not None:
                     prepared_formation, competition_evidence = self._prepare_golden_competition(
                         selected,
@@ -2725,10 +2932,16 @@ class WorkspaceService:
                         selected
                     )
             else:
-                prepared_formation = self.formation.prepare_quote(
-                    selected,
-                    run_id=self.workflow_run_id,
-                )
+                if self.deliverable_formation is not None:
+                    prepared_deliverable_set = self.deliverable_formation.prepare(
+                        selected, run_id=self.workflow_run_id,
+                    )
+                    prepared_formation = prepared_deliverable_set.quote_prepared
+                else:
+                    prepared_formation = self.formation.prepare_quote(
+                        selected,
+                        run_id=self.workflow_run_id,
+                    )
             formation = prepared_formation.task_receipt
             trace = self._prepared_formation_trace(prepared_formation)
             if oac_activation_binding is not None:
@@ -2865,10 +3078,20 @@ class WorkspaceService:
                             "claim_ceiling": activation_consumption.claim_ceiling,
                         },
                     )
-                formation = self.formation.commit_quote(
-                    prepared_formation,
-                    connection=connection,
-                )
+                if prepared_deliverable_set is not None:
+                    set_receipt = self.deliverable_formation.commit(
+                        prepared_deliverable_set, connection=connection,
+                    )
+                    formation = TaskReceipt.model_validate(
+                        self.store.load_artifact(self.task_receipt_id).payload
+                    )
+                    if formation.digest not in set_receipt.task_receipt_digests:
+                        raise IntegrityError("DELIVERABLE_SET_QUOTE_RECEIPT_MISMATCH")
+                else:
+                    formation = self.formation.commit_quote(
+                        prepared_formation,
+                        connection=connection,
+                    )
                 if competition_evidence is not None:
                     competition_artifact_digest = self.store.save_artifact(
                         connection,
@@ -3014,6 +3237,466 @@ class WorkspaceService:
     def current_quote(self):
         return self.store.get_object(self.quote_object_id)
 
+    def current_deliverables(self) -> tuple[VersionedObject, ...]:
+        with self.store.read_snapshot():
+            return self._current_deliverables_snapshot()
+
+    def _current_deliverables_snapshot(self) -> tuple[VersionedObject, ...]:
+        if self.deliverable_set_profile is None:
+            return (self.current_quote(),)
+        return tuple(
+            self.store.get_object(item.object_id)
+            for item in self.deliverable_set_profile.members
+        )
+
+    def deliverable_set_view(self) -> dict[str, Any]:
+        with self.store.read_snapshot():
+            return self._deliverable_set_view_snapshot()
+
+    def _deliverable_set_view_snapshot(self) -> dict[str, Any]:
+        if self.deliverable_set_profile is None:
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_PROFILE_NOT_CONFIGURED")
+        binding = self._deliverable_set_binding()
+        members = self._current_deliverables_snapshot()
+        return {
+            "schema_version": "orgrebase.deliverable-set-view.v1",
+            "workspace_id": self.store.workspace_id,
+            "profile": self.deliverable_set_profile.model_dump(mode="json"),
+            "binding": binding.model_dump(mode="json"),
+            "members": [
+                {
+                    "object_ref": item.ref,
+                    "object_digest": item.digest,
+                    "deliverable_kind": item.payload["deliverable_kind"],
+                    "owner": item.payload["owner"],
+                    "state": item.state.value,
+                }
+                for item in members
+            ],
+            "external_effects": "DISABLED",
+        }
+
+    def deliverable_set_change_view(self, kind: str) -> dict[str, Any]:
+        """Return safe, exact per-member review and approval state for one change."""
+
+        from orgrebase.workspace.change_proposals import require_action
+
+        require_action(self, "read")
+        with self.store.read_snapshot():
+            return self._deliverable_set_change_view_snapshot(kind)
+
+    def _deliverable_set_change_view_snapshot(self, kind: str) -> dict[str, Any]:
+        if self.deliverable_set_profile is None:
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_PROFILE_NOT_CONFIGURED")
+        preview_record = self._preview_record(kind)
+        if preview_record is None:
+            raise RuntimeError(f"WORKSPACE_PREVIEW_REQUIRED:{kind}")
+        bundle = WorkspacePreviewBundle.model_validate(preview_record["bundle"])
+        candidate_set = self._deliverable_candidate_record(bundle)
+        if candidate_set is None:
+            raise IntegrityError("DELIVERABLE_CANDIDATE_SET_MISSING")
+        self._verify_deliverable_candidate_evidence(bundle, candidate_set)
+        decisions = tuple(
+            DeliverableApprovalDecision.model_validate(item.payload)
+            for item in self.store.list_artifacts(
+                artifact_id_prefix=self._deliverable_decision_prefix(bundle),
+                expected_media_type=DELIVERABLE_APPROVAL_DECISION_MEDIA_TYPE,
+            )
+        )
+        approval_set = self._deliverable_approval_record(bundle)
+        review_members = []
+        for member in candidate_set.members:
+            projection = DeliverableReviewProjection.model_validate(
+                self.store.load_artifact(
+                    member.review_projection_ref,
+                    DELIVERABLE_REVIEW_PROJECTION_MEDIA_TYPE,
+                ).payload
+            )
+            if projection.digest != member.review_projection_digest:
+                raise IntegrityError("DELIVERABLE_REVIEW_PROJECTION_DIGEST_MISMATCH")
+            review_members.append(
+                {
+                    "object_id": member.object_id,
+                    "deliverable_kind": member.deliverable_kind,
+                    "disposition": member.disposition,
+                    "owner_id": member.owner_id,
+                    "candidate_ref": member.candidate_ref,
+                    "candidate_payload_digest": member.candidate_payload_digest,
+                    "safe_payload": projection.safe_payload,
+                }
+            )
+        principal = request_principal.get()
+        required_owners = tuple(
+            sorted(
+                {
+                    item.owner_id
+                    for item in candidate_set.members
+                    if item.disposition == "REBUILD"
+                }
+            )
+        )
+        decided = {item.owner_id for item in decisions}
+        current_owner = (
+            principal.actor_id
+            if principal is not None and principal.actor_id in required_owners
+            else None
+        )
+        allowed_actions: list[str] = []
+        source_approval_current = False
+        try:
+            self._require_current_deliverable_source_approval(kind, bundle)
+        except (
+            AuthenticationError,
+            AuthorizationError,
+            FreshnessError,
+            IntegrityError,
+            RuntimeError,
+        ):
+            pass
+        else:
+            source_approval_current = True
+        outcome_record = self._outcome_record(kind)
+        apply_receipt = None
+        if outcome_record is not None:
+            from orgrebase.workspace.models import DeliverableSetApplyReceipt
+
+            outcome = outcome_record["outcome"]
+            base_receipt = RebaseReceipt.model_validate(outcome["rebase_receipt"])
+            workspace_receipt = WorkspaceRebaseReceipt.model_validate(
+                outcome["workspace_rebase_receipt"]
+            )
+            self._apply_successors(base_receipt, workspace_receipt)
+            batch = DeliverableSetApplyReceipt.model_validate(
+                self.store.load_artifact(
+                    workspace_receipt.deliverable_set_receipt_ref,
+                    DELIVERABLE_SET_APPLY_RECEIPT_MEDIA_TYPE,
+                ).payload
+            )
+            binding = self._deliverable_set_binding()
+            if (
+                approval_set is None
+                or approval_set.status != "COMPLETE"
+                or batch.candidate_set_digest != candidate_set.digest
+                or batch.approval_set_digest != approval_set.digest
+                or batch.binding_ref != binding.ref
+                or batch.binding_digest != binding.digest
+                or len(batch.members) != len(candidate_set.members)
+                or len({item.object_id for item in batch.members}) != len(batch.members)
+            ):
+                raise IntegrityError("WORKSPACE_DELIVERABLE_SET_RECEIPT_INVALID")
+            candidates = {item.object_id: item for item in candidate_set.members}
+            for member in batch.members:
+                candidate = candidates.get(member.object_id)
+                result = self.store.get_object(*split_ref(member.result_ref))
+                if (
+                    candidate is None
+                    or member.deliverable_kind != candidate.deliverable_kind
+                    or member.disposition != candidate.disposition
+                    or member.predecessor_ref != candidate.predecessor_ref
+                    or member.result_ref != candidate.candidate_ref
+                    or member.result_digest != result.digest
+                    or sha256_digest(result.payload) != candidate.candidate_payload_digest
+                ):
+                    raise IntegrityError("WORKSPACE_DELIVERABLE_SET_RECEIPT_INVALID")
+            apply_receipt = batch.model_dump(mode="json")
+        if (
+            current_owner is not None
+            and current_owner not in decided
+            and candidate_set.state == "READY"
+            and source_approval_current
+            and (approval_set is None or approval_set.status == "INCOMPLETE")
+        ):
+            try:
+                self._deliverable_decision_identity(
+                    owner_id=current_owner,
+                    actor_id=None,
+                )
+            except (AuthenticationError, AuthorizationError, FreshnessError):
+                pass
+            else:
+                allowed_actions = ["APPROVE", "REJECT"]
+        return {
+            "schema_version": "orgrebase.deliverable-set-change-view.v1",
+            "workspace_id": self.store.workspace_id,
+            "event_id": kind,
+            "preview_digest": bundle.preview.digest,
+            "candidate_set": candidate_set.model_dump(mode="json"),
+            "review_members": review_members,
+            "decisions": [item.model_dump(mode="json") for item in decisions],
+            "approval_set": (
+                approval_set.model_dump(mode="json")
+                if approval_set is not None
+                else None
+            ),
+            "required_owner_ids": list(required_owners),
+            "pending_owner_ids": [owner for owner in required_owners if owner not in decided],
+            "current_principal_owner_id": current_owner,
+            "allowed_actions": allowed_actions,
+            "source_approval_digest": (
+                (self._approval_record(kind) or {}).get("approval_digest")
+            ),
+            "outcome": outcome_record,
+            "apply_receipt": apply_receipt,
+            "current_members": self._deliverable_set_view_snapshot()["members"],
+            "external_effects": "DISABLED",
+            "canonical_target_writes": 0,
+        }
+
+    def deliverable_set_apply_ready(self, kind: str) -> bool:
+        """Project whether the dual-output approval gate is complete."""
+
+        if self.deliverable_set_profile is None:
+            return True
+        preview_record = self._preview_record(kind)
+        if preview_record is None:
+            return False
+        bundle = WorkspacePreviewBundle.model_validate(preview_record["bundle"])
+        candidate_set = self._deliverable_candidate_record(bundle)
+        approval_set = self._deliverable_approval_record(bundle)
+        if candidate_set is None or approval_set is None:
+            return False
+        status = self._change_status(kind)
+        if status == "APPROVED":
+            try:
+                self._require_current_deliverable_source_approval(kind, bundle)
+            except (
+                AuthenticationError,
+                AuthorizationError,
+                FreshnessError,
+                IntegrityError,
+                RuntimeError,
+            ):
+                return False
+        elif status != "RECOVERY_REQUIRED":
+            return False
+        try:
+            self._verify_deliverable_approval_set(bundle, candidate_set, approval_set)
+        except (AuthenticationError, AuthorizationError, FreshnessError, IntegrityError):
+            return False
+        return True
+
+    def export_deliverable_set(self) -> dict[str, Any]:
+        """Export the complete internal Quote+Memo state without external effects."""
+
+        from orgrebase.workspace.change_proposals import require_action
+
+        require_action(self, "export")
+        with self.store.read_snapshot():
+            return self._export_deliverable_set_snapshot()
+
+    def _export_deliverable_set_snapshot(self) -> dict[str, Any]:
+        if self.deliverable_set_profile is None:
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_PROFILE_NOT_CONFIGURED")
+        changes = {}
+        for event_id in self.change_order:
+            if self._preview_record(event_id) is None:
+                continue
+            changes[event_id] = self._deliverable_set_change_view_snapshot(event_id)
+        document = {
+            "schema_version": "orgrebase.deliverable-set-export.v1",
+            "workspace_id": self.store.workspace_id,
+            "deliverable_set": self._deliverable_set_view_snapshot(),
+            "deliverables": [
+                item.model_dump(mode="json")
+                for item in self._current_deliverables_snapshot()
+            ],
+            "changes": changes,
+            "external_effects": "DISABLED",
+        }
+        return {**document, "digest": sha256_digest(document)}
+
+    def _deliverable_set_binding(self) -> DeliverableSetBinding:
+        if self.deliverable_set_profile is None:
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_PROFILE_NOT_CONFIGURED")
+        try:
+            stored = self.store.load_artifact(
+                DELIVERABLE_SET_BINDING_ARTIFACT_ID,
+                DELIVERABLE_SET_BINDING_MEDIA_TYPE,
+            )
+        except KeyError as exc:
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_NOT_FORMED") from exc
+        binding = DeliverableSetBinding.model_validate(stored.payload)
+        if (
+            binding.profile_ref != self.deliverable_set_profile.ref
+            or binding.profile_digest != self.deliverable_set_profile.digest
+            or binding.members != self.deliverable_set_profile.members
+            or binding.workspace_id != self.store.workspace_id
+        ):
+            raise IntegrityError("WORKSPACE_DELIVERABLE_SET_BINDING_INVALID")
+        return binding
+
+    @staticmethod
+    def _deliverable_candidate_artifact_id(bundle: WorkspacePreviewBundle) -> str:
+        return (
+            "deliverable-candidate-set:"
+            f"{bundle.change_set.id.split(':', 1)[-1]}@{bundle.change_set.revision}"
+        )
+
+    @staticmethod
+    def _deliverable_approval_artifact_id(bundle: WorkspacePreviewBundle) -> str:
+        return (
+            "deliverable-approval-set:"
+            f"{bundle.change_set.id.split(':', 1)[-1]}@{bundle.change_set.revision}"
+        )
+
+    @staticmethod
+    def _deliverable_decision_prefix(bundle: WorkspacePreviewBundle) -> str:
+        return (
+            "deliverable-approval-decision:"
+            f"{bundle.change_set.id.split(':', 1)[-1]}@{bundle.change_set.revision}:"
+        )
+
+    def _deliverable_candidate_record(
+        self,
+        bundle: WorkspacePreviewBundle,
+    ) -> DeliverableCandidateSet | None:
+        try:
+            stored = self.store.load_artifact(
+                self._deliverable_candidate_artifact_id(bundle),
+                DELIVERABLE_CANDIDATE_SET_MEDIA_TYPE,
+            )
+        except KeyError:
+            return None
+        return DeliverableCandidateSet.model_validate(stored.payload)
+
+    def _verify_deliverable_candidate_evidence(
+        self,
+        bundle: WorkspacePreviewBundle,
+        candidate_set: DeliverableCandidateSet,
+    ) -> None:
+        binding = self._deliverable_set_binding()
+        if (
+            candidate_set.change_set_ref
+            != f"{bundle.change_set.id}@{bundle.change_set.revision}"
+            or candidate_set.change_set_digest != bundle.change_set.digest
+            or candidate_set.preview_digest != bundle.preview.digest
+            or candidate_set.binding_ref != binding.ref
+            or candidate_set.binding_digest != binding.digest
+            or candidate_set.runtime_revision != self.deliverable_set_profile.runtime_revision
+            or candidate_set.snapshot_ref != bundle.snapshot_ref
+            or candidate_set.snapshot_digest != bundle.snapshot_digest
+        ):
+            raise IntegrityError("DELIVERABLE_CANDIDATE_SET_BINDING_INVALID")
+        snapshot = WorkspaceGraphSnapshot.model_validate(
+            self.store.load_artifact(candidate_set.snapshot_ref, SNAPSHOT_MEDIA_TYPE).payload
+        )
+        if snapshot.digest != candidate_set.snapshot_digest:
+            raise IntegrityError("DELIVERABLE_CANDIDATE_SNAPSHOT_MISMATCH")
+        for member in candidate_set.members:
+            review = DeliverableReviewProjection.model_validate(
+                self.store.load_artifact(
+                    member.review_projection_ref,
+                    DELIVERABLE_REVIEW_PROJECTION_MEDIA_TYPE,
+                ).payload
+            )
+            context = TaskContextManifest.model_validate(
+                self.store.load_artifact(
+                    member.context_ref,
+                    WORKSPACE_CONTEXT_MEDIA_TYPE,
+                ).payload
+            )
+            trace = WorkTrace.model_validate(
+                self.store.load_artifact(
+                    member.trace_ref,
+                    WORKSPACE_TRACE_MEDIA_TYPE,
+                ).payload
+            )
+            coverage = TraceCoverageReceipt.model_validate(
+                self.store.load_artifact(
+                    member.coverage_ref,
+                    WORKSPACE_COVERAGE_MEDIA_TYPE,
+                ).payload
+            )
+            manifest = RuntimeDependencyManifest.model_validate(
+                self.store.load_artifact(
+                    member.manifest_ref,
+                    RUNTIME_MANIFEST_MEDIA_TYPE,
+                ).payload
+            )
+            if (
+                review.digest != member.review_projection_digest
+                or review.candidate_ref != member.candidate_ref
+                or review.candidate_payload_digest != member.candidate_payload_digest
+                or review.deliverable_kind != member.deliverable_kind
+                or review.owner_id != member.owner_id
+                or review.change_set_digest != bundle.change_set.digest
+                or review.binding_digest != binding.digest
+                or context.digest != member.context_digest
+                or trace.digest != member.trace_digest
+                or coverage.digest != member.coverage_digest
+                or manifest.digest != member.manifest_digest
+                or trace.context_manifest_ref != context.ref
+                or trace.output_ref != member.candidate_ref
+                or trace.output_digest != member.candidate_payload_digest
+                or coverage.trace_ref != trace.ref
+                or coverage.status.value != "PASS"
+                or manifest.consumer_ref != member.candidate_ref
+                or manifest.trace_ref != trace.ref
+                or manifest.coverage_receipt_ref != coverage.id
+            ):
+                raise IntegrityError(
+                    f"DELIVERABLE_CANDIDATE_EVIDENCE_MISMATCH:{member.object_id}"
+                )
+            serialized_review = json.dumps(review.safe_payload, ensure_ascii=False).lower()
+            if any(
+                forbidden in serialized_review
+                for forbidden in (
+                    "raw_contract_text",
+                    "internal_cost_floor",
+                    "private_source",
+                    "secret",
+                )
+            ):
+                raise IntegrityError("DELIVERABLE_REVIEW_PROJECTION_FORBIDDEN_FIELD")
+            if member.evidence_mode == "PREDECESSOR_PRESERVED":
+                if (
+                    member.candidate_ref != member.predecessor_ref
+                    or member.manifest_ref not in snapshot.manifest_refs
+                ):
+                    raise IntegrityError("DELIVERABLE_PRESERVE_EVIDENCE_INVALID")
+            elif (
+                member.evidence_mode == "CANDIDATE"
+                and member.candidate_ref == member.predecessor_ref
+            ):
+                raise IntegrityError("DELIVERABLE_CANDIDATE_SUCCESSOR_REQUIRED")
+
+    def _persist_deliverable_candidate_set(
+        self,
+        connection: Any,
+        prepared: PreparedDeliverableCandidateSet,
+    ) -> tuple[str, tuple[str, ...]]:
+        for write in prepared.artifact_writes:
+            if sha256_digest(write.payload) != write.payload_digest:
+                raise IntegrityError(
+                    f"DELIVERABLE_CANDIDATE_ARTIFACT_DIGEST_MISMATCH:{write.artifact_id}"
+                )
+            self.store.save_artifact(
+                connection,
+                write.artifact_id,
+                write.media_type,
+                write.payload,
+            )
+        candidate_digest = self.store.save_artifact(
+            connection,
+            prepared.candidate_set.id,
+            DELIVERABLE_CANDIDATE_SET_MEDIA_TYPE,
+            prepared.candidate_set.model_dump(mode="json"),
+        )
+        return candidate_digest, tuple(write.artifact_id for write in prepared.artifact_writes)
+
+    def _deliverable_approval_record(
+        self,
+        bundle: WorkspacePreviewBundle,
+    ) -> DeliverableApprovalSet | None:
+        try:
+            stored = self.store.load_artifact(
+                self._deliverable_approval_artifact_id(bundle),
+                DELIVERABLE_APPROVAL_SET_MEDIA_TYPE,
+            )
+        except KeyError:
+            return None
+        return DeliverableApprovalSet.model_validate(stored.payload)
+
     def current_graph_pointer(self):
         return self.store.get_object(self.graph_pointer_id)
 
@@ -3100,7 +3783,7 @@ class WorkspaceService:
             "workflow_run_id": bundle.run_envelope.run_id,
             "run_nonce": bundle.run_envelope.nonce,
             "pack_digest": self.deployment_binding.get("pack_digest"),
-            "profile_digest": self.profile_digest,
+            "profile_digest": self.workspace_profile_digest,
             "review_duration_ms": self.review_duration_ms,
             "previewed_at": self._epoch_ms_timestamp(previewed_at_epoch_ms),
             "previewed_at_epoch_ms": previewed_at_epoch_ms,
@@ -3132,7 +3815,7 @@ class WorkspaceService:
             or gate.get("workflow_run_id") != bundle.run_envelope.run_id
             or gate.get("run_nonce") != bundle.run_envelope.nonce
             or gate.get("pack_digest") != self.deployment_binding.get("pack_digest")
-            or gate.get("profile_digest") != self.profile_digest
+            or gate.get("profile_digest") != self.workspace_profile_digest
             or gate.get("approval_identity_mode") != self.approval_identity_mode
         ):
             raise RuntimeError("WORKSPACE_REVIEW_GATE_BINDING_MISMATCH")
@@ -3160,6 +3843,22 @@ class WorkspaceService:
         review_gate = self._review_gate_record(kind)
         from orgrebase.workspace.change_agentteams import verified_native_bundle
         native_execution = verified_native_bundle(self, bundle)
+        candidate_view = None
+        if self.deliverable_set_profile is not None:
+            candidate = self._deliverable_candidate_record(bundle)
+            if candidate is None:
+                raise IntegrityError("DELIVERABLE_CANDIDATE_SET_MISSING")
+            self._verify_deliverable_candidate_evidence(bundle, candidate)
+            candidate_view = {
+                "candidate_set": candidate.model_dump(mode="json"),
+                "review_projections": [
+                    self.store.load_artifact(
+                        member.review_projection_ref,
+                        DELIVERABLE_REVIEW_PROJECTION_MEDIA_TYPE,
+                    ).payload
+                    for member in candidate.members
+                ],
+            }
         return {
             "kind": kind,
             "artifact_id": stored.artifact_id,
@@ -3169,6 +3868,18 @@ class WorkspaceService:
             "review_gate": review_gate,
             **({"pricing_comparison": bundle.pricing_comparison.model_dump(mode="json")}
                if bundle.pricing_comparison is not None else {}),
+            **(
+                {
+                    "deliverable_set_profile": {
+                        "profile_ref": self.deliverable_set_profile.ref,
+                        "profile_digest": self.deliverable_set_profile.digest,
+                        "runtime_revision": self.deliverable_set_profile.runtime_revision,
+                    }
+                }
+                if self.deliverable_set_profile is not None
+                else {}
+            ),
+            **({"deliverable_candidates": candidate_view} if candidate_view else {}),
             **({"native_execution": native_execution} if native_execution is not None else {}),
         }
 
@@ -3258,7 +3969,7 @@ class WorkspaceService:
             )
             or (self.workflow_run_id is not None and binding.run_nonce != self.workflow_run_nonce)
             or binding.pack_digest != self.deployment_binding.get("pack_digest")
-            or binding.profile_digest != self.profile_digest
+            or binding.profile_digest != self.workspace_profile_digest
             or binding.change_set_digest != bundle.change_set.digest
             or binding.preview_digest != bundle.preview.digest
             or binding.minimal_rebase_certificate_digest != bundle.minimal_rebase_certificate.digest
@@ -4649,7 +5360,61 @@ class WorkspaceService:
     @_serialized
     def state(self, *, history_limit: int = 50) -> dict[str, Any]:
         with self.store.read_snapshot():
-            return self._state_snapshot(history_limit=history_limit)
+            view = self._learning_history_view(
+                self._state_snapshot(history_limit=history_limit), surface="state",
+            )
+            authorization = current_authorization()
+            if authorization is not None:
+                authorization()
+            return view
+
+    @staticmethod
+    def _learning_history_view(payload: dict[str, Any], *, surface: str) -> dict[str, Any]:
+        """Expose a labelled view; canonical bundles remain in the StateStore."""
+        from orgrebase.workspace.learning_content_projection import (
+            CONTENT_CLASSES,
+            project_learning_content,
+            safe_response_view_digest,
+        )
+
+        previous = payload.get("learning_content_view")
+        previous = previous if isinstance(previous, dict) and previous.get("schema_version") == (
+            "orgrebase.learning-content-safe-view.v1"
+        ) else None
+        source = {key: value for key, value in payload.items() if key != "learning_content_view"} if (
+            previous is not None
+        ) else payload
+        projection = project_learning_content(source, surface=surface)
+        previous_count = previous.get("redacted_count") if previous is not None else 0
+        previous_count = previous_count if type(previous_count) is int and previous_count >= 0 else 0
+        if not projection.redacted_paths and previous is None:
+            return payload
+        view = projection.payload
+        previous_classes = previous.get("content_classes") if previous is not None else ()
+        previous_classes = previous_classes if isinstance(previous_classes, list) else ()
+        content_classes = sorted(set(projection.content_classes) | {
+            item for item in previous_classes if isinstance(item, str) and item in CONTENT_CLASSES
+        })
+        original_digest = (
+            previous.get("original_logical_digest") if previous is not None
+            else projection.original_logical_digest
+        )
+        marker = {
+            "schema_version": "orgrebase.learning-content-safe-view.v1",
+            "surface": surface,
+            "redacted_count": previous_count + len(projection.redacted_paths),
+            "content_classes": content_classes,
+            "content_status": "METADATA_ONLY_NO_HISTORICAL_CONTENT_GRANT",
+            "storage_status": "LEGACY_CANONICAL_INLINE_MAY_REMAIN",
+            "original_logical_digest": original_digest,
+            "digest_meaning": "VIEW_DIGEST_NOT_ORIGINAL_LOGICAL_DIGEST",
+            "view_digest_scope": "EXCLUDES_TOP_LEVEL_DIGEST_AND_MARKER_VIEW_DIGEST",
+        }
+        view["learning_content_view"] = marker
+        marker["view_digest"] = safe_response_view_digest(view)
+        if surface == "export":
+            view["digest"] = sha256_digest({key: value for key, value in view.items() if key != "digest"})
+        return view
 
     def _state_snapshot(self, *, history_limit: int) -> dict[str, Any]:
         from orgrebase.workspace.approval_authority import authority_detail
@@ -4840,6 +5605,8 @@ class WorkspaceService:
             "event_scopes": event_scopes,
             "actions": self._actions(stage, active_event, active_status),
         }
+        if self.deliverable_set_profile is not None and formation is not None:
+            result["deliverable_set"] = self.deliverable_set_view()
         if competition_evidence is not None or self.competition_mode == GOLDEN_COMPETITION_MODE:
             result["competition_evidence"] = competition_evidence
         if competition_evidence is not None:
@@ -4920,6 +5687,10 @@ class WorkspaceService:
 
     @_serialized
     def export_quote(self) -> dict[str, Any]:
+        with self.store.read_snapshot():
+            return self._export_quote_snapshot()
+
+    def _export_quote_snapshot(self) -> dict[str, Any]:
         if self.changes.gaps():
             raise RuntimeError("OWNER_READMISSION_REQUIRED")
         state = self.state()
@@ -4940,10 +5711,24 @@ class WorkspaceService:
             "graph_pointer": state["graph_pointer"],
             "boundaries": state["boundaries"],
         }
+        if self.deliverable_set_profile is not None:
+            document["deliverable_set"] = self._deliverable_set_view_snapshot()
+            document["deliverables"] = [
+                item.model_dump(mode="json")
+                for item in self._current_deliverables_snapshot()
+            ]
         return {**document, "digest": sha256_digest(document)}
 
     @_serialized
     def export_evidence(self) -> dict[str, Any]:
+        with self.store.read_snapshot():
+            view = self._learning_history_view(self._export_evidence_snapshot(), surface="export")
+            authorization = current_authorization()
+            if authorization is not None:
+                authorization()
+            return view
+
+    def _export_evidence_snapshot(self) -> dict[str, Any]:
         state = self.state()
         if state["quote"] is None:
             raise RuntimeError("WORKSPACE_SESSION_EMPTY")
@@ -4990,6 +5775,12 @@ class WorkspaceService:
             document["competition_evidence"] = state["competition_evidence"]
         if state.get("experience_governance") is not None:
             document["experience_governance"] = state["experience_governance"]
+        if self.deliverable_set_profile is not None:
+            deliverable_export = self._export_deliverable_set_snapshot()
+            document["deliverable_set"] = {
+                key: value for key, value in deliverable_export.items() if key != "digest"
+            }
+            document["deliverable_set_export_digest"] = deliverable_export["digest"]
         return {**document, "digest": sha256_digest(document)}
 
     def current_snapshot(self) -> WorkspaceGraphSnapshot:
@@ -5079,9 +5870,17 @@ class WorkspaceService:
 
     def _reuse_preview(self, kind: str, existing: dict[str, Any]) -> WorkspacePreviewBundle:
         bundle = WorkspacePreviewBundle.model_validate(existing["bundle"])
+        from orgrebase.workspace.finance_adoption import require_existing_preview_adoption
+        if self._outcome_record(kind) is None:
+            require_existing_preview_adoption(self, kind, bundle, action="propose")
+        if self.deliverable_set_profile is not None:
+            candidate_set = self._deliverable_candidate_record(bundle)
+            if candidate_set is None:
+                raise IntegrityError("DELIVERABLE_CANDIDATE_SET_MISSING")
+            self._verify_deliverable_candidate_evidence(bundle, candidate_set)
         if self._outcome_record(kind) is None:
             require_preview_runtime(self, kind, bundle.preview.digest)
-            validate_source_observations(self, (self.changes.get(kind).proposal,), self.clock.now())
+            validate_change_proposal_sources(self, (self.changes.get(kind).proposal,), self.clock.now())
         self._ensure_review_gate(kind=kind, bundle=bundle, preview_artifact_digest=existing["artifact_digest"])
         self.last_preview_bundle = bundle
         return bundle
@@ -5094,9 +5893,23 @@ class WorkspaceService:
             recovery_adapter,
             require_recovery_inputs,
         )
+        from orgrebase.workspace.finance_adoption import (
+            USE_MEDIA,
+            configured_policy,
+            prepare_normal_adoption,
+            require_existing_finance_event_attempt,
+            require_selection_current,
+            reserve_finance_business_preview_identity,
+            reserve_selection,
+            use_payload,
+            use_ref,
+        )
         from orgrebase.workspace.rebuild import preview_quote_pricing
         from orgrebase.workspace.runtime_revision import workspace_revision
 
+        finance_policy = configured_policy()
+        finance_selection_enabled = finance_policy is not None and finance_policy.mode == "ADOPTED"
+        prepared_finance = None
         with self._command_lock:
             require_action(self, "propose")
             self.changes.refresh()
@@ -5120,20 +5933,87 @@ class WorkspaceService:
                     store=self.store, quote=self.current_quote(), proposal=self.changes.get(kind).proposal,
                     template_ref=self.profile.default_task.template_ref, snapshot_digest=spec.expected_snapshot_digest,
                 )
-                validate_source_observations(self, (self.changes.get(kind).proposal,), self.clock.now())
+                validate_change_proposal_sources(self, (self.changes.get(kind).proposal,), self.clock.now())
                 captured_runtime = workspace_revision(self)
                 adapter, verifier = recovery_adapter(self, kind)
                 recovery = require_recovery_inputs(self, kind)
-                attempt = reserve_attempt(self, connection, command=attempt_command(self, kind), fixture=fixture,
-                    change_set=change_set, preview=preview, envelope=self._run_envelope(spec),
-                    request_binding=recovery["digest"] if recovery else None)
-        advisory = execute_attempt(self, attempt, fixture=fixture, change_set=change_set, preview=preview,
-                                   adapter=adapter, verifier=verifier)
+                envelope = self._run_envelope(spec)
+                require_existing_finance_event_attempt(
+                    self, event_id=kind, change_set=change_set,
+                    envelope=envelope, policy=finance_policy,
+                )
+                reserve_finance_business_preview_identity(
+                    self, connection, event_id=kind, fixture=fixture,
+                    change_set=change_set, preview=preview, envelope=envelope,
+                    policy=finance_policy,
+                )
+                if not finance_selection_enabled:
+                    attempt = reserve_attempt(self, connection, command=attempt_command(self, kind), fixture=fixture,
+                        change_set=change_set, preview=preview, envelope=envelope,
+                        request_binding=recovery["digest"] if recovery else None)
+        if finance_selection_enabled:
+            prepared_finance = prepare_normal_adoption(
+                self, event_id=kind, fixture=fixture, change_set=change_set,
+                preview=preview, envelope=envelope, base_adapter=adapter,
+                recovery_digest=recovery["digest"] if recovery else None,
+            )
+            with self._command_lock, self.store.transaction() as connection:
+                from orgrebase.workspace.enterprise_binding import lock_binding_scope
+                lock_binding_scope(self, connection)
+                require_action(self, "propose")
+                if require_recovery_inputs(self, kind) != recovery:
+                    raise IntegrityError("CHANGE_RECOVERY_CONTEXT_CHANGED")
+                self.changes.refresh()
+                if (self._preview_record(kind) is not None
+                        or self._change_status(kind) != "RECEIVED"):
+                    raise IntegrityError("WORKSPACE_ADVISORY_CHANGE_NO_LONGER_PENDING")
+                current_fixture = self._fixture_for_change(spec)
+                if (workspace_revision(self) != captured_runtime
+                        or sha256_digest(current_fixture.model_dump(mode="json"))
+                        != sha256_digest(fixture.model_dump(mode="json"))):
+                    raise IntegrityError("WORKSPACE_ADVISORY_INPUT_CHANGED")
+                validate_change_proposal_sources(self, (self.changes.get(kind).proposal,), self.clock.now())
+                if prepared_finance is not None:
+                    adapter, verifier = prepared_finance.adapter, prepared_finance.verifier
+                attempt = reserve_attempt(
+                    self, connection, command=attempt_command(self, kind),
+                    fixture=fixture, change_set=change_set, preview=preview,
+                    envelope=envelope,
+                    request_binding={
+                        "recovery_digest": recovery["digest"] if recovery else None,
+                        "finance_selection_digest": prepared_finance.selection.digest,
+                    } if prepared_finance is not None else (recovery["digest"] if recovery else None),
+                )
+                if prepared_finance is not None:
+                    reserve_selection(
+                        self, connection, prepared_finance, expected_attempt_key=attempt.key,
+                    )
+        try:
+            advisory = execute_attempt(self, attempt, fixture=fixture, change_set=change_set, preview=preview,
+                                       adapter=adapter, verifier=verifier)
+        except BaseException:
+            if prepared_finance is not None:
+                from orgrebase.workspace.finance_adoption import failed_use_payload
+                from orgrebase.workspace.preview_execution import read_attempt_summary
+                failed_use = failed_use_payload(
+                    prepared_finance.selection,
+                    read_attempt_summary(self, command=attempt_command(self, kind)),
+                )
+                with self.store.transaction() as connection:
+                    self.store.save_artifact(
+                        connection, use_ref(prepared_finance.selection), USE_MEDIA, failed_use,
+                    )
+            raise
         bundle = WorkspacePreviewBundle(
             change_spec=spec, snapshot_ref=spec.expected_snapshot_ref, snapshot_digest=spec.expected_snapshot_digest,
             change_set=change_set, preview=preview, minimal_rebase_certificate=minimal,
             advisory=advisory, run_envelope=attempt.envelope,
             pricing_comparison=pricing_comparison,
+        )
+        prepared_candidates = (
+            self._build_deliverable_candidate_set(bundle)
+            if self.deliverable_set_profile is not None
+            else None
         )
         with self._command_lock, self.store.transaction() as connection:
             from orgrebase.workspace.enterprise_binding import lock_binding_scope
@@ -5156,19 +6036,47 @@ class WorkspaceService:
                 raise IntegrityError("WORKSPACE_ADVISORY_INPUT_CHANGED")
             if utc_datetime(self.clock.now()) >= utc_datetime(attempt.envelope.expires_at):
                 raise IntegrityError("WORKSPACE_ADVISORY_PREVIEW_EXPIRED")
-            validate_source_observations(self, (self.changes.get(kind).proposal,), self.clock.now())
+            validate_change_proposal_sources(self, (self.changes.get(kind).proposal,), self.clock.now())
             require_attempt_sources(self, attempt)
+            finance_use = None
+            if prepared_finance is not None:
+                require_selection_current(
+                    self, prepared_finance.selection, prepared_finance.advice,
+                    change_set=change_set, preview=preview, envelope=attempt.envelope,
+                    action="propose",
+                )
+                finance_use = use_payload(self, prepared_finance.selection, advisory)
             payload = bundle.model_dump(mode="json")
             artifact_id = self._preview_artifact_id(kind)
             preview_artifact_digest = sha256_digest(payload)
             review_gate = self._new_review_gate(kind=kind, bundle=bundle,
                                                 preview_artifact_digest=preview_artifact_digest)
             artifact_digest = self.store.save_artifact(connection, artifact_id, WORKSPACE_PREVIEW_MEDIA_TYPE, payload)
+            if finance_use is not None:
+                self.store.save_artifact(
+                    connection, use_ref(prepared_finance.selection), USE_MEDIA, finance_use,
+                )
+            if prepared_candidates is not None:
+                candidate_digest, candidate_evidence_refs = (
+                    self._persist_deliverable_candidate_set(
+                        connection,
+                        prepared_candidates,
+                    )
+                )
             bind_preview_runtime(self, connection, kind, bundle.preview.digest)
             review_gate_artifact_digest = self.store.save_artifact(connection,
                 self._review_gate_artifact_id(kind), WORKSPACE_REVIEW_GATE_MEDIA_TYPE, review_gate)
             preview_event = {"kind": kind, "artifact_id": artifact_id, "artifact_digest": artifact_digest,
                              "preview_digest": bundle.preview.digest, "snapshot_digest": bundle.snapshot_digest}
+            if prepared_candidates is not None:
+                preview_event.update(
+                    {
+                        "deliverable_candidate_set_ref": prepared_candidates.candidate_set.id,
+                        "deliverable_candidate_set_digest": prepared_candidates.candidate_set.digest,
+                        "deliverable_candidate_artifact_digest": candidate_digest,
+                        "deliverable_candidate_evidence_refs": list(candidate_evidence_refs),
+                    }
+                )
             if self.review_duration_ms > 0:
                 preview_event.update({"review_gate_ref": self._review_gate_artifact_id(kind),
                     "review_gate_artifact_digest": review_gate_artifact_digest,
@@ -5197,6 +6105,7 @@ class WorkspaceService:
         kind: str,
         bundle: WorkspacePreviewBundle,
         fail_after: str | None = None,
+        advisory_action: str = "execute",
     ) -> tuple[EnterpriseFixture, RebaseWorkflow]:
         fixture = self._fixture_for_change(bundle.change_spec)
         request_check = current_authorization()
@@ -5206,17 +6115,46 @@ class WorkspaceService:
             require_change_owner(self, self.changes.get(kind))
             if request_check is not None:
                 request_check()
-            validate_source_observations(self, (self.changes.get(kind).proposal,), self.clock.now())
+            validate_change_proposal_sources(self, (self.changes.get(kind).proposal,), self.clock.now())
             require_preview_runtime(self, kind, bundle.preview.digest)
+            from orgrebase.workspace.finance_adoption import (
+                adopted_adapter_for_preview,
+                selection_for_bundle,
+                verify_use,
+            )
+            selection = selection_for_bundle(self, kind, bundle)
+            if selection is not None:
+                adopted_adapter_for_preview(
+                    self, event_id=kind, bundle=bundle,
+                    base_adapter=recovery_adapter(self, kind)[0],
+                )
+                verify_use(self, selection, bundle.advisory)
             approval_record = self._approval_record(kind)
             if approval_record is not None:
                 from orgrebase.workspace.approval_authority import verify_approval_authority
                 verify_approval_authority(self, kind, Approval.model_validate(approval_record["approval"]), current=True)
+            if self.deliverable_set_profile is not None:
+                candidate_set = self._deliverable_candidate_record(bundle)
+                approval_set = self._deliverable_approval_record(bundle)
+                if candidate_set is None or approval_set is None:
+                    raise RuntimeError("DELIVERABLE_APPROVAL_SET_REQUIRED")
+                self._verify_deliverable_approval_set(
+                    bundle,
+                    candidate_set,
+                    approval_set,
+                )
 
         from orgrebase.workspace.change_recovery import recovery_adapter
+        from orgrebase.workspace.finance_adoption import adopted_adapter_for_preview
+        base_adapter, base_verifier = recovery_adapter(self, kind)
+        adopted = adopted_adapter_for_preview(
+            self, event_id=kind, bundle=bundle, base_adapter=base_adapter,
+            action=advisory_action,
+        )
         return fixture, self._create_rebase_workflow(
             fixture, authorize_commit=authorize_apply, fail_after=fail_after,
-            advisory_verifier=recovery_adapter(self, kind)[1],
+            advisory_verifier=adopted[1] if adopted is not None else base_verifier,
+            bundle=bundle,
         )
 
     def _create_rebase_workflow(
@@ -5224,16 +6162,79 @@ class WorkspaceService:
         authorize_completion: Callable[[], None] | None = None,
         fail_after: str | None = None,
         advisory_verifier: Any | None = None,
+        bundle: WorkspacePreviewBundle | None = None,
     ) -> RebaseWorkflow:
         clock = self._clock("")
+        template_refs = (
+            {"DISCOUNT_MEMO": "template:discount_exception_memo@v2"}
+            if self.deliverable_set_profile is not None
+            else None
+        )
         provider = WorkspaceRebuildContextProvider(
             clock=clock, read_dependency_validator=lambda premises, now: validate_read_dependencies(self, premises, now),
             template_ref=self.profile.default_task.template_ref,
+            template_refs=template_refs,
         )
 
         def verify_completion() -> None:
             (authorize_completion or authorize_commit)()
             provider.current_premises(self.store, self.clock.now())
+
+        handlers: dict[str, Any] = {
+            "QUOTE": QuoteRebuildPayloadHandler(
+                template_ref=self.profile.default_task.template_ref
+            )
+        }
+        apply_extension: Any
+        if self.deliverable_set_profile is None:
+            apply_extension = WorkspaceGraphApplyExtension(
+                fail_after=fail_after,
+                run_id=self.workflow_run_id,
+                task_request=self.profile.task_request(),
+                graph_pointer_id=self.graph_pointer_id,
+                graph_snapshot_id=self.graph_snapshot_id,
+                snapshot_scope_roots=self.snapshot_scope_roots,
+            )
+        else:
+            apply_extension = None
+            if bundle is not None:
+                handlers["DISCOUNT_MEMO"] = DiscountMemoRebuildPayloadHandler(
+                    change_set_ref=f"{bundle.change_set.id}@{bundle.change_set.revision}",
+                    change_set_digest=bundle.change_set.digest,
+                )
+                candidate_set = self._deliverable_candidate_record(bundle)
+                approval_set = self._deliverable_approval_record(bundle)
+                if candidate_set is not None and approval_set is not None:
+                    binding = self._deliverable_set_binding()
+                    memo_request = self.deliverable_formation._memo_request(
+                        self.profile.task_request()
+                    )
+                    apply_extension = DeliverableSetGraphApplyExtension(
+                        profile=self.deliverable_set_profile,
+                        binding=binding,
+                        candidate_set=candidate_set,
+                        approval_set=approval_set,
+                        authority_revisions={
+                            owner_id: self._deliverable_required_authority(
+                                candidate_set,
+                                owner_id,
+                            )[1]
+                            for owner_id in {
+                                item.owner_id
+                                for item in candidate_set.members
+                                if item.disposition == "REBUILD"
+                            }
+                        },
+                        task_requests={
+                            "QUOTE": self.profile.task_request(),
+                            "DISCOUNT_MEMO": memo_request,
+                        },
+                        graph_pointer_id=self.graph_pointer_id,
+                        graph_snapshot_id=self.graph_snapshot_id,
+                        snapshot_scope_roots=self.snapshot_scope_roots,
+                        run_id=self.workflow_run_id,
+                        fail_after=fail_after,
+                    )
 
         return RebaseWorkflow(
             fixture,
@@ -5244,15 +6245,8 @@ class WorkspaceService:
             authorize_commit=authorize_commit,
             authorize_completion=verify_completion,
             context_provider=provider,
-            rebuild_handlers={"QUOTE": QuoteRebuildPayloadHandler(template_ref=self.profile.default_task.template_ref)},
-            apply_extension=WorkspaceGraphApplyExtension(
-                fail_after=fail_after,
-                run_id=self.workflow_run_id,
-                task_request=self.profile.task_request(),
-                graph_pointer_id=self.graph_pointer_id,
-                graph_snapshot_id=self.graph_snapshot_id,
-                snapshot_scope_roots=self.snapshot_scope_roots,
-            ),
+            rebuild_handlers=handlers,
+            apply_extension=apply_extension,
             advisory_verifier=advisory_verifier or self.advisory_verifier,
         )
 
@@ -5273,7 +6267,7 @@ class WorkspaceService:
         if self.changes.rejection(kind) is not None:
             raise RuntimeError("WORKSPACE_CHANGE_REJECTED")
         if self._outcome_record(kind) is None:
-            validate_source_observations(self, (self.changes.get(kind).proposal,), self.clock.now())
+            validate_change_proposal_sources(self, (self.changes.get(kind).proposal,), self.clock.now())
         status, status_reason = self._change_status_with_reason(kind)
         if status == "EXPIRED":
             if status_reason in {"RUNTIME_BINDING_MISSING", "RUNTIME_BINDING_SCOPE_CHANGED", "RUNTIME_IMPLEMENTATION_CHANGED"}:
@@ -5284,6 +6278,8 @@ class WorkspaceService:
             raise RuntimeError(f"WORKSPACE_PREVIEW_REQUIRED:{kind}")
         bundle = WorkspacePreviewBundle.model_validate(preview_record["bundle"])
         require_preview_runtime(self, kind, bundle.preview.digest)
+        from orgrebase.workspace.finance_adoption import require_existing_preview_adoption
+        require_existing_preview_adoption(self, kind, bundle, action="approve")
         if preview_digest != bundle.preview.digest:
             raise RuntimeError("WORKSPACE_PREVIEW_DIGEST_MISMATCH:approval must bind the persisted preview")
         from orgrebase.workspace.approval_authority import record_approval_authority, require_approval_actor
@@ -5315,7 +6311,7 @@ class WorkspaceService:
             )
         if self._change_status(kind) != "PREVIEWED":
             raise RuntimeError("WORKSPACE_CHANGE_NOT_APPROVABLE")
-        _, workflow = self._workflow(kind=kind, bundle=bundle)
+        _, workflow = self._workflow(kind=kind, bundle=bundle, advisory_action="approve")
         approval = workflow.approve(
             bundle.change_set,
             bundle.preview,
@@ -5331,7 +6327,7 @@ class WorkspaceService:
             workflow_run_id=bundle.run_envelope.run_id,
             run_nonce=bundle.run_envelope.nonce,
             pack_digest=self.deployment_binding.get("pack_digest"),
-            profile_digest=self.profile_digest,
+            profile_digest=self.workspace_profile_digest,
             predecessor_ref=predecessor.ref,
             predecessor_digest=predecessor.digest,
             change_set_digest=bundle.change_set.digest,
@@ -5409,6 +6405,534 @@ class WorkspaceService:
             raise RuntimeError("WORKSPACE_APPROVAL_PERSISTENCE_FAILED")
         return {**record, "state": self.state()}
 
+    def _build_deliverable_candidate_set(
+        self,
+        bundle: WorkspacePreviewBundle,
+    ) -> PreparedDeliverableCandidateSet:
+        if self.deliverable_set_profile is None:
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_PROFILE_NOT_CONFIGURED")
+        fixture = self._fixture_for_change(bundle.change_spec)
+        clock = self._clock("")
+        provider = WorkspaceRebuildContextProvider(
+            clock=clock,
+            read_dependency_validator=lambda premises, now: validate_read_dependencies(
+                self, premises, now
+            ),
+            template_ref=self.profile.default_task.template_ref,
+            template_refs={"DISCOUNT_MEMO": "template:discount_exception_memo@v2"},
+        )
+        handlers = {
+            "QUOTE": QuoteRebuildPayloadHandler(
+                template_ref=self.profile.default_task.template_ref
+            ),
+            "DISCOUNT_MEMO": DiscountMemoRebuildPayloadHandler(
+                change_set_ref=f"{bundle.change_set.id}@{bundle.change_set.revision}",
+                change_set_digest=bundle.change_set.digest,
+            ),
+        }
+        memo_request = self.deliverable_formation._memo_request(self.profile.task_request())
+        return build_deliverable_candidate_set(
+            store=self.store,
+            fixture=fixture,
+            profile=self.deliverable_set_profile,
+            binding=self._deliverable_set_binding(),
+            change_set=bundle.change_set,
+            preview=bundle.preview,
+            snapshot=self.current_snapshot(),
+            context_provider=provider,
+            handlers=handlers,
+            dispositions={
+                item.target_id: item.disposition.value
+                for item in bundle.minimal_rebase_certificate.effects
+            },
+            task_requests={
+                "QUOTE": self.profile.task_request(),
+                "DISCOUNT_MEMO": memo_request,
+            },
+            graph_pointer_id=self.graph_pointer_id,
+            run_id=self.workflow_run_id,
+        )
+
+    def _deliverable_required_authority(
+        self,
+        candidate_set: DeliverableCandidateSet,
+        owner_id: str,
+    ) -> tuple[tuple[str, ...], str]:
+        from orgrebase.workspace.enterprise_binding import binding_revision, resource_authority
+
+        current_binding = self.enterprise_binding
+        resources = {item.slot_id: item for item in current_binding.resources}
+        required = [
+            item
+            for item in candidate_set.members
+            if item.disposition == "REBUILD" and item.owner_id == owner_id
+        ]
+        if not required:
+            raise AuthorizationError("DELIVERABLE_APPROVAL_OWNER_OUT_OF_SCOPE")
+        authority_facts = []
+        for item in required:
+            if item.deliverable_kind == "QUOTE":
+                current_owner = self.profile.default_task.actor_id
+                authority = sha256_digest(
+                    {
+                        "profile_digest": self.profile_digest,
+                        "task_actor": current_owner,
+                    }
+                )
+            else:
+                resource = resources.get("pricing_policy")
+                if resource is None:
+                    raise FreshnessError("DELIVERABLE_MEMO_OWNER_BINDING_MISSING")
+                current_owner = resource.owner_id
+                authority = resource_authority(self, "pricing_policy")
+            if current_owner != item.owner_id:
+                raise FreshnessError("DELIVERABLE_OWNER_RESPONSIBILITY_CHANGED")
+            authority_facts.append(
+                {
+                    "object_id": item.object_id,
+                    "deliverable_kind": item.deliverable_kind,
+                    "owner_id": current_owner,
+                    "authority": authority,
+                    "scopes": list(item.required_scopes),
+                }
+            )
+        scopes = tuple(sorted({scope for item in required for scope in item.required_scopes}))
+        revision = sha256_digest(
+            {
+                "workspace_id": self.store.workspace_id,
+                "workspace_profile_digest": self.workspace_profile_digest,
+                "deliverable_binding_digest": self._deliverable_set_binding().digest,
+                "enterprise_binding_digest": current_binding.digest,
+                "enterprise_binding_revision": binding_revision(self),
+                "owner_id": owner_id,
+                "authority_facts": authority_facts,
+            }
+        )
+        return scopes, revision
+
+    def _require_current_deliverable_source_approval(
+        self,
+        kind: str,
+        bundle: WorkspacePreviewBundle,
+    ) -> tuple[dict[str, Any], Approval]:
+        if self._change_status(kind) != "APPROVED":
+            raise FreshnessError("DELIVERABLE_SOURCE_APPROVAL_NOT_CURRENT")
+        source_approval = self._approval_record(kind)
+        if source_approval is None:
+            raise RuntimeError("DELIVERABLE_SOURCE_APPROVAL_REQUIRED")
+        source_model = Approval.model_validate(source_approval["approval"])
+        if (
+            source_model.change_set_digest != bundle.change_set.digest
+            or source_model.preview_digest != bundle.preview.digest
+            or source_model.minimal_rebase_certificate_digest
+            != bundle.minimal_rebase_certificate.digest
+        ):
+            raise IntegrityError("DELIVERABLE_SOURCE_APPROVAL_BINDING_INVALID")
+        self._require_approval_binding(
+            kind=kind,
+            bundle=bundle,
+            approval=source_model,
+            require_current_predecessor=True,
+        )
+        from orgrebase.workspace.runtime_revision import require_preview_runtime
+
+        require_preview_runtime(self, kind, bundle.preview.digest)
+        validate_change_proposal_sources(
+            self,
+            (self.changes.get(kind).proposal,),
+            self.clock.now(),
+        )
+        return source_approval, source_model
+
+    def _deliverable_decision_identity(
+        self,
+        *,
+        owner_id: str,
+        actor_id: str | None,
+    ) -> tuple[dict[str, str], str, int | None]:
+        principal = request_principal.get()
+        if principal is not None:
+            from orgrebase.workspace.approval_authority import verify_member
+            from orgrebase.workspace.change_proposals import require_action
+
+            actual_actor = require_action(self, "approve")
+            if actual_actor != owner_id or actor_id not in {None, actual_actor}:
+                raise AuthorizationError("DELIVERABLE_APPROVER_IDENTITY_MISMATCH")
+            identity = {
+                "issuer": principal.issuer,
+                "subject": principal.subject,
+                "actor_id": principal.actor_id,
+            }
+            verify_member(self, identity, "approve")
+            return identity, "VERIFIED_REQUEST_PRINCIPAL", principal.expires_at
+        raise AuthenticationError("AUTH_VERIFIED_PRINCIPAL_REQUIRED")
+
+    def _verify_deliverable_approval_set(
+        self,
+        bundle: WorkspacePreviewBundle,
+        candidate_set: DeliverableCandidateSet,
+        approval_set: DeliverableApprovalSet,
+    ) -> None:
+        from orgrebase.workspace.approval_authority import verify_member
+
+        self._verify_deliverable_candidate_evidence(bundle, candidate_set)
+        if (
+            approval_set.status != "COMPLETE"
+            or approval_set.candidate_set_digest != candidate_set.digest
+        ):
+            raise IntegrityError("DELIVERABLE_APPROVAL_SET_INCOMPLETE")
+        required_owners = {
+            item.owner_id
+            for item in candidate_set.members
+            if item.disposition == "REBUILD"
+        }
+        decisions = {item.owner_id: item for item in approval_set.decisions}
+        if set(decisions) != required_owners:
+            raise IntegrityError("DELIVERABLE_APPROVAL_OWNER_COVERAGE_INVALID")
+        observed = utc_datetime(self.clock.now())
+        for owner_id in sorted(required_owners):
+            decision = decisions[owner_id]
+            scopes, authority_revision = self._deliverable_required_authority(
+                candidate_set,
+                owner_id,
+            )
+            if (
+                decision.actor_id != owner_id
+                or decision.decision != "APPROVED"
+                or decision.scopes != scopes
+                or decision.authority_revision != authority_revision
+                or not utc_datetime(decision.approved_at)
+                <= observed
+                < utc_datetime(decision.expires_at)
+            ):
+                raise IntegrityError("DELIVERABLE_APPROVAL_AUTHORITY_INVALID")
+            identity = {
+                "issuer": decision.identity_issuer,
+                "subject": decision.identity_subject,
+                "actor_id": decision.actor_id,
+            }
+            if decision.identity_mode == "VERIFIED_REQUEST_PRINCIPAL":
+                verify_member(self, identity, "approve")
+            elif decision.identity_mode != self.approval_identity_mode:
+                raise AuthenticationError("DELIVERABLE_APPROVAL_IDENTITY_MODE_CHANGED", 403)
+
+    @_serialized
+    def approve_deliverable_set_change(
+        self,
+        kind: str,
+        *,
+        owner_id: str | None,
+        actor_id: str | None,
+        preview_digest: str,
+        decision: str = "APPROVED",
+        operation_id: str | None = None,
+    ) -> dict[str, Any]:
+        """Persist one current owner's exact output decision per authorized command."""
+
+        if self.deliverable_set_profile is None:
+            raise RuntimeError("WORKSPACE_DELIVERABLE_SET_PROFILE_NOT_CONFIGURED")
+        if decision not in {"APPROVED", "REJECTED"}:
+            raise ValueError("DELIVERABLE_APPROVAL_DECISION_INVALID")
+        principal = request_principal.get()
+        selected_owner = owner_id or (principal.actor_id if principal is not None else None)
+        if selected_owner is None:
+            raise AuthenticationError("AUTH_VERIFIED_PRINCIPAL_REQUIRED")
+        preview_record = self._preview_record(kind)
+        if preview_record is None:
+            raise RuntimeError(f"WORKSPACE_PREVIEW_REQUIRED:{kind}")
+        initial_bundle = WorkspacePreviewBundle.model_validate(preview_record["bundle"])
+        initial_candidate = self._deliverable_candidate_record(initial_bundle)
+        if initial_candidate is None:
+            raise IntegrityError("DELIVERABLE_CANDIDATE_SET_MISSING")
+        selected_operation = operation_id or (
+            "deliverable-decision:"
+            + sha256_digest(
+                {
+                    "candidate_set_digest": initial_candidate.digest,
+                    "owner_id": selected_owner,
+                    "decision": decision,
+                }
+            )[7:39]
+        )
+        if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}", selected_operation) is None:
+            raise ValueError("DELIVERABLE_APPROVAL_OPERATION_ID_INVALID")
+        candidate_lock_key = (
+            "deliverable-approval-cas:" + initial_candidate.digest.removeprefix("sha256:")
+        )
+        candidate_lock_digest = sha256_digest(
+            {
+                "contract": "orgrebase.deliverable-approval-cas.v1",
+                "candidate_set_digest": initial_candidate.digest,
+            }
+        )
+        source_approval: dict[str, Any]
+        candidate_set: DeliverableCandidateSet
+        approval_set: DeliverableApprovalSet
+        persisted_decision: DeliverableApprovalDecision
+        created = False
+        with self.store.transaction() as connection:
+            from orgrebase.workspace.enterprise_binding import lock_binding_scope
+
+            lock_binding_scope(self, connection)
+            # PostgreSQL obtains a transaction-scoped advisory lock for this
+            # absent key; SQLite's BEGIN IMMEDIATE serializes the same unit.
+            self.store.get_idempotent(
+                candidate_lock_key,
+                candidate_lock_digest,
+                connection=connection,
+            )
+            authorization = current_authorization()
+            if authorization is not None:
+                authorization()
+                self.store.require_before_commit(connection, authorization)
+            current_preview = self._preview_record(kind)
+            if current_preview is None:
+                raise RuntimeError(f"WORKSPACE_PREVIEW_REQUIRED:{kind}")
+            bundle = WorkspacePreviewBundle.model_validate(current_preview["bundle"])
+            if (
+                bundle.preview.digest != preview_digest
+                or bundle.preview.digest != initial_bundle.preview.digest
+            ):
+                raise RuntimeError("WORKSPACE_PREVIEW_DIGEST_MISMATCH")
+            candidate_set = self._deliverable_candidate_record(bundle)
+            if candidate_set is None or candidate_set.digest != initial_candidate.digest:
+                raise FreshnessError("DELIVERABLE_CANDIDATE_SET_STALE")
+            decision_prefix = self._deliverable_decision_prefix(bundle)
+            existing_decisions = tuple(
+                DeliverableApprovalDecision.model_validate(item.payload)
+                for item in self.store.list_artifacts(
+                    artifact_id_prefix=decision_prefix,
+                    expected_media_type=DELIVERABLE_APPROVAL_DECISION_MEDIA_TYPE,
+                )
+            )
+            combined = {item.owner_id: item for item in existing_decisions}
+            previous = combined.get(selected_owner)
+            operation_key = (
+                "deliverable-approval-operation:"
+                + candidate_set.digest.removeprefix("sha256:")
+                + ":"
+                + sha256_digest(selected_owner)[7:23]
+                + ":"
+                + sha256_digest(selected_operation)[7:39]
+            )
+            if (
+                previous is not None
+                and previous.operation_id == selected_operation
+                and previous.command_digest is not None
+            ):
+                identity, _, _ = self._deliverable_decision_identity(
+                    owner_id=selected_owner,
+                    actor_id=actor_id,
+                )
+                if (
+                    previous.candidate_set_digest != candidate_set.digest
+                    or previous.decision != decision
+                    or previous.actor_id != identity["actor_id"]
+                    or previous.identity_issuer != identity["issuer"]
+                    or previous.identity_subject != identity["subject"]
+                ):
+                    raise RuntimeError("DELIVERABLE_APPROVAL_OPERATION_CONFLICT")
+                operation_record = self.store.get_idempotent(
+                    operation_key,
+                    previous.command_digest,
+                    connection=connection,
+                )
+                if (
+                    operation_record is None
+                    or operation_record.get("decision_digest") != previous.digest
+                    or operation_record.get("candidate_set_digest") != candidate_set.digest
+                ):
+                    raise IntegrityError(
+                        "DELIVERABLE_APPROVAL_OPERATION_BINDING_INVALID"
+                    )
+                approval_set = self._deliverable_approval_record(bundle)
+                if approval_set is None:
+                    status = (
+                        "REJECTED"
+                        if any(item.decision == "REJECTED" for item in existing_decisions)
+                        else "INCOMPLETE"
+                    )
+                    approval_set = DeliverableApprovalSet(
+                        id=self._deliverable_approval_artifact_id(bundle),
+                        candidate_set_digest=candidate_set.digest,
+                        decisions=existing_decisions,
+                        status=status,
+                    )
+                source_approval = self._approval_record(kind)
+                return {
+                    "source_approval": source_approval,
+                    "candidate_set": candidate_set.model_dump(mode="json"),
+                    "approval_set": approval_set.model_dump(mode="json"),
+                    "persisted": approval_set.status in {"COMPLETE", "REJECTED"},
+                    "decision_count": len(existing_decisions),
+                    "operation_id": selected_operation,
+                    "decision_digest": previous.digest,
+                    "canonical_target_writes": 0,
+                }
+            self._verify_deliverable_candidate_evidence(bundle, candidate_set)
+            current_snapshot = self.current_snapshot()
+            if (
+                current_snapshot.ref != candidate_set.snapshot_ref
+                or current_snapshot.digest != candidate_set.snapshot_digest
+            ):
+                raise FreshnessError("DELIVERABLE_CANDIDATE_SET_STALE")
+            if candidate_set.state != "READY":
+                raise RuntimeError("DELIVERABLE_SET_UNKNOWN_BLOCKS_APPROVAL")
+            source_approval, source_model = (
+                self._require_current_deliverable_source_approval(kind, bundle)
+            )
+            scopes, authority_revision = self._deliverable_required_authority(
+                candidate_set,
+                selected_owner,
+            )
+            identity, identity_mode, principal_expires_at = self._deliverable_decision_identity(
+                owner_id=selected_owner,
+                actor_id=actor_id,
+            )
+            command_digest = sha256_digest(
+                {
+                    "schema_version": "orgrebase.deliverable-approval-command.v1",
+                    "workspace_id": self.store.workspace_id,
+                    "workspace_profile_digest": self.workspace_profile_digest,
+                    "operation_id": selected_operation,
+                    "candidate_set_digest": candidate_set.digest,
+                    "preview_digest": bundle.preview.digest,
+                    "source_approval_digest": source_model.digest,
+                    "owner_id": selected_owner,
+                    "identity": identity,
+                    "identity_mode": identity_mode,
+                    "authority_revision": authority_revision,
+                    "scopes": scopes,
+                    "decision": decision,
+                }
+            )
+            try:
+                operation_record = self.store.get_idempotent(
+                    operation_key,
+                    command_digest,
+                    connection=connection,
+                )
+            except RuntimeError as exc:
+                raise RuntimeError("DELIVERABLE_APPROVAL_OPERATION_CONFLICT") from exc
+            if operation_record is not None:
+                if (
+                    previous is None
+                    or operation_record.get("decision_digest") != previous.digest
+                    or operation_record.get("candidate_set_digest") != candidate_set.digest
+                ):
+                    raise IntegrityError("DELIVERABLE_APPROVAL_OPERATION_BINDING_INVALID")
+                persisted_decision = previous
+            elif previous is not None:
+                if previous.command_digest != command_digest:
+                    raise RuntimeError("DELIVERABLE_APPROVAL_COMMAND_CONFLICT")
+                persisted_decision = previous
+            else:
+                expires_at = source_model.expires_at
+                if principal_expires_at is not None:
+                    principal_expiry = timestamp(
+                        datetime.fromtimestamp(principal_expires_at, UTC)
+                    )
+                    if utc_datetime(principal_expiry) < utc_datetime(expires_at):
+                        expires_at = principal_expiry
+                persisted_decision = DeliverableApprovalDecision(
+                    operation_id=selected_operation,
+                    command_digest=command_digest,
+                    owner_id=selected_owner,
+                    actor_id=identity["actor_id"],
+                    identity_issuer=identity["issuer"],
+                    identity_subject=identity["subject"],
+                    identity_mode=identity_mode,
+                    candidate_set_digest=candidate_set.digest,
+                    authority_revision=authority_revision,
+                    scopes=scopes,
+                    decision=decision,
+                    approved_at=self.clock.now(),
+                    expires_at=expires_at,
+                    method="EXPLICIT_DELIVERABLE_OWNER_COMMAND",
+                )
+                self.store.save_artifact(
+                    connection,
+                    decision_prefix + sha256_digest(selected_owner)[7:23],
+                    DELIVERABLE_APPROVAL_DECISION_MEDIA_TYPE,
+                    persisted_decision.model_dump(mode="json"),
+                )
+                combined[selected_owner] = persisted_decision
+                created = True
+            if previous is not None:
+                combined[selected_owner] = previous
+            decisions = tuple(combined[owner] for owner in sorted(combined))
+            required_owners = {
+                item.owner_id
+                for item in candidate_set.members
+                if item.disposition == "REBUILD"
+            }
+            if any(item.decision == "REJECTED" for item in decisions):
+                status = "REJECTED"
+            elif set(combined) == required_owners:
+                status = "COMPLETE"
+            else:
+                status = "INCOMPLETE"
+            approval_set = DeliverableApprovalSet(
+                id=self._deliverable_approval_artifact_id(bundle),
+                candidate_set_digest=candidate_set.digest,
+                decisions=decisions,
+                status=status,
+            )
+            candidate_digest = self.store.load_artifact(
+                candidate_set.id,
+                DELIVERABLE_CANDIDATE_SET_MEDIA_TYPE,
+            ).payload_digest
+            approval_digest = (
+                self.store.save_artifact(
+                    connection,
+                    approval_set.id,
+                    DELIVERABLE_APPROVAL_SET_MEDIA_TYPE,
+                    approval_set.model_dump(mode="json"),
+                )
+                if status in {"COMPLETE", "REJECTED"}
+                else None
+            )
+            if operation_record is None:
+                self.store.save_idempotent(
+                    connection,
+                    operation_key,
+                    command_digest,
+                    {
+                        "candidate_set_digest": candidate_set.digest,
+                        "decision_digest": persisted_decision.digest,
+                        "owner_id": selected_owner,
+                    },
+                )
+            if created:
+                self.store.append_event(
+                    connection,
+                    "WORKSPACE_DELIVERABLE_SET_APPROVED",
+                    {
+                        "kind": kind,
+                        "candidate_set_digest": candidate_set.digest,
+                        "candidate_artifact_digest": candidate_digest,
+                        "approval_set_digest": approval_set.digest,
+                        "approval_artifact_digest": approval_digest,
+                        "operation_id": selected_operation,
+                        "command_digest": command_digest,
+                        "owner_id": selected_owner,
+                        "actor_id": persisted_decision.actor_id,
+                        "identity_mode": persisted_decision.identity_mode,
+                        "required_owners": list(sorted(required_owners)),
+                        "status": status,
+                    },
+                )
+        return {
+            "source_approval": source_approval,
+            "candidate_set": candidate_set.model_dump(mode="json"),
+            "approval_set": approval_set.model_dump(mode="json"),
+            "persisted": status in {"COMPLETE", "REJECTED"},
+            "decision_count": len(decisions),
+            "operation_id": selected_operation,
+            "decision_digest": persisted_decision.digest,
+            "canonical_target_writes": 0,
+        }
+
     @staticmethod
     def _collaboration(bundle: WorkspacePreviewBundle) -> dict[str, Any]:
         return {
@@ -5456,6 +6980,8 @@ class WorkspaceService:
             bundle=bundle,
             fail_after=fail_after,
         )
+        if self.deliverable_set_profile is not None and workflow.apply_extension is None:
+            raise RuntimeError("DELIVERABLE_APPROVAL_SET_REQUIRED")
         receipt = workflow.apply(
             change_set=bundle.change_set,
             preview=bundle.preview,
@@ -5479,6 +7005,7 @@ class WorkspaceService:
             "rebase_receipt": receipt,
             "workspace_rebase_receipt": workspace_receipt,
             "quote": quote,
+            "deliverables": self.current_deliverables(),
             "graph_pointer": graph_pointer,
             "event_chain": self.store.verify_event_chain(),
         }
@@ -5493,10 +7020,17 @@ class WorkspaceService:
             workspace_receipt is None
             or workspace_receipt.base_rebase_receipt_ref != receipt.id
             or workspace_receipt.base_rebase_receipt_digest != receipt.digest
-            or len(workspace_receipt.successor_object_refs) != 1
+            or not workspace_receipt.successor_object_refs
         ):
             raise IntegrityError("WORKSPACE_APPLIED_SUCCESSOR_BINDING_INVALID")
-        quote = self.store.get_object(*split_ref(workspace_receipt.successor_object_refs[0]))
+        successors = tuple(
+            self.store.get_object(*split_ref(ref))
+            for ref in workspace_receipt.successor_object_refs
+        )
+        quote_matches = [item for item in successors if item.id == self.quote_object_id]
+        if len(quote_matches) != 1:
+            raise IntegrityError("WORKSPACE_APPLIED_SUCCESSOR_BINDING_INVALID")
+        quote = quote_matches[0]
         pointer = self.store.get_object(*split_ref(workspace_receipt.graph_pointer_ref))
         snapshot = WorkspaceGraphSnapshot.model_validate(
             self.store.load_artifact(
@@ -5510,12 +7044,41 @@ class WorkspaceService:
             or snapshot.digest != workspace_receipt.successor_snapshot_digest
             or pointer.payload.get("snapshot_ref") != snapshot.ref
             or pointer.payload.get("snapshot_digest") != snapshot.digest
-            or not any(
-                item.object_ref == quote.ref and item.digest == quote.digest
-                for item in snapshot.object_digests
+            or any(
+                not any(
+                    binding.object_ref == successor.ref
+                    and binding.digest == successor.digest
+                    for binding in snapshot.object_digests
+                )
+                for successor in successors
             )
         ):
             raise IntegrityError("WORKSPACE_APPLIED_SUCCESSOR_BINDING_INVALID")
+        if self.deliverable_set_profile is not None:
+            if (
+                workspace_receipt.deliverable_set_receipt_ref is None
+                or workspace_receipt.deliverable_set_receipt_digest is None
+            ):
+                raise IntegrityError("WORKSPACE_DELIVERABLE_SET_RECEIPT_MISSING")
+            from orgrebase.workspace.models import DeliverableSetApplyReceipt
+
+            batch = DeliverableSetApplyReceipt.model_validate(
+                self.store.load_artifact(
+                    workspace_receipt.deliverable_set_receipt_ref,
+                    DELIVERABLE_SET_APPLY_RECEIPT_MEDIA_TYPE,
+                ).payload
+            )
+            if (
+                batch.digest != workspace_receipt.deliverable_set_receipt_digest
+                or batch.base_rebase_receipt_ref != receipt.id
+                or batch.base_rebase_receipt_digest != receipt.digest
+                or batch.graph_pointer_ref != pointer.ref
+                or batch.snapshot_ref != snapshot.ref
+                or batch.snapshot_digest != snapshot.digest
+                or {item.object_id for item in batch.members}
+                != {item.object_id for item in self.deliverable_set_profile.members}
+            ):
+                raise IntegrityError("WORKSPACE_DELIVERABLE_SET_RECEIPT_INVALID")
         return quote, pointer
 
     def _recover_apply_result(
@@ -5596,6 +7159,7 @@ class WorkspaceService:
             "rebase_receipt": receipt,
             "workspace_rebase_receipt": workspace_receipt,
             "quote": quote,
+            "deliverables": self.current_deliverables(),
             "graph_pointer": graph_pointer,
             **({"event_chain": self.store.verify_event_chain()} if include_event_chain else {}),
         }
@@ -5616,6 +7180,15 @@ class WorkspaceService:
                 else None
             ),
             "quote": result["quote"].model_dump(mode="json"),
+            **(
+                {
+                    "deliverables": [
+                        item.model_dump(mode="json") for item in result["deliverables"]
+                    ]
+                }
+                if "deliverables" in result
+                else {}
+            ),
             "graph_pointer": result["graph_pointer"].model_dump(mode="json"),
         }
 
@@ -5701,6 +7274,13 @@ class WorkspaceService:
                 require_current_predecessor=True,
             )
             if self._change_status(kind) != "APPROVED":
+                # A human proposal's formal read witness has an established
+                # precise API error even when the status projection already
+                # marked it STALE. Source-backed proposals keep the historical
+                # generic not-applicable result at this outer Apply gate.
+                proposal = self.changes.get(kind).proposal
+                if not proposal.version.startswith("source-") and "read_dependencies" in proposal.payload:
+                    validate_read_dependencies(self, (proposal,), self.clock.now())
                 raise RuntimeError("WORKSPACE_CHANGE_NOT_APPLICABLE")
             result = self._execute_apply(
                 kind=kind,

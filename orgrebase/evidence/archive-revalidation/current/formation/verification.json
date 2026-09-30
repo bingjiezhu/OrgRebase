@@ -12,7 +12,7 @@
   "candidate_only": true,
   "canonical_target_writes": 0,
   "claim_boundary": "PINNED_IN_PROCESS_TEAMHARNESS_DYNAMIC_TOPOLOGY_NOT_LIVE_WORKER_OR_BUSINESS_ADMISSION",
-  "digest": "sha256:fbde5b59d07cdfbf7cffa360eaedae6d641785dfa3cdf7f3cfced24282408478",
+  "digest": "sha256:d45a2f54a4d3a2f36a459b214577bb993edf5d8c65815bbde68bb32dcdedf3e4",
   "domain_task_count": 2,
   "evidence_class": "CONTROLLED_LOCAL_FORMATION_COMPILED_AGENTTEAMS",
   "execution_plan_digest": "sha256:905f9cf1a656cb9a7a6810d7b7ae5430512bceeb86d8d244763db74cf810c61e",
@@ -22,7 +22,7 @@
   ],
   "project_terminal_state": "completed",
   "reviewer_task_count": 1,
-  "run_id": "run:formation-recheck:f256f60b26e54dd7802677eecfc395cd",
+  "run_id": "run:formation-recheck:30de6d3a82b54916a553ec6c91378931",
   "selected_domain_ids": [
     "legal",
     "product"
@@ -31,5 +31,5 @@
   "task_binding_count": 3,
   "topology_match": true,
   "verification_strength": "PINNED_CHECKOUT_REPLAY",
-  "verified_receipt_digest": "sha256:610eaec366c83cf8f15e381115e9cc3138a43efa96a839e16f68806ba2935209"
+  "verified_receipt_digest": "sha256:b65e0fbafdbe897c1cd543f1ad57f247d40eb9bd6605a5a2bf6930224bdbed1e"
 }

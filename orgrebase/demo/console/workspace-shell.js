@@ -58,9 +58,9 @@
       sectionPlatformValidation: "平台验证",
       sectionOnboarding: "企业接入",
       pages: {
-        overview: ["变化处置", "规则变了，更新受影响的工作", "查看变化、影响范围和待审批事项，跟进正式版本更新。"],
-        quote: ["变化处置", "上游规则变化后，更新受影响的工作", "从任务与团队协作，到影响预览、负责人审批和报价更新。"],
-        onboarding: ["企业接入", "规则变了，先找出哪些工作需要更新", "本页用于首次接入：确认企业材料、规则与负责人。完成后进入「变化处置」，查看影响、审阅候选并批准必要更新。"],
+        overview: ["变化处置", "企业发生变更，更新受影响的工作", "查看变化、影响范围和待审批事项，跟进正式版本更新。"],
+        quote: ["变化处置", "企业发生变更后，更新受影响的工作", "从任务与团队协作，到影响预览、负责人审批和报价更新。"],
+        onboarding: ["企业接入", "企业接入，先确认工作依据与负责人", "本页用于首次接入：确认企业材料、规则与负责人。完成后进入「变化处置」，查看影响、审阅候选并批准必要更新。"],
         assurance: ["能力与保障", "管理团队能力、运行记录与服务状态", "查看Skill版本、任务记录、验证案例和运维信息。"],
         data: ["变化影响与后继版本", "审批前看候选影响，审批后看规范写入", "从已准入基线、最小上下文到零写预演、匹配负责人审批与后继报价版本，逐项解释重建、保留和人工复核。"],
         agents: ["基线组队与变化团队", "区分报价基线 v1 的原生协作和后续变更集投影", "展示基线实际拓扑、最小上下文交接、智能体的 Tool / Skill 与候选结果；变化轮只投影最小变化团队并复用已准入能力。"],
@@ -113,12 +113,12 @@
       executionPreviewAt: "产品智能体 ↔ 产品负责人",
       executionPreviewAtBody: "智能体自动读取产品事实并生成候选；负责人只审批产品规范变化",
       executionPreviewCapability: "法务智能体 ↔ 法务负责人",
-      executionPreviewCapabilityBody: "智能体自动检查义务与限制；证据不足或法务规范变化时通知负责人",
+      executionPreviewCapabilityBody: "智能体自动检查义务与限制；证据不足或法务规范变化时列出负责人待办",
       executionPreviewAuthority: "财务智能体 ↔ 财务负责人",
       executionPreviewAuthorityBody: "智能体自动补证定价与币种；只有匹配负责人能批准财务规范写入",
       executionPreviewFailure: "市场与商业化智能体 ↔ 市场与商业化负责人",
       executionPreviewFailureBody: "智能体使用受治理 Skill 组装候选；负责人保留对外口径与发布边界",
-      executionPreviewBoundary: "智能体默认连续自动执行，只有精确权威边界才暂停并通知对应负责人；批准前规范写入为 0，批准后由控制面自动选择性重构。",
+      executionPreviewBoundary: "系统准备并复核候选，将待审事项交给对应负责人。批准后由有权执行人应用更新；生效前已有成果保留原版本。",
       processBaselineKicker: "现状人工流程 · 参考基线",
       processBaselineTitle: "八步现状流程与职责分工（RACI）：人工基线待企业校准，不是系统运行耗时",
       processBaselineBoundary: "表内时限仅作为参考人工基线，尚未在真实企业环境观测；系统实测结果只来自同运行回执，人工等待时间在审批门单独显示。",
@@ -368,7 +368,7 @@
       caseBadge: "当前事项",
       taskIntakeKicker: "新建工作 · 企业报价",
       taskIntakeTitle: "说明需求，交给团队生成报价",
-      taskIntakeBody: "客户、业务事实和权限来自已准入组织契约。确认工作范围后启动团队；后续规则变更将提交对应负责人审批。",
+      taskIntakeBody: "客户、业务事实和权限来自已准入组织契约。确认工作范围后启动团队；后续企业变更将提交对应负责人审批。",
       taskCompletedKicker: "员工发起记录 · 已绑定当前运行",
       taskCompletedTitle: "员工需求已确认",
       taskCompletedBody: "本次工作说明已经校验并启动智能体团队；客户、事实与权限始终来自已准入组织契约。",
@@ -383,6 +383,8 @@
       taskPrivateRestricted: "仅任务发起人可查看工作说明原文。",
       taskPrivateUnavailable: "暂时无法读取工作说明，请稍后重试。",
       taskActorLabel: "发起人",
+      taskRoleLocalHint: "当前身份为{current}。请在页面左侧切换为{required}并点击「使用此角色」，再发起工作。",
+      taskRoleIdentityHint: "当前账号不是本任务发起人。请使用{required}的企业账号发起工作，或请管理员核对任务配置。",
       taskCustomerLabel: "客户",
       taskKindLabel: "工作类型",
       taskKindValue: "企业报价",
@@ -484,9 +486,9 @@
       sectionPlatformValidation: "PLATFORM VALIDATION",
       sectionOnboarding: "ENTERPRISE ONBOARDING",
       pages: {
-        overview: ["Change Response", "Update work affected by changing rules", "Review changes, affected scope, and pending decisions, then track version updates."],
-        quote: ["Change Response", "Update work affected by upstream rules", "Follow the task and team collaboration through impact preview, owner approval, and Quote updates."],
-        onboarding: ["Enterprise Onboarding", "When rules change, identify the work that needs updating", "First-time setup: confirm enterprise inputs, rules and responsible owners. Then open Change Response to inspect impact, review candidates and approve the necessary updates."],
+        overview: ["Change Response", "Update work affected by enterprise changes", "Review changes, affected scope, and pending decisions, then track version updates."],
+        quote: ["Change Response", "Update work after enterprise changes", "Follow the task and team collaboration through impact preview, owner approval, and Quote updates."],
+        onboarding: ["Enterprise Onboarding", "Confirm the facts and owners before starting work", "First-time setup: confirm enterprise inputs, rules and responsible owners. Then open Change Response to inspect impact, review candidates and approve the necessary updates."],
         assurance: ["Capabilities & Assurance", "Manage team capabilities, run records, and service health", "Browse Skill versions, task records, verification cases, and operations."],
         data: ["Change Impact & Successor Versions", "See candidate impact before approval and canonical writes after approval", "Trace the admitted baseline and least-privilege context through zero-write Preview, matching-Owner approval, and successor Quote versions, including rebuild, preserve, and human-review decisions."],
         agents: ["Baseline Formation & Change Team", "Separate Quote v1 native collaboration from later ChangeSet projections", "Inspect the baseline topology, least-privilege handoffs, Agent Tool / Skill calls, and candidate results; change rounds only project the minimum change_team and reuse admitted capabilities."],
@@ -508,7 +510,7 @@
       termsAuthority: "A candidate awaits verification. The control plane writes official state only after the designated owner approves the exact proposal. AgentTeams task completion is not business application.",
       termsImpactTitle: "Impact check and selective rebase",
       termsImpact: "Check affected work, then update only what is necessary. VMRC records the verifiable impact and disposition basis; unknown impact still needs review.",
-      taskContextSummary: "How work updates when rules change",
+      taskContextSummary: "How work updates after enterprise changes",
       sectionPrimary: "BUSINESS LIFECYCLE",
       sectionSecondary: "LOW-FREQUENCY ADMIN",
       lifecycleAria: "Enterprise work lifecycle",
@@ -544,7 +546,7 @@
       executionPreviewAuthorityBody: "The Agent recovers pricing and currency evidence; only the matching Owner may approve Finance canonical writes",
       executionPreviewFailure: "GTM Agent ↔ GTM Owner",
       executionPreviewFailureBody: "The Agent uses a governed Skill to compose candidates; the Owner retains messaging and release authority",
-      executionPreviewBoundary: "Agents run continuously by default. Only an exact authority boundary pauses and notifies the matching Owner: 0 canonical writes before approval, then automatic selective Rebase by the control plane.",
+      executionPreviewBoundary: "The system prepares and checks candidates, then presents decisions to the matching owner. An authorized executor applies approved changes; existing results remain unchanged until application.",
       processBaselineKicker: "AS-IS HUMAN PROCESS · REFERENCE BASELINE",
       processBaselineTitle: "Eight-step current-state process and RACI: human baseline pending enterprise calibration, not system runtime",
       processBaselineBoundary: "Timings in this table are reference human baselines not yet observed in a real enterprise. System measurements come only from same-run receipts; human waiting time is shown separately at approval gates.",
@@ -781,7 +783,7 @@
       caseBadge: "CURRENT WORK ITEM",
       taskIntakeKicker: "NEW TASK · ENTERPRISE QUOTE",
       taskIntakeTitle: "Describe the request and let the team prepare the Quote",
-      taskIntakeBody: "Customers, facts, and permissions come from the admitted organization contract. Confirm the scope to start the team. Subsequent rule changes require approval from the designated owner.",
+      taskIntakeBody: "Customers, facts, and permissions come from the admitted organization contract. Confirm the scope to start the team. Subsequent enterprise changes require approval from the designated owner.",
       taskCompletedKicker: "EMPLOYEE INTAKE RECORD · BOUND TO THIS RUN",
       taskCompletedTitle: "Employee request confirmed",
       taskCompletedBody: "The work description was validated and the Agent team was started. Customer, facts, and authority remained constrained by the admitted organization contract.",
@@ -796,6 +798,8 @@
       taskPrivateRestricted: "Only the task requester can view the original work description.",
       taskPrivateUnavailable: "The work description is unavailable. Try again later.",
       taskActorLabel: "REQUESTED BY",
+      taskRoleLocalHint: "You are using {current}. Select {required} in the role picker on the left and choose Use this role before starting work.",
+      taskRoleIdentityHint: "This account is not the configured requester. Sign in as {required} to start work, or ask your administrator to check the task configuration.",
       taskCustomerLabel: "CUSTOMER",
       taskKindLabel: "Task type",
       taskKindValue: "Enterprise Quote",
@@ -1193,6 +1197,7 @@
         <div><span id="task-intake-kicker" data-shell-copy="taskIntakeKicker"></span><h2 id="task-intake-title" data-shell-copy="taskIntakeTitle"></h2><p id="task-intake-body" data-shell-copy="taskIntakeBody"></p></div>
         <b id="task-intake-contract"></b>
       </header>
+      <p id="task-intake-role-hint" class="task-intake-boundary" role="status" aria-live="polite" hidden></p>
       <div class="task-intake-form" id="task-intake-form">
         <label for="task-request-prompt"><span data-shell-copy="taskPromptLabel"></span><textarea id="task-request-prompt" rows="3" minlength="8" maxlength="500" required autocomplete="off" spellcheck="false"></textarea></label>
         <dl class="task-intake-scope">
@@ -1316,10 +1321,10 @@
     const taskWork = make("div", "task-work-flow");
     taskWork.append(
       buildTaskPrerequisite(),
+      buildTaskIntake(),
+      buildTaskCompass(),
       buildTaskExecutionPreview(),
       buildTaskProcessBaseline(acceptance),
-      buildTaskCompass(),
-      buildTaskIntake(),
     );
     [document.querySelector(".journey"), byId("command-bar"), byId("workspace")].forEach((node) => {
       if (node) taskWork.append(node);
@@ -2657,10 +2662,12 @@
     const privateText = byId("task-intake-private-text");
     const contract = byId("task-intake-contract");
     const error = byId("task-intake-error");
+    const roleHint = byId("task-intake-role-hint");
     if (!root || !prompt || !prepare || !candidatePanel || !admit || !run || !privatePanel || !privateText || !contract || !error) return;
 
     const stateReady = stateAvailability === "ready" && state && STAGES.includes(state.stage);
     if (!stateReady) {
+      if (roleHint) { roleHint.hidden = true; roleHint.textContent = ""; }
       const unavailable = stateAvailability === "unavailable";
       const status = unavailable ? selected.workspaceUnavailable : selected.workspaceLoading;
       root.dataset.contract = "blocked";
@@ -2702,6 +2709,22 @@
     const session = window.OrgRebaseClient.session();
     const operatorAllowed = !session?.authentication_required || session.authenticated
       && session.principal?.actor_id === scope.actorId;
+    if (roleHint) {
+      roleHint.hidden = formed || !contractReady || operatorAllowed;
+      if (roleHint.hidden) roleHint.textContent = "";
+      else {
+        const actors = Array.isArray(session?.actors) ? session.actors : [];
+        const actorLabel = actor => language === "en" ? actor?.label_en || actor?.label || actor?.actor_id
+          : actor?.label || actor?.actor_id;
+        const current = actors.find(actor => actor.actor_id === session?.principal?.actor_id);
+        const required = actors.find(actor => actor.actor_id === scope.actorId);
+        roleHint.textContent = format(session?.identity_source === "controlled-local-session"
+          ? selected.taskRoleLocalHint : selected.taskRoleIdentityHint, {
+          current: actorLabel(current) || session?.principal?.actor_id || "—",
+          required: actorLabel(required) || displayTaskActor(scope.actorId),
+        });
+      }
+    }
     const operatorHint = language === "en" ? `Required operator: ${displayTaskActor(scope.actorId)}`
       : `需由${displayTaskActor(scope.actorId)}发起`;
     for (const button of [prepare, admit, run]) {
@@ -3031,6 +3054,8 @@
     } else if (state != null) {
       currentState = null;
       stateAvailability = "unavailable";
+    } else if (!currentState && availability === "loading") {
+      stateAvailability = "loading";
     } else if (!currentState && availability === "unavailable") {
       stateAvailability = "unavailable";
     } else if (!currentState && stateAvailability !== "unavailable") {
@@ -3081,7 +3106,7 @@
         const prompt = byId("task-request-prompt");
         if (prompt) prompt.value = "";
       }
-      renderState(null, { availability: "unavailable" });
+      renderState(null, { availability: event.detail?.reason === "role-switch" ? "loading" : "unavailable" });
     });
     window.addEventListener("orgrebase:staterendered", (event) => {
       renderState(event.detail || null);
@@ -3097,7 +3122,7 @@
         if (prompt) prompt.value = "";
       }
       currentState = null;
-      renderState(null, { availability: "unavailable" });
+      renderState(null, { availability: event?.detail?.status === "LOADING" ? "loading" : "unavailable" });
     });
     refreshRunProgress({ follow: false });
   }

@@ -52,11 +52,13 @@ from orgrebase.agentteams_source import load_agentteams_source, load_teamharness
 from orgrebase.fixture import load_fixture
 from orgrebase.resource_paths import runtime_asset_path
 from orgrebase.api import RELEASE_FACTS_PATH
+from orgrebase.api import _active_golden_evidence_root
 from orgrebase.cli import _enterprise_pilot_check
 from orgrebase.service import OrgRebaseService
 from orgrebase.workspace.benchmark import OWBBenchmarkRepository
 from orgrebase.workspace.oac_wire import load_runtime_policy
 from orgrebase.workspace.pilot import load_enterprise_quote_pilot_pack
+from orgrebase.workspace.oac_quote_parity import attempts_from_golden_summary, load_golden_summary
 from orgrebase.workspace.pilot_authoring import (
     initialize_enterprise_quote_pilot_draft,
     seal_enterprise_quote_pilot_pack,
@@ -72,6 +74,7 @@ fixture = load_fixture()
 assert fixture.organization_id == "org:northstar"
 release_facts = json.loads(RELEASE_FACTS_PATH.read_text(encoding="utf-8"))
 assert release_facts["workspace"]["agentteams_live"] == "NOT_RUN"
+assert len(attempts_from_golden_summary(load_golden_summary(_active_golden_evidence_root()))) == 7
 repo = OWBBenchmarkRepository()
 assert repo.verify()["case_count"] == 192
 policy, policy_digest = load_runtime_policy()

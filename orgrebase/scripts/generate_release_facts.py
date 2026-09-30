@@ -1,8 +1,9 @@
-"""Generate the single machine-readable fact surface used by docs and demos."""
+"""Verify frozen runtime facts or generate a separate development aggregate."""
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -27,6 +28,9 @@ from orgrebase.workspace.source_admission import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+# An immutable historical compatibility coordinate, not a current release gate.
+RETAINED_FACTS_SHA256 = "f5b59e6a69044f94437ee6e56aed274a69034a516de5a3dcf33160fa284a65bd"
+RETAINED_FACTS_RELEASE = "0.4.0"
 SEMIFINAL_COMPLETION_MATRIX = {
     "enterprise_quote_operating_model": "VALIDATED_SYNTHETIC_AND_MODELLED",
     "enterprise_shadow_observation_contract": "VALIDATED_SYNTHETIC_CONTRACT",
@@ -1216,20 +1220,68 @@ def build_facts(*, root: Path = ROOT) -> dict[str, Any]:
     }
 
 
+def _historical_projection(facts: dict[str, Any]) -> dict[str, Any]:
+    projected = json.loads(json.dumps(facts))
+    projected["release"] = RETAINED_FACTS_RELEASE
+    # These fields observe mutable project/lock bytes. They are not evidence
+    # about the retained run and must not reseal that historical coordinate.
+    for section in ("semifinal_integrated_candidate_closure", "code_release_gate"):
+        binding = projected[section]["current_build_binding"]
+        binding.pop("status", None)
+        for record in binding["files"]:
+            record.pop("current_sha256", None)
+            record.pop("status", None)
+    return projected
+
+
+def check_retained_facts(*, root: Path = ROOT) -> None:
+    path = root / "evidence" / "release-facts.json"
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != RETAINED_FACTS_SHA256:
+        raise ValueError("RETAINED_RELEASE_FACTS_DIGEST_DRIFT")
+    actual = json.loads(raw)
+    if _historical_projection(actual) != _historical_projection(build_facts(root=root)):
+        raise ValueError("RETAINED_RELEASE_FACTS_EVIDENCE_DRIFT")
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, default=ROOT / "evidence" / "release-facts.json")
-    parser.add_argument("--check", action="store_true")
+    parser = argparse.ArgumentParser(
+        description=(
+            "Generate development facts by default. --check without --output "
+            "verifies only the immutable historical facts."
+        ),
+    )
+    parser.add_argument(
+        "--output", type=Path,
+        help="Development output to write or check; use the same path for both operations.",
+    )
+    parser.add_argument(
+        "--check", action="store_true",
+        help="Check --output, or verify frozen historical facts when --output is omitted.",
+    )
     args = parser.parse_args()
+    retained = ROOT / "evidence" / "release-facts.json"
+    if args.check and (args.output is None or args.output.resolve() == retained.resolve()):
+        try:
+            check_retained_facts()
+        except (OSError, ValueError, KeyError) as exc:
+            raise SystemExit(str(exc)) from exc
+        print('{"status":"PASS","fact_surface":"HISTORICAL_COMPATIBILITY_BASELINE",'
+              '"current_release_qualified":false}')
+        return
+    output = args.output or ROOT / "evidence" / "development-release-facts.json"
+    if output.resolve() == retained.resolve():
+        raise SystemExit("RETAINED_RELEASE_FACTS_IMMUTABLE")
     expected = json.dumps(build_facts(), ensure_ascii=False, indent=2) + "\n"
     if args.check:
-        if not args.output.is_file() or args.output.read_text(encoding="utf-8") != expected:
-            raise SystemExit("RELEASE_FACTS_DRIFT")
-        print('{"status":"PASS","fact_surface":"CURRENT"}')
+        if not output.is_file() or output.read_text(encoding="utf-8") != expected:
+            raise SystemExit("DEVELOPMENT_RELEASE_FACTS_DRIFT")
+        print('{"status":"PASS","fact_surface":"DEVELOPMENT_AGGREGATE",'
+              '"current_release_qualified":false}')
         return
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(expected, encoding="utf-8")
-    print(f"wrote {args.output}")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(expected, encoding="utf-8")
+    print(f"wrote {output}")
 
 
 if __name__ == "__main__":

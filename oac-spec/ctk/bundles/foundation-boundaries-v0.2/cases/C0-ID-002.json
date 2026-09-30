@@ -1,0 +1,33 @@
+{
+  "caseId": "C0-ID-002",
+  "expect": {
+    "result": {
+      "identifier": "urn:oac:mvp:path:99d177ea82e8882a9c9b802c"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "fields": {
+      "changeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "dutyRefs": [],
+      "edgeRefs": [
+        "urn:edge:e"
+      ],
+      "evaluationRefs": [
+        "urn:oac:mvp:evaluation:abc"
+      ],
+      "origin": "dependency",
+      "ruleRefs": [],
+      "snapshotDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "state": "affected",
+      "targetRef": "urn:node:t",
+      "truncated": false
+    },
+    "identifierKind": "path"
+  },
+  "operation": "deriveIdentifier",
+  "requirementRefs": [
+    "REQ-DERIVED-ID-LEGACY"
+  ],
+  "testTarget": "SUT"
+}

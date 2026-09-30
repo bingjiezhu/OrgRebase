@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from datetime import timedelta
+from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
@@ -13,6 +14,10 @@ from orgrebase.domain import ObjectState
 from orgrebase.runtime_config import open_workspace
 from orgrebase.workspace.dataverse import DataverseReader, SourceError
 from orgrebase.workspace.source_bindings import (
+    SourceBindingConfig,
+    SourceFieldMapping,
+    SourceScope,
+    _validate_mappings,
     binding_view,
     load_source_config,
     read_inventory,
@@ -180,6 +185,41 @@ def test_missing_configuration_differs_from_invalid_configured_path(tmp_path):
         load_source_config(None)
     with pytest.raises(ValueError, match=r"^SOURCE_CONFIG_INVALID$"):
         load_source_config(tmp_path / "not-created.json")
+
+
+def test_scalar_source_connector_rejects_structured_basket_and_policy_slots():
+    config = SourceBindingConfig(
+        source=SourceScope(
+            connector_id="dataverse:test",
+            tenant_id="org:test",
+            instance_url="https://example.crm.dynamics.com",
+            record_ids=(RECORD,),
+        ),
+        organization_id="00000000-0000-0000-0000-000000000123",
+        source_token_variable="SOURCE_TOKEN",
+        access_token_variable="ORGREBASE_TOKEN",
+    )
+    current = {
+        "inventory": {
+            "fields": [
+                {"field": "new_structured_value", "transforms": ["identity"]},
+            ]
+        }
+    }
+    for slot_id in ("quote_basket", "pricing_policy"):
+        workspace = SimpleNamespace(
+            domain_pack=SimpleNamespace(mutable_slots=(slot_id,)),
+            enterprise_binding=SimpleNamespace(
+                resources=(SimpleNamespace(slot_id=slot_id, owner_id="human:owner"),)
+            ),
+        )
+        mapping = SourceFieldMapping(
+            record_id=RECORD,
+            field="new_structured_value",
+            slot_id=slot_id,
+        )
+        with pytest.raises(SourceError, match=r"^SOURCE_SLOT_TYPE_UNSUPPORTED$"):
+            _validate_mappings(workspace, config, current, [mapping])
 
 
 def test_owner_can_revoke_even_when_source_inventory_is_unavailable(deployment):

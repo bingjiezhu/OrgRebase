@@ -2,27 +2,24 @@
 
 OrgRebase treats an enterprise deliverable as a versioned build artifact. Formation records the organizational premises actually read during execution. A later premise change produces a bounded impact proof and rebuilds only the invalidated artifact fields and dependencies.
 
-The product has one deterministic control plane. OAC is a proposed portable contract standard; the Spec 062 enterprise-adaptation layer is a pre-deployment admission surface around that control plane, not another runtime or source of business truth. The reader-facing overview and the two non-combinable evidence chains are in [SYSTEM-MAP.md](SYSTEM-MAP.md).
+The product has one deterministic control plane. OAC is a proposed portable contract standard; the enterprise-adaptation layer is a pre-deployment admission surface around that control plane, not another runtime or source of business truth. The reader-facing overview and the two non-combinable evidence chains are in [SYSTEM-MAP.md](SYSTEM-MAP.md).
 
-<!-- SPEC-062-VALIDATION-STATUS:START -->
+The enterprise-adaptation reference uses exact Pack/Source admission and controlled-local validation. Complete inputs may reach `READY_FOR_ORGREBASE`; missing or invalid inputs remain `HOLD`. Those statuses do not establish customer UAT or production readiness.
 
-> **Spec 062 implementation state:** `VALIDATED_CONTROLLED_LOCAL`. Evergreen reaches `READY_FOR_ORGREBASE`; Veracier retains seven gaps and stays `HOLD`; the 20-entry lane passes an independent verifier and six mutation checks. The existing Golden remains `oac_runtime_bridge=NOT_USED_IN_THIS_RUN`; real enterprise UAT and production readiness remain `NOT_RUN`.
-
-<!-- SPEC-062-VALIDATION-STATUS:END -->
 
 ## Pre-deployment OAC adaptation boundary
 
-| Stage | Authority | Durable artifact | State at this edit |
+| Stage | Authority | Durable artifact | Reference behavior |
 |---|---|---|---|
 | Five-root semantic mapping | candidate-only mapper; deterministic or model-backed | mapping candidates with source digests and explicit Unknowns | `PASS_CONTROLLED_LOCAL` |
-| OAC public validation | sibling `oac-spec` public CLI / installed equivalent | `OrganizationSnapshot`, `OrganizationalDemand`, validation receipt | `PASS`; five CLI checks plus dual-wheel boundary check |
-| Source admission | `Enterprise Contract Owner` after a server-side four-second exact-digest gate | OAC `SourceAdmissionReceipt` | `PASS_CONTROLLED_LOCAL`; observed 5323ms |
-| Formation compatibility | OrgRebase control plane; not the OAC compiler | `QuoteFormationParityReceipt` | `PASS`; five obligations / seven attempts |
+| OAC public validation | sibling `oac-spec` public CLI / installed equivalent | `OrganizationSnapshot`, `OrganizationalDemand`, validation receipt | `PASS` within the declared public resource boundary |
+| Source admission | `Enterprise Contract Owner` after a server-side four-second exact-digest gate | OAC `SourceAdmissionReceipt` | Exact-digest, current-owner and configured review-gate checks |
+| Formation compatibility | OrgRebase control plane; not the OAC compiler | `QuoteFormationParityReceipt` | Declared obligation, authority and ordering compatibility |
 | Runtime activation | OrgRebase admission with exact capsule/profile/pack match | `OACAdapterCapsule` and adaptation-to-execution binding | `PASS_CONTROLLED_LOCAL` |
 
 The P0 parity receipt must say `oac_plan_produced=false`, `oac_plan_certificate_produced=false`, `oac_runtime_invoked=false`, and `formation_authority=ORGREBASE_CONTROL_PLANE`. The current OAC compiler is SupplierChange-specific; a Quote `OrganizationPlan` and `PlanCertificate` require a future Quote Profile, compiler-independent verifier, mutations, and TCK.
 
-## Current agent collaboration contract (Specs 067–068)
+## Agent collaboration contract
 
 The current MVP does not use a semantic super-agent as a hidden source of
 business truth.  It uses a task-adaptive hub-and-spoke topology with one
@@ -127,16 +124,18 @@ displayed as an observed AgentTeams invocation.
 
 - `agentteams/workspace/team.yaml` defines the registered Product, Legal, Finance, and GTM candidate pool; it does not force every run to create all four tasks.
 - `TemplateBoundTaskInterpreter` is the Employee Task Agent; it is not a Worker in that Team.
-- `CoalitionPlanner` enumerates all 15 non-empty Worker subsets and selects by coverage, card count, declared cost, and lexical order.
+- `CoalitionPlanner` derives the required domains from admitted task slots and requires exactly one currently eligible Capability Card per domain. Missing or ambiguous providers fail closed. The current policy records total declared cost but does not rank multiple providers or solve a global set-cover problem.
 - `WorkspaceTransportCompiler` emits exact `DomainDelegationTask` bytes with run, nonce, deadline, actor projection, allowed slots, and output Schema.
 - `AgentTeamsExecutionPlan` binds Formation, Context, Capability Card, actor projection and Schema digests, and is the only allowed source for the actual domain-task set.
+- Local deterministic Formation can run independent selected domains through the bounded ready-task executor when `ORGREBASE_FORMATION_MAX_PARALLEL_TASKS` is explicitly greater than one. It captures sources before the write transaction, reduces results in plan order, and replays integrity checks inline inside the commit transaction. The default remains one.
+- Reference change advisories have the same opt-in local deterministic executor through `ORGREBASE_CHANGE_MAX_PARALLEL_TASKS`. Only tasks whose declared dependencies are complete may start. Native taskflow and model-backed providers remain serial until their session ownership, provider isolation, shared budget, and cancellation contracts are separately qualified.
 - `structured-domain-handoff@1.1.2` carries candidate bundles with `target_writes=0`.
 - The default demo uses `LocalDomainCandidateRegistry`/local deterministic transport. The external Workspace AgentTeams runtime and verifier are implemented, but live status remains `NOT_RUN` without correlated K8s, Matrix, artifact, Skill, and provider evidence.
 - Retained controlled-local evidence proves both a four-domain Quote plan and a two-domain Legal/Product plan materialize exactly in pinned TeamHarness. This is not distributed production execution.
 
-### Semifinal controlled-local native task slice
+### Controlled-local native task profile
 
-Spec 045 separately exercises the source-locked AgentTeams v1.2.2
+The controlled-local profile exercises the source-locked AgentTeams v1.2.2
 `projectflow/taskflow` actions through the pinned upstream `call_tool` entry point.
 It creates, plans, delegates, acknowledges, submits, inspects, accepts,
 cancels/reassigns, fences a late attempt, and reaches a terminal project state.
@@ -190,9 +189,9 @@ The required AgentTeams capability mapping is stable across both surfaces:
 | `ImpactPreview` / `ImpactCertificate` | Affected, bounded-unaffected, Skill-requalification, or `UNKNOWN` result with witnesses |
 | `MinimalRebaseCertificate` | Exact effect set: `REBUILD`, `PRESERVE_WITHIN_BOUNDARY`, `HOLD_FOR_REVIEW`, or `REQUALIFY` |
 | `AgentCandidateIngestionReceipt` | Candidate bytes, input/run bindings, decision, and zero-write proof |
-| `CandidateSemanticMapping` | Spec 062 candidate-only mapping from one admitted Pack root to OAC paths, including source digest, Unknowns, reason codes, and zero-write ceiling; controlled-local verified |
-| `QuoteFormationParityReceipt` | Spec 062 OrgRebase-owned coverage/authority/order parity proof; explicitly not an OAC `PlanCertificate`; independently verified |
-| `OACAdapterCapsule` | Spec 062 exact binding across Profile, Pack, OAC Source admission, mappings, approval, Formation parity, and execution run; controlled-local verified |
+| `CandidateSemanticMapping` | Candidate-only mapping from one admitted Pack root to OAC paths, including source digest, Unknowns, reason codes, and zero-write ceiling; controlled-local verified |
+| `QuoteFormationParityReceipt` | OrgRebase-owned coverage/authority/order parity proof; explicitly not an OAC `PlanCertificate`; independently verified |
+| `OACAdapterCapsule` | Exact binding across Profile, Pack, OAC Source admission, mappings, approval, Formation parity, and execution run; controlled-local verified |
 | `QualificationReport` | Exact Skill candidate, partitions, thresholds, failures, and release state |
 | `RebaseReceipt` | Applied transitions, preserved targets, graph promotion, idempotency, and evidence bindings |
 
@@ -296,7 +295,7 @@ Core business-compensation receipts are not presented as Workspace successor-gra
 ## Replaceable infrastructure
 
 The local profile uses SQLite, frozen JSON configuration, typed in-process
-Domain ports, HTTP `ToolContract`, and file evidence. Spec 045 additionally
+Domain ports, HTTP `ToolContract`, and file evidence. The controlled-local operations profile additionally
 validates loopback Source/Tool HTTP plus an OTLP/HTTP receiver backed by local
 SQLite query, retention and alert projections. Those are controlled-local
 protocol and operations proofs, not an external collector or production

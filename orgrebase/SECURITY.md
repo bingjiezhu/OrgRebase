@@ -85,9 +85,10 @@ verification.
 - Configure and validate the actual IdP and auditable membership/owner assignments with the
   existing authorization boundary; verify approval and rollback signers and revocation in
   the customer's deployment.
-- Qualify the chosen SQLite or PostgreSQL deployment's encryption, roles, backups, restore
-  isolation and independently protected audit retention. Local database tests do not
-  establish the customer's recovery or isolation guarantees.
+- Qualify the production PostgreSQL deployment's encryption, roles, backups, restore
+  isolation and independently protected audit retention. SQLite is a local-development
+  adapter. Local database tests do not establish the customer's recovery or isolation
+  guarantees.
 - Sign release artifacts and evidence receipts with managed keys, publish provenance/SBOM,
   scan dependencies and container images, and pin runtime images by digest.
 - Sandbox every tool execution with explicit egress and filesystem policy. The local Git

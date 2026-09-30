@@ -1,10 +1,10 @@
 {
   "action_digests": {
     "accept_task_result": "sha256:f150b44ed7c5ec88c617d40f98f54119119080ff3d1eb7c5c08d567905fddbdd",
-    "ack_task": "sha256:1e038d75ec729a791d8e6cc8cb4e850ad882c8ad8929b7f2439c9eed0e463be7",
-    "check_task": "sha256:e2356ab9f996176514c0ba097a01c8d6ba27aa4cfc5016ee5a1bc48bcd7ecefd",
-    "delegate_task": "sha256:2a92cbc75c2ac40cc167df7e4de8d911d172b5c38b055af1c29bfa187a73627f",
-    "submit_task": "sha256:ef456702df73b2883c3139bb06e5820bf07fb3e6cfbad94ce8a61efdc437f3b4"
+    "ack_task": "sha256:278b8e57c46e8103201871f455bae313afa77a95b7c704b21c9fc056a9ceea48",
+    "check_task": "sha256:931d1fde34ff60e61995f5c91033a269e15a9dd2e8fa695791ee6009ab62e789",
+    "delegate_task": "sha256:205c4915ef686d93c93590879c7f65bad51c6b4acadf84f116c133920ba6b315",
+    "submit_task": "sha256:b642f12b1056d52ad56d6183b320274825d1c0f87a8a6026e4d2dd9ee6d411ef"
   },
   "assignee_actor_id": "independent-reviewer",
   "candidate_only": true,
@@ -13,14 +13,14 @@
     "at-domain-legal-a3f56c48b0c5",
     "at-domain-product-f0e5afba2159"
   ],
-  "digest": "sha256:358f4d4c70e0571c365e64a43c0c392e85773ed9d9bfd9814b9a3ce74da13a7c",
+  "digest": "sha256:cccf78a80c8bb3c563305fb1718023d56a6d09c9e75d7823792359b30cf3abc8",
   "domain_id": "reviewer",
   "execution_task_digest": "sha256:251a014d568254aa52ec9e0f12be1e2e98ad9b94d1d47cd3251d9cb901d211f3",
-  "result_digest": "sha256:0bcdf7aa98326d85cdca094d2a377f14529fc6eef534b3f23e5044fb6a385386",
+  "result_digest": "sha256:f690c7280f59b376d4177f8195f0dc5e83402d6d7f35291956be07483a3c51f1",
   "schema_version": "orgrebase.formation-taskflow-task-receipt.v1",
   "task_id": "at-reviewer-barrier-7e3227d5ab73",
   "task_kind": "REVIEWER_BARRIER",
-  "task_spec_digest": "sha256:2b70451f1f319595b2f3001f87b44b299f583b7f4459d5cbd06e20b0573932b9",
+  "task_spec_digest": "sha256:af46fafa9760efa9da35fd368b26c19c7767a1d641d02384f22ab98998b8acaf",
   "terminal_status": "completed",
   "transport_assignee": "@independent-reviewer:controlled.local"
 }

@@ -67,4 +67,21 @@ context.renderTaskIntake({stage:'EMPTY',execution:{run_id:'run:new'},task_intake
 assert.equal(byId('task-intake-title').textContent,labels.taskIntakeTitle);
 assert.equal(byId('task-intake-body').textContent,labels.taskIntakeBody);
 assert.equal(byId('task-request-prompt').disabled,false);
+// A mismatched actor needs an actionable, visible explanation, not only a tooltip.
+context.window.OrgRebaseClient.session=()=>({identity_source:'controlled-local-session',
+ authentication_required:true,authenticated:true,principal:{actor_id:'owner:one'},actors:[
+ {actor_id:'owner:one',label:'接入负责人',label_en:'Onboarding owner'},
+ {actor_id:'employee:one',label:'业务发起人',label_en:'Business requester'}]});
+context.renderTaskIntake({stage:'EMPTY',execution:{run_id:'run:new'},task_intake:null});
+assert.equal(byId('task-request-prompt').disabled,true);
+assert.equal(byId('task-intake-prepare').disabled,true);
+assert.equal(byId('task-intake-role-hint').hidden,false);
+assert.ok(byId('task-intake-role-hint').textContent.includes(LANGUAGE==='en'?'Onboarding owner':'接入负责人'));
+assert.ok(byId('task-intake-role-hint').textContent.includes(LANGUAGE==='en'?'Business requester':'业务发起人'));
+context.window.OrgRebaseClient.session=()=>({mode:'oidc',authentication_required:true,
+ authenticated:true,principal:{actor_id:'employee:one'}});
+context.renderTaskIntake({stage:'EMPTY',execution:{run_id:'run:new'},task_intake:null});
+assert.equal(byId('task-intake-role-hint').hidden,true);
+assert.equal(byId('task-intake-role-hint').textContent,'');
+assert.equal(byId('task-request-prompt').disabled,false);
 '''.replace("LANGUAGE", json.dumps(language)))

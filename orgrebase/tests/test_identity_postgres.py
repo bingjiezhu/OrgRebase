@@ -10,6 +10,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from enterprise_pack_factory import make_enterprise_pack
 from fastapi.testclient import TestClient
 
+from orgrebase import __version__
 from orgrebase.api import create_app
 from orgrebase.auth import IdentitySettings, VerifiedJWKClient
 from orgrebase.clock import SystemClock
@@ -109,7 +110,7 @@ def test_production_api_real_postgres_signed_identity_and_restart(postgres_runti
         rejection = command("approver", "reject", event_id=rejected_event.event_id, reason="Confirm source with owner")
         assert rejection["rejection"]["actor_id"] == owner
         assert rejection["rejection"]["status"] == "REJECTED"
-        assert client.get("/readyz").json() == {"status": "ready", "service": "orgrebase", "version": "0.4.0"}
+        assert client.get("/readyz").json() == {"status": "ready", "service": "orgrebase", "version": __version__}
         before = client.get("/api/workspace/state", headers=headers("operator")).json()
     with TestClient(create_app(deployment_settings=settings), base_url="http://localhost") as client:
         after = client.get("/api/workspace/state", headers=headers("operator"))

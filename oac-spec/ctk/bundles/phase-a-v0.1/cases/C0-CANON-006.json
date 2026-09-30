@@ -1,0 +1,13 @@
+{
+  "caseId": "C0-CANON-006",
+  "expect": {
+    "result": {
+      "canonicalBase64": "eyLwn5iAIjoyLCLugIAiOjF9",
+      "digest": "sha256:28c95d1bbb2209223307e62f489020e8f9e0cfa16adf2daf6d88127a1e8dd22a"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {"rawBase64": "eyJcdWUwMDAiOjEsIvCfmIAiOjJ9"},
+  "operation": "canonicalize",
+  "requirementRefs": ["REQ-UTF16-KEY-ORDER"]
+}

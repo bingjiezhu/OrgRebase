@@ -32,7 +32,7 @@ class ObservedProvider(PricedProvider):
 
 
 @pytest.mark.parametrize("backend", ["sqlite", "postgresql"])
-def test_failed_attempt_detail_retains_unknown_usage_and_reservation_without_retry(
+def test_unknown_attempt_detail_retains_unknown_usage_and_reservation_without_retry(
     tmp_path, postgres_runtime, backend,
 ):
     provider = PricedProvider(unknown=True)
@@ -43,8 +43,8 @@ def test_failed_attempt_detail_retains_unknown_usage_and_reservation_without_ret
             service.preview_change("currency")
         reservation = cost_attempts(service)
         summary = change_detail(service, "currency")["advisory_attempt"]
-        assert summary["state"] == "FAILED"
-        assert summary["public_error_code"] == "WORKSPACE_ADVISORY_MODEL_INCOMPLETE"
+        assert summary["state"] == "RESULT_UNKNOWN"
+        assert summary["public_error_code"] == "WORKSPACE_ADVISORY_RESULT_UNKNOWN"
         assert summary["usage_status"] == "UNKNOWN"
         assert summary["cost_reservation"] == {
             "scope": "ONE_PREVIEW_ATTEMPT", "currency": "USD", "reserved_microusd": 270480,
@@ -170,7 +170,7 @@ def test_attempt_lookup_cannot_read_another_workspace_with_the_same_run_and_even
     try:
         with pytest.raises(IntegrityError):
             service.preview_change("currency")
-        assert change_detail(service, "currency")["advisory_attempt"]["state"] == "FAILED"
+        assert change_detail(service, "currency")["advisory_attempt"]["state"] == "RESULT_UNKNOWN"
         service.store.register_workspace("another-quote", profile_digest=service.profile_digest,
                                          pack_digest=None, quote_object_id="quote:another",
                                          created_at=service.clock.now())
@@ -219,7 +219,7 @@ def test_unadmitted_group_attempt_is_readable_without_group_creation_or_retry(
             body = response.json()
             assert set(body) == {"group_id", "advisory_attempt"} and body["group_id"] == "recover-1"
             summary = body["advisory_attempt"]
-            assert summary["state"] == ("IN_PROGRESS" if lose_result else "FAILED")
+            assert summary["state"] == ("IN_PROGRESS" if lose_result else "RESULT_UNKNOWN")
             assert summary["usage_status"] == "UNKNOWN" and summary["cost_reservation"]["reserved_microusd"] > 0
             if lose_result:
                 monkeypatch.setattr(service, "_wall_clock", lambda: summary["deadline_epoch_ms"] / 1000 + 1)
@@ -259,7 +259,10 @@ def test_group_attempt_read_cannot_cross_workspace_scope(tmp_path, postgres_runt
     try:
         with pytest.raises(IntegrityError):
             prepare(service)
-        assert group_attempt_detail(service, "recover-1")["advisory_attempt"]["state"] == "FAILED"
+        assert (
+            group_attempt_detail(service, "recover-1")["advisory_attempt"]["state"]
+            == "RESULT_UNKNOWN"
+        )
         service.store.register_workspace("another-quote", profile_digest=service.profile_digest,
                                          pack_digest=None, quote_object_id="quote:another",
                                          created_at=service.clock.now())

@@ -7,7 +7,7 @@ import os
 import re
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, urlencode, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 
@@ -26,6 +26,9 @@ def workspace_command(
     reason: str | None = None,
     token_variable: str = "ORGREBASE_ACCESS_TOKEN",
     workspace_id: str | None = None,
+    record_ref: str | None = None,
+    after: str | None = None,
+    limit: int = 50,
 ) -> dict[str, Any]:
     if workspace_id is not None and (
         not isinstance(workspace_id, str)
@@ -41,8 +44,30 @@ def workspace_command(
         ))
     ):
         raise OperationError("API_HTTPS_OR_LOCALHOST_REQUIRED")
+    if action.startswith("experience-") and any(
+        value is not None for value in (event_id, digest, payload, reason)
+    ):
+        raise OperationError("EXPERIENCE_READ_ARGUMENT_INVALID")
     if action == "state":
         method, path, body = "GET", "/api/workspace/state", None
+    elif action in {"experience-cases", "experience-lessons", "experience-candidates"}:
+        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 100:
+            raise OperationError("EXPERIENCE_PAGE_LIMIT_INVALID")
+        if after is not None and (not after or len(after) > 256):
+            raise OperationError("EXPERIENCE_PAGE_CURSOR_INVALID")
+        query = {"limit": limit}
+        if after is not None:
+            query["after"] = after
+        endpoint = "experience-lessons/candidates" if action == "experience-candidates" else action
+        method, path, body = "GET", f"/api/workspace/{endpoint}?{urlencode(query)}", None
+    elif action == "experience-case":
+        if not record_ref or not record_ref.startswith("experience-case:") or len(record_ref) > 256:
+            raise OperationError("EXPERIENCE_CASE_REF_REQUIRED")
+        method, path, body = "GET", f"/api/workspace/experience-cases/{quote(record_ref, safe='')}", None
+    elif action == "experience-lesson":
+        if not record_ref or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:-]{0,95}", record_ref) is None:
+            raise OperationError("EXPERIENCE_LESSON_ID_REQUIRED")
+        method, path, body = "GET", f"/api/workspace/experience-lessons/heads/{quote(record_ref, safe='')}", None
     elif action == "register":
         if payload is None:
             raise OperationError("CHANGE_EVENT_INPUT_REQUIRED")

@@ -1,0 +1,19 @@
+{
+  "caseId": "S-WITNESS-SPACE-ENCODE",
+  "expect": {
+    "result": {
+      "witnessRef": "urn:a%20b#/a%20b"
+    },
+    "sutStatus": "COMPLETED"
+  },
+  "input": {
+    "mode": "encode",
+    "pointer": "/a b",
+    "resourceId": "urn:a b"
+  },
+  "operation": "witness",
+  "requirementRefs": [
+    "REQ-WITNESS-GRAMMAR"
+  ],
+  "testTarget": "SUT"
+}

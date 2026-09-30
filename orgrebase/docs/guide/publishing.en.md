@@ -2,15 +2,9 @@
 
 ## Product source directory
 
-The [OrgRebase product repository](https://github.com/bingjiezhu/OrgRebase) maintains source, contracts, tests, documentation and licenses.
+The [OrgRebase repository](https://github.com/bingjiezhu/OrgRebase) is a workspace: `orgrebase/` contains the product and `oac-spec/` is an independent sibling contract project. One clone supplies both. Run `uv sync`, `make check-core` and the documentation build from `orgrebase/`. OAC is not embedded in the product Python package; deployment configuration, customer credentials and runtime databases stay outside source.
 
-Previously: the GitHub product root *was* the product source root, containing `pyproject.toml`, `src/`, `docs/`, `documentation/` and `LICENSE`; a complete source distribution named that directory `orgrebase/`.
-
-Now: the public repository is a workspace root. Those product files live under `orgrebase/`, next to sibling `oac-spec/`. After `git clone`, `cd orgrebase/` before `uv sync`, `make check-core`, or the documentation build. Deployment configuration, customer credentials and runtime databases remain separate.
-
-Why: one clone supplies matching OAC without nesting it inside the product package or changing its Apache-2.0 terms.
-
-OAC is an independent dependency. Previously: the GitHub product root did not include OAC; a complete source distribution could supply sibling `orgrebase/` and `oac-spec/` trees, and a product-only checkout needed a matching revision at `../oac-spec` or `ORGREBASE_OAC_ROOT`. Now: a workspace publication puts both trees at the clone root, so default `../oac-spec` works. Why: they ship together without nesting OAC inside the product package or changing its Apache-2.0 terms. Full CI on the product-root layout binds `OAC_REPOSITORY` and a 40-character `OAC_REVISION`; a workspace layout should run checks from `orgrebase/` and use the in-repo `oac-spec/`. Core CI does not require OAC.
+Protected source and runtime-resource changes trigger product core, public OAC conformance and PostgreSQL/OAC enterprise boundary checks. Historical internal archives are outside the public allowlist, so public CI does not treat retained `make check` or `make archive-replay-check` as qualification of new source. A maintainer starts the public release gate manually; build, isolated installation, SBOM and attestations must bind the same commit. A local Beta check is not a remote GitHub CI result.
 
 ## Before publishing
 
@@ -21,7 +15,7 @@ OAC is an independent dependency. Previously: the GitHub product root did not in
 
 ## Build the bilingual site
 
-Previously: run from the product root (the directory that contains `pyproject.toml`). Now: that directory is `orgrebase/` in a workspace clone.
+Run from `orgrebase/` in a workspace clone:
 
 ```bash
 uv sync --project documentation --locked --python 3.12.13
@@ -34,8 +28,7 @@ The output directory must be empty and outside the product source tree. MkDocs, 
 
 To add a reviewed source download, supply both `--source-archive` and `--source-sha256`. The builder verifies the checksum and the bytes of documents, referenced source and site tooling. The download enters only generated site output. The distribution and site use the same source ZIP and checksum.
 
-Previously the GitHub Pages workflow built a preview by default; an authorized maintainer had to configure Pages and select deployment to publish the site.
-Now, documentation changes on `main` build and publish [bingjiezhu.github.io/OrgRebase](https://bingjiezhu.github.io/OrgRebase/en/). `workflow_dispatch` can still set `site_url`. See the [site-maintenance guide](../DOCUMENTATION-SITE.md) for commands and scope.
+Pull requests build a read-only preview; documentation and site-input changes on `main` build and deploy [bingjiezhu.github.io/OrgRebase](https://bingjiezhu.github.io/OrgRebase/en/). A local build does not push or replace the live site. After merge, verify the live “Site source and downloads” page, licensing and language switching against the target revision. See the [site-maintenance guide](../DOCUMENTATION-SITE.md) for commands and scope.
 
 ## Versions and acceptance records
 

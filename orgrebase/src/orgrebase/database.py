@@ -121,6 +121,32 @@ idempotency_records = Table(
     Column("request_digest", Text, nullable=False),
     Column("result_json", Text, nullable=False),
 )
+deployment_budget_reservations = Table(
+    "deployment_budget_reservations",
+    metadata,
+    Column("tenant_id", Text, primary_key=True),
+    Column("deployment_scope", Text, primary_key=True),
+    Column("period_start_epoch_ms", BigInteger, primary_key=True),
+    Column("attempt_key", Text, primary_key=True),
+    Column("period_end_epoch_ms", BigInteger, nullable=False),
+    Column("workspace_id", Text, nullable=False),
+    Column("request_digest", Text, nullable=False),
+    Column("policy_digest", Text, nullable=False),
+    Column("state", Text, nullable=False),
+    Column("reserved_microusd", BigInteger, nullable=False),
+    Column("reserved_calls", BigInteger, nullable=False),
+    Column("deadline_epoch_ms", BigInteger, nullable=False),
+    Column("created_at", Text, nullable=False),
+    Column("updated_at", Text, nullable=False),
+    CheckConstraint("period_start_epoch_ms >= 0"),
+    CheckConstraint("period_end_epoch_ms > period_start_epoch_ms"),
+    CheckConstraint("reserved_microusd >= 0"),
+    CheckConstraint("reserved_calls >= 0"),
+    CheckConstraint("deadline_epoch_ms > 0"),
+    CheckConstraint(
+        "state IN ('DISPATCHING', 'COMPLETE', 'FAILED', 'RESULT_UNKNOWN')"
+    ),
+)
 artifacts = Table(
     "artifacts",
     metadata,

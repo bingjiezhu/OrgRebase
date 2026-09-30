@@ -1221,6 +1221,7 @@ class OACAgenticRuntime:
         self,
         *,
         expected_activation_binding_digest: str,
+        expected_existing_intake_digest: str | None = None,
     ) -> tuple[TaskFormationDecisionReceipt, TaskAgentContextEnvelope]:
         """Return the exact approved OAC roots for the current Workspace task.
 
@@ -1245,6 +1246,21 @@ class OACAgenticRuntime:
             raise OACAgenticRuntimeError(
                 "OAC_AGENTIC_RUNTIME_ACTIVATION_BINDING_CHANGED"
             )
+        if expected_existing_intake_digest is not None:
+            intake = self.workspace_service._task_intake_run_record()
+            consumption = self.workspace_service._oac_activation_consumption_record()
+            if (
+                intake is None or consumption is None
+                or intake["digest"] != expected_existing_intake_digest
+                or intake["oac_activation_binding_digest"] != binding.digest
+                or consumption["receipt"]["activation_binding_digest"] != binding.digest
+                or consumption["receipt"]["formation_receipt_digest"] != intake["formation_receipt_digest"]
+            ):
+                raise OACAgenticRuntimeError("OAC_AGENTIC_RUNTIME_EXISTING_INTAKE_BINDING_MISMATCH")
+            receipt, context, anchored = self._retained_context(capsule, binding)
+            if not anchored:
+                raise OACAgenticRuntimeError("OAC_AGENTIC_RUNTIME_CONTEXT_TRUSTED_BINDING_REQUIRED")
+            return receipt, context
         context = self._load_or_compile_context(
             organizational_intent_digest=capsule.organizational_demand_digest
         )

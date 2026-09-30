@@ -6,6 +6,8 @@ import subprocess
 import sys
 import tarfile
 import zipfile
+from email import policy
+from email.parser import BytesParser
 from pathlib import Path, PurePosixPath
 
 import pytest
@@ -40,6 +42,109 @@ def _minimal_release_root(root: Path) -> None:
         "[tool.hatch.build.targets.sdist]\nexclude = []\n",
         encoding="utf-8",
     )
+
+
+@pytest.mark.parametrize("linked", ("src/orgrebase", "src"))
+def test_offline_wheel_rejects_symlinked_source_ancestors(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, linked: str,
+) -> None:
+    checkout = tmp_path / "checkout"
+    _minimal_release_root(checkout)
+    outside = tmp_path / "outside"
+    (checkout / linked).rename(outside)
+    (checkout / linked).symlink_to(outside, target_is_directory=True)
+    (checkout / "src/orgrebase/outside.py").write_text("OUTSIDE_CHECKOUT = True\n")
+    monkeypatch.setattr(release, "ROOT", checkout)
+    with pytest.raises(release.ReleaseInputError, match="SYMLINK_RELEASE_INPUT_REJECTED"):
+        release.build_wheel(_minimal_release_config(), tmp_path)
+    assert not list(tmp_path.glob("*.whl"))
+
+
+def test_offline_input_rejects_symlinked_checkout_root(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    outside = tmp_path / "outside"
+    _minimal_release_root(outside)
+    checkout = tmp_path / "checkout"
+    checkout.symlink_to(outside, target_is_directory=True)
+    monkeypatch.setattr(release, "ROOT", checkout)
+    with pytest.raises(release.ReleaseInputError, match="SYMLINK_RELEASE_ROOT_REJECTED"):
+        release._read_release_input(checkout / "pyproject.toml")
+
+
+@pytest.mark.parametrize("relative", ("pyproject.toml", "LICENSE", "licenses/NOTICE.md"))
+def test_offline_config_and_license_inputs_reject_links(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, relative: str,
+) -> None:
+    checkout = tmp_path / "checkout"
+    checkout.mkdir()
+    outside = tmp_path / "retained-input"
+    outside.write_text("outside release input\n")
+    path = checkout / relative
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.symlink_to(outside)
+    monkeypatch.setattr(release, "ROOT", checkout)
+    with pytest.raises(release.ReleaseInputError, match="SYMLINK_RELEASE_INPUT_REJECTED"):
+        release._read_release_input(path)
+
+
+def test_offline_read_rejects_file_replaced_between_validation_and_open(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    checkout = tmp_path / "checkout"
+    _minimal_release_root(checkout)
+    path = checkout / "README.md"
+    original_open = os.open
+
+    def replace_before_open(file, flags, *args, **kwargs):
+        if Path(file) == path:
+            path.rename(checkout / "retained-readme")
+            path.write_bytes(b"Changed after validation\n")
+        return original_open(file, flags, *args, **kwargs)
+
+    monkeypatch.setattr(release, "ROOT", checkout)
+    monkeypatch.setattr(os, "open", replace_before_open)
+    with pytest.raises(release.ReleaseInputError, match="RELEASE_INPUT_CHANGED_DURING_READ"):
+        release._read_release_input(path)
+
+
+@pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="host has no FIFO support")
+def test_offline_source_tree_rejects_special_files_without_blocking(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    checkout = tmp_path / "checkout"
+    _minimal_release_root(checkout)
+    os.mkfifo(checkout / "src/orgrebase/pipe")
+    monkeypatch.setattr(release, "ROOT", checkout)
+    with pytest.raises(release.ReleaseInputError, match="NON_REGULAR_RELEASE_INPUT_REJECTED"):
+        release.wheel_payloads()
+
+
+def test_offline_sdist_rejects_symlinked_admitted_directory(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    checkout = tmp_path / "checkout"
+    _minimal_release_root(checkout)
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (outside / "guide.md").write_text("Unrelated private content\n")
+    (checkout / "docs").symlink_to(outside, target_is_directory=True)
+    monkeypatch.setattr(release, "ROOT", checkout)
+    with pytest.raises(release.ReleaseInputError, match="SYMLINK_RELEASE_INPUT_REJECTED"):
+        release.build_sdist(_minimal_release_config(), tmp_path)
+    assert not list(tmp_path.glob("*.tar.gz"))
+
+
+def test_offline_sdist_prunes_excluded_cache_before_validating_links(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    checkout = tmp_path / "checkout"
+    _minimal_release_root(checkout)
+    (checkout / "src/orgrebase/runtime.py").write_text("VALUE = 1\n")
+    (checkout / "src/orgrebase/.venv").symlink_to(tmp_path / "absent-cache", target_is_directory=True)
+    monkeypatch.setattr(release, "ROOT", checkout)
+    sdist = release.build_sdist(_minimal_release_config(), tmp_path)
+    with tarfile.open(sdist) as archive:
+        assert "orgrebase-0.0.0/src/orgrebase/runtime.py" in archive.getnames()
+        assert all(".venv" not in name for name in archive.getnames())
 
 
 def test_new_configured_assets_are_included_without_builder_changes(
@@ -329,7 +434,8 @@ def test_offline_release_preserves_license_and_package_boundary(tmp_path) -> Non
         names = set(archive.namelist())
         metadata = archive.read(f"{dist_info}/METADATA").decode("utf-8")
     assert expected_license_files <= names
-    assert "License: Apache-2.0" in metadata
+    assert "License-Expression: Apache-2.0" in metadata
+    assert "\nLicense: " not in metadata
     assert "License-File: LICENSE" in metadata
     assert "License-File: LICENSE.md" in metadata
     assert "License-File: NOTICE.md" in metadata
@@ -390,19 +496,80 @@ def test_offline_release_preserves_license_and_package_boundary(tmp_path) -> Non
         "LICENSE",
         "COMMERCIAL-LICENSE.md",
         "NOTICE.md",
-        "RELEASE-VERIFICATION.md",
         "requirements.txt",
         "requirements-dev.txt",
     ):
         assert f"{prefix}/{relative}" in sdist_names
     assert not any("evidence/agentteams/live-sources" in name for name in sdist_names)
     assert not any("nonce-ledger" in name for name in sdist_names)
+    assert f"{prefix}/RELEASE-VERIFICATION.md" not in sdist_names
     _assert_public_sdist_boundary(sdist, prefix)
+
+
+def test_normal_and_offline_builds_preserve_spdx_and_license_bytes(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    checkout = tmp_path / "checkout"
+    _minimal_release_root(checkout)
+    license_bytes = (release.ROOT / "LICENSE").read_bytes()
+    notice_bytes = (release.ROOT / "NOTICE.md").read_bytes()
+    (checkout / "LICENSE").write_bytes(license_bytes)
+    (checkout / "NOTICE.md").write_bytes(notice_bytes)
+    (checkout / "src" / "orgrebase" / "__init__.py").write_text("__version__ = '1.0.0'\n")
+    (checkout / "pyproject.toml").write_text(
+        '[build-system]\nrequires = ["hatchling>=1.27"]\nbuild-backend = "hatchling.build"\n'
+        '[project]\nname = "orgrebase"\nversion = "1.0.0"\n'
+        'description = "Controlled local packaging fixture"\nrequires-python = ">=3.12"\n'
+        'license = "Apache-2.0"\nlicense-files = ["LICENSE", "NOTICE.md"]\n'
+        '[tool.hatch.build.targets.wheel]\npackages = ["src/orgrebase"]\n'
+        '[tool.hatch.build.targets.wheel.force-include]\n'
+        '"LICENSE" = "orgrebase/_assets/licenses/Apache-2.0.txt"\n'
+        '[tool.hatch.build.targets.sdist]\nexclude = []\n',
+        encoding="utf-8",
+    )
+    canonical = tmp_path / "canonical"
+    subprocess.run(
+        ["uv", "build", "--offline", "--python", sys.executable, "--out-dir", str(canonical)],
+        cwd=checkout, check=True, capture_output=True, text=True,
+    )
+    fallback = tmp_path / "fallback"
+    fallback.mkdir()
+    monkeypatch.setattr(release, "ROOT", checkout)
+    config = release.load_config()
+    fallback_wheel = release.build_wheel(config, fallback)
+    fallback_sdist = release.build_sdist(config, fallback)
+    assert config.license_expression == "Apache-2.0"
+    license_metadata = []
+    for wheel in (next(canonical.glob("*.whl")), fallback_wheel):
+        with zipfile.ZipFile(wheel) as archive:
+            metadata = BytesParser(policy=policy.default).parsebytes(
+                archive.read(f"{config.dist_info}/METADATA")
+            )
+            assert metadata["License-Expression"] == "Apache-2.0"
+            assert metadata["License"] is None
+            license_metadata.append(sorted(metadata.get_all("License-File")))
+            assert archive.read(f"{config.dist_info}/licenses/LICENSE") == license_bytes
+            assert archive.read(f"{config.dist_info}/licenses/NOTICE.md") == notice_bytes
+            assert archive.read("orgrebase/_assets/licenses/Apache-2.0.txt") == license_bytes
+    assert license_metadata == [["LICENSE", "NOTICE.md"], ["LICENSE", "NOTICE.md"]]
+    prefix = f"{config.normalized_name}-{config.version}"
+    for sdist in (next(canonical.glob("*.tar.gz")), fallback_sdist):
+        with tarfile.open(sdist, "r:gz") as archive:
+            for relative, expected in (("LICENSE", license_bytes), ("NOTICE.md", notice_bytes)):
+                retained = archive.extractfile(f"{prefix}/{relative}")
+                assert retained is not None
+                assert retained.read() == expected
+            metadata_file = archive.extractfile(f"{prefix}/PKG-INFO")
+            assert metadata_file is not None
+            metadata = BytesParser(policy=policy.default).parsebytes(metadata_file.read())
+            assert metadata["License-Expression"] == "Apache-2.0"
+            assert metadata["License"] is None
+            assert sorted(metadata.get_all("License-File")) == ["LICENSE", "NOTICE.md"]
 
 
 def test_canonical_sdist_preserves_public_evidence_boundary(tmp_path: Path) -> None:
     subprocess.run(
-        ["uv", "build", "--sdist", "--out-dir", str(tmp_path)],
+        ["uv", "build", "--offline", "--python", sys.executable, "--sdist", "--out-dir", str(tmp_path)],
         cwd=release.ROOT,
         check=True,
         capture_output=True,
@@ -673,9 +840,11 @@ def test_combined_source_snapshot_runs_bridge_and_standalone_fails_closed(
     # Reuse the running interpreter, while uv still creates the extracted
     # project's isolated environment; unrelated managed installs may be broken.
     combined_env["UV_PYTHON"] = str(Path(sys.executable).resolve())
+    combined_env["MAKEFLAGS"] = " -- PYTHON=.venv/bin/python"
     result = subprocess.run(
         [
             "make",
+            "PYTHON=uv run python",
             "workspace-oac-admission-demo",
             "workspace-oac-admission-verify",
         ],

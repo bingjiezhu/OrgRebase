@@ -28,15 +28,40 @@ def _scope(issuer: str, kind: str, value: str) -> str:
 
 
 class BrowserSessionStore:
+    CLEANUP_BATCH_SIZE = 256
+
     def __init__(self, store: StateStore) -> None:
         self.store = store
         if not store.tenant_id:
             raise ValueError("AUTH_SESSION_TENANT_REQUIRED")
 
+    @staticmethod
+    def _cleanup_expired(connection, *, now: int, batch_size: int) -> dict[str, int]:
+        if not 1 <= batch_size <= 1000:
+            raise ValueError("AUTH_SESSION_CLEANUP_BATCH_INVALID")
+        removed: dict[str, int] = {}
+        for table, identity in (
+            (oidc_login_transactions, oidc_login_transactions.c.transaction_id),
+            (browser_sessions, browser_sessions.c.session_id),
+            (browser_session_revocations, browser_session_revocations.c.scope_id),
+        ):
+            expired = select(identity).where(table.c.expires_at <= now).order_by(
+                table.c.expires_at, identity
+            ).limit(batch_size)
+            result = execute_core(connection, delete(table).where(
+                identity.in_(expired), table.c.expires_at <= now,
+            ))
+            removed[table.name] = max(0, result.rowcount)
+        return removed
+
+    def cleanup_expired(self, *, now: int, batch_size: int = CLEANUP_BATCH_SIZE) -> dict[str, int]:
+        """Perform a stable, bounded cleanup pass outside request parsing."""
+        with self.store.transaction() as connection:
+            return self._cleanup_expired(connection, now=now, batch_size=batch_size)
+
     def save_login(self, values: dict[str, Any], *, now: int) -> None:
         with self.store.transaction() as connection:
-            for table in (oidc_login_transactions, browser_sessions, browser_session_revocations):
-                execute_core(connection, delete(table).where(table.c.expires_at <= now))
+            self._cleanup_expired(connection, now=now, batch_size=self.CLEANUP_BATCH_SIZE)
             execute_core(connection, insert(oidc_login_transactions).values(**values))
 
     def consume_login(self, transaction_id: str, browser_digest: str, *, now: int) -> dict[str, Any]:

@@ -1,0 +1,87 @@
+{
+  "apiVersion": "oac.ctk.independence/v0.1",
+  "kind": "IndependenceStatement",
+  "statementId": "oac.supplier.go.internal.plan-verifier/internal-differential/v0.1-seed-1",
+  "implementation": {
+    "implementationId": "oac.supplier.go.internal.plan-verifier",
+    "implementationVersion": "0.1.0-seed1",
+    "artifactDigest": "sha256:b3723b3e0164d2e6a7aea98a459178f6e99bf6150b768d5d8eefe6f8453edf5a"
+  },
+  "maintainer": {
+    "maintainerId": "same-repository-internal-author",
+    "organizationRef": null,
+    "evidenceRefs": [
+      "PROVENANCE.md",
+      "README.md"
+    ]
+  },
+  "source": {
+    "repositoryRef": "oac-spec/shared-worktree",
+    "revision": "internal-differential-uncommitted-base-e301952ae08986e6398a636f04f883036bc88c8d-2026-08-24",
+    "sourceDigest": "sha256:2ef199e822f81e50fab1c58c9005421c2f00f8cf8305817368db4b61d448c589"
+  },
+  "build": {
+    "buildSystem": "Go 1.25.6 standard toolchain; go build -trimpath",
+    "recipeDigest": "sha256:a5cf7b4f63b8ac3468bbd4574c452051d846b63b14b1e8fed74d9edbe853df2d",
+    "environmentDigest": "sha256:06c2a7e7aa87d3885b89645fbc1a53d34332a0a6ab86ab66de64adb34a232d48",
+    "artifactDigest": "sha256:b3723b3e0164d2e6a7aea98a459178f6e99bf6150b768d5d8eefe6f8453edf5a"
+  },
+  "sbom": {
+    "format": "other",
+    "documentRef": "go.mod (stdlib-only dependency declaration)",
+    "documentDigest": "sha256:774f3bd2973ff4c156c0f04c6929a76773bf9cbbd4198dba4fe2a3dd99254dc3"
+  },
+  "referenceAccess": {
+    "level": "reference_source_observed",
+    "artifactRefs": [
+      "PROVENANCE.md#source-exposure-and-origin",
+      "implementations/python-plan-verifier-reference",
+      "src/oac/supplier.py",
+      "src/oac/verifier.py",
+      "standard/oac-plan-verification-relation-v0.1.md"
+    ],
+    "attestation": "Same-repository internal-differential implementation with reference_source_observed exposure; explicitly non-clean-room and non-independent. Separate Go runtime does not imply source or organizational independence."
+  },
+  "generatedCode": {
+    "used": true,
+    "generatorRefs": [
+      "codex-agent:implement_go_plan_verifier",
+      "codex-root:plan-verification-integration"
+    ],
+    "generatedSourceDigest": "sha256:2ef199e822f81e50fab1c58c9005421c2f00f8cf8305817368db4b61d448c589"
+  },
+  "dependencies": {
+    "language": [
+      {
+        "name": "Go toolchain",
+        "version": "go1.25.6 darwin/arm64",
+        "artifactDigest": "sha256:cd864b57eef970002eadd9d4f35ce4026265d3fe7f4c030a8b5d69373f9a4bc2",
+        "sharedWithReference": false,
+        "semanticRole": "build"
+      }
+    ],
+    "runtime": [
+      {
+        "name": "Go statically linked runtime in adapter artifact",
+        "version": "go1.25.6",
+        "artifactDigest": "sha256:b3723b3e0164d2e6a7aea98a459178f6e99bf6150b768d5d8eefe6f8453edf5a",
+        "sharedWithReference": false,
+        "semanticRole": "none"
+      }
+    ],
+    "library": [
+      {
+        "name": "Go standard library linked in adapter artifact",
+        "version": "go1.25.6",
+        "artifactDigest": "sha256:b3723b3e0164d2e6a7aea98a459178f6e99bf6150b768d5d8eefe6f8453edf5a",
+        "sharedWithReference": false,
+        "semanticRole": "verification"
+      }
+    ],
+    "ffi": [],
+    "process": [],
+    "service": []
+  },
+  "claimLimit": "provenance_and_dependency_disclosure_only",
+  "digest": "sha256:27c3f5487a7a4c21d55f6335e119245e8a70b52bd6445aff272a156d8c22be52"
+}

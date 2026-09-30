@@ -16,34 +16,43 @@ document instead.
 ## Development
 
 ```bash
-uv sync --locked --all-extras
+uv sync --locked --extra dev
 make check-core
 ```
 
-The core check requires no extra OAC checkout, PostgreSQL or service credentials
-when this repository is cloned as a workspace (`orgrebase/` next to `oac-spec/`).
-A product-only tree still uses `../oac-spec` or `ORGREBASE_OAC_ROOT`.
+The core check requires no OAC checkout, PostgreSQL or service credentials,
+including in a product-only source tree. Integration checks require a matching,
+admitted OAC tree at `../oac-spec` or `ORGREBASE_OAC_ROOT`.
 It runs lint, assets/schema checks, retained core evidence verification, an isolated
 runtime-resource probe and the explicit `CORE_TESTS` list in the Makefile. It does
 not claim complete integration coverage. The [first-run guide](README.md#first-run-verify-one-public-transaction)
 also runs a fresh, bounded pricing/governance workflow.
 
-A lightweight runtime source delivery can run the documented first run and `make check-core`,
-but may omit complete historical evidence. Full `make check` also needs the full-profile
-archive inputs referenced by its gates, in addition to OAC and PostgreSQL. Missing archives
-are not evidence that a release passed; use the matching full source/evidence delivery.
+For changes involving OAC integration, deployment or database behavior, install
+the sibling OAC environment with `uv sync --locked --all-extras` in `oac-spec/`,
+supply the admitted source and [PostgreSQL tools](docs/AUTHENTICATED-DEPLOYMENT.md),
+then run these public checks from `orgrebase/`:
 
-For changes involving OAC integration, deployment or database behavior, supply the
-admitted OAC source and [PostgreSQL tools](docs/AUTHENTICATED-DEPLOYMENT.md), then run
-`make check`. Full checks require PostgreSQL; an unavailable database tool is a
-failure.
+```bash
+make check-core
+make check-enterprise-boundaries
+python3 -B scripts/build_source_snapshot.py public-check --snapshot-root ..
+```
 
-Previously, full CI bound an external `OAC_REPOSITORY` and 40-character `OAC_REVISION`.
-Now this workspace clone already contains `oac-spec/`. Ordinary push and pull-request
-CI runs `make check-core` from `orgrebase/` with no OAC or service credentials. Full
-OAC + PostgreSQL validation is `workflow_dispatch` only, with
-`ORGREBASE_OAC_ROOT` pointing at the in-tree `oac-spec/`. A skipped full job cannot
-qualify a release candidate. See [candidate qualification](docs/RELEASE-CANDIDATES.md)
+The OAC public check also requires Go 1.22. Enterprise boundary checks require
+PostgreSQL; an unavailable database tool is a failure. These are source checks;
+release qualification additionally binds the exact artifacts to installation,
+SBOM and provenance results. Full `make check` remains an internal development
+gate for a workspace carrying its complete historical archive inputs, OAC and
+PostgreSQL. Those archives are outside the public source profile; a fresh public
+clone cannot use that gate as its release qualification.
+
+This workspace clone includes `oac-spec/`. On protected source and runtime-resource
+changes, push and pull-request CI runs product core checks, the independent OAC
+conformance gate, and PostgreSQL/OAC enterprise boundary checks. The public release
+gate remains a maintainer-initiated `workflow_dispatch` job, with
+`ORGREBASE_OAC_ROOT` pointing at the in-tree `oac-spec/`. A skipped release job does
+not qualify a candidate. See [candidate qualification](docs/RELEASE-CANDIDATES.md)
 and the [community note](docs/COMMUNITY.md).
 
 Open an issue with the problem, threatened invariant, smallest interface change, and the
@@ -56,7 +65,14 @@ Without `uv`:
 python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
+make check-core PYTHON=.venv/bin/python
 ```
+
+The Makefile otherwise defaults to `uv run python`. Pass the same `PYTHON`
+override to other Makefile checks when `uv` is unavailable. The pip installation
+does not reproduce `uv.lock`; use the locked uv environment for release
+qualification. Local SQLite runs also require a [patched linked SQLite
+library](docs/guide/quickstart.en.md#sqlite-runtime).
 
 Every behavior change needs a test for its invariant or failure boundary. New evidence
 must declare one of the existing evidence classes; static assets, replay, and synthetic
@@ -93,11 +109,15 @@ Security reports follow [SECURITY.md](SECURITY.md).
 
 ## License and copyright
 
-Project-owned OrgRebase material is Apache License 2.0, including documentation.
-See [LICENSE.md](LICENSE.md). Earlier public revisions used PolyForm Noncommercial
-1.0.0 plus a separate commercial grant, and one later commit used CC BY 4.0 for
-prose. That history is in [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md).
+Project-owned OrgRebase material, including documentation and Skills, is licensed
+under [Apache-2.0](LICENSE). See [LICENSE.md](LICENSE.md) for scope and historical
+release terms.
 
-By submitting a contribution, you confirm that you have the right to submit it, and you
-license it to **Bingjie Zhu** under Apache-2.0 so it can be distributed with OrgRebase.
-You keep copyright in your contribution unless a later CLA says otherwise.
+By intentionally submitting a contribution for inclusion, you confirm that you have
+the right to submit it and offer it under Apache-2.0, as described in Section 5 of
+the license. You retain copyright in your contribution. Contribution does not
+transfer ownership or automatically accept a future contributor agreement.
+
+Any separate contribution agreement applies only after the contributor and the
+project explicitly accept it. This project does not require a CLA or a DCO sign-off
+for contributions.

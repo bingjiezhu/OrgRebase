@@ -136,8 +136,12 @@ vendor/agentteams/                pinned reconstructable source bundle
 
 `uv.lock` records the dependency resolution. OAC is maintained in the adjacent `oac-spec/` project and is not included in the OrgRebase Python package.
 
-## Status and license
+## Project status
 
 The Beta has controlled local validation for its named reference paths. Customer IAM integration, employee UAT, production capacity, SLA and ROI remain separate acceptance work. See [release qualification](docs/RELEASE-CANDIDATES.md) for validation scope and release checks.
 
-Project-owned code, documentation and synthetic fixtures use [Apache-2.0](LICENSE). Third-party dependencies, datasets and optional models retain their own terms; see [LICENSE.md](LICENSE.md), [third-party inventory](docs/THIRD-PARTY-INVENTORY.md) and [NOTICE.md](NOTICE.md). The historical `v0.4.0` tag retains its original PolyForm terms.
+## License
+
+Project-owned OrgRebase source code, documentation, schemas, Skills and synthetic fixtures are licensed under [Apache-2.0](LICENSE). Commercial use, modification, redistribution and hosted use are permitted under its terms; no additional project commercial license is required.
+
+Third-party code, dependencies, datasets and optional models retain their own terms and attribution notices. See [license scope](LICENSE.md), [third-party inventory](docs/THIRD-PARTY-INVENTORY.md) and [NOTICE.md](NOTICE.md).

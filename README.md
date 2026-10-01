@@ -79,10 +79,14 @@ These paths have bounded local validation. New deliverable types and real enterp
 
 The repository contains `orgrebase/` (runtime, WebUI, Skills, tests, and documentation) and `oac-spec/` (contracts, compiler, verifier, and conformance tests). The Python package lives in `orgrebase/`; OAC remains an adjacent project. The [product README](orgrebase/README.md) covers the native AgentTeams journey and development checks.
 
-## Status and license
+## Project status
 
 The Beta has **controlled local validation** for its named reference paths. Public replay, local PostgreSQL and protocol-fixture checks establish the behavior exercised in those environments. Customer identity integration, employee UAT, production capacity, SLA and ROI remain separate acceptance work. The [release qualification guide](orgrebase/docs/RELEASE-CANDIDATES.md) describes validation scope and release checks.
 
-Protected changes trigger product, OAC and enterprise-boundary CI; release qualification uses a separate maintainer-initiated gate. Check the workflow result for the revision you use. The deployed [Pages site](https://bingjiezhu.github.io/OrgRebase/en/) may reflect an earlier commit.
+Every pull request and main push runs product, OAC and enterprise-boundary CI; release qualification uses a separate maintainer-initiated gate. Check the workflow result for the revision you use. The deployed [Pages site](https://bingjiezhu.github.io/OrgRebase/en/) may reflect an earlier commit.
 
-Project-owned material is [Apache-2.0](LICENSE), including documentation; third-party components and optional models retain their own terms. The historical `v0.4.0` tag retains its original PolyForm terms. See [LICENSES.md](LICENSES.md) before reuse.
+## License
+
+Project-owned OrgRebase and OAC source code, documentation, schemas, Skills and synthetic fixtures are licensed under [Apache-2.0](LICENSE). Commercial use, modification, redistribution and hosted use are permitted under its terms; no additional project commercial license is required.
+
+Third-party code, dependencies, datasets and optional models retain their own terms and attribution notices. See the [component license index](LICENSES.md).

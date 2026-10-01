@@ -136,8 +136,12 @@ vendor/agentteams/                固定版本、可重建的源码包
 
 `uv.lock` 记录依赖解析。OAC 在相邻的 `oac-spec/` 项目中维护，不包含在 OrgRebase Python 包内。
 
-## 状态与许可
+## 项目状态
 
 本 Beta 对明确列出的参考路径具有受控本地验证。客户 IAM 接入、员工 UAT、生产容量、SLA 和 ROI 须单独验收。验证范围与发布检查见[发布资格说明](docs/RELEASE-CANDIDATES.md)。
 
-项目自有代码、文档和合成夹具适用 [Apache-2.0](LICENSE)。第三方依赖、数据集和可选模型遵循各自条款，详见 [LICENSE.md](LICENSE.md)、[第三方清单](docs/THIRD-PARTY-INVENTORY.md)和 [NOTICE.md](NOTICE.md)。历史 `v0.4.0` 标签保留当时的 PolyForm 条款。
+## 许可
+
+OrgRebase 的项目自有代码、文档、Schema、Skill 和合成夹具统一适用 [Apache-2.0](LICENSE)。依照许可证条款，允许商业使用、修改、再分发及托管服务；无需额外的项目商业授权。
+
+第三方代码、依赖、数据集和可选模型保留各自条款与来源通知。详见 [许可范围](LICENSE.md)、[第三方清单](docs/THIRD-PARTY-INVENTORY.md)和 [NOTICE.md](NOTICE.md)。

@@ -79,10 +79,14 @@ uv run --frozen orgrebase enterprise-pilot-seal \
 
 仓库中的 `orgrebase/` 包含运行程序、WebUI、Skill、测试和文档；`oac-spec/` 包含契约、编译器、验证器和一致性测试。Python 包在 `orgrebase/` 内，OAC 作为并列项目维护。[产品 README](orgrebase/README.zh-CN.md)给出原生 AgentTeams 旅程与开发检查。
 
-## 状态与许可
+## 项目状态
 
 本 Beta 对明确列出的参考路径具有**受控本地验证**。公开数据复算、本地 PostgreSQL 与协议夹具检查证明各自环境中实际执行的行为。客户身份接入、员工 UAT、生产容量、SLA 和 ROI 须单独验收。验证范围与发布检查见[发布资格说明](orgrebase/docs/RELEASE-CANDIDATES.md)。
 
-受保护变更触发产品、OAC 与企业边界 CI；发布资格检查由维护者单独启动。使用某个版本时，应核对其工作流结果。[线上 Pages](https://bingjiezhu.github.io/OrgRebase/)可能对应较早提交。
+每个 PR 和 main 推送均运行产品、OAC 与企业边界 CI；发布资格检查由维护者单独启动。使用某个版本时，应核对其工作流结果。[线上 Pages](https://bingjiezhu.github.io/OrgRebase/)可能对应较早提交。
 
-项目自有材料（含文档）适用 [Apache-2.0](LICENSE)；第三方组件和可选模型遵循各自许可。历史 `v0.4.0` 标签仍适用当时的 PolyForm 条款。复用前参见 [LICENSES.md](LICENSES.md)。
+## 许可
+
+OrgRebase 与 OAC 的项目自有代码、文档、Schema、Skill 和合成夹具统一适用 [Apache-2.0](LICENSE)。依照许可证条款，允许商业使用、修改、再分发及托管服务；无需额外的项目商业授权。
+
+第三方代码、依赖、数据集和可选模型保留各自条款与来源通知。组件许可及归属见 [LICENSES.md](LICENSES.md)。

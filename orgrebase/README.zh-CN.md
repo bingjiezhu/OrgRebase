@@ -142,6 +142,6 @@ vendor/agentteams/                固定版本、可重建的源码包
 
 ## 许可
 
-OrgRebase 的项目自有代码、文档、Schema、Skill 和合成夹具统一适用 [Apache-2.0](LICENSE)。依照许可证条款，允许商业使用、修改、再分发及托管服务；无需额外的项目商业授权。
+OrgRebase 的项目自有材料适用 **[Apache-2.0](LICENSE)**。
 
 第三方代码、依赖、数据集和可选模型保留各自条款与来源通知。详见 [许可范围](LICENSE.md)、[第三方清单](docs/THIRD-PARTY-INVENTORY.md)和 [NOTICE.md](NOTICE.md)。

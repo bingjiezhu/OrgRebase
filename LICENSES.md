@@ -11,14 +11,10 @@ to their respective paths. 本索引不新增授权，各路径以原始许可�
 | Public retail sample | [Attribution and license](orgrebase/benchmark/public-retail-quote/v1/LICENSE.md) |
 | Product dependencies and reuse | [Third-party inventory](orgrebase/docs/THIRD-PARTY-INVENTORY.md), [reuse guide](orgrebase/docs/REUSE-AND-LICENSING.md) |
 
-Project-owned OrgRebase and OAC source code, documentation, schemas, Skills and
-synthetic fixtures use Apache-2.0. Commercial use, modification, redistribution and
-hosted use are permitted under its terms; no additional project commercial license
-is required. Third-party software, datasets and models retain their own terms and
-attribution notices.
+Project-owned OrgRebase and OAC material uses **Apache-2.0**.
+Third-party software, datasets and models retain their own terms and attribution notices.
 
-仓库中 OrgRebase 与 OAC 的项目自有材料统一适用 Apache-2.0。依照许可证条款，
-允许商业使用、修改、再分发和托管服务，无需额外项目商业授权；第三方内容保留原条款与归属。
+OrgRebase 与 OAC 的项目自有材料适用 **Apache-2.0**；第三方内容保留原条款与归属。
 
 For archived versions and immutable record identifiers, see
 [historical releases and sealed records](orgrebase/LICENSE.md#historical-releases-and-sealed-records).

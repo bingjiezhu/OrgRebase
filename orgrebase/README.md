@@ -142,6 +142,6 @@ The Beta has controlled local validation for its named reference paths. Customer
 
 ## License
 
-Project-owned OrgRebase source code, documentation, schemas, Skills and synthetic fixtures are licensed under [Apache-2.0](LICENSE). Commercial use, modification, redistribution and hosted use are permitted under its terms; no additional project commercial license is required.
+Project-owned OrgRebase material is licensed under **[Apache-2.0](LICENSE)**.
 
 Third-party code, dependencies, datasets and optional models retain their own terms and attribution notices. See [license scope](LICENSE.md), [third-party inventory](docs/THIRD-PARTY-INVENTORY.md) and [NOTICE.md](NOTICE.md).

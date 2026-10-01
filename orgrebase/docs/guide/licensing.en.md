@@ -1,17 +1,17 @@
 # Licensing and evidence scope
 
-Project-owned OrgRebase and OAC code, documentation, Skills and synthetic fixtures are licensed under **Apache License 2.0**. Commercial use, modification, redistribution and hosted services are permitted under that license; no additional project commercial license is required. Keep applicable copyright, attribution, license and change notices as required by the [license text](../../LICENSE).
+Project-owned OrgRebase and OAC code, documentation, Skills and synthetic fixtures are licensed under **[Apache-2.0](../../LICENSE)**.
 
 | Material | Applicable terms |
 |---|---|
 | Project-owned OrgRebase code, Skills, fixtures and documentation | [Apache License 2.0](../../LICENSE) |
-| Current license scope and optional paid services | [LICENSE.md](../../LICENSE.md), [COMMERCIAL-LICENSE.md](../../COMMERCIAL-LICENSE.md) |
+| License scope | [LICENSE.md](../../LICENSE.md) |
 | Project-owned OAC material | Apache-2.0; consult OAC LICENSE.md |
 | AgentTeams and Python dependencies | Their own upstream licenses |
 | UCI product sample | CC BY 4.0 with attribution and transformation notes; no UCI endorsement |
 | Cloud services and optional local models | Their service/model terms; client software licensing does not grant model rights |
 
-The current source, documentation site and distribution archives use the same license scope. Implementation, integration, hosting and support may be covered by optional paid service agreements; those agreements do not limit the software rights granted by Apache-2.0. See [historical releases and sealed records](../../LICENSE.md#historical-releases-and-sealed-records) for earlier release terms and preserved metadata.
+The current source, documentation site and distribution archives use the same license scope. See [historical releases and sealed records](../../LICENSE.md#historical-releases-and-sealed-records) for earlier release terms and preserved metadata.
 
 Configuring Vertex or DeepSeek does not authorize sending customer data to a provider. Deployment owners must review service terms, data flows and organizational permission. The optional qwen2.5:3b model has a Qwen Research License with a separate commercial-permission requirement; its weights are not redistributed with OrgRebase.
 
